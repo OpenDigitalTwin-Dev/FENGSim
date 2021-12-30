@@ -4,11 +4,7 @@ Digital twins need all CAX technologies. Without a large team and big money, it 
 
 数字孪生需要融合全部CAX技术，在过去的二十年中，德国西门子公司、法国达索公司和美国ANSYS公司花费巨资并购形成了各自的数字孪生平台，分别为西门子Team Center、达索3D Experiences和ANSYS WorkBench。我们充分验证了基于开源软件也可以形成同样的数字孪生系统并开发工业级应用。目前开源数字孪生项目（Open Digital Twin）包括FENGSim、OpenCAEPoro、FASP三部分。FENGSim由Anders Logg教授和信吉平博士发起，FASP和OpenCAEPoro由张晨松副研究员发起。
 
-<div align="center"><img src="images/Fengsim_logo_hi_2.png" alt="FENGSim" height="110" /></div>
-
-<div align="center"><img src="images/opencaeporo.png" alt="FENGSim" height="50" /></div>
-
-<div align="center"><img src="images/fasp.png" alt="FENGSim" height="50" /></div>
+<div align="center"><img src="images/logos.jpg" alt="FENGSim" height="80" /></div>
 
 # Why Digital Twins?
 
