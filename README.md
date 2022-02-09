@@ -15,9 +15,7 @@ By using just one command, you could open the door to the world of CAX and Digit
 curl -O https://raw.githubusercontent.com/OpenDigitalTwin-Dev/OpenDigitalTwin/main/cube.x && sudo chmod 777 cube.x && ./cube.x
 `
 
-
-
-<div align="center"><img src="images/dt_tech.jpg" alt="FENGSim" width="500"/></div>
+You will get all the codes of CAX software and the development environment.
 
 # [Airfoil Benchmark](https://github.com/fengsim/FENGSim-Dev/wiki/Home)
 
