@@ -11,9 +11,9 @@ Digital twins need all CAX technologies. Without a large team and big money, it 
 # Cosmic Cube
 By using just one command, you could open the door to the world of CAX and Digital Twin. 
 
-``` 
+`
 curl -O https://raw.githubusercontent.com/OpenDigitalTwin-Dev/OpenDigitalTwin/main/cube.x && sudo chmod 777 cube.x && ./cube.x
-```
+`
 
 
 
