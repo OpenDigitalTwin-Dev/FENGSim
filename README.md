@@ -8,14 +8,14 @@ Digital twins need all CAX technologies. Without a large team and big money, it 
 
 <div align="center"><img src="images/dt2.jpg" alt="FENGSim" width="500"/></div>
 
-# Cosmic Cube
+# [Cosmic Cube](https://github.com/OpenDigitalTwin-Dev/OpenDigitalTwin/wiki/Home)
 By using just one command, you could open the door to the world of CAX and Digital Twins. 
 
 `curl -O https://raw.githubusercontent.com/OpenDigitalTwin-Dev/OpenDigitalTwin/main/cube.x && sudo chmod 777 cube.x && ./cube.x`
 
 You will get all the codes of CAX software and the development environment. The Cosmic Cube can be used for the development of CAX, BIM, MBD, EDA, Visualization, AR/VR, Virtual City, Digital Twin and Metaverse.
 
-# [Airfoil Benchmark](https://github.com/fengsim/FENGSim-Dev/wiki/Home)
+# [Airfoil Benchmark](https://github.com/OpenDigitalTwin-Dev/OpenDigitalTwin/wiki/Home)
 
 Here we show you how to develop your own digital twin project by introducing the Airfoil benchmark.   
 
