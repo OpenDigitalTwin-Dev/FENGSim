@@ -21,7 +21,7 @@ Here we show you how to develop your own digital twin project by introducing the
 
 <div align="center"><img src="images/airfoil.jpg" alt="airfoil" width="600" /></div>
 
-# Applications
+# Industrial Applications
 
 ## Machining
 
