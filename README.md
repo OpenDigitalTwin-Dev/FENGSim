@@ -1,6 +1,6 @@
-# About Open Source Digital Twin
+# About Open Source Digital Twins
 
-Digital Twins need all CAX technologies. Without a large team and big money, it is normally difficult and nearly impossible to develop a digital twin system like Siemens TeamCenter, Dassault 3D Experience, and Ansys WorkBench. But we've proven that open-source software is a good solution to this and it brings its products directly to the industrial sector. The open source digital twin project includes FENGSim, FASP, and OpenCAEPoro. FENGSim was initiated by Prof. Anders Logg and Dr. Jiping Xin from 2016. FASP and OpenCAEPoro were initiated by Associate Prof. Chensong Zhang.
+Digital twins need all CAX technologies. Without a large team and big money, it is normally difficult and nearly impossible to develop a digital twin system like Siemens TeamCenter, Dassault 3D Experience, and Ansys WorkBench. But we've proven that open-source software is a good solution to this and it brings its products directly to the industrial sector. The open source digital twin project includes FENGSim, FASP, and OpenCAEPoro. FENGSim was initiated by Prof. Anders Logg and Dr. Jiping Xin from 2016. FASP and OpenCAEPoro were initiated by Associate Prof. Chensong Zhang.
 
 <div align="center"><img src="images/logos.jpg" alt="FENGSim" height="120" /></div>
 
