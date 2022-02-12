@@ -1,0 +1,116 @@
+#!/bin/sh
+BasicInstall()
+{
+    echo "    ###########################################################"
+    echo "    ###########################################################"
+    echo "    ###                                                     ###"
+    echo "    ###                                                     ###"
+    echo "    ###     Now you will install some libraries by apt.     ###"
+    echo "    ###     Please press ENTER to continue.                 ###"
+    echo "    ###                                                     ###"
+    echo "    ###                                                     ###"
+    echo "    ###########################################################"
+    echo "    ###########################################################"
+    read enter
+    sudo apt update
+    sudo apt -y upgrade
+    sudo apt -y install libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev 
+    sudo apt -y install build-essential g++ gfortran cmake cmake-curses-gui emacs
+    sudo apt -y install libfreetype-dev
+    sudo apt -y install libxcb-xinerama0
+}
+DockerInstall()
+{
+    echo "    ###########################################################"
+    echo "    ###########################################################"
+    echo "    ###                                                     ###"
+    echo "    ###     Now you will install docker, pull the image     ###"
+    echo "    ###     from dockerhub and run a container.             ###"
+    echo "    ###     Please press ENTER to continue.                 ###"
+    echo "    ###                                                     ###"
+    echo "    ###                                                     ###"
+    echo "    ###########################################################"
+    echo "    ###########################################################"
+    read enter
+    sudo apt -y install curl
+    curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun
+    sudo docker pull fengsim/opendigitaltwin:1.0
+    sudo rm -rf $HOME/odt
+    mkdir $HOME/odt
+    mkdir $HOME/odt/prepost
+    sudo docker run --name odt -id -v $HOME/odt/prepost:/home/odt/share fengsim/opendigitaltwin:1.0
+    if test $? -ne 0  
+    then
+	echo "can't run odt"
+	sudo docker rm odt
+	if test $? -ne 0 
+	then
+	    echo "can't rm odt"
+	    sudo docker stop odt
+	    sudo docker rm odt
+	else
+    	    echo "rm odt"
+	fi
+	sudo docker run --name odt -id -v $HOME/odt/prepost:/home/odt/share fengsim/opendigitaltwin:1.0
+	echo "    ###########################################################"
+	echo "    ###########################################################"
+	echo "    ###                                                     ###"
+	echo "    ###     Now You will get the codes of the prepost       ###"
+	echo "    ###     module and get Qt5.                             ###"
+	echo "    ###     Please press ENTER to continue.                 ###"
+	echo "    ###                                                     ###"
+	echo "    ###                                                     ###"
+	echo "    ###########################################################"
+	echo "    ###########################################################"
+	read enter
+	sudo docker exec -it odt /bin/bash -c "odt 1"
+    else
+	echo "run odt"
+	echo "    ###########################################################"
+	echo "    ###########################################################"
+	echo "    ###                                                     ###"
+	echo "    ###     Now You will get the codes of the prepost       ###"
+	echo "    ###     module and get Qt5.                             ###"
+	echo "    ###     Please press ENTER to continue.                 ###"
+	echo "    ###                                                     ###"
+	echo "    ###                                                     ###"
+	echo "    ###########################################################"
+	echo "    ###########################################################"
+	read enter
+	sudo docker exec -it odt /bin/bash -c "odt 1"
+    fi
+}
+QtInstall ()
+{
+    sed -i 11c"<value type=\"QString\" key=\"QMakePath\">"$HOME/odt/prepost/qt/5.12.10/gcc_64/bin/qmake"</value>" $HOME/odt/prepost/qt/Tools/QtCreator/share/qtcreator/QtProject/qtcreator/qtversion.xml
+}
+Install ()
+{
+    read choose
+    if test $choose = yes
+    then
+	BasicInstall
+	DockerInstall
+	QtInstall
+    elif test $choose = no
+    then
+	echo "You could find more information from www.opendigitaltwin.top."
+    else
+	echo "Please enter yes or no."
+	Install
+    fi
+}
+
+echo "    ###########################################################"
+echo "    ###########################################################"
+echo "    ###                                                     ###"
+echo "    ###                                                     ###"
+echo "    ###     Hi, I am the Comsic Cube.                       ###"
+echo "    ###     Now You will open the door to the CAX world!    ###"
+echo "    ###                                                     ###"
+echo "    ###                                                     ###"
+echo "    ###########################################################"
+echo "    ###########################################################"
+echo 
+echo "Do you want to install the open source digital twin project? (yes or no)"
+Install
