@@ -11,7 +11,7 @@ Digital twins need all CAX technologies. Without a large team and big money, it 
 # [Cosmic Cube](https://github.com/OpenDigitalTwin-Dev/OpenDigitalTwin/wiki/Home)
 By using just one command, you could open the door to the world of CAX and Digital Twins. 
 
-`curl -O https://raw.githubusercontent.com/OpenDigitalTwin-Dev/OpenDigitalTwin/main/cube.x && sudo chmod 777 cube.x && ./cube.x`
+`/bin/bash -c "$(curl https://raw.githubusercontent.com/OpenDigitalTwin-Dev/OpenDigitalTwin/main/cube)"`
 
 You will get all the codes of CAX software and the development environment. The Cosmic Cube can be used for the development of CAX, BIM, MBD, EDA, Visualization, AR/VR, Virtual City, Digital Twin and Metaverse.
 
