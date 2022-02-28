@@ -38,11 +38,11 @@ DockerInstall()
     read enter
     sudo apt -y install curl
     curl -fsSL https://get.docker.com | bash -s docker --mirror Aliyun
-    sudo docker pull fengsim/opendigitaltwin:1.0
+    sudo docker pull fengsim/opendigitaltwin:latest
     sudo rm -rf $HOME/odt
     mkdir $HOME/odt
     mkdir $HOME/odt/prepost
-    sudo docker run --name odt -id -v $HOME/odt/prepost:/home/odt/share fengsim/opendigitaltwin:1.0
+    sudo docker run --name odt -id -v $HOME/odt/prepost:/home/odt/share fengsim/opendigitaltwin:latest
     if test $? -ne 0  
     then
 	echo "can't run odt"
@@ -55,7 +55,7 @@ DockerInstall()
 	else
     	    echo "rm odt"
 	fi
-	sudo docker run --name odt -id -v $HOME/odt/prepost:/home/odt/share fengsim/opendigitaltwin:1.0
+	sudo docker run --name odt -id -v $HOME/odt/prepost:/home/odt/share fengsim/opendigitaltwin:latest
 	echo
 	echo "    ###########################################################"
 	echo "    ###########################################################"
