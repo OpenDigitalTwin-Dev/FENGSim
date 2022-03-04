@@ -15,6 +15,8 @@ By using just one command, you could open the door to the world of CAX and Digit
 
 You will get all the codes of CAX software and the development environment. The Cosmic Cube can be used for the development of CAX, BIM, MBD, EDA, Visualization, AR/VR, Virtual City, Digital Twin and Metaverse.
 
+<div align="center"><img src="images/cosmiccube.jpg" alt="cosmic cube" width="600" /></div>
+
 # [Airfoil Benchmark](https://github.com/OpenDigitalTwin-Dev/OpenDigitalTwin/wiki/Home)
 
 Here we show you how to develop your own digital twin by the Airfoil Benchmark.   
