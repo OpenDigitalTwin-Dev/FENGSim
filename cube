@@ -16,10 +16,9 @@ BasicInstall()
     read enter
     sudo apt update
     sudo apt -y upgrade
-    sudo apt -y install libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev 
-    sudo apt -y install build-essential g++ gfortran cmake cmake-curses-gui emacs
+    sudo apt -y install libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev build-essential libxcb-xinerama0
+    sudo apt -y install g++ gfortran cmake cmake-curses-gui emacs p7zip-full 
     sudo apt -y install libfreetype-dev
-    sudo apt -y install libxcb-xinerama0
 }
 DockerInstall()
 {
@@ -70,6 +69,7 @@ DockerInstall()
 	echo
 	read enter
 	sudo docker exec -it odt /bin/bash -c "odt 1"
+	7za x $HOME/odt/prepost/Qt5.12.10.7z -o/$HOME
     else
 	echo "run odt"
 	echo
@@ -86,12 +86,13 @@ DockerInstall()
 	echo
 	read enter
 	sudo docker exec -it odt /bin/bash -c "odt 1"
+	7za x $HOME/odt/prepost/Qt5.12.10.7z -o/$HOME
     fi
 }
-QtInstall ()
-{
-    sed -i 11c"<value type=\"QString\" key=\"QMakePath\">"$HOME/odt/prepost/qt/5.12.10/gcc_64/bin/qmake"</value>" $HOME/odt/prepost/qt/Tools/QtCreator/share/qtcreator/QtProject/qtcreator/qtversion.xml
-}
+#QtInstall ()
+#{
+#    sed -i 11c"<value type=\"QString\" key=\"QMakePath\">"$HOME/odt/prepost/qt/5.12.10/gcc_64/bin/qmake"</value>" $HOME/odt/prepost/qt/Tools/QtCreator/share/qtcreator/QtProject/qtcreator/qtversion.xml
+#}
 Install ()
 {
     read choose
@@ -99,7 +100,7 @@ Install ()
     then
 	BasicInstall
 	DockerInstall
-	QtInstall
+#	QtInstall
     elif test $choose = no
     then
 	echo "You could find more information from www.opendigitaltwin.top."
