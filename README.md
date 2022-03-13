@@ -31,6 +31,11 @@ Here we show you how to develop your own digital twin by the Airfoil Benchmark.
 
 ## Composite Materials
 
+<div align="center"><img src="images/compositematerial1.jpg" alt="composite material" width="600" /></div>
+
+<div align="center"><img src="images/compositematerial2.jpg" alt="composite material" width="600" /></div>
+by Associate Professor Yuqing Peng from Shanghai University 
+
 ## Measurement
 
 <div align="center"><img src="images/meas1.jpg" alt="Measurement" width="500" /></div>
