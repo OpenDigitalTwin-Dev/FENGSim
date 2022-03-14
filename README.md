@@ -25,6 +25,14 @@ Here we show you how to develop your own digital twin by the Airfoil Benchmark.
 
 # Industrial Applications
 
+## Petroleum Reservoir
+
+## Power Battery
+
+## Extreme Mechanics
+
+## Aircraft Aerodynamics
+
 ## Machining
 
 ## Additive Manufacturing
@@ -43,3 +51,7 @@ by Associate Professor Yuqing Peng and Professor Aijun Li from Shanghai Universi
 <div align="center"><img src="images/meas2.jpg" alt="Measurement" width="500" /></div>
 
 ## Biomedical Engineering
+
+## Transport Theory
+
+
