@@ -9,6 +9,17 @@ Metal Cutting
 .. toctree::
     :maxdepth: 3
 
+Stress tensor:
+			  
+.. math::
+
+    \sigma =
+	\mat{\sigma_{00}&\sigma_{01}&\sigma_{02}\cr
+    \sigma_{10}&\sigma_{11}&\sigma_{12}\cr
+    \sigma_{20}&\sigma_{21}&\sigma_{22}\cr}
+
+	
+			   
 Indices and tables
 ==================
 
