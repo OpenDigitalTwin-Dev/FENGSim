@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.15)  2 JUN 2022 11:00
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.15)  2 JUN 2022 13:12
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -781,73 +781,43 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ] [2
 
 ]
+[1] [2
+
+]
 Chapter 1.
 LaTeX Font Info:    Trying to load font information for TS1+qtm on input line 2
-28.
+13.
 (/usr/share/texmf/tex/latex/tex-gyre/ts1qtm.fd
 File: ts1qtm.fd 2009/09/25 v1.2 font definition file for TS1/qtm
-)
-LaTeX Font Info:    Trying to load font information for T1+txtt on input line 2
-42.
+) (./theoretical-physics.ind)
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 227.
 
-(/usr/share/texlive/texmf-dist/tex/latex/txfonts/t1txtt.fd
-File: t1txtt.fd 2000/12/15 v3.1
-)
-LaTeX Font Info:    Font shape `T1/txtt/b/n' in size <10> not available
-(Font)              Font shape `T1/txtt/bx/n' tried instead on input line 242.
-
-Underfull \hbox (badness 10000) in paragraph at lines 251--251
-|\T1/qhv/b/n/10 Function ex-port_overlap(const Won-ton::Jali_Mesh_Wrapper&, std
-::vector<int>, const Won-
- []
-
-[1
-
-]
-Underfull \hbox (badness 10000) in paragraph at lines 351--351
-|\T1/qhv/b/n/10 Function ex-port_vtk(Jali::UniStateVector<double, Jali::Mesh>, 
-const Won-
- []
-
-[2] [3] [4
-
-]
-Chapter 2.
-(./theoretical-physics.ind [5] [6
-
-] [7
-
-
-])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 490.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 490.
+[3]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 227.
  (./theoretical-physics.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 490.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 490.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 227.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 227.
 Package rerunfilecheck Info: File `theoretical-physics.out' has not changed.
-(rerunfilecheck)             Checksum: 7833FF6A1F1579ABE287E3E3DBAAC728;6429.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 490.
+(rerunfilecheck)             Checksum: E81C69F63AD497B126C77C1297BE8A5D;139.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 227.
  ) 
 Here is how much of TeX's memory you used:
- 13986 strings out of 481239
- 203844 string characters out of 5920376
- 479525 words of memory out of 5000000
- 28820 multiletter control sequences out of 15000+600000
- 583716 words of font info for 66 fonts, out of 8000000 for 9000
+ 13766 strings out of 481239
+ 195641 string characters out of 5920376
+ 469461 words of memory out of 5000000
+ 28675 multiletter control sequences out of 15000+600000
+ 573104 words of font info for 55 fonts, out of 8000000 for 9000
  1142 hyphenation exceptions out of 8191
- 38i,11n,51p,875b,446s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/tex-gyre/q-ec.enc}{/usr/share/texmf/fonts/e
-nc/dvips/tex-gyre/q-ts1.enc}</usr/share/texmf/fonts/type1/public/tex-gyre/qhvb.
+ 38i,11n,51p,261b,388s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf/fonts/enc/dvips/tex-gyre/q-ts1.enc}{/usr/share/texmf/fonts/
+enc/dvips/tex-gyre/q-ec.enc}</usr/share/texmf/fonts/type1/public/tex-gyre/qhvb.
 pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qhvbi.pfb></usr/share/texmf/f
-onts/type1/public/tex-gyre/qhvr.pfb></usr/share/texmf/fonts/type1/public/tex-gy
-re/qtmb.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qtmr.pfb></usr/share/
-texmf/fonts/type1/public/tex-gyre/qtmri.pfb></usr/share/texlive/texmf-dist/font
-s/type1/public/txfonts/t1xbtt.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
-blic/txfonts/t1xtt.pfb>
-Output written on theoretical-physics.pdf (11 pages, 146187 bytes).
+onts/type1/public/tex-gyre/qtmb.pfb></usr/share/texmf/fonts/type1/public/tex-gy
+re/qtmr.pfb>
+Output written on theoretical-physics.pdf (7 pages, 90691 bytes).
 PDF statistics:
- 247 PDF objects out of 1000 (max. 8388607)
- 218 compressed objects within 3 object streams
- 58 named destinations out of 1000 (max. 500000)
- 229 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 72 PDF objects out of 1000 (max. 8388607)
+ 53 compressed objects within 1 object stream
+ 9 named destinations out of 1000 (max. 500000)
+ 29 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -10,46 +10,37 @@ Program Listing for File test.h
 
 .. code-block:: cpp
 
-   #ifndef _TEST_H_
-   #define _TEST_H_
    
-   #include <iostream>
-   #include <portage/search/search_kdtree.h>
-   #include <portage/intersect/intersect_r2d.h>
+   class QTstyle_Test
+   {
+     public:
+    
    
-   // wonton includes
-   #include "wonton/support/wonton.h"
-   #include "wonton/support/Point.h"
-   #include "wonton/mesh/simple/simple_mesh.h"
-   #include "wonton/mesh/simple/simple_mesh_wrapper.h"
-   #include "wonton/state/simple/simple_state.h"
-   #include "wonton/state/simple/simple_state_wrapper.h"
-   #include "wonton/mesh/jali/jali_mesh_wrapper.h"
+       enum TEnum { 
+                    TVal1, 
+                    TVal2, 
+                    TVal3  
+                  } 
    
-   // portage includes
-   #include "portage/interpolate/interpolate_1st_order.h"
-   #include "portage/interpolate/interpolate_2nd_order.h"
-   #include "simple_intersect_for_tests.h"
-   #include "portage/support/portage.h"
-   #include "portage/driver/coredriver.h"
+            *enumPtr, 
    
-   #include "JaliStateVector.h"
-   #include "JaliState.h"
+            enumVar;  
+       
    
-   #include <fstream>
+       QTstyle_Test();
+    
    
-   void export_vtk (int n, std::string filename, std::vector<double> val);
-   void export_vtk (Jali::UniStateVector<double, Jali::Mesh> cellvecout);
-   void export_overlap (const Wonton::Simple_Mesh_Wrapper& source, std::vector<int> candidates,
-                        const Wonton::Simple_Mesh_Wrapper& target, int cell_id);
-   void export_overlap (const Wonton::Jali_Mesh_Wrapper& source, std::vector<int> candidates,
-                        const Wonton::Jali_Mesh_Wrapper& target, int cell_id);
-   void export_vtk (std::vector<std::vector<Wonton::Point<2>>>& mesh, std::vector<double>& cellvecout);
-   void export_vtk (Jali::UniStateVector<double, Jali::Mesh> cellvecout, const Wonton::Jali_Mesh_Wrapper& targetMeshWrapper);
-     
-   void test_search();
-   void test_intersection ();
-   void test_interpolation ();
-   void test_remapping();
+      ~QTstyle_Test();
+       
    
-   #endif
+       int testMe(int a,const char *s);
+          
+   
+       virtual void testMeToo(char c1,char c2) = 0;
+      
+   
+       int publicVar;
+          
+   
+       int (*handler)(int a,int b);
+   };

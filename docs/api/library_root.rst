@@ -1,6 +1,8 @@
-===========
-Library API
-===========
+=================
+Open Digital Twin
+=================
+
+.. include:: class_view_hierarchy.rst.include
 
 .. include:: file_view_hierarchy.rst.include
 
