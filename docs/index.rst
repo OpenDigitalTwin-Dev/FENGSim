@@ -7,9 +7,11 @@ Open Digital Twin
 =============================
 
 .. toctree::
-    :maxdepth: 3
+   :maxdepth: 3
+
    api/library_root.rst
 
+   
 Indices and tables
 ==================
 
