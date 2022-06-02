@@ -23,7 +23,7 @@ sys.path.append(os.path.abspath('exts'))
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.imgmath', "math_dollar"]
+extensions = ['sphinx.ext.imgmath', "math_dollar", 'breathe', 'exhale']
 
 latex_preamble = r"""
 \usepackage{dsfont}
@@ -334,11 +334,11 @@ latex_documents = [
 #latex_use_modindex = True
 
 # The `extensions` list should already be in here from `sphinx-quickstart`
-extensions = [
+#extensions = [
     # there may be others here already, e.g. 'sphinx.ext.mathjax'
-    'breathe',
-    'exhale'
-]
+ #   'breathe',
+ #   'exhale'
+#]
 
 # Setup the breathe extension
 breathe_projects = {
