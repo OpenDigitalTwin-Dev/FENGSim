@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.15)  2 JUN 2022 13:47
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.15)  2 JUN 2022 20:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -782,46 +782,50 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 
 ]
 Chapter 1.
+[1
+
+] [2
+
+]
+Chapter 2.
 LaTeX Font Info:    Trying to load font information for TS1+qtm on input line 2
-36.
+39.
 (/usr/share/texmf/tex/latex/tex-gyre/ts1qtm.fd
 File: ts1qtm.fd 2009/09/25 v1.2 font definition file for TS1/qtm
 )
 LaTeX Font Info:    Trying to load font information for T1+txtt on input line 2
-50.
+53.
 
 (/usr/share/texlive/texmf-dist/tex/latex/txfonts/t1txtt.fd
 File: t1txtt.fd 2000/12/15 v3.1
 )
 LaTeX Font Info:    Font shape `T1/txtt/b/n' in size <10> not available
-(Font)              Font shape `T1/txtt/bx/n' tried instead on input line 250.
- [1
-
-] [2] [3]
-[4
+(Font)              Font shape `T1/txtt/bx/n' tried instead on input line 253.
+ [3] [4] [5]
+[6
 
 ]
-Chapter 2.
-(./opendigitaltwin.ind [5] [6
+Chapter 3.
+(./opendigitaltwin.ind [7] [8
 
-] [7
+] [9
 
 
 ])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 536.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 536.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 539.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 539.
  (./opendigitaltwin.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 536.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 536.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 539.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 539.
 Package rerunfilecheck Info: File `opendigitaltwin.out' has not changed.
-(rerunfilecheck)             Checksum: 50DDF12607DF5793E7051E03FC8AF6C4;1299.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 536.
+(rerunfilecheck)             Checksum: 48A1305F579E76CCE185023EB22B29D7;1370.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 539.
  ) 
 Here is how much of TeX's memory you used:
- 13935 strings out of 481239
- 199518 string characters out of 5920376
- 477734 words of memory out of 5000000
- 28779 multiletter control sequences out of 15000+600000
+ 13940 strings out of 481239
+ 199564 string characters out of 5920376
+ 476753 words of memory out of 5000000
+ 28781 multiletter control sequences out of 15000+600000
  583716 words of font info for 66 fonts, out of 8000000 for 9000
  1142 hyphenation exceptions out of 8191
  38i,11n,51p,751b,642s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -833,10 +837,10 @@ re/qtmb.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qtmr.pfb></usr/share/
 texmf/fonts/type1/public/tex-gyre/qtmri.pfb></usr/share/texlive/texmf-dist/font
 s/type1/public/txfonts/t1xbtt.pfb></usr/share/texlive/texmf-dist/fonts/type1/pu
 blic/txfonts/t1xtt.pfb>
-Output written on opendigitaltwin.pdf (11 pages, 139628 bytes).
+Output written on opendigitaltwin.pdf (13 pages, 143309 bytes).
 PDF statistics:
- 203 PDF objects out of 1000 (max. 8388607)
- 175 compressed objects within 2 object streams
- 48 named destinations out of 1000 (max. 500000)
- 101 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 218 PDF objects out of 1000 (max. 8388607)
+ 188 compressed objects within 2 object streams
+ 51 named destinations out of 1000 (max. 500000)
+ 109 words of extra memory for PDF output out of 10000 (max. 10000000)
 

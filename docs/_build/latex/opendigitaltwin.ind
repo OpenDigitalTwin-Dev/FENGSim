@@ -5,19 +5,19 @@
 \let\spxextra \sphinxstyleindexextra
 
   \bigletter Q
-  \item \spxentry{QTstyle\_Test}\spxextra{C++ class}, \hyperpage{1}
+  \item \spxentry{QTstyle\_Test}\spxextra{C++ class}, \hyperpage{3}
   \item \spxentry{QTstyle\_Test::\textasciitilde{}QTstyle\_Test}\spxextra{C++ function}, 
-		\hyperpage{2}
-  \item \spxentry{QTstyle\_Test::enumPtr}\spxextra{C++ member}, \hyperpage{2}
-  \item \spxentry{QTstyle\_Test::enumVar}\spxextra{C++ member}, \hyperpage{2}
-  \item \spxentry{QTstyle\_Test::handler}\spxextra{C++ member}, \hyperpage{3}
-  \item \spxentry{QTstyle\_Test::publicVar}\spxextra{C++ member}, \hyperpage{3}
-  \item \spxentry{QTstyle\_Test::QTstyle\_Test}\spxextra{C++ function}, \hyperpage{2}
-  \item \spxentry{QTstyle\_Test::TEnum}\spxextra{C++ enum}, \hyperpage{1}
-  \item \spxentry{QTstyle\_Test::TEnum::TVal1}\spxextra{C++ enumerator}, \hyperpage{1}
-  \item \spxentry{QTstyle\_Test::TEnum::TVal2}\spxextra{C++ enumerator}, \hyperpage{1}
-  \item \spxentry{QTstyle\_Test::TEnum::TVal3}\spxextra{C++ enumerator}, \hyperpage{1}
-  \item \spxentry{QTstyle\_Test::testMe}\spxextra{C++ function}, \hyperpage{2}
-  \item \spxentry{QTstyle\_Test::testMeToo}\spxextra{C++ function}, \hyperpage{2}
+		\hyperpage{4}
+  \item \spxentry{QTstyle\_Test::enumPtr}\spxextra{C++ member}, \hyperpage{4}
+  \item \spxentry{QTstyle\_Test::enumVar}\spxextra{C++ member}, \hyperpage{4}
+  \item \spxentry{QTstyle\_Test::handler}\spxextra{C++ member}, \hyperpage{5}
+  \item \spxentry{QTstyle\_Test::publicVar}\spxextra{C++ member}, \hyperpage{5}
+  \item \spxentry{QTstyle\_Test::QTstyle\_Test}\spxextra{C++ function}, \hyperpage{4}
+  \item \spxentry{QTstyle\_Test::TEnum}\spxextra{C++ enum}, \hyperpage{3}
+  \item \spxentry{QTstyle\_Test::TEnum::TVal1}\spxextra{C++ enumerator}, \hyperpage{3}
+  \item \spxentry{QTstyle\_Test::TEnum::TVal2}\spxextra{C++ enumerator}, \hyperpage{3}
+  \item \spxentry{QTstyle\_Test::TEnum::TVal3}\spxextra{C++ enumerator}, \hyperpage{3}
+  \item \spxentry{QTstyle\_Test::testMe}\spxextra{C++ function}, \hyperpage{4}
+  \item \spxentry{QTstyle\_Test::testMeToo}\spxextra{C++ function}, \hyperpage{4}
 
 \end{sphinxtheindex}
