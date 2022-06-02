@@ -6,12 +6,13 @@
 Open Digital Twin
 =============================
 
-codes test
+Software
+=============================
 
 .. toctree::
    :maxdepth: 3
 
-.. api/library_root.rst
+   api/library_root.rst
 
 
    

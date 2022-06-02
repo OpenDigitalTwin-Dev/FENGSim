@@ -298,7 +298,7 @@ html_static_path = ['_static']
 #html_file_suffix = ''
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'theoretical-physicsdoc'
+htmlhelp_basename = 'opendigitaltwindoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -312,8 +312,8 @@ htmlhelp_basename = 'theoretical-physicsdoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'theoretical-physics.tex', u'Theoretical Physics Reference',
-   u'Ondřej Čertík', 'manual'),
+  ('index', 'opendigitaltwin.tex', u'Open Digital Twin',
+   u'Jiping Xin', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
