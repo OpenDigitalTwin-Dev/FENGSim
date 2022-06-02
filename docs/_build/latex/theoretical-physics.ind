@@ -1,0 +1,18 @@
+\begin{sphinxtheindex}
+\let\bigletter\sphinxstyleindexlettergroup
+\let\spxpagem \sphinxstyleindexpagemain
+\let\spxentry \sphinxstyleindexentry
+\let\spxextra \sphinxstyleindexextra
+
+  \bigletter E
+  \item \spxentry{export\_overlap}\spxextra{C++ function}, \hyperpage{1}
+  \item \spxentry{export\_vtk}\spxextra{C++ function}, \hyperpage{2}
+
+  \indexspace
+  \bigletter T
+  \item \spxentry{test\_interpolation}\spxextra{C++ function}, \hyperpage{3}
+  \item \spxentry{test\_intersection}\spxextra{C++ function}, \hyperpage{3}
+  \item \spxentry{test\_remapping}\spxextra{C++ function}, \hyperpage{3}
+  \item \spxentry{test\_search}\spxextra{C++ function}, \hyperpage{3}
+
+\end{sphinxtheindex}
