@@ -8,7 +8,7 @@ The true digital twins need all CAX technologies. Without a large team and big m
 
 <div align="center"><img src="images/dt2.jpg" alt="FENGSim" width="500"/></div>
 
-# FENGSIm 
+# FENGSim 
 
 ## [Cosmic Cube (CAX IDE)](https://github.com/OpenDigitalTwin-Dev/OpenDigitalTwin/wiki/Home)
 By using just one command, you could open the door to the world of CAX and Digital Twins. 
