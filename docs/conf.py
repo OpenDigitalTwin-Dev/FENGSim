@@ -153,6 +153,10 @@ latex_preamble = r"""
 \def\Tr{\hbox{Tr}\,}
 \def\Arg{\hbox{Arg}}
 \def\atan{\hbox{atan}}
+
+\usepackage{CJK}
+\AtBeginDocument{\begin{CJK}{UTF8}{gbsn}}
+\AtEndDocument{\end{CJK}}
 """
 
 imgmath_latex_preamble = latex_preamble
