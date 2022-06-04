@@ -15,7 +15,7 @@ Airfoil Benchmark
 -----------------------------
 
 Solving PDEs in Python – The FEniCS Tutorial Volume I, Hans Petter Langtangen and Anders Logg
------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Software
 -----------------------------
