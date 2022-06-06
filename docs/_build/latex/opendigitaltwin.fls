@@ -317,12 +317,11 @@ INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu96.tfm
 INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu73.tfm
 INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu58.tfm
 INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu7a.tfm
-INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu7f.tfm
-INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu8b.tfm
 INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu72.tfm
 INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu52.tfm
 INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu56.tfm
 INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu79.tfm
+INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu8b.tfm
 INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu7b.tfm
 INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu66.tfm
 INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu78.tfm
@@ -384,7 +383,6 @@ INPUT /usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu78.pfb
 INPUT /usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu79.pfb
 INPUT /usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu7a.pfb
 INPUT /usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu7b.pfb
-INPUT /usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu7f.pfb
 INPUT /usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu86.pfb
 INPUT /usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu8b.pfb
 INPUT /usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu8c.pfb

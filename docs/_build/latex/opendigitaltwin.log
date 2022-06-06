@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.15)  6 JUN 2022 14:01
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.15)  6 JUN 2022 14:19
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -950,7 +950,7 @@ File: t1txtt.fd 2000/12/15 v3.1
 )
 LaTeX Font Info:    Font shape `T1/txtt/b/n' in size <10> not available
 (Font)              Font shape `T1/txtt/bx/n' tried instead on input line 218.
-<cosmiccube.jpg, id=154, 820.06375pt x 662.475pt>
+<cosmiccube.jpg, id=153, 820.06375pt x 662.475pt>
 File: cosmiccube.jpg Graphic file (type jpg)
 <use cosmiccube.jpg>
 Package pdftex.def Info: cosmiccube.jpg  used on input line 221.
@@ -995,11 +995,11 @@ Package rerunfilecheck Info: File `opendigitaltwin.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 324.
  ) 
 Here is how much of TeX's memory you used:
- 15211 strings out of 481239
- 211934 string characters out of 5920376
+ 15204 strings out of 481239
+ 211838 string characters out of 5920376
  489104 words of memory out of 5000000
- 29928 multiletter control sequences out of 15000+600000
- 594138 words of font info for 103 fonts, out of 8000000 for 9000
+ 29923 multiletter control sequences out of 15000+600000
+ 593843 words of font info for 102 fonts, out of 8000000 for 9000
  1142 hyphenation exceptions out of 8191
  38i,11n,51p,619b,791s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/tex-gyre/q-ec.enc}{/usr/share/texmf/fonts/e
@@ -1025,22 +1025,21 @@ nu/gbsnu75.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu76.pfb></usr/sha
 re/texmf/fonts/type1/arphic/gbsnu/gbsnu78.pfb></usr/share/texmf/fonts/type1/arp
 hic/gbsnu/gbsnu79.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu7a.pfb></
 usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu7b.pfb></usr/share/texmf/fonts/ty
-pe1/arphic/gbsnu/gbsnu7f.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu86
-.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu8b.pfb></usr/share/texmf/f
-onts/type1/arphic/gbsnu/gbsnu8c.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/
-gbsnu8f.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu96.pfb></usr/share/
-texmf/fonts/type1/arphic/gbsnu/gbsnu98.pfb></usr/share/texmf/fonts/type1/arphic
-/gbsnu/gbsnuff.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qhvb.pfb></usr
-/share/texmf/fonts/type1/public/tex-gyre/qhvbi.pfb></usr/share/texmf/fonts/type
-1/public/tex-gyre/qhvr.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qtmb.p
-fb></usr/share/texmf/fonts/type1/public/tex-gyre/qtmr.pfb></usr/share/texmf/fon
-ts/type1/public/tex-gyre/qtmri.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
-ublic/txfonts/t1xbtt.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/txfo
-nts/t1xtt.pfb>
-Output written on opendigitaltwin.pdf (19 pages, 301790 bytes).
+pe1/arphic/gbsnu/gbsnu86.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu8b
+.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu8c.pfb></usr/share/texmf/f
+onts/type1/arphic/gbsnu/gbsnu8f.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/
+gbsnu96.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu98.pfb></usr/share/
+texmf/fonts/type1/arphic/gbsnu/gbsnuff.pfb></usr/share/texmf/fonts/type1/public
+/tex-gyre/qhvb.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qhvbi.pfb></us
+r/share/texmf/fonts/type1/public/tex-gyre/qhvr.pfb></usr/share/texmf/fonts/type
+1/public/tex-gyre/qtmb.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qtmr.p
+fb></usr/share/texmf/fonts/type1/public/tex-gyre/qtmri.pfb></usr/share/texlive/
+texmf-dist/fonts/type1/public/txfonts/t1xbtt.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/txfonts/t1xtt.pfb>
+Output written on opendigitaltwin.pdf (19 pages, 298209 bytes).
 PDF statistics:
- 384 PDF objects out of 1000 (max. 8388607)
- 307 compressed objects within 4 object streams
+ 380 PDF objects out of 1000 (max. 8388607)
+ 304 compressed objects within 4 object streams
  41 named destinations out of 1000 (max. 500000)
  162 words of extra memory for PDF output out of 10000 (max. 10000000)
 
