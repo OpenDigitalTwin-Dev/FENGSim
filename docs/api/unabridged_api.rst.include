@@ -9,4 +9,4 @@ Classes and Structs
 .. toctree::
    :maxdepth: 5
 
-   classQTstyle__Test.rst
+   classtest.rst
