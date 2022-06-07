@@ -9,7 +9,7 @@
 			  
    src/intro.rst
    src/cosmiccube/main.rst
-   src/machining/main.rst
+   src/airfoil/main.rst
    api/library_root.rst
 
 Indices and tables

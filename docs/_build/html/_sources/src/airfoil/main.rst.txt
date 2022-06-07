@@ -1,0 +1,9 @@
+Airfoil CAX架构
+=========
+
+.. toctree::
+   :maxdepth: 2
+
+   airfoil_prepost.rst
+   airfoil_solver.rst
+

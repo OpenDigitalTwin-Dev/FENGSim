@@ -154,9 +154,9 @@ latex_preamble = r"""
 \def\Arg{\hbox{Arg}}
 \def\atan{\hbox{atan}}
 
-\usepackage{CJK}
-\AtBeginDocument{\begin{CJK}{UTF8}{gbsn}}
-\AtEndDocument{\end{CJK}}
+\usepackage{CJKutf8}
+\AtBeginDocument{\begin{CJK*}{UTF8}{gbsn}}
+\AtEndDocument{\end{CJK*}}
 """
 
 imgmath_latex_preamble = latex_preamble

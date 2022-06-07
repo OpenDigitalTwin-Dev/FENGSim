@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>命令获取 &#8212; Open Digital Twin 0.1 documentation</title>
+    <title>前后处理 &#8212; Open Digital Twin 0.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/classic.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/collapsible-lists/css/tree_view.css" />
@@ -19,8 +19,8 @@
     
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Airfoil架构" href="../airfoil/main.html" />
-    <link rel="prev" title="CosmicCube集成开发环境" href="main.html" /> 
+    <link rel="next" title="FENGSim" href="../../api/library_root.html" />
+    <link rel="prev" title="Airfoil架构" href="main.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -29,14 +29,14 @@
           <a href="../../genindex.html" title="General Index"
              accesskey="I">index</a></li>
         <li class="right" >
-          <a href="../airfoil/main.html" title="Airfoil架构"
+          <a href="../../api/library_root.html" title="FENGSim"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="main.html" title="CosmicCube集成开发环境"
+          <a href="main.html" title="Airfoil架构"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Open Digital Twin 0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="main.html" accesskey="U">CosmicCube集成开发环境</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">命令获取</a></li> 
+          <li class="nav-item nav-item-1"><a href="main.html" accesskey="U">Airfoil架构</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">前后处理</a></li> 
       </ul>
     </div>  
 
@@ -46,11 +46,39 @@
           <div class="body" role="main">
             
   <div class="section" id="id1">
-<h1>命令获取<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="o">/</span><span class="nb">bin</span><span class="o">/</span><span class="n">bash</span> <span class="o">-</span><span class="n">c</span> <span class="s2">&quot;$(curl https://raw.githubusercontent.com/OpenDigitalTwin-Dev/OpenDigitalTwin/main/cube)&quot;</span>
-</pre></div>
+<h1>前后处理<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h1>
+<p>ODT_模块名称_函数名称</p>
+<div class="section" id="id2">
+<h2>图形用户界面设计<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id3">
+<h3>主界面设计<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<ol class="arabic simple">
+<li><p>模仿GIMP</p></li>
+<li><p>通过菜单和工具栏进入CAD建模、定义物理模型、网格剖分、求解器、可视化五个模块</p>
+<ul class="simple">
+<li><p>梳理菜单和工具栏对应的action</p></li>
+<li><p>梳理和action connection的函数名称和功能</p></li>
+</ul>
+</li>
+<li><p>主要操作通过浮动工具栏实现</p></li>
+</ol>
 </div>
-<a class="reference internal image-reference" href="../../_images/cosmiccube.jpg"><img alt="Alternative text" src="../../_images/cosmiccube.jpg" style="width: 400px;" /></a>
+<div class="section" id="cad">
+<h3>CAD建模浮动工具栏设计<a class="headerlink" href="#cad" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="id4">
+<h3>定义物理模型浮动工具栏设计<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="id5">
+<h3>网格剖分浮动工具栏设计<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="id6">
+<h3>求解器浮动工具栏设计<a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="id7">
+<h3>可视化浮动工具栏设计<a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
 </div>
 
 
@@ -61,19 +89,37 @@
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <div>
+    <h3><a href="../../index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">前后处理</a><ul>
+<li><a class="reference internal" href="#id2">图形用户界面设计</a><ul>
+<li><a class="reference internal" href="#id3">主界面设计</a></li>
+<li><a class="reference internal" href="#cad">CAD建模浮动工具栏设计</a></li>
+<li><a class="reference internal" href="#id4">定义物理模型浮动工具栏设计</a></li>
+<li><a class="reference internal" href="#id5">网格剖分浮动工具栏设计</a></li>
+<li><a class="reference internal" href="#id6">求解器浮动工具栏设计</a></li>
+<li><a class="reference internal" href="#id7">可视化浮动工具栏设计</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
     <h4>Previous topic</h4>
     <p class="topless"><a href="main.html"
-                          title="previous chapter">CosmicCube集成开发环境</a></p>
+                          title="previous chapter">Airfoil架构</a></p>
   </div>
   <div>
     <h4>Next topic</h4>
-    <p class="topless"><a href="../airfoil/main.html"
-                          title="next chapter">Airfoil架构</a></p>
+    <p class="topless"><a href="../../api/library_root.html"
+                          title="next chapter">FENGSim</a></p>
   </div>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/src/cosmiccube/cosmiccube.rst.txt"
+      <li><a href="../../_sources/src/airfoil/airfoil_prepost.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -98,14 +144,14 @@
           <a href="../../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../airfoil/main.html" title="Airfoil架构"
+          <a href="../../api/library_root.html" title="FENGSim"
              >next</a> |</li>
         <li class="right" >
-          <a href="main.html" title="CosmicCube集成开发环境"
+          <a href="main.html" title="Airfoil架构"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../../index.html">Open Digital Twin 0.1 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="main.html" >CosmicCube集成开发环境</a> &#187;</li>
-        <li class="nav-item nav-item-this"><a href="">命令获取</a></li> 
+          <li class="nav-item nav-item-1"><a href="main.html" >Airfoil架构</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">前后处理</a></li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

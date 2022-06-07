@@ -186,9 +186,9 @@
 \def\Arg{\hbox{Arg}}
 \def\atan{\hbox{atan}}
 
-\usepackage{CJK}
-\AtBeginDocument{\begin{CJK}{UTF8}{gbsn}}
-\AtEndDocument{\end{CJK}}
+\usepackage{CJKutf8}
+\AtBeginDocument{\begin{CJK*}{UTF8}{gbsn}}
+\AtEndDocument{\end{CJK*}}
 
 
 \title{Open Digital Twin}
@@ -216,16 +216,13 @@
 \sphinxstepscope
 
 
-\chapter{Cosmic Cube}
+\chapter{Cosmic Cube集成开发环境}
 \label{\detokenize{src/cosmiccube/main:cosmic-cube}}\label{\detokenize{src/cosmiccube/main::doc}}
 \sphinxstepscope
 
 
-\section{Cosmic Cube}
-\label{\detokenize{src/cosmiccube/cosmiccube:cosmic-cube}}\label{\detokenize{src/cosmiccube/cosmiccube::doc}}
-\sphinxAtStartPar
-ODT\_模块名称\_函数名称
-
+\section{命令获取}
+\label{\detokenize{src/cosmiccube/cosmiccube:id1}}\label{\detokenize{src/cosmiccube/cosmiccube::doc}}
 \begin{sphinxVerbatim}[commandchars=\\\{\}]
 \PYG{g+gp}{\PYGZgt{}\PYGZgt{}\PYGZgt{} }\PYG{o}{/}\PYG{n+nb}{bin}\PYG{o}{/}\PYG{n}{bash} \PYG{o}{\PYGZhy{}}\PYG{n}{c} \PYG{l+s+s2}{\PYGZdq{}}\PYG{l+s+s2}{\PYGZdl{}(curl https://raw.githubusercontent.com/OpenDigitalTwin\PYGZhy{}Dev/OpenDigitalTwin/main/cube)}\PYG{l+s+s2}{\PYGZdq{}}
 \end{sphinxVerbatim}
@@ -235,13 +232,70 @@ ODT\_模块名称\_函数名称
 \sphinxstepscope
 
 
-\chapter{Machining}
-\label{\detokenize{src/machining/main:machining}}\label{\detokenize{src/machining/main::doc}}
+\chapter{Airfoil CAX架构}
+\label{\detokenize{src/airfoil/main:airfoil-cax}}\label{\detokenize{src/airfoil/main::doc}}
 \sphinxstepscope
 
 
-\section{PDE}
-\label{\detokenize{src/machining/pde:pde}}\label{\detokenize{src/machining/pde::doc}}
+\section{前后处理}
+\label{\detokenize{src/airfoil/airfoil_prepost:id1}}\label{\detokenize{src/airfoil/airfoil_prepost::doc}}
+\sphinxAtStartPar
+ODT\_模块名称\_函数名称
+
+
+\subsection{图形用户界面设计}
+\label{\detokenize{src/airfoil/airfoil_prepost:id2}}
+
+\subsubsection{主界面设计}
+\label{\detokenize{src/airfoil/airfoil_prepost:id3}}\begin{enumerate}
+\sphinxsetlistlabels{\arabic}{enumi}{enumii}{}{.}%
+\item {} 
+\sphinxAtStartPar
+模仿GIMP
+
+\item {} 
+\sphinxAtStartPar
+通过菜单和工具栏进入CAD建模、定义物理模型、网格剖分、求解器、可视化五个模块
+\begin{itemize}
+\item {} 
+\sphinxAtStartPar
+梳理菜单和工具栏对应的action
+
+\item {} 
+\sphinxAtStartPar
+梳理和action connection的函数名称和功能
+
+\end{itemize}
+
+\item {} 
+\sphinxAtStartPar
+主要操作通过浮动工具栏实现
+
+\end{enumerate}
+
+
+\subsubsection{CAD建模浮动工具栏设计}
+\label{\detokenize{src/airfoil/airfoil_prepost:cad}}
+
+\subsubsection{定义物理模型浮动工具栏设计}
+\label{\detokenize{src/airfoil/airfoil_prepost:id4}}
+
+\subsubsection{网格剖分浮动工具栏设计}
+\label{\detokenize{src/airfoil/airfoil_prepost:id5}}
+
+\subsubsection{求解器浮动工具栏设计}
+\label{\detokenize{src/airfoil/airfoil_prepost:id6}}
+
+\subsubsection{可视化浮动工具栏设计}
+\label{\detokenize{src/airfoil/airfoil_prepost:id7}}
+\sphinxstepscope
+
+
+\section{求解器}
+\label{\detokenize{src/airfoil/airfoil_solver:id1}}\label{\detokenize{src/airfoil/airfoil_solver::doc}}
+
+\subsection{M++}
+\label{\detokenize{src/airfoil/airfoil_solver:m}}
 \sphinxstepscope
 
 
