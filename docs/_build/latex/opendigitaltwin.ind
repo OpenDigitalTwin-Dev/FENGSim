@@ -5,7 +5,7 @@
 \let\spxextra \sphinxstyleindexextra
 
   \bigletter T
-  \item \spxentry{test}\spxextra{C++ class}, \hyperpage{7}
-  \item \spxentry{test::test}\spxextra{C++ function}, \hyperpage{7}
+  \item \spxentry{test}\spxextra{C++ class}, \hyperpage{11}
+  \item \spxentry{test::test}\spxextra{C++ function}, \hyperpage{11}
 
 \end{sphinxtheindex}
