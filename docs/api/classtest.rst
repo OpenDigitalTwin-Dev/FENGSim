@@ -3,7 +3,7 @@
 Class test
 ==========
 
-- Defined in :ref:`file__home_jiping_FENGSim_FENGSim_include_test.h`
+- Defined in :ref:`file_include_test.h`
 
 
 Class Documentation

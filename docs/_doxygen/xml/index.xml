@@ -7,8 +7,6 @@
   </compound>
   <compound refid="test_8h" kind="file"><name>test.h</name>
   </compound>
-  <compound refid="dir_5d1c26698e7986ae56f1964222b14273" kind="dir"><name>/home/jiping/FENGSim/FENGSim</name>
-  </compound>
-  <compound refid="dir_d303d8f2da0d0a5f28477a3224afa88e" kind="dir"><name>/home/jiping/FENGSim/FENGSim/include</name>
+  <compound refid="dir_d44c64559bbebec7f509842c48db8b23" kind="dir"><name>include</name>
   </compound>
 </doxygenindex>

@@ -2,7 +2,7 @@
 <doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
   <compounddef id="test_8h" kind="file" language="C++">
     <compoundname>test.h</compoundname>
-    <includedby refid="test_8cpp" local="yes">/home/jiping/FENGSim/FENGSim/include/test.cpp</includedby>
+    <includedby refid="test_8cpp" local="yes">include/test.cpp</includedby>
     <innerclass refid="classtest" prot="public">test</innerclass>
     <briefdescription>
     </briefdescription>
@@ -21,6 +21,6 @@
 <codeline lineno="10"><highlight class="normal"></highlight></codeline>
 <codeline lineno="11"><highlight class="normal"></highlight><highlight class="preprocessor">#endif<sp/>//<sp/>TEST_H</highlight></codeline>
     </programlisting>
-    <location file="/home/jiping/FENGSim/FENGSim/include/test.h"/>
+    <location file="include/test.h"/>
   </compounddef>
 </doxygen>

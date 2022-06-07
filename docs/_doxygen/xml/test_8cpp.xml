@@ -5,7 +5,7 @@
     <includes refid="test_8h" local="yes">test.h</includes>
     <incdepgraph>
       <node id="1">
-        <label>/home/jiping/FENGSim/FENGSim/include/test.cpp</label>
+        <label>include/test.cpp</label>
         <link refid="test_8cpp"/>
         <childnode refid="2" relation="include">
         </childnode>
@@ -27,6 +27,6 @@
 <codeline lineno="5"><highlight class="normal"></highlight></codeline>
 <codeline lineno="6"><highlight class="normal">}</highlight></codeline>
     </programlisting>
-    <location file="/home/jiping/FENGSim/FENGSim/include/test.cpp"/>
+    <location file="include/test.cpp"/>
   </compounddef>
 </doxygen>

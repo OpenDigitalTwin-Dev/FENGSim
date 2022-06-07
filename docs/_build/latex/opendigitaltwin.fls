@@ -1,4 +1,4 @@
-PWD /home/jiping/FENGSim/OpenDigitalTwin/docs/_build/latex
+PWD /home/jiping/FENGSim/FENGSim/docs/_build/latex
 INPUT /etc/texmf/web2c/texmf.cnf
 INPUT /usr/share/texmf/web2c/texmf.cnf
 INPUT /usr/share/texlive/texmf-dist/web2c/texmf.cnf
@@ -328,6 +328,8 @@ INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu78.tfm
 INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu8c.tfm
 INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu86.tfm
 INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu63.tfm
+INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu6a.tfm
+INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu57.tfm
 INPUT /usr/share/texlive/texmf-dist/tex/latex/txfonts/t1txtt.fd
 INPUT /usr/share/texlive/texmf-dist/tex/latex/txfonts/t1txtt.fd
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/txfonts/t1xtt.tfm
@@ -338,8 +340,6 @@ INPUT ./cosmiccube.jpg
 INPUT ./cosmiccube.jpg
 INPUT cosmiccube.jpg
 INPUT ./cosmiccube.jpg
-INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu6a.tfm
-INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu57.tfm
 INPUT /usr/share/texmf/fonts/tfm/public/tex-gyre/ec-qtmr.tfm
 INPUT /usr/share/texmf/fonts/tfm/public/tex-gyre/ec-qhvr.tfm
 INPUT /usr/share/texmf/tex/latex/tex-gyre/ts1qtm.fd

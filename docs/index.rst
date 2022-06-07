@@ -3,50 +3,18 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-欢迎使用开源数字孪生项目！ODT由FENGSim、OpenCAE+和GCGE构成，其中FENGSim包括Cosmic Cube集成开发环境和Airfoil Benchmark架构，Airfoil架构包括FEniCS教程中文版本。OpenCAE+包括OpenCAEPoro和FASP。OpenCAE+和GCGE分别由中国科学院计算数学所张晨松副研究员和谢和虎研究员主持开发。
    
-FENGSim
-=============================
-
-Cosmic Cube
------------------------------
->>> /bin/bash -c "$(curl https://raw.githubusercontent.com/OpenDigitalTwin-Dev/OpenDigitalTwin/main/cube)"
-
-.. image:: images/cosmiccube.jpg
-  :width: 400
-  :alt: Alternative text
-		
-Airfoil Benchmark
------------------------------
-
-Solving PDEs in Python – The FEniCS Tutorial Volume I, Hans Petter Langtangen and Anders Logg
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-Library
------------------------------
-ODT_模块名称_函数名称
-
 .. toctree::
    :maxdepth: 3
-
+			  
+   src/intro.rst
+   src/cosmiccube/main.rst
+   src/machining/main.rst
    api/library_root.rst
 
-
-   
 Indices and tables
------------------------------
+=============================
 
 * :ref:`genindex`
 * :ref:`search`
 
-OpenCAE+
-=============================
-
-OpenCAEPoro
------------------------------
-
-FASP
------------------------------
-
-GCGE
-=============================

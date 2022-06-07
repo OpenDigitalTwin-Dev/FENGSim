@@ -11,12 +11,7 @@ Directories
 .. toctree::
    :maxdepth: 5
 
-   dir__home_jiping_FENGSim_FENGSim.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   dir__home_jiping_FENGSim_FENGSim_include.rst
+   dir_include.rst
 
 Files
 *****
@@ -25,9 +20,9 @@ Files
 .. toctree::
    :maxdepth: 5
 
-   file__home_jiping_FENGSim_FENGSim_include_test.cpp.rst
+   file_include_test.cpp.rst
 
 .. toctree::
    :maxdepth: 5
 
-   file__home_jiping_FENGSim_FENGSim_include_test.h.rst
+   file_include_test.h.rst
