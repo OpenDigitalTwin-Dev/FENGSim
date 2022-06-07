@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.15)  7 JUN 2022 15:48
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.15)  7 JUN 2022 16:09
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -965,7 +965,7 @@ File: t1txtt.fd 2000/12/15 v3.1
 )
 LaTeX Font Info:    Font shape `T1/txtt/b/n' in size <10> not available
 (Font)              Font shape `T1/txtt/bx/n' tried instead on input line 227.
-<cosmiccube.jpg, id=218, 820.06375pt x 662.475pt>
+<cosmiccube.jpg, id=243, 820.06375pt x 662.475pt>
 File: cosmiccube.jpg Graphic file (type jpg)
 <use cosmiccube.jpg>
 Package pdftex.def Info: cosmiccube.jpg  used on input line 230.
@@ -986,33 +986,41 @@ Chapter 3.
 
 ]
 Chapter 4.
-(./opendigitaltwin.ind [9] [10
+[9] [10
 
-] [11
+]
+Chapter 5.
+[11] [12
+
+]
+Chapter 6.
+(./opendigitaltwin.ind [13] [14
+
+] [15
 
 
 ])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 376.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 376.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 395.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 395.
  (./opendigitaltwin.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 376.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 376.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 395.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 395.
 Package rerunfilecheck Info: File `opendigitaltwin.out' has not changed.
-(rerunfilecheck)             Checksum: 4E29CB7C8D0BD7A8136C74AF35EEAAE3;2690.
+(rerunfilecheck)             Checksum: 488D210640794F783A52365CCB1DE70B;3098.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 376.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 395.
  ) 
 Here is how much of TeX's memory you used:
- 15728 strings out of 481239
- 219694 string characters out of 5920376
- 497329 words of memory out of 5000000
- 30310 multiletter control sequences out of 15000+600000
+ 15749 strings out of 481239
+ 220030 string characters out of 5920376
+ 497566 words of memory out of 5000000
+ 30322 multiletter control sequences out of 15000+600000
  604388 words of font info for 138 fonts, out of 8000000 for 9000
  1142 hyphenation exceptions out of 8191
- 38i,11n,51p,392b,1366s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,11n,51p,392b,1384s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/tex-gyre/q-ec.enc}{/usr/share/texmf/fonts/e
 nc/dvips/tex-gyre/q-ts1.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/a
 msfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
@@ -1057,10 +1065,10 @@ mb.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qtmr.pfb></usr/share/texmf
 /fonts/type1/public/tex-gyre/qtmri.pfb></usr/share/texlive/texmf-dist/fonts/typ
 e1/public/txfonts/t1xbtt.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
 txfonts/t1xtt.pfb>
-Output written on opendigitaltwin.pdf (15 pages, 366769 bytes).
+Output written on opendigitaltwin.pdf (19 pages, 369889 bytes).
 PDF statistics:
- 492 PDF objects out of 1000 (max. 8388607)
- 357 compressed objects within 4 object streams
- 45 named destinations out of 1000 (max. 500000)
- 398 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 535 PDF objects out of 1000 (max. 8388607)
+ 396 compressed objects within 4 object streams
+ 54 named destinations out of 1000 (max. 500000)
+ 438 words of extra memory for PDF output out of 10000 (max. 10000000)
 

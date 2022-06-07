@@ -10,6 +10,8 @@
    src/intro.rst
    src/cosmiccube/main.rst
    src/airfoil/main.rst
+   src/opencaeplus/main.rst
+   src/gcge/main.rst
    api/library_root.rst
 
 Indices and tables
