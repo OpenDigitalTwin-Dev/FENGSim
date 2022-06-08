@@ -1,0 +1,598 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classUi__MainWindow" kind="class" language="C++" prot="public">
+    <compoundname>Ui_MainWindow</compoundname>
+    <derivedcompoundref refid="classUi_1_1MainWindow" prot="public" virt="non-virtual">Ui::MainWindow</derivedcompoundref>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="classUi__MainWindow_1a22c93f5d4a5b1331282c23159b4fe810" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MainWindow::actionCAD</definition>
+        <argsstring></argsstring>
+        <name>actionCAD</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="39" column="13" bodyfile="include/ui_MainWindow.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1a82a242ac2bd5c37a9661443303f6f2de" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MainWindow::actionMesh</definition>
+        <argsstring></argsstring>
+        <name>actionMesh</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="40" column="13" bodyfile="include/ui_MainWindow.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1af5d5a6eac02b97d407a67147ace76e08" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MainWindow::actionFEM</definition>
+        <argsstring></argsstring>
+        <name>actionFEM</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="41" column="13" bodyfile="include/ui_MainWindow.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1a51fc8238c12a3c3c5dea9e22cfabe0e2" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MainWindow::actionVisual</definition>
+        <argsstring></argsstring>
+        <name>actionVisual</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="42" column="13" bodyfile="include/ui_MainWindow.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1abdf2b43167c2cd0d3405f90b8c30e934" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MainWindow::actionAbout</definition>
+        <argsstring></argsstring>
+        <name>actionAbout</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="43" column="13" bodyfile="include/ui_MainWindow.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1a6e14788227f1a0dbc8cf983514685f3b" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MainWindow::actionSave</definition>
+        <argsstring></argsstring>
+        <name>actionSave</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="44" column="13" bodyfile="include/ui_MainWindow.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1a5772f39001f62b7f601aafe72caa10c0" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MainWindow::actionOpen</definition>
+        <argsstring></argsstring>
+        <name>actionOpen</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="45" column="13" bodyfile="include/ui_MainWindow.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1a8cd11e69494a245929e506e7765a8c4e" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MainWindow::actionSPC</definition>
+        <argsstring></argsstring>
+        <name>actionSPC</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="46" column="13" bodyfile="include/ui_MainWindow.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1a1740c62bba6af6ba94788aef6d0cbc08" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MainWindow::actionAxo</definition>
+        <argsstring></argsstring>
+        <name>actionAxo</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="47" column="13" bodyfile="include/ui_MainWindow.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1ad97f475081278b8ab9704ee6f72c95ad" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MainWindow::actionFront</definition>
+        <argsstring></argsstring>
+        <name>actionFront</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="48" column="13" bodyfile="include/ui_MainWindow.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1a0e175388653faa98680f46a50860d77c" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MainWindow::actionBack</definition>
+        <argsstring></argsstring>
+        <name>actionBack</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="49" column="13" bodyfile="include/ui_MainWindow.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1a08107784d30c221ac7ef4e562f92f10f" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MainWindow::actionLeft</definition>
+        <argsstring></argsstring>
+        <name>actionLeft</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="50" column="13" bodyfile="include/ui_MainWindow.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1adc026baea7c22ac3907c21c51516a5aa" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MainWindow::actionRight</definition>
+        <argsstring></argsstring>
+        <name>actionRight</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="51" column="13" bodyfile="include/ui_MainWindow.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1a989f0bcde82db16ace2a333e55c19161" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MainWindow::actionTop</definition>
+        <argsstring></argsstring>
+        <name>actionTop</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="52" column="13" bodyfile="include/ui_MainWindow.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1a40b6f038eaeca16f2f946a1a5980149c" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MainWindow::actionBottom</definition>
+        <argsstring></argsstring>
+        <name>actionBottom</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="53" column="13" bodyfile="include/ui_MainWindow.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1abb48c925047cc85e03658f2cacfa752c" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MainWindow::actionFit</definition>
+        <argsstring></argsstring>
+        <name>actionFit</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="54" column="13" bodyfile="include/ui_MainWindow.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1a9090620adfd867b72c5f445c83b8c0ec" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MainWindow::actionNew</definition>
+        <argsstring></argsstring>
+        <name>actionNew</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="55" column="13" bodyfile="include/ui_MainWindow.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1ab15d94c50540fd52fbda6bead58b7313" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MainWindow::actionMeasure</definition>
+        <argsstring></argsstring>
+        <name>actionMeasure</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="56" column="13" bodyfile="include/ui_MainWindow.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1a24d1255120744e725bfa493b31db417e" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MainWindow::actionSystem</definition>
+        <argsstring></argsstring>
+        <name>actionSystem</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="57" column="13" bodyfile="include/ui_MainWindow.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1a80bad322a2486d739e6652a6c9ec2a7e" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MainWindow::actionAdditiveManufacturing</definition>
+        <argsstring></argsstring>
+        <name>actionAdditiveManufacturing</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="58" column="13" bodyfile="include/ui_MainWindow.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1a38be43cafc63de4984b44acb936e30ed" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MainWindow::actionViewRotationH</definition>
+        <argsstring></argsstring>
+        <name>actionViewRotationH</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="59" column="13" bodyfile="include/ui_MainWindow.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1abc017e66ce9bfc8ad4a189f4c7c67f26" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MainWindow::actionViewRotationV</definition>
+        <argsstring></argsstring>
+        <name>actionViewRotationV</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="60" column="13" bodyfile="include/ui_MainWindow.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1a363e5ff128c592e3563531830053421e" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MainWindow::actionMachining</definition>
+        <argsstring></argsstring>
+        <name>actionMachining</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="61" column="13" bodyfile="include/ui_MainWindow.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1affd31dcab2d3bcaf2aa7d0d2a44abbf3" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MainWindow::actionTransport</definition>
+        <argsstring></argsstring>
+        <name>actionTransport</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="62" column="13" bodyfile="include/ui_MainWindow.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1a4cbb6f3a7337a2e7c6d81a8e000da324" prot="public" static="no" mutable="no">
+        <type>OCCWidget *</type>
+        <definition>OCCWidget* Ui_MainWindow::centralWidget</definition>
+        <argsstring></argsstring>
+        <name>centralWidget</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="63" column="15" bodyfile="include/ui_MainWindow.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1aecd96a04789fcfec3f98d80390ad8184" prot="public" static="no" mutable="no">
+        <type>QVBoxLayout *</type>
+        <definition>QVBoxLayout* Ui_MainWindow::verticalLayout</definition>
+        <argsstring></argsstring>
+        <name>verticalLayout</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="64" column="17" bodyfile="include/ui_MainWindow.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1a5d15fa11294b2eaf4fd021a7a22443b3" prot="public" static="no" mutable="no">
+        <type>QMdiArea *</type>
+        <definition>QMdiArea* Ui_MainWindow::mdiArea</definition>
+        <argsstring></argsstring>
+        <name>mdiArea</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="65" column="14" bodyfile="include/ui_MainWindow.h" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1a2be1c24ec9adfca18e1dcc951931457f" prot="public" static="no" mutable="no">
+        <type>QMenuBar *</type>
+        <definition>QMenuBar* Ui_MainWindow::menuBar</definition>
+        <argsstring></argsstring>
+        <name>menuBar</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="66" column="14" bodyfile="include/ui_MainWindow.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1a7ba84cb4cdd6a12dc83bf4e100bd8d80" prot="public" static="no" mutable="no">
+        <type>QMenu *</type>
+        <definition>QMenu* Ui_MainWindow::menuFile</definition>
+        <argsstring></argsstring>
+        <name>menuFile</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="67" column="11" bodyfile="include/ui_MainWindow.h" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1a5200116a5c140f570657c3fc730251e9" prot="public" static="no" mutable="no">
+        <type>QMenu *</type>
+        <definition>QMenu* Ui_MainWindow::menuFENGSim</definition>
+        <argsstring></argsstring>
+        <name>menuFENGSim</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="68" column="11" bodyfile="include/ui_MainWindow.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1a9e7f2ce6c3d8a309109baed7d6890604" prot="public" static="no" mutable="no">
+        <type>QMenu *</type>
+        <definition>QMenu* Ui_MainWindow::menuView</definition>
+        <argsstring></argsstring>
+        <name>menuView</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="69" column="11" bodyfile="include/ui_MainWindow.h" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1aa11a672d324fa5c42a5dc488e99bc216" prot="public" static="no" mutable="no">
+        <type>QMenu *</type>
+        <definition>QMenu* Ui_MainWindow::menuAbout</definition>
+        <argsstring></argsstring>
+        <name>menuAbout</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="70" column="11" bodyfile="include/ui_MainWindow.h" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1a50fa481337604bcc8bf68de18ab16ecd" prot="public" static="no" mutable="no">
+        <type>QStatusBar *</type>
+        <definition>QStatusBar* Ui_MainWindow::statusBar</definition>
+        <argsstring></argsstring>
+        <name>statusBar</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="71" column="16" bodyfile="include/ui_MainWindow.h" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1af0e3e4981b5f999d6613d5c097a77aa9" prot="public" static="no" mutable="no">
+        <type>QToolBar *</type>
+        <definition>QToolBar* Ui_MainWindow::toolBarFENGSim</definition>
+        <argsstring></argsstring>
+        <name>toolBarFENGSim</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="72" column="14" bodyfile="include/ui_MainWindow.h" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1ac8a083c4b66fb317a9b538409ce412e2" prot="public" static="no" mutable="no">
+        <type>QDockWidget *</type>
+        <definition>QDockWidget* Ui_MainWindow::dockWidget</definition>
+        <argsstring></argsstring>
+        <name>dockWidget</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="73" column="17" bodyfile="include/ui_MainWindow.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1a765ded8236736213d556f6f91941808e" prot="public" static="no" mutable="no">
+        <type>QWidget *</type>
+        <definition>QWidget* Ui_MainWindow::dockWidgetContents</definition>
+        <argsstring></argsstring>
+        <name>dockWidgetContents</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="74" column="13" bodyfile="include/ui_MainWindow.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1a0c01bad60d9f422a1258e710635a2f65" prot="public" static="no" mutable="no">
+        <type>QVBoxLayout *</type>
+        <definition>QVBoxLayout* Ui_MainWindow::verticalLayout_2</definition>
+        <argsstring></argsstring>
+        <name>verticalLayout_2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="75" column="17" bodyfile="include/ui_MainWindow.h" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MainWindow_1ad332d93084584930878f1daf5f84cdbf" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_MainWindow::pushButton</definition>
+        <argsstring></argsstring>
+        <name>pushButton</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="76" column="17" bodyfile="include/ui_MainWindow.h" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classUi__MainWindow_1acf4a0872c4c77d8f43a2ec66ed849b58" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Ui_MainWindow::setupUi</definition>
+        <argsstring>(QMainWindow *MainWindow)</argsstring>
+        <name>setupUi</name>
+        <param>
+          <type>QMainWindow *</type>
+          <declname>MainWindow</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="78" column="10" bodyfile="include/ui_MainWindow.h" bodystart="78" bodyend="376"/>
+      </memberdef>
+      <memberdef kind="function" id="classUi__MainWindow_1a097dd160c3534a204904cb374412c618" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Ui_MainWindow::retranslateUi</definition>
+        <argsstring>(QMainWindow *MainWindow)</argsstring>
+        <name>retranslateUi</name>
+        <param>
+          <type>QMainWindow *</type>
+          <declname>MainWindow</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MainWindow.h" line="378" column="10" bodyfile="include/ui_MainWindow.h" bodystart="378" bodyend="420"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Ui::MainWindow</label>
+        <link refid="classUi_1_1MainWindow"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>Ui_MainWindow</label>
+        <link refid="classUi__MainWindow"/>
+      </node>
+    </inheritancegraph>
+    <location file="include/ui_MainWindow.h" line="31" column="1" bodyfile="include/ui_MainWindow.h" bodystart="30" bodyend="416"/>
+    <listofallmembers>
+      <member refid="classUi__MainWindow_1abdf2b43167c2cd0d3405f90b8c30e934" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>actionAbout</name></member>
+      <member refid="classUi__MainWindow_1a80bad322a2486d739e6652a6c9ec2a7e" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>actionAdditiveManufacturing</name></member>
+      <member refid="classUi__MainWindow_1a1740c62bba6af6ba94788aef6d0cbc08" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>actionAxo</name></member>
+      <member refid="classUi__MainWindow_1a0e175388653faa98680f46a50860d77c" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>actionBack</name></member>
+      <member refid="classUi__MainWindow_1a40b6f038eaeca16f2f946a1a5980149c" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>actionBottom</name></member>
+      <member refid="classUi__MainWindow_1a22c93f5d4a5b1331282c23159b4fe810" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>actionCAD</name></member>
+      <member refid="classUi__MainWindow_1af5d5a6eac02b97d407a67147ace76e08" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>actionFEM</name></member>
+      <member refid="classUi__MainWindow_1abb48c925047cc85e03658f2cacfa752c" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>actionFit</name></member>
+      <member refid="classUi__MainWindow_1ad97f475081278b8ab9704ee6f72c95ad" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>actionFront</name></member>
+      <member refid="classUi__MainWindow_1a08107784d30c221ac7ef4e562f92f10f" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>actionLeft</name></member>
+      <member refid="classUi__MainWindow_1a363e5ff128c592e3563531830053421e" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>actionMachining</name></member>
+      <member refid="classUi__MainWindow_1ab15d94c50540fd52fbda6bead58b7313" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>actionMeasure</name></member>
+      <member refid="classUi__MainWindow_1a82a242ac2bd5c37a9661443303f6f2de" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>actionMesh</name></member>
+      <member refid="classUi__MainWindow_1a9090620adfd867b72c5f445c83b8c0ec" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>actionNew</name></member>
+      <member refid="classUi__MainWindow_1a5772f39001f62b7f601aafe72caa10c0" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>actionOpen</name></member>
+      <member refid="classUi__MainWindow_1adc026baea7c22ac3907c21c51516a5aa" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>actionRight</name></member>
+      <member refid="classUi__MainWindow_1a6e14788227f1a0dbc8cf983514685f3b" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>actionSave</name></member>
+      <member refid="classUi__MainWindow_1a8cd11e69494a245929e506e7765a8c4e" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>actionSPC</name></member>
+      <member refid="classUi__MainWindow_1a24d1255120744e725bfa493b31db417e" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>actionSystem</name></member>
+      <member refid="classUi__MainWindow_1a989f0bcde82db16ace2a333e55c19161" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>actionTop</name></member>
+      <member refid="classUi__MainWindow_1affd31dcab2d3bcaf2aa7d0d2a44abbf3" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>actionTransport</name></member>
+      <member refid="classUi__MainWindow_1a38be43cafc63de4984b44acb936e30ed" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>actionViewRotationH</name></member>
+      <member refid="classUi__MainWindow_1abc017e66ce9bfc8ad4a189f4c7c67f26" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>actionViewRotationV</name></member>
+      <member refid="classUi__MainWindow_1a51fc8238c12a3c3c5dea9e22cfabe0e2" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>actionVisual</name></member>
+      <member refid="classUi__MainWindow_1a4cbb6f3a7337a2e7c6d81a8e000da324" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>centralWidget</name></member>
+      <member refid="classUi__MainWindow_1ac8a083c4b66fb317a9b538409ce412e2" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>dockWidget</name></member>
+      <member refid="classUi__MainWindow_1a765ded8236736213d556f6f91941808e" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>dockWidgetContents</name></member>
+      <member refid="classUi__MainWindow_1a5d15fa11294b2eaf4fd021a7a22443b3" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>mdiArea</name></member>
+      <member refid="classUi__MainWindow_1aa11a672d324fa5c42a5dc488e99bc216" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>menuAbout</name></member>
+      <member refid="classUi__MainWindow_1a2be1c24ec9adfca18e1dcc951931457f" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>menuBar</name></member>
+      <member refid="classUi__MainWindow_1a5200116a5c140f570657c3fc730251e9" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>menuFENGSim</name></member>
+      <member refid="classUi__MainWindow_1a7ba84cb4cdd6a12dc83bf4e100bd8d80" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>menuFile</name></member>
+      <member refid="classUi__MainWindow_1a9e7f2ce6c3d8a309109baed7d6890604" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>menuView</name></member>
+      <member refid="classUi__MainWindow_1ad332d93084584930878f1daf5f84cdbf" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>pushButton</name></member>
+      <member refid="classUi__MainWindow_1a097dd160c3534a204904cb374412c618" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>retranslateUi</name></member>
+      <member refid="classUi__MainWindow_1acf4a0872c4c77d8f43a2ec66ed849b58" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>setupUi</name></member>
+      <member refid="classUi__MainWindow_1a50fa481337604bcc8bf68de18ab16ecd" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>statusBar</name></member>
+      <member refid="classUi__MainWindow_1af0e3e4981b5f999d6613d5c097a77aa9" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>toolBarFENGSim</name></member>
+      <member refid="classUi__MainWindow_1aecd96a04789fcfec3f98d80390ad8184" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>verticalLayout</name></member>
+      <member refid="classUi__MainWindow_1a0c01bad60d9f422a1258e710635a2f65" prot="public" virt="non-virtual"><scope>Ui_MainWindow</scope><name>verticalLayout_2</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

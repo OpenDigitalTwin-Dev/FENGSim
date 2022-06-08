@@ -1,7 +1,7 @@
 This is makeindex, version 2.15 [TeX Live 2019] (kpathsea + Thai support).
 Scanning style file ./python.ist.......done (7 attributes redefined, 0 ignored).
-Scanning input file opendigitaltwin.idx....done (2 entries accepted, 0 rejected).
-Sorting entries....done (2 comparisons).
-Generating output file opendigitaltwin.ind....done (11 lines written, 0 warnings).
+Scanning input file opendigitaltwin.idx....done (481 entries accepted, 0 rejected).
+Sorting entries......done (4418 comparisons).
+Generating output file opendigitaltwin.ind....done (642 lines written, 0 warnings).
 Output written in opendigitaltwin.ind.
 Transcript written in opendigitaltwin.ilg.

@@ -2,6 +2,15 @@
 Full API
 --------
 
+Namespaces
+**********
+
+
+.. toctree::
+   :maxdepth: 5
+
+   namespace_Ui.rst
+
 Classes and Structs
 *******************
 
@@ -10,3 +19,113 @@ Classes and Structs
    :maxdepth: 5
 
    classtest.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classUi_1_1AboutDialog.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classUi_1_1AdditiveManufacturingDockWidget.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classUi_1_1CADDockWidget.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classUi_1_1FEMDockWidget.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classUi_1_1MachiningDockWidget.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classUi_1_1MainWindow.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classUi_1_1MeasureDockWidget.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classUi_1_1MeshDockWidget.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classUi_1_1SPCDockWidget.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classUi_1_1TransportDockWidget.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classUi_1_1VTKDockWidget.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classUi__AboutDialog.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classUi__AdditiveManufacturingDockWidget.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classUi__CADDockWidget.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classUi__FEMDockWidget.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classUi__MachiningDockWidget.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classUi__MainWindow.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classUi__MeasureDockWidget.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classUi__MeshDockWidget.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classUi__SPCDockWidget.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classUi__TransportDockWidget.rst
+
+.. toctree::
+   :maxdepth: 5
+
+   classUi__VTKDockWidget.rst

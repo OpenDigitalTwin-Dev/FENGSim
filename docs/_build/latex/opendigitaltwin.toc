@@ -21,8 +21,99 @@
 \contentsline {section}{\numberline {5.1}Class Hierarchy}{11}{section.5.1}%
 \contentsline {section}{\numberline {5.2}File Hierarchy}{11}{section.5.2}%
 \contentsline {section}{\numberline {5.3}Full API}{11}{section.5.3}%
-\contentsline {subsection}{\numberline {5.3.1}Classes and Structs}{11}{subsection.5.3.1}%
-\contentsline {subsubsection}{Class test}{11}{subsubsection*.9}%
-\contentsline {paragraph}{Class Documentation}{11}{paragraph*.10}%
-\contentsline {chapter}{\numberline {6}Indices and tables}{13}{chapter.6}%
-\contentsline {chapter}{Index}{15}{section*.16}%
+\contentsline {subsection}{\numberline {5.3.1}Namespaces}{11}{subsection.5.3.1}%
+\contentsline {subsubsection}{Namespace Ui}{11}{subsubsection*.9}%
+\contentsline {paragraph}{Classes}{11}{paragraph*.11}%
+\contentsline {subsection}{\numberline {5.3.2}Classes and Structs}{12}{subsection.5.3.2}%
+\contentsline {subsubsection}{Class test}{12}{subsubsection*.12}%
+\contentsline {paragraph}{Class Documentation}{12}{paragraph*.13}%
+\contentsline {subsubsection}{Class AboutDialog}{12}{subsubsection*.19}%
+\contentsline {paragraph}{Inheritance Relationships}{12}{paragraph*.20}%
+\contentsline {subparagraph}{Base Type}{12}{subparagraph*.21}%
+\contentsline {paragraph}{Class Documentation}{12}{paragraph*.22}%
+\contentsline {subsubsection}{Class AdditiveManufacturingDockWidget}{12}{subsubsection*.25}%
+\contentsline {paragraph}{Inheritance Relationships}{12}{paragraph*.26}%
+\contentsline {subparagraph}{Base Type}{12}{subparagraph*.27}%
+\contentsline {paragraph}{Class Documentation}{13}{paragraph*.28}%
+\contentsline {subsubsection}{Class CADDockWidget}{13}{subsubsection*.31}%
+\contentsline {paragraph}{Inheritance Relationships}{13}{paragraph*.32}%
+\contentsline {subparagraph}{Base Type}{13}{subparagraph*.33}%
+\contentsline {paragraph}{Class Documentation}{13}{paragraph*.34}%
+\contentsline {subsubsection}{Class FEMDockWidget}{13}{subsubsection*.37}%
+\contentsline {paragraph}{Inheritance Relationships}{13}{paragraph*.38}%
+\contentsline {subparagraph}{Base Type}{13}{subparagraph*.39}%
+\contentsline {paragraph}{Class Documentation}{13}{paragraph*.40}%
+\contentsline {subsubsection}{Class MachiningDockWidget}{13}{subsubsection*.43}%
+\contentsline {paragraph}{Inheritance Relationships}{14}{paragraph*.44}%
+\contentsline {subparagraph}{Base Type}{14}{subparagraph*.45}%
+\contentsline {paragraph}{Class Documentation}{14}{paragraph*.46}%
+\contentsline {subsubsection}{Class MainWindow}{14}{subsubsection*.49}%
+\contentsline {paragraph}{Inheritance Relationships}{14}{paragraph*.50}%
+\contentsline {subparagraph}{Base Type}{14}{subparagraph*.51}%
+\contentsline {paragraph}{Class Documentation}{14}{paragraph*.52}%
+\contentsline {subsubsection}{Class MeasureDockWidget}{14}{subsubsection*.55}%
+\contentsline {paragraph}{Inheritance Relationships}{14}{paragraph*.56}%
+\contentsline {subparagraph}{Base Type}{14}{subparagraph*.57}%
+\contentsline {paragraph}{Class Documentation}{14}{paragraph*.58}%
+\contentsline {subsubsection}{Class MeshDockWidget}{15}{subsubsection*.61}%
+\contentsline {paragraph}{Inheritance Relationships}{15}{paragraph*.62}%
+\contentsline {subparagraph}{Base Type}{15}{subparagraph*.63}%
+\contentsline {paragraph}{Class Documentation}{15}{paragraph*.64}%
+\contentsline {subsubsection}{Class SPCDockWidget}{15}{subsubsection*.67}%
+\contentsline {paragraph}{Inheritance Relationships}{15}{paragraph*.68}%
+\contentsline {subparagraph}{Base Type}{15}{subparagraph*.69}%
+\contentsline {paragraph}{Class Documentation}{15}{paragraph*.70}%
+\contentsline {subsubsection}{Class TransportDockWidget}{15}{subsubsection*.73}%
+\contentsline {paragraph}{Inheritance Relationships}{15}{paragraph*.74}%
+\contentsline {subparagraph}{Base Type}{15}{subparagraph*.75}%
+\contentsline {paragraph}{Class Documentation}{16}{paragraph*.76}%
+\contentsline {subsubsection}{Class VTKDockWidget}{16}{subsubsection*.79}%
+\contentsline {paragraph}{Inheritance Relationships}{16}{paragraph*.80}%
+\contentsline {subparagraph}{Base Type}{16}{subparagraph*.81}%
+\contentsline {paragraph}{Class Documentation}{16}{paragraph*.82}%
+\contentsline {subsubsection}{Class Ui\_AboutDialog}{16}{subsubsection*.85}%
+\contentsline {paragraph}{Inheritance Relationships}{16}{paragraph*.86}%
+\contentsline {subparagraph}{Derived Type}{16}{subparagraph*.87}%
+\contentsline {paragraph}{Class Documentation}{16}{paragraph*.88}%
+\contentsline {subsubsection}{Class Ui\_AdditiveManufacturingDockWidget}{17}{subsubsection*.101}%
+\contentsline {paragraph}{Inheritance Relationships}{17}{paragraph*.102}%
+\contentsline {subparagraph}{Derived Type}{17}{subparagraph*.103}%
+\contentsline {paragraph}{Class Documentation}{17}{paragraph*.104}%
+\contentsline {subsubsection}{Class Ui\_CADDockWidget}{23}{subsubsection*.365}%
+\contentsline {paragraph}{Inheritance Relationships}{23}{paragraph*.366}%
+\contentsline {subparagraph}{Derived Type}{23}{subparagraph*.367}%
+\contentsline {paragraph}{Class Documentation}{24}{paragraph*.368}%
+\contentsline {subsubsection}{Class Ui\_FEMDockWidget}{28}{subsubsection*.539}%
+\contentsline {paragraph}{Inheritance Relationships}{28}{paragraph*.540}%
+\contentsline {subparagraph}{Derived Type}{28}{subparagraph*.541}%
+\contentsline {paragraph}{Class Documentation}{28}{paragraph*.542}%
+\contentsline {subsubsection}{Class Ui\_MachiningDockWidget}{29}{subsubsection*.577}%
+\contentsline {paragraph}{Inheritance Relationships}{29}{paragraph*.578}%
+\contentsline {subparagraph}{Derived Type}{29}{subparagraph*.579}%
+\contentsline {paragraph}{Class Documentation}{29}{paragraph*.580}%
+\contentsline {subsubsection}{Class Ui\_MainWindow}{32}{subsubsection*.687}%
+\contentsline {paragraph}{Inheritance Relationships}{32}{paragraph*.688}%
+\contentsline {subparagraph}{Derived Type}{32}{subparagraph*.689}%
+\contentsline {paragraph}{Class Documentation}{32}{paragraph*.690}%
+\contentsline {subsubsection}{Class Ui\_MeasureDockWidget}{34}{subsubsection*.775}%
+\contentsline {paragraph}{Inheritance Relationships}{34}{paragraph*.776}%
+\contentsline {subparagraph}{Derived Type}{34}{subparagraph*.777}%
+\contentsline {paragraph}{Class Documentation}{34}{paragraph*.778}%
+\contentsline {subsubsection}{Class Ui\_MeshDockWidget}{37}{subsubsection*.895}%
+\contentsline {paragraph}{Inheritance Relationships}{37}{paragraph*.896}%
+\contentsline {subparagraph}{Derived Type}{37}{subparagraph*.897}%
+\contentsline {paragraph}{Class Documentation}{38}{paragraph*.898}%
+\contentsline {subsubsection}{Class Ui\_SPCDockWidget}{38}{subsubsection*.925}%
+\contentsline {paragraph}{Inheritance Relationships}{38}{paragraph*.926}%
+\contentsline {subparagraph}{Derived Type}{38}{subparagraph*.927}%
+\contentsline {paragraph}{Class Documentation}{39}{paragraph*.928}%
+\contentsline {subsubsection}{Class Ui\_TransportDockWidget}{39}{subsubsection*.941}%
+\contentsline {paragraph}{Inheritance Relationships}{39}{paragraph*.942}%
+\contentsline {subparagraph}{Derived Type}{39}{subparagraph*.943}%
+\contentsline {paragraph}{Class Documentation}{39}{paragraph*.944}%
+\contentsline {subsubsection}{Class Ui\_VTKDockWidget}{42}{subsubsection*.1055}%
+\contentsline {paragraph}{Inheritance Relationships}{42}{paragraph*.1056}%
+\contentsline {subparagraph}{Derived Type}{42}{subparagraph*.1057}%
+\contentsline {paragraph}{Class Documentation}{42}{paragraph*.1058}%
+\contentsline {chapter}{\numberline {6}Indices and tables}{45}{chapter.6}%
+\contentsline {chapter}{Index}{47}{section*.1087}%

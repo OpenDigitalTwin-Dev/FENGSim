@@ -1,0 +1,1200 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classUi__CADDockWidget" kind="class" language="C++" prot="public">
+    <compoundname>Ui_CADDockWidget</compoundname>
+    <derivedcompoundref refid="classUi_1_1CADDockWidget" prot="public" virt="non-virtual">Ui::CADDockWidget</derivedcompoundref>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="classUi__CADDockWidget_1aad188456730f7fe4e05d3f603eb70483" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_CADDockWidget::actionSphere</definition>
+        <argsstring></argsstring>
+        <name>actionSphere</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="38" column="13" bodyfile="include/ui_CADDockWidget.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a778f66bd0456c45a2a0a8fc5aea9ccc6" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_CADDockWidget::actionCube</definition>
+        <argsstring></argsstring>
+        <name>actionCube</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="39" column="13" bodyfile="include/ui_CADDockWidget.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1aed39416fc6f78b571317efba0f64a867" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_CADDockWidget::actionTorus</definition>
+        <argsstring></argsstring>
+        <name>actionTorus</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="40" column="13" bodyfile="include/ui_CADDockWidget.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a99ebb4635635449b978eb575be7eef23" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_CADDockWidget::actionCone</definition>
+        <argsstring></argsstring>
+        <name>actionCone</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="41" column="13" bodyfile="include/ui_CADDockWidget.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a32d2be0215c2ce77dca4ec27a6f19ce0" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_CADDockWidget::actionCylinder</definition>
+        <argsstring></argsstring>
+        <name>actionCylinder</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="42" column="13" bodyfile="include/ui_CADDockWidget.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a0048a1e8b32df16868014c336d26b07c" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_CADDockWidget::actionPoint</definition>
+        <argsstring></argsstring>
+        <name>actionPoint</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="43" column="13" bodyfile="include/ui_CADDockWidget.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1aeecf48ea1f7dffdf0c9b783105546c3d" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_CADDockWidget::actionLine</definition>
+        <argsstring></argsstring>
+        <name>actionLine</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="44" column="13" bodyfile="include/ui_CADDockWidget.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1af1126ebd73475ccf2bae9ed30b5f10fa" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_CADDockWidget::actionSquare</definition>
+        <argsstring></argsstring>
+        <name>actionSquare</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="45" column="13" bodyfile="include/ui_CADDockWidget.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1aed38a1583608da88a9a939e717be3662" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_CADDockWidget::actionUnion</definition>
+        <argsstring></argsstring>
+        <name>actionUnion</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="46" column="13" bodyfile="include/ui_CADDockWidget.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a5fbcec530193fc24641d0d09b51a854c" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_CADDockWidget::actionSection</definition>
+        <argsstring></argsstring>
+        <name>actionSection</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="47" column="13" bodyfile="include/ui_CADDockWidget.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a38f7fc0b7b65a3ac1ebc224a023d0a87" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_CADDockWidget::actionCut</definition>
+        <argsstring></argsstring>
+        <name>actionCut</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="48" column="13" bodyfile="include/ui_CADDockWidget.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a030e95e2845372741c95390b50b23efe" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_CADDockWidget::actionSweep</definition>
+        <argsstring></argsstring>
+        <name>actionSweep</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="49" column="13" bodyfile="include/ui_CADDockWidget.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1ae25e87d50ee2b73d017c5ad3c770c76c" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_CADDockWidget::actionExtrude</definition>
+        <argsstring></argsstring>
+        <name>actionExtrude</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="50" column="13" bodyfile="include/ui_CADDockWidget.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1af9b5affc936813ac79b695bc5e823062" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_CADDockWidget::actionMirror</definition>
+        <argsstring></argsstring>
+        <name>actionMirror</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="51" column="13" bodyfile="include/ui_CADDockWidget.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1aee277d03d30b6b861ac6b36d3d690c29" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_CADDockWidget::actionSelectFace</definition>
+        <argsstring></argsstring>
+        <name>actionSelectFace</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="52" column="13" bodyfile="include/ui_CADDockWidget.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a75b3359246f66bac3975ac2c87580682" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_CADDockWidget::actionSelectDomain</definition>
+        <argsstring></argsstring>
+        <name>actionSelectDomain</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="53" column="13" bodyfile="include/ui_CADDockWidget.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a678623e86730f1477bceec5964495d5a" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_CADDockWidget::actionPart1</definition>
+        <argsstring></argsstring>
+        <name>actionPart1</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="54" column="13" bodyfile="include/ui_CADDockWidget.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1adaefcb060c121ae84445bcad41fe3add" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_CADDockWidget::actionPart2</definition>
+        <argsstring></argsstring>
+        <name>actionPart2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="55" column="13" bodyfile="include/ui_CADDockWidget.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a080f1be9ded364ae59d18214b77ac4ff" prot="public" static="no" mutable="no">
+        <type>QVBoxLayout *</type>
+        <definition>QVBoxLayout* Ui_CADDockWidget::verticalLayout_5</definition>
+        <argsstring></argsstring>
+        <name>verticalLayout_5</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="56" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1aa2c8dd1479f95d336d42dd3531cca7c0" prot="public" static="no" mutable="no">
+        <type>QGridLayout *</type>
+        <definition>QGridLayout* Ui_CADDockWidget::gridLayout</definition>
+        <argsstring></argsstring>
+        <name>gridLayout</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="57" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a4183099d20a9dbebf64b65cb8412b3f7" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_CADDockWidget::pushButton_4</definition>
+        <argsstring></argsstring>
+        <name>pushButton_4</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="58" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1aee56ffd68dac8d149548ab0600b4aa5c" prot="public" static="no" mutable="no">
+        <type>QSpacerItem *</type>
+        <definition>QSpacerItem* Ui_CADDockWidget::horizontalSpacer_2</definition>
+        <argsstring></argsstring>
+        <name>horizontalSpacer_2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="59" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a30f97461eebbdd3c79e45055e25d6f72" prot="public" static="no" mutable="no">
+        <type>QSpacerItem *</type>
+        <definition>QSpacerItem* Ui_CADDockWidget::horizontalSpacer</definition>
+        <argsstring></argsstring>
+        <name>horizontalSpacer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="60" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a7712af76e5c2fa8cb397d6c3e08aeaa3" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_CADDockWidget::pushButton_9</definition>
+        <argsstring></argsstring>
+        <name>pushButton_9</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="61" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a2a37b7dadffc48c0451cd4f425d9f0ae" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_CADDockWidget::pushButton</definition>
+        <argsstring></argsstring>
+        <name>pushButton</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="62" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a029f5e617639ac2bbf140a62837efa10" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_CADDockWidget::pushButton_2</definition>
+        <argsstring></argsstring>
+        <name>pushButton_2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="63" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1ad668918e49924ee55b24a79f95315e60" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_CADDockWidget::pushButton_3</definition>
+        <argsstring></argsstring>
+        <name>pushButton_3</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="64" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1ab2dc20f24d2011965ea269047ad0dc2c" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_CADDockWidget::pushButton_7</definition>
+        <argsstring></argsstring>
+        <name>pushButton_7</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="65" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a59170792fd319416f6219f6868d54c71" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_CADDockWidget::pushButton_6</definition>
+        <argsstring></argsstring>
+        <name>pushButton_6</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="66" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1af0f5321d0b3ced9bc272a00dfdfb957c" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_CADDockWidget::pushButton_5</definition>
+        <argsstring></argsstring>
+        <name>pushButton_5</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="67" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1ae4ff270e39574fafc704c58b815b576e" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_CADDockWidget::pushButton_13</definition>
+        <argsstring></argsstring>
+        <name>pushButton_13</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="68" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a8f7f3131ea8a1c9f7b23c981415104b1" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_CADDockWidget::pushButton_0</definition>
+        <argsstring></argsstring>
+        <name>pushButton_0</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="69" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a48a78f0bed00b734f26c054206801a94" prot="public" static="no" mutable="no">
+        <type>QSpacerItem *</type>
+        <definition>QSpacerItem* Ui_CADDockWidget::verticalSpacer_4</definition>
+        <argsstring></argsstring>
+        <name>verticalSpacer_4</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="70" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a9920fa985cbc4effb03a5288523660e8" prot="public" static="no" mutable="no">
+        <type>QTabWidget *</type>
+        <definition>QTabWidget* Ui_CADDockWidget::tabWidget</definition>
+        <argsstring></argsstring>
+        <name>tabWidget</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="71" column="16" bodyfile="include/ui_CADDockWidget.h" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1af2f2e08d8ac280f98998d439ef7b8c60" prot="public" static="no" mutable="no">
+        <type>QWidget *</type>
+        <definition>QWidget* Ui_CADDockWidget::tab</definition>
+        <argsstring></argsstring>
+        <name>tab</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="72" column="13" bodyfile="include/ui_CADDockWidget.h" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1af8d7355ff8b9c998431aea6ab1789b91" prot="public" static="no" mutable="no">
+        <type>QVBoxLayout *</type>
+        <definition>QVBoxLayout* Ui_CADDockWidget::verticalLayout_2</definition>
+        <argsstring></argsstring>
+        <name>verticalLayout_2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="73" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a20db1491566cb0700bceaa02cb12bff3" prot="public" static="no" mutable="no">
+        <type>QGridLayout *</type>
+        <definition>QGridLayout* Ui_CADDockWidget::gridLayout_3</definition>
+        <argsstring></argsstring>
+        <name>gridLayout_3</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="74" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1ad0ccc2b96cb4a42f733c328ab10f6cf4" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_CADDockWidget::pushButton_33</definition>
+        <argsstring></argsstring>
+        <name>pushButton_33</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="75" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a17053354cf06fc9f7f13a5e01a523c00" prot="public" static="no" mutable="no">
+        <type>QComboBox *</type>
+        <definition>QComboBox* Ui_CADDockWidget::comboBox_2</definition>
+        <argsstring></argsstring>
+        <name>comboBox_2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="76" column="15" bodyfile="include/ui_CADDockWidget.h" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a84f4427d71b5d5f9e5f5e573515cf814" prot="public" static="no" mutable="no">
+        <type>QLabel *</type>
+        <definition>QLabel* Ui_CADDockWidget::label_4</definition>
+        <argsstring></argsstring>
+        <name>label_4</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="77" column="12" bodyfile="include/ui_CADDockWidget.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1aff745854a9f61394103db8dbb2694fce" prot="public" static="no" mutable="no">
+        <type>QGridLayout *</type>
+        <definition>QGridLayout* Ui_CADDockWidget::gridLayout_4</definition>
+        <argsstring></argsstring>
+        <name>gridLayout_4</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="78" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1aec82b1e0f689d5844cfc1886eb504fa6" prot="public" static="no" mutable="no">
+        <type>QLabel *</type>
+        <definition>QLabel* Ui_CADDockWidget::label</definition>
+        <argsstring></argsstring>
+        <name>label</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="79" column="12" bodyfile="include/ui_CADDockWidget.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a5cc58908eb684e9e32549abaa93897a8" prot="public" static="no" mutable="no">
+        <type>QDoubleSpinBox *</type>
+        <definition>QDoubleSpinBox* Ui_CADDockWidget::doubleSpinBox_4</definition>
+        <argsstring></argsstring>
+        <name>doubleSpinBox_4</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="80" column="20" bodyfile="include/ui_CADDockWidget.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a115213492e92491b19a16c78e3d66756" prot="public" static="no" mutable="no">
+        <type>QLabel *</type>
+        <definition>QLabel* Ui_CADDockWidget::label_3</definition>
+        <argsstring></argsstring>
+        <name>label_3</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="81" column="12" bodyfile="include/ui_CADDockWidget.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1af49b071526beca8a73a795e25f7b92b2" prot="public" static="no" mutable="no">
+        <type>QDoubleSpinBox *</type>
+        <definition>QDoubleSpinBox* Ui_CADDockWidget::doubleSpinBox_5</definition>
+        <argsstring></argsstring>
+        <name>doubleSpinBox_5</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="82" column="20" bodyfile="include/ui_CADDockWidget.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1abb6dcc8ae86b0c8fc04170d475e25eee" prot="public" static="no" mutable="no">
+        <type>QDoubleSpinBox *</type>
+        <definition>QDoubleSpinBox* Ui_CADDockWidget::doubleSpinBox_6</definition>
+        <argsstring></argsstring>
+        <name>doubleSpinBox_6</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="83" column="20" bodyfile="include/ui_CADDockWidget.h" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1ae1c19416613fe491f209406e49f44749" prot="public" static="no" mutable="no">
+        <type>QLabel *</type>
+        <definition>QLabel* Ui_CADDockWidget::label_2</definition>
+        <argsstring></argsstring>
+        <name>label_2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="84" column="12" bodyfile="include/ui_CADDockWidget.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1abf6f5d1f94c2dcde56495289f5eda1e6" prot="public" static="no" mutable="no">
+        <type>QVBoxLayout *</type>
+        <definition>QVBoxLayout* Ui_CADDockWidget::verticalLayout</definition>
+        <argsstring></argsstring>
+        <name>verticalLayout</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="85" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1ae72e298d71a15de68bc126c05253cd32" prot="public" static="no" mutable="no">
+        <type>QSpacerItem *</type>
+        <definition>QSpacerItem* Ui_CADDockWidget::verticalSpacer</definition>
+        <argsstring></argsstring>
+        <name>verticalSpacer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="86" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1aecabf99c8532ac884b61cbec4181d884" prot="public" static="no" mutable="no">
+        <type>QSpacerItem *</type>
+        <definition>QSpacerItem* Ui_CADDockWidget::verticalSpacer_3</definition>
+        <argsstring></argsstring>
+        <name>verticalSpacer_3</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="87" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a9ab1967a14685ce42e6e7b5f29469760" prot="public" static="no" mutable="no">
+        <type>QWidget *</type>
+        <definition>QWidget* Ui_CADDockWidget::tab_3</definition>
+        <argsstring></argsstring>
+        <name>tab_3</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="88" column="13" bodyfile="include/ui_CADDockWidget.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1ae2d13cde2bbf73d14f3530ebdb71123c" prot="public" static="no" mutable="no">
+        <type>QVBoxLayout *</type>
+        <definition>QVBoxLayout* Ui_CADDockWidget::verticalLayout_3</definition>
+        <argsstring></argsstring>
+        <name>verticalLayout_3</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="89" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a710e617c7cdbf8a10c1e7b1eea164a7e" prot="public" static="no" mutable="no">
+        <type>QGridLayout *</type>
+        <definition>QGridLayout* Ui_CADDockWidget::gridLayout_5</definition>
+        <argsstring></argsstring>
+        <name>gridLayout_5</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="90" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a36a62328dea0a3382fd828496b2f7bf4" prot="public" static="no" mutable="no">
+        <type>QVBoxLayout *</type>
+        <definition>QVBoxLayout* Ui_CADDockWidget::verticalLayout_4</definition>
+        <argsstring></argsstring>
+        <name>verticalLayout_4</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="91" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1ae516053642d82781a65e74c26232e56a" prot="public" static="no" mutable="no">
+        <type>QSpacerItem *</type>
+        <definition>QSpacerItem* Ui_CADDockWidget::verticalSpacer_6</definition>
+        <argsstring></argsstring>
+        <name>verticalSpacer_6</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="92" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a6cd79a84ac238b41b6f4dcabb9c17885" prot="public" static="no" mutable="no">
+        <type>QGridLayout *</type>
+        <definition>QGridLayout* Ui_CADDockWidget::gridLayout_11</definition>
+        <argsstring></argsstring>
+        <name>gridLayout_11</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="93" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1af70022af4afb86817bc09dcf82054d56" prot="public" static="no" mutable="no">
+        <type>QLabel *</type>
+        <definition>QLabel* Ui_CADDockWidget::label_7</definition>
+        <argsstring></argsstring>
+        <name>label_7</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="94" column="12" bodyfile="include/ui_CADDockWidget.h" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1aedfca6ec5743327e5520dcef754bae27" prot="public" static="no" mutable="no">
+        <type>QLabel *</type>
+        <definition>QLabel* Ui_CADDockWidget::label_8</definition>
+        <argsstring></argsstring>
+        <name>label_8</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="95" column="12" bodyfile="include/ui_CADDockWidget.h" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a7f37345765f3ba56a5b303cf07bfbf2d" prot="public" static="no" mutable="no">
+        <type>QDoubleSpinBox *</type>
+        <definition>QDoubleSpinBox* Ui_CADDockWidget::doubleSpinBox_2</definition>
+        <argsstring></argsstring>
+        <name>doubleSpinBox_2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="96" column="20" bodyfile="include/ui_CADDockWidget.h" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1af3efe0a45e6bab38080f2b44154328a4" prot="public" static="no" mutable="no">
+        <type>QDoubleSpinBox *</type>
+        <definition>QDoubleSpinBox* Ui_CADDockWidget::doubleSpinBox_3</definition>
+        <argsstring></argsstring>
+        <name>doubleSpinBox_3</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="97" column="20" bodyfile="include/ui_CADDockWidget.h" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a8ae06aaf97e17e1ac8cf90eefd514ac4" prot="public" static="no" mutable="no">
+        <type>QDoubleSpinBox *</type>
+        <definition>QDoubleSpinBox* Ui_CADDockWidget::doubleSpinBox</definition>
+        <argsstring></argsstring>
+        <name>doubleSpinBox</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="98" column="20" bodyfile="include/ui_CADDockWidget.h" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a2a2568d4d03caee510319b0797119b1d" prot="public" static="no" mutable="no">
+        <type>QLabel *</type>
+        <definition>QLabel* Ui_CADDockWidget::label_6</definition>
+        <argsstring></argsstring>
+        <name>label_6</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="99" column="12" bodyfile="include/ui_CADDockWidget.h" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1aa2412ec095da2554611a396e89b53b70" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_CADDockWidget::pushButton_36</definition>
+        <argsstring></argsstring>
+        <name>pushButton_36</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="100" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1ae76e28e8b4e096dfe079851b0b323e07" prot="public" static="no" mutable="no">
+        <type>QLabel *</type>
+        <definition>QLabel* Ui_CADDockWidget::label_5</definition>
+        <argsstring></argsstring>
+        <name>label_5</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="101" column="12" bodyfile="include/ui_CADDockWidget.h" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1ade1c190c2dabc511e150c69349632a56" prot="public" static="no" mutable="no">
+        <type>QComboBox *</type>
+        <definition>QComboBox* Ui_CADDockWidget::comboBox</definition>
+        <argsstring></argsstring>
+        <name>comboBox</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="102" column="15" bodyfile="include/ui_CADDockWidget.h" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a864187a94349f9974b35c647c425d581" prot="public" static="no" mutable="no">
+        <type>QSpacerItem *</type>
+        <definition>QSpacerItem* Ui_CADDockWidget::verticalSpacer_5</definition>
+        <argsstring></argsstring>
+        <name>verticalSpacer_5</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="103" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a0cfd8d249ed2311dbdc5f504be686e19" prot="public" static="no" mutable="no">
+        <type>QWidget *</type>
+        <definition>QWidget* Ui_CADDockWidget::tab_2</definition>
+        <argsstring></argsstring>
+        <name>tab_2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="104" column="13" bodyfile="include/ui_CADDockWidget.h" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1aac4cc53c0f252b9df76baf47159420b5" prot="public" static="no" mutable="no">
+        <type>QVBoxLayout *</type>
+        <definition>QVBoxLayout* Ui_CADDockWidget::verticalLayout_6</definition>
+        <argsstring></argsstring>
+        <name>verticalLayout_6</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="105" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a5f104358a91023eef5a2c4bea4211330" prot="public" static="no" mutable="no">
+        <type>QHBoxLayout *</type>
+        <definition>QHBoxLayout* Ui_CADDockWidget::horizontalLayout</definition>
+        <argsstring></argsstring>
+        <name>horizontalLayout</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="106" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a77116ac5dac2025ced679f312958d71c" prot="public" static="no" mutable="no">
+        <type>QComboBox *</type>
+        <definition>QComboBox* Ui_CADDockWidget::comboBox_4</definition>
+        <argsstring></argsstring>
+        <name>comboBox_4</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="107" column="15" bodyfile="include/ui_CADDockWidget.h" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1aae88df71cf167449ab75f62076cd41d2" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_CADDockWidget::pushButton_10</definition>
+        <argsstring></argsstring>
+        <name>pushButton_10</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="108" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1afd028ab4df682564e16233bf546c6bd1" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_CADDockWidget::pushButton_11</definition>
+        <argsstring></argsstring>
+        <name>pushButton_11</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="109" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a520a194a140c20a7a46d80e39b4efec3" prot="public" static="no" mutable="no">
+        <type>QGridLayout *</type>
+        <definition>QGridLayout* Ui_CADDockWidget::gridLayout_2</definition>
+        <argsstring></argsstring>
+        <name>gridLayout_2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="110" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a7a09e719476e19df3cc4fef05a0780ae" prot="public" static="no" mutable="no">
+        <type>QDoubleSpinBox *</type>
+        <definition>QDoubleSpinBox* Ui_CADDockWidget::doubleSpinBox_8</definition>
+        <argsstring></argsstring>
+        <name>doubleSpinBox_8</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="111" column="20" bodyfile="include/ui_CADDockWidget.h" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a750e1bfa6a102d8b7744d7cdb7b59921" prot="public" static="no" mutable="no">
+        <type>QDoubleSpinBox *</type>
+        <definition>QDoubleSpinBox* Ui_CADDockWidget::doubleSpinBox_7</definition>
+        <argsstring></argsstring>
+        <name>doubleSpinBox_7</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="112" column="20" bodyfile="include/ui_CADDockWidget.h" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a0565eb490362fc658c4ab5ed9f6c30a0" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_CADDockWidget::pushButton_8</definition>
+        <argsstring></argsstring>
+        <name>pushButton_8</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="113" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a9ef89feb708f803a08b15283cabb8f25" prot="public" static="no" mutable="no">
+        <type>QComboBox *</type>
+        <definition>QComboBox* Ui_CADDockWidget::comboBox_3</definition>
+        <argsstring></argsstring>
+        <name>comboBox_3</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="114" column="15" bodyfile="include/ui_CADDockWidget.h" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1ad5c359c8e809a19d32b41461930e385b" prot="public" static="no" mutable="no">
+        <type>QLabel *</type>
+        <definition>QLabel* Ui_CADDockWidget::label_9</definition>
+        <argsstring></argsstring>
+        <name>label_9</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="115" column="12" bodyfile="include/ui_CADDockWidget.h" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1ac32cf39ae8778538df5d9d08af20a683" prot="public" static="no" mutable="no">
+        <type>QLabel *</type>
+        <definition>QLabel* Ui_CADDockWidget::label_10</definition>
+        <argsstring></argsstring>
+        <name>label_10</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="116" column="12" bodyfile="include/ui_CADDockWidget.h" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1ad3f01307d0f620e615161459d1831d90" prot="public" static="no" mutable="no">
+        <type>QDoubleSpinBox *</type>
+        <definition>QDoubleSpinBox* Ui_CADDockWidget::doubleSpinBox_9</definition>
+        <argsstring></argsstring>
+        <name>doubleSpinBox_9</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="117" column="20" bodyfile="include/ui_CADDockWidget.h" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__CADDockWidget_1a52ae88682f86943b8ace71556dcb03bf" prot="public" static="no" mutable="no">
+        <type>QSpacerItem *</type>
+        <definition>QSpacerItem* Ui_CADDockWidget::verticalSpacer_2</definition>
+        <argsstring></argsstring>
+        <name>verticalSpacer_2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="118" column="17" bodyfile="include/ui_CADDockWidget.h" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classUi__CADDockWidget_1a73e36729eb2301f9fab91207c7da7e9f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Ui_CADDockWidget::setupUi</definition>
+        <argsstring>(QWidget *CADDockWidget)</argsstring>
+        <name>setupUi</name>
+        <param>
+          <type>QWidget *</type>
+          <declname>CADDockWidget</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="120" column="10" bodyfile="include/ui_CADDockWidget.h" bodystart="120" bodyend="811"/>
+      </memberdef>
+      <memberdef kind="function" id="classUi__CADDockWidget_1ad266f3963764d7000b927c0017e5f5c6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Ui_CADDockWidget::retranslateUi</definition>
+        <argsstring>(QWidget *CADDockWidget)</argsstring>
+        <name>retranslateUi</name>
+        <param>
+          <type>QWidget *</type>
+          <declname>CADDockWidget</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_CADDockWidget.h" line="813" column="10" bodyfile="include/ui_CADDockWidget.h" bodystart="813" bodyend="875"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>Ui_CADDockWidget</label>
+        <link refid="classUi__CADDockWidget"/>
+      </node>
+      <node id="2">
+        <label>Ui::CADDockWidget</label>
+        <link refid="classUi_1_1CADDockWidget"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="include/ui_CADDockWidget.h" line="30" column="1" bodyfile="include/ui_CADDockWidget.h" bodystart="29" bodyend="871"/>
+    <listofallmembers>
+      <member refid="classUi__CADDockWidget_1a99ebb4635635449b978eb575be7eef23" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>actionCone</name></member>
+      <member refid="classUi__CADDockWidget_1a778f66bd0456c45a2a0a8fc5aea9ccc6" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>actionCube</name></member>
+      <member refid="classUi__CADDockWidget_1a38f7fc0b7b65a3ac1ebc224a023d0a87" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>actionCut</name></member>
+      <member refid="classUi__CADDockWidget_1a32d2be0215c2ce77dca4ec27a6f19ce0" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>actionCylinder</name></member>
+      <member refid="classUi__CADDockWidget_1ae25e87d50ee2b73d017c5ad3c770c76c" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>actionExtrude</name></member>
+      <member refid="classUi__CADDockWidget_1aeecf48ea1f7dffdf0c9b783105546c3d" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>actionLine</name></member>
+      <member refid="classUi__CADDockWidget_1af9b5affc936813ac79b695bc5e823062" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>actionMirror</name></member>
+      <member refid="classUi__CADDockWidget_1a678623e86730f1477bceec5964495d5a" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>actionPart1</name></member>
+      <member refid="classUi__CADDockWidget_1adaefcb060c121ae84445bcad41fe3add" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>actionPart2</name></member>
+      <member refid="classUi__CADDockWidget_1a0048a1e8b32df16868014c336d26b07c" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>actionPoint</name></member>
+      <member refid="classUi__CADDockWidget_1a5fbcec530193fc24641d0d09b51a854c" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>actionSection</name></member>
+      <member refid="classUi__CADDockWidget_1a75b3359246f66bac3975ac2c87580682" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>actionSelectDomain</name></member>
+      <member refid="classUi__CADDockWidget_1aee277d03d30b6b861ac6b36d3d690c29" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>actionSelectFace</name></member>
+      <member refid="classUi__CADDockWidget_1aad188456730f7fe4e05d3f603eb70483" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>actionSphere</name></member>
+      <member refid="classUi__CADDockWidget_1af1126ebd73475ccf2bae9ed30b5f10fa" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>actionSquare</name></member>
+      <member refid="classUi__CADDockWidget_1a030e95e2845372741c95390b50b23efe" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>actionSweep</name></member>
+      <member refid="classUi__CADDockWidget_1aed39416fc6f78b571317efba0f64a867" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>actionTorus</name></member>
+      <member refid="classUi__CADDockWidget_1aed38a1583608da88a9a939e717be3662" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>actionUnion</name></member>
+      <member refid="classUi__CADDockWidget_1ade1c190c2dabc511e150c69349632a56" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>comboBox</name></member>
+      <member refid="classUi__CADDockWidget_1a17053354cf06fc9f7f13a5e01a523c00" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>comboBox_2</name></member>
+      <member refid="classUi__CADDockWidget_1a9ef89feb708f803a08b15283cabb8f25" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>comboBox_3</name></member>
+      <member refid="classUi__CADDockWidget_1a77116ac5dac2025ced679f312958d71c" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>comboBox_4</name></member>
+      <member refid="classUi__CADDockWidget_1a8ae06aaf97e17e1ac8cf90eefd514ac4" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>doubleSpinBox</name></member>
+      <member refid="classUi__CADDockWidget_1a7f37345765f3ba56a5b303cf07bfbf2d" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>doubleSpinBox_2</name></member>
+      <member refid="classUi__CADDockWidget_1af3efe0a45e6bab38080f2b44154328a4" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>doubleSpinBox_3</name></member>
+      <member refid="classUi__CADDockWidget_1a5cc58908eb684e9e32549abaa93897a8" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>doubleSpinBox_4</name></member>
+      <member refid="classUi__CADDockWidget_1af49b071526beca8a73a795e25f7b92b2" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>doubleSpinBox_5</name></member>
+      <member refid="classUi__CADDockWidget_1abb6dcc8ae86b0c8fc04170d475e25eee" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>doubleSpinBox_6</name></member>
+      <member refid="classUi__CADDockWidget_1a750e1bfa6a102d8b7744d7cdb7b59921" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>doubleSpinBox_7</name></member>
+      <member refid="classUi__CADDockWidget_1a7a09e719476e19df3cc4fef05a0780ae" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>doubleSpinBox_8</name></member>
+      <member refid="classUi__CADDockWidget_1ad3f01307d0f620e615161459d1831d90" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>doubleSpinBox_9</name></member>
+      <member refid="classUi__CADDockWidget_1aa2c8dd1479f95d336d42dd3531cca7c0" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>gridLayout</name></member>
+      <member refid="classUi__CADDockWidget_1a6cd79a84ac238b41b6f4dcabb9c17885" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>gridLayout_11</name></member>
+      <member refid="classUi__CADDockWidget_1a520a194a140c20a7a46d80e39b4efec3" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>gridLayout_2</name></member>
+      <member refid="classUi__CADDockWidget_1a20db1491566cb0700bceaa02cb12bff3" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>gridLayout_3</name></member>
+      <member refid="classUi__CADDockWidget_1aff745854a9f61394103db8dbb2694fce" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>gridLayout_4</name></member>
+      <member refid="classUi__CADDockWidget_1a710e617c7cdbf8a10c1e7b1eea164a7e" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>gridLayout_5</name></member>
+      <member refid="classUi__CADDockWidget_1a5f104358a91023eef5a2c4bea4211330" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>horizontalLayout</name></member>
+      <member refid="classUi__CADDockWidget_1a30f97461eebbdd3c79e45055e25d6f72" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>horizontalSpacer</name></member>
+      <member refid="classUi__CADDockWidget_1aee56ffd68dac8d149548ab0600b4aa5c" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>horizontalSpacer_2</name></member>
+      <member refid="classUi__CADDockWidget_1aec82b1e0f689d5844cfc1886eb504fa6" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>label</name></member>
+      <member refid="classUi__CADDockWidget_1ac32cf39ae8778538df5d9d08af20a683" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>label_10</name></member>
+      <member refid="classUi__CADDockWidget_1ae1c19416613fe491f209406e49f44749" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>label_2</name></member>
+      <member refid="classUi__CADDockWidget_1a115213492e92491b19a16c78e3d66756" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>label_3</name></member>
+      <member refid="classUi__CADDockWidget_1a84f4427d71b5d5f9e5f5e573515cf814" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>label_4</name></member>
+      <member refid="classUi__CADDockWidget_1ae76e28e8b4e096dfe079851b0b323e07" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>label_5</name></member>
+      <member refid="classUi__CADDockWidget_1a2a2568d4d03caee510319b0797119b1d" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>label_6</name></member>
+      <member refid="classUi__CADDockWidget_1af70022af4afb86817bc09dcf82054d56" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>label_7</name></member>
+      <member refid="classUi__CADDockWidget_1aedfca6ec5743327e5520dcef754bae27" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>label_8</name></member>
+      <member refid="classUi__CADDockWidget_1ad5c359c8e809a19d32b41461930e385b" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>label_9</name></member>
+      <member refid="classUi__CADDockWidget_1a2a37b7dadffc48c0451cd4f425d9f0ae" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>pushButton</name></member>
+      <member refid="classUi__CADDockWidget_1a8f7f3131ea8a1c9f7b23c981415104b1" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>pushButton_0</name></member>
+      <member refid="classUi__CADDockWidget_1aae88df71cf167449ab75f62076cd41d2" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>pushButton_10</name></member>
+      <member refid="classUi__CADDockWidget_1afd028ab4df682564e16233bf546c6bd1" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>pushButton_11</name></member>
+      <member refid="classUi__CADDockWidget_1ae4ff270e39574fafc704c58b815b576e" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>pushButton_13</name></member>
+      <member refid="classUi__CADDockWidget_1a029f5e617639ac2bbf140a62837efa10" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>pushButton_2</name></member>
+      <member refid="classUi__CADDockWidget_1ad668918e49924ee55b24a79f95315e60" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>pushButton_3</name></member>
+      <member refid="classUi__CADDockWidget_1ad0ccc2b96cb4a42f733c328ab10f6cf4" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>pushButton_33</name></member>
+      <member refid="classUi__CADDockWidget_1aa2412ec095da2554611a396e89b53b70" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>pushButton_36</name></member>
+      <member refid="classUi__CADDockWidget_1a4183099d20a9dbebf64b65cb8412b3f7" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>pushButton_4</name></member>
+      <member refid="classUi__CADDockWidget_1af0f5321d0b3ced9bc272a00dfdfb957c" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>pushButton_5</name></member>
+      <member refid="classUi__CADDockWidget_1a59170792fd319416f6219f6868d54c71" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>pushButton_6</name></member>
+      <member refid="classUi__CADDockWidget_1ab2dc20f24d2011965ea269047ad0dc2c" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>pushButton_7</name></member>
+      <member refid="classUi__CADDockWidget_1a0565eb490362fc658c4ab5ed9f6c30a0" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>pushButton_8</name></member>
+      <member refid="classUi__CADDockWidget_1a7712af76e5c2fa8cb397d6c3e08aeaa3" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>pushButton_9</name></member>
+      <member refid="classUi__CADDockWidget_1ad266f3963764d7000b927c0017e5f5c6" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>retranslateUi</name></member>
+      <member refid="classUi__CADDockWidget_1a73e36729eb2301f9fab91207c7da7e9f" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>setupUi</name></member>
+      <member refid="classUi__CADDockWidget_1af2f2e08d8ac280f98998d439ef7b8c60" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>tab</name></member>
+      <member refid="classUi__CADDockWidget_1a0cfd8d249ed2311dbdc5f504be686e19" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>tab_2</name></member>
+      <member refid="classUi__CADDockWidget_1a9ab1967a14685ce42e6e7b5f29469760" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>tab_3</name></member>
+      <member refid="classUi__CADDockWidget_1a9920fa985cbc4effb03a5288523660e8" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>tabWidget</name></member>
+      <member refid="classUi__CADDockWidget_1abf6f5d1f94c2dcde56495289f5eda1e6" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>verticalLayout</name></member>
+      <member refid="classUi__CADDockWidget_1af8d7355ff8b9c998431aea6ab1789b91" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>verticalLayout_2</name></member>
+      <member refid="classUi__CADDockWidget_1ae2d13cde2bbf73d14f3530ebdb71123c" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>verticalLayout_3</name></member>
+      <member refid="classUi__CADDockWidget_1a36a62328dea0a3382fd828496b2f7bf4" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>verticalLayout_4</name></member>
+      <member refid="classUi__CADDockWidget_1a080f1be9ded364ae59d18214b77ac4ff" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>verticalLayout_5</name></member>
+      <member refid="classUi__CADDockWidget_1aac4cc53c0f252b9df76baf47159420b5" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>verticalLayout_6</name></member>
+      <member refid="classUi__CADDockWidget_1ae72e298d71a15de68bc126c05253cd32" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>verticalSpacer</name></member>
+      <member refid="classUi__CADDockWidget_1a52ae88682f86943b8ace71556dcb03bf" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>verticalSpacer_2</name></member>
+      <member refid="classUi__CADDockWidget_1aecabf99c8532ac884b61cbec4181d884" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>verticalSpacer_3</name></member>
+      <member refid="classUi__CADDockWidget_1a48a78f0bed00b734f26c054206801a94" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>verticalSpacer_4</name></member>
+      <member refid="classUi__CADDockWidget_1a864187a94349f9974b35c647c425d581" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>verticalSpacer_5</name></member>
+      <member refid="classUi__CADDockWidget_1ae516053642d82781a65e74c26232e56a" prot="public" virt="non-virtual"><scope>Ui_CADDockWidget</scope><name>verticalSpacer_6</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

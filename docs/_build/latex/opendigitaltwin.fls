@@ -387,9 +387,9 @@ INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu6d.tfm
 INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu6c.tfm
 INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu89.tfm
 INPUT /usr/share/texmf/fonts/tfm/arphic/gbsnu/gbsnu56.tfm
-INPUT opendigitaltwin.ind
-INPUT opendigitaltwin.ind
 INPUT /usr/share/texmf/fonts/tfm/public/tex-gyre/ec-qtmri.tfm
+INPUT opendigitaltwin.ind
+INPUT opendigitaltwin.ind
 INPUT opendigitaltwin.aux
 INPUT ./opendigitaltwin.out
 INPUT ./opendigitaltwin.out

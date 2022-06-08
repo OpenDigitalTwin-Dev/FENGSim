@@ -33,6 +33,9 @@ help:
 clean:
 	-rm -rf api _doxygen _build 
 
+copy:
+	cp ../../build*/ui_*.h ../include
+
 html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo

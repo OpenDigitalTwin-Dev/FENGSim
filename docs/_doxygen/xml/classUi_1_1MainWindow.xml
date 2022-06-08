@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classUi_1_1MainWindow" kind="class" language="C++" prot="public">
+    <compoundname>Ui::MainWindow</compoundname>
+    <basecompoundref refid="classUi__MainWindow" prot="public" virt="non-virtual">Ui_MainWindow</basecompoundref>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>Ui::MainWindow</label>
+        <link refid="classUi_1_1MainWindow"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Ui_MainWindow</label>
+        <link refid="classUi__MainWindow"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>Ui::MainWindow</label>
+        <link refid="classUi_1_1MainWindow"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Ui_MainWindow</label>
+        <link refid="classUi__MainWindow"/>
+      </node>
+    </collaborationgraph>
+    <location file="include/ui_MainWindow.h" line="419" column="42" bodyfile="include/ui_MainWindow.h" bodystart="419" bodyend="419"/>
+    <listofallmembers>
+      <member refid="classUi__MainWindow_1abdf2b43167c2cd0d3405f90b8c30e934" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>actionAbout</name></member>
+      <member refid="classUi__MainWindow_1a80bad322a2486d739e6652a6c9ec2a7e" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>actionAdditiveManufacturing</name></member>
+      <member refid="classUi__MainWindow_1a1740c62bba6af6ba94788aef6d0cbc08" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>actionAxo</name></member>
+      <member refid="classUi__MainWindow_1a0e175388653faa98680f46a50860d77c" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>actionBack</name></member>
+      <member refid="classUi__MainWindow_1a40b6f038eaeca16f2f946a1a5980149c" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>actionBottom</name></member>
+      <member refid="classUi__MainWindow_1a22c93f5d4a5b1331282c23159b4fe810" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>actionCAD</name></member>
+      <member refid="classUi__MainWindow_1af5d5a6eac02b97d407a67147ace76e08" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>actionFEM</name></member>
+      <member refid="classUi__MainWindow_1abb48c925047cc85e03658f2cacfa752c" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>actionFit</name></member>
+      <member refid="classUi__MainWindow_1ad97f475081278b8ab9704ee6f72c95ad" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>actionFront</name></member>
+      <member refid="classUi__MainWindow_1a08107784d30c221ac7ef4e562f92f10f" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>actionLeft</name></member>
+      <member refid="classUi__MainWindow_1a363e5ff128c592e3563531830053421e" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>actionMachining</name></member>
+      <member refid="classUi__MainWindow_1ab15d94c50540fd52fbda6bead58b7313" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>actionMeasure</name></member>
+      <member refid="classUi__MainWindow_1a82a242ac2bd5c37a9661443303f6f2de" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>actionMesh</name></member>
+      <member refid="classUi__MainWindow_1a9090620adfd867b72c5f445c83b8c0ec" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>actionNew</name></member>
+      <member refid="classUi__MainWindow_1a5772f39001f62b7f601aafe72caa10c0" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>actionOpen</name></member>
+      <member refid="classUi__MainWindow_1adc026baea7c22ac3907c21c51516a5aa" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>actionRight</name></member>
+      <member refid="classUi__MainWindow_1a6e14788227f1a0dbc8cf983514685f3b" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>actionSave</name></member>
+      <member refid="classUi__MainWindow_1a8cd11e69494a245929e506e7765a8c4e" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>actionSPC</name></member>
+      <member refid="classUi__MainWindow_1a24d1255120744e725bfa493b31db417e" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>actionSystem</name></member>
+      <member refid="classUi__MainWindow_1a989f0bcde82db16ace2a333e55c19161" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>actionTop</name></member>
+      <member refid="classUi__MainWindow_1affd31dcab2d3bcaf2aa7d0d2a44abbf3" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>actionTransport</name></member>
+      <member refid="classUi__MainWindow_1a38be43cafc63de4984b44acb936e30ed" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>actionViewRotationH</name></member>
+      <member refid="classUi__MainWindow_1abc017e66ce9bfc8ad4a189f4c7c67f26" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>actionViewRotationV</name></member>
+      <member refid="classUi__MainWindow_1a51fc8238c12a3c3c5dea9e22cfabe0e2" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>actionVisual</name></member>
+      <member refid="classUi__MainWindow_1a4cbb6f3a7337a2e7c6d81a8e000da324" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>centralWidget</name></member>
+      <member refid="classUi__MainWindow_1ac8a083c4b66fb317a9b538409ce412e2" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>dockWidget</name></member>
+      <member refid="classUi__MainWindow_1a765ded8236736213d556f6f91941808e" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>dockWidgetContents</name></member>
+      <member refid="classUi__MainWindow_1a5d15fa11294b2eaf4fd021a7a22443b3" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>mdiArea</name></member>
+      <member refid="classUi__MainWindow_1aa11a672d324fa5c42a5dc488e99bc216" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>menuAbout</name></member>
+      <member refid="classUi__MainWindow_1a2be1c24ec9adfca18e1dcc951931457f" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>menuBar</name></member>
+      <member refid="classUi__MainWindow_1a5200116a5c140f570657c3fc730251e9" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>menuFENGSim</name></member>
+      <member refid="classUi__MainWindow_1a7ba84cb4cdd6a12dc83bf4e100bd8d80" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>menuFile</name></member>
+      <member refid="classUi__MainWindow_1a9e7f2ce6c3d8a309109baed7d6890604" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>menuView</name></member>
+      <member refid="classUi__MainWindow_1ad332d93084584930878f1daf5f84cdbf" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>pushButton</name></member>
+      <member refid="classUi__MainWindow_1a097dd160c3534a204904cb374412c618" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>retranslateUi</name></member>
+      <member refid="classUi__MainWindow_1acf4a0872c4c77d8f43a2ec66ed849b58" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>setupUi</name></member>
+      <member refid="classUi__MainWindow_1a50fa481337604bcc8bf68de18ab16ecd" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>statusBar</name></member>
+      <member refid="classUi__MainWindow_1af0e3e4981b5f999d6613d5c097a77aa9" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>toolBarFENGSim</name></member>
+      <member refid="classUi__MainWindow_1aecd96a04789fcfec3f98d80390ad8184" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>verticalLayout</name></member>
+      <member refid="classUi__MainWindow_1a0c01bad60d9f422a1258e710635a2f65" prot="public" virt="non-virtual"><scope>Ui::MainWindow</scope><name>verticalLayout_2</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

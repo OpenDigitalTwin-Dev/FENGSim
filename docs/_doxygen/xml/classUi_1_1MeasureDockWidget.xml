@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classUi_1_1MeasureDockWidget" kind="class" language="C++" prot="public">
+    <compoundname>Ui::MeasureDockWidget</compoundname>
+    <basecompoundref refid="classUi__MeasureDockWidget" prot="public" virt="non-virtual">Ui_MeasureDockWidget</basecompoundref>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>Ui::MeasureDockWidget</label>
+        <link refid="classUi_1_1MeasureDockWidget"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Ui_MeasureDockWidget</label>
+        <link refid="classUi__MeasureDockWidget"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>Ui::MeasureDockWidget</label>
+        <link refid="classUi_1_1MeasureDockWidget"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Ui_MeasureDockWidget</label>
+        <link refid="classUi__MeasureDockWidget"/>
+      </node>
+    </collaborationgraph>
+    <location file="include/ui_MeasureDockWidget.h" line="533" column="56" bodyfile="include/ui_MeasureDockWidget.h" bodystart="533" bodyend="533"/>
+    <listofallmembers>
+      <member refid="classUi__MeasureDockWidget_1a57ceafb7487d7f63c627729b89fdfdb3" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>actionCircularity</name></member>
+      <member refid="classUi__MeasureDockWidget_1a94e9a237389c5758f1706c424b39483a" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>actionCylindricity</name></member>
+      <member refid="classUi__MeasureDockWidget_1aa29de470fc40f23829c144e099810d8c" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>actionFlatness</name></member>
+      <member refid="classUi__MeasureDockWidget_1adb4f2132b48e7f3c01db9ae5d31cd158" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>actionLine</name></member>
+      <member refid="classUi__MeasureDockWidget_1a357945ea20a911d1767d69b91289a6cc" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>actionLineProfile</name></member>
+      <member refid="classUi__MeasureDockWidget_1a1011dbac1029e118ace4d558678eeeb0" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>actionStraightness</name></member>
+      <member refid="classUi__MeasureDockWidget_1ad759bb4bc441aad912f13cbd944b4960" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>actionSurface</name></member>
+      <member refid="classUi__MeasureDockWidget_1ac421d38ca0af22405e58c89adc6cb7a1" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>actionSurfaceProfile</name></member>
+      <member refid="classUi__MeasureDockWidget_1a5dabcf56ee54364ca302e1bc0bf1b981" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>doubleSpinBox</name></member>
+      <member refid="classUi__MeasureDockWidget_1a720fd937a8d1ba7b37fe180e2eb5e8d3" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>doubleSpinBox_2</name></member>
+      <member refid="classUi__MeasureDockWidget_1aab2b8e8aade58ab8691493a8850a4d2c" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>doubleSpinBox_3</name></member>
+      <member refid="classUi__MeasureDockWidget_1ae052315435158d57fc493e32f4f6b432" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>horizontalLayout</name></member>
+      <member refid="classUi__MeasureDockWidget_1ae5658cc06867db32b853b63dff43eb99" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>horizontalLayout_10</name></member>
+      <member refid="classUi__MeasureDockWidget_1ac63155bf88b3818716ee801145e8a26a" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>horizontalLayout_11</name></member>
+      <member refid="classUi__MeasureDockWidget_1a737b4f8db3b653dbec6b34479c3cc108" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>horizontalLayout_12</name></member>
+      <member refid="classUi__MeasureDockWidget_1a0864c6219c25795e2e47eb3f6d92ea20" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>horizontalLayout_3</name></member>
+      <member refid="classUi__MeasureDockWidget_1aff9e371d7fd576ffe8e4da2aae4ce138" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>horizontalLayout_4</name></member>
+      <member refid="classUi__MeasureDockWidget_1a2ac3a273a1904bc9261f901905061800" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>horizontalLayout_7</name></member>
+      <member refid="classUi__MeasureDockWidget_1a8f2317c83bcaafef992234a6c4d6df1a" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>horizontalLayout_8</name></member>
+      <member refid="classUi__MeasureDockWidget_1ac92a0669edb02467a4138d834d8b68b8" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>horizontalScrollBar</name></member>
+      <member refid="classUi__MeasureDockWidget_1af324ba0d7776817c0c78b750f32f40f8" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>horizontalSpacer</name></member>
+      <member refid="classUi__MeasureDockWidget_1a7fd92b875abe1093846c8829d38b8c80" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>horizontalSpacer_2</name></member>
+      <member refid="classUi__MeasureDockWidget_1aa73696ad985e19a70ed121c5c9ac3264" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>horizontalSpacer_3</name></member>
+      <member refid="classUi__MeasureDockWidget_1aeb44bed891ac761647f04bde492f0553" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>horizontalSpacer_4</name></member>
+      <member refid="classUi__MeasureDockWidget_1aa9549f56dd7ac35a0e4c7d7663897746" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>horizontalSpacer_5</name></member>
+      <member refid="classUi__MeasureDockWidget_1ae25f1e948dd396b5fc6a0fa1c5533c2f" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>horizontalSpacer_6</name></member>
+      <member refid="classUi__MeasureDockWidget_1a432cba7d399ed4ddbf66e842ec5167af" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>horizontalSpacer_8</name></member>
+      <member refid="classUi__MeasureDockWidget_1a3356e4ce8ff977331172bf9b02cd368b" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>horizontalSpacer_9</name></member>
+      <member refid="classUi__MeasureDockWidget_1a1beb18bed8d8772b9a885f231da36abe" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>label</name></member>
+      <member refid="classUi__MeasureDockWidget_1a60fe150491be8dd4c24ad31ff91d331e" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>label_11</name></member>
+      <member refid="classUi__MeasureDockWidget_1a20c88d85d321a3abeca9bc98338249e6" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>label_2</name></member>
+      <member refid="classUi__MeasureDockWidget_1a9f9fcba73e2c8c084bf67387384bb278" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>label_4</name></member>
+      <member refid="classUi__MeasureDockWidget_1a9402ec506028fbf4ec4ff577ede8d08b" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>label_5</name></member>
+      <member refid="classUi__MeasureDockWidget_1aff6ba68c0245326addf041f1454ff9cb" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>label_6</name></member>
+      <member refid="classUi__MeasureDockWidget_1a3c308f7af6501a376b420e35b418b2ce" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>label_8</name></member>
+      <member refid="classUi__MeasureDockWidget_1a3dd22669404c72961bbfea8361113e2a" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>label_9</name></member>
+      <member refid="classUi__MeasureDockWidget_1a62ee304f6d9309a1398f333463b93f4f" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>progressBar</name></member>
+      <member refid="classUi__MeasureDockWidget_1ac50ad679736fffe61cc677c288579c30" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>progressBar_2</name></member>
+      <member refid="classUi__MeasureDockWidget_1a6d1a3568f4dea5bb973ddd73ca093c23" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>pushButton</name></member>
+      <member refid="classUi__MeasureDockWidget_1a2098bba46d4820921f9960472cee35f7" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>pushButton_10</name></member>
+      <member refid="classUi__MeasureDockWidget_1a11664338bff559b2afbdba115a4b3ced" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>pushButton_11</name></member>
+      <member refid="classUi__MeasureDockWidget_1a57c8060d7d404a1922d58b0c921de6da" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>pushButton_13</name></member>
+      <member refid="classUi__MeasureDockWidget_1a0f016471dd4ea23c6660f808683d285e" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>pushButton_19</name></member>
+      <member refid="classUi__MeasureDockWidget_1a43843eef213ce40312657e4648bdafac" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>pushButton_2</name></member>
+      <member refid="classUi__MeasureDockWidget_1a09543fb6a4428ef7d632fd0d67b51211" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>pushButton_3</name></member>
+      <member refid="classUi__MeasureDockWidget_1aba9aa4af827d5fa4af63c53f3c5e7900" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>pushButton_4</name></member>
+      <member refid="classUi__MeasureDockWidget_1a7828525d2ce43799b95de4a144b4e901" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>pushButton_5</name></member>
+      <member refid="classUi__MeasureDockWidget_1a9c797a1775d3d7c7673f3e4bc222f65a" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>pushButton_6</name></member>
+      <member refid="classUi__MeasureDockWidget_1afb7f034d1b88ebab8158104fe2976c3b" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>pushButton_7</name></member>
+      <member refid="classUi__MeasureDockWidget_1a9781f960c10818ce40baa590e6037652" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>pushButton_8</name></member>
+      <member refid="classUi__MeasureDockWidget_1a7d9d466fa0ec8e0a42487b65d453c879" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>pushButton_9</name></member>
+      <member refid="classUi__MeasureDockWidget_1a4fdd9f4622c51663673af0cd876ba47c" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>retranslateUi</name></member>
+      <member refid="classUi__MeasureDockWidget_1ac6405e246998d50e6c0a9a2f7330c095" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>setupUi</name></member>
+      <member refid="classUi__MeasureDockWidget_1acb7588a4ae76ce73905295bb2328caa8" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>verticalLayout</name></member>
+      <member refid="classUi__MeasureDockWidget_1a73973982bda6b58bc6d9b719ad948c9b" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>verticalLayout_2</name></member>
+      <member refid="classUi__MeasureDockWidget_1a07ea50aaddb932f2e16d482cc49f928e" prot="public" virt="non-virtual"><scope>Ui::MeasureDockWidget</scope><name>verticalSpacer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

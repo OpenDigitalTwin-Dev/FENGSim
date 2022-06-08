@@ -1,0 +1,822 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classUi__MeasureDockWidget" kind="class" language="C++" prot="public">
+    <compoundname>Ui_MeasureDockWidget</compoundname>
+    <derivedcompoundref refid="classUi_1_1MeasureDockWidget" prot="public" virt="non-virtual">Ui::MeasureDockWidget</derivedcompoundref>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a1011dbac1029e118ace4d558678eeeb0" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MeasureDockWidget::actionStraightness</definition>
+        <argsstring></argsstring>
+        <name>actionStraightness</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="37" column="13" bodyfile="include/ui_MeasureDockWidget.h" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1aa29de470fc40f23829c144e099810d8c" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MeasureDockWidget::actionFlatness</definition>
+        <argsstring></argsstring>
+        <name>actionFlatness</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="38" column="13" bodyfile="include/ui_MeasureDockWidget.h" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1ad759bb4bc441aad912f13cbd944b4960" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MeasureDockWidget::actionSurface</definition>
+        <argsstring></argsstring>
+        <name>actionSurface</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="39" column="13" bodyfile="include/ui_MeasureDockWidget.h" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1adb4f2132b48e7f3c01db9ae5d31cd158" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MeasureDockWidget::actionLine</definition>
+        <argsstring></argsstring>
+        <name>actionLine</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="40" column="13" bodyfile="include/ui_MeasureDockWidget.h" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a57ceafb7487d7f63c627729b89fdfdb3" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MeasureDockWidget::actionCircularity</definition>
+        <argsstring></argsstring>
+        <name>actionCircularity</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="41" column="13" bodyfile="include/ui_MeasureDockWidget.h" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a94e9a237389c5758f1706c424b39483a" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MeasureDockWidget::actionCylindricity</definition>
+        <argsstring></argsstring>
+        <name>actionCylindricity</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="42" column="13" bodyfile="include/ui_MeasureDockWidget.h" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a357945ea20a911d1767d69b91289a6cc" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MeasureDockWidget::actionLineProfile</definition>
+        <argsstring></argsstring>
+        <name>actionLineProfile</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="43" column="13" bodyfile="include/ui_MeasureDockWidget.h" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1ac421d38ca0af22405e58c89adc6cb7a1" prot="public" static="no" mutable="no">
+        <type>QAction *</type>
+        <definition>QAction* Ui_MeasureDockWidget::actionSurfaceProfile</definition>
+        <argsstring></argsstring>
+        <name>actionSurfaceProfile</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="44" column="13" bodyfile="include/ui_MeasureDockWidget.h" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1acb7588a4ae76ce73905295bb2328caa8" prot="public" static="no" mutable="no">
+        <type>QVBoxLayout *</type>
+        <definition>QVBoxLayout* Ui_MeasureDockWidget::verticalLayout</definition>
+        <argsstring></argsstring>
+        <name>verticalLayout</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="45" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a0864c6219c25795e2e47eb3f6d92ea20" prot="public" static="no" mutable="no">
+        <type>QHBoxLayout *</type>
+        <definition>QHBoxLayout* Ui_MeasureDockWidget::horizontalLayout_3</definition>
+        <argsstring></argsstring>
+        <name>horizontalLayout_3</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="46" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a1beb18bed8d8772b9a885f231da36abe" prot="public" static="no" mutable="no">
+        <type>QLabel *</type>
+        <definition>QLabel* Ui_MeasureDockWidget::label</definition>
+        <argsstring></argsstring>
+        <name>label</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="47" column="12" bodyfile="include/ui_MeasureDockWidget.h" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a432cba7d399ed4ddbf66e842ec5167af" prot="public" static="no" mutable="no">
+        <type>QSpacerItem *</type>
+        <definition>QSpacerItem* Ui_MeasureDockWidget::horizontalSpacer_8</definition>
+        <argsstring></argsstring>
+        <name>horizontalSpacer_8</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="48" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a09543fb6a4428ef7d632fd0d67b51211" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_MeasureDockWidget::pushButton_3</definition>
+        <argsstring></argsstring>
+        <name>pushButton_3</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="49" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a9c797a1775d3d7c7673f3e4bc222f65a" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_MeasureDockWidget::pushButton_6</definition>
+        <argsstring></argsstring>
+        <name>pushButton_6</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="50" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="50" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a2ac3a273a1904bc9261f901905061800" prot="public" static="no" mutable="no">
+        <type>QHBoxLayout *</type>
+        <definition>QHBoxLayout* Ui_MeasureDockWidget::horizontalLayout_7</definition>
+        <argsstring></argsstring>
+        <name>horizontalLayout_7</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="51" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a9f9fcba73e2c8c084bf67387384bb278" prot="public" static="no" mutable="no">
+        <type>QLabel *</type>
+        <definition>QLabel* Ui_MeasureDockWidget::label_4</definition>
+        <argsstring></argsstring>
+        <name>label_4</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="52" column="12" bodyfile="include/ui_MeasureDockWidget.h" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1aa73696ad985e19a70ed121c5c9ac3264" prot="public" static="no" mutable="no">
+        <type>QSpacerItem *</type>
+        <definition>QSpacerItem* Ui_MeasureDockWidget::horizontalSpacer_3</definition>
+        <argsstring></argsstring>
+        <name>horizontalSpacer_3</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="53" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1aff9e371d7fd576ffe8e4da2aae4ce138" prot="public" static="no" mutable="no">
+        <type>QHBoxLayout *</type>
+        <definition>QHBoxLayout* Ui_MeasureDockWidget::horizontalLayout_4</definition>
+        <argsstring></argsstring>
+        <name>horizontalLayout_4</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="54" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a6d1a3568f4dea5bb973ddd73ca093c23" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_MeasureDockWidget::pushButton</definition>
+        <argsstring></argsstring>
+        <name>pushButton</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="55" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a43843eef213ce40312657e4648bdafac" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_MeasureDockWidget::pushButton_2</definition>
+        <argsstring></argsstring>
+        <name>pushButton_2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="56" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1aeb44bed891ac761647f04bde492f0553" prot="public" static="no" mutable="no">
+        <type>QSpacerItem *</type>
+        <definition>QSpacerItem* Ui_MeasureDockWidget::horizontalSpacer_4</definition>
+        <argsstring></argsstring>
+        <name>horizontalSpacer_4</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="57" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a5dabcf56ee54364ca302e1bc0bf1b981" prot="public" static="no" mutable="no">
+        <type>QDoubleSpinBox *</type>
+        <definition>QDoubleSpinBox* Ui_MeasureDockWidget::doubleSpinBox</definition>
+        <argsstring></argsstring>
+        <name>doubleSpinBox</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="58" column="20" bodyfile="include/ui_MeasureDockWidget.h" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a3356e4ce8ff977331172bf9b02cd368b" prot="public" static="no" mutable="no">
+        <type>QSpacerItem *</type>
+        <definition>QSpacerItem* Ui_MeasureDockWidget::horizontalSpacer_9</definition>
+        <argsstring></argsstring>
+        <name>horizontalSpacer_9</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="59" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a7828525d2ce43799b95de4a144b4e901" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_MeasureDockWidget::pushButton_5</definition>
+        <argsstring></argsstring>
+        <name>pushButton_5</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="60" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1ac92a0669edb02467a4138d834d8b68b8" prot="public" static="no" mutable="no">
+        <type>QScrollBar *</type>
+        <definition>QScrollBar* Ui_MeasureDockWidget::horizontalScrollBar</definition>
+        <argsstring></argsstring>
+        <name>horizontalScrollBar</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="61" column="16" bodyfile="include/ui_MeasureDockWidget.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a73973982bda6b58bc6d9b719ad948c9b" prot="public" static="no" mutable="no">
+        <type>QVBoxLayout *</type>
+        <definition>QVBoxLayout* Ui_MeasureDockWidget::verticalLayout_2</definition>
+        <argsstring></argsstring>
+        <name>verticalLayout_2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="62" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a3dd22669404c72961bbfea8361113e2a" prot="public" static="no" mutable="no">
+        <type>QLabel *</type>
+        <definition>QLabel* Ui_MeasureDockWidget::label_9</definition>
+        <argsstring></argsstring>
+        <name>label_9</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="63" column="12" bodyfile="include/ui_MeasureDockWidget.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a737b4f8db3b653dbec6b34479c3cc108" prot="public" static="no" mutable="no">
+        <type>QHBoxLayout *</type>
+        <definition>QHBoxLayout* Ui_MeasureDockWidget::horizontalLayout_12</definition>
+        <argsstring></argsstring>
+        <name>horizontalLayout_12</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="64" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a3c308f7af6501a376b420e35b418b2ce" prot="public" static="no" mutable="no">
+        <type>QLabel *</type>
+        <definition>QLabel* Ui_MeasureDockWidget::label_8</definition>
+        <argsstring></argsstring>
+        <name>label_8</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="65" column="12" bodyfile="include/ui_MeasureDockWidget.h" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a720fd937a8d1ba7b37fe180e2eb5e8d3" prot="public" static="no" mutable="no">
+        <type>QDoubleSpinBox *</type>
+        <definition>QDoubleSpinBox* Ui_MeasureDockWidget::doubleSpinBox_2</definition>
+        <argsstring></argsstring>
+        <name>doubleSpinBox_2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="66" column="20" bodyfile="include/ui_MeasureDockWidget.h" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1aa9549f56dd7ac35a0e4c7d7663897746" prot="public" static="no" mutable="no">
+        <type>QSpacerItem *</type>
+        <definition>QSpacerItem* Ui_MeasureDockWidget::horizontalSpacer_5</definition>
+        <argsstring></argsstring>
+        <name>horizontalSpacer_5</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="67" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1aba9aa4af827d5fa4af63c53f3c5e7900" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_MeasureDockWidget::pushButton_4</definition>
+        <argsstring></argsstring>
+        <name>pushButton_4</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="68" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1afb7f034d1b88ebab8158104fe2976c3b" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_MeasureDockWidget::pushButton_7</definition>
+        <argsstring></argsstring>
+        <name>pushButton_7</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="69" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1ae5658cc06867db32b853b63dff43eb99" prot="public" static="no" mutable="no">
+        <type>QHBoxLayout *</type>
+        <definition>QHBoxLayout* Ui_MeasureDockWidget::horizontalLayout_10</definition>
+        <argsstring></argsstring>
+        <name>horizontalLayout_10</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="70" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a9402ec506028fbf4ec4ff577ede8d08b" prot="public" static="no" mutable="no">
+        <type>QLabel *</type>
+        <definition>QLabel* Ui_MeasureDockWidget::label_5</definition>
+        <argsstring></argsstring>
+        <name>label_5</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="71" column="12" bodyfile="include/ui_MeasureDockWidget.h" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1af324ba0d7776817c0c78b750f32f40f8" prot="public" static="no" mutable="no">
+        <type>QSpacerItem *</type>
+        <definition>QSpacerItem* Ui_MeasureDockWidget::horizontalSpacer</definition>
+        <argsstring></argsstring>
+        <name>horizontalSpacer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="72" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a9781f960c10818ce40baa590e6037652" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_MeasureDockWidget::pushButton_8</definition>
+        <argsstring></argsstring>
+        <name>pushButton_8</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="73" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a7d9d466fa0ec8e0a42487b65d453c879" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_MeasureDockWidget::pushButton_9</definition>
+        <argsstring></argsstring>
+        <name>pushButton_9</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="74" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1ac63155bf88b3818716ee801145e8a26a" prot="public" static="no" mutable="no">
+        <type>QHBoxLayout *</type>
+        <definition>QHBoxLayout* Ui_MeasureDockWidget::horizontalLayout_11</definition>
+        <argsstring></argsstring>
+        <name>horizontalLayout_11</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="75" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1aff6ba68c0245326addf041f1454ff9cb" prot="public" static="no" mutable="no">
+        <type>QLabel *</type>
+        <definition>QLabel* Ui_MeasureDockWidget::label_6</definition>
+        <argsstring></argsstring>
+        <name>label_6</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="76" column="12" bodyfile="include/ui_MeasureDockWidget.h" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1ae25f1e948dd396b5fc6a0fa1c5533c2f" prot="public" static="no" mutable="no">
+        <type>QSpacerItem *</type>
+        <definition>QSpacerItem* Ui_MeasureDockWidget::horizontalSpacer_6</definition>
+        <argsstring></argsstring>
+        <name>horizontalSpacer_6</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="77" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a8f2317c83bcaafef992234a6c4d6df1a" prot="public" static="no" mutable="no">
+        <type>QHBoxLayout *</type>
+        <definition>QHBoxLayout* Ui_MeasureDockWidget::horizontalLayout_8</definition>
+        <argsstring></argsstring>
+        <name>horizontalLayout_8</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="78" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a60fe150491be8dd4c24ad31ff91d331e" prot="public" static="no" mutable="no">
+        <type>QLabel *</type>
+        <definition>QLabel* Ui_MeasureDockWidget::label_11</definition>
+        <argsstring></argsstring>
+        <name>label_11</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="79" column="12" bodyfile="include/ui_MeasureDockWidget.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1aab2b8e8aade58ab8691493a8850a4d2c" prot="public" static="no" mutable="no">
+        <type>QDoubleSpinBox *</type>
+        <definition>QDoubleSpinBox* Ui_MeasureDockWidget::doubleSpinBox_3</definition>
+        <argsstring></argsstring>
+        <name>doubleSpinBox_3</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="80" column="20" bodyfile="include/ui_MeasureDockWidget.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a7fd92b875abe1093846c8829d38b8c80" prot="public" static="no" mutable="no">
+        <type>QSpacerItem *</type>
+        <definition>QSpacerItem* Ui_MeasureDockWidget::horizontalSpacer_2</definition>
+        <argsstring></argsstring>
+        <name>horizontalSpacer_2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="81" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a0f016471dd4ea23c6660f808683d285e" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_MeasureDockWidget::pushButton_19</definition>
+        <argsstring></argsstring>
+        <name>pushButton_19</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="82" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a11664338bff559b2afbdba115a4b3ced" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_MeasureDockWidget::pushButton_11</definition>
+        <argsstring></argsstring>
+        <name>pushButton_11</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="83" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a62ee304f6d9309a1398f333463b93f4f" prot="public" static="no" mutable="no">
+        <type>QProgressBar *</type>
+        <definition>QProgressBar* Ui_MeasureDockWidget::progressBar</definition>
+        <argsstring></argsstring>
+        <name>progressBar</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="84" column="18" bodyfile="include/ui_MeasureDockWidget.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1ae052315435158d57fc493e32f4f6b432" prot="public" static="no" mutable="no">
+        <type>QHBoxLayout *</type>
+        <definition>QHBoxLayout* Ui_MeasureDockWidget::horizontalLayout</definition>
+        <argsstring></argsstring>
+        <name>horizontalLayout</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="85" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a20c88d85d321a3abeca9bc98338249e6" prot="public" static="no" mutable="no">
+        <type>QLabel *</type>
+        <definition>QLabel* Ui_MeasureDockWidget::label_2</definition>
+        <argsstring></argsstring>
+        <name>label_2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="86" column="12" bodyfile="include/ui_MeasureDockWidget.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a2098bba46d4820921f9960472cee35f7" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_MeasureDockWidget::pushButton_10</definition>
+        <argsstring></argsstring>
+        <name>pushButton_10</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="87" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a57c8060d7d404a1922d58b0c921de6da" prot="public" static="no" mutable="no">
+        <type>QPushButton *</type>
+        <definition>QPushButton* Ui_MeasureDockWidget::pushButton_13</definition>
+        <argsstring></argsstring>
+        <name>pushButton_13</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="88" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1ac50ad679736fffe61cc677c288579c30" prot="public" static="no" mutable="no">
+        <type>QProgressBar *</type>
+        <definition>QProgressBar* Ui_MeasureDockWidget::progressBar_2</definition>
+        <argsstring></argsstring>
+        <name>progressBar_2</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="89" column="18" bodyfile="include/ui_MeasureDockWidget.h" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classUi__MeasureDockWidget_1a07ea50aaddb932f2e16d482cc49f928e" prot="public" static="no" mutable="no">
+        <type>QSpacerItem *</type>
+        <definition>QSpacerItem* Ui_MeasureDockWidget::verticalSpacer</definition>
+        <argsstring></argsstring>
+        <name>verticalSpacer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="90" column="17" bodyfile="include/ui_MeasureDockWidget.h" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classUi__MeasureDockWidget_1ac6405e246998d50e6c0a9a2f7330c095" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Ui_MeasureDockWidget::setupUi</definition>
+        <argsstring>(QWidget *MeasureDockWidget)</argsstring>
+        <name>setupUi</name>
+        <param>
+          <type>QWidget *</type>
+          <declname>MeasureDockWidget</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="92" column="10" bodyfile="include/ui_MeasureDockWidget.h" bodystart="92" bodyend="488"/>
+      </memberdef>
+      <memberdef kind="function" id="classUi__MeasureDockWidget_1a4fdd9f4622c51663673af0cd876ba47c" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void Ui_MeasureDockWidget::retranslateUi</definition>
+        <argsstring>(QWidget *MeasureDockWidget)</argsstring>
+        <name>retranslateUi</name>
+        <param>
+          <type>QWidget *</type>
+          <declname>MeasureDockWidget</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="include/ui_MeasureDockWidget.h" line="490" column="10" bodyfile="include/ui_MeasureDockWidget.h" bodystart="490" bodyend="534"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Ui::MeasureDockWidget</label>
+        <link refid="classUi_1_1MeasureDockWidget"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>Ui_MeasureDockWidget</label>
+        <link refid="classUi__MeasureDockWidget"/>
+      </node>
+    </inheritancegraph>
+    <location file="include/ui_MeasureDockWidget.h" line="29" column="1" bodyfile="include/ui_MeasureDockWidget.h" bodystart="28" bodyend="530"/>
+    <listofallmembers>
+      <member refid="classUi__MeasureDockWidget_1a57ceafb7487d7f63c627729b89fdfdb3" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>actionCircularity</name></member>
+      <member refid="classUi__MeasureDockWidget_1a94e9a237389c5758f1706c424b39483a" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>actionCylindricity</name></member>
+      <member refid="classUi__MeasureDockWidget_1aa29de470fc40f23829c144e099810d8c" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>actionFlatness</name></member>
+      <member refid="classUi__MeasureDockWidget_1adb4f2132b48e7f3c01db9ae5d31cd158" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>actionLine</name></member>
+      <member refid="classUi__MeasureDockWidget_1a357945ea20a911d1767d69b91289a6cc" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>actionLineProfile</name></member>
+      <member refid="classUi__MeasureDockWidget_1a1011dbac1029e118ace4d558678eeeb0" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>actionStraightness</name></member>
+      <member refid="classUi__MeasureDockWidget_1ad759bb4bc441aad912f13cbd944b4960" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>actionSurface</name></member>
+      <member refid="classUi__MeasureDockWidget_1ac421d38ca0af22405e58c89adc6cb7a1" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>actionSurfaceProfile</name></member>
+      <member refid="classUi__MeasureDockWidget_1a5dabcf56ee54364ca302e1bc0bf1b981" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>doubleSpinBox</name></member>
+      <member refid="classUi__MeasureDockWidget_1a720fd937a8d1ba7b37fe180e2eb5e8d3" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>doubleSpinBox_2</name></member>
+      <member refid="classUi__MeasureDockWidget_1aab2b8e8aade58ab8691493a8850a4d2c" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>doubleSpinBox_3</name></member>
+      <member refid="classUi__MeasureDockWidget_1ae052315435158d57fc493e32f4f6b432" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>horizontalLayout</name></member>
+      <member refid="classUi__MeasureDockWidget_1ae5658cc06867db32b853b63dff43eb99" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>horizontalLayout_10</name></member>
+      <member refid="classUi__MeasureDockWidget_1ac63155bf88b3818716ee801145e8a26a" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>horizontalLayout_11</name></member>
+      <member refid="classUi__MeasureDockWidget_1a737b4f8db3b653dbec6b34479c3cc108" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>horizontalLayout_12</name></member>
+      <member refid="classUi__MeasureDockWidget_1a0864c6219c25795e2e47eb3f6d92ea20" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>horizontalLayout_3</name></member>
+      <member refid="classUi__MeasureDockWidget_1aff9e371d7fd576ffe8e4da2aae4ce138" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>horizontalLayout_4</name></member>
+      <member refid="classUi__MeasureDockWidget_1a2ac3a273a1904bc9261f901905061800" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>horizontalLayout_7</name></member>
+      <member refid="classUi__MeasureDockWidget_1a8f2317c83bcaafef992234a6c4d6df1a" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>horizontalLayout_8</name></member>
+      <member refid="classUi__MeasureDockWidget_1ac92a0669edb02467a4138d834d8b68b8" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>horizontalScrollBar</name></member>
+      <member refid="classUi__MeasureDockWidget_1af324ba0d7776817c0c78b750f32f40f8" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>horizontalSpacer</name></member>
+      <member refid="classUi__MeasureDockWidget_1a7fd92b875abe1093846c8829d38b8c80" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>horizontalSpacer_2</name></member>
+      <member refid="classUi__MeasureDockWidget_1aa73696ad985e19a70ed121c5c9ac3264" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>horizontalSpacer_3</name></member>
+      <member refid="classUi__MeasureDockWidget_1aeb44bed891ac761647f04bde492f0553" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>horizontalSpacer_4</name></member>
+      <member refid="classUi__MeasureDockWidget_1aa9549f56dd7ac35a0e4c7d7663897746" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>horizontalSpacer_5</name></member>
+      <member refid="classUi__MeasureDockWidget_1ae25f1e948dd396b5fc6a0fa1c5533c2f" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>horizontalSpacer_6</name></member>
+      <member refid="classUi__MeasureDockWidget_1a432cba7d399ed4ddbf66e842ec5167af" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>horizontalSpacer_8</name></member>
+      <member refid="classUi__MeasureDockWidget_1a3356e4ce8ff977331172bf9b02cd368b" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>horizontalSpacer_9</name></member>
+      <member refid="classUi__MeasureDockWidget_1a1beb18bed8d8772b9a885f231da36abe" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>label</name></member>
+      <member refid="classUi__MeasureDockWidget_1a60fe150491be8dd4c24ad31ff91d331e" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>label_11</name></member>
+      <member refid="classUi__MeasureDockWidget_1a20c88d85d321a3abeca9bc98338249e6" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>label_2</name></member>
+      <member refid="classUi__MeasureDockWidget_1a9f9fcba73e2c8c084bf67387384bb278" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>label_4</name></member>
+      <member refid="classUi__MeasureDockWidget_1a9402ec506028fbf4ec4ff577ede8d08b" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>label_5</name></member>
+      <member refid="classUi__MeasureDockWidget_1aff6ba68c0245326addf041f1454ff9cb" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>label_6</name></member>
+      <member refid="classUi__MeasureDockWidget_1a3c308f7af6501a376b420e35b418b2ce" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>label_8</name></member>
+      <member refid="classUi__MeasureDockWidget_1a3dd22669404c72961bbfea8361113e2a" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>label_9</name></member>
+      <member refid="classUi__MeasureDockWidget_1a62ee304f6d9309a1398f333463b93f4f" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>progressBar</name></member>
+      <member refid="classUi__MeasureDockWidget_1ac50ad679736fffe61cc677c288579c30" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>progressBar_2</name></member>
+      <member refid="classUi__MeasureDockWidget_1a6d1a3568f4dea5bb973ddd73ca093c23" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>pushButton</name></member>
+      <member refid="classUi__MeasureDockWidget_1a2098bba46d4820921f9960472cee35f7" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>pushButton_10</name></member>
+      <member refid="classUi__MeasureDockWidget_1a11664338bff559b2afbdba115a4b3ced" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>pushButton_11</name></member>
+      <member refid="classUi__MeasureDockWidget_1a57c8060d7d404a1922d58b0c921de6da" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>pushButton_13</name></member>
+      <member refid="classUi__MeasureDockWidget_1a0f016471dd4ea23c6660f808683d285e" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>pushButton_19</name></member>
+      <member refid="classUi__MeasureDockWidget_1a43843eef213ce40312657e4648bdafac" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>pushButton_2</name></member>
+      <member refid="classUi__MeasureDockWidget_1a09543fb6a4428ef7d632fd0d67b51211" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>pushButton_3</name></member>
+      <member refid="classUi__MeasureDockWidget_1aba9aa4af827d5fa4af63c53f3c5e7900" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>pushButton_4</name></member>
+      <member refid="classUi__MeasureDockWidget_1a7828525d2ce43799b95de4a144b4e901" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>pushButton_5</name></member>
+      <member refid="classUi__MeasureDockWidget_1a9c797a1775d3d7c7673f3e4bc222f65a" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>pushButton_6</name></member>
+      <member refid="classUi__MeasureDockWidget_1afb7f034d1b88ebab8158104fe2976c3b" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>pushButton_7</name></member>
+      <member refid="classUi__MeasureDockWidget_1a9781f960c10818ce40baa590e6037652" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>pushButton_8</name></member>
+      <member refid="classUi__MeasureDockWidget_1a7d9d466fa0ec8e0a42487b65d453c879" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>pushButton_9</name></member>
+      <member refid="classUi__MeasureDockWidget_1a4fdd9f4622c51663673af0cd876ba47c" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>retranslateUi</name></member>
+      <member refid="classUi__MeasureDockWidget_1ac6405e246998d50e6c0a9a2f7330c095" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>setupUi</name></member>
+      <member refid="classUi__MeasureDockWidget_1acb7588a4ae76ce73905295bb2328caa8" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>verticalLayout</name></member>
+      <member refid="classUi__MeasureDockWidget_1a73973982bda6b58bc6d9b719ad948c9b" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>verticalLayout_2</name></member>
+      <member refid="classUi__MeasureDockWidget_1a07ea50aaddb932f2e16d482cc49f928e" prot="public" virt="non-virtual"><scope>Ui_MeasureDockWidget</scope><name>verticalSpacer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classUi_1_1SPCDockWidget" kind="class" language="C++" prot="public">
+    <compoundname>Ui::SPCDockWidget</compoundname>
+    <basecompoundref refid="classUi__SPCDockWidget" prot="public" virt="non-virtual">Ui_SPCDockWidget</basecompoundref>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Ui_SPCDockWidget</label>
+        <link refid="classUi__SPCDockWidget"/>
+      </node>
+      <node id="1">
+        <label>Ui::SPCDockWidget</label>
+        <link refid="classUi_1_1SPCDockWidget"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Ui_SPCDockWidget</label>
+        <link refid="classUi__SPCDockWidget"/>
+      </node>
+      <node id="1">
+        <label>Ui::SPCDockWidget</label>
+        <link refid="classUi_1_1SPCDockWidget"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="include/ui_SPCDockWidget.h" line="94" column="48" bodyfile="include/ui_SPCDockWidget.h" bodystart="94" bodyend="94"/>
+    <listofallmembers>
+      <member refid="classUi__SPCDockWidget_1a64a8da14d811e629fe5041a847cbab6d" prot="public" virt="non-virtual"><scope>Ui::SPCDockWidget</scope><name>horizontalLayout</name></member>
+      <member refid="classUi__SPCDockWidget_1a0c7aae141cadb48eaa50eef6a5f6fec8" prot="public" virt="non-virtual"><scope>Ui::SPCDockWidget</scope><name>retranslateUi</name></member>
+      <member refid="classUi__SPCDockWidget_1a753bdc5f8aea866a9e162c36de6fdc0b" prot="public" virt="non-virtual"><scope>Ui::SPCDockWidget</scope><name>setupUi</name></member>
+      <member refid="classUi__SPCDockWidget_1add3cf943217f233200168e5701ec02b3" prot="public" virt="non-virtual"><scope>Ui::SPCDockWidget</scope><name>treeWidget</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,166 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.8.17">
+  <compounddef id="classUi_1_1AdditiveManufacturingDockWidget" kind="class" language="C++" prot="public">
+    <compoundname>Ui::AdditiveManufacturingDockWidget</compoundname>
+    <basecompoundref refid="classUi__AdditiveManufacturingDockWidget" prot="public" virt="non-virtual">Ui_AdditiveManufacturingDockWidget</basecompoundref>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>Ui::AdditiveManufacturingDockWidget</label>
+        <link refid="classUi_1_1AdditiveManufacturingDockWidget"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Ui_AdditiveManufacturingDockWidget</label>
+        <link refid="classUi__AdditiveManufacturingDockWidget"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>Ui::AdditiveManufacturingDockWidget</label>
+        <link refid="classUi_1_1AdditiveManufacturingDockWidget"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Ui_AdditiveManufacturingDockWidget</label>
+        <link refid="classUi__AdditiveManufacturingDockWidget"/>
+      </node>
+    </collaborationgraph>
+    <location file="include/ui_AdditiveManufacturingDockWidget.h" line="1052" column="84" bodyfile="include/ui_AdditiveManufacturingDockWidget.h" bodystart="1052" bodyend="1052"/>
+    <listofallmembers>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1af47f083198365c7ef7bd817ea499849a" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>comboBox</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1ab865742b5905d9d5cbdf47832b51ede9" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>doubleSpinBox</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a44dfa1a65a82399eb5f57dd5a88c8fae" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>doubleSpinBox_2</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a0f441ed88877ea3a14888dc7487ead59" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>doubleSpinBox_3</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1af0cb178da86a8ef547b4787e58709529" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>doubleSpinBox_4</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a01c2bc826d6049c3fd4c8579a60bcbdf" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>doubleSpinBox_5</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a966d59c120df1d6a265693de88f66dc5" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>doubleSpinBox_6</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1ad94070d879ad0035d126d3dc56322d31" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>doubleSpinBox_7</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a1d4c36803e7a90401d404eeecf659c61" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>doubleSpinBox_8</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a140fed7ccd97ff7213302fe0566a8b1f" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>gridLayout</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a08cb8b9da2ed5da053afe3aa9c721b9a" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>gridLayout_2</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a0598e153a1dd9a4ebf00382d52258cf9" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>gridLayout_4</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a58a581430f9a14c2672903afbf8c48a2" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalLayout</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a52f2277381642402f690eb8c7ae4ad30" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalLayout_10</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a5af5be2362370c83d3fdc42d6344e718" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalLayout_11</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a0e9819040d22425b5a909f4fe4e6bd7a" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalLayout_12</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1affcec27b4422e387e65254c4f360cd40" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalLayout_13</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a33747f475cb0f159cee0ae77fbe522ab" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalLayout_14</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a288f8c61fc65fcbcd3b07f723bd6b960" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalLayout_15</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a25d16d1d36531d31a01ce38009293372" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalLayout_16</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1aa9b16a43d3d22277c1966dc1c56b0aba" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalLayout_17</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a7a3c889f3e26c6f038e2a750d0289fed" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalLayout_18</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a6f512ba38f785145490fbdf326015bac" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalLayout_2</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a42cd060421da6acad31587caf917110b" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalLayout_3</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a5164e6d269166dbaae4fda6ede52c6ae" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalLayout_4</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1adc1320337a19a9fdae1662116c21c766" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalLayout_5</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a6cef2ecfdb7064233d6b54da99a8f746" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalLayout_6</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1ab4430927fa5892f7cb4a9c5e1c6369a1" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalLayout_7</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a5182e875e08761db6a1b235447775b75" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalLayout_8</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1ac107e5f16557c6b6686c9d65ceeb91a6" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalLayout_9</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1ab79b63d9146b108e8be93ed0551e6c55" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalSlider</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1af31ff13b8dc8b83a8ba3d22f4c52edeb" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalSpacer</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a9efeb80d84b67b2c4b1ed1d33c91a2c7" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalSpacer_10</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a74f83c780e589be0a651271f7b2ab273" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalSpacer_11</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a743f7d96e6dd9a0854e52f663a5124ea" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalSpacer_12</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1ad88af6b9b2a109940106efe70a16771b" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalSpacer_13</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a4e683cdd33fb0987fa5dc0a15adf9e84" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalSpacer_14</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a581f4f38d32ded65ca555ba502067295" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalSpacer_15</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1adc5037b5361aceecb5aa85d618fd0ca4" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalSpacer_16</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a7016ecdd81c18d48ae1cb6bc9ec715fb" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalSpacer_17</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a7b27fec4facde7f727fc8c23e9f7bc64" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalSpacer_18</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1aedcf068aec721a9ff3ac73740efd3aaa" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalSpacer_19</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a4efab49243a4343e681b6fc5c89f120b" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalSpacer_2</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a2db970879241bb72fbe46fd4a467ea7c" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalSpacer_3</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1acc7adf528b82a28836206a90b5c666be" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalSpacer_4</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1ab5356c56a18928c7ea3409b57b3fa514" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalSpacer_5</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a8b0fd1244cfd7d4b84e616674a856b9e" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalSpacer_6</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a3bc4935d49851db73a1b3edb1f09f198" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalSpacer_7</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a6c3d2a8a40964f3e9fdf0109c807603c" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalSpacer_8</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1aba8f422b35b8ce226e0b495ec0abcae4" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>horizontalSpacer_9</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1ad830385bfabcff24b2373ee0d8909967" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>label</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1af4621b104e2d2c83b542beb36eb1534d" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>label_10</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1ad1f43682878cb818c5dc49655e0a78f6" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>label_11</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a9fdcc20fbd451424481cdc23d283eeb0" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>label_12</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a5c0816e2fe3fedd587b8431199fa6e2f" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>label_13</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a682299e99d6ccdcb7e242ee11c544802" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>label_14</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1ac82eabbd57ee4de9565274575ae3e1ed" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>label_15</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a988c2d2b6b48b1bd0cda3838b44d36db" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>label_16</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1afa5ee225131d00015ea5cfb7f8c6e991" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>label_17</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a048ba83c61a22a56856e5bb6e33b322c" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>label_18</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a6ad8cefbe8d69b2106a89adc731224bf" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>label_2</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a656fa5bf561e5563f80cdb7df851dca9" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>label_3</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a2f58e0cce40cb0732df1bf3cf97aaaba" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>label_4</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1aaddde388c6624f875bb2f7bab2a5c20a" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>label_5</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a51a3310021200e9ca9b56da87d85169e" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>label_6</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a8b3b2230a8862203fadc9d2cdeb1bf61" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>label_7</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a456306b7350711e54ef9bdd9619c0ef7" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>label_8</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1afc70917780095044bf7611c75b06c2f8" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>label_9</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1ad1d521b4a770b805f4ef95f51b7cb8dc" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>lineEdit</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a1b17ef767857d8221004d722639766d8" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>lineEdit_2</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1aa8a8e0825328fb33a519015966511707" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>page_3</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1aa7d43a9a4bfc12ae8d8ce99d6907de8c" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>page_4</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1aa2e104435df4a5a6911ebcd5c0c2031e" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>page_5</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1aebb34764e4dc3f796842e401ab464727" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>page_6</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a88cb69e503f5f108546302b3786dc5a8" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>page_7</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1ae8015020116cfd11c6bc4884066c1059" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>progressBar</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a20dce3627aec86e2b3b6272fd65da747" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1ac19b115b9298ee62aaee5e3afda131d6" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_10</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1ac80dd6773549cbde64c7ee228fcef394" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_11</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1aabdc900461ae272a64ff6fda22ab41a2" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_12</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a9d4d946310908e53985cce2a993f906b" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_13</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1ae471bdeebb36834b59481a92705c986e" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_14</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1aa6b39e150488c9c2b84c4996213cb298" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_15</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a64cfc65d4a15b717c189cb38df0f7484" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_16</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a43c01dbfeef6220ffc000d2bf71c2901" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_17</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a1d0ccedd0ee73fde6e413feea8a7b770" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_18</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a7501ccae8608dd6a3df6797275495e19" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_19</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1ac52a8a5d46ec6181be20375ae2e01c02" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_2</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1af1d6b8405be1b22020624ca57bf710e6" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_20</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a94324753b2fa65f72a2d2fbee259b785" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_21</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a9b7f892fd1e9980dcc2d79b4b050d205" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_22</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1aaee99ef88842d294032a07f4cfde5ea3" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_23</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1aeaa7955cfae8d7dc93443a9ae43b0b77" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_24</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a8132dba0925d6d86831776b8f3eaa7e2" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_25</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a182c40ed9b74d0ec7c12961e3ae49b4d" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_26</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a134e33807d01811fafcd10647f53241e" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_27</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a32d9af2b9ec0fe1b78ab1db605b011f8" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_28</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a2983d7366c15f69f932c6cb951dba8a3" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_3</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1af4aa3314cdcaec05fc6dcd4fd24e25cc" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_4</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a50dda53be7c3b37c77fb140bd9cfb3c7" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_5</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1afed1aa1164c7b2158572fd7a57b011e8" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_6</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1aab6bf45fa86b0905291242c702b6dfa1" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_7</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a363e433438946e973b2a655ee228ca16" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_8</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1aa51b58b28aa5d4e310ad0e192f514d38" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>pushButton_9</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a7d91891583252c3773bf2586d743668e" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>retranslateUi</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a86127e98b67d5d09fe0cdce1c0083e00" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>setupUi</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a42ddfd479986e7e066403127c525bce3" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>spinBox</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a71e99060e2787eecf32231dd23e93d01" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>tab</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a7627678b7cb9507c389c5f26ff3c2b40" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>tab_2</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a24cc8b03d8ee7976a8430160e2f4a44d" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>tableWidget</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a75a5a27f37be7d4017618efbc15f3625" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>tabWidget</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a9bf86393295fc3dc7145bdf104b29ebb" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>toolBox</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1ab737510771dda8a89bab32973051dd89" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>verticalLayout</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1ae97008adad99d1e6d37e472e1013e049" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>verticalLayout_2</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1af6fcccc7edb9e59d9cf3dc10ed1e1d53" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>verticalLayout_3</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a02d83af431a8e434ddbe831b6021fd31" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>verticalLayout_4</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1ab1d92595cd8ddea8c8d27ca9924d7d5c" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>verticalLayout_5</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a8b5eb88b00e215efcc19bf7c61afafea" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>verticalLayout_6</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a82433d6572d005728e54244cff274035" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>verticalLayout_7</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1ae2f03b0d2fa70fc90e1f77cc2c081414" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>verticalLayout_8</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a8266fd06576ecae11367cbe23d1cae62" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>verticalSpacer</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1aa9eb9089acf2d4385151fd265ecff86e" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>verticalSpacer_2</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a32d97e572016ad835199867155683bda" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>verticalSpacer_3</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1ab05c44c2225c93298accab2dffff3f5c" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>verticalSpacer_4</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1aca76fd64b1145bd6c7c46a98059ac10d" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>verticalSpacer_5</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1affe2b491782314d9e0ea7656e9de17e8" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>verticalSpacer_6</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a0ca6fedd24bdb77e28de215a9c8dd30b" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>verticalSpacer_8</name></member>
+      <member refid="classUi__AdditiveManufacturingDockWidget_1a8d64a640626394524d34ecc5665a7f9f" prot="public" virt="non-virtual"><scope>Ui::AdditiveManufacturingDockWidget</scope><name>verticalSpacer_9</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>
