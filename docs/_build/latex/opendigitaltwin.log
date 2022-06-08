@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.15)  8 JUN 2022 21:07
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.15)  8 JUN 2022 21:18
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -2304,11 +2304,11 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 6407.
 Here is how much of TeX's memory you used:
  18006 strings out of 481239
  327404 string characters out of 5920376
- 545318 words of memory out of 5000000
+ 545291 words of memory out of 5000000
  31500 multiletter control sequences out of 15000+600000
  602922 words of font info for 133 fonts, out of 8000000 for 9000
  1142 hyphenation exceptions out of 8191
- 38i,12n,51p,606b,1854s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,12n,51p,606b,1846s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/tex-gyre/q-ec.enc}{/usr/share/texmf/fonts/e
 nc/dvips/tex-gyre/q-ts1.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/a
 msfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
@@ -2353,7 +2353,7 @@ mb.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qtmr.pfb></usr/share/texmf
 /fonts/type1/public/tex-gyre/qtmri.pfb></usr/share/texlive/texmf-dist/fonts/typ
 e1/public/txfonts/t1xbtt.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
 txfonts/t1xtt.pfb>
-Output written on opendigitaltwin.pdf (56 pages, 469803 bytes).
+Output written on opendigitaltwin.pdf (56 pages, 469804 bytes).
 PDF statistics:
  2797 PDF objects out of 2984 (max. 8388607)
  2599 compressed objects within 26 object streams

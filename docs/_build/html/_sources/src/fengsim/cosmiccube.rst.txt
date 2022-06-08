@@ -9,4 +9,5 @@ Cosmic Cube集成开发环境
 .. image:: images/cosmiccube.jpg
 		   :width: 400
 		   :alt: Alternative text
+		   :align: center
 
