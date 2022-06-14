@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/prefix1"/>
+    <qresource prefix="/fem_wind">
+        <file>figure/fem_wind/checked.png</file>
+        <file>figure/fem_wind/unchecked.png</file>
+    </qresource>
+</RCC>

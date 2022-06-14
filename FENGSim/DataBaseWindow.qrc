@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>figure/database_wind/delete.png</file>
+        <file>figure/database_wind/edit.png</file>
+        <file>figure/database_wind/last.png</file>
+        <file>figure/database_wind/new.png</file>
+        <file>figure/database_wind/next.png</file>
+        <file>figure/database_wind/ok.png</file>
+        <file>figure/database_wind/statistics.png</file>
+    </qresource>
+</RCC>

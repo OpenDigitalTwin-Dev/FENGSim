@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>figure/spc_wind/close.png</file>
+        <file>figure/spc_wind/open.png</file>
+        <file>figure/spc_wind/spc.png</file>
+    </qresource>
+</RCC>
