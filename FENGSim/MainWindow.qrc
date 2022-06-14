@@ -1,0 +1,28 @@
+<RCC>
+    <qresource prefix="/main_wind">
+        <file>figure/main_wind/cad.png</file>
+        <file>figure/main_wind/fem.png</file>
+        <file>figure/main_wind/Fengsim_logo_hi.png</file>
+        <file>figure/main_wind/handle.png</file>
+        <file>figure/main_wind/mesh.png</file>
+        <file>figure/main_wind/visual.png</file>
+        <file>style.qss</file>
+        <file>figure/main_wind/dock_open.png</file>
+        <file>figure/main_wind/dock_close.png</file>
+        <file>figure/main_wind/open.png</file>
+        <file>figure/main_wind/save.png</file>
+        <file>figure/main_wind/Fengsim_logo_about.png</file>
+        <file>figure/main_wind/database.png</file>
+        <file>figure/main_wind/Fengsim_logo_625.png</file>
+        <file>figure/main_wind/boolean.png</file>
+        <file>figure/main_wind/others.png</file>
+        <file>figure/main_wind/properties.png</file>
+        <file>figure/main_wind/new.png</file>
+        <file>figure/main_wind/dock_background.png</file>
+        <file>figure/main_wind/separator.png</file>
+        <file>figure/main_wind/viewrotationv.png</file>
+        <file>figure/main_wind/viewrotationh.png</file>
+        <file>figure/main_wind/physics.png</file>
+        <file>figure/main_wind/direction.png</file>
+    </qresource>
+</RCC>

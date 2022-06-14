@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>637</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>800</width>
+    <height>637</height>
+   </size>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>10</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>FENGSim</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="MainWindow.qrc">
+    <normaloff>:/main_wind/figure/main_wind/Fengsim_logo_about.png</normaloff>:/main_wind/figure/main_wind/Fengsim_logo_about.png</iconset>
+  </property>
+  <property name="windowOpacity">
+   <double>1.000000000000000</double>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QWindow {height: 600; width: 800;}</string>
+  </property>
+  <widget class="OCCWidget" name="centralWidget">
+   <property name="styleSheet">
+    <string notr="true">margin: 0px;</string>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QMdiArea" name="mdiArea">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">margin: 0px; padding: 0px; background-color: rgb(69, 92, 123);</string>
+      </property>
+      <property name="lineWidth">
+       <number>0</number>
+      </property>
+      <property name="background">
+       <brush brushstyle="SolidPattern">
+        <color alpha="255">
+         <red>69</red>
+         <green>92</green>
+         <blue>123</blue>
+        </color>
+       </brush>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="focusPolicy">
+    <enum>Qt::NoFocus</enum>
+   </property>
+   <property name="autoFillBackground">
+    <bool>true</bool>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionNew"/>
+    <addaction name="actionOpen"/>
+    <addaction name="actionSave"/>
+   </widget>
+   <widget class="QMenu" name="menuFENGSim">
+    <property name="title">
+     <string>FENGSim</string>
+    </property>
+    <widget class="QMenu" name="menuView">
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="title">
+      <string>View</string>
+     </property>
+     <property name="icon">
+      <iconset resource="MainWindow.qrc">
+       <normaloff>:/main_wind/figure/main_wind/direction.png</normaloff>:/main_wind/figure/main_wind/direction.png</iconset>
+     </property>
+     <addaction name="actionAxo"/>
+     <addaction name="actionFront"/>
+     <addaction name="actionBack"/>
+     <addaction name="actionLeft"/>
+     <addaction name="actionRight"/>
+     <addaction name="actionTop"/>
+     <addaction name="actionBottom"/>
+     <addaction name="actionFit"/>
+    </widget>
+    <addaction name="actionCAD"/>
+    <addaction name="actionPhysics"/>
+    <addaction name="actionMesh"/>
+    <addaction name="actionSolver"/>
+    <addaction name="actionVisual"/>
+    <addaction name="menuView"/>
+    <addaction name="separator"/>
+    <addaction name="actionAdditiveManufacturing"/>
+    <addaction name="actionMeasure"/>
+    <addaction name="actionSystem"/>
+    <addaction name="actionSPC"/>
+   </widget>
+   <widget class="QMenu" name="menuAbout">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuFENGSim"/>
+   <addaction name="menuAbout"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="windowTitle">
+    <string>toolBar_3</string>
+   </property>
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::TopToolBarArea</set>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionNew"/>
+   <addaction name="actionOpen"/>
+   <addaction name="actionSave"/>
+   <addaction name="separator"/>
+   <addaction name="actionCAD"/>
+   <addaction name="actionPhysics"/>
+   <addaction name="actionMesh"/>
+   <addaction name="actionSolver"/>
+   <addaction name="actionVisual"/>
+   <addaction name="actionAdditiveManufacturing"/>
+   <addaction name="actionMeasure"/>
+   <addaction name="actionMachining"/>
+   <addaction name="actionSystem"/>
+   <addaction name="actionSPC"/>
+   <addaction name="actionTransport"/>
+   <addaction name="separator"/>
+   <addaction name="actionAbout"/>
+  </widget>
+  <widget class="QDockWidget" name="dockWidget">
+   <property name="minimumSize">
+    <size>
+     <width>180</width>
+     <height>420</height>
+    </size>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>180</width>
+     <height>420</height>
+    </size>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <property name="floating">
+    <bool>true</bool>
+   </property>
+   <property name="features">
+    <set>QDockWidget::AllDockWidgetFeatures</set>
+   </property>
+   <property name="allowedAreas">
+    <set>Qt::NoDockWidgetArea</set>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents">
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="sizeConstraint">
+      <enum>QLayout::SetNoConstraint</enum>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="pushButton">
+       <property name="styleSheet">
+        <string notr="true">QPushButton{background-color:transparent;
+                               max-width: 32px; max-height: 32px; min-width: 32px; min-height: 32px; border: 0px solid white;
+    border-radius: 2px; margin: 2px; padding: 3px;}
+ 
+QPushButton:hover, QPushButton::menu-button:hover { 
+                                                background-color: transparent; 
+border: 2px solid rgb(158,158,158); 
+}</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="CADWindow.qrc">
+         <normaloff>:/cad_wind/figure/cad_wind/view.png</normaloff>:/cad_wind/figure/cad_wind/view.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>26</width>
+         <height>26</height>
+        </size>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="default">
+        <bool>false</bool>
+       </property>
+       <property name="flat">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <action name="actionCAD">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/main_wind/figure/main_wind/cad.png</normaloff>:/main_wind/figure/main_wind/cad.png</iconset>
+   </property>
+   <property name="text">
+    <string>CAD</string>
+   </property>
+  </action>
+  <action name="actionMesh">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/main_wind/figure/main_wind/mesh.png</normaloff>:/main_wind/figure/main_wind/mesh.png</iconset>
+   </property>
+   <property name="text">
+    <string>Mesh</string>
+   </property>
+  </action>
+  <action name="actionSolver">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/main_wind/figure/main_wind/fem.png</normaloff>:/main_wind/figure/main_wind/fem.png</iconset>
+   </property>
+   <property name="text">
+    <string>FEM</string>
+   </property>
+  </action>
+  <action name="actionVisual">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/main_wind/figure/main_wind/visual.png</normaloff>:/main_wind/figure/main_wind/visual.png</iconset>
+   </property>
+   <property name="text">
+    <string>Visual</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/main_wind/figure/main_wind/Fengsim_logo_about.png</normaloff>:/main_wind/figure/main_wind/Fengsim_logo_about.png</iconset>
+   </property>
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/main_wind/figure/main_wind/save.png</normaloff>:/main_wind/figure/main_wind/save.png</iconset>
+   </property>
+   <property name="text">
+    <string>Save</string>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/main_wind/figure/main_wind/open.png</normaloff>:/main_wind/figure/main_wind/open.png</iconset>
+   </property>
+   <property name="text">
+    <string>Open</string>
+   </property>
+  </action>
+  <action name="actionSPC">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="SPCWindow.qrc">
+     <normaloff>:/new/prefix1/figure/spc_wind/spc.png</normaloff>:/new/prefix1/figure/spc_wind/spc.png</iconset>
+   </property>
+   <property name="text">
+    <string>SPC</string>
+   </property>
+   <property name="toolTip">
+    <string>Statistical Process Control</string>
+   </property>
+  </action>
+  <action name="actionAxo">
+   <property name="icon">
+    <iconset resource="CADWindow.qrc">
+     <normaloff>:/cad_wind/figure/cad_wind/axo.png</normaloff>:/cad_wind/figure/cad_wind/axo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Axo</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionFront">
+   <property name="icon">
+    <iconset resource="CADWindow.qrc">
+     <normaloff>:/cad_wind/figure/cad_wind/front.png</normaloff>:/cad_wind/figure/cad_wind/front.png</iconset>
+   </property>
+   <property name="text">
+    <string>Front</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionBack">
+   <property name="icon">
+    <iconset resource="CADWindow.qrc">
+     <normaloff>:/cad_wind/figure/cad_wind/back.png</normaloff>:/cad_wind/figure/cad_wind/back.png</iconset>
+   </property>
+   <property name="text">
+    <string>Back</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionLeft">
+   <property name="icon">
+    <iconset resource="CADWindow.qrc">
+     <normaloff>:/cad_wind/figure/cad_wind/left.png</normaloff>:/cad_wind/figure/cad_wind/left.png</iconset>
+   </property>
+   <property name="text">
+    <string>Left</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionRight">
+   <property name="icon">
+    <iconset resource="CADWindow.qrc">
+     <normaloff>:/cad_wind/figure/cad_wind/right.png</normaloff>:/cad_wind/figure/cad_wind/right.png</iconset>
+   </property>
+   <property name="text">
+    <string>Right</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionTop">
+   <property name="icon">
+    <iconset resource="CADWindow.qrc">
+     <normaloff>:/cad_wind/figure/cad_wind/top.png</normaloff>:/cad_wind/figure/cad_wind/top.png</iconset>
+   </property>
+   <property name="text">
+    <string>Top</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionBottom">
+   <property name="icon">
+    <iconset resource="CADWindow.qrc">
+     <normaloff>:/cad_wind/figure/cad_wind/bottom.png</normaloff>:/cad_wind/figure/cad_wind/bottom.png</iconset>
+   </property>
+   <property name="text">
+    <string>Bottom</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionFit">
+   <property name="icon">
+    <iconset resource="CADWindow.qrc">
+     <normaloff>:/cad_wind/figure/cad_wind/fit.png</normaloff>:/cad_wind/figure/cad_wind/fit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Fit</string>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+  </action>
+  <action name="actionNew">
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/main_wind/figure/main_wind/new.png</normaloff>:/main_wind/figure/main_wind/new.png</iconset>
+   </property>
+   <property name="text">
+    <string>New</string>
+   </property>
+  </action>
+  <action name="actionMeasure">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="MeasureWidnow.qrc">
+     <normaloff>:/new/measure/figure/measure_wind/measure.png</normaloff>:/new/measure/figure/measure_wind/measure.png</iconset>
+   </property>
+   <property name="text">
+    <string>Measure</string>
+   </property>
+  </action>
+  <action name="actionSystem">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="System.qrc">
+     <normaloff>:/new/prefix1/figure/system_wind/system.png</normaloff>:/new/prefix1/figure/system_wind/system.png</iconset>
+   </property>
+   <property name="text">
+    <string>System</string>
+   </property>
+  </action>
+  <action name="actionAdditiveManufacturing">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="MeshWindow.qrc">
+     <normaloff>:/new/prefix1/figure/mesh_wind/am.png</normaloff>:/new/prefix1/figure/mesh_wind/am.png</iconset>
+   </property>
+   <property name="text">
+    <string>AM</string>
+   </property>
+   <property name="toolTip">
+    <string>AM</string>
+   </property>
+  </action>
+  <action name="actionViewRotationH">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/main_wind/figure/main_wind/viewrotationh.png</normaloff>:/main_wind/figure/main_wind/viewrotationh.png</iconset>
+   </property>
+   <property name="text">
+    <string>Horizontal</string>
+   </property>
+   <property name="toolTip">
+    <string>ViewRotationH</string>
+   </property>
+  </action>
+  <action name="actionViewRotationV">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/main_wind/figure/main_wind/viewrotationv.png</normaloff>:/main_wind/figure/main_wind/viewrotationv.png</iconset>
+   </property>
+   <property name="text">
+    <string> Vertical</string>
+   </property>
+  </action>
+  <action name="actionMachining">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Machining/machining.qrc">
+     <normaloff>:/figure/machining/machining.png</normaloff>:/figure/machining/machining.png</iconset>
+   </property>
+   <property name="text">
+    <string>Machining</string>
+   </property>
+  </action>
+  <action name="actionTransport">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="figure/transport_wind/transportwindow.qrc">
+     <normaloff>:/new/prefix1/nuclear.png</normaloff>:/new/prefix1/nuclear.png</iconset>
+   </property>
+   <property name="text">
+    <string>Transport</string>
+   </property>
+  </action>
+  <action name="actionPhysics">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="MainWindow.qrc">
+     <normaloff>:/main_wind/figure/main_wind/physics.png</normaloff>:/main_wind/figure/main_wind/physics.png</iconset>
+   </property>
+   <property name="text">
+    <string>Physics</string>
+   </property>
+   <property name="toolTip">
+    <string>Physics</string>
+   </property>
+  </action>
+  <zorder>dockWidget</zorder>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>OCCWidget</class>
+   <extends>QWidget</extends>
+   <header>CAD/OCCWidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="figure/transport_wind/transportwindow.qrc"/>
+  <include location="CADWindow.qrc"/>
+  <include location="System.qrc"/>
+  <include location="MeasureWidnow.qrc"/>
+  <include location="MainWindow.qrc"/>
+  <include location="Machining/machining.qrc"/>
+  <include location="MeshWindow.qrc"/>
+  <include location="SPCWindow.qrc"/>
+ </resources>
+ <connections/>
+</ui>
