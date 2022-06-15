@@ -1,4 +1,4 @@
-# About Open Digital Twin Project
+# About Open Digital Twin Project 开源CAX数字孪生项目
 
 The true digital twins need all CAX technologies. Without a large team and big money, it is normally difficult and nearly impossible to develop a digital twin system like Siemens Digital Industries Software, Dassault 3D Experience, and Ansys WorkBench. But we've proven that open source software is definitely a solution to this and it brings its products directly to industries. The Open Digital Twin Project includes FENGSim, FASP, and OpenCAEPoro. FENGSim was started by Prof. Anders Logg, Dr. Jiping Xin, Mr. Bin Duan, Associate Prof. Yuqing Peng, Mr. Zhuang Zhang, Prof. XB Liu and Prof. Chaofeng Zhang from 2016. FASP and OpenCAEPoro were started by Associate Prof. Chensong Zhang.
 
