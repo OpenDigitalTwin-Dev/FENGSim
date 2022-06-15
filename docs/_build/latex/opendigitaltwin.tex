@@ -193,7 +193,7 @@
 
 
 \title{金属切削工艺多尺度仿真软件}
-\date{Jun 09, 2022}
+\date{Jun 15, 2022}
 \release{0.1}
 \author{信吉平}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -214,88 +214,6 @@
 \sphinxAtStartPar
 欢迎使用开源数字孪生项目！ODT由FENGSim、OpenCAE+和GCGE构成，其中FENGSim包括Cosmic Cube集成开发环境和Airfoil Benchmark架构，Airfoil架构包括FEniCS教程中文版本。OpenCAE+包括OpenCAEPoro和FASP。OpenCAE+和GCGE分别由中国科学院计算数学所张晨松副研究员和谢和虎研究员主持开发。
 
-\sphinxstepscope
-
-
-\chapter{偏微分方程}
-\label{\detokenize{src/pde/main:id1}}\label{\detokenize{src/pde/main::doc}}
-\sphinxstepscope
-
-
-\section{热传导方程}
-\label{\detokenize{src/pde/heat:id1}}\label{\detokenize{src/pde/heat::doc}}\begin{align}
--\Delta u &= f & \textrm{in }\Omega\\
-u &= u_{\textrm D} & \textrm{on }\Gamma_{\textrm D} \\
-\partial_{\mathbf n} u &= u_{\textrm N} & \textrm{on }\Gamma_{\textrm N}
-\end{align}
-\sphinxstepscope
-
-
-\section{弹性方程}
-\label{\detokenize{src/pde/elasticity:id1}}\label{\detokenize{src/pde/elasticity::doc}}
-
-\subsection{张量运算}
-\label{\detokenize{src/pde/elasticity:id2}}
-\sphinxAtStartPar
-二阶张量是 \(3\times 3\) 矩阵，四阶张量是 \(9\times 9\) 矩阵，我们定义两个常用的张量乘积，一个是 \(\mathbf a\otimes\mathbf b\) ，叫做Kronecker product，一个是 \(\mathbf A:\mathbf B\) ，叫做Frobenius inner product。
-\begin{equation*}
-\begin{split}\mathbf A \otimes \mathbf B =
-\left(\begin{array}{cc}
-a_{11}\mathbf B & a_{12}\mathbf B  \\
-a_{21}\mathbf B & a_{22}\mathbf B
-\end{array}\right)\end{split}
-\end{equation*}\begin{equation*}
-\begin{split}\mathbf A : \mathbf B = a_{ij}b_{ij}\end{split}
-\end{equation*}\begin{equation*}
-\begin{split}\mathbb A : \mathbf B = a_{ijkl} b_{kl}\mathbf e_i\otimes\mathbf e_j\end{split}
-\end{equation*}
-\sphinxstepscope
-
-
-\section{弹塑性方程}
-\label{\detokenize{src/pde/elastoplasticity:id1}}\label{\detokenize{src/pde/elastoplasticity::doc}}
-\sphinxstepscope
-
-
-\chapter{有限元算法}
-\label{\detokenize{src/fem/main:id1}}\label{\detokenize{src/fem/main::doc}}
-
-\section{热传导方程}
-\label{\detokenize{src/fem/main:id2}}
-
-\section{弹性方程}
-\label{\detokenize{src/fem/main:id3}}
-
-\section{弹塑性方程}
-\label{\detokenize{src/fem/main:id4}}
-\sphinxstepscope
-
-
-\chapter{任意拉格郎日欧拉算法}
-\label{\detokenize{src/ale/main:id1}}\label{\detokenize{src/ale/main::doc}}
-
-\section{remeshing}
-\label{\detokenize{src/ale/main:remeshing}}
-
-\section{remapping}
-\label{\detokenize{src/ale/main:remapping}}
-
-\section{ALE}
-\label{\detokenize{src/ale/main:ale}}
-\sphinxstepscope
-
-
-\chapter{金属切削}
-\label{\detokenize{src/metalcutting/main:id1}}\label{\detokenize{src/metalcutting/main::doc}}
-
-\section{二维直角切削}
-\label{\detokenize{src/metalcutting/main:id2}}
-
-\section{三维斜角切削}
-\label{\detokenize{src/metalcutting/main:id3}}
-
-\section{三维铣削}
-\label{\detokenize{src/metalcutting/main:id4}}
 \sphinxstepscope
 
 

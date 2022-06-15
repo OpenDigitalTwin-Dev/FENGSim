@@ -8,10 +8,6 @@
    :maxdepth: 3
 			  
    src/intro.rst
-   src/pde/main.rst
-   src/fem/main.rst
-   src/ale/main.rst
-   src/metalcutting/main.rst
    api/library_root.rst
 
 Indices and tables
