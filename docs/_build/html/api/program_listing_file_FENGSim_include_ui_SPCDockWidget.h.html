@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Program Listing for File ui_SPCDockWidget.h &#8212; Open Digital Twin 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/collapsible-lists/css/tree_view.css" />
+    
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/collapsible-lists/js/CollapsibleLists.compressed.js"></script>
+    <script src="../_static/collapsible-lists/js/apply-collapsible-lists.js"></script>
+    
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Open Digital Twin 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File ui_SPCDockWidget.h</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="program-listing-for-file-ui-spcdockwidget-h">
+<span id="program-listing-file-fengsim-include-ui-spcdockwidget-h"></span><h1>Program Listing for File ui_SPCDockWidget.h<a class="headerlink" href="#program-listing-for-file-ui-spcdockwidget-h" title="Permalink to this headline">¶</a></h1>
+<p>↰ <a class="reference internal" href="file_FENGSim_include_ui_SPCDockWidget.h.html#file-fengsim-include-ui-spcdockwidget-h"><span class="std std-ref">Return to documentation for file</span></a> (<code class="docutils literal notranslate"><span class="pre">FENGSim/include/ui_SPCDockWidget.h</span></code>)</p>
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="cm">/********************************************************************************</span>
+<span class="cm">** Form generated from reading UI file &#39;SPCDockWidget.ui&#39;</span>
+<span class="cm">**</span>
+<span class="cm">** Created by: Qt User Interface Compiler version 5.12.10</span>
+<span class="cm">**</span>
+<span class="cm">** WARNING! All changes made in this file will be lost when recompiling UI file!</span>
+<span class="cm">********************************************************************************/</span><span class="w"></span>
+
+<span class="cp">#ifndef UI_SPCDOCKWIDGET_H</span>
+<span class="cp">#define UI_SPCDOCKWIDGET_H</span>
+
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;QtCore/QVariant&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;QtWidgets/QApplication&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;QtWidgets/QHBoxLayout&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;QtWidgets/QHeaderView&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;QtWidgets/QTreeWidget&gt;</span><span class="cp"></span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;QtWidgets/QWidget&gt;</span><span class="cp"></span>
+
+<span class="n">QT_BEGIN_NAMESPACE</span><span class="w"></span>
+
+<span class="k">class</span><span class="w"> </span><span class="nc">Ui_SPCDockWidget</span><span class="w"></span>
+<span class="p">{</span><span class="w"></span>
+<span class="k">public</span><span class="o">:</span><span class="w"></span>
+<span class="w">    </span><span class="n">QHBoxLayout</span><span class="w"> </span><span class="o">*</span><span class="n">horizontalLayout</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="n">QTreeWidget</span><span class="w"> </span><span class="o">*</span><span class="n">treeWidget</span><span class="p">;</span><span class="w"></span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">setupUi</span><span class="p">(</span><span class="n">QWidget</span><span class="w"> </span><span class="o">*</span><span class="n">SPCDockWidget</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">SPCDockWidget</span><span class="o">-&gt;</span><span class="n">objectName</span><span class="p">().</span><span class="n">isEmpty</span><span class="p">())</span><span class="w"></span>
+<span class="w">            </span><span class="n">SPCDockWidget</span><span class="o">-&gt;</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">QString</span><span class="o">::</span><span class="n">fromUtf8</span><span class="p">(</span><span class="s">&quot;SPCDockWidget&quot;</span><span class="p">));</span><span class="w"></span>
+<span class="w">        </span><span class="n">SPCDockWidget</span><span class="o">-&gt;</span><span class="n">resize</span><span class="p">(</span><span class="mi">400</span><span class="p">,</span><span class="w"> </span><span class="mi">300</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">horizontalLayout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">QHBoxLayout</span><span class="p">(</span><span class="n">SPCDockWidget</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">horizontalLayout</span><span class="o">-&gt;</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">QString</span><span class="o">::</span><span class="n">fromUtf8</span><span class="p">(</span><span class="s">&quot;horizontalLayout&quot;</span><span class="p">));</span><span class="w"></span>
+<span class="w">        </span><span class="n">treeWidget</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">QTreeWidget</span><span class="p">(</span><span class="n">SPCDockWidget</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">QFont</span><span class="w"> </span><span class="n">font</span><span class="p">;</span><span class="w"></span>
+<span class="w">        </span><span class="n">font</span><span class="p">.</span><span class="n">setPointSize</span><span class="p">(</span><span class="mi">9</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">QTreeWidgetItem</span><span class="w"> </span><span class="o">*</span><span class="n">__qtreewidgetitem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">QTreeWidgetItem</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="n">__qtreewidgetitem</span><span class="o">-&gt;</span><span class="n">setFont</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">font</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">treeWidget</span><span class="o">-&gt;</span><span class="n">setHeaderItem</span><span class="p">(</span><span class="n">__qtreewidgetitem</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">QTreeWidgetItem</span><span class="w"> </span><span class="o">*</span><span class="n">__qtreewidgetitem1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">QTreeWidgetItem</span><span class="p">(</span><span class="n">treeWidget</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">new</span><span class="w"> </span><span class="n">QTreeWidgetItem</span><span class="p">(</span><span class="n">__qtreewidgetitem1</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">treeWidget</span><span class="o">-&gt;</span><span class="n">setObjectName</span><span class="p">(</span><span class="n">QString</span><span class="o">::</span><span class="n">fromUtf8</span><span class="p">(</span><span class="s">&quot;treeWidget&quot;</span><span class="p">));</span><span class="w"></span>
+<span class="w">        </span><span class="n">treeWidget</span><span class="o">-&gt;</span><span class="n">setFont</span><span class="p">(</span><span class="n">font</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">treeWidget</span><span class="o">-&gt;</span><span class="n">setStyleSheet</span><span class="p">(</span><span class="n">QString</span><span class="o">::</span><span class="n">fromUtf8</span><span class="p">(</span><span class="s">&quot;QTreeView::item:hover {</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="s">&quot;    background: transparent;</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="s">&quot;QTreeView::item:selected{</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="s">&quot;    background: #1E90FF;</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="s">&quot;QTreeView::branch {</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="s">&quot;    background: transparent;</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="s">&quot;QTreeView::branch:hover {</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="s">&quot;    background: transparent;</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="s">&quot;QTreeView::branch:selected {</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="s">&quot;    background: #1E90FF;</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="s">&quot;QTreeView::branch:closed:has-children{</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="s">&quot;    image: url(:/new/prefix1/figure/spc_wind/open.png);</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="s">&quot;QTreeView::branch:open:has-children{</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="s">&quot;   image: url(:/new/prefix1/figure/spc_wind/close.png);</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="w"></span>
+<span class="s">&quot;&quot;</span><span class="p">));</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">horizontalLayout</span><span class="o">-&gt;</span><span class="n">addWidget</span><span class="p">(</span><span class="n">treeWidget</span><span class="p">);</span><span class="w"></span>
+
+
+<span class="w">        </span><span class="n">retranslateUi</span><span class="p">(</span><span class="n">SPCDockWidget</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">        </span><span class="n">QMetaObject</span><span class="o">::</span><span class="n">connectSlotsByName</span><span class="p">(</span><span class="n">SPCDockWidget</span><span class="p">);</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="c1">// setupUi</span>
+
+<span class="w">    </span><span class="kt">void</span><span class="w"> </span><span class="nf">retranslateUi</span><span class="p">(</span><span class="n">QWidget</span><span class="w"> </span><span class="o">*</span><span class="n">SPCDockWidget</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="n">SPCDockWidget</span><span class="o">-&gt;</span><span class="n">setWindowTitle</span><span class="p">(</span><span class="n">QApplication</span><span class="o">::</span><span class="n">translate</span><span class="p">(</span><span class="s">&quot;SPCDockWidget&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Form&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">));</span><span class="w"></span>
+<span class="w">        </span><span class="n">QTreeWidgetItem</span><span class="w"> </span><span class="o">*</span><span class="n">___qtreewidgetitem</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">treeWidget</span><span class="o">-&gt;</span><span class="n">headerItem</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="n">___qtreewidgetitem</span><span class="o">-&gt;</span><span class="n">setText</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">QApplication</span><span class="o">::</span><span class="n">translate</span><span class="p">(</span><span class="s">&quot;SPCDockWidget&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;part_1&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">));</span><span class="w"></span>
+
+<span class="w">        </span><span class="k">const</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="n">__sortingEnabled</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">treeWidget</span><span class="o">-&gt;</span><span class="n">isSortingEnabled</span><span class="p">();</span><span class="w"></span>
+<span class="w">        </span><span class="n">treeWidget</span><span class="o">-&gt;</span><span class="n">setSortingEnabled</span><span class="p">(</span><span class="nb">false</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">QTreeWidgetItem</span><span class="w"> </span><span class="o">*</span><span class="n">___qtreewidgetitem1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">treeWidget</span><span class="o">-&gt;</span><span class="n">topLevelItem</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">___qtreewidgetitem1</span><span class="o">-&gt;</span><span class="n">setText</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">QApplication</span><span class="o">::</span><span class="n">translate</span><span class="p">(</span><span class="s">&quot;SPCDockWidget&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;tool_1&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">));</span><span class="w"></span>
+<span class="w">        </span><span class="n">QTreeWidgetItem</span><span class="w"> </span><span class="o">*</span><span class="n">___qtreewidgetitem2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">___qtreewidgetitem1</span><span class="o">-&gt;</span><span class="n">child</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="n">___qtreewidgetitem2</span><span class="o">-&gt;</span><span class="n">setText</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="n">QApplication</span><span class="o">::</span><span class="n">translate</span><span class="p">(</span><span class="s">&quot;SPCDockWidget&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;data_1&quot;</span><span class="p">,</span><span class="w"> </span><span class="k">nullptr</span><span class="p">));</span><span class="w"></span>
+<span class="w">        </span><span class="n">treeWidget</span><span class="o">-&gt;</span><span class="n">setSortingEnabled</span><span class="p">(</span><span class="n">__sortingEnabled</span><span class="p">);</span><span class="w"></span>
+
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="c1">// retranslateUi</span>
+
+<span class="p">};</span><span class="w"></span>
+
+<span class="k">namespace</span><span class="w"> </span><span class="nn">Ui</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="k">class</span><span class="w"> </span><span class="nc">SPCDockWidget</span><span class="o">:</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="n">Ui_SPCDockWidget</span><span class="w"> </span><span class="p">{};</span><span class="w"></span>
+<span class="p">}</span><span class="w"> </span><span class="c1">// namespace Ui</span>
+
+<span class="n">QT_END_NAMESPACE</span><span class="w"></span>
+
+<span class="cp">#endif </span><span class="c1">// UI_SPCDOCKWIDGET_H</span>
+</pre></div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/api/program_listing_file_FENGSim_include_ui_SPCDockWidget.h.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="nav-item nav-item-0"><a href="../index.html">Open Digital Twin 0.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Program Listing for File ui_SPCDockWidget.h</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Jiping Xin.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.5.0.
+    </div>
+  </body>
+</html>
