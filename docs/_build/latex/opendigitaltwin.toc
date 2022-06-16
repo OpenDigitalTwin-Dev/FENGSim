@@ -1,4 +1,18 @@
 \babel@toc {english}{}
-\contentsline {chapter}{\numberline {1}ODT}{3}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Full API}{3}{section.1.1}%
-\contentsline {chapter}{\numberline {2}Indices and tables}{5}{chapter.2}%
+\contentsline {chapter}{\numberline {1}Cosmic Cube CAX集成开发环境}{3}{chapter.1}%
+\contentsline {chapter}{\numberline {2}Airfoil Benchmark CAX数字孪生架构}{5}{chapter.2}%
+\contentsline {section}{\numberline {2.1}CAD}{5}{section.2.1}%
+\contentsline {section}{\numberline {2.2}CAE}{5}{section.2.2}%
+\contentsline {section}{\numberline {2.3}CAM}{5}{section.2.3}%
+\contentsline {section}{\numberline {2.4}CAI}{5}{section.2.4}%
+\contentsline {section}{\numberline {2.5}数字孪生}{5}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}仿真训练人工智能}{5}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {2.5.2}云边协同}{5}{subsection.2.5.2}%
+\contentsline {subsection}{\numberline {2.5.3}浸入式交互}{5}{subsection.2.5.3}%
+\contentsline {chapter}{\numberline {3}OpenCAE+}{7}{chapter.3}%
+\contentsline {section}{\numberline {3.1}OpenCAEPoro}{7}{section.3.1}%
+\contentsline {section}{\numberline {3.2}FASP}{7}{section.3.2}%
+\contentsline {chapter}{\numberline {4}GCGE}{9}{chapter.4}%
+\contentsline {chapter}{\numberline {5}ODT}{11}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Full API}{11}{section.5.1}%
+\contentsline {chapter}{\numberline {6}Indices and tables}{13}{chapter.6}%
