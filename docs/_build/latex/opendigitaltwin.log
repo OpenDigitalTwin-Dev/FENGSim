@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.15)  15 JUN 2022 10:40
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.15)  16 JUN 2022 08:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -983,7 +983,7 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 242.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 242.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 242.
 Package rerunfilecheck Info: File `opendigitaltwin.out' has not changed.
-(rerunfilecheck)             Checksum: B583D5CA35B8DBABC9CEEAABC69D55F2;294.
+(rerunfilecheck)             Checksum: B3730129E7105BE106044F9F111AA497;294.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
@@ -1030,7 +1030,7 @@ mf/fonts/type1/arphic/gbsnu/gbsnu98.pfb></usr/share/texmf/fonts/type1/arphic/gb
 snu/gbsnuff.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qhvb.pfb></usr/sh
 are/texmf/fonts/type1/public/tex-gyre/qhvbi.pfb></usr/share/texmf/fonts/type1/p
 ublic/tex-gyre/qtmb.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qtmr.pfb>
-Output written on opendigitaltwin.pdf (9 pages, 219373 bytes).
+Output written on opendigitaltwin.pdf (9 pages, 219629 bytes).
 PDF statistics:
  292 PDF objects out of 1000 (max. 8388607)
  190 compressed objects within 2 object streams
