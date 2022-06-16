@@ -8,8 +8,7 @@
    :maxdepth: 3
 			  
    src/intro.rst
-   src/cosmiccube/main.rst
-   src/airfoil/main.rst
+   src/fengsim/main.rst
    src/opencaeplus/main.rst
    src/gcge/main.rst
    api/library_root.rst

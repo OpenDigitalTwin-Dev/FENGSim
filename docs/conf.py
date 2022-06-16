@@ -317,7 +317,7 @@ htmlhelp_basename = 'opendigitaltwindoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'opendigitaltwin.tex', u'金属切削工艺多尺度仿真软件',
+  ('index', 'opendigitaltwin.tex', u'开源CAX数字孪生软件',
    u'信吉平', 'manual'),
 ]
 
