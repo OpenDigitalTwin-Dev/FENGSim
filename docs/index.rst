@@ -5,7 +5,7 @@
 
    
 .. toctree::
-   :maxdepth: 3
+   :maxdepth: 4
 			  
    src/intro.rst
    src/fengsim/main.rst
