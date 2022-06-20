@@ -154,6 +154,9 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
+   <property name="contextMenuPolicy">
+    <enum>Qt::DefaultContextMenu</enum>
+   </property>
    <property name="windowTitle">
     <string>toolBar_3</string>
    </property>
@@ -243,42 +246,6 @@
      <property name="bottomMargin">
       <number>0</number>
      </property>
-     <item>
-      <widget class="QPushButton" name="pushButton">
-       <property name="styleSheet">
-        <string notr="true">QPushButton{background-color:transparent;
-                               max-width: 32px; max-height: 32px; min-width: 32px; min-height: 32px; border: 0px solid white;
-    border-radius: 2px; margin: 2px; padding: 3px;}
- 
-QPushButton:hover, QPushButton::menu-button:hover { 
-                                                background-color: transparent; 
-border: 2px solid rgb(158,158,158); 
-}</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="CADWindow.qrc">
-         <normaloff>:/cad_wind/figure/cad_wind/view.png</normaloff>:/cad_wind/figure/cad_wind/view.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>26</width>
-         <height>26</height>
-        </size>
-       </property>
-       <property name="checkable">
-        <bool>true</bool>
-       </property>
-       <property name="default">
-        <bool>false</bool>
-       </property>
-       <property name="flat">
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
     </layout>
    </widget>
   </widget>
@@ -637,14 +604,14 @@ border: 2px solid rgb(158,158,158);
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="figure/transport_wind/transportwindow.qrc"/>
   <include location="CADWindow.qrc"/>
-  <include location="System.qrc"/>
-  <include location="MeasureWidnow.qrc"/>
   <include location="MainWindow.qrc"/>
-  <include location="Machining/machining.qrc"/>
+  <include location="MeasureWidnow.qrc"/>
   <include location="MeshWindow.qrc"/>
+  <include location="Machining/machining.qrc"/>
+  <include location="System.qrc"/>
   <include location="SPCWindow.qrc"/>
+  <include location="figure/transport_wind/transportwindow.qrc"/>
  </resources>
  <connections/>
 </ui>

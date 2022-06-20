@@ -53,13 +53,16 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     connect(ui->actionSolver, SIGNAL(triggered()), this, SLOT(OpenSolverModule()));
     connect(ui->actionVisual, SIGNAL(triggered()), this, SLOT(OpenVisualModule()));
 
-    ui->pushButton->setMenu(ui->menuView);
-    ui->toolBar->insertWidget(ui->actionAdditiveManufacturing,ui->pushButton);
+    //ui->pushButton->setMenu(ui->menuView);
+    //ui->toolBar->insertWidget(ui->actionAdditiveManufacturing,ui->pushButton);
+    //ui->toolBar->insertSeparator(ui->actionAdditiveManufacturing);
+
+    QToolButton *cadCiew = new QToolButton(this);
+    cadCiew->setPopupMode(QToolButton::InstantPopup);
+    cadCiew->setIcon(QIcon(":/main_wind/figure/main_wind/direction.png"));
+    cadCiew->setMenu(ui->menuView);
+    ui->toolBar->insertWidget(ui->actionAdditiveManufacturing,cadCiew);
     ui->toolBar->insertSeparator(ui->actionAdditiveManufacturing);
-
-
-
-
 
 
 
@@ -3818,3 +3821,5 @@ void MainWindow::ImportVTKFile()
     vtk_widget->Clear();
     vtk_widget->ImportVTKFile(stl_file_name.toStdString());
 }
+
+

@@ -101,6 +101,8 @@ private slots:
 
 
 
+    void on_actionTest_triggered();
+
 private:
 
 
