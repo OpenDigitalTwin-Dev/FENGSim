@@ -57,11 +57,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     //ui->toolBar->insertWidget(ui->actionAdditiveManufacturing,ui->pushButton);
     //ui->toolBar->insertSeparator(ui->actionAdditiveManufacturing);
 
-    QToolButton *cadCiew = new QToolButton(this);
-    cadCiew->setPopupMode(QToolButton::InstantPopup);
-    cadCiew->setIcon(QIcon(":/main_wind/figure/main_wind/direction.png"));
-    cadCiew->setMenu(ui->menuView);
-    ui->toolBar->insertWidget(ui->actionAdditiveManufacturing,cadCiew);
+    QToolButton *cadView = new QToolButton(this);
+    cadView->setPopupMode(QToolButton::InstantPopup);
+    cadView->setIcon(QIcon(":/main_wind/figure/main_wind/direction.png"));
+    cadView->setMenu(ui->menuView);
+    ui->toolBar->insertWidget(ui->actionAdditiveManufacturing,cadView);
     ui->toolBar->insertSeparator(ui->actionAdditiveManufacturing);
 
 
