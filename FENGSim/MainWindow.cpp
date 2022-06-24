@@ -68,7 +68,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
         
 
 
-hahaha
+
 
 
 
