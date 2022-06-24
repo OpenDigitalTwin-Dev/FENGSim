@@ -26,8 +26,12 @@
 #include "ui_TransportDockWidget.h"
 #include "Machining/MakeTools.h"
 #include "QToolButton"
-
 #include "QTreeWidget"
+#include "STEPControl_Reader.hxx"
+#include <QFileDialog>
+#include "BRep_Builder.hxx"
+#include "STEPControl_Writer.hxx"
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
@@ -39,23 +43,19 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
 
 
 
-    // ###############################################
-    // ###############################################
+    // ##############################################################################################
+    // ##############################################################################################
     //
     // version 1.0 updated by Dr. Jiping Xin
     //
-    // ###############################################
-    // ###############################################
+    // ##############################################################################################
+    // ##############################################################################################
 
     connect(ui->actionCAD, SIGNAL(triggered()), this, SLOT(OpenCADModule()));
     connect(ui->actionPhysics, SIGNAL(triggered()), this, SLOT(OpenPhysicsModule()));
     connect(ui->actionMesh, SIGNAL(triggered()), this, SLOT(OpenMeshModule()));
     connect(ui->actionSolver, SIGNAL(triggered()), this, SLOT(OpenSolverModule()));
     connect(ui->actionVisual, SIGNAL(triggered()), this, SLOT(OpenVisualModule()));
-
-    //ui->pushButton->setMenu(ui->menuView);
-    //ui->toolBar->insertWidget(ui->actionAdditiveManufacturing,ui->pushButton);
-    //ui->toolBar->insertSeparator(ui->actionAdditiveManufacturing);
 
     QToolButton *cadView = new QToolButton(this);
     cadView->setPopupMode(QToolButton::InstantPopup);
@@ -64,6 +64,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     ui->toolBar->insertWidget(ui->actionAdditiveManufacturing,cadView);
     ui->toolBar->insertSeparator(ui->actionAdditiveManufacturing);
 
+    connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(OpenProject()));
 
 
 
@@ -72,6 +73,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
 
 
 
+
+    // ##############################################################################################
+    // ##############################################################################################
 
 
 
@@ -159,7 +163,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     connect(cad_dock->ui->actionSelectFace, SIGNAL(triggered(bool)), this, SLOT(SelectBnd()));
     connect(cad_dock->ui->actionSelectDomain, SIGNAL(triggered(bool)), this, SLOT(SelectDomain()));
     connect(cad_dock->ui->pushButton_8, SIGNAL(clicked()), this, SLOT(UpdateBndValue()));
-    connect(cad_dock->ui->pushButton_10, SIGNAL(clicked()), this, SLOT(Open()));
+    connect(cad_dock->ui->pushButton_10, SIGNAL(clicked()), this, SLOT(OpenProject()));
     // module
     ui->dockWidget->hide();
     connect(ui->actionCAD, SIGNAL(triggered()), this, SLOT(OpenCADModule()));
@@ -175,7 +179,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     //connect(mesh_dock->ui->pushButton_6, SIGNAL(clicked(bool)), this, SLOT(AMReset()));
     // open and close
     connect(ui->actionSave, SIGNAL(triggered()), this, SLOT(Save()));
-    connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(Open()));
     // show about_dialog
     about_dialog = new AboutDialog;
     connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(OpenAboutDialog()));
@@ -370,13 +373,15 @@ MainWindow::~MainWindow()
 
 
 
-// ###############################################
-// ###############################################
+// ##############################################################################################
+// ##############################################################################################
 //
 // version 1.0 updated by Jiping Xin
 //
-// ###############################################
-// ###############################################
+// ##############################################################################################
+// ##############################################################################################
+
+
 
 void MainWindow::SetActionChecked (int n) {
     ui->actionCAD->setChecked(false);
@@ -479,7 +484,44 @@ void MainWindow::OpenVisualModule()
     }
 }
 
+void MainWindow::OpenProject ()
+{
+    QString fileName = QFileDialog::getOpenFileName(this,tr("Open File"),"/home/jiping/OpenDigitalTwin/",
+                                                    tr("CAD Files (*.stp *.step *.vtk)")
+                                                    , 0 , QFileDialog::DontUseNativeDialog);
+    cout << fileName.toStdString() << endl;
+    if (fileName.isNull()) return;
+    if (fileName.right(3)==QString("stp")||fileName.right(4)==QString("step")) {
+        // file name
+        char* ch;
+        QByteArray ba = fileName.toLatin1();
+        ch=ba.data();
+        // reader
+        STEPControl_Reader reader;
+        reader.ReadFile(ch);
+        Standard_Integer NbRoots = reader.NbRootsForTransfer();
+        Standard_Integer NbTrans = reader.TransferRoots();
+        General* S = new General(new TopoDS_Shape(reader.OneShape()));
+        // add to ds and plot
+        if (S != NULL)
+        {
+            vtk_widget->Plot(*(S->Value()));
+            parts->Add(S);
+        }
+    }
+    else if (fileName.right(3)==QString("vtk"))
+    {
+        vtk_widget->ImportVTKFile(fileName.toStdString());
+    }
+}
 
+
+
+
+
+// ##############################################################################################
+// ##############################################################################################
+// ##############################################################################################
 
 
 
@@ -1133,9 +1175,7 @@ void MainWindow::SelectDomain()
 // open and save
 //
 // =======================================================================
-#include <QFileDialog>
-#include "BRep_Builder.hxx"
-#include "STEPControl_Writer.hxx"
+
 void MainWindow::Save ()
 {
     QString fileName = QFileDialog::getSaveFileName(this,tr("Save File"),
@@ -1170,30 +1210,7 @@ void MainWindow::Save ()
         writer.Write(aRes,fileName.toLatin1().data());
     }
 }
-#include "STEPControl_Reader.hxx"
-void MainWindow::Open ()
-{
-    QString fileName = QFileDialog::getOpenFileName(this,tr("Open File"),"/home/jiping/FENGSim/FENGSim/",tr("CAD Files (*.stp *.step)")
-                                                    , 0 , QFileDialog::DontUseNativeDialog);
-    cout << fileName.toStdString() << endl;
-    if (fileName.isNull()) return;
-    // file name
-    char* ch;
-    QByteArray ba = fileName.toLatin1();
-    ch=ba.data();
-    // reader
-    STEPControl_Reader reader;
-    reader.ReadFile(ch);
-    Standard_Integer NbRoots = reader.NbRootsForTransfer();
-    Standard_Integer NbTrans = reader.TransferRoots();
-    General* S = new General(new TopoDS_Shape(reader.OneShape()));
-    // add to ds and plot
-    if (S != NULL)
-    {
-        vtk_widget->Plot(*(S->Value()));
-        parts->Add(S);
-    }
-}
+
 // =======================================================================
 //
 // general module
