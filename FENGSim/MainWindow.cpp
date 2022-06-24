@@ -65,6 +65,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     ui->toolBar->insertSeparator(ui->actionAdditiveManufacturing);
 
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(OpenProject()));
+        
+
 
 
 
