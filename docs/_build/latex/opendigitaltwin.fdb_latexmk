@@ -1,10 +1,19 @@
 # Fdb version 3
+<<<<<<< HEAD
 ["makeindex opendigitaltwin.idx"] 1655357988 "opendigitaltwin.idx" "opendigitaltwin.ind" "opendigitaltwin" 1655359423
   "opendigitaltwin.idx" 1655359421 0 d41d8cd98f00b204e9800998ecf8427e "pdflatex"
+=======
+["makeindex opendigitaltwin.idx"] 1654589385 "opendigitaltwin.idx" "opendigitaltwin.ind" "opendigitaltwin" 1654589714
+  "opendigitaltwin.idx" 1654589386 178 9c0f9df22eb6801d0a2f97376969858e "pdflatex"
+>>>>>>> adf17e614d948696c2db13d298baa743a18b28c3
   (generated)
-  "opendigitaltwin.ind"
   "opendigitaltwin.ilg"
+<<<<<<< HEAD
 ["pdflatex"] 1655359421 "opendigitaltwin.tex" "opendigitaltwin.pdf" "opendigitaltwin" 1655359423
+=======
+  "opendigitaltwin.ind"
+["pdflatex"] 1654589385 "opendigitaltwin.tex" "opendigitaltwin.pdf" "opendigitaltwin" 1654589714
+>>>>>>> adf17e614d948696c2db13d298baa743a18b28c3
   "/etc/texmf/web2c/texmf.cnf" 1607959990 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/ecrm1000.tfm" 1136768653 3584 adb004a0c8e7c46ee66cad73671f37b4 ""
@@ -235,6 +244,7 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1581979058 38841 ce3692aa899bb693b90b87eaa5d4d84e ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1607964176 4770781 1ed1abab22da9c3e2cc82e4db562318b ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1607964197 8259874 45078260d5460abfe0fb31203d40d5d6 ""
+<<<<<<< HEAD
   "opendigitaltwin.aux" 1655359421 6040 2045803ab8d332e2c6d8b185e519c453 "pdflatex"
   "opendigitaltwin.ind" 1655357988 0 d41d8cd98f00b204e9800998ecf8427e "makeindex opendigitaltwin.idx"
   "opendigitaltwin.out" 1655359421 2307 6424ca6a768029b507ff4606b1a6a970 "pdflatex"
@@ -242,6 +252,16 @@
   "opendigitaltwin.toc" 1655359421 1784 cb6ed10cf4d0024ef8f75d0e239453d2 "pdflatex"
   "sphinx.sty" 1654062037 13276 82c78138249383cc280953c4285ce73f ""
   "sphinxhighlight.sty" 1655359422 6679 76d10c62e0f0661410b46f5db6118e26 ""
+=======
+  "cosmiccube.jpg" 1654571337 34885 8c06396d82f980eabde5e13a3ec04dc0 ""
+  "opendigitaltwin.aux" 1654589386 7656 50ee3805b1015fcb4bda55aa4dca21ab "pdflatex"
+  "opendigitaltwin.ind" 1654589385 347 fc458a9b74c2210b6917db0d5fd153d0 "makeindex opendigitaltwin.idx"
+  "opendigitaltwin.out" 1654589386 3098 488d210640794f783a52365ccb1de70b "pdflatex"
+  "opendigitaltwin.tex" 1654589384 10489 0892f92f058055b5279be2b99ebaa89e ""
+  "opendigitaltwin.toc" 1654589386 2015 d95e6604680a23cd30a241661fc1ee18 "pdflatex"
+  "sphinx.sty" 1654062037 13276 82c78138249383cc280953c4285ce73f ""
+  "sphinxhighlight.sty" 1654589714 6679 76d10c62e0f0661410b46f5db6118e26 ""
+>>>>>>> adf17e614d948696c2db13d298baa743a18b28c3
   "sphinxlatexadmonitions.sty" 1654062037 6238 2d867d769abf3f72abc17ef52adff78b ""
   "sphinxlatexcontainers.sty" 1654062037 901 d3a3a1b7b2547f47ade2499350b5c420 ""
   "sphinxlatexgraphics.sty" 1654062037 4840 a9578332b6f3b35e198751fb632c9b79 ""
@@ -256,14 +276,26 @@
   "sphinxlatexstyletext.sty" 1654062037 6177 c18841ce3fafc366cd3b145f8faa4c37 ""
   "sphinxlatextables.sty" 1654062037 21848 2827eb0b11b99b185a8b77317d3e131c ""
   "sphinxmanual.cls" 1654062037 4241 7b0d7a37df7b5715fb0dbd585c52ecdb ""
+<<<<<<< HEAD
   "sphinxmessages.sty" 1655359422 745 3f5fcd6cdd7964ed608767954a8ced6f ""
+=======
+  "sphinxmessages.sty" 1654589714 745 3f5fcd6cdd7964ed608767954a8ced6f ""
+>>>>>>> adf17e614d948696c2db13d298baa743a18b28c3
   "sphinxoptionsgeometry.sty" 1654062037 2061 47bb34b8ed8a78823eb0c886abfb9f4d ""
   "sphinxoptionshyperref.sty" 1654062037 1094 79beb8b8a3f10784f8cce804e0f9d3aa ""
   "sphinxpackagefootnote.sty" 1654062037 13248 e2c77871396275ccf592403f8130f6f2 ""
   (generated)
   "opendigitaltwin.pdf"
+<<<<<<< HEAD
   "opendigitaltwin.idx"
   "opendigitaltwin.out"
   "opendigitaltwin.aux"
   "opendigitaltwin.log"
   "opendigitaltwin.toc"
+=======
+  "opendigitaltwin.log"
+  "opendigitaltwin.toc"
+  "opendigitaltwin.idx"
+  "opendigitaltwin.out"
+  "opendigitaltwin.aux"
+>>>>>>> adf17e614d948696c2db13d298baa743a18b28c3
