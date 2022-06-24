@@ -66,7 +66,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
 
     connect(ui->actionOpen, SIGNAL(triggered()), this, SLOT(OpenProject()));
         
-        test
+
 
 
 
