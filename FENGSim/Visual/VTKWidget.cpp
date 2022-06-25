@@ -709,8 +709,10 @@ void VTKWidget::ImportVTKFile(std::string name)
     vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
     actor->SetMapper(mapper);
     actor->GetProperty()->EdgeVisibilityOn();
+    actor->GetProperty()->SetAmbient(0.25);
     // actor->GetProperty()->SetFrontfaceCulling(1); // shit this is OK, check it for long time
     // actor->GetProperty()->SetOpacity(100.0);
+    //actor->GetProperty()->SetEdgeColor(255.0/255.0,255.0/255.0,255.0/255.0);
     // renderer
     renderer->AddActor(actor);
     renderer->ResetCamera();
