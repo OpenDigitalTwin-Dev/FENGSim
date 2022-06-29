@@ -130,6 +130,7 @@
     <addaction name="separator"/>
     <addaction name="actionAdditiveManufacturing"/>
     <addaction name="actionMeasure"/>
+    <addaction name="actionMachining"/>
     <addaction name="actionSystem"/>
     <addaction name="actionSPC"/>
    </widget>
@@ -604,14 +605,14 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="CADWindow.qrc"/>
   <include location="MainWindow.qrc"/>
-  <include location="MeasureWidnow.qrc"/>
+  <include location="figure/transport_wind/transportwindow.qrc"/>
   <include location="MeshWindow.qrc"/>
   <include location="Machining/machining.qrc"/>
-  <include location="System.qrc"/>
+  <include location="MeasureWidnow.qrc"/>
   <include location="SPCWindow.qrc"/>
-  <include location="figure/transport_wind/transportwindow.qrc"/>
+  <include location="CADWindow.qrc"/>
+  <include location="System.qrc"/>
  </resources>
  <connections/>
 </ui>
