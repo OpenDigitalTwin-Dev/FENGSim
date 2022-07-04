@@ -34,11 +34,8 @@
    </property>
    <item>
     <layout class="QGridLayout" name="gridLayout">
-     <property name="horizontalSpacing">
-      <number>2</number>
-     </property>
-     <property name="verticalSpacing">
-      <number>3</number>
+     <property name="spacing">
+      <number>1</number>
      </property>
      <item row="0" column="3">
       <widget class="QPushButton" name="pushButton_2">
@@ -76,8 +73,8 @@
        </property>
        <property name="iconSize">
         <size>
-         <width>18</width>
-         <height>18</height>
+         <width>20</width>
+         <height>20</height>
         </size>
        </property>
        <property name="flat">
@@ -126,8 +123,8 @@
        </property>
        <property name="iconSize">
         <size>
-         <width>18</width>
-         <height>18</height>
+         <width>20</width>
+         <height>20</height>
         </size>
        </property>
        <property name="flat">
@@ -223,12 +220,12 @@
        </property>
        <property name="icon">
         <iconset resource="../CADWindow.qrc">
-         <normaloff>:/cad_wind/figure/cad_wind/ball.png</normaloff>:/cad_wind/figure/cad_wind/ball.png</iconset>
+         <normaloff>:/cad_wind/figure/cad_wind/box.png</normaloff>:/cad_wind/figure/cad_wind/box.png</iconset>
        </property>
        <property name="iconSize">
         <size>
-         <width>18</width>
-         <height>18</height>
+         <width>20</width>
+         <height>20</height>
         </size>
        </property>
        <property name="flat">
@@ -279,8 +276,8 @@
        </property>
        <property name="iconSize">
         <size>
-         <width>24</width>
-         <height>24</height>
+         <width>20</width>
+         <height>20</height>
         </size>
        </property>
        <property name="checkable">
@@ -323,8 +320,8 @@
        </property>
        <property name="iconSize">
         <size>
-         <width>18</width>
-         <height>18</height>
+         <width>20</width>
+         <height>20</height>
         </size>
        </property>
        <property name="checkable">
@@ -550,6 +547,15 @@
           <font>
            <pointsize>9</pointsize>
           </font>
+         </property>
+         <property name="autoFillBackground">
+          <bool>false</bool>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: black;
+
+
+</string>
          </property>
          <attribute name="headerVisible">
           <bool>false</bool>
