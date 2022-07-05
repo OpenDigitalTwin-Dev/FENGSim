@@ -31,7 +31,7 @@ help:
 	@echo "  doctest   to run all doctests embedded in the documentation (if enabled)"
 
 clean:
-	-rm -rf api _doxygen _build 
+	-rm -rf api _doxygen _build
 
 html:
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
@@ -88,6 +88,12 @@ latex:
 
 latexpdf: latex
 	$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) _build/latex
+	@echo "Running LaTeX files through pdflatex..."
+	make -C _build/latex all-pdf
+	@echo "pdflatex finished; the PDF files are in _build/latex."
+
+internal: latex
+	$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) -t Internal _build/latex
 	@echo "Running LaTeX files through pdflatex..."
 	make -C _build/latex all-pdf
 	@echo "pdflatex finished; the PDF files are in _build/latex."
