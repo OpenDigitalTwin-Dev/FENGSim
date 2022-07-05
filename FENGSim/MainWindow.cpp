@@ -746,7 +746,7 @@ void MainWindow::MakeCylinder (double r, double h,
     cout << "geometry num: "  << parts->size() << endl;
 
     StlAPI_Writer STLwriter;
-    STLwriter.Write(*S,"/home/jiping/FENGSim/FENGSim/data/stl_data/cylinder.stl");
+    STLwriter.Write(*S,"data/cylinder.stl");
 
 }
 void MainWindow::MakeCone (double r1, double r2, double h,
