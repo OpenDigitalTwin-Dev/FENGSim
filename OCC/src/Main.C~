@@ -1,0 +1,7 @@
+// file:   Main.C
+// author: Jiping Xin
+
+int main (int argv, char** argc) {
+	std::cout << "test " << std::endl;
+    return 0;
+}
