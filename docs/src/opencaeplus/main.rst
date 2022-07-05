@@ -4,9 +4,7 @@ OpenCAE+
 .. toctree::
    :maxdepth: 2
 
-OpenCAEPoro
----------------
-
-FASP
----------------
-
+   opencaeporo.rst
+   opencaeam.rst
+   opencaecm.rst
+   fasp.rst
