@@ -6,4 +6,4 @@ CAD
 
    cad_design.rst
    cad_example.rst
-   ../../src2/fengsim/cad_ds.rst
+   cad_ds.rst
