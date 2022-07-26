@@ -6,4 +6,3 @@ CAD
 
    cad_design.rst
    cad_example.rst
-   cad_ds.rst

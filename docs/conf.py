@@ -158,6 +158,11 @@ latex_preamble = r"""
 \AtBeginDocument{\begin{CJK*}{UTF8}{gbsn}}
 \AtEndDocument{\end{CJK*}}
 \usepackage{amsmath}
+\def\ud{\mathrm{d}}
+\def\uD{\mathrm{D}}
+\def\uN{\mathrm{N}}
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
 """
 
 imgmath_latex_preamble = latex_preamble
@@ -176,7 +181,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Open Digital Twin'
+project = u'ODT'
 copyright = u'2022, Jiping Xin'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -303,7 +308,7 @@ html_static_path = ['_static']
 #html_file_suffix = ''
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'opendigitaltwindoc'
+htmlhelp_basename = 'aledoc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -317,7 +322,7 @@ htmlhelp_basename = 'opendigitaltwindoc'
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'opendigitaltwin.tex', u'开源CAX数字孪生软件',
+  ('index', 'odt.tex', u'开源CAX数字孪生',
    u'信吉平', 'manual'),
 ]
 
@@ -358,13 +363,13 @@ exhale_args = {
     "rootFileName":          "library_root.rst",
     "doxygenStripFromPath":  "..",
     # Heavily encouraged optional argument (see docs)
-    "rootFileTitle":         "ODT",
+    "rootFileTitle":         "程序",
     # Suggested optional arguments
     "createTreeView":        True,
     # TIP: if using the sphinx-bootstrap-theme, you need
     # "treeViewIsBootstrap": True,
     "exhaleExecutesDoxygen": True,
-    "exhaleDoxygenStdin":    "INPUT = ../test"
+    "exhaleDoxygenStdin":    "INPUT = ../src/M++/solver/src"
 }
 
 # Tell sphinx what the primary language being documented is.
@@ -372,3 +377,6 @@ primary_domain = 'cpp'
 
 # Tell sphinx what the pygments highlight language should be.
 highlight_language = 'cpp'
+
+numfig = True
+
