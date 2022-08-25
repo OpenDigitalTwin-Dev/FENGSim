@@ -1,2 +1,2 @@
-OpenCAEcm
+OpenCM
 ============
