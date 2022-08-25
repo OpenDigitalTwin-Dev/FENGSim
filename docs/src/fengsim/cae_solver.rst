@@ -24,7 +24,7 @@ cells          us             cells          abaqus         cells          abaqu
    :align: center
    :height: 300px
 
-   Cook Membrane by us
+   2D Cook Membrane by us
 
 .. _fig_elasticity_2d_abaqus:
 
