@@ -4,6 +4,6 @@ GCGE
 .. toctree::
    :maxdepth: 2
 
-GCGE
+解法器
 ------------------
 

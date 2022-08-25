@@ -10,6 +10,8 @@
    src/intro.rst
    src/fengsim/main.rst
    src/opencaeplus/main.rst
+   src/fasp/main.rst
+   src/openpfem/main.rst
    src/gcge/main.rst
    api/library_root.rst
 

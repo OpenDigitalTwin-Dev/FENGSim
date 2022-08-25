@@ -1,2 +1,2 @@
-OpenCAEam
+OpenAM
 ===================
