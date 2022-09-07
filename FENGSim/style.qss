@@ -219,7 +219,7 @@ QMenuBar
     background: 1px solid rgb(33,40,48);
     color: #000000;
     border: 0px solid #6A8480;
-    selection-color: #6A8480;
+    selection-color: white;
     margin: 0px;
 }
 
@@ -243,15 +243,15 @@ QMenuBar::item:selected
 {
     background: transparent;
     border: 0px solid #6A8480;
-    background-color: #6A8480;
-    color: black;
+    background-color: rgb(67,67,67);
+    color: white;
 }
 
 QMenuBar::item:pressed
 {
     border: 0px solid #6A8480;
-    background-color: #6A8480;
-    color: black;
+    background-color: rgb(67,67,67);
+    color: white;
 }
 
 QMenu
@@ -866,12 +866,16 @@ QLabel
 
 QTabWidget{
     border: 2px solid black;
+    background-color: transparent;
+
 }
 
 QTabWidget::pane {
     border: 0px solid #76797C;
     padding: 0px;
     margin: 0px;
+    background-color: transparent;
+
 }
 
 QTabWidget::tab-bar {
@@ -924,8 +928,8 @@ QTabBar::tab:top {
     border: 0px solid #76797C;
     width: 19px;
     height: 20px;
-    border-top-left-radius: 2px;
-    border-top-right-radius: 2px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
     padding-top: 3px;
     padding-bottom: 2px;
     padding-left: 4px;
@@ -936,12 +940,12 @@ QTabBar::tab:top {
 QTabBar::tab:top:!selected
 {
     color: #eff0f1;
-    background-color: transparent;
+    background-color: rgb(33,40,48);
 }
 
 QTabBar::tab:top:selected
 {
-    background-color: rgba(135, 167, 165, 50);
+    background-color: transparent;
 }
 
 /* BOTTOM TABS */
@@ -1024,21 +1028,21 @@ QTabBar::tab:right:!selected:hover {
 }
 
 QDockWidget {
-    background: #31363b;
+    background: transparent;
     border: 0px solid transparent;
     titlebar-close-icon: url(:/main_wind/figure/main_wind/dock_close.png);
     titlebar-normal-icon: url(:/main_wind/figure/main_wind/dock_open.png);
 }
 
 QDockWidget::title {
-   background: #6A8480;
+   background: rgb(67,67,67);
    padding: 5px;
 }
 
 QDockWidget::close-button {
     border: 1px solid transparent;
     border-radius: 2px;
-    background: #6A8480;
+    background: rgb(67,67,67);
     color: #000000;
     top: 6px;
     right: 10px;
@@ -1049,7 +1053,7 @@ QDockWidget::close-button {
 QDockWidget::float-button {
     border: 1px solid transparent;
     border-radius: 2px;
-    background: #6A8480;
+    background: rgb(67,67,67);
     color: #000000;
     top: 6px;
     right: 30px;
