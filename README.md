@@ -1,14 +1,14 @@
 # About Open Digital Twin Project
 
-The true digital twins need all CAX technologies. Without a large team and big money, it is normally difficult and nearly impossible to develop a digital twin system like Siemens Digital Industries Software, Dassault 3D Experience, and Ansys WorkBench. But we've proven that open source software is definitely a solution to this and it brings its products directly to industries. The Open Digital Twin Project includes FENGSim, FASP, and OpenCAEPoro. FENGSim was started by Prof. Anders Logg, Dr. Jiping Xin, Mr. Bin Duan, Associate Prof. Yuqing Peng, Mr. Zhuang Zhang, Prof. XB Liu and Prof. Chaofeng Zhang from 2016. FASP and OpenCAEPoro were started by Associate Prof. Chensong Zhang.
-
-<div align="center"><img src="images/logos.jpg" alt="FENGSim" height="120" /></div>
+This project is not for the money and it is for the future of the industry. The true digital twins need all CAX technologies. Without a large team and big money, it is normally difficult and nearly impossible to develop a digital twin system like Siemens Digital Industries Software, Dassault 3D Experience, and Ansys WorkBench. But we've proven that open source software is definitely a solution to this and it brings its products directly to industries. The Open Digital Twin Project includes FENGSim, OpenCAE+, OpenPFEM, FASP and GCGE. FENGSim was started by Prof. Anders Logg and Dr. Jiping Xin with the support from many friends as Mr. Bin Duan, Associate Prof. Yuqing Peng, Mr. Zhuang Zhang, Mr. Xuebo Liu from 2016. FASP and OpenCAE+ were started by Associate Prof. Chensong Zhang. GCGE and OpenPFEM were started by Prof. Hehu Xie. 
 
 # Why Digital Twins?
 
-<div align="center"><img src="images/dt2.jpg" alt="FENGSim" width="500"/></div>
+<div align="center"><img src="images/dt2.jpg" alt="FENGSim" width="800"/></div>
 
 # FENGSim 
+
+<div align="left"><img src="images/Fengsim_logo_hi.jpg" alt="FENGSim" width="300"/></div>
 
 ## [Cosmic Cube (CAX IDE)](https://github.com/OpenDigitalTwin-Dev/OpenDigitalTwin/wiki/Home)
 By using just one command, you could open the door to the world of CAX and Digital Twins. 
@@ -29,17 +29,13 @@ Here we show you how to develop your own digital twin by the Airfoil Benchmark.
 
 ## OpenCAEPoro
 
-## FASP
+# FASP
+
+# OpenPFEM
+
+# GCGE
 
 # Industrial Applications
-
-## Petroleum Reservoir
-
-## Power Battery
-
-## Extreme Mechanics
-
-## Aircraft Aerodynamics
 
 ## Machining
 
@@ -58,8 +54,8 @@ by Associate Professor Yuqing Peng and Professor Aijun Li from Shanghai Universi
 
 <div align="center"><img src="images/meas2.jpg" alt="Measurement" width="500" /></div>
 
-## Biomedical Engineering
-
 ## Transport Theory
+
+## Medicine
 
 
