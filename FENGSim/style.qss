@@ -788,7 +788,7 @@ QComboBox QAbstractItemView {
 
 QComboBox::item
 {
-    padding-left: 15px;
+    padding-left: 0px;
     margin-bottom: 0px;
     border: 0px solid transparent; /* reserve space for selection border */
     color: white;
