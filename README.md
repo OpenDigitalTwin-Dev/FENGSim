@@ -17,11 +17,7 @@ You will get all the codes of CAX software and the integrated development enviro
 
 <div align="center"><img src="images/cosmiccube.jpg" alt="cosmic cube" width="500" /></div>
 
-<<<<<<< HEAD
-## [Airfoil Benchmark (Framework)](https://github.com/OpenDigitalTwin-Dev/OpenDigitalTwin/wiki/Home)
-=======
 ### [Airfoil Benchmark](https://github.com/OpenDigitalTwin-Dev/OpenDigitalTwin/wiki/Home)
->>>>>>> odt
 
 Here we show you how to develop your own digital twin by the Airfoil Benchmark.   
 
