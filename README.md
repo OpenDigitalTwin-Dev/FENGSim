@@ -6,7 +6,7 @@ This project is for the future of the industry. The true digital twins need all 
 <div align="center"><img src="images/dt2.jpg" alt="FENGSim" width="800"/></div>
 
 # FENGSim 
-<div align="left"><img src="images/Fengsim_logo_hi.jpg" alt="FENGSim" width="250"/></div>
+<div align="center"><img src="images/Fengsim_logo_hi.jpg" alt="FENGSim" width="250"/></div>
 
 ## [Cosmic Cube (CAX IDE)](https://github.com/OpenDigitalTwin-Dev/OpenDigitalTwin/wiki/Home)
 By using just one command, you could open the door to the world of CAX and Digital Twins. 
@@ -15,13 +15,13 @@ By using just one command, you could open the door to the world of CAX and Digit
 
 You will get all the codes of CAX software and the integrated development environment. The Cosmic Cube can be used for the development of CAX, BIM, MBD, MBSE, EDA, Visualization, AR/VR, Virtual City, Digital Twin and Metaverse.
 
-<div align="center"><img src="images/cosmiccube.jpg" alt="cosmic cube" width="600" /></div>
+<div align="center"><img src="images/cosmiccube.jpg" alt="cosmic cube" width="500" /></div>
 
 ## [Airfoil Benchmark (Framework)](https://github.com/OpenDigitalTwin-Dev/OpenDigitalTwin/wiki/Home)
 
 Here we show you how to develop your own digital twin by the Airfoil Benchmark.   
 
-<div align="center"><img src="images/airfoil.jpg" alt="airfoil" width="600" /></div>
+<div align="center"><img src="images/airfoil.jpg" alt="airfoil" width="500" /></div>
 
 # OpenCAE+
 
