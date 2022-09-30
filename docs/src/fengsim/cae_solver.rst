@@ -44,6 +44,27 @@ cells          us             cells          abaqus         cells          abaqu
 
    3D Cook Membrane by Abaqus
 
+弹塑性力学方程
+^^^^^^^^^^^^^^^^^^^^
+
+.. _fig_elastoplasticity_fengsim:
+
+.. figure:: ../../images/elastoplasticity_fengsim.png
+   :alt: Logo
+   :align: center
+   :height: 300px
+
+   by FENGSim
+
+.. _fig_elastoplasticity_abaqus:
+
+.. figure:: ../../images/elastoplasticity_abaqus.png
+   :alt: Logo
+   :align: center
+   :height: 300px
+
+   by Abaqus
+
 
 弹塑性力学方程
 ^^^^^^^^^^^^^^^^^^^^
