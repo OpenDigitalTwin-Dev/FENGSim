@@ -1,30 +1,38 @@
 \babel@toc {english}{}
 \contentsline {chapter}{\numberline {1}FENGSim}{3}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Cosmic Cube（集成开发环境)}{3}{section.1.1}%
+\contentsline {section}{\numberline {1.1}Cosmic Cube（集成开发环境/架构/应用商店)}{3}{section.1.1}%
 \contentsline {subsection}{\numberline {1.1.1}CAD}{3}{subsection.1.1.1}%
 \contentsline {subsubsection}{\numberline {1.1.1.1}功能设计}{3}{subsubsection.1.1.1.1}%
 \contentsline {subsubsection}{\numberline {1.1.1.2}算例和C++/Python接口}{4}{subsubsection.1.1.1.2}%
 \contentsline {paragraph}{几何方程}{4}{paragraph*.3}%
-\contentsline {subparagraph}{B\sphinxhyphen {}Splines算例}{4}{subparagraph*.4}%
-\contentsline {subparagraph}{定义}{4}{subparagraph*.5}%
-\contentsline {subparagraph}{算例}{4}{subparagraph*.6}%
+\contentsline {subparagraph}{B\sphinxhyphen {}Splines}{4}{subparagraph*.4}%
 \contentsline {subsection}{\numberline {1.1.2}CAE}{4}{subsection.1.1.2}%
 \contentsline {subsubsection}{\numberline {1.1.2.1}前处理}{4}{subsubsection.1.1.2.1}%
 \contentsline {subsubsection}{\numberline {1.1.2.2}求解器}{4}{subsubsection.1.1.2.2}%
-\contentsline {subsubsection}{\numberline {1.1.2.3}后处理}{4}{subsubsection.1.1.2.3}%
-\contentsline {subsection}{\numberline {1.1.3}CAM}{4}{subsection.1.1.3}%
-\contentsline {subsection}{\numberline {1.1.4}CAI}{4}{subsection.1.1.4}%
-\contentsline {section}{\numberline {1.2}Airfoil Benchmark（数字孪生架构）}{4}{section.1.2}%
-\contentsline {subsection}{\numberline {1.2.1}真实数据驱动下的设计模型}{4}{subsection.1.2.1}%
-\contentsline {subsection}{\numberline {1.2.2}仿真训练人工智能}{4}{subsection.1.2.2}%
-\contentsline {subsection}{\numberline {1.2.3}云边协同}{4}{subsection.1.2.3}%
-\contentsline {subsection}{\numberline {1.2.4}浸入式交互}{4}{subsection.1.2.4}%
-\contentsline {chapter}{\numberline {2}OpenCAE+}{5}{chapter.2}%
-\contentsline {section}{\numberline {2.1}OpenCAEPoro}{5}{section.2.1}%
-\contentsline {section}{\numberline {2.2}OpenCAEam}{5}{section.2.2}%
-\contentsline {section}{\numberline {2.3}OpenCAEcm}{5}{section.2.3}%
-\contentsline {section}{\numberline {2.4}FASP}{5}{section.2.4}%
-\contentsline {chapter}{\numberline {3}GCGE}{7}{chapter.3}%
-\contentsline {section}{\numberline {3.1}GCGE}{7}{section.3.1}%
-\contentsline {chapter}{\numberline {4}Full API}{9}{chapter.4}%
-\contentsline {chapter}{\numberline {5}Indices and tables}{11}{chapter.5}%
+\contentsline {paragraph}{热传导方程}{4}{paragraph*.5}%
+\contentsline {paragraph}{弹性力学方程}{4}{paragraph*.6}%
+\contentsline {paragraph}{弹塑性力学方程}{6}{paragraph*.7}%
+\contentsline {subsubsection}{\numberline {1.1.2.3}后处理}{6}{subsubsection.1.1.2.3}%
+\contentsline {subsection}{\numberline {1.1.3}CAM}{6}{subsection.1.1.3}%
+\contentsline {subsubsection}{\numberline {1.1.3.1}路径规划}{6}{subsubsection.1.1.3.1}%
+\contentsline {subsubsection}{\numberline {1.1.3.2}运动规划}{6}{subsubsection.1.1.3.2}%
+\contentsline {subsection}{\numberline {1.1.4}CAI}{6}{subsection.1.1.4}%
+\contentsline {subsubsection}{\numberline {1.1.4.1}尺寸和形位公差测量}{6}{subsubsection.1.1.4.1}%
+\contentsline {subsubsection}{\numberline {1.1.4.2}逆向造型}{6}{subsubsection.1.1.4.2}%
+\contentsline {section}{\numberline {1.2}Airfoil Benchmark（数字孪生架构）}{6}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}真实数据驱动下的CAX模型}{7}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}仿真训练人工智能}{7}{subsection.1.2.2}%
+\contentsline {subsection}{\numberline {1.2.3}云边协同}{7}{subsection.1.2.3}%
+\contentsline {subsection}{\numberline {1.2.4}浸入式交互}{7}{subsection.1.2.4}%
+\contentsline {chapter}{\numberline {2}OpenCAE+}{9}{chapter.2}%
+\contentsline {section}{\numberline {2.1}OpenCAEPoro}{9}{section.2.1}%
+\contentsline {section}{\numberline {2.2}OpenAM}{9}{section.2.2}%
+\contentsline {section}{\numberline {2.3}OpenCM}{9}{section.2.3}%
+\contentsline {chapter}{\numberline {3}FASP}{11}{chapter.3}%
+\contentsline {section}{\numberline {3.1}解法器}{11}{section.3.1}%
+\contentsline {chapter}{\numberline {4}OpenPFEM}{13}{chapter.4}%
+\contentsline {section}{\numberline {4.1}并行自适应}{13}{section.4.1}%
+\contentsline {chapter}{\numberline {5}GCGE}{15}{chapter.5}%
+\contentsline {section}{\numberline {5.1}解法器}{15}{section.5.1}%
+\contentsline {chapter}{\numberline {6}Full API}{17}{chapter.6}%
+\contentsline {chapter}{\numberline {7}Indices and tables}{19}{chapter.7}%

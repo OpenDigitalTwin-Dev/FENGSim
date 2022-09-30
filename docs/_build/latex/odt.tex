@@ -198,7 +198,7 @@
 
 
 \title{开源CAX数字孪生}
-\date{Jul 26, 2022}
+\date{Sep 30, 2022}
 \release{0.1}
 \author{信吉平}
 \newcommand{\sphinxlogo}{\vbox{}}
@@ -227,7 +227,7 @@
 \sphinxstepscope
 
 
-\section{Cosmic Cube（集成开发环境)}
+\section{Cosmic Cube（集成开发环境/架构/应用商店)}
 \label{\detokenize{src/fengsim/cosmiccube:cosmic-cube}}\label{\detokenize{src/fengsim/cosmiccube::doc}}
 \sphinxstepscope
 
@@ -295,14 +295,8 @@ OpenCascade为LGPL开源协议，使用链接库可以直接闭源商业化，�
 \paragraph{几何方程}
 \label{\detokenize{src/fengsim/cad_example:id1}}
 
-\subparagraph{B\sphinxhyphen{}Splines算例}
+\subparagraph{B\sphinxhyphen{}Splines}
 \label{\detokenize{src/fengsim/cad_example:b-splines}}
-
-\subparagraph{定义}
-\label{\detokenize{src/fengsim/cad_example:id2}}
-
-\subparagraph{算例}
-\label{\detokenize{src/fengsim/cad_example:id3}}
 \sphinxstepscope
 
 
@@ -318,6 +312,112 @@ OpenCascade为LGPL开源协议，使用链接库可以直接闭源商业化，�
 
 \subsubsection{求解器}
 \label{\detokenize{src/fengsim/cae_solver:id1}}\label{\detokenize{src/fengsim/cae_solver::doc}}
+
+\paragraph{热传导方程}
+\label{\detokenize{src/fengsim/cae_solver:id2}}
+
+\paragraph{弹性力学方程}
+\label{\detokenize{src/fengsim/cae_solver:id3}}
+
+\begin{savenotes}\sphinxattablestart
+\centering
+\begin{tabulary}{\linewidth}[t]{|T|T|T|T|T|T|}
+\hline
+\sphinxstyletheadfamily 
+\sphinxAtStartPar
+cells
+&\sphinxstyletheadfamily 
+\sphinxAtStartPar
+us
+&\sphinxstyletheadfamily 
+\sphinxAtStartPar
+cells
+&\sphinxstyletheadfamily 
+\sphinxAtStartPar
+abaqus
+&\sphinxstyletheadfamily 
+\sphinxAtStartPar
+cells
+&\sphinxstyletheadfamily 
+\sphinxAtStartPar
+abaqus
+\\
+\hline
+\sphinxAtStartPar
+3997
+&
+\sphinxAtStartPar
+22.384
+&
+\sphinxAtStartPar
+3024
+&
+\sphinxAtStartPar
+24.93
+&
+\sphinxAtStartPar
+22606
+&
+\sphinxAtStartPar
+22.57
+\\
+\hline
+\sphinxAtStartPar
+15988
+&
+\sphinxAtStartPar
+22.503
+&&&&\\
+\hline
+\sphinxAtStartPar
+63952
+&
+\sphinxAtStartPar
+22.56
+&&&&\\
+\hline
+\end{tabulary}
+\par
+\sphinxattableend\end{savenotes}
+
+\begin{figure}[htbp]
+\centering
+\capstart
+
+\noindent\sphinxincludegraphics[height=300\sphinxpxdimen]{{elasticity_us}.png}
+\caption{2D Cook Membrane by us}\label{\detokenize{src/fengsim/cae_solver:id5}}\label{\detokenize{src/fengsim/cae_solver:fig-elasticity-us}}\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\capstart
+
+\noindent\sphinxincludegraphics[height=300\sphinxpxdimen]{{elasticity_2d_abaqus}.png}
+\caption{2D Cook Membrane by Abaqus}\label{\detokenize{src/fengsim/cae_solver:id6}}\label{\detokenize{src/fengsim/cae_solver:fig-elasticity-2d-abaqus}}\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\capstart
+
+\noindent\sphinxincludegraphics[height=300\sphinxpxdimen]{{elasticity_3d_abaqus}.png}
+\caption{3D Cook Membrane by Abaqus}\label{\detokenize{src/fengsim/cae_solver:id7}}\label{\detokenize{src/fengsim/cae_solver:fig-elasticity-3d-abaqus}}\end{figure}
+
+
+\paragraph{弹塑性力学方程}
+\label{\detokenize{src/fengsim/cae_solver:id4}}
+\begin{figure}[htbp]
+\centering
+\capstart
+
+\noindent\sphinxincludegraphics[height=300\sphinxpxdimen]{{elastoplasticity_fengsim}.png}
+\caption{by FENGSim}\label{\detokenize{src/fengsim/cae_solver:id8}}\label{\detokenize{src/fengsim/cae_solver:fig-elastoplasticity-fengsim}}\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\capstart
+
+\noindent\sphinxincludegraphics[height=300\sphinxpxdimen]{{elastoplasticity_abaqus}.png}
+\caption{by Abaqus}\label{\detokenize{src/fengsim/cae_solver:id9}}\label{\detokenize{src/fengsim/cae_solver:fig-elastoplasticity-abaqus}}\end{figure}
+
 \sphinxstepscope
 
 
@@ -328,30 +428,45 @@ OpenCascade为LGPL开源协议，使用链接库可以直接闭源商业化，�
 
 \subsection{CAM}
 \label{\detokenize{src/fengsim/cam:cam}}\label{\detokenize{src/fengsim/cam::doc}}
+
+\subsubsection{路径规划}
+\label{\detokenize{src/fengsim/cam:id1}}
+
+\subsubsection{运动规划}
+\label{\detokenize{src/fengsim/cam:id2}}
 \sphinxstepscope
 
 
 \subsection{CAI}
 \label{\detokenize{src/fengsim/cai:cai}}\label{\detokenize{src/fengsim/cai::doc}}
+
+\subsubsection{尺寸和形位公差测量}
+\label{\detokenize{src/fengsim/cai:id1}}
+
+\subsubsection{逆向造型}
+\label{\detokenize{src/fengsim/cai:id2}}
 \sphinxstepscope
 
 
 \section{Airfoil Benchmark（数字孪生架构）}
 \label{\detokenize{src/fengsim/airfoil:airfoil-benchmark}}\label{\detokenize{src/fengsim/airfoil::doc}}
+\sphinxAtStartPar
+用增材制造打印Airfoil，用三维扫描逆向获取真实数模，用于空气动力学计算和教学风洞试验比较。
+
 \sphinxstepscope
 
 
-\subsection{真实数据驱动下的设计模型}
-\label{\detokenize{src/fengsim/dt:id1}}\label{\detokenize{src/fengsim/dt::doc}}
+\subsection{真实数据驱动下的CAX模型}
+\label{\detokenize{src/fengsim/dt:cax}}\label{\detokenize{src/fengsim/dt::doc}}
 
 \subsection{仿真训练人工智能}
-\label{\detokenize{src/fengsim/dt:id2}}
+\label{\detokenize{src/fengsim/dt:id1}}
 
 \subsection{云边协同}
-\label{\detokenize{src/fengsim/dt:id3}}
+\label{\detokenize{src/fengsim/dt:id2}}
 
 \subsection{浸入式交互}
-\label{\detokenize{src/fengsim/dt:id4}}
+\label{\detokenize{src/fengsim/dt:id3}}
 \sphinxstepscope
 
 
@@ -365,25 +480,40 @@ OpenCascade为LGPL开源协议，使用链接库可以直接闭源商业化，�
 \sphinxstepscope
 
 
-\section{OpenCAEam}
-\label{\detokenize{src/opencaeplus/opencaeam:opencaeam}}\label{\detokenize{src/opencaeplus/opencaeam::doc}}
+\section{OpenAM}
+\label{\detokenize{src/opencaeplus/opencaeam:openam}}\label{\detokenize{src/opencaeplus/opencaeam::doc}}
 \sphinxstepscope
 
 
-\section{OpenCAEcm}
-\label{\detokenize{src/opencaeplus/opencaecm:opencaecm}}\label{\detokenize{src/opencaeplus/opencaecm::doc}}
+\section{OpenCM}
+\label{\detokenize{src/opencaeplus/opencaecm:opencm}}\label{\detokenize{src/opencaeplus/opencaecm::doc}}
 \sphinxstepscope
 
 
-\section{FASP}
-\label{\detokenize{src/opencaeplus/fasp:fasp}}\label{\detokenize{src/opencaeplus/fasp::doc}}
+\chapter{FASP}
+\label{\detokenize{src/fasp/main:fasp}}\label{\detokenize{src/fasp/main::doc}}
+\sphinxstepscope
+
+
+\section{解法器}
+\label{\detokenize{src/fasp/fasp:id1}}\label{\detokenize{src/fasp/fasp::doc}}
+\sphinxstepscope
+
+
+\chapter{OpenPFEM}
+\label{\detokenize{src/openpfem/main:openpfem}}\label{\detokenize{src/openpfem/main::doc}}
+\sphinxstepscope
+
+
+\section{并行自适应}
+\label{\detokenize{src/openpfem/openpfem:id1}}\label{\detokenize{src/openpfem/openpfem::doc}}
 \sphinxstepscope
 
 
 \chapter{GCGE}
 \label{\detokenize{src/gcge/main:gcge}}\label{\detokenize{src/gcge/main::doc}}
 
-\section{GCGE}
+\section{解法器}
 \label{\detokenize{src/gcge/main:id1}}
 \sphinxstepscope
 

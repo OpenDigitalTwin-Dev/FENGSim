@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.15)  26 JUL 2022 17:13
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2020.12.15)  30 SEP 2022 09:48
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -964,7 +964,7 @@ This may cause the page layout to be inconsistent, however.
 
 ]
 Chapter 1.
-<cad.png, id=275, 1379.1525pt x 784.43062pt>
+<cad.png, id=327, 1379.1525pt x 784.43062pt>
 LaTeX Font Info:    Trying to load font information for T1+txtt on input line 2
 45.
 (/usr/share/texlive/texmf-dist/tex/latex/txfonts/t1txtt.fd
@@ -975,49 +975,85 @@ File: cad.png Graphic file (type png)
 Package pdftex.def Info: cad.png  used on input line 245.
 (pdftex.def)             Requested size: 451.68457pt x 256.91188pt.
  [3 <./cad.png>]
-[4]
+<elasticity_us.png, id=359, 1030.60031pt x 596.2275pt>
+File: elasticity_us.png Graphic file (type png)
+<use elasticity_us.png>
+Package pdftex.def Info: elasticity_us.png  used on input line 387.
+(pdftex.def)             Requested size: 390.37413pt x 225.84229pt.
+<elasticity_2d_abaqus.png, id=360, 1144.275pt x 514.92375pt>
+File: elasticity_2d_abaqus.png Graphic file (type png)
+<use elasticity_2d_abaqus.png>
+Package pdftex.def Info: elasticity_2d_abaqus.png  used on input line 394.
+(pdftex.def)             Requested size: 469.74944pt x 211.3951pt.
+<elasticity_3d_abaqus.png, id=361, 1144.275pt x 514.92375pt>
+File: elasticity_3d_abaqus.png Graphic file (type png)
+<use elasticity_3d_abaqus.png>
+Package pdftex.def Info: elasticity_3d_abaqus.png  used on input line 401.
+(pdftex.def)             Requested size: 469.74944pt x 211.3951pt.
+
+[4 <./elasticity_us.png (PNG copy)>] [5 <./elasticity_2d_abaqus.png> <./elastic
+ity_3d_abaqus.png>]
+<elastoplasticity_fengsim.png, id=381, 1090.0725pt x 619.31375pt>
+File: elastoplasticity_fengsim.png Graphic file (type png)
+<use elastoplasticity_fengsim.png>
+Package pdftex.def Info: elastoplasticity_fengsim.png  used on input line 411.
+(pdftex.def)             Requested size: 397.51555pt x 225.84229pt.
+<elastoplasticity_abaqus.png, id=382, 711.65875pt x 610.28pt>
+File: elastoplasticity_abaqus.png Graphic file (type png)
+<use elastoplasticity_abaqus.png>
+Package pdftex.def Info: elastoplasticity_abaqus.png  used on input line 418.
+(pdftex.def)             Requested size: 263.3639pt x 225.84229pt.
+ [6 <./elastoplasticity_fengsim.png>] [7 <./elastoplasticity_abaqus.png>] [8
+
+]
 Chapter 2.
-[5
-
-] [6
-
-]
-Chapter 3.
-[7] [8
-
-]
-Chapter 4.
 [9] [10
 
 ]
+Chapter 3.
+[11] [12
+
+]
+Chapter 4.
+[13] [14
+
+]
 Chapter 5.
-LaTeX Font Info:    Trying to load font information for TS1+qtm on input line 4
-01.
+[15] [16
+
+]
+Chapter 6.
+[17] [18
+
+]
+Chapter 7.
+LaTeX Font Info:    Trying to load font information for TS1+qtm on input line 5
+31.
 (/usr/share/texmf/tex/latex/tex-gyre/ts1qtm.fd
 File: ts1qtm.fd 2009/09/25 v1.2 font definition file for TS1/qtm
 ) (./odt.ind)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 415.
- [11]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 415.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 545.
+ [19]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 545.
  (./odt.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 415.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 415.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 545.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 545.
 Package rerunfilecheck Info: File `odt.out' has not changed.
-(rerunfilecheck)             Checksum: DEA8C4479682D20D00B4355858223DDA;3010.
+(rerunfilecheck)             Checksum: 65E9AA24961C56464015A17784B7A3B6;3920.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 415.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 545.
  ) 
 Here is how much of TeX's memory you used:
- 16011 strings out of 481239
- 223426 string characters out of 5920376
- 499057 words of memory out of 5000000
- 30543 multiletter control sequences out of 15000+600000
- 608838 words of font info for 164 fonts, out of 8000000 for 9000
+ 16288 strings out of 481239
+ 228124 string characters out of 5920376
+ 502057 words of memory out of 5000000
+ 30758 multiletter control sequences out of 15000+600000
+ 612307 words of font info for 176 fonts, out of 8000000 for 9000
  1142 hyphenation exceptions out of 8191
- 38i,11n,51p,380b,1364s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 38i,11n,51p,380b,1418s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/tex-gyre/q-ts1.enc}{/usr/share/texmf/fonts/
 enc/dvips/tex-gyre/q-ec.enc}</usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu30.
 pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu4e.pfb></usr/share/texmf/fo
@@ -1032,42 +1068,46 @@ arphic/gbsnu/gbsnu56.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu57.pfb
 u5b.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu5c.pfb></usr/share/texm
 f/fonts/type1/arphic/gbsnu/gbsnu5d.pfb></usr/share/texmf/fonts/type1/arphic/gbs
 nu/gbsnu5e.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu5f.pfb></usr/sha
-re/texmf/fonts/type1/arphic/gbsnu/gbsnu62.pfb></usr/share/texmf/fonts/type1/arp
-hic/gbsnu/gbsnu63.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu64.pfb></
-usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu65.pfb></usr/share/texmf/fonts/ty
-pe1/arphic/gbsnu/gbsnu66.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu67
-.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu68.pfb></usr/share/texmf/f
-onts/type1/arphic/gbsnu/gbsnu6a.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/
-gbsnu6b.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu6c.pfb></usr/share/
-texmf/fonts/type1/arphic/gbsnu/gbsnu6d.pfb></usr/share/texmf/fonts/type1/arphic
-/gbsnu/gbsnu6e.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu70.pfb></usr
-/share/texmf/fonts/type1/arphic/gbsnu/gbsnu72.pfb></usr/share/texmf/fonts/type1
-/arphic/gbsnu/gbsnu73.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu74.pf
-b></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu75.pfb></usr/share/texmf/font
-s/type1/arphic/gbsnu/gbsnu76.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbs
-nu77.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu78.pfb></usr/share/tex
-mf/fonts/type1/arphic/gbsnu/gbsnu79.pfb></usr/share/texmf/fonts/type1/arphic/gb
-snu/gbsnu7a.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu7b.pfb></usr/sh
-are/texmf/fonts/type1/arphic/gbsnu/gbsnu7e.pfb></usr/share/texmf/fonts/type1/ar
-phic/gbsnu/gbsnu7f.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu80.pfb><
-/usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu82.pfb></usr/share/texmf/fonts/t
-ype1/arphic/gbsnu/gbsnu83.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu8
-6.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu88.pfb></usr/share/texmf/
-fonts/type1/arphic/gbsnu/gbsnu89.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu
-/gbsnu8b.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu8c.pfb></usr/share
-/texmf/fonts/type1/arphic/gbsnu/gbsnu8f.pfb></usr/share/texmf/fonts/type1/arphi
-c/gbsnu/gbsnu90.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu94.pfb></us
-r/share/texmf/fonts/type1/arphic/gbsnu/gbsnu95.pfb></usr/share/texmf/fonts/type
-1/arphic/gbsnu/gbsnu96.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu97.p
-fb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu98.pfb></usr/share/texmf/fon
-ts/type1/arphic/gbsnu/gbsnu9a.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gb
-snuff.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qhvb.pfb></usr/share/te
-xmf/fonts/type1/public/tex-gyre/qhvbi.pfb></usr/share/texmf/fonts/type1/public/
-tex-gyre/qtmb.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qtmr.pfb>
-Output written on odt.pdf (15 pages, 374184 bytes).
+re/texmf/fonts/type1/arphic/gbsnu/gbsnu60.pfb></usr/share/texmf/fonts/type1/arp
+hic/gbsnu/gbsnu62.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu63.pfb></
+usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu64.pfb></usr/share/texmf/fonts/ty
+pe1/arphic/gbsnu/gbsnu65.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu66
+.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu67.pfb></usr/share/texmf/f
+onts/type1/arphic/gbsnu/gbsnu68.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/
+gbsnu6a.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu6b.pfb></usr/share/
+texmf/fonts/type1/arphic/gbsnu/gbsnu6c.pfb></usr/share/texmf/fonts/type1/arphic
+/gbsnu/gbsnu6d.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu6e.pfb></usr
+/share/texmf/fonts/type1/arphic/gbsnu/gbsnu70.pfb></usr/share/texmf/fonts/type1
+/arphic/gbsnu/gbsnu72.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu73.pf
+b></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu74.pfb></usr/share/texmf/font
+s/type1/arphic/gbsnu/gbsnu75.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbs
+nu76.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu77.pfb></usr/share/tex
+mf/fonts/type1/arphic/gbsnu/gbsnu78.pfb></usr/share/texmf/fonts/type1/arphic/gb
+snu/gbsnu79.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu7a.pfb></usr/sh
+are/texmf/fonts/type1/arphic/gbsnu/gbsnu7b.pfb></usr/share/texmf/fonts/type1/ar
+phic/gbsnu/gbsnu7e.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu7f.pfb><
+/usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu80.pfb></usr/share/texmf/fonts/t
+ype1/arphic/gbsnu/gbsnu81.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu8
+2.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu83.pfb></usr/share/texmf/
+fonts/type1/arphic/gbsnu/gbsnu86.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu
+/gbsnu88.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu89.pfb></usr/share
+/texmf/fonts/type1/arphic/gbsnu/gbsnu8b.pfb></usr/share/texmf/fonts/type1/arphi
+c/gbsnu/gbsnu8c.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu8d.pfb></us
+r/share/texmf/fonts/type1/arphic/gbsnu/gbsnu8f.pfb></usr/share/texmf/fonts/type
+1/arphic/gbsnu/gbsnu90.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu91.p
+fb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu94.pfb></usr/share/texmf/fon
+ts/type1/arphic/gbsnu/gbsnu95.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gb
+snu96.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnu97.pfb></usr/share/te
+xmf/fonts/type1/arphic/gbsnu/gbsnu98.pfb></usr/share/texmf/fonts/type1/arphic/g
+bsnu/gbsnu9a.pfb></usr/share/texmf/fonts/type1/arphic/gbsnu/gbsnuff.pfb></usr/s
+hare/texmf/fonts/type1/public/tex-gyre/qhvb.pfb></usr/share/texmf/fonts/type1/p
+ublic/tex-gyre/qhvbi.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qhvr.pfb
+></usr/share/texmf/fonts/type1/public/tex-gyre/qtmb.pfb></usr/share/texmf/fonts
+/type1/public/tex-gyre/qtmr.pfb>
+Output written on odt.pdf (23 pages, 1007465 bytes).
 PDF statistics:
- 566 PDF objects out of 1000 (max. 8388607)
- 413 compressed objects within 5 object streams
- 54 named destinations out of 1000 (max. 500000)
- 498 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 681 PDF objects out of 1000 (max. 8388607)
+ 502 compressed objects within 6 object streams
+ 75 named destinations out of 1000 (max. 500000)
+ 603 words of extra memory for PDF output out of 10000 (max. 10000000)
 
