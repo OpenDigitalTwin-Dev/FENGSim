@@ -1,6 +1,6 @@
 # About Open Digital Twin Project
 
-This project is for the future of the industry. The true digital twins need all CAX technologies. Without a large team and big money, it is normally difficult and nearly impossible to develop a digital twin system like Siemens Digital Industries Software, Dassault 3D Experience, and Ansys WorkBench. But we've proven that open source software is definitely a solution to this and it brings its products directly to industries. The Open Digital Twin Project includes FENGSim, OpenCAE+, OpenPFEM, FASP and GCGE. FENGSim was started by Prof. Anders Logg and Dr. Jiping Xin with the support from many friends as Mr. Bin Duan, Associate Prof. Yuqing Peng, Mr. Zhuang Zhang, Mr. Xuebo Liu and Prof. Chaofeng Zhangfrom 2016. FASP and OpenCAE+ were started by Associate Prof. Chensong Zhang. GCGE and OpenPFEM were started by Prof. Hehu Xie. 
+This project is for the future of the industry. The true digital twins need all CAX technologies. Without a large team and big money, it is normally difficult and nearly impossible to develop a digital twin system like Siemens Digital Industries Software, Dassault 3D Experience, and Ansys WorkBench. But we've proven that open source software is definitely a solution to this and it brings its products directly to industries. The Open Digital Twin Project includes FENGSim, OpenCAE+, OpenPFEM, FASP and GCGE. FENGSim was started by Prof. Anders Logg and Dr. Jiping Xin with the support from many friends as Mr. Bin Duan, Associate Prof. Yuqing Peng, Mr. Zhuang Zhang, Mr. Xuebo Liu and Prof. Chaofeng Zhang from 2016. FASP and OpenCAE+ were started by Associate Prof. Chensong Zhang. GCGE and OpenPFEM were started by Prof. Hehu Xie. 
 
 # Why Digital Twins?
 <div align="center"><img src="images/dt2.jpg" alt="FENGSim" width="800"/></div>
@@ -12,7 +12,7 @@ By using just one command, you could open the door to the world of CAX and Digit
 
 `/bin/bash -c "$(curl https://raw.githubusercontent.com/OpenDigitalTwin-Dev/OpenDigitalTwin/main/cube)"`
 
-You will get all the codes of CAX software and the integrated development environment. The Cosmic Cube can be used for the development of CAX, BIM, MBD, MBSE, EDA, Visualization, AR/VR, Virtual City, Digital Twin and Metaverse.
+You will get all the codes of CAX software and the integrated development environment. FENGSim can be used for the development of CAX, BIM, MBD, MBSE, EDA, Visualization, AR/VR, Virtual City, Digital Twin and Metaverse.
 
 <div align="center"><img src="images/cosmiccube.jpg" alt="cosmic cube" width="500" /></div>
 
