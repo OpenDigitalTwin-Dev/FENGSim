@@ -8,7 +8,7 @@ This project is for the future of the industry. The true digital twins need all 
 # FENGSim 
 <div align="center"><img src="images/Fengsim_logo_hi.jpg" alt="FENGSim" width="250"/></div>
 
-We can build the digital twin system by the following softare from the open source world !!!
+We can build the digital twin system by the following open source software !!!
 
 >OpenCV, PCL, MeshLab, CGAL, OCC, Gmsh/Tetgen/Netgen/Triangle/Slice2Mesh/Mesquite/Portage, OpenCAE+/OpenPFEM/FEniCS/FreeFEM/MFEM/OpenFoam/OpenRadioss, FASP/GCGE, MPICH2/OpenMPI/OpenMP, VTK/CSG/UE4/WebGL, Modelica/FMI/Hopsan, SciLab/Scipy/Numpy, R/OpenMC/Geant4, ROS/Cura/Clipper/RnD, pytorch/TensorFlow
 
