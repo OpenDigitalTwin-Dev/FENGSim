@@ -1,4 +1,4 @@
-# About the Open Digital Twin Project
+# 关于OpenDigitalTwin项目
 
 数字孪生要建立贯穿产品全生命周期的闭合优化回路，目的是为了提高工业机理研发水平和效率，CAX软件是数字孪生实现的关键技术。
 
