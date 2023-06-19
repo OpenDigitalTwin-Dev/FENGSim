@@ -6,9 +6,6 @@ OpenCAXPlus项目（OCP）是由KAUST-SRIBD科学计算与机器学习联合中�
 
 请注意，开源的意义更多是开发工具，并不是软件产品。有了卓越的开发工具、生态环境和人才，才能开发卓越产品。请勿把OCP和ODT等同于成熟软件产品，而是我们对开源软件以及数学、物理和计算机知识的系统性学习和分享。
 
-![RUNOOB 图标](images/1.png)
-![RUNOOB 图标](images/2.png)
-
 # 增材制造
 
 ![RUNOOB 图标](images/3.png)
