@@ -8,3 +8,20 @@ OpenCAXPlus项目（OCP）是由KAUST-SRIBD科学计算与机器学习联合中�
 
 ![RUNOOB 图标](images/1.png)
 ![RUNOOB 图标](images/2.png)
+
+# 增材制造
+
+![RUNOOB 图标](images/3.png)
+![RUNOOB 图标](images/4.png)
+
+# 复合材料
+
+![RUNOOB 图标](images/5.png)
+![RUNOOB 图标](images/6.png)
+![RUNOOB 图标](images/7.png)
+
+# 测量
+
+![RUNOOB 图标](images/8.png)
+![RUNOOB 图标](images/9.png)
+![RUNOOB 图标](images/10.png)
