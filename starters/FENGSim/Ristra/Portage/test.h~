@@ -1,0 +1,38 @@
+#ifndef _TEST_H_
+#define _TEST_H_
+
+#include <iostream>
+#include <portage/search/search_kdtree.h>
+#include <portage/intersect/intersect_r2d.h>
+
+// wonton includes
+#include "wonton/support/wonton.h"
+#include "wonton/support/Point.h"
+#include "wonton/mesh/simple/simple_mesh.h"
+#include "wonton/mesh/simple/simple_mesh_wrapper.h"
+#include "wonton/state/simple/simple_state.h"
+#include "wonton/state/simple/simple_state_wrapper.h"
+#include "wonton/mesh/jali/jali_mesh_wrapper.h"
+
+// portage includes
+#include "portage/interpolate/interpolate_1st_order.h"
+#include "portage/interpolate/interpolate_2nd_order.h"
+#include "simple_intersect_for_tests.h"
+#include "portage/support/portage.h"
+#include "portage/driver/coredriver.h"
+
+#include <fstream>
+
+void export_vtk (int n, std::string filename, std::vector<double> val);
+void export_overlap (const Wonton::Simple_Mesh_Wrapper& source, std::vector<int> candidates,
+					 const Wonton::Simple_Mesh_Wrapper& target, int cell_id);
+void export_overlap (const Wonton::Jali_Mesh_Wrapper& source, std::vector<int> candidates,
+					 const Wonton::Jali_Mesh_Wrapper& target, int cell_id);
+void export_vtk (const Wonton::Jali_Mesh_Wrapper& source);
+  
+void test_search(int argc, char** argv);
+void test_intersection ();
+void test_interpolation ();
+void test_remapping(int argc, char** argv);
+
+#endif

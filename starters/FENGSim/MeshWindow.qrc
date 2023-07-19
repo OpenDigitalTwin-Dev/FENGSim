@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>figure/mesh_wind/mesh.png</file>
+        <file>figure/mesh_wind/refine.png</file>
+        <file>figure/mesh_wind/am.png</file>
+        <file>figure/mesh_wind/see.png</file>
+        <file>figure/mesh_wind/reset.png</file>
+    </qresource>
+</RCC>

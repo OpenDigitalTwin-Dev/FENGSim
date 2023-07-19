@@ -1,0 +1,40 @@
+#include "test_example2.h"
+
+void test_example_2 () {
+  std::shared_ptr<Wonton::Simple_Mesh> source_mesh =
+    std::make_shared<Wonton::Simple_Mesh>(0.0, 0.0, 1.0, 1.0, 4, 4);
+  std::shared_ptr<Wonton::Simple_Mesh> target_mesh =
+    std::make_shared<Wonton::Simple_Mesh>(0.0, 0.0, 1.0, 1.0, 5, 5);
+  
+  Wonton::Simple_Mesh_Wrapper sourceMeshWrapper(*source_mesh);
+  Wonton::Simple_Mesh_Wrapper targetMeshWrapper(*target_mesh);
+
+  const int ncells_source =
+      sourceMeshWrapper.num_owned_cells();
+  const int ncells_target =
+      targetMeshWrapper.num_owned_cells();
+  std::cout << ncells_source << " " << ncells_target << std::endl;
+
+  Wonton::Simple_State source_state(source_mesh);
+  Wonton::Simple_State target_state(target_mesh);
+
+  std::vector<double> inputData(ncells_source, 1.25);
+  std::vector<double> targetData(ncells_target);
+
+  double sum1 = 0;
+  for (int i=0; i<4; i++)
+    for (int j=0; j<4; j++) {
+      data[i*4+j] = exp(i+j);
+      sum1 += exp(i+j)*0.25*0.25;
+    }
+  std::cout << "source mass total: " << sum1 << std::endl;
+
+  Wonton::Simple_State_Wrapper<Wonton::Simple_Mesh_Wrapper> 
+    sourceStateWrapper(sourceMeshWrapper);
+  sourceStateWrapper.add(std::make_shared<Wonton::StateVectorUni<>>
+			 ("celldata", Entity_kind::CELL, inputData));
+  Wonton::Simple_State_Wrapper<Wonton::Simple_Mesh_Wrapper> 
+    targetStateWrapper(targetMeshWrapper);
+  targetStateWrapper.add(std::make_shared<Wonton::StateVectorUni<>>
+			 ("celldata", Entity_kind::CELL, targetData));
+}

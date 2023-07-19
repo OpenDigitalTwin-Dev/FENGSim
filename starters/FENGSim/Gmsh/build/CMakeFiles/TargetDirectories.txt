@@ -1,0 +1,3 @@
+/home/jiping/FENGSim/FENGSim/Gmsh/build/CMakeFiles/rebuild_cache.dir
+/home/jiping/FENGSim/FENGSim/Gmsh/build/CMakeFiles/edit_cache.dir
+/home/jiping/FENGSim/FENGSim/Gmsh/build/CMakeFiles/test.dir

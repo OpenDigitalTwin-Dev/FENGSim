@@ -1,0 +1,12 @@
+//#include "odt_pcl.h"
+//#include <stdlib.h>
+//#include <iostream>
+
+int main(int argc, char** argv) {
+    std::cout << "test uniform sampling" << std::endl;
+    //test_uniform_sampling();
+    std::cout << std::endl;
+    std::cout << "test kdtree_search" << std::endl;
+    //test_kdtree_search();
+    return 0;
+}

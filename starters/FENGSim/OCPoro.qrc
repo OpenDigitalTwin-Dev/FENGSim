@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>figure/ocporo_wind/poro.png</file>
+    </qresource>
+</RCC>
