@@ -1,0 +1,3 @@
+#include <Geom_Transformation.hxx>
+#include <gp_Pnt.hxx>
+#include <GC_MakeScale.hxx>

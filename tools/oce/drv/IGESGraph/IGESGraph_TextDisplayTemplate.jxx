@@ -1,0 +1,4 @@
+#include <IGESGraph_TextFontDef.hxx>
+#include <gp_XYZ.hxx>
+#include <gp_Pnt.hxx>
+#include <IGESGraph_TextDisplayTemplate.hxx>

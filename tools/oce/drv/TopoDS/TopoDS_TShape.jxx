@@ -1,0 +1,5 @@
+#include <Standard_ConstructionError.hxx>
+#include <TopoDS_Iterator.hxx>
+#include <TopoDS_Builder.hxx>
+#include <TopoDS_ListOfShape.hxx>
+#include <TopoDS_TShape.hxx>

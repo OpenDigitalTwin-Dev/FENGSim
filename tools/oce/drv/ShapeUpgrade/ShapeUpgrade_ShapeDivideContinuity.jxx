@@ -1,0 +1,3 @@
+#include <TopoDS_Shape.hxx>
+#include <ShapeUpgrade_FaceDivide.hxx>
+#include <ShapeUpgrade_ShapeDivideContinuity.hxx>

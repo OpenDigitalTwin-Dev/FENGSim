@@ -1,0 +1,3 @@
+#include <PCollection_HExtendedString.hxx>
+#include <PDF_HAttributeArray1.hxx>
+#include <PDataStd_Relation.hxx>

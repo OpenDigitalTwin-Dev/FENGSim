@@ -1,0 +1,2 @@
+#include <IntSurf_InteriorPoint.hxx>
+#include <IntSurf_InteriorPointTool.hxx>

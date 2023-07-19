@@ -1,0 +1,4 @@
+#include <StepDimTol_Datum.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <StepRepr_ProductDefinitionShape.hxx>
+#include <StepDimTol_CommonDatum.hxx>

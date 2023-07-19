@@ -1,0 +1,3 @@
+#include <TColGeom_HSequenceOfCurve.hxx>
+#include <TColStd_HSequenceOfReal.hxx>
+#include <ShapeUpgrade_ConvertCurve3dToBezier.hxx>

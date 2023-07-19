@@ -1,0 +1,4 @@
+#include <TopoDS_Solid.hxx>
+#include <gp_Pnt.hxx>
+#include <TopoDS_Shell.hxx>
+#include <TopOpeBRepTool_SolidClassifier.hxx>

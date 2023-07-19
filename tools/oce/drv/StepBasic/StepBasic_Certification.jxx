@@ -1,0 +1,3 @@
+#include <TCollection_HAsciiString.hxx>
+#include <StepBasic_CertificationType.hxx>
+#include <StepBasic_Certification.hxx>

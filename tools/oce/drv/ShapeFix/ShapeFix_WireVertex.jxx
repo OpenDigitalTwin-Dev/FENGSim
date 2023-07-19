@@ -1,0 +1,4 @@
+#include <TopoDS_Wire.hxx>
+#include <ShapeExtend_WireData.hxx>
+#include <ShapeAnalysis_WireVertex.hxx>
+#include <ShapeFix_WireVertex.hxx>

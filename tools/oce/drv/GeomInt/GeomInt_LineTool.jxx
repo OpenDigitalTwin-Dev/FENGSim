@@ -1,0 +1,3 @@
+#include <IntPatch_Line.hxx>
+#include <IntPatch_Point.hxx>
+#include <GeomInt_LineTool.hxx>

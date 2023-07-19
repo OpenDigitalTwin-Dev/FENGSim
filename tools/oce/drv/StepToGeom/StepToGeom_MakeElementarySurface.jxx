@@ -1,0 +1,3 @@
+#include <StepGeom_ElementarySurface.hxx>
+#include <Geom_ElementarySurface.hxx>
+#include <StepToGeom_MakeElementarySurface.hxx>

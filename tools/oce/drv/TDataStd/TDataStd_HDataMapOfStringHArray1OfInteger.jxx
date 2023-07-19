@@ -1,0 +1,2 @@
+#include <TDataStd_DataMapOfStringHArray1OfInteger.hxx>
+#include <TDataStd_HDataMapOfStringHArray1OfInteger.hxx>

@@ -1,0 +1,3 @@
+#include <TColgp_SequenceOfXY.hxx>
+#include <Plate_LinearXYZConstraint.hxx>
+#include <Plate_GlobalTranslationConstraint.hxx>

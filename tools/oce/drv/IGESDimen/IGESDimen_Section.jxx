@@ -1,0 +1,4 @@
+#include <TColgp_HArray1OfXY.hxx>
+#include <Standard_OutOfRange.hxx>
+#include <gp_Pnt.hxx>
+#include <IGESDimen_Section.hxx>

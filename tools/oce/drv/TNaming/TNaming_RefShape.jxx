@@ -1,0 +1,4 @@
+#include <TopoDS_Shape.hxx>
+#include <TDF_Label.hxx>
+#include <TNaming_NamedShape.hxx>
+#include <TNaming_RefShape.hxx>

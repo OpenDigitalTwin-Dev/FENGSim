@@ -1,0 +1,3 @@
+#include <StepGeom_Vector.hxx>
+#include <Geom2d_VectorWithMagnitude.hxx>
+#include <StepToGeom_MakeVectorWithMagnitude2d.hxx>

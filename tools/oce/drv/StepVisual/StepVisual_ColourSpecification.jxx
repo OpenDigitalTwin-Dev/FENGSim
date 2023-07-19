@@ -1,0 +1,2 @@
+#include <TCollection_HAsciiString.hxx>
+#include <StepVisual_ColourSpecification.hxx>

@@ -1,0 +1,3 @@
+#include <StepRepr_ShapeRepresentationRelationship.hxx>
+#include <StepRepr_ProductDefinitionShape.hxx>
+#include <StepShape_ContextDependentShapeRepresentation.hxx>

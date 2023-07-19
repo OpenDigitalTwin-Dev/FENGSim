@@ -1,0 +1,5 @@
+#include <Standard_NoSuchObject.hxx>
+#include <Storage_Schema.hxx>
+#include <TCollection_AsciiString.hxx>
+#include <TColStd_HSequenceOfAsciiString.hxx>
+#include <Storage_TypeData.hxx>

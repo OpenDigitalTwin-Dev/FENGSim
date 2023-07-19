@@ -1,0 +1,2 @@
+#include <BOPTools_Set.hxx>
+#include <BOPTools_SetMapHasher.hxx>

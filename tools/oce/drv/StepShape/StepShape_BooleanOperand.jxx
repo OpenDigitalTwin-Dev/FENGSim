@@ -1,0 +1,5 @@
+#include <StepShape_SolidModel.hxx>
+#include <StepShape_HalfSpaceSolid.hxx>
+#include <StepShape_BooleanResult.hxx>
+#include <StepShape_CsgPrimitive.hxx>
+#include <StepShape_BooleanOperand.hxx>

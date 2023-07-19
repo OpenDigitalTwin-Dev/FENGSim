@@ -1,0 +1,3 @@
+#include <TopOpeBRep_LineInter.hxx>
+#include <TopOpeBRep_WPointInter.hxx>
+#include <TopOpeBRep_WPointInterIterator.hxx>

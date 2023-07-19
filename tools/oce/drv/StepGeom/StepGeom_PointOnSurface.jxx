@@ -1,0 +1,3 @@
+#include <StepGeom_Surface.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <StepGeom_PointOnSurface.hxx>

@@ -1,0 +1,3 @@
+#include <TopoDS_Face.hxx>
+#include <TopoDS_Shell.hxx>
+#include <ShapeFix_FaceConnect.hxx>

@@ -1,0 +1,3 @@
+#include <PGeom_Curve.hxx>
+#include <PTopLoc_Location.hxx>
+#include <PBRep_PointOnCurve.hxx>

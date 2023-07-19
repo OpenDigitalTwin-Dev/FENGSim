@@ -1,0 +1,3 @@
+#include <StepShape_FaceSurface.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <StepShape_SweptFaceSolid.hxx>

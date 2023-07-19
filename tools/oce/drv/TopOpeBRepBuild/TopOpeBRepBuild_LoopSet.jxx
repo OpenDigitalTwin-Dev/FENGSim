@@ -1,0 +1,3 @@
+#include <TopOpeBRepBuild_ListOfLoop.hxx>
+#include <TopOpeBRepBuild_Loop.hxx>
+#include <TopOpeBRepBuild_LoopSet.hxx>

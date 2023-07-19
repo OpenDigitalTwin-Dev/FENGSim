@@ -1,0 +1,23 @@
+vtk_add_test_python(
+  ImplicitSum.py
+#  LineIntersectQuadraticCells.py
+  PerlinNoise.py
+  SelectionLoop.py
+  TestCopyStructuredData.py,NO_DATA,NO_VALID
+  TestNumericArrayImageData.py,NO_DATA,NO_VALID
+  TestQuadricClustering.py
+  TestStaticPointLocator.py,NO_DATA,NO_VALID
+  TestStaticPointLocator2.py,NO_DATA,NO_VALID
+  TestStructuredGrid.py
+  TestTemplates.py,NO_DATA,NO_VALID
+  headBone.py
+  scalarColors.py
+  scalarConn.py
+  TestConvexPointSet.py
+  otherDataSetAttributes.py,NO_DATA,NO_VALID,NO_RT
+  quadricCut.py,NO_RT
+  quadraticQuadDeriv.py,NO_VALID,NO_RT
+  Test3DCellsEvaluatePosition.py,NO_DATA,NO_VALID,NO_OUTPUT
+  TestICPTransform.py,NO_RT
+  TestMolecule.py,NO_VALID,NO_RT
+  )

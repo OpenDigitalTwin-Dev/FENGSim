@@ -1,0 +1,2 @@
+#include <gp_Parab2d.hxx>
+#include <Convert_ParabolaToBSplineCurve.hxx>

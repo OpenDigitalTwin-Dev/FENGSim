@@ -1,0 +1,3 @@
+#include <StepShape_Vertex.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <StepShape_Edge.hxx>

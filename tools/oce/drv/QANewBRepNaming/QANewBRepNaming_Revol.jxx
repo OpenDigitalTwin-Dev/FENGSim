@@ -1,0 +1,4 @@
+#include <TDF_Label.hxx>
+#include <BRepPrimAPI_MakeRevol.hxx>
+#include <TopoDS_Shape.hxx>
+#include <QANewBRepNaming_Revol.hxx>

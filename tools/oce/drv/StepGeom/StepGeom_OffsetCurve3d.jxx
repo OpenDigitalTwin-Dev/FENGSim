@@ -1,0 +1,4 @@
+#include <StepGeom_Curve.hxx>
+#include <StepGeom_Direction.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <StepGeom_OffsetCurve3d.hxx>

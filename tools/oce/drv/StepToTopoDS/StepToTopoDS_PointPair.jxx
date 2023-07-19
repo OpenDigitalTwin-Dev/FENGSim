@@ -1,0 +1,3 @@
+#include <StepGeom_CartesianPoint.hxx>
+#include <StepToTopoDS_PointPairHasher.hxx>
+#include <StepToTopoDS_PointPair.hxx>

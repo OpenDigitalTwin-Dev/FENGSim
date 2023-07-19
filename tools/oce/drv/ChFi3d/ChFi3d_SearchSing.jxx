@@ -1,0 +1,2 @@
+#include <Geom_Curve.hxx>
+#include <ChFi3d_SearchSing.hxx>

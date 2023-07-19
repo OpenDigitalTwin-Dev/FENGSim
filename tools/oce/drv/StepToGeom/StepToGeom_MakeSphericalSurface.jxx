@@ -1,0 +1,3 @@
+#include <StepGeom_SphericalSurface.hxx>
+#include <Geom_SphericalSurface.hxx>
+#include <StepToGeom_MakeSphericalSurface.hxx>

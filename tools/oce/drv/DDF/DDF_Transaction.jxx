@@ -1,0 +1,5 @@
+#include <Standard_DomainError.hxx>
+#include <Standard_NullObject.hxx>
+#include <TDF_Data.hxx>
+#include <TDF_Delta.hxx>
+#include <DDF_Transaction.hxx>

@@ -1,0 +1,3 @@
+#include <XSControl_WorkSession.hxx>
+#include <IGESData_IGESModel.hxx>
+#include <IGESControl_Reader.hxx>

@@ -1,0 +1,4 @@
+#include <Standard_Transient.hxx>
+#include <StepVisual_PresentationRepresentation.hxx>
+#include <StepVisual_PresentationSet.hxx>
+#include <StepVisual_PresentationRepresentationSelect.hxx>

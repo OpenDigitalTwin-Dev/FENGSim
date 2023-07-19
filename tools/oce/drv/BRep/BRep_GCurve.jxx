@@ -1,0 +1,3 @@
+#include <TopLoc_Location.hxx>
+#include <gp_Pnt.hxx>
+#include <BRep_GCurve.hxx>

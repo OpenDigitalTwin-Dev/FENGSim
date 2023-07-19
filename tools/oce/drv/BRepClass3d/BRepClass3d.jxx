@@ -1,0 +1,3 @@
+#include <TopoDS_Shell.hxx>
+#include <TopoDS_Solid.hxx>
+#include <BRepClass3d.hxx>

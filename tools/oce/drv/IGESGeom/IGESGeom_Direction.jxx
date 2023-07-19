@@ -1,0 +1,3 @@
+#include <gp_XYZ.hxx>
+#include <gp_Vec.hxx>
+#include <IGESGeom_Direction.hxx>

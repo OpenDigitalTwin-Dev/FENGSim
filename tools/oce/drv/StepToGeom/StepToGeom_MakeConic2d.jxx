@@ -1,0 +1,3 @@
+#include <StepGeom_Conic.hxx>
+#include <Geom2d_Conic.hxx>
+#include <StepToGeom_MakeConic2d.hxx>

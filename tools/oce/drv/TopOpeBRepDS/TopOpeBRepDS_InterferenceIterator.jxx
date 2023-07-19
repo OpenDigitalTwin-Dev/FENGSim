@@ -1,0 +1,4 @@
+#include <TopOpeBRepDS_ListOfInterference.hxx>
+#include <TopOpeBRepDS_Interference.hxx>
+#include <TopOpeBRepDS_ListIteratorOfListOfInterference.hxx>
+#include <TopOpeBRepDS_InterferenceIterator.hxx>

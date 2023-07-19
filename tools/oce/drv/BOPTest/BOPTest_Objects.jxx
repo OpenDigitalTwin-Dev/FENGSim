@@ -1,0 +1,5 @@
+#include <BOPAlgo_PaveFiller.hxx>
+#include <BOPAlgo_Builder.hxx>
+#include <BOPAlgo_BOP.hxx>
+#include <BOPAlgo_Section.hxx>
+#include <BOPTest_Objects.hxx>

@@ -1,0 +1,4 @@
+#include <IGESData_HArray1OfIGESEntity.hxx>
+#include <Standard_OutOfRange.hxx>
+#include <IGESData_IGESEntity.hxx>
+#include <IGESGeom_CompositeCurve.hxx>

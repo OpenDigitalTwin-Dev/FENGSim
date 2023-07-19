@@ -1,0 +1,2 @@
+#include <Standard_NegativeValue.hxx>
+#include <StlMesh_MeshTriangle.hxx>

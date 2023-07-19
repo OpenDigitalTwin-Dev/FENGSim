@@ -1,0 +1,4 @@
+#include <PPoly_PolygonOnTriangulation.hxx>
+#include <PPoly_Triangulation.hxx>
+#include <PTopLoc_Location.hxx>
+#include <PBRep_PolygonOnClosedTriangulation.hxx>

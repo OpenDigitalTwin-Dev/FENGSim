@@ -1,0 +1,3 @@
+#include <TopTools_HArray1OfShape.hxx>
+#include <TNaming_NamedShape.hxx>
+#include <TNaming_DeltaOnModification.hxx>

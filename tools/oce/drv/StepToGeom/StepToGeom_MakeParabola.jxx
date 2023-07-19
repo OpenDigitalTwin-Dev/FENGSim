@@ -1,0 +1,3 @@
+#include <StepGeom_Parabola.hxx>
+#include <Geom_Parabola.hxx>
+#include <StepToGeom_MakeParabola.hxx>

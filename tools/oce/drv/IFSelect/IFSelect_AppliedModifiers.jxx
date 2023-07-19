@@ -1,0 +1,3 @@
+#include <IFSelect_GeneralModifier.hxx>
+#include <TColStd_HSequenceOfInteger.hxx>
+#include <IFSelect_AppliedModifiers.hxx>

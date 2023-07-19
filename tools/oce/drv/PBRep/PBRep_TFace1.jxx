@@ -1,0 +1,4 @@
+#include <PGeom_Surface.hxx>
+#include <PPoly_Triangulation.hxx>
+#include <PTopLoc_Location.hxx>
+#include <PBRep_TFace1.hxx>

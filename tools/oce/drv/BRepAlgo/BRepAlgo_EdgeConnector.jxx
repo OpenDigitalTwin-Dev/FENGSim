@@ -1,0 +1,4 @@
+#include <TopoDS_Edge.hxx>
+#include <TopTools_ListOfShape.hxx>
+#include <TopoDS_Shape.hxx>
+#include <BRepAlgo_EdgeConnector.hxx>

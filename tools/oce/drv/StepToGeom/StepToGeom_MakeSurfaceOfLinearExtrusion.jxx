@@ -1,0 +1,3 @@
+#include <StepGeom_SurfaceOfLinearExtrusion.hxx>
+#include <Geom_SurfaceOfLinearExtrusion.hxx>
+#include <StepToGeom_MakeSurfaceOfLinearExtrusion.hxx>

@@ -1,0 +1,3 @@
+#include <StepShape_ToleranceMethodDefinition.hxx>
+#include <StepShape_DimensionalCharacteristic.hxx>
+#include <StepShape_PlusMinusTolerance.hxx>

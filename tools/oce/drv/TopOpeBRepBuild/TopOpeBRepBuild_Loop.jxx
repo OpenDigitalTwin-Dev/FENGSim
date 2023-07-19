@@ -1,0 +1,3 @@
+#include <TopoDS_Shape.hxx>
+#include <TopOpeBRepBuild_BlockIterator.hxx>
+#include <TopOpeBRepBuild_Loop.hxx>

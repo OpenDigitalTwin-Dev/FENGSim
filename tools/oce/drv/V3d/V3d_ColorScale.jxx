@@ -1,0 +1,4 @@
+#include <V3d_LayerMgr.hxx>
+#include <Quantity_Color.hxx>
+#include <TCollection_ExtendedString.hxx>
+#include <V3d_ColorScale.hxx>

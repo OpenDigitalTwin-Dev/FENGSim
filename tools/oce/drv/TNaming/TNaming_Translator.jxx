@@ -1,0 +1,3 @@
+#include <TopoDS_Shape.hxx>
+#include <TopTools_DataMapOfShapeShape.hxx>
+#include <TNaming_Translator.hxx>

@@ -1,0 +1,3 @@
+#include <StepGeom_Line.hxx>
+#include <Geom_Line.hxx>
+#include <StepToGeom_MakeLine.hxx>

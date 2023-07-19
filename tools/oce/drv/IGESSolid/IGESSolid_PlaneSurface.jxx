@@ -1,0 +1,3 @@
+#include <IGESGeom_Point.hxx>
+#include <IGESGeom_Direction.hxx>
+#include <IGESSolid_PlaneSurface.hxx>

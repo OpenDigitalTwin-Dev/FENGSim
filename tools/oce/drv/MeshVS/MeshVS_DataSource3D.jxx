@@ -1,0 +1,2 @@
+#include <MeshVS_HArray1OfSequenceOfInteger.hxx>
+#include <MeshVS_DataSource3D.hxx>

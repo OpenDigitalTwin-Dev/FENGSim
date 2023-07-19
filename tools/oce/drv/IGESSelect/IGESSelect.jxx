@@ -1,0 +1,3 @@
+#include <IGESData_IGESEntity.hxx>
+#include <Interface_Graph.hxx>
+#include <IGESSelect.hxx>

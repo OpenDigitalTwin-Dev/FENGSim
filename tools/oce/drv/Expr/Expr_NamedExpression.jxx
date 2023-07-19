@@ -1,0 +1,3 @@
+#include <TCollection_AsciiString.hxx>
+#include <Expr_GeneralExpression.hxx>
+#include <Expr_NamedExpression.hxx>

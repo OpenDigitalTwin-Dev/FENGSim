@@ -1,0 +1,5 @@
+#include <TFunction_Logbook.hxx>
+#include <TDF_Label.hxx>
+#include <BRepPrimAPI_MakePrism.hxx>
+#include <TopoDS_Shape.hxx>
+#include <DNaming_PrismDriver.hxx>

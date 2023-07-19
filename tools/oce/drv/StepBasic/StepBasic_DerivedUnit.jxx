@@ -1,0 +1,3 @@
+#include <StepBasic_HArray1OfDerivedUnitElement.hxx>
+#include <StepBasic_DerivedUnitElement.hxx>
+#include <StepBasic_DerivedUnit.hxx>

@@ -1,0 +1,4 @@
+#include <TopoDS_Shape.hxx>
+#include <TopOpeBRepTool_ShapeExplorer.hxx>
+#include <TopOpeBRepTool_BoxSort.hxx>
+#include <TopOpeBRep_ShapeScanner.hxx>

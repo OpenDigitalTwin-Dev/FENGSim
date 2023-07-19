@@ -1,0 +1,3 @@
+#include <PBRep_CurveRepresentation.hxx>
+#include <PTopLoc_Location.hxx>
+#include <PBRep_CurveRepresentation.hxx>

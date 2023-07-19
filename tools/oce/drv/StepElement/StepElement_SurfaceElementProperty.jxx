@@ -1,0 +1,3 @@
+#include <TCollection_HAsciiString.hxx>
+#include <StepElement_SurfaceSectionField.hxx>
+#include <StepElement_SurfaceElementProperty.hxx>

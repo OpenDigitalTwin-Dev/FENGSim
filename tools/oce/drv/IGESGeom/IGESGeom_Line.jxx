@@ -1,0 +1,3 @@
+#include <gp_XYZ.hxx>
+#include <gp_Pnt.hxx>
+#include <IGESGeom_Line.hxx>

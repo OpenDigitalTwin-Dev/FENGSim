@@ -1,0 +1,3 @@
+#include <StepGeom_BoundedCurve.hxx>
+#include <Geom2d_BoundedCurve.hxx>
+#include <StepToGeom_MakeBoundedCurve2d.hxx>

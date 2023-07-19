@@ -1,0 +1,2 @@
+#include <TDataStd_DataMapOfStringByte.hxx>
+#include <TDataStd_HDataMapOfStringByte.hxx>

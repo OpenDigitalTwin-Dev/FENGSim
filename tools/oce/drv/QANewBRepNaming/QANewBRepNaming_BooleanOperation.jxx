@@ -1,0 +1,3 @@
+#include <TDF_Label.hxx>
+#include <BRepAlgo_BooleanOperation.hxx>
+#include <QANewBRepNaming_BooleanOperation.hxx>

@@ -1,0 +1,3 @@
+#include <StepGeom_CartesianPoint.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <StepGeom_Placement.hxx>

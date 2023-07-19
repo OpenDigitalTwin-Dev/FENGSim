@@ -1,0 +1,3 @@
+#include <StepBasic_MeasureValueMember.hxx>
+#include <StepBasic_Unit.hxx>
+#include <StepBasic_MeasureWithUnit.hxx>

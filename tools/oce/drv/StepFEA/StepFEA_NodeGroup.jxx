@@ -1,0 +1,4 @@
+#include <StepFEA_HArray1OfNodeRepresentation.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <StepFEA_FeaModel.hxx>
+#include <StepFEA_NodeGroup.hxx>

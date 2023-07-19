@@ -1,0 +1,2 @@
+#include <ShapeBuild_ReShape.hxx>
+#include <ShapeUpgrade_Tool.hxx>

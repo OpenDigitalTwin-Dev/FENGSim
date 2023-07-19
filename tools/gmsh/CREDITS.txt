@@ -1,0 +1,161 @@
+                 Gmsh is copyright (C) 1997-2017
+
+                       Christophe Geuzaine
+                     <cgeuzaine at ulg.ac.be>
+
+                               and
+
+                      Jean-Francois Remacle
+              <jean-francois.remacle at uclouvain.be>
+
+Code contributions to Gmsh have been provided by David Colignon (colormaps),
+Emilie Marchandise (compound geometrical entities), Gaetan Bricteux (Gauss
+integration and levelsets), Jacques Lechelle (DIFFPACK mesh format), Jonathan
+Lambrechts (fields, solver), Jozef Vesely (help with Tetgen integration), Koen
+Hillewaert (high order elements, generalized periodic meshes), Laurent Stainier
+(eigenvalue solvers, tensor display and MacOS bits), Marc Ume (original list
+code), Mark van Doesburg (OpenCASCADE face connection), Matt Gundry (Plot3d mesh
+format), Matti Pellikka (Cell complex and Homology solver), Nicolas Tardieu
+(help with Netgen integration), Pascale Noyret (MED mesh format), Pierre Badel
+(root finding and minimization), Ruth Sabariego (pyramids), Stephen Guzik (CGNS
+and partitioners), Bastien Gorissen (parallel remote post-processing), Eric
+Bechet (solver), Gilles Marckmann (camera and stero mode), Ashish Negi (Netgen
+CAD healing), Trevor Strickler (structured/unstructured coupling with pyramids),
+Amaury Johnen (Bezier), Benjamin Ruard (Java wrappers), Maxime Graulich
+(iOS/Android port), Francois Henrotte (onelab metamodels), Sebastian Eiser (PGF
+output), Alexis Salzman (compressed IO), Hang Si (TetGen/BR boundary recovery
+code), Fernando Lorenzo (Tochnog support). See comments in the sources for more
+information. If we forgot to list your contributions please send us an email!
+
+The TetGen/BR code (Mesh/tetgenBR.{cpp,h}) is copyright (c) 2016 Hang Si, Weierstrass
+Institute for Applied Analysis and Stochatics.
+
+The AVL tree code (Common/avl.{cpp,h}) and the YUV image code
+(Graphics/gl2yuv.{cpp,h}) are copyright (C) 1988-1993, 1995 The Regents of the
+University of California. Permission to use, copy, modify, and distribute this
+software and its documentation for any purpose and without fee is hereby
+granted, provided that the above copyright notice appear in all copies and that
+both that copyright notice and this permission notice appear in supporting
+documentation, and that the name of the University of California not be used in
+advertising or publicity pertaining to distribution of the software without
+specific, written prior permission. The University of California makes no
+representations about the suitability of this software for any purpose. It is
+provided "as is" without express or implied warranty.
+
+The picojson code (Common/picojson.h) is Copyright 2009-2010 Cybozu Labs, Inc.,
+Copyright 2011-2014 Kazuho Oku, All rights reserved. Redistribution and use in
+source and binary forms, with or without modification, are permitted provided
+that the following conditions are met: 1. Redistributions of source code must
+retain the above copyright notice, this list of conditions and the following
+disclaimer. 2. Redistributions in binary form must reproduce the above copyright
+notice, this list of conditions and the following disclaimer in the
+documentation and/or other materials provided with the distribution. THIS
+SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
+ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+The trackball code (Graphics/Trackball.{cpp.h}) is copyright (C) 1993, 1994,
+Silicon Graphics, Inc. ALL RIGHTS RESERVED. Permission to use, copy, modify, and
+distribute this software for any purpose and without fee is hereby granted,
+provided that the above copyright notice appear in all copies and that both the
+copyright notice and this permission notice appear in supporting documentation,
+and that the name of Silicon Graphics, Inc. not be used in advertising or
+publicity pertaining to distribution of the software without specific, written
+prior permission.
+
+The GIF and PPM routines (Graphics/gl2gif.cpp) are based on code copyright (C)
+1989, 1991, Jef Poskanzer. Permission to use, copy, modify, and distribute this
+software and its documentation for any purpose and without fee is hereby
+granted, provided that the above copyright notice appear in all copies and that
+both that copyright notice and this permission notice appear in supporting
+documentation.  This software is provided "as is" without express or implied
+warranty.
+
+The colorbar widget (Fltk/Colorbar_Window.cpp) was inspired by code from the
+Vis5d program for visualizing five dimensional gridded data sets, copyright (C)
+1990-1995, Bill Hibbard, Brian Paul, Dave Santek, and Andre Battaiola.
+
+In addition, this this version of Gmsh may contain the following contributed
+codes in the contrib/ directory, each governed by their own license:
+
+* contrib/ANN copyright (C) 1997-2005 University of Maryland and Sunil Arya and
+  David Mount;
+
+* contrib/Chaco written by Bruce Hendrickson and Robert Leland at Sandia
+  National Laboratories under US Department of Energy contract DE-AC04-76DP00789
+  and is copyrighted by Sandia Corporation.
+
+* contrib/gmm copyright (C) 2002-2008 Yves Renard;
+
+* contrib/kbipack copyright (C) 2005 Saku Suuriniemi;
+
+* contrib/MathEx based in part on the work of the SSCILIB Library, copyright (C)
+  2000-2003 Sadao Massago;
+
+* contrib/Metis written by George Karypis (karypis at cs.umn.edu), copyright (C)
+  1998 Regents of the University of Minnesota;
+
+* contrib/mpeg_encode copyright (c) 1995 The Regents of the University of
+  California;
+
+* contrib/Netgen subdirectory copyright (C) 1994-2004 Joachim Sch"oberl;
+
+* contrib/Tetgen1.5 subdirectory) copyright (C) 2002-2007 Hang Si;
+
+* contrib/bamg subdirectory) from Freefem++ copyright (C) Frederic Hecht;
+
+* contrib/lbfgs subdirectory) (C) Sergey Bochkanov (ALGLIB project);
+
+* contrib/mmg3d subdirectory) from MMG3D Version 4.0 (C) 2004-2011 Cecile
+  Dobrzynski and Pascal Frey (IPB - UPMC - INRIA);
+
+* contrib/blossom subdirectory) copyright (C) 1995-1997 Bill Cook et al.;
+
+* contrib/bamg subdirectory) from Freefem++ copyright (C) Frederic Hecht;
+
+* contrib/taucs subdirectory) from TAUCS Version 2.0, November 29, 2001,
+  Copyright (c) 2001, 2002, 2003 by Sivan Toledo, Tel-Aviv Univesity,
+  stoledo@tau.ac.il. All Rights Reserved.
+
+* contrib/voro++ subdirectory) from Voro++ Copyright (c) 2008, The Regents of
+  the University of California, through Lawrence Berkeley National Laboratory
+  (subject to receipt of any required approvals from the U.S. Dept. of
+  Energy). All rights reserved;
+
+* contrib/zipper subdirectory) from MiniZip - Copyright (c) 1998-2010 - by
+  Gilles Vollant - version 1.1 64 bits from Mathias Svensson.
+
+Check the configuration options to see which has been enabled.
+
+Special thanks to Bill Spitzak, Michael Sweet, Matthias Melcher, Greg Ercolano
+and others for the Fast Light Tool Kit on which Gmsh's GUI is based. See
+http://www.fltk.org for more info on this excellent object-oriented,
+cross-platform toolkit.
+
+Special thanks also to EDF for funding the original OpenCASCADE and MED
+integration in 2006-2007.
+
+Thanks to the following folks who have contributed by providing fresh ideas on
+theoretical or programming topics, who have sent patches, requests for changes
+or improvements, or who gave us access to exotic machines for testing Gmsh: Juan
+Abanto, Olivier Adam, Guillaume Alleon, Laurent Champaney, Pascal Dupuis,
+Patrick Dular, Philippe Geuzaine, Johan Gyselinck, Francois Henrotte, Benoit
+Meys, Nicolas Moes, Osamu Nakamura, Chad Schmutzer, Jean-Luc Fl'ejou, Xavier
+Dardenne, Christophe Prud'homme, Sebastien Clerc, Jose Miguel Pasini, Philippe
+Lussou, Jacques Kools, Bayram Yenikaya, Peter Hornby, Krishna Mohan Gundu,
+Christopher Stott, Timmy Schumacher, Carl Osterwisch, Bruno Frackowiak, Philip
+Kelleners, Romuald Conty, Renaud Sizaire, Michel Benhamou, Tom De Vuyst, Kris
+Van den Abeele, Simon Vun, Simon Corbin, Thomas De-Soza, Marcus Drosson, Antoine
+Dechaume, Jose Paulo Moitinho de Almeida, Thomas Pinchard, Corrado Chisari, Axel
+Hackbarth, Peter Wainwright, Jiri Hnidek, Thierry Thomas, Konstantinos Poulios,
+Laurent Van Miegroet, Shahrokh Ghavamian, Geordie McBain, Jose Paulo Moitinho de
+Almeida, Guillaume Demesy, Wendy Merks-Swolfs, Cosmin Stefan Deaconu, Nigel
+Nunn, Serban Georgescu, Julien Troufflard, Michele Mocciola, Matthijs Sypkens
+Smit, Sauli Ruuska, Larry Price.

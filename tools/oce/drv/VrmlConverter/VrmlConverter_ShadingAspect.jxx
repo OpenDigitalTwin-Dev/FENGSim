@@ -1,0 +1,3 @@
+#include <Vrml_Material.hxx>
+#include <Vrml_ShapeHints.hxx>
+#include <VrmlConverter_ShadingAspect.hxx>

@@ -1,0 +1,2 @@
+#include <IntTools_PntOnFace.hxx>
+#include <IntTools_PntOn2Faces.hxx>

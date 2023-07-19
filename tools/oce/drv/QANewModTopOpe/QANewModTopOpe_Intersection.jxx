@@ -1,0 +1,3 @@
+#include <TopoDS_Shape.hxx>
+#include <TopTools_ListOfShape.hxx>
+#include <QANewModTopOpe_Intersection.hxx>

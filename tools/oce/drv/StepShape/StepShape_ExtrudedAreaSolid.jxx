@@ -1,0 +1,4 @@
+#include <StepGeom_Direction.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <StepGeom_CurveBoundedSurface.hxx>
+#include <StepShape_ExtrudedAreaSolid.hxx>

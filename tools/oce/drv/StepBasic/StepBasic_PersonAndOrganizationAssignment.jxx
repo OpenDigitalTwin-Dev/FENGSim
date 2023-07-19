@@ -1,0 +1,3 @@
+#include <StepBasic_PersonAndOrganization.hxx>
+#include <StepBasic_PersonAndOrganizationRole.hxx>
+#include <StepBasic_PersonAndOrganizationAssignment.hxx>

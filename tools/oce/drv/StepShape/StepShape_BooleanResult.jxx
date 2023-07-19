@@ -1,0 +1,3 @@
+#include <TCollection_HAsciiString.hxx>
+#include <StepShape_BooleanOperand.hxx>
+#include <StepShape_BooleanResult.hxx>

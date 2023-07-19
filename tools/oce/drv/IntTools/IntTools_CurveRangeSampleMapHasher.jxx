@@ -1,0 +1,2 @@
+#include <IntTools_CurveRangeSample.hxx>
+#include <IntTools_CurveRangeSampleMapHasher.hxx>

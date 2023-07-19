@@ -1,0 +1,2 @@
+#include <TColStd_Array1OfReal.hxx>
+#include <AdvApprox_PrefCutting.hxx>

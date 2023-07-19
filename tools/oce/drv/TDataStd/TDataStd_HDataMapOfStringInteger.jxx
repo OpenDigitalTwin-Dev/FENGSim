@@ -1,0 +1,2 @@
+#include <TColStd_DataMapOfStringInteger.hxx>
+#include <TDataStd_HDataMapOfStringInteger.hxx>

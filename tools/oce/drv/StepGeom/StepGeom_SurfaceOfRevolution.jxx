@@ -1,0 +1,4 @@
+#include <StepGeom_Axis1Placement.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <StepGeom_Curve.hxx>
+#include <StepGeom_SurfaceOfRevolution.hxx>

@@ -1,0 +1,5 @@
+#include <TopoDS_Shape.hxx>
+#include <TopoDS_Face.hxx>
+#include <TopoDS_Edge.hxx>
+#include <TopTools_ListOfShape.hxx>
+#include <BRepFeat_Gluer.hxx>

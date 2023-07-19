@@ -1,0 +1,2 @@
+#include <StepFEA_FeaParametricPoint.hxx>
+#include <StepFEA_CurveElementLocation.hxx>

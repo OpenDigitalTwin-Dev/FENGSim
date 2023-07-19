@@ -1,0 +1,4 @@
+#include <Standard_Transient.hxx>
+#include <StepBasic_ProductDefinition.hxx>
+#include <StepBasic_ProductDefinitionFormation.hxx>
+#include <StepRepr_ConfigurationDesignItem.hxx>

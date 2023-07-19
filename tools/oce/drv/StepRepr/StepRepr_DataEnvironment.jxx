@@ -1,0 +1,3 @@
+#include <TCollection_HAsciiString.hxx>
+#include <StepRepr_HArray1OfPropertyDefinitionRepresentation.hxx>
+#include <StepRepr_DataEnvironment.hxx>

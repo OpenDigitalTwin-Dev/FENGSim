@@ -1,0 +1,3 @@
+#include <StlMesh_Mesh.hxx>
+#include <TopoDS_Shape.hxx>
+#include <StlAPI_Writer.hxx>

@@ -1,0 +1,3 @@
+#include <StepGeom_BSplineSurface.hxx>
+#include <Geom_BSplineSurface.hxx>
+#include <StepToGeom_MakeBSplineSurface.hxx>

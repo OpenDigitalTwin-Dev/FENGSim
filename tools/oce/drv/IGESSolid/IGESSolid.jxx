@@ -1,0 +1,2 @@
+#include <IGESSolid_Protocol.hxx>
+#include <IGESSolid.hxx>

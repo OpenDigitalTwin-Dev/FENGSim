@@ -1,0 +1,5 @@
+#include <TColStd_HArray1OfReal.hxx>
+#include <IGESBasic_HArray2OfHArray1OfReal.hxx>
+#include <Standard_DimensionMismatch.hxx>
+#include <Standard_OutOfRange.hxx>
+#include <IGESGeom_SplineSurface.hxx>

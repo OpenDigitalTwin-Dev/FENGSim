@@ -1,0 +1,3 @@
+#include <Geom_BSplineCurve.hxx>
+#include <Geom_BoundedCurve.hxx>
+#include <GeomConvert_CompCurveToBSplineCurve.hxx>

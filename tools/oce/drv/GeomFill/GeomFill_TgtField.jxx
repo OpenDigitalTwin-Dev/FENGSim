@@ -1,0 +1,3 @@
+#include <Law_BSpline.hxx>
+#include <gp_Vec.hxx>
+#include <GeomFill_TgtField.hxx>

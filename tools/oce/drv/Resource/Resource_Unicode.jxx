@@ -1,0 +1,2 @@
+#include <TCollection_ExtendedString.hxx>
+#include <Resource_Unicode.hxx>

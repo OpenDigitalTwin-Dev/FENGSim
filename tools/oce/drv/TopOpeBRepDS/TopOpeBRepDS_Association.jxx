@@ -1,0 +1,3 @@
+#include <TopOpeBRepDS_Interference.hxx>
+#include <TopOpeBRepDS_ListOfInterference.hxx>
+#include <TopOpeBRepDS_Association.hxx>

@@ -1,0 +1,6 @@
+#include <IGESDraw_HArray1OfViewKindEntity.hxx>
+#include <IGESData_HArray1OfIGESEntity.hxx>
+#include <Standard_OutOfRange.hxx>
+#include <IGESData_ViewKindEntity.hxx>
+#include <IGESData_IGESEntity.hxx>
+#include <IGESDraw_ViewsVisible.hxx>

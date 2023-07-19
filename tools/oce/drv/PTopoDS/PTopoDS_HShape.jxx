@@ -1,0 +1,3 @@
+#include <PTopoDS_TShape.hxx>
+#include <PTopLoc_Location.hxx>
+#include <PTopoDS_HShape.hxx>

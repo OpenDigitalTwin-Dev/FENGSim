@@ -1,0 +1,4 @@
+#include <Geom_Surface.hxx>
+#include <gp_Pnt.hxx>
+#include <gp_Vec.hxx>
+#include <GeomLProp_SurfaceTool.hxx>

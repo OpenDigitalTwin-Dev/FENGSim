@@ -1,0 +1,3 @@
+#include <StepBasic_MassUnit.hxx>
+#include <StepBasic_DimensionalExponents.hxx>
+#include <StepBasic_SiUnitAndMassUnit.hxx>

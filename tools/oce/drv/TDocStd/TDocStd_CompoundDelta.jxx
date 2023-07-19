@@ -1,0 +1,2 @@
+#include <TDocStd_Document.hxx>
+#include <TDocStd_CompoundDelta.hxx>

@@ -1,0 +1,3 @@
+#include <TColStd_SequenceOfExtendedString.hxx>
+#include <TDocStd_Document.hxx>
+#include <XCAFApp_Application.hxx>

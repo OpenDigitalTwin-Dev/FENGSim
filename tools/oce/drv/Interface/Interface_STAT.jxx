@@ -1,0 +1,5 @@
+#include <TCollection_HAsciiString.hxx>
+#include <TColStd_HSequenceOfAsciiString.hxx>
+#include <TColStd_HSequenceOfReal.hxx>
+#include <TColStd_HSequenceOfInteger.hxx>
+#include <Interface_STAT.hxx>

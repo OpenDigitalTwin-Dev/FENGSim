@@ -1,0 +1,3 @@
+#include <Interface_Check.hxx>
+#include <IGESData_IGESEntity.hxx>
+#include <IGESData_DirChecker.hxx>

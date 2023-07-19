@@ -1,0 +1,3 @@
+#include <TCollection_HAsciiString.hxx>
+#include <StepBasic_IdentificationRole.hxx>
+#include <StepBasic_IdentificationAssignment.hxx>

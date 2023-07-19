@@ -1,0 +1,5 @@
+#include <StepAP214_HArray1OfAutoDesignDateAndPersonItem.hxx>
+#include <StepBasic_PersonAndOrganization.hxx>
+#include <StepBasic_PersonAndOrganizationRole.hxx>
+#include <StepAP214_AutoDesignDateAndPersonItem.hxx>
+#include <StepAP214_AutoDesignDateAndPersonAssignment.hxx>

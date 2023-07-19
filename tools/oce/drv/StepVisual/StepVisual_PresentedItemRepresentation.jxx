@@ -1,0 +1,3 @@
+#include <StepVisual_PresentedItem.hxx>
+#include <StepVisual_PresentationRepresentationSelect.hxx>
+#include <StepVisual_PresentedItemRepresentation.hxx>

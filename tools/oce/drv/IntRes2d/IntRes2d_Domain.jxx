@@ -1,0 +1,3 @@
+#include <Standard_DomainError.hxx>
+#include <gp_Pnt2d.hxx>
+#include <IntRes2d_Domain.hxx>

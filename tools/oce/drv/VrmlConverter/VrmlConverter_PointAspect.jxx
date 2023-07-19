@@ -1,0 +1,2 @@
+#include <Vrml_Material.hxx>
+#include <VrmlConverter_PointAspect.hxx>

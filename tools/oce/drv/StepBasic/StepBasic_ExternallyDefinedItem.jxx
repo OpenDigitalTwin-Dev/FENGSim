@@ -1,0 +1,3 @@
+#include <StepBasic_ExternalSource.hxx>
+#include <StepBasic_SourceItem.hxx>
+#include <StepBasic_ExternallyDefinedItem.hxx>

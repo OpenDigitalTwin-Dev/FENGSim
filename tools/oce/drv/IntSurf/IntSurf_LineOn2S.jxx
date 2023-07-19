@@ -1,0 +1,3 @@
+#include <Standard_OutOfRange.hxx>
+#include <IntSurf_PntOn2S.hxx>
+#include <IntSurf_LineOn2S.hxx>

@@ -1,0 +1,2 @@
+#include <TColStd_HSequenceOfReal.hxx>
+#include <ShapeUpgrade_SplitCurve.hxx>

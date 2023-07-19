@@ -1,0 +1,4 @@
+#include <IFSelect_SelectDeduct.hxx>
+#include <TColStd_HSequenceOfTransient.hxx>
+#include <Interface_Graph.hxx>
+#include <IFSelect_GraphCounter.hxx>

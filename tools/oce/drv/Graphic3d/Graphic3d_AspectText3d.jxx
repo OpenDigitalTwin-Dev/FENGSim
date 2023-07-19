@@ -1,0 +1,3 @@
+#include <Graphic3d_AspectTextDefinitionError.hxx>
+#include <Quantity_Color.hxx>
+#include <Graphic3d_AspectText3d.hxx>

@@ -1,0 +1,5 @@
+#include <StepShape_OpenShell.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <StepShape_HArray1OfFace.hxx>
+#include <StepShape_Face.hxx>
+#include <StepShape_OrientedOpenShell.hxx>

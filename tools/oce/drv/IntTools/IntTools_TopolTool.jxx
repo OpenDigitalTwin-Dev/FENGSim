@@ -1,0 +1,5 @@
+#include <Standard_DomainError.hxx>
+#include <Adaptor3d_HSurface.hxx>
+#include <gp_Pnt2d.hxx>
+#include <gp_Pnt.hxx>
+#include <IntTools_TopolTool.hxx>

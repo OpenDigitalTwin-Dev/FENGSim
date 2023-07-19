@@ -1,0 +1,4 @@
+#include <HLRAlgo_Projector.hxx>
+#include <Draw_Display.hxx>
+#include <Draw_Drawable3D.hxx>
+#include <HLRTest_Projector.hxx>

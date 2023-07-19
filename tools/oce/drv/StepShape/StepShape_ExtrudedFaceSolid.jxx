@@ -1,0 +1,4 @@
+#include <StepGeom_Direction.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <StepShape_FaceSurface.hxx>
+#include <StepShape_ExtrudedFaceSolid.hxx>

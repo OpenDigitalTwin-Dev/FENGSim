@@ -1,0 +1,3 @@
+#include <StepAP203_HArray1OfClassifiedItem.hxx>
+#include <StepBasic_SecurityClassification.hxx>
+#include <StepAP203_CcDesignSecurityClassification.hxx>

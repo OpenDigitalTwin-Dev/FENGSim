@@ -1,0 +1,3 @@
+#include <StepShape_HArray1OfConnectedFaceSet.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <StepShape_FaceBasedSurfaceModel.hxx>

@@ -1,0 +1,3 @@
+#include <TCollection_HAsciiString.hxx>
+#include <StepBasic_DocumentType.hxx>
+#include <StepBasic_Document.hxx>

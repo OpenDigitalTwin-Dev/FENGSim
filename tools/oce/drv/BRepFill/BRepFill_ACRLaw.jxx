@@ -1,0 +1,4 @@
+#include <TColStd_HArray1OfReal.hxx>
+#include <TopoDS_Wire.hxx>
+#include <GeomFill_LocationGuide.hxx>
+#include <BRepFill_ACRLaw.hxx>

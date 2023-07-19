@@ -1,0 +1,3 @@
+#include <StepGeom_Hyperbola.hxx>
+#include <Geom_Hyperbola.hxx>
+#include <StepToGeom_MakeHyperbola.hxx>

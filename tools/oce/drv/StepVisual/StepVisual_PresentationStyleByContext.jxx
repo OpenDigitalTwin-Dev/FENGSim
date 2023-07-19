@@ -1,0 +1,3 @@
+#include <StepVisual_HArray1OfPresentationStyleSelect.hxx>
+#include <StepVisual_StyleContextSelect.hxx>
+#include <StepVisual_PresentationStyleByContext.hxx>

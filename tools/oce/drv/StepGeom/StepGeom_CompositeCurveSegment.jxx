@@ -1,0 +1,2 @@
+#include <StepGeom_Curve.hxx>
+#include <StepGeom_CompositeCurveSegment.hxx>

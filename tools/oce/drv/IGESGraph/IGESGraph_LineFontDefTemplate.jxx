@@ -1,0 +1,2 @@
+#include <IGESBasic_SubfigureDef.hxx>
+#include <IGESGraph_LineFontDefTemplate.hxx>

@@ -1,0 +1,5 @@
+#include <TopoDS_Shape.hxx>
+#include <TopoDS_Compound.hxx>
+#include <TopTools_HSequenceOfShape.hxx>
+#include <TopTools_DataMapOfShapeShape.hxx>
+#include <ShapeAnalysis_FreeBounds.hxx>

@@ -1,0 +1,5 @@
+#include <IGESGeom_TransformationMatrix.hxx>
+#include <gp_XYZ.hxx>
+#include <gp_Pnt.hxx>
+#include <IGESData_TransfEntity.hxx>
+#include <IGESAppli_Node.hxx>

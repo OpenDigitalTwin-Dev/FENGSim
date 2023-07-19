@@ -1,0 +1,3 @@
+#include <StepVisual_PresentationLayerAssignment.hxx>
+#include <StepVisual_PresentationRepresentation.hxx>
+#include <StepVisual_PresentationLayerUsage.hxx>

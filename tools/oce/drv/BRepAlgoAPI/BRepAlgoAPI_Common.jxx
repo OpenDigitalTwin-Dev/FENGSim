@@ -1,0 +1,3 @@
+#include <BOPAlgo_PaveFiller.hxx>
+#include <TopoDS_Shape.hxx>
+#include <BRepAlgoAPI_Common.hxx>

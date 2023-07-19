@@ -1,0 +1,4 @@
+#include <Prs3d_Presentation.hxx>
+#include <TCollection_ExtendedString.hxx>
+#include <gp_Pnt.hxx>
+#include <DsgPrs_SymbPresentation.hxx>

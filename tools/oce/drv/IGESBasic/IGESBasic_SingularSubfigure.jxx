@@ -1,0 +1,3 @@
+#include <IGESBasic_SubfigureDef.hxx>
+#include <gp_XYZ.hxx>
+#include <IGESBasic_SingularSubfigure.hxx>

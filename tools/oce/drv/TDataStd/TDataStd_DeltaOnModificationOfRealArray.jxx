@@ -1,0 +1,4 @@
+#include <TColStd_HArray1OfInteger.hxx>
+#include <TColStd_HArray1OfReal.hxx>
+#include <TDataStd_RealArray.hxx>
+#include <TDataStd_DeltaOnModificationOfRealArray.hxx>

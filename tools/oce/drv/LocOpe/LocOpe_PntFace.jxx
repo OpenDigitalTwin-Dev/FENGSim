@@ -1,0 +1,3 @@
+#include <gp_Pnt.hxx>
+#include <TopoDS_Face.hxx>
+#include <LocOpe_PntFace.hxx>

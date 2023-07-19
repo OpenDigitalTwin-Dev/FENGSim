@@ -1,0 +1,3 @@
+#include <TCollection_HAsciiString.hxx>
+#include <StepGeom_Axis2Placement3d.hxx>
+#include <StepGeom_ConicalSurface.hxx>

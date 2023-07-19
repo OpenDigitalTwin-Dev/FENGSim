@@ -1,0 +1,4 @@
+#include <StepGeom_Curve.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <StepShape_Vertex.hxx>
+#include <StepShape_EdgeCurve.hxx>

@@ -1,0 +1,2 @@
+#include <TopOpeBRepDS_Transition.hxx>
+#include <TopOpeBRepDS_SolidSurfaceInterference.hxx>

@@ -1,0 +1,5 @@
+#include <Standard_Transient.hxx>
+#include <StepVisual_PresentationView.hxx>
+#include <StepVisual_PresentationArea.hxx>
+#include <StepVisual_AreaInSet.hxx>
+#include <StepVisual_PresentationSizeAssignmentSelect.hxx>

@@ -1,0 +1,3 @@
+#include <SelectBasics_EntityOwner.hxx>
+#include <gp_Trsf.hxx>
+#include <SelectBasics_SensitiveEntity.hxx>

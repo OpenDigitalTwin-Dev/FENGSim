@@ -1,0 +1,4 @@
+#include <PXCAFDoc_GraphNode.hxx>
+#include <PXCAFDoc_GraphNodeSequence.hxx>
+#include <Standard_GUID.hxx>
+#include <PXCAFDoc_GraphNode.hxx>

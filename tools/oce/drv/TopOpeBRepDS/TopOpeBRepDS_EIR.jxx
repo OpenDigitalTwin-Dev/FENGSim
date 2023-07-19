@@ -1,0 +1,2 @@
+#include <TopOpeBRepDS_HDataStructure.hxx>
+#include <TopOpeBRepDS_EIR.hxx>

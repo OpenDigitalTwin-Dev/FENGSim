@@ -1,0 +1,4 @@
+#include <BRepFill_LocationLaw.hxx>
+#include <TopoDS_Shape.hxx>
+#include <gp_Trsf.hxx>
+#include <BRepFill_SectionPlacement.hxx>

@@ -1,0 +1,3 @@
+#include <StepBasic_ApprovalStatus.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <StepBasic_Approval.hxx>

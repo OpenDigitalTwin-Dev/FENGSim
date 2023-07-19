@@ -1,0 +1,4 @@
+#include <gp_Pnt.hxx>
+#include <BRep_ListOfPointRepresentation.hxx>
+#include <TopoDS_TShape.hxx>
+#include <BRep_TVertex.hxx>

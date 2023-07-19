@@ -1,0 +1,3 @@
+#include <TopOpeBRepDS_HDataStructure.hxx>
+#include <TopOpeBRepDS_DataMapOfShapeListOfShapeOn1State.hxx>
+#include <TopOpeBRepDS_FIR.hxx>

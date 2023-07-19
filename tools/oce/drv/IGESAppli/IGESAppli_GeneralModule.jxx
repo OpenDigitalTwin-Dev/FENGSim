@@ -1,0 +1,8 @@
+#include <IGESData_IGESEntity.hxx>
+#include <Interface_EntityIterator.hxx>
+#include <IGESData_DirChecker.hxx>
+#include <Interface_ShareTool.hxx>
+#include <Interface_Check.hxx>
+#include <Standard_Transient.hxx>
+#include <Interface_CopyTool.hxx>
+#include <IGESAppli_GeneralModule.hxx>

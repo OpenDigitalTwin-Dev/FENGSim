@@ -1,0 +1,3 @@
+#include <PBRep_PointRepresentation.hxx>
+#include <PTopLoc_Location.hxx>
+#include <PBRep_PointRepresentation.hxx>

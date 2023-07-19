@@ -1,0 +1,2 @@
+#include <Standard_ErrorHandler.hxx>
+#include <Standard_ErrorHandlerCallback.hxx>

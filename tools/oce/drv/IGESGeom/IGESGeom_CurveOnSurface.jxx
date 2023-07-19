@@ -1,0 +1,2 @@
+#include <IGESData_IGESEntity.hxx>
+#include <IGESGeom_CurveOnSurface.hxx>

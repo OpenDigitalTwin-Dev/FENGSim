@@ -1,0 +1,4 @@
+#include <TopoDS_Shape.hxx>
+#include <TopOpeBRepDS_Interference.hxx>
+#include <TopOpeBRepDS_Point.hxx>
+#include <TopOpeBRepDS_EdgeInterferenceTool.hxx>

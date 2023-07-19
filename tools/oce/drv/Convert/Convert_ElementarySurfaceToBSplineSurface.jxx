@@ -1,0 +1,3 @@
+#include <Standard_OutOfRange.hxx>
+#include <gp_Pnt.hxx>
+#include <Convert_ElementarySurfaceToBSplineSurface.hxx>

@@ -1,0 +1,4 @@
+#include <IFSelect_Selection.hxx>
+#include <IFSelect_Dispatch.hxx>
+#include <TCollection_AsciiString.hxx>
+#include <IFSelect_GeneralModifier.hxx>

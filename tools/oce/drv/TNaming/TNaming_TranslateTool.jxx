@@ -1,0 +1,4 @@
+#include <Standard_TypeMismatch.hxx>
+#include <TopoDS_Shape.hxx>
+#include <TColStd_IndexedDataMapOfTransientTransient.hxx>
+#include <TNaming_TranslateTool.hxx>

@@ -1,0 +1,3 @@
+#include <Standard_DomainError.hxx>
+#include <gp_Cylinder.hxx>
+#include <Convert_CylinderToBSplineSurface.hxx>

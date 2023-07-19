@@ -1,0 +1,3 @@
+#include <TColgp_Array1OfPnt.hxx>
+#include <TopoDS_Wire.hxx>
+#include <ShapeConstruct_MakeTriangulation.hxx>

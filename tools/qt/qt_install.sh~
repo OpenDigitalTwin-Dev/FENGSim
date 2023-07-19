@@ -1,0 +1,10 @@
+
+sudo apt update
+sudo apt install libxcb-xinerama0-dev
+sudo apt install libpcre2-dev
+sudo apt-get install build-essential
+sudo apt-get install libgl1-mesa-dev
+sudo apt-get install libglu1-mesa-dev
+sudo apt-get install freeglut3-dev
+sudo apt-get install libxcb-xinput-dev
+sudo apt install g++

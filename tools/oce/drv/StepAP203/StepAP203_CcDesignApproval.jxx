@@ -1,0 +1,3 @@
+#include <StepAP203_HArray1OfApprovedItem.hxx>
+#include <StepBasic_Approval.hxx>
+#include <StepAP203_CcDesignApproval.hxx>

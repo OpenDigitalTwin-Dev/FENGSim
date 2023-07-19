@@ -1,0 +1,3 @@
+#include <StepGeom_CartesianPoint.hxx>
+#include <StepVisual_PlanarBox.hxx>
+#include <StepVisual_ViewVolume.hxx>

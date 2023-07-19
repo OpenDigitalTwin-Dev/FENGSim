@@ -1,0 +1,3 @@
+#include <Vrml_SFImage.hxx>
+#include <TCollection_AsciiString.hxx>
+#include <Vrml_Texture2.hxx>

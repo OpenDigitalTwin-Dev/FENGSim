@@ -1,0 +1,3 @@
+#include <TopoDS_Shape.hxx>
+#include <gp_Pnt.hxx>
+#include <HLRBRep_BiPoint.hxx>

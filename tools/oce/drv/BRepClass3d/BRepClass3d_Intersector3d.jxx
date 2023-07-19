@@ -1,0 +1,4 @@
+#include <gp_Lin.hxx>
+#include <TopoDS_Face.hxx>
+#include <gp_Pnt.hxx>
+#include <BRepClass3d_Intersector3d.hxx>

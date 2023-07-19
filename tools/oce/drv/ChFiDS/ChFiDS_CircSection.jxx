@@ -1,0 +1,3 @@
+#include <gp_Circ.hxx>
+#include <gp_Lin.hxx>
+#include <ChFiDS_CircSection.hxx>

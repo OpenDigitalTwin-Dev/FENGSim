@@ -1,0 +1,2 @@
+#include <TCollection_HAsciiString.hxx>
+#include <IGESGraph_NominalSize.hxx>

@@ -1,0 +1,2 @@
+#include <gp_Vec.hxx>
+#include <PGeom_VectorWithMagnitude.hxx>

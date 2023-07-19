@@ -1,0 +1,2 @@
+#include <PDF_Data.hxx>
+#include <PDocStd_Document.hxx>

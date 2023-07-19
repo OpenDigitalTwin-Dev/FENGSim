@@ -1,0 +1,3 @@
+#include <PPoly_Polygon3D.hxx>
+#include <PTopLoc_Location.hxx>
+#include <PBRep_Polygon3D.hxx>

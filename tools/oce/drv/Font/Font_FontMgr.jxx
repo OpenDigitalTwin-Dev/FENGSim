@@ -1,0 +1,4 @@
+#include <TColStd_SequenceOfHAsciiString.hxx>
+#include <Font_SystemFont.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <Font_FontMgr.hxx>

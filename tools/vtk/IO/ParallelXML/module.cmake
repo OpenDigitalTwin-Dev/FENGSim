@@ -1,0 +1,19 @@
+vtk_module(vtkIOParallelXML
+  GROUPS
+    StandAlone
+  TEST_DEPENDS
+    vtkIOParallelXML
+    vtkParallelMPI
+    vtkTestingCore
+  KIT
+    vtkParallel
+  DEPENDS
+    vtkIOXML
+  PRIVATE_DEPENDS
+    vtkCommonCore
+    vtkCommonDataModel
+    vtkCommonExecutionModel
+    vtkCommonMisc
+    vtkParallelCore
+    vtksys
+  )

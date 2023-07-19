@@ -1,0 +1,3 @@
+#include <TCollection_HAsciiString.hxx>
+#include <StepRepr_HArray1OfMaterialPropertyRepresentation.hxx>
+#include <StepElement_ElementMaterial.hxx>

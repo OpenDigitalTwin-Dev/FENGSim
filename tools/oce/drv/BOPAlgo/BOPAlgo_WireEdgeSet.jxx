@@ -1,0 +1,3 @@
+#include <TopoDS_Face.hxx>
+#include <TopoDS_Shape.hxx>
+#include <BOPAlgo_WireEdgeSet.hxx>

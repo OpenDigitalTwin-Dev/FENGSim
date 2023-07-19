@@ -1,0 +1,3 @@
+#include <Geom_Curve.hxx>
+#include <gp_Dir.hxx>
+#include <Geom_SweptSurface.hxx>

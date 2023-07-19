@@ -1,0 +1,30 @@
+vtk_add_test_python(
+  3DMorph.py
+  TestGreedyTerrainDecimation.py
+  TestGridWarp3D.py
+  TestGridWarpCubic.py
+  TestGridWarpLinear.py
+  TestGridWarpNearest.py
+  TestImageStencilWithPolydata.py
+  TestPCA.py
+  TestProcrustes.py
+  TestProjectedTerrainPath.py
+  TestTemporalSnapToTimeStep.py,NO_DATA,NO_VALID
+  WarpPolyData.py
+  appendImplicitModel.py
+  appendImplicitModelNoBounds.py
+  banana.py
+  depthSort.py
+  earth.py
+  imageToPolyData.py
+  largeImageGradientBackground.py
+  largeImageOffset.py
+  largeImageParallel.py
+  TestProcrustesRigidCentroid.py
+  )
+
+if ("${VTK_RENDERING_BACKEND}" STREQUAL "OpenGL2")
+  vtk_add_test_python(
+    TestFacetReader.py
+  )
+endif()

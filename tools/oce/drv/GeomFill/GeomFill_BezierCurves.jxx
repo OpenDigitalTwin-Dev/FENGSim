@@ -1,0 +1,4 @@
+#include <Geom_BezierSurface.hxx>
+#include <Standard_ConstructionError.hxx>
+#include <Geom_BezierCurve.hxx>
+#include <GeomFill_BezierCurves.hxx>

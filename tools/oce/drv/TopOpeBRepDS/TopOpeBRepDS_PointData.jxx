@@ -1,0 +1,3 @@
+#include <TopOpeBRepDS_DataStructure.hxx>
+#include <TopOpeBRepDS_Point.hxx>
+#include <TopOpeBRepDS_PointData.hxx>

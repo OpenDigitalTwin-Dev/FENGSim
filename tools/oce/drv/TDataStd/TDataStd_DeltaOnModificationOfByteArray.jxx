@@ -1,0 +1,4 @@
+#include <TColStd_HArray1OfInteger.hxx>
+#include <TColStd_HArray1OfByte.hxx>
+#include <TDataStd_ByteArray.hxx>
+#include <TDataStd_DeltaOnModificationOfByteArray.hxx>

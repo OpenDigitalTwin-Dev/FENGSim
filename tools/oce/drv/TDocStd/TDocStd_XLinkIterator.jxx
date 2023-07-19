@@ -1,0 +1,3 @@
+#include <Standard_NoMoreObject.hxx>
+#include <TDocStd_Document.hxx>
+#include <TDocStd_XLinkIterator.hxx>

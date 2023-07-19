@@ -1,0 +1,141 @@
+//=========================================================================
+//
+//  Program:   Visualization Toolkit
+//
+//  Copyright (c) Ken Martin, Will Schroeder, Bill Lorensen
+//  All rights reserved.
+//  See Copyright.txt or http://www.kitware.com/Copyright.htm for details.
+//
+//     This software is distributed WITHOUT ANY WARRANTY; without even
+//     the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+//     PURPOSE.  See the above copyright notice for more information.
+//
+//=========================================================================
+
+// This file contains enough suppressions to result in no cppcheck warnings,
+// at least on macOS with cppcheck 1.81.
+
+// To run:
+// cd /path/to/VTK/
+// cppcheck --platform=unspecified --enable=style -q --suppressions-list=CMake/VTKcppcheckSuppressions.txt --template='{id},{file}:{line},{severity},{message}' -j8 .
+
+// Suppress everything from ThirdParty.
+*:ThirdParty/*
+
+// Similarly, these aren't really part of VTK proper.
+*:Utilities/KWSys/*
+*:Utilities/MetaIO/*
+*:Utilities/DICOMParser/*
+
+// Can't fix in portable way for all VTK-supported platforms.
+duplicateExpression:IO/PostgreSQL/vtkPostgreSQLQuery.cxx
+unpreciseMathCall
+
+// Using reallocf() would be a good solution, but it's not available on all platforms.
+memleakOnRealloc
+
+// VTK assumes IEEE 754 floats, so this warning isn't useful.
+memsetClassFloat
+
+// There are just too many of these to manage, so suppress many/all.  Can look again one day.
+// 2364 warnings
+variableScope
+// 1109 warnings
+uninitMemberVar
+// 231 warnings
+cstyleCast
+// 182 warnings
+noExplicitConstructor
+// 169 warnings
+invalidscanf
+// 137 warnings
+unreadVariable
+// 34 warnings
+noCopyConstructor
+// 20 warnings
+useInitializationList
+// 18 warnings
+redundantAssignment:Filters/General/vtkBoxClipDataSet.cxx
+redundantAssignment:*/Testing/*
+
+// Gives too many false positives.
+assertWithSideEffect
+argumentSize
+
+// False positives.
+AssignmentAddressToInteger:Common/Math/vtkPolynomialSolversUnivariate.cxx
+AssignmentAddressToInteger:IO/Exodus/vtkExodusIIReader.cxx
+CastIntegerToAddressAtReturn:Geovis/Core/vtkGeoTreeNode.h
+copyCtorPointerCopying:IO/NetCDF/vtkSLACReader.cxx
+duplicateExpression:Rendering/Annotation/vtkScalarBarActor.cxx
+memleak:Examples/Infovis/Cxx/MultiView.cxx
+memleak:Imaging/Hybrid/vtkSurfaceReconstructionFilter.cxx
+memleak:IO/Image/vtkJPEGReader.cxx
+memleak:Rendering/OpenGL2/vtkOpenGLRenderTimerLog.cxx
+operatorEqVarError:Filters/General/vtkHyperStreamline.cxx
+redundantAssignment:Wrapping/Tcl/vtkTclUtil.cxx
+redundantAssignment:Wrapping/Tools/vtkParsePreprocess.c
+stlIfStrFind:Infovis/Core/vtkPipelineGraphSource.cxx
+stlIfStrFind:Rendering/OpenGL2/vtkOpenGLRenderer.cxx
+unsafeClassCanLeak:Filters/General/vtkDensifyPolyData.cxx
+unsafeClassCanLeak:GUISupport/Qt/QVTKInteractorInternal.h
+unsafeClassCanLeak:Interaction/Widgets/vtkBiDimensionalRepresentation.h
+unusedLabelSwitch:IO/Exodus/vtkCPExodusIINodalCoordinatesTemplate.txx
+unusedStructMember:Common/Misc/vtkHeap.cxx
+unusedStructMember:IO/Infovis/vtkTulipReader.cxx
+uselessAssignmentArg:Common/DataModel/vtkReebGraph.cxx
+uselessAssignmentPtrArg:Wrapping/Tools/vtkParse.tab.c
+knownConditionTrueFalse:IO/Exodus/vtkExodusIIReader.cxx
+knownConditionTrueFalse:IO/Geometry/Testing/Cxx/TestIncrementalOctreePointLocator.cxx
+
+// false positive: <http://trac.cppcheck.net/ticket/7889>
+knownConditionTrueFalse:IO/Parallel/vtkMultiBlockPLOT3DReader.cxx
+knownConditionTrueFalse:Parallel/MPI/Testing/Cxx/ExerciseMultiProcessController.cxx
+
+// false positive: <http://trac.cppcheck.net/ticket/7896>
+unassignedVariable:Common/Transforms/vtkHomogeneousTransform.cxx
+unassignedVariable:Rendering/Core/vtkCamera.cxx
+
+// Not worth fixing, but not actually false positives.
+duplicateExpression:Common/Math/Testing/Cxx/TestPolynomialSolversUnivariate.cxx
+knownConditionTrueFalse:Common/Core/Testing/Cxx/UnitTestMath.cxx
+knownConditionTrueFalse:GUISupport/Qt/QVTKWidget.cxx
+knownConditionTrueFalse:IO/XML/Testing/Cxx/TestHyperOctreeIO.cxx
+knownConditionTrueFalse:Rendering/OpenGL/vtkXGPUInfoList.cxx
+knownConditionTrueFalse:Rendering/OpenGL2/vtkOpenGLRenderWindow.cxx
+knownConditionTrueFalse:Rendering/OpenGL2/vtkOpenGLShaderCache.cxx
+knownConditionTrueFalse:Filters/Parallel/Testing/Cxx/UnitTestPMaskPoints.cxx
+knownConditionTrueFalse:Rendering/OSPRay/vtkOSPRayRendererNode.cxx
+nullPointer:Wrapping/Tools/lex.yy.c
+passedByValue:Filters/General/vtkYoungsMaterialInterface.cxx
+
+// There are a fair number of these, but they are probably worth working through.
+// 16 warnings
+invalidPointerCast:Rendering/GL2PSOpenGL2/vtkOpenGLGL2PSHelperImpl.cxx
+invalidPointerCast:Rendering/OSPRay/vtkOSPRayPolyDataMapperNode.cxx
+invalidPointerCast:Rendering/OpenGL2/vtkOpenGLSphereMapper.cxx
+invalidPointerCast:Rendering/OpenGL2/vtkOpenGLStickMapper.cxx
+invalidPointerCast:Rendering/OpenGL2/vtkOpenGLVertexBufferObject.cxx
+invalidPointerCast:Rendering/ParallelLIC/vtkParallelTimer.cxx
+
+// 14 warnings
+copyCtorAndEqOperator
+
+// 6 warnings
+noConstructor:Common/Core/Testing/Cxx/TestCxxFeatures.cxx
+noConstructor:Common/Core/Testing/Cxx/TestDataArrayIterators.cxx
+noConstructor:Common/Core/vtkTypeList.txx
+noConstructor:Examples/GUI/Win32/vtkMFC/vtkSDI/vtkSDIView.h
+noConstructor:Filters/ParallelDIY2/vtkPResampleToImage.cxx
+noConstructor:Filters/ParallelDIY2/vtkPResampleWithDataSet.cxx
+noConstructor:Rendering/Core/Testing/Cxx/TestInteractorTimers.cxx
+
+// Need someone that knows this code...
+memleak:Wrapping/Tools/vtkParsePreprocess.c
+nullPointerRedundantCheck:IO/Exodus/vtkExodusIIReaderParser.cxx
+redundantAssignment:IO/Image/vtkJPEGReader.cxx
+knownConditionTrueFalse:IO/Exodus/vtkExodusIIWriter.cxx
+knownConditionTrueFalse:Rendering/Label/vtkLabeledTreeMapDataMapper.cxx
+knownConditionTrueFalse:Filters/ParallelFlowPaths/Testing/Cxx/TestPStreamGeometry.cxx
+knownConditionTrueFalse:Rendering/Label/vtkLabelSizeCalculator.cxx
+redundantAssignment:Rendering/OSPRay/vtkOSPRayRendererNode.cxx

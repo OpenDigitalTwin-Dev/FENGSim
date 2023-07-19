@@ -1,0 +1,3 @@
+#include <TCollection_HAsciiString.hxx>
+#include <StepRepr_ShapeAspect.hxx>
+#include <StepRepr_ShapeAspectRelationship.hxx>

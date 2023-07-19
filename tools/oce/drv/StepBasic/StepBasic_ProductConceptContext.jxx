@@ -1,0 +1,3 @@
+#include <TCollection_HAsciiString.hxx>
+#include <StepBasic_ApplicationContext.hxx>
+#include <StepBasic_ProductConceptContext.hxx>

@@ -1,0 +1,104 @@
+##============================================================================
+##  Copyright (c) Kitware, Inc.
+##  All rights reserved.
+##  See LICENSE.txt for details.
+##  This software is distributed WITHOUT ANY WARRANTY; without even
+##  the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+##  PURPOSE.  See the above copyright notice for more information.
+##
+##  Copyright 2014 National Technology & Engineering Solutions of Sandia, LLC (NTESS).
+##  Copyright 2014 UT-Battelle, LLC.
+##  Copyright 2014 Los Alamos National Security.
+##
+##  Under the terms of Contract DE-NA0003525 with NTESS,
+##  the U.S. Government retains certain rights in this software.
+##
+##  Under the terms of Contract DE-AC52-06NA25396 with Los Alamos National
+##  Laboratory (LANL), the U.S. Government retains certain rights in
+##  this software.
+##============================================================================
+
+# When this file is run by CMake through the find_package command, the
+# following variables will be defined:
+#
+# VTKm_INCLUDE_DIRS - Directories containing VTK-m and dependent headers
+# VTKm_LIBRARIES - The libraries required when using VTK-m
+# VTKm_COMPILE_OPTIONS - Options VTK-m suggests to add to the compiler
+#
+# Note that the VTK-m package supports several components. It is important
+# to request the components being used (as done through find_package arguments).
+# If no components are requested, then the dependent packages will not be
+# found and loaded. The following components are supported:
+#
+# @VTKm_AVAILABLE_COMPONENTS_LIST@
+#
+
+cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
+
+@PACKAGE_INIT@
+
+
+# The VTKm version number
+set(VTKm_VERSION_MAJOR "@VTKm_VERSION_MAJOR@")
+set(VTKm_VERSION_MINOR "@VTKm_VERSION_MINOR@")
+set(VTKm_VERSION_PATCH "@VTKm_VERSION_PATCH@")
+set(VTKm_VERSION_FULL "@VTKm_VERSION_FULL@")
+set(VTKm_VERSION "@VTKm_VERSION@")
+
+# This is true when the package is still in the build directory (not installed)
+if(CMAKE_CURRENT_LIST_DIR STREQUAL "@VTKm_BINARY_DIR@/@VTKm_INSTALL_CONFIG_DIR@")
+  set(VTKm_PACKAGE_IN_BUILD TRUE)
+endif()
+
+if(VTKm_PACKAGE_IN_BUILD)
+  set_and_check(VTKm_CMAKE_MODULE_PATH "@VTKm_SOURCE_DIR@/CMake")
+  set_and_check(VTKm_INCLUDE_DIRS ${VTKm_INCLUDE_DIRS} "@VTKm_SOURCE_DIR@")
+else()
+  set_and_check(VTKm_CMAKE_MODULE_PATH "@PACKAGE_VTKm_INSTALL_CMAKE_MODULE_DIR@")
+  set_and_check(VTKm_INCLUDE_DIRS "@PACKAGE_VTKm_INSTALL_INCLUDE_DIR@")
+endif()
+
+set(VTKm_BUILD_SHARED_LIBS "@BUILD_SHARED_LIBS@")
+set(VTKm_ENABLE_CUDA "@VTKm_ENABLE_CUDA@")
+set(VTKm_ENABLE_TBB "@VTKm_ENABLE_TBB@")
+set(VTKm_ENABLE_OSMESA "@VTKm_ENABLE_OSMESA@")
+set(VTKm_ENABLE_RENDERING "@VTKm_ENABLE_RENDERING@")
+
+# Load the library exports, but only if not compiling VTK-m itself
+set_and_check(VTKm_CONFIG_DIR "@PACKAGE_VTKm_INSTALL_CONFIG_DIR@")
+if(NOT "${CMAKE_BINARY_DIR}" STREQUAL "@CMAKE_BINARY_DIR@")
+  include(${VTKm_CONFIG_DIR}/VTKmTargets.cmake)
+endif()
+
+# Clear out the libraries. We will add more when loading components.
+set(VTKm_LIBRARIES)
+
+# The VTKm variables used to configure components and packages silently.
+set(VTKm_CONFIGURE_QUIET "${VTKm_FIND_QUIETLY}")
+set(VTKm_FIND_PACKAGE_QUIETLY "")
+if(VTKm_CONFIGURE_QUIET)
+  set(VTKm_FIND_PACKAGE_QUIETLY "QUIET")
+endif()
+
+# VTKm requires some CMake Find modules not included with CMake, so
+# include the CMake modules distributed with VTKm.
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${VTKm_CMAKE_MODULE_PATH})
+
+# This includes a host of macros used by VTK-m CMake.
+include(VTKmMacros)
+
+# Extra compile options that VTKm has generated, such as vectorization settings.
+# This should be specified to any target with the CMake command target_compile_options
+# that uses VTK-m.
+set(VTKm_COMPILE_OPTIONS "@VTKm_COMPILE_OPTIONS@")
+
+# All projects using VTK-m should include the "Base" configuration (otherwise
+# nothing may compile). Make sure the Base configuration is added to
+# VTKm_FIND_COMPONENTS and the component is required.
+set(VTKm_FIND_COMPONENTS "Base" ${VTKm_FIND_COMPONENTS})
+set(VTKm_FIND_REQUIRED_Base TRUE)
+
+# Load the selected components
+@VTKm_LOAD_COMPONENTS_COMMANDS@
+
+check_required_components(VTKm)

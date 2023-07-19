@@ -1,0 +1,4 @@
+#include <gp_Trsf.hxx>
+#include <gp_Mat.hxx>
+#include <gp_XYZ.hxx>
+#include <XmlObjMgt_GP.hxx>

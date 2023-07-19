@@ -1,0 +1,3 @@
+#include <gp_XY.hxx>
+#include <gp_Pnt2d.hxx>
+#include <IGESDimen_BasicDimension.hxx>

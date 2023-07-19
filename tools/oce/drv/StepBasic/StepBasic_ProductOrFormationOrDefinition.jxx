@@ -1,0 +1,5 @@
+#include <Standard_Transient.hxx>
+#include <StepBasic_Product.hxx>
+#include <StepBasic_ProductDefinitionFormation.hxx>
+#include <StepBasic_ProductDefinition.hxx>
+#include <StepBasic_ProductOrFormationOrDefinition.hxx>

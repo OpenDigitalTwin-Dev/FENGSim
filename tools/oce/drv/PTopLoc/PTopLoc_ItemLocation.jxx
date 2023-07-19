@@ -1,0 +1,3 @@
+#include <PTopLoc_Datum3D.hxx>
+#include <PTopLoc_Location.hxx>
+#include <PTopLoc_ItemLocation.hxx>

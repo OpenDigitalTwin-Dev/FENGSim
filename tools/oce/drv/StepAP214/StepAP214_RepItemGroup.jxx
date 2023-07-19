@@ -1,0 +1,3 @@
+#include <StepRepr_RepresentationItem.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <StepAP214_RepItemGroup.hxx>

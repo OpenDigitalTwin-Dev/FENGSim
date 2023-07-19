@@ -1,0 +1,4 @@
+#include <StepShape_BoxDomain.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <StepGeom_Surface.hxx>
+#include <StepShape_BoxedHalfSpace.hxx>

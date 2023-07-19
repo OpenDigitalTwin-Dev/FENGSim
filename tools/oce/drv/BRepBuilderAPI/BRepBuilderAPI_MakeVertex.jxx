@@ -1,0 +1,3 @@
+#include <gp_Pnt.hxx>
+#include <TopoDS_Vertex.hxx>
+#include <BRepBuilderAPI_MakeVertex.hxx>

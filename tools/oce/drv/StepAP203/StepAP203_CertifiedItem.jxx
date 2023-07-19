@@ -1,0 +1,3 @@
+#include <Standard_Transient.hxx>
+#include <StepRepr_SuppliedPartRelationship.hxx>
+#include <StepAP203_CertifiedItem.hxx>

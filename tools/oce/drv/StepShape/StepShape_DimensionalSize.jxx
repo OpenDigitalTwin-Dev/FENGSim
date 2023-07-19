@@ -1,0 +1,3 @@
+#include <StepRepr_ShapeAspect.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <StepShape_DimensionalSize.hxx>

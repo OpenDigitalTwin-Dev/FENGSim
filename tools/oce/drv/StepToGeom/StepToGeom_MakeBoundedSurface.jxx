@@ -1,0 +1,3 @@
+#include <StepGeom_BoundedSurface.hxx>
+#include <Geom_BoundedSurface.hxx>
+#include <StepToGeom_MakeBoundedSurface.hxx>

@@ -1,0 +1,3 @@
+#include <Standard_GUID.hxx>
+#include <TCollection_ExtendedString.hxx>
+#include <TDF.hxx>

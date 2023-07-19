@@ -1,0 +1,3 @@
+#include <Adaptor3d_Curve.hxx>
+#include <VrmlConverter_Drawer.hxx>
+#include <VrmlConverter_Curve.hxx>

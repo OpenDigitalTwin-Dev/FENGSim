@@ -1,0 +1,3 @@
+#include <TopoDS_Shape.hxx>
+#include <BinTools_LocationSet.hxx>
+#include <BinTools_ShapeSet.hxx>

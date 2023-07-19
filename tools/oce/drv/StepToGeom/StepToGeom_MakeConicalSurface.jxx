@@ -1,0 +1,3 @@
+#include <StepGeom_ConicalSurface.hxx>
+#include <Geom_ConicalSurface.hxx>
+#include <StepToGeom_MakeConicalSurface.hxx>

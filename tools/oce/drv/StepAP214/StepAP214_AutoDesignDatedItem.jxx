@@ -1,0 +1,5 @@
+#include <Standard_Transient.hxx>
+#include <StepBasic_ApprovalPersonOrganization.hxx>
+#include <StepAP214_AutoDesignDateAndPersonAssignment.hxx>
+#include <StepBasic_ProductDefinitionEffectivity.hxx>
+#include <StepAP214_AutoDesignDatedItem.hxx>

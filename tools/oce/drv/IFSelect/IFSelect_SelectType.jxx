@@ -1,0 +1,3 @@
+#include <Standard_Type.hxx>
+#include <TCollection_AsciiString.hxx>
+#include <IFSelect_SelectType.hxx>

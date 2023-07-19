@@ -1,0 +1,3 @@
+#include <StepFEA_CurveElementLocation.hxx>
+#include <StepBasic_EulerAngles.hxx>
+#include <StepFEA_CurveElementInterval.hxx>

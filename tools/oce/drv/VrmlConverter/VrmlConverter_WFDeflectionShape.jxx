@@ -1,0 +1,3 @@
+#include <TopoDS_Shape.hxx>
+#include <VrmlConverter_Drawer.hxx>
+#include <VrmlConverter_WFDeflectionShape.hxx>

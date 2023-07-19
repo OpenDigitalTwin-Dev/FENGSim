@@ -1,0 +1,2 @@
+#include <TopoDS_Shape.hxx>
+#include <ShapeUpgrade_RemoveLocations.hxx>

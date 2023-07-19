@@ -1,0 +1,4 @@
+#include <TColStd_HArray1OfInteger.hxx>
+#include <TColStd_HArray1OfExtendedString.hxx>
+#include <TDataStd_ExtStringArray.hxx>
+#include <TDataStd_DeltaOnModificationOfExtStringArray.hxx>

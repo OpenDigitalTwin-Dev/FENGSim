@@ -1,0 +1,3 @@
+#include <StepBasic_DateAndTime.hxx>
+#include <StepBasic_DateTimeRole.hxx>
+#include <StepBasic_DateAndTimeAssignment.hxx>

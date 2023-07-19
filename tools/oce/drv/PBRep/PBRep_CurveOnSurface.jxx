@@ -1,0 +1,5 @@
+#include <PGeom_Surface.hxx>
+#include <PGeom2d_Curve.hxx>
+#include <PTopLoc_Location.hxx>
+#include <gp_Pnt2d.hxx>
+#include <PBRep_CurveOnSurface.hxx>

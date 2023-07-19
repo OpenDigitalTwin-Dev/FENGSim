@@ -1,0 +1,3 @@
+#include <HLRBRep_PolyAlgo.hxx>
+#include <TopoDS_Shape.hxx>
+#include <HLRBRep_PolyHLRToShape.hxx>

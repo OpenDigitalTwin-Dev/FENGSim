@@ -1,0 +1,3 @@
+#include <HLRBRep_AreaLimit.hxx>
+#include <HLRAlgo_Intersection.hxx>
+#include <HLRBRep_AreaLimit.hxx>

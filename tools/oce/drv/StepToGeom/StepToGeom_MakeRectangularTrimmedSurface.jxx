@@ -1,0 +1,3 @@
+#include <StepGeom_RectangularTrimmedSurface.hxx>
+#include <Geom_RectangularTrimmedSurface.hxx>
+#include <StepToGeom_MakeRectangularTrimmedSurface.hxx>

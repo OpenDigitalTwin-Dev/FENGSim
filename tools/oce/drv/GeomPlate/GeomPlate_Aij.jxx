@@ -1,0 +1,3 @@
+#include <GeomPlate_BuildAveragePlane.hxx>
+#include <gp_Vec.hxx>
+#include <GeomPlate_Aij.hxx>

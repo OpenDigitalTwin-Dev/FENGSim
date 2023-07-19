@@ -1,0 +1,3 @@
+#include <Geom_Surface.hxx>
+#include <TopLoc_Location.hxx>
+#include <BRep_PointsOnSurface.hxx>

@@ -1,0 +1,3 @@
+#include <StepGeom_Circle.hxx>
+#include <Geom_Circle.hxx>
+#include <StepToGeom_MakeCircle.hxx>

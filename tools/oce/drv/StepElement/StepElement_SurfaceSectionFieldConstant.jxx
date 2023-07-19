@@ -1,0 +1,2 @@
+#include <StepElement_SurfaceSection.hxx>
+#include <StepElement_SurfaceSectionFieldConstant.hxx>

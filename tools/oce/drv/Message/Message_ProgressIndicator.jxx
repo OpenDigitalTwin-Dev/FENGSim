@@ -1,0 +1,3 @@
+#include <TCollection_HAsciiString.hxx>
+#include <Message_ProgressScale.hxx>
+#include <Message_ProgressIndicator.hxx>

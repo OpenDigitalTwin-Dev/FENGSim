@@ -1,0 +1,3 @@
+#include <TopoDS_Shape.hxx>
+#include <TopOpeBRepDS_Interference.hxx>
+#include <TopOpeBRepBuild_BuilderON.hxx>

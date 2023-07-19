@@ -1,0 +1,2 @@
+#include <TopoDS_Shape.hxx>
+#include <XmlMNaming_Shape1.hxx>

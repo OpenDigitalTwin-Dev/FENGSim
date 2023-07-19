@@ -1,0 +1,3 @@
+#include <StepBasic_LengthUnit.hxx>
+#include <StepBasic_DimensionalExponents.hxx>
+#include <StepBasic_SiUnitAndLengthUnit.hxx>

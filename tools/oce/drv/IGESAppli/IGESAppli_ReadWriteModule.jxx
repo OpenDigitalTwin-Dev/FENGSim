@@ -1,0 +1,6 @@
+#include <Standard_DomainError.hxx>
+#include <IGESData_IGESEntity.hxx>
+#include <IGESData_IGESReaderData.hxx>
+#include <IGESData_ParamReader.hxx>
+#include <IGESData_IGESWriter.hxx>
+#include <IGESAppli_ReadWriteModule.hxx>

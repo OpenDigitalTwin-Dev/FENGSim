@@ -1,0 +1,2 @@
+#include <PTopoDS_Shape1.hxx>
+#include <PCDMShape_Document.hxx>

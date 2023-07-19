@@ -1,0 +1,4 @@
+#include <TopoDS_Shape.hxx>
+#include <BRepOffset_MakeOffset.hxx>
+#include <TopTools_ListOfShape.hxx>
+#include <BRepOffsetAPI_MakeOffsetShape.hxx>

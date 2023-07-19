@@ -1,0 +1,5 @@
+#include <Geom_BSplineSurface.hxx>
+#include <Standard_OutOfRange.hxx>
+#include <Geom_Surface.hxx>
+#include <Adaptor3d_HSurface.hxx>
+#include <GeomConvert_ApproxSurface.hxx>

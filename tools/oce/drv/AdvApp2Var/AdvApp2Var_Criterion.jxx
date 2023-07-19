@@ -1,0 +1,3 @@
+#include <AdvApp2Var_Patch.hxx>
+#include <AdvApp2Var_Context.hxx>
+#include <AdvApp2Var_Criterion.hxx>

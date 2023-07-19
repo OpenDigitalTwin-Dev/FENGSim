@@ -1,0 +1,3 @@
+#include <TCollection_HAsciiString.hxx>
+#include <StepFEA_SymmetricTensor42d.hxx>
+#include <StepFEA_FeaShellMembraneStiffness.hxx>

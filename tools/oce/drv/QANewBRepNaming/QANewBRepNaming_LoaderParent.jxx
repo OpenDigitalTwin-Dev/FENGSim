@@ -1,0 +1,4 @@
+#include <TopoDS_Shape.hxx>
+#include <TNaming_Builder.hxx>
+#include <TopTools_DataMapOfShapeShape.hxx>
+#include <QANewBRepNaming_LoaderParent.hxx>

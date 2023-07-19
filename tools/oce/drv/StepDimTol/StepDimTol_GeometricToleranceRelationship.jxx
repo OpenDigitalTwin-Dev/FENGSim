@@ -1,0 +1,3 @@
+#include <TCollection_HAsciiString.hxx>
+#include <StepDimTol_GeometricTolerance.hxx>
+#include <StepDimTol_GeometricToleranceRelationship.hxx>

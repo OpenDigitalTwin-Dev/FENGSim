@@ -1,0 +1,24 @@
+vtk_module(vtkFiltersHyperTree
+  GROUPS
+    StandAlone
+  TEST_DEPENDS
+    vtkFiltersModeling
+    vtkIOXML
+    vtkIOLegacy
+    vtkImagingHybrid
+    vtkRenderingAnnotation
+    vtkTestingRendering
+    vtkInteractionStyle
+    vtkRendering${VTK_RENDERING_BACKEND}
+  KIT
+    vtkFilters
+  DEPENDS
+    vtkCommonDataModel
+    vtkCommonExecutionModel
+    vtkCommonMisc
+    vtkFiltersCore
+  PRIVATE_DEPENDS
+    vtkCommonCore
+    vtkCommonSystem
+    vtkFiltersGeneral
+  )

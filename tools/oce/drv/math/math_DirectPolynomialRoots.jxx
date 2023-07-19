@@ -1,0 +1,3 @@
+#include <Standard_RangeError.hxx>
+#include <StdFail_InfiniteSolutions.hxx>
+#include <math_DirectPolynomialRoots.hxx>

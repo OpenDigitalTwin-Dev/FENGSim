@@ -1,0 +1,4 @@
+#include <StepShape_HArray1OfValueQualifier.hxx>
+#include <TCollection_HAsciiString.hxx>
+#include <StepShape_ValueQualifier.hxx>
+#include <StepShape_QualifiedRepresentationItem.hxx>

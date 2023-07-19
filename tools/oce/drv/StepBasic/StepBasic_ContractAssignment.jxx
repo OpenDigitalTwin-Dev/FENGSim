@@ -1,0 +1,2 @@
+#include <StepBasic_Contract.hxx>
+#include <StepBasic_ContractAssignment.hxx>

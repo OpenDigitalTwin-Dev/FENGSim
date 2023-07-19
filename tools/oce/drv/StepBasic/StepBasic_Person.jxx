@@ -1,0 +1,3 @@
+#include <TCollection_HAsciiString.hxx>
+#include <Interface_HArray1OfHAsciiString.hxx>
+#include <StepBasic_Person.hxx>

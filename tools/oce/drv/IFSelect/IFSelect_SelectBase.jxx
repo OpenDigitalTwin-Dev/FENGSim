@@ -1,0 +1,2 @@
+#include <IFSelect_SelectionIterator.hxx>
+#include <IFSelect_SelectBase.hxx>

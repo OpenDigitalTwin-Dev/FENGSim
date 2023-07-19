@@ -1,0 +1,3 @@
+#include <ShapeBuild_ReShape.hxx>
+#include <TopoDS_Shape.hxx>
+#include <ShapeUpgrade_UnifySameDomain.hxx>
