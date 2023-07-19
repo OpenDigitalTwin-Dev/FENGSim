@@ -5,5 +5,4 @@ _ORIGINAL_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/../tools/qt/5.12.12/plugins
 export LD_LIBRARY_PATH
 
-#./../tools/qt/qtcreator/bin/qtcreator -user-library-path "$_ORIGINAL_LD_LIBRARY_PATH" &
 ./../tools/qt/qtcreator/bin/qtcreator
