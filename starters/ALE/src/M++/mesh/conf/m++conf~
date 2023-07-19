@@ -1,0 +1,10 @@
+#loadconf = solver/conf/poisson.conf;
+#loadconf = solver/conf/heat.conf;
+#loadconf = solver/conf/elasticity.conf;
+#loadconf = solver/conf/telasticity.conf;
+#loadconf = solver/conf/rezoning.conf;
+#loadconf = solver/conf/remapping.conf;
+#loadconf = solver/conf/elastoplasticity.conf;
+#loadconf = solver/conf/telastoplasticity.conf;
+loadconf = solver/conf/finitestrainale.conf;
+loadconf = solver/conf/contact.conf;

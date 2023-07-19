@@ -1,0 +1,72 @@
+// file: FiniteStrainALE.C
+// author: Jiping Xin
+// This module is to solve elastoplasticity problem
+// by using the Newton method and the return mapping algorithm.
+
+#include "m++.h"
+#include "FiniteStrainALEProblems.h"
+#include "ReturnMappingAlgo.h"
+#include "Rezoning.h"
+#include <fstream>
+
+class FiniteStrainALEAssemble : public FiniteStrainALEProblems {
+    int dim;
+    Discretization disc;
+	double Mu = 1;
+    double Lambda = 1;
+    Tensor4 I4;
+	int frame = 50;
+public:
+	FiniteStrainALEAssemble (int _dim);
+	void SetDirichlet (Vector& u, double t);
+	void SetH0 (Vector& x0);
+	void SetH1 (Vector& x1, double dt);
+	
+	// mesh export and import
+	double* coords = NULL;
+	int* ids = NULL;
+	bool* fixed = NULL;
+	int num_cells;
+	int num_vertices;
+	vector<Point> bnds;
+	vector<int> bndsid;
+	void MeshExport (const Vector& x1);
+	void MeshBndImport (Meshes& M2);
+	ALEMesh AM1;
+	ALEMesh AM2;
+	
+    // vertices value export and import
+	vector<Point> vertices;
+	vector<Point> disp0; 
+	vector<Point> disp1; 
+	void DispExport (const Vector& x0, const Vector& x1, const Vector& x3);
+	void DispImport (Vector& x0, Vector& x1);
+	vector<Point> TotalDisp;
+	vector<Point> RefDisp;  
+	void PhysicsExport (const Vector& _TDisp, const Vector& _RDisp);
+    void PhysicsImport (Vector& _TDisp, Vector& _RDisp);
+
+    // cells value export and import
+	vector<Point> cells;
+	vector<double> rho;
+	vector<Tensor> taus;
+	void PhysicsExport (const Vector& Tau);
+	void PhysicsImport (Vector& Tau);
+
+    // solver 
+	void Update (const Vector& _RDisp, Vector& _Tau, Vector& _CStress);
+	void TESolver (Meshes& M2, int num, double dT);
+	void Jacobi (Matrix& A);
+    double Residual (Vector& b, Vector& CS, double time=0);
+	
+	// ALE
+	void ALEPre (int i);
+	void ale_rezoning ();
+	void ale_remapping_cell(vector<double>& A, int n);
+	void ale_remapping_cell(vector<Point>& A, int n);
+	void ale_remapping_cell(vector<Tensor>& A, int n);
+	void ale_remapping_node(vector<Point>& A, int n);
+	
+};
+
+void FiniteStrainALEMain ();

@@ -1,0 +1,46 @@
+#include "m++.h"
+#include "LogarithmicStrain.h"
+
+void LSE (const Tensor&F, Tensor&S) {
+	double* in = new double[9];
+	for (int i=0; i<3; i++)
+		for (int j=0; j<3; j++)
+			in[i*3+j] = F[i][j];
+	double* out = LGStrain2 (in);
+	for (int i=0; i<3; i++) {
+		for (int j=0; j<3; j++) {
+			S[i][j] = out[i*3+j];
+		}
+	}
+}
+
+void StressStrainMain () {
+    string name = "UnitCube";
+    ReadConfig(Settings, "Mesh", name);
+    Meshes M(name.c_str());
+	int dim = M.dim();
+    Discretization disc(dim);
+    MatrixGraphs G(M, disc);
+    Vector x(G.fine());
+	x = 0;
+	x(Point(0.125,0),0) = -0.172643;
+	x(Point(0.125,0),1) = 0.0104572;
+	x(Point(0.125,0.125),0) = 0.351899;
+	x(Point(0.125,0.125),1) = 0.189362;
+	for (row r=x.rows(); r!=x.rows_end(); r++) {
+		mout << x(r,0) << " " << x(r,1) << endl;
+	}
+	mout << endl;
+	for (cell c = x.GetMesh().cells(); c != x.GetMesh().cells_end(); c++) {
+		VectorFieldElement E(disc, x, c);
+		for (int q = 0; q < E.nQ(); q++) {
+			Tensor DG = One + E.VectorGradient(q, x);
+			mout << DG << endl;
+			//Tensor TDG = Invert(DG);
+			Tensor E;
+			LSE(DG*transpose(DG), E);
+			//LSE(transpose(DG)*DG, E);
+			mout << E << endl;
+		}
+	}
+}

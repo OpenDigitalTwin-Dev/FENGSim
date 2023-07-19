@@ -1,0 +1,74 @@
+// file:   Main.C
+// author: Christian Wieners Jiping Xin
+
+#include "m++.h" 
+#include "mpi.h"
+#include "Poisson.h"
+#include "Heat.h"
+#include "Elasticity.h"
+#include "TElasticity.h"
+#include "Rezoning.h"
+#include "Remapping.h"
+#include "ElastoPlasticity.h"
+#include "TElastoPlasticity.h"
+
+#ifdef DCOMPLEX
+#error undef DCOMPLEX in src/Compiler.h
+#endif
+
+void PoissonMain ();
+void PoissonDDMMain ();
+void HeatMain ();
+void ElasticityMain ();
+void TElasticityMain ();
+void RezoningMain ();
+void RemappingMain ();
+void ElastoPlasticityMain ();
+void QuasiElastoPlasticityMain ();
+// dynamic explicit
+void TElastoPlasticityMain ();
+// mass lumping
+void TElastoPlasticity2Main ();
+// total lagrange
+void TElastoPlasticity3Main ();
+// updated lagrange
+void TElastoPlasticity4Main ();
+// Hencky hyperelasticity 
+void TElastoPlasticity5Main ();
+// Hencky elastoplasticity
+void TElastoPlasticity6Main ();
+// Jaumann stress rate
+void TElastoPlasticity7Main ();
+// test
+void StressStrainMain ();
+// finite strain
+void FiniteStrainALEMain ();
+// contact
+void ContactMain ();
+
+int main (int argv, char** argc) {
+	DPO dpo(&argv,&argc);
+	string Model = "test";
+	ReadConfig(Settings,"Model",Model);
+	if (Model == "Poisson") PoissonMain();
+	if (Model == "PoissonDDM") PoissonDDMMain();
+	if (Model == "Heat") HeatMain();
+	if (Model == "Elasticity") ElasticityMain();
+	if (Model == "TElasticity") TElasticityMain();
+	if (Model == "ElastoPlasticity") ElastoPlasticityMain ();
+	if (Model == "QuasiElastoPlasticity") QuasiElastoPlasticityMain ();
+	if (Model == "TElastoPlasticity") TElastoPlasticityMain ();
+	if (Model == "TElastoPlasticity2") TElastoPlasticity2Main ();
+	if (Model == "TElastoPlasticity3") TElastoPlasticity3Main ();
+	if (Model == "TElastoPlasticity4") TElastoPlasticity4Main ();
+	if (Model == "TElastoPlasticity5") TElastoPlasticity5Main ();
+	if (Model == "TElastoPlasticity6") TElastoPlasticity6Main ();
+	if (Model == "TElastoPlasticity7") TElastoPlasticity7Main ();
+	if (Model == "Rezoning") RezoningMain();
+	if (Model == "Remapping") RemappingMain();
+	if (Model == "StressStrain") StressStrainMain();
+	if (Model == "FiniteStrainALE") FiniteStrainALEMain();
+	if (Model == "Contact") ContactMain();
+
+    return 0;
+}

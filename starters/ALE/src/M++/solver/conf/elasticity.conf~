@@ -1,0 +1,68 @@
+#Model = Elasticity;
+Model = TElasticity
+
+#Model = IncrementalTriangulation;
+#Model = DelaunayTriangulation;
+#Model = ConstrainedDelaunayTriangulation;
+#Model = Mesher;
+#Model = AlphaShape;
+#Model = WeightedAlphaShape
+
+GeoPath = solver/;
+
+EXAMPLE = 2;
+#Mesh = quad;
+Mesh = example2;
+Mesh = cookmembrane;
+#Mesh = hypermesh;
+Mesh = fengsim_mesh;
+plevel = 0;
+level = 3;
+
+Discretization = linear;
+#Discretization = EqualOrderP1P1;
+Discretization = EqualOrderP1P1PPP;
+Overlap_Distribution = 0;
+Overlap = none;
+Distribution = Stripes;
+
+# cook membrane
+#Young = 1;
+#PoissonRatio = 0.33333333;
+
+# punctured disc
+#Young = 206900;
+#PoissonRatio = 0.29;
+
+#Young = 70;
+#PoissonRatio = 0.4999;
+
+Young = 2.5; # mu = 1 lambda = 1
+PoissonRatio = 0.25;
+
+Young = 2.999001; # mu =1 lambda = 1000
+PoissonRatio = 0.4995005;
+
+PPP = 0;
+
+Time = 0.5;
+TimeSteps = 100;
+
+NewtonSteps = 10;
+NewtonResidual = 1e-20;
+
+LinearSolver = CG;
+Preconditioner = Jacobi;
+Preconditioner = JacobiMixed;
+#Preconditioner = SSOR;
+LinearSolver = GMRES;
+#Preconditioner = GaussSeidel;
+Preconditioner = NoPreconditioner; # for example 2 level 7 the Jacobi preconditioner has some problems
+LinearSteps = 10000000;	
+LinearEpsilon = 1e-15;
+LinearReduction = 1e-15;
+
+QuadratureCell = 3;
+QuadratureBoundary = 2;
+
+precision = 5;

@@ -1,0 +1,52 @@
+#include "FASPInterface.h"
+extern "C"
+{
+#include "fasp.h"
+#include "fasp_functs.h"
+}
+
+void FASPInterface (const Matrix& A, const Vector& b, Vector& x) {
+    AMG_param amgparam; 
+    fasp_param_amg_init(&amgparam);
+    amgparam.maxit = 100;
+    amgparam.print_level=3;
+    // step 1
+    dCSRmat _A;
+    Scalar* a = new Scalar[A.Size()];
+    int* ind = new int[A.size()+1];
+    int* col = new int[A.Size()];
+    A.copy(a, ind, col);
+    _A.row = A.size();
+    _A.col = A.size();
+    _A.nnz = A.Size();
+    _A.IA = new INT[A.size()+1];
+    _A.JA = new INT[A.Size()];
+    _A.val = new REAL[A.Size()];
+    for (int i=0; i<A.size()+1; i++) {
+	_A.IA[i] = ind[i];
+    }
+    for (int i=0; i<A.Size(); i++) {
+	_A.JA[i] = col[i];
+	_A.val[i] = a[i];
+    }
+    // step 2
+    dvector _b, _x;
+    _b.row = b.size();
+    _x.row = x.size();
+    _b.val = new REAL[b.size()];
+    _x.val = new REAL[x.size()];
+    for (row r=b.rows(); r!=b.rows_end(); r++) {
+	_b.val[r.Id()] = b(r,0);
+	_x.val[r.Id()] = 0;
+    }
+    // step 3
+    //fasp_dvec_alloc(_A.row, &_x);
+    //fasp_dvec_set(_A.row, &_x, 0.0);
+    fasp_solver_amg(&_A, &_b, &_x, &amgparam);
+    for (row r=x.rows(); r!=x.rows_end(); r++) {
+	x(r,0) = _x.val[r.Id()];
+    }
+    fasp_dcsr_free(&_A);
+    fasp_dvec_free(&_b);
+    fasp_dvec_free(&_x);
+}

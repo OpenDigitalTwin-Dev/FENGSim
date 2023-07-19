@@ -1,0 +1,93 @@
+#include "Rezoning.h"
+#include <fstream>
+#include <iostream>
+
+void VTK2ALEMesh (std::string file_name, ALEMesh& AM) {		
+	std::ifstream is(file_name.c_str());
+	const int len = 256;
+	char L[len];
+	
+	for (int i=0; i<5; i++)
+		is.getline(L,len);
+	sscanf(L,"%*s %d %*s", &AM.num_vertices);
+	//std::cout << AM.num_vertices << std::endl;
+	
+	AM.coords = new double[AM.num_vertices*3];
+	for (int i=0; i<AM.num_vertices; i++) {
+		is.getline(L,len);
+		double t[3];
+		sscanf(L,"%lf %lf %lf", t, t+1, t+2);
+		AM.coords[i*3] = t[0];
+		AM.coords[i*3+1] = t[1];
+		AM.coords[i*3+2] = t[2];
+	}
+	
+	is.getline(L,len);
+	sscanf(L,"%*s %d %*s", &AM.num_cells);
+	//std::cout << "cells: " << AM.num_cells << std::endl;
+	
+	AM.ids = new int[AM.num_cells*4];
+	for (int i=0; i<AM.num_cells; i++) {
+		is.getline(L,len);
+		double t[5];
+		sscanf(L,"%lf %lf %lf %lf %lf", t, t+1, t+2, t+3, t+4);
+		AM.ids[i*4] = t[1];
+		AM.ids[i*4+1] = t[2];
+		AM.ids[i*4+2] = t[3];
+		AM.ids[i*4+3] = t[4];
+	}
+	
+	is.getline(L,len);
+	for (int i=0; i<AM.num_cells; i++) {
+		is.getline(L,len);
+	}
+	
+	is.getline(L,len);
+	is.getline(L,len);
+	is.getline(L,len);
+	
+	AM.fixed = new bool[AM.num_vertices];
+	for (int i=0; i<AM.num_vertices; i++) {
+		is.getline(L,len);
+		double t[1];
+		sscanf(L,"%lf", t);
+		AM.fixed[i] = t[0];
+	}
+	
+	is.close();
+	return;
+}
+
+void ALEMesh2VTK (const ALEMesh& AM, std::string file_name) {
+	std::ofstream out(file_name);
+    out << "# vtk DataFile Version 2.0" << std::endl;
+    out << "Structured Grid by Portage" << std::endl;
+    out << "ASCII" << std::endl;
+    out << "DATASET UNSTRUCTURED_GRID" << std::endl;
+    out << "POINTS " << AM.num_vertices << " float" << std::endl;
+    for (int i=0; i<AM.num_vertices; i++) {
+	    out << AM.coords[i*3+0] << " "
+			<< AM.coords[i*3+1] << " "
+			<< AM.coords[i*3+2] << std::endl; 
+	}
+    out << "CELLS " << AM.num_cells << " " << AM.num_cells*5  << std::endl;
+    for (int i=0; i<AM.num_cells; i++) {
+        out << "4 "
+			<< AM.ids[i*4+0] << " "
+			<< AM.ids[i*4+1] << " "
+			<< AM.ids[i*4+2] << " "
+			<< AM.ids[i*4+3] << " "
+			<< std::endl;
+    }
+    out << "CELL_TYPES " << AM.num_cells << std::endl;
+    for (int i=0; i<AM.num_cells; i++) {
+        out << "9" << std::endl;
+    }
+	out << "POINT_DATA " << AM.num_vertices << std::endl;
+	out << "SCALARS fixed int" << std::endl;
+	out << "LOOKUP_TABLE default" << std::endl;
+    for (int i=0; i<AM.num_vertices; i++) {
+        out << AM.fixed[i] << std::endl;
+    }
+    out.close();
+}

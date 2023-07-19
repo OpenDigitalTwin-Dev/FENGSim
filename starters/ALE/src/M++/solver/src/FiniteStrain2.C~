@@ -1,0 +1,164 @@
+#include "FiniteStrain.h"
+
+void FiniteStrainAssemble::MeshBndImport (Meshes& M2) {
+	for (int i=0; i<bnds.size(); i++) {
+		hash_map<Point,BoundaryFace,Hash>::iterator it = M2.fine().BoundaryFaces::find(bnds[i]);
+		it->second.SetPart(bndsid[i]);
+	}
+}
+
+void FiniteStrainAssemble::DispImport (Vector& x0, Vector& x1) {
+	for (int i=0; i<vertices.size(); i++) {
+		x0(vertices[i],0) = disp0[i][0];
+		x0(vertices[i],1) = disp0[i][1];
+		x1(vertices[i],0) = disp1[i][0];
+		x1(vertices[i],1) = disp1[i][1];
+	}
+}
+
+void FiniteStrainAssemble::PhysicsExport5 (const Vector& LStrain) {
+	LogStrain.clear();
+	for (cell c = LStrain.GetMesh().cells(); c != LStrain.GetMesh().cells_end(); ++c) {
+		VectorFieldElement E(disc, LStrain, c);
+		for (int q = 0; q < E.nQ(); q++) {
+			// incremental strain
+			Tensor s = Tensor(LStrain(E.QPoint(q),0),
+							  LStrain(E.QPoint(q),1),
+							  LStrain(E.QPoint(q),2),
+							  LStrain(E.QPoint(q),3),
+							  LStrain(E.QPoint(q),4),
+							  LStrain(E.QPoint(q),5),
+							  LStrain(E.QPoint(q),6),
+							  LStrain(E.QPoint(q),7),
+							  LStrain(E.QPoint(q),8));
+			LogStrain.push_back(s);
+		}
+	}
+}
+
+void FiniteStrainAssemble::PhysicsImport5 (Vector& LStrain) {
+	for (int i=0; i<cells.size(); i++) {
+		Point p(cells[i][0],cells[i][1]);
+		// incremental plastic strain
+		LStrain(p,0) = LogStrain[i][0][0];
+		LStrain(p,1) = LogStrain[i][0][1];
+		LStrain(p,2) = LogStrain[i][0][2];
+		LStrain(p,3) = LogStrain[i][1][0];
+		LStrain(p,4) = LogStrain[i][1][1];
+		LStrain(p,5) = LogStrain[i][1][2];
+		LStrain(p,6) = LogStrain[i][2][0];
+		LStrain(p,7) = LogStrain[i][2][1];
+		LStrain(p,8) = LogStrain[i][2][2];
+	}	
+}
+
+void FiniteStrainAssemble::PhysicsExport6 (const Vector& TDisp, const Vector& RDisp) {
+	TotalDisp.clear();
+	RefDisp.clear();
+	for (row r = TDisp.rows(); r != TDisp.rows_end(); ++r) {
+		Point p;
+		p[0] = TDisp(r,0);
+		p[1] = TDisp(r,1);
+		TotalDisp.push_back(p);
+		p[0] = RDisp(r,0);
+		p[1] = RDisp(r,1);
+		RefDisp.push_back(p);
+	}
+}
+
+void FiniteStrainAssemble::PhysicsImport6 (Vector& TDisp, Vector& RDisp) {
+	for (int i=0; i<vertices.size(); i++) {
+		Point p(vertices[i][0],vertices[i][1]);
+		TDisp(p,0) = TotalDisp[i][0];
+		TDisp(p,1) = TotalDisp[i][1];
+		RDisp(p,0) = RefDisp[i][0];
+		RDisp(p,1) = RefDisp[i][1];
+	}	
+}
+
+void FiniteStrainAssemble::MeshExport (const Vector& x1) {
+	if (coords!=NULL) {
+		delete coords;
+		coords = NULL;
+	}
+	if (ids!=NULL) {
+		delete ids;
+		ids = NULL;
+	}
+	if (fixed!=NULL) {
+		delete fixed;
+		fixed = NULL;
+	}
+	cells.clear();
+	// vertices
+	num_vertices = x1.GetMesh().Vertices::size();
+	coords = new double[num_vertices*3];
+	int dim = x1.GetMesh().dim();
+	for (row r=x1.rows(); r!=x1.rows_end(); r++) {
+		for (int i=0; i<dim; i++) {
+			coords[r.Id()*3+i] = Point(r()+x1(r))[i];
+		}
+		if (dim<3) coords[r.Id()*3+2] = 0;
+	}
+	// cells
+	num_cells = x1.GetMesh().Cells::size();
+	ids = new int[num_cells*4];
+	int i = 0;
+	for (cell c=x1.GetMesh().cells(); c!=x1.GetMesh().cells_end(); c++) {
+		for (int j=0; j<c.Corners(); j++) {
+			ids[i*4+j] = x1.Id(c.Corner(j));
+		}
+		i++;
+		Point p1 = c.Corner(0) + Point(x1(c.Corner(0),0),x1(c.Corner(0),1));
+		Point p2 = c.Corner(1) + Point(x1(c.Corner(1),0),x1(c.Corner(1),1));
+		Point p3 = c.Corner(2) + Point(x1(c.Corner(2),0),x1(c.Corner(2),1));
+		Point p4 = c.Corner(3) + Point(x1(c.Corner(3),0),x1(c.Corner(3),1));
+		Point p = 0.25 * (p1 + p2 + p3 + p4);
+		cells.push_back(Point(p[0],p[1]));
+	}
+	// fixed
+	fixed = new bool[num_vertices];
+	for (int i=0; i<num_vertices; i++) fixed[i] = 0;
+	for (bnd_face bf=x1.bnd_faces(); bf!=x1.bnd_faces_end(); bf++) {
+		Point left = x1.GetMesh().find_face(bf()).Left();
+		cell c = x1.GetMesh().find_cell(left);
+		for (int i=0; i<c.Faces(); i++) {
+			if (c.Face(i) == bf()) {
+				for (int j=0; j<c.FaceCorners(i); j++) {
+					fixed[x1.Id(c.FaceCorner(i,j))] = 1;
+				}
+			}
+		}
+	}
+	bnds.clear();
+	bndsid.clear();
+	for (bnd_face bf=x1.bnd_faces(); bf!=x1.bnd_faces_end(); bf++) {
+		Point left = x1.GetMesh().find_face(bf()).Left();
+		cell c = x1.GetMesh().find_cell(left);
+		for (int i=0; i<c.Faces(); i++) {
+			if (c.Face(i) == bf()) {
+				Point bnd;
+				for (int j=0; j<c.FaceCorners(i); j++) {
+					bnd += c.FaceCorner(i,j) + x1(c.FaceCorner(i,j));
+				}
+				bnd[2] = 0;
+				bnd *= 1.0 / c.FaceCorners(i);
+				bnds.push_back(bnd);
+				bndsid.push_back(bf.Part());
+			}
+		}
+	}
+}
+
+void FiniteStrainAssemble::DispExport (const Vector& x0, const Vector& x1, const Vector& x3) {
+	disp0.clear();
+	disp1.clear();
+	vertices.clear();
+	for (row r = x3.rows(); r != x3.rows_end(); r++) {
+		Point d = x3(r);
+		d += r();
+		vertices.push_back(Point(d[0],d[1]));
+		disp0.push_back(Point(x0(r)[0],x0(r)[1]));
+		disp1.push_back(Point(x1(r)[0],x1(r)[1]));
+	}
+}

@@ -1,0 +1,106 @@
+A1 = load('referencecell.txt');
+m = 0;
+for l=1:2
+    for i=1:8
+        for j=1:15
+            k = 1;
+            B1((i-1)*15+j+m,k) = A1(j,k) + (i-1)*0.125;
+            k = 2;
+            B1((i-1)*15+j+m,k) = A1(j,k);
+            k = 3;
+            B1((i-1)*15+j+m,k) = A1(j,k) + (l-1)*0.125;
+        end
+    end
+    m = 8*15*l;
+end
+m = 2*8*15;
+for l=1:2
+    for i=1:8
+        for j=1:15
+            k = 1;
+            B1((i-1)*15+j+m,k) = A1(j,k) + (i-1)*0.125;
+            k = 2;
+            B1((i-1)*15+j+m,k) = A1(j,k) + 0.875;
+            k = 3;
+            B1((i-1)*15+j+m,k) = A1(j,k) + (l-1)*0.125;
+        end
+    end
+    m = m + 8*15*l;
+end
+m = 4*8*15;
+for l=1:2
+    for i=1:8
+        for j=1:15
+            k = 1;
+            B1((i-1)*15+j+m,k) = A1(j,k);
+            k = 2;
+            B1((i-1)*15+j+m,k) = A1(j,k) + (i-1)*0.125;
+            k = 3;
+            B1((i-1)*15+j+m,k) = A1(j,k) + (l-1)*0.125 + 0.75;
+        end
+    end
+    m = m + 8*15*l;
+end
+m = 6*8*15;
+for l=1:2
+    for i=1:8
+        for j=1:15
+            k = 1;
+            B1((i-1)*15+j+m,k) = A1(j,k) + 0.875;
+            k = 2;
+            B1((i-1)*15+j+m,k) = A1(j,k) + (i-1)*0.125;
+            k = 3;
+            B1((i-1)*15+j+m,k) = A1(j,k) + (l-1)*0.125 + 0.75;
+        end
+    end
+    m = m + 8*15*l;
+end
+m = 8*8*15;
+for l=1:2
+    for i=1:8
+        for j=1:15
+            k = 1;
+            B1((i-1)*15+j+m,k) = A1(j,k) + 0.375;
+            k = 2;
+            B1((i-1)*15+j+m,k) = A1(j,k) + (i-1)*0.125;
+            k = 3;
+            B1((i-1)*15+j+m,k) = A1(j,k) + (l-1)*0.125;
+        end
+    end
+    m = m + 8*15*l;
+end
+m = 10*8*15;
+for l=1:2
+    for i=1:8
+        for j=1:15
+            k = 1;
+            B1((i-1)*15+j+m,k) = A1(j,k) + ;
+            k = 2;
+            B1((i-1)*15+j+m,k) = A1(j,k) + (i-1)*0.125;
+            k = 3;
+            B1((i-1)*15+j+m,k) = A1(j,k) + (l-1)*0.125;
+        end
+    end
+    m = m + 8*15*l;
+end
+A2 = load('referencecellnumber.txt');
+for i=1:64
+    for j=1:24
+        k = 1;
+        B2((i-1)*24+j,k) = A2(j,k);
+        k = 2;
+        B2((i-1)*24+j,k) = A2(j,k);
+        k = 3;
+        B2((i-1)*24+j,k) = A2(j,k)+15*(i-1);
+        k = 4;
+        B2((i-1)*24+j,k) = A2(j,k)+15*(i-1);
+        k = 5;
+        B2((i-1)*24+j,k) = A2(j,k)+15*(i-1);
+        k = 6;
+        B2((i-1)*24+j,k) = A2(j,k)+15*(i-1);
+    end
+end
+
+dlmwrite('BandGapSiliconCoordinate2.txt',B1,'delimiter',' ')
+dlmwrite('BandGapSiliconNumber2.txt',B2,'delimiter',' ')
+clear

@@ -1,0 +1,32 @@
+// file: ElastoPlasticity.C
+// author: Jiping Xin
+// This module is to solve elastoplasticity problem
+// by using the Newton method and the return mapping algorithm.
+
+#include "m++.h"
+#include "ElastoPlasticityProblems.h"
+#include "ReturnMappingAlgo.h"
+#include <fstream>
+
+class ElastoPlasticityAssemble : public ElastoPlasticityProblems {
+    int dim;
+    Discretization disc;
+	double Mu = 1;
+    double Lambda = 1;
+    Tensor4 I4;
+
+public:
+	ElastoPlasticityAssemble (int _dim);
+	void Dirichlet (Vector& u, double t);
+    void Update (const Tensor epsilon2, const Tensor epsilonp1, const double alpha1, const Tensor beta1,
+				 Tensor& epsilonp2, double& alpha2, Tensor& beta2, Tensor4& C2, Tensor& sigma2);
+    void Update (Vector& x, Vector& EpsilonP1, Vector& Alpha1, Vector& Beta1);
+	void Jacobi (Matrix& A, Vector& x0, Vector& EpsilonP1, Vector& Alpha1, Vector& Beta1);
+    double Residual (Vector& b, Vector& x0, Vector& EpsilonP1, Vector& Alpha1, Vector& Beta1,
+					 double time=0);
+    double L2Error (const Vector& x);
+    void AnalyticalSolution (const Vector& x, double c, double dim);
+};
+
+void ElastoPlasticityMain ();
+void QuasiElastoPlasticityMain ();

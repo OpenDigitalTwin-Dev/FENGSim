@@ -1,0 +1,808 @@
+#include "portage/search/search_simple.h"
+
+#include "wonton/support/wonton.h"
+#include "wonton/mesh/jali/jali_mesh_wrapper.h"
+#include "wonton/state/jali/jali_state_wrapper.h"
+
+#include "Mesh.hh"
+#include "MeshFactory.hh"
+#include "JaliStateVector.h"
+#include "JaliState.h"
+
+#include "Mesh_MSTK.hh"
+
+#include "remapping_export.h"
+
+void test_search () {
+	// *******************************************
+	// *******************************************	
+	std::cout << "simple mesh" << std::endl;
+	std::cout << "--------------------------------" << std::endl;
+    std::cout << "simple search" << std::endl;
+	
+	Wonton::Simple_Mesh sm{0, 0, 1, 1, 20, 20};
+	Wonton::Simple_Mesh tm{0, 0, 1, 1, 30, 30};
+	const Wonton::Simple_Mesh_Wrapper source_mesh_wrapper(sm);
+	const Wonton::Simple_Mesh_Wrapper target_mesh_wrapper(tm);
+	std::cout << sm.num_entities(Wonton::Entity_kind::NODE, Wonton::Entity_type::ALL) << std::endl;
+	std::cout << tm.num_entities(Wonton::Entity_kind::NODE, Wonton::Entity_type::ALL) << std::endl;
+	
+	Portage::SearchSimple<Wonton::Simple_Mesh_Wrapper,
+						  Wonton::Simple_Mesh_Wrapper>
+		search(source_mesh_wrapper, target_mesh_wrapper);
+	
+	for (int tc = 0; tc < 4; ++tc) {
+		std::vector<int> candidates;
+		search(tc, &candidates);
+		for (int i=0; i<candidates.size(); i++)
+			std::cout << candidates[i] << " ";
+		std::cout << std::endl;
+	}	
+	std::cout << std::endl;
+	
+	// *******************************************
+	// *******************************************	
+	std::cout << "kd tree search" << std::endl;
+	
+	Portage::SearchKDTree<2, Portage::Entity_kind::CELL,
+						  Wonton::Simple_Mesh_Wrapper,
+						  Wonton::Simple_Mesh_Wrapper>
+	  search_kd(source_mesh_wrapper, target_mesh_wrapper);
+	
+	std::vector<Wonton::Point<2>> cell_coord;
+	std::cout << "cell num: " << target_mesh_wrapper.num_entities(Wonton::Entity_kind::CELL, Wonton::Entity_type::ALL) << std::endl;
+	int cell_id = 100;
+	std::cout << "target cell: " << std::endl;
+    target_mesh_wrapper.cell_get_coordinates(cell_id, &cell_coord);
+	for (int i=0; i<cell_coord.size(); i++)
+		std::cout << cell_coord[i] << std::endl;
+	std::cout << std::endl;
+	std::vector<int> candidates = search_kd(cell_id);
+	std::cout << "source cell: " << std::endl;
+	for (int i=0; i<candidates.size(); i++) {
+	    source_mesh_wrapper.cell_get_coordinates(candidates[i], &cell_coord);
+		for (int j=0; j<cell_coord.size(); j++)
+			std::cout << cell_coord[j] << std::endl;
+		std::cout << std::endl;
+	}
+	
+	export_overlap(source_mesh_wrapper, candidates, target_mesh_wrapper, cell_id);
+	
+	// *******************************************
+	// *******************************************
+	std::cout << "jali mesh" << std::endl;
+	std::cout << "--------------------------------" << std::endl;
+	
+	std::shared_ptr<Jali::Mesh> jali_source_mesh;
+	std::shared_ptr<Jali::Mesh> jali_target_mesh;
+	Jali::MeshFactory mesh_factory(MPI_COMM_WORLD);
+	bool mstkOK = Jali::framework_available(Jali::MSTK);
+	std::cout << "mstk framework is available: " << mstkOK << std::endl;
+	mesh_factory.included_entities(Jali::Entity_kind::ALL_KIND);
+    jali_source_mesh = mesh_factory("source.exo");
+	jali_target_mesh = mesh_factory("target.exo");
+	const Wonton::Jali_Mesh_Wrapper jali_sourceMeshWrapper(*jali_source_mesh);
+	const Wonton::Jali_Mesh_Wrapper jali_targetMeshWrapper(*jali_target_mesh);
+	
+	Portage::SearchKDTree<2, Portage::Entity_kind::CELL,
+						  Wonton::Jali_Mesh_Wrapper,
+						  Wonton::Jali_Mesh_Wrapper>
+		jali_search_kd(jali_sourceMeshWrapper, jali_targetMeshWrapper);
+	
+	cell_id = 50;
+	candidates = jali_search_kd(cell_id);	
+	export_overlap(jali_sourceMeshWrapper, candidates, jali_targetMeshWrapper, cell_id);
+	
+}
+
+#include "portage/intersect/intersect_polys_r2d.h"
+#include "portage/intersect/intersect_r2d.h"
+
+void test_intersection () {
+	std::cout << "------------------------------------" << std::endl;
+	std::cout << "calculation in report" << std::endl;
+	std::cout << "------------------------------------" << std::endl;
+	std::vector<Wonton::Point<2>> source_poly;
+	Wonton::Point<2> a1(0,0);
+	Wonton::Point<2> a2(1,0);
+	Wonton::Point<2> a3(0,1);
+	source_poly.push_back(a1);
+	source_poly.push_back(a2);
+	source_poly.push_back(a3);
+	std::vector<Wonton::Point<2>> target_poly;
+	Wonton::Point<2> b1(0,0);
+	Wonton::Point<2> b2(1,0);
+	Wonton::Point<2> b3(1,1);
+	//Wonton::Point<2> b1(0.5,0);
+	//Wonton::Point<2> b2(1.5,0);
+	//Wonton::Point<2> b3(0.5,1);
+	target_poly.push_back(b1);
+	target_poly.push_back(b2);
+	target_poly.push_back(b3);
+
+	Portage::NumericTolerances_t num_tols = Portage::DEFAULT_NUMERIC_TOLERANCES<2>;
+	std::vector<double> results = Portage::intersect_polys_r2d(source_poly,target_poly,num_tols,true,Wonton::CoordSysType::Cartesian);
+
+	for (int i=0; i<results.size(); i++)
+		std::cout << results[i] << std::endl;
+
+	std::cout << "------------------------------------" << std::endl;
+	std::cout << "mesh intersection" << std::endl;
+	std::cout << "------------------------------------" << std::endl;
+	std::shared_ptr<Wonton::Simple_Mesh> sourcemesh = std::make_shared<Wonton::Simple_Mesh>(0, 0, 1, 1, 2, 2);
+	std::shared_ptr<Wonton::Simple_Mesh> targetmesh = std::make_shared<Wonton::Simple_Mesh>(0, 0, 1, 1, 3, 3);
+	const Wonton::Simple_Mesh_Wrapper sm(*sourcemesh);
+	const Wonton::Simple_Mesh_Wrapper tm(*targetmesh);
+	
+	std::shared_ptr<Wonton::Simple_State> sourcestate = std::make_shared<Wonton::Simple_State>(sourcemesh);
+	const Wonton::Simple_State_Wrapper ss(*sourcestate);
+
+	Portage::IntersectR2D<Portage::Entity_kind::CELL,
+						  Wonton::Simple_Mesh_Wrapper,
+						  Wonton::Simple_State_Wrapper,
+						  Wonton::Simple_Mesh_Wrapper>
+		isect{sm, ss, tm, num_tols};
+
+	// srccells is the cells from source mesh which are overlapped with target cell
+	// in isect(tarcell, srccells) tarcell and srccells should be given.
+	int tarcell = 4;
+	std::vector<int> srccells({0,1});
+	std::vector<Portage::Weights_t> srcwts = isect(tarcell, srccells);
+	std::cout << "tarcell: " << tarcell << std::endl;
+	std::vector<Wonton::Point<2>> cell_coord;
+	tm.cell_get_coordinates(tarcell, &cell_coord);
+	for (int i=0; i<cell_coord.size(); i++)
+		std::cout << cell_coord[i] << std::endl;
+	for (int i=0; i<srccells.size(); i++)
+		std::cout << "srccells: " << srccells[i] << std::endl;
+
+	std::cout << srcwts.size() << std::endl;
+	for (int i=0; i<srcwts.size(); i++) {
+		int srcent = srcwts[i].entityID;
+		std::vector<double> moments = srcwts[i].weights;
+		int const num_moments = moments.size();
+		for (int j = 0; j < num_moments; j++)
+			std::cout << "i, j, m: " << srcent << ", " << j << ", " << moments[j] << std::endl;
+	}
+}
+
+#include "wonton/state/simple/simple_state_wrapper.h"
+
+// ***************************************
+// ***************************************
+//
+// this is an example from test_interp_2nd_order.cc
+//
+// ***************************************
+// ***************************************
+
+void test_interpolation() {
+	std::shared_ptr<Wonton::Simple_Mesh> source_mesh =
+		std::make_shared<Wonton::Simple_Mesh>(0.0, 0.0, 1.0, 1.0, 2, 2);
+	std::shared_ptr<Wonton::Simple_Mesh> target_mesh =
+		std::make_shared<Wonton::Simple_Mesh>(0.0, 0.0, 1.0, 1.0, 3, 3);
+	
+	// Create mesh wrappers
+	
+	Wonton::Simple_Mesh_Wrapper sourceMeshWrapper(*source_mesh);
+	Wonton::Simple_Mesh_Wrapper targetMeshWrapper(*target_mesh);
+	
+	// count cells
+	
+	const int ncells_source =
+		sourceMeshWrapper.num_owned_cells();
+	const int ncells_target =
+		targetMeshWrapper.num_owned_cells();
+	
+	// Create a state object
+	
+	Wonton::Simple_State source_state(source_mesh);
+	
+	// Define a state vector with constant value and add it to the source state
+
+	std::cout << "source data: ";
+	std::vector<double> data(ncells_source);
+	for (int i=0; i<data.size(); i++) {
+		std::vector<Wonton::Point<2>> cell_coord;
+		sourceMeshWrapper.cell_get_coordinates(i, &cell_coord);
+		double x=0;
+		double y=0;
+		for (int j=0; j<cell_coord.size(); j++) {
+			x+=cell_coord[j][0];
+			y+=cell_coord[j][1];
+		}
+		data[i] =  (x+y)/4;
+		std::cout << data[i] << " ";
+	}
+	std::cout << std::endl;
+	source_state.add("cellvars", Wonton::Entity_kind::CELL, &(data[0]));
+	
+	// Create state wrapper
+	
+	Wonton::Simple_State_Wrapper sourceStateWrapper(source_state);
+	
+	// Gather the cell coordinates as Portage Points for source and target meshes
+	// for intersection. The outer vector is the cells, the inner vector is the
+	// points of the vertices of that cell.
+	
+	std::vector<std::vector<Wonton::Point<2>>>
+		source_cell_coords(ncells_source);
+	std::vector<std::vector<Wonton::Point<2>>>
+		target_cell_coords(ncells_target);
+	
+	// Actually get the Wonton::Points
+	
+	for (int c = 0; c < ncells_source; ++c)
+		sourceMeshWrapper.cell_get_coordinates(c, &(source_cell_coords[c]));
+	for (int c = 0; c < ncells_target; ++c)
+		targetMeshWrapper.cell_get_coordinates(c, &(target_cell_coords[c]));
+	
+	// Interpolate from source to target mesh using the independent calculation
+	// in simple_intersect_for_tests.h
+	
+	std::vector<double> outvals(ncells_target);
+	std::vector<std::vector<Portage::Weights_t>>
+		sources_and_weights(ncells_target);
+	
+	// Loop over target cells
+	std::cout << "ex1: ";
+	for (int c = 0; c < ncells_target; ++c) {
+		
+		std::vector<int> xcells;
+		std::vector<std::vector<double>> xwts;
+		
+		// Compute the moments
+		// xcells is the source cell indices that intersect
+		// xwts is the moments vector for each cell that intersects
+		
+		BOX_INTERSECT::intersection_moments<2>(target_cell_coords[c],
+											   source_cell_coords,
+											   &xcells, &xwts);
+		
+		// Pack the results into a vector of true Portage::Weights_t
+		
+		int const num_intersect_cells = xcells.size();
+		std::vector<Portage::Weights_t> wtsvec(num_intersect_cells);
+		for (int i = 0; i < num_intersect_cells; ++i) {
+			wtsvec[i].entityID = xcells[i];
+			wtsvec[i].weights = xwts[i];
+		}
+		
+		// Put the weights in final form
+		
+		sources_and_weights[c] = wtsvec;
+
+		double interpolation = 0;
+		double weight = 0;
+		for (int i = 0; i < xcells.size(); i++) {
+			interpolation += data[xcells[i]]*xwts[i][0];
+			weight += xwts[i][0];
+		}
+		std::cout << interpolation / weight << " ";
+
+		
+	}
+	std::cout << std::endl;
+	
+	// Now do it the Portage way
+	
+	// use default tolerances
+	Portage::NumericTolerances_t num_tols = Portage::DEFAULT_NUMERIC_TOLERANCES<2>;
+	
+	// Create Interpolation object
+	
+	Portage::Interpolate_1stOrder<2, Wonton::Entity_kind::CELL,
+								  Wonton::Simple_Mesh_Wrapper,
+								  Wonton::Simple_Mesh_Wrapper,
+								  Wonton::Simple_State_Wrapper,
+								  Wonton::Simple_State_Wrapper,
+								  double>
+		interpolator(sourceMeshWrapper, targetMeshWrapper, sourceStateWrapper,
+					 num_tols);
+	
+	interpolator.set_interpolation_variable("cellvars");
+	
+	std::cout << "ex2: ";
+	for (int id = 0; id < ncells_target; id++) {
+		//std::cout << "target cell: " << std::endl;
+		for (int i=0; i<target_cell_coords[id].size(); i++) {
+			//std::cout << target_cell_coords[id][i] << std::endl;
+		}
+		//std::cout << "interpolation for " << id << ": " << std::endl;
+		std::cout << interpolator(id, sources_and_weights[id]) << " ";
+		//std::cout << "source cells: " << std::endl;
+		for (int i=0; i<sources_and_weights[id].size(); i++) {
+			int id2 = sources_and_weights[id][i].entityID;
+			for (int j=0; j<source_cell_coords[id2].size(); j++) {
+				//std::cout << source_cell_coords[id2][j] << std::endl;
+			}
+			//std::cout << std::endl;
+		}
+	}
+	std::cout << std::endl;
+		
+	Wonton::transform(targetMeshWrapper.begin(Wonton::Entity_kind::CELL),
+					  targetMeshWrapper.end(Wonton::Entity_kind::CELL),
+					  sources_and_weights.begin(),
+					  outvals.begin(), interpolator);
+	std::cout << "ex3: ";
+	for (int i=0; i<outvals.size(); i++) {
+		std::cout << outvals[i] << " ";
+	}
+	std::cout << std::endl;
+
+
+
+
+
+
+
+
+}
+
+
+void test_interpolation2() {
+	  // Create simple meshes
+
+	/*std::shared_ptr<Wonton::Simple_Mesh> source_mesh =
+		std::make_shared<Wonton::Simple_Mesh>(0.0, 0.0, 1.0, 1.0, 4, 4);
+	std::shared_ptr<Wonton::Simple_Mesh> target_mesh =
+		std::make_shared<Wonton::Simple_Mesh>(0.0, 0.0, 1.0, 1.0, 5, 5);
+	
+	// Create mesh wrappers
+	
+	Wonton::Simple_Mesh_Wrapper sourceMeshWrapper(*source_mesh);
+	Wonton::Simple_Mesh_Wrapper targetMeshWrapper(*target_mesh);
+	*/
+
+
+
+	std::shared_ptr<Jali::Mesh> source_mesh;
+	std::shared_ptr<Jali::Mesh> target_mesh;
+	Jali::MeshFactory mesh_factory(MPI_COMM_WORLD);
+	bool mstkOK = Jali::framework_available(Jali::MSTK);
+	std::cout << "mstk framework is available: " << mstkOK << std::endl;
+	mesh_factory.included_entities(Jali::Entity_kind::ALL_KIND);
+    source_mesh = mesh_factory("source.exo");
+	target_mesh = mesh_factory("target.exo");
+	const Wonton::Jali_Mesh_Wrapper sourceMeshWrapper(*source_mesh);
+	const Wonton::Jali_Mesh_Wrapper targetMeshWrapper(*target_mesh);
+
+	
+
+
+	
+	// count nodes
+	
+	const int nnodes_source =
+		sourceMeshWrapper.num_owned_nodes();
+	const int nnodes_target =
+		targetMeshWrapper.num_owned_nodes();
+	
+	// Create a state object
+
+	//std::shared_ptr<Jali::State> source_state = Jali::State::create(source_mesh);
+	//std::shared_ptr<Jali::State> target_state = Jali::State::create(target_mesh);	
+	//Wonton::Jali_State_Wrapper sourceStateWrapper(*source_state);
+	//Wonton::Jali_State_Wrapper targetStateWrapper(*target_state);
+
+	
+	
+	// Define a state vector with constant value and add it to the source state
+	
+	//std::vector<double> data(nnodes_source);
+	//for (int i=0; i<data.size(); i++)
+	//data[i] = i;
+	//source_state->add("nodevars", Wonton::Entity_kind::NODE, &(data[0]));
+	
+	// Create state wrapper
+
+	//Wonton::Jali_State_Wrapper sourceStateWrapper(source_state);
+	
+	// Gather the cell coordinates as Portage Points for source and target meshes
+	// for intersection. The outer vector is the cells, the inner vector is the
+	// points of the vertices of that cell.
+
+	std::vector<std::vector<Wonton::Point<2>>>
+		source_dualcell_coords(nnodes_source);
+	std::vector<std::vector<Wonton::Point<2>>>
+		target_dualcell_coords(nnodes_target);
+	
+	// Actually get the Wonton::Points for the dual cells
+	
+	for (int n = 0; n < nnodes_source; ++n)
+		sourceMeshWrapper.dual_cell_get_coordinates(n, &source_dualcell_coords[n]);
+	for (int n = 0; n < nnodes_target; ++n)
+		targetMeshWrapper.dual_cell_get_coordinates(n, &target_dualcell_coords[n]);
+
+	for (int i=0; i<source_dualcell_coords.size();i++) {
+		std::cout << "cell " << i << std::endl;
+		for (int j=0; j<source_dualcell_coords[i].size();j++) {
+			std::cout << source_dualcell_coords[i][j] << std::endl;
+		}
+		std::cout << std::endl;
+	}
+	
+	
+	// Interpolate from source to target mesh using the independent calculation
+	// in simple_intersect_for_tests.h
+	/*
+	std::vector<double> outvals(nnodes_target);
+	std::vector<std::vector<Portage::Weights_t>>
+		sources_and_weights(nnodes_target);
+	
+	// Loop over target nodes
+	
+	for (int c = 0; c < nnodes_target; ++c) {
+		
+		std::vector<int> xcells;
+		std::vector<std::vector<double>> xwts;
+		
+		// Compute the moments
+		// xcells is the source cell indices that intersect
+		// xwts is the moments vector for each cell that intersects
+		
+		BOX_INTERSECT::intersection_moments<2>(target_dualcell_coords[c],
+											   source_dualcell_coords,
+											   &xcells, &xwts);
+
+		// Pack the results into a vector of true Portage::Weights_t
+		
+		int const num_intersect_cells = xcells.size();
+		std::vector<Portage::Weights_t> wtsvec(num_intersect_cells);
+		for (int i = 0; i < num_intersect_cells; ++i) {
+			wtsvec[i].entityID = xcells[i];
+			wtsvec[i].weights = xwts[i];
+		}
+		
+		// Put the weights in final form
+		
+		sources_and_weights[c] = wtsvec;
+	}
+	
+	// Now do it the Portage way
+	
+	// use default tolerances
+	Portage::NumericTolerances_t num_tols = Portage::DEFAULT_NUMERIC_TOLERANCES<2>;
+	
+	// Create Interpolation object
+	
+	Portage::Interpolate_1stOrder<2, Wonton::Entity_kind::NODE,
+								  Wonton::Simple_Mesh_Wrapper,
+								  Wonton::Simple_Mesh_Wrapper,
+								  Wonton::Simple_State_Wrapper,
+								  Wonton::Simple_State_Wrapper,
+								  double>
+		interpolator(sourceMeshWrapper, targetMeshWrapper, sourceStateWrapper,
+					 num_tols);
+	
+	interpolator.set_interpolation_variable("nodevars");
+	
+	
+	Wonton::transform(targetMeshWrapper.begin(Wonton::Entity_kind::NODE),
+					  targetMeshWrapper.end(Wonton::Entity_kind::NODE),
+					  sources_and_weights.begin(),
+					  outvals.begin(), interpolator);
+	
+	// Make sure we retrieved the correct value for each cell on the target
+	const double stdval = data[0];
+	for (int c = 0; c < nnodes_target; ++c) std::cout << outvals[c] << " ";
+	std::cout << std::endl;
+	*/
+}
+
+#include <iostream>
+#include <memory>
+
+#include "mpi.h"
+
+#include "wonton/support/wonton.h"
+#include "wonton/mesh/jali/jali_mesh_wrapper.h"
+#include "wonton/state/jali/jali_state_wrapper.h"
+
+#include "portage/driver/mmdriver.h"
+#include "portage/intersect/intersect_rNd.h"
+#include "portage/interpolate/interpolate_1st_order.h"
+
+#include "Mesh.hh"
+#include "MeshFactory.hh"
+
+double TOL = 1e-6;
+
+// ***************************************
+// ***************************************
+//
+// this is an example from test_driver.cc
+//
+// ***************************************
+// ***************************************
+
+double compute_constant_field(JaliGeometry::Point centroid) {
+	return 1.0;
+}
+
+double compute_linear_field(JaliGeometry::Point centroid) {
+	return centroid[0]+centroid[1];
+}
+double compute_linear_field_3d(JaliGeometry::Point centroid) {
+	return 100*(centroid[0]+centroid[1]+centroid[2]);
+}
+double compute_quadratic_field(JaliGeometry::Point centroid) {
+	return 3*3*centroid[0]*centroid[0]+40*40*centroid[1]*centroid[1];
+}
+double compute_quadratic_field_3d(JaliGeometry::Point centroid) {
+	return 3*3*centroid[0]*centroid[0] + 40*40*centroid[1]*centroid[1] +
+		500*500*centroid[2]*centroid[2];
+}
+
+void test_remapping_1() {
+	// step 1 mesh
+	if (!Jali::framework_available(Jali::MSTK)) return;
+	Jali::MeshFactory mesh_factory(MPI_COMM_WORLD);
+	mesh_factory.framework(Jali::MSTK);	
+	std::shared_ptr<Jali::Mesh> sourceMesh = mesh_factory(0.0, 0.0, 1.0, 1.0, 2, 2);
+	std::cout << "source cells num: " <<sourceMesh->num_cells<Jali::Entity_type::ALL>() << std::endl;
+	std::shared_ptr<Jali::Mesh> targetMesh = mesh_factory(0.0, 0.0, 1.0, 1.0, 3, 3);
+	std::cout << "target cells num: " << targetMesh->num_cells<Jali::Entity_type::ALL>() << std::endl;
+	Wonton::Jali_Mesh_Wrapper sourceMeshWrapper(*sourceMesh);
+	Wonton::Jali_Mesh_Wrapper targetMeshWrapper(*targetMesh);
+	
+	// step 2 state
+	std::shared_ptr<Jali::State> sourceState = Jali::State::create(sourceMesh);
+	std::shared_ptr<Jali::State> targetState = Jali::State::create(targetMesh);	
+	Wonton::Jali_State_Wrapper sourceStateWrapper(*sourceState);
+	Wonton::Jali_State_Wrapper targetStateWrapper(*targetState);
+	
+	const int nsrccells = sourceMeshWrapper.num_owned_cells() +
+		sourceMeshWrapper.num_ghost_cells();
+	std::vector<double> sourceData(nsrccells);
+	for (int c = 0; c < nsrccells; ++c) {
+		JaliGeometry::Point cen = sourceMesh->cell_centroid(c);
+		//sourceData[c] = compute_constant_field(cen);
+		sourceData[c] = compute_linear_field(cen);
+		//std::cout << sourceData[c] << " ";
+	}
+	//std::cout << std::endl;
+	sourceState->add("celldata", sourceMesh, Jali::Entity_kind::CELL,
+					 Jali::Entity_type::ALL, &(sourceData[0]));
+	
+	const int ntarcells = targetMeshWrapper.num_owned_cells();
+	std::vector<double> targetData(ntarcells, 0.0);  
+	targetState->add("celldata", targetMesh, Jali::Entity_kind::CELL,
+					 Jali::Entity_type::ALL, &(targetData[0]));
+	
+	// step 3 remapping
+	std::vector<std::string> remap_fields;
+	remap_fields.emplace_back("celldata");
+	
+	Portage::MMDriver<Portage::SearchKDTree,
+					  Portage::IntersectRnD,
+					  Portage::Interpolate_1stOrder, 2,
+					  Wonton::Jali_Mesh_Wrapper, Wonton::Jali_State_Wrapper,
+					  Wonton::Jali_Mesh_Wrapper, Wonton::Jali_State_Wrapper>
+		d(sourceMeshWrapper, sourceStateWrapper, targetMeshWrapper,
+		  targetStateWrapper);
+	d.set_remap_var_names(remap_fields);
+	d.run();
+	
+	// step 4 error estimate
+	Jali::UniStateVector<double, Jali::Mesh> cellvecout;
+	bool found = targetState->get<double, Jali::Mesh>("celldata", targetMesh,
+													  Jali::Entity_kind::CELL,
+													  Jali::Entity_type::ALL,
+													  &cellvecout);
+	std::cout << "if found interpolation value: " << found << std::endl;
+	double source_integral = 0.0;
+	for (int c = 0; c < nsrccells; ++c) {
+		double cellvol = sourceMesh->cell_volume(c);
+		source_integral += sourceData[c]*cellvol;
+	}
+	
+	double field_err2 = 0., target_integral = 0.;
+	for (int c = 0; c < ntarcells; ++c) {
+		JaliGeometry::Point ccen = targetMesh->cell_centroid(c);
+		//double error = compute_constant_field(ccen) - cellvecout[c];
+		double error = compute_linear_field(ccen) - cellvecout[c];
+		field_err2 += error*error;
+		
+		double cellvol = targetMesh->cell_volume(c);
+		target_integral += cellvecout[c]*cellvol;
+
+		std::cout << cellvecout[c] << " ";
+	}
+	std::cout << std::endl;
+	
+	std::cout << "error: " << field_err2
+			  << " source integral: " << source_integral
+			  << " target integral: " << target_integral << std::endl;
+}
+
+void test_remapping_cell(double* data1, double* data2, int n) {
+	// ************************************
+	// step 1 mesh
+	// ************************************
+	if (!Jali::framework_available(Jali::MSTK)) return;
+	Jali::MeshFactory mesh_factory(MPI_COMM_WORLD);
+	mesh_factory.included_entities(Jali::Entity_kind::ALL_KIND);	
+    std::shared_ptr<Jali::Mesh> sourceMesh = mesh_factory((std::string("./data/vtk/source_")+std::to_string(n)+std::string(".exo")).c_str());
+	std::shared_ptr<Jali::Mesh> targetMesh = mesh_factory((std::string("./data/vtk/target_")+std::to_string(n)+std::string(".exo")).c_str());
+	Wonton::Jali_Mesh_Wrapper sourceMeshWrapper(*sourceMesh);
+	Wonton::Jali_Mesh_Wrapper targetMeshWrapper(*targetMesh);
+	
+	// ************************************
+	// step 2 state
+	// ************************************
+	std::shared_ptr<Jali::State> sourceState = Jali::State::create(sourceMesh);
+	std::shared_ptr<Jali::State> targetState = Jali::State::create(targetMesh);	
+	Wonton::Jali_State_Wrapper sourceStateWrapper(*sourceState);
+	Wonton::Jali_State_Wrapper targetStateWrapper(*targetState);
+	
+	const int nsrccells = sourceMeshWrapper.num_owned_cells() +
+		sourceMeshWrapper.num_ghost_cells();
+	std::vector<double> sourceData(nsrccells);
+	for (int c = 0; c < nsrccells; ++c) {
+		JaliGeometry::Point cen = sourceMesh->cell_centroid(c);
+		//sourceData[c] = compute_constant_field(cen);
+		//sourceData[c] = compute_linear_field(cen);
+		sourceData[c] = data1[c];
+	}
+	sourceState->add("celldata", sourceMesh, Jali::Entity_kind::CELL,
+					 Jali::Entity_type::ALL, &(sourceData[0]));
+	
+	const int ntarcells = targetMeshWrapper.num_owned_cells();
+	std::vector<double> targetData(ntarcells, 0.0);  
+	targetState->add("celldata", targetMesh, Jali::Entity_kind::CELL,
+					 Jali::Entity_type::ALL, &(targetData[0]));
+	
+	// ************************************
+	// step 3 remapping
+	// ************************************
+	std::vector<std::string> remap_fields;
+	remap_fields.emplace_back("celldata");
+	
+	Portage::MMDriver<Portage::SearchKDTree,
+					  Portage::IntersectRnD,
+					  Portage::Interpolate_1stOrder, 2,
+					  //Portage::Interpolate_2ndOrder, 2,
+					  Wonton::Jali_Mesh_Wrapper, Wonton::Jali_State_Wrapper,
+					  Wonton::Jali_Mesh_Wrapper, Wonton::Jali_State_Wrapper>
+		d(sourceMeshWrapper, sourceStateWrapper, targetMeshWrapper,
+		  targetStateWrapper);
+	d.set_remap_var_names(remap_fields);
+	d.run();
+	
+	// ************************************
+	// step 4 error estimate
+	// ************************************
+	Jali::UniStateVector<double, Jali::Mesh> cellvecout;
+	bool found = targetState->get<double, Jali::Mesh>("celldata", targetMesh,
+													  Jali::Entity_kind::CELL,
+													  Jali::Entity_type::ALL,
+													  &cellvecout);
+	std::cout << "if found interpolation value: " << found << std::endl;
+	double source_integral = 0.0;
+	for (int c = 0; c < nsrccells; ++c) {
+		double cellvol = sourceMesh->cell_volume(c);
+		source_integral += sourceData[c]*cellvol;
+	}
+	
+	double field_err2 = 0., target_integral = 0.;
+	for (int c = 0; c < ntarcells; ++c) {
+		JaliGeometry::Point ccen = targetMesh->cell_centroid(c);
+		//double error = compute_constant_field(ccen) - cellvecout[c];
+		double error = compute_linear_field(ccen) - cellvecout[c];
+		field_err2 += error*error;
+		
+		double cellvol = targetMesh->cell_volume(c);
+		target_integral += cellvecout[c]*cellvol;
+		data2[c] = cellvecout[c];
+		//std::cout << cellvecout[c] << " ";
+	}
+	//std::cout << std::endl;
+	
+	std::cout << "cell interpolation error: " << field_err2
+			  << " source integral: " << source_integral
+			  << " target integral: " << target_integral << std::endl;
+
+	// ************************************
+	// export data to vtk
+	// ************************************
+	export_vtk(cellvecout, targetMeshWrapper);
+}
+
+void test_remapping_node(double* data1, double* data2, int n=0) {
+	// ************************************
+	// step 1 mesh
+	// ************************************
+	if (!Jali::framework_available(Jali::MSTK)) return;
+	Jali::MeshFactory mesh_factory(MPI_COMM_WORLD);
+	mesh_factory.included_entities(Jali::Entity_kind::ALL_KIND);	
+    std::shared_ptr<Jali::Mesh> sourceMesh = mesh_factory((std::string("./data/vtk/source_")+std::to_string(n)+std::string(".exo")).c_str());
+	std::shared_ptr<Jali::Mesh> targetMesh = mesh_factory((std::string("./data/vtk/target_")+std::to_string(n)+std::string(".exo")).c_str());
+	Wonton::Jali_Mesh_Wrapper sourceMeshWrapper(*sourceMesh);
+	Wonton::Jali_Mesh_Wrapper targetMeshWrapper(*targetMesh);
+	
+	// ************************************
+	// step 2 state
+	// ************************************
+	std::shared_ptr<Jali::State> sourceState = Jali::State::create(sourceMesh);
+	std::shared_ptr<Jali::State> targetState = Jali::State::create(targetMesh);	
+	Wonton::Jali_State_Wrapper sourceStateWrapper(*sourceState);
+	Wonton::Jali_State_Wrapper targetStateWrapper(*targetState);
+	
+	const int nsrcnodes = sourceMeshWrapper.num_owned_nodes() +
+		sourceMeshWrapper.num_ghost_nodes();
+	std::vector<double> sourceData(nsrcnodes);
+	for (int c = 0; c < nsrcnodes; ++c) {
+		sourceData[c] = data1[c];
+	}
+	sourceState->add("nodevars", sourceMesh, Jali::Entity_kind::NODE,
+					 Jali::Entity_type::ALL, &(sourceData[0]));
+	
+	const int ntarnodes = targetMeshWrapper.num_owned_nodes();
+	std::vector<double> targetData(ntarnodes, 0.0);  
+	targetState->add("nodevars", targetMesh, Jali::Entity_kind::NODE,
+					 Jali::Entity_type::ALL, &(targetData[0]));
+
+	//std::cout << "source nodes: " << nsrcnodes << " target nodes: " << ntarnodes << std::endl;
+	
+	
+	// ************************************
+	// step 3 remapping
+	// ************************************
+	std::vector<std::string> remap_fields;
+	remap_fields.emplace_back("nodevars");
+	
+	Portage::MMDriver<Portage::SearchKDTree,
+					  Portage::IntersectRnD,
+					  Portage::Interpolate_1stOrder, 2,
+					  //Portage::Interpolate_2ndOrder, 2,
+					  Wonton::Jali_Mesh_Wrapper, Wonton::Jali_State_Wrapper,
+					  Wonton::Jali_Mesh_Wrapper, Wonton::Jali_State_Wrapper>
+		d(sourceMeshWrapper, sourceStateWrapper, targetMeshWrapper,
+		  targetStateWrapper);
+	d.set_remap_var_names(remap_fields);
+	d.run();
+	
+	// ************************************
+	// step 4 error estimate
+	// ************************************
+	Jali::UniStateVector<double, Jali::Mesh> nodevecout;
+	bool found = targetState->get<double, Jali::Mesh>("nodevars", targetMesh,
+													  Jali::Entity_kind::NODE,
+													  Jali::Entity_type::ALL,
+													  &nodevecout);
+	std::cout << "if found interpolation value: " << found << std::endl;
+	
+	double error = 0;
+	for (int n = 0; n < ntarnodes; ++n) {
+		Wonton::Point<2> coord;
+		targetMeshWrapper.node_get_coordinates(n, &coord);
+		double t = abs(coord[0]+coord[1]-nodevecout[n]);
+		error += t;
+		data2[n] = nodevecout[n];
+		//std::cout << coord[0]+coord[1] << " : " << nodevecout[n] << std::endl;
+	}
+	std::cout << "node interpolation error: " << error/ntarnodes << std::endl;
+}
+
+#include "Rezoning.h"
+
+void RemappingMain () {
+	std::cout << ">>>>>>>>>>>>>>>  rezoning  >>>>>>>>>>>>>>>" << std::endl;
+  	ALEMesh M1;
+	ALEMesh M2;
+	VTK2ALEMesh("./solver/conf/geo/remapping.vtk",M1);
+	VTK2ALEMesh("./solver/conf/geo/remapping.vtk",M2);
+	ALEMesh2Exo(M1, "./data/vtk/source_0.exo");
+	ALEMesh2Exo(M2, "./data/vtk/target_0.exo"); 
+	//Rezoning(M1,M2);	
+	//test_search();
+	//test_intersection();
+	//test_interpolation();
+	//test_interpolation2();
+	std::cout << ">>>>>>>>>>>>>>>  remapping >>>>>>>>>>>>>>>" << std::endl;
+	double* data1 = new double[100];
+	double* data2 = new double[100];
+	test_remapping_cell(data1, data2, 0);
+}

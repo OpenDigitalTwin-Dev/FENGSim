@@ -1,0 +1,31 @@
+Model = Poisson;
+
+GeoPath = solver/;
+
+EXAMPLE = 2;
+Mesh = example2;
+plevel = 2;
+level = 5;
+
+Discretization = linear;
+Overlap_Distribution = 0;
+Overlap = none;
+Distribution = Stripes;
+
+NewtonSteps = 10;
+NewtonResidual = 1e-20;
+
+#LinearSolver = CG;
+#LinearSolver = SuperLU;   # by using sparsematrix and solver
+LinearSolver = FASP;   # by using sparsematrix and solver
+Preconditioner = Jacobi;
+LinearSteps = 50000;	
+LinearEpsilon = 1e-15;
+LinearReduction = 1e-15;
+
+
+
+QuadratureCell = 3;
+QuadratureBoundary = 2;
+
+precision = 5;
