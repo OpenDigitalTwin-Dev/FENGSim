@@ -1,6 +1,6 @@
 # 关于OPEN DIGITAL TWIN项目
 
-Please just do ./install.sh in cli path. Thanks. 
+Please run ./install.sh in cli directory. After the installation, you could run ./qtcreator.sh to open QtCreator and open FENGSim.pro in starters/FENGSim directory to run the CAX software.  
 
 
 数字孪生要建立贯穿产品全生命周期的闭合优化回路，目的是为了提高工业机理研发水平和效率，CAX软件是数字孪生的核心技术，这样就可以实现星际跳跃了。
