@@ -1,0 +1,3 @@
+#!/bin/sh
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/../tools/qt/icu/usr/local/lib
+./../tools/qt/qtcreator/bin/qtcreator &

@@ -1,0 +1,11 @@
+#!/bin/sh
+
+rm -rf $PWD/../tools/vtk/build
+rm -rf $PWD/../tools/vtk_install
+rm -rf $PWD/../tools/oce/build
+rm -rf $PWD/../tools/oce_install
+rm -rf $PWD/../tools/gmsh/build
+rm -rf $PWD/../tools/gmsh_install
+rm -rf $PWD/../starters/build*
+rm -rf $PWD/../starters/FENGSim/*.pro.user
+rm -rf $PWD/../starters/ALE/build
