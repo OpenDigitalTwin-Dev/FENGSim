@@ -1,0 +1,47 @@
+cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+
+project(registration_api)
+
+set(GMSH_INCLUDE_DIRS "/usr/local/include/gmsh/")
+message(${GMSH_INCLUDE_DIRS})
+set(GMSH_LIBRARY_DIRS "/usr/local/lib")
+message(${GMSH_LIBRARY_DIRS})
+set(GMSH_LIBRARIES "/usr/local/lib/libGmsh.so")
+message(${GMSH_LIBRARIES})
+
+include_directories(${GMSH_INCLUDE_DIRS})
+link_directories(${GMSH_LIBRARY_DIRS})
+
+set(OCE_INCLUDE_DIRS "/usr/local/include/oce/")
+message(${OCE_INCLUDE_DIRS})
+set(OCE_LIBRARY_DIRS "/usr/local/lib")
+message(${OCE_LIBRARY_DIRS})
+file(OCE_LIBRARIES libTK*.so)
+message(${OCE_LIBRARIES})
+
+add_executable (test main.cpp)
+target_link_libraries (test ${GMSH_LIBRARIES})
+
+
+
+# this is cmake&swig for c++&python. 
+FIND_PACKAGE(SWIG REQUIRED)
+if(SWIG_FOUND)
+  message("SWIG FOUND")
+  INCLUDE(${SWIG_USE_FILE})
+  FIND_PACKAGE(PythonLibs 3.8)
+  if (PythonLibs_FOUND)
+    message("PythonLibs FOUND")
+    INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
+    INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+    message(${PYTHON_INCLUDE_PATH})
+    message(${CMAKE_CURRENT_SOURCE_DIR})
+  endif()
+  SET(CMAKE_SWIG_FLAGS "")
+#  SET_SOURCE_FILES_PROPERTIES(odt_pcl.i PROPERTIES CPLUSPLUS ON)
+#  SWIG_ADD_LIBRARY(odt_pcl LANGUAGE python SOURCES odt_pcl.i test_uniform_sampling.cpp test_kdtree_search.cpp odt_pcl_tools.cpp)
+#  SWIG_LINK_LIBRARIES(odt_pcl ${PCL_LIBRARIES})
+endif()
+
+
+

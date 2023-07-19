@@ -1,0 +1,18 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/jiping/FENGSim/FENGSim/Gmsh/main.cpp
+stdlib.h
+-
+iostream
+-
+Gmsh.h
+/home/jiping/FENGSim/FENGSim/Gmsh/Gmsh.h
+GModel.h
+/home/jiping/FENGSim/FENGSim/Gmsh/GModel.h
+

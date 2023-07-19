@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/machining_wind">
+        <file>figure/machining_wind/uncheck.png</file>
+        <file>figure/machining_wind/check.png</file>
+        <file>figure/machining_wind/down_arrow.png</file>
+        <file>figure/machining_wind/up_arrow.png</file>
+    </qresource>
+</RCC>

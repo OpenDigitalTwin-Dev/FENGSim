@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/amwind">
+        <file>figure/am_wind/open.png</file>
+        <file>figure/am_wind/hide.png</file>
+        <file>figure/am_wind/ok.png</file>
+        <file>figure/am_wind/A.png</file>
+        <file>figure/am_wind/B.png</file>
+        <file>figure/am_wind/animation.png</file>
+    </qresource>
+</RCC>

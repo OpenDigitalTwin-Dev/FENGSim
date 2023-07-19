@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>figure/transport_wind/cad.png</file>
+        <file>figure/transport_wind/data.png</file>
+        <file>figure/transport_wind/detector.png</file>
+        <file>figure/transport_wind/nuclear.png</file>
+        <file>figure/transport_wind/save.png</file>
+        <file>figure/transport_wind/source.png</file>
+        <file>figure/transport_wind/select.png</file>
+    </qresource>
+</RCC>

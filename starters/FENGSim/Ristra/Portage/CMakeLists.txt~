@@ -1,0 +1,43 @@
+cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+
+project(portage_api)
+
+find_package(portage)
+if(portage_FOUND)
+  message("PORTAGE FOUND")
+  message(${PORTAGE_LIBRARIES})
+  include_directories(${PORTAGE_INCLUDE_DIRS})
+  link_directories(${PORTAGE_LIBRARY_DIRS})
+  add_definitions(${PORTAGE_DEFINITIONS})
+endif()
+
+find_package(Jali)
+if(Jali_FOUND)
+  message("Jali FOUND")
+  message(${Jali_LIBRARIES})
+  include_directories(${Jali_INCLUDE_DIRS})
+  link_directories(${Jali_LIBRARY_DIRS})
+  add_definitions(${Jali_DEFINITIONS})
+endif()
+
+find_package(MPI)
+if(MPI_FOUND)
+  message("MPI FOUND")
+  message(${MPI_LIBRARIES})
+  include_directories(${MPI_INCLUDE_DIRS})
+  link_directories(${MPI_LIBRARY_DIRS})
+  add_definitions(${MPI_DEFINITIONS})
+endif()
+
+find_package(wonton)
+if(wonton_FOUND)
+  message("wonton FOUND")
+  message(${WONTON_LIBRARIES})
+  include_directories(${WONTON_INCLUDE_DIRS})
+  link_directories(${WONTON_LIBRARY_DIRS})
+  add_definitions(${WONTON_DEFINITIONS})
+endif()
+
+add_executable (test main.cc test.cc test_example_1.cc test_example_2.cc test_search.cc test_intersection.cc)
+target_link_libraries (test ${PORTAGE_LIBRARIES} ${Jali_LIBRARIES} ${MPI_LIBRARIES} ${WONTON_LIBRARIES})
+

@@ -1,0 +1,32 @@
+<RCC>
+    <qresource prefix="/new/measure">
+        <file>figure/measure_wind/measure.png</file>
+        <file>figure/measure_wind/face.png</file>
+        <file>figure/measure_wind/line.png</file>
+        <file>figure/measure_wind/straight.png</file>
+        <file>figure/measure_wind/flatness.png</file>
+        <file>figure/measure_wind/circularity.png</file>
+        <file>figure/measure_wind/lineprofile.png</file>
+        <file>figure/measure_wind/surfaceprofile.png</file>
+        <file>figure/measure_wind/cylindricity.png</file>
+        <file>figure/measure_wind/others.png</file>
+        <file>figure/measure_wind/open.png</file>
+        <file>figure/measure_wind/fit.png</file>
+        <file>figure/measure_wind/clear.png</file>
+        <file>figure/measure_wind/hide.png</file>
+        <file>figure/measure_wind/xxx.png</file>
+        <file>figure/measure_wind/xx.png</file>
+        <file>figure/measure_wind/yy.png</file>
+        <file>figure/measure_wind/zzz.png</file>
+        <file>figure/measure_wind/zz.png</file>
+        <file>figure/measure_wind/yyy.png</file>
+        <file>figure/measure_wind/dt_virtual.png</file>
+        <file>figure/measure_wind/cad.png</file>
+        <file>figure/measure_wind/cloudpoint.png</file>
+        <file>figure/measure_wind/linetosurface.png</file>
+        <file>figure/measure_wind/delete.png</file>
+        <file>figure/cad_wind/noview.png</file>
+        <file>figure/measure_wind/novision.png</file>
+        <file>figure/measure_wind/vision.png</file>
+    </qresource>
+</RCC>
