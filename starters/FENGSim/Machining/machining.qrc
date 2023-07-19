@@ -1,9 +1,0 @@
-<RCC>
-    <qresource prefix="/new/prefix1"/>
-    <qresource prefix="/figure"/>
-    <qresource prefix="/">
-        <file>../figure/machining/machining.png</file>
-        <file>../figure/machining/1.png</file>
-        <file>../figure/machining/2.png</file>
-    </qresource>
-</RCC>

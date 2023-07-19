@@ -1,3 +1,0 @@
-/home/jiping/OpenDT/FENGSim/FENGSim/Ristra/Portage/build/CMakeFiles/rebuild_cache.dir
-/home/jiping/OpenDT/FENGSim/FENGSim/Ristra/Portage/build/CMakeFiles/edit_cache.dir
-/home/jiping/OpenDT/FENGSim/FENGSim/Ristra/Portage/build/CMakeFiles/test.dir
