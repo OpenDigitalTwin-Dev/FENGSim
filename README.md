@@ -1,4 +1,4 @@
-# ABOUT OPEN DIGITAL TWIN
+# About OpenDigitalTwin
 
 To install:
 1. Navigate to the cli directory in your terminal/command prompt.
