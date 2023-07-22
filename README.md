@@ -1,6 +1,14 @@
 # ABOUT OPEN DIGITAL TWIN
 
-Please run ./install.sh in cli directory. After the installation, you could run ./qtcreator.sh to open QtCreator and open FENGSim.pro in starters/FENGSim directory to compile the prepost module.  
+To install:
+1. Navigate to the cli directory in your terminal/command prompt.
+2. Run the install script by entering:
+    ./install.sh
+3. Once installation is complete, launch QtCreator with:
+    ./qtcreator.sh 
+4. In QtCreator, open the FENGSim.pro project file located at:
+    starters/FENGSim/FENGSim.pro
+5. Build the prepost module project in QtCreator.
 
 The product life cycle includes design, manufacturing, operation, and maintenance. In the past, optimization of products focused on the design phase, often overlooking issues that arose in manufacturing, operation, and maintenance. This is where digital twins can help - by extending optimization across the entire product lifecycle. With digital twins, problems can be identified and solved not just in design, but even after production during real-world use. This allows products to be greatly improved through rapid iteration. Digital twins may thus accelerate innovations like manned missions to Mars. 
 
