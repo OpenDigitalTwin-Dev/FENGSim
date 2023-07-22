@@ -37,4 +37,4 @@ Based on this SDK, we are developing open digital twin projects for key applicat
 
 # Incubator
 
-We have connections to many incubators. If you want to get some financial support, please contact us. 
+We have connections with many incubators. If you would like to obtain financial support, please contact us.
