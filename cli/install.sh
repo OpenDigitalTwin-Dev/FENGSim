@@ -31,6 +31,12 @@ sudo apt -y install libglu1-mesa-dev
 sudo apt -y install freeglut3-dev
 sudo apt -y install libxcb-xinput-dev
 sudo apt -y install g++
+
+# cgal
+sudo apt -y install libgmp-dev
+sudo apt -y install libmpfr-dev
+sudo apt -y install libboost-all-dev
+
 sed -i 11c"<value type=\"QString\" key=\"QMakePath\">"$PWD/../tools/qt/5.12.12/bin/qmake"</value>" $PWD/../tools/qt/qtcreator/share/qtcreator/QtProject/qtcreator/qtversion.xml
 
 # vtk install
