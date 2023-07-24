@@ -54,7 +54,20 @@ cmake .. -DOCC_INC=$PWD/../../oce_install/include/oce -DCMAKE_INSTALL_PREFIX=$PW
 make -j4
 make install
 
+cd ../../cgal
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../cgal_install -DWITH_CGAL_Qt5=OFF
+make -j4
+make install
+
 cd ../../../starters/ALE
+mkdir build
+cd build
+cmake ..
+make
+
+cd ../../../starters/CGAL
 mkdir build
 cd build
 cmake ..
