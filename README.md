@@ -25,13 +25,15 @@ System solutions for complex products, algorithms, and applications !
 ![RUNOOB 图标](images/4.png)
 ![RUNOOB 图标](images/3.png)
 
-# Composited Materials
+# Composite Materials
 
 ![RUNOOB 图标](images/5.png)
 ![RUNOOB 图标](images/6.png)
 ![RUNOOB 图标](images/7.png)
 
-# Measurement
+# Robotics
+
+# Metrology
 
 ![RUNOOB 图标](images/8.png)
 ![RUNOOB 图标](images/9.png)
