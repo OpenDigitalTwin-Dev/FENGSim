@@ -12,6 +12,6 @@ endif()
 
 aux_source_directory(src cgal_DIR_SRCS)
 add_executable (cgal_test ${cgal_DIR_SRCS})
-target_link_libraries (cgal_test /usr/lib/x86_64-linux-gnu/libgmp.so)
+target_link_libraries (cgal_test /usr/lib/x86_64-linux-gnu/libgmp.so /usr/lib/x86_64-linux-gnu/libmpfr.so)
 set_target_properties(cgal_test PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
