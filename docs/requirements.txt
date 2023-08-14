@@ -1,3 +1,5 @@
 breathe
 exhale
 six
+sphinx-math-dollar
+sphinxcontrib-bibtex
