@@ -1,4 +1,4 @@
-# About OpenDigitalTwin
+# [About OpenDigitalTwin](opendigitaltwin.readthedocs.io)
 
 To install:
 1. Navigate to the cli directory in your terminal/command prompt.
