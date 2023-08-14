@@ -23,7 +23,7 @@ sys.path.append(os.path.abspath('exts'))
 
 # Add any Sphinx extension module names here, as strings. They can be extensions
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.imgmath', "math_dollar", 'sphinx.ext.todo', 'breathe', 'exhale', 'sphinxcontrib.bibtex']
+extensions = ['sphinx.ext.imgmath', 'sphinx.ext.todo', 'breathe', 'exhale', 'sphinxcontrib.bibtex']
 
 latex_preamble = r"""
 \usepackage{setspace}
