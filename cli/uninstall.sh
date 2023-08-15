@@ -20,3 +20,4 @@ rm -rf $PWD/../starters/build*
 rm -rf $PWD/../starters/FENGSim/*.pro.user
 rm -rf $PWD/../starters/ALE/build
 rm -rf $PWD/../starters/CGAL/build
+rm -rf $PWD/../starters/CGAL/data/output

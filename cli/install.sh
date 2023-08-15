@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# basic
 sudo apt update
 sudo apt -y install cmake
 sudo apt -y install libfreetype-dev
@@ -67,6 +68,7 @@ cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../cgal_install -DWITH_CGAL_Qt5=OFF
 make -j4
 make install
 
+# build starters
 cd ../../../starters/ALE
 mkdir build
 cd build
@@ -74,6 +76,7 @@ cmake ..
 make
 
 cd ../../../starters/CGAL
+mkdir data/output
 mkdir build
 cd build
 cmake ..
