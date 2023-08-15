@@ -1,4 +1,4 @@
-# [OpenDigitalTwin](https://opendigitaltwin.readthedocs.io)
+# [OpenDigitalTwin](https://ocp-docs.readthedocs.io)
 
 To install:
 1. Navigate to the cli directory in your terminal/command prompt.
