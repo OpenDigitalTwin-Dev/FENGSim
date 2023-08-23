@@ -21,19 +21,20 @@ System solutions for complex products, algorithms, and applications !
 # [Logs](./logs.md)
 
 1. FENGSim
-   * qt5->qt6
-   * vtk8->vtk9
+   * qt5->qt6 (...)
+   * vtk8->vtk9 (...)
 2. Mesh Generation
-   * cgal 2d triangulation
-   * cgal 3d triangulation
-   * cgal 2d mesh generation
-   * cgal 3d mesh generation
+   * cgal 2d triangulation (2023-08-23)
+   * cgal 3d triangulation (2023-08-23)
+   * cgal 2d mesh generation (2023-08-23)
+   * cgal 3d mesh generation (2023-08-23)
+   * triangle (...)
 3. Contact
-   * Domain Decomposition Method (the Poisson equation, 2023-08-23)
-   * Domain Decomposition Method (the elasticity equation)
+   * Domain Decomposition Method, the Poisson equation (2023-08-23)
+   * Domain Decomposition Method, the elasticity equation (...)
 4. ROS 
-   * MoveIt sources and compilation
-   * Navigation sources and compilation
+   * MoveIt sources and compilation (...)
+   * Navigation sources and compilation (...)
    
 # Additive Manufacturing
 
