@@ -18,8 +18,23 @@ Based on this SDK, we are developing the OpenDigitalTwin project for key applica
 
 System solutions for complex products, algorithms, and applications !
 
-# [Progress](./prog.md)
+# [Progresses](./prog.md)
 
+1. FENGSim
+   * qt5->qt6
+   * vtk8->vtk9
+2. Mesh Generation
+   * cgal 2d triangulation
+   * cgal 3d triangulation
+   * cgal 2d mesh generation
+   * cgal 3d mesh generation
+3. Contact
+   * Domain Decomposition Method (the Poisson equation, 2023-08-23)
+   * Domain Decomposition Method (the elasticity equation)
+4. ROS 
+   * MoveIt sources and compilation
+   * Navigation sources and compilation
+   
 # Additive Manufacturing
 
 ![RUNOOB 图标](images/4.png)
