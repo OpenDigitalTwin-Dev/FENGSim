@@ -10,5 +10,5 @@
    * Domain Decomposition Method (the Poisson equation, 2023-08-23)
    * Domain Decomposition Method (the elasticity equation)
 4. ROS 
-   * MoveIt 
-   * Navigation
+   * MoveIt sources and compilation
+   * Navigation sources and compilation
