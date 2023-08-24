@@ -18,7 +18,7 @@ Based on this SDK, we are developing the OpenDigitalTwin project for key applica
 
 System solutions for complex products, algorithms, and applications !
 
-# [Logs](./logs.md)
+# [Logs](./logs/logs.md)
 
 1. FENGSim
    * qt5->qt6 (...)
