@@ -24,12 +24,12 @@ System solutions for complex products, algorithms, and applications !
    * qt5->qt6 (...)
    * vtk8->vtk9 (...)
 2. Mesh Generation
-   1. cgal
+   * cgal
 	  * cgal 2d triangulation (2023-08-23)
 	  * cgal 3d triangulation (2023-08-23)
 	  * cgal 2d mesh generation (2023-08-23)
 	  * cgal 3d mesh generation (2023-08-23)
-   2. triangle (...)
+   * triangle (...)
 3. Contact
    * Domain Decomposition Method, the Poisson equation (2023-08-23)
    * Domain Decomposition Method, the elasticity equation (...)
