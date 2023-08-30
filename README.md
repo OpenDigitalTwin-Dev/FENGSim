@@ -57,6 +57,8 @@ System solutions for complex products, algorithms, and applications !
 ![RUNOOB 图标](images/7.png)
 
 # Robotics
+![RUNOOB 图标](images/ros1.jpg)
+![RUNOOB 图标](images/ros2.jpg)
 
 # Metrology
 
