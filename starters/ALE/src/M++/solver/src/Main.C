@@ -10,12 +10,14 @@
 #endif
 
 void ElasticityMain ();
+void ContactMain ();
 
 int main (int argv, char** argc) {
 	DPO dpo(&argv,&argc);
 	string Model = "test";
 	ReadConfig(Settings,"Model",Model);
 	if (Model == "Elasticity") ElasticityMain();
+	if (Model == "Contact") ContactMain();
 
     return 0;
 }
