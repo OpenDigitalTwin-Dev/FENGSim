@@ -35,6 +35,7 @@ System solutions for complex products, algorithms, and applications !
    ![RUNOOB 图标](images/contact/2.png)
    ![RUNOOB 图标](images/contact/3.png)
    ![RUNOOB 图标](images/contact/4.png)
+   ![RUNOOB 图标](images/contact/5.png)
    * Domain Decomposition Method, the Poisson equation (2023-08-23)
    * Domain Decomposition Method, the elasticity equation (...)
 4. ROS 
