@@ -29,6 +29,7 @@ System solutions for complex products, algorithms, and applications !
 	  * cgal 3d triangulation (2023-08-23)
 	  * cgal 2d mesh generation (2023-08-23)
 	  * cgal 3d mesh generation (2023-08-23)
+	  ![RUNOOB 图标](images/mesh/cgal/1.png)
    * triangle (...)
 3. Contact
    * Hello World! (2023-09-13)
