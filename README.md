@@ -20,14 +20,14 @@ System solutions for complex products, algorithms, and applications !
    
 # Additive Manufacturing
 
-![RUNOOB 图标](images/4.png)
-![RUNOOB 图标](images/3.png)
+![RUNOOB 图标](images/4.jpg)
+![RUNOOB 图标](images/3.jpg)
 
 # Composite Materials
 
-![RUNOOB 图标](images/5.png)
-![RUNOOB 图标](images/6.png)
-![RUNOOB 图标](images/7.png)
+![RUNOOB 图标](images/5.jpg)
+![RUNOOB 图标](images/6.jpg)
+![RUNOOB 图标](images/7.jpg)
 
 # Robotics
 ![RUNOOB 图标](images/ros1.jpg)
@@ -35,9 +35,9 @@ System solutions for complex products, algorithms, and applications !
 
 # Metrology
 
-![RUNOOB 图标](images/8.png)
-![RUNOOB 图标](images/9.png)
-![RUNOOB 图标](images/10.png)
+![RUNOOB 图标](images/8.jpg)
+![RUNOOB 图标](images/9.jpg)
+![RUNOOB 图标](images/10.jpg)
 
 # Incubator
 
