@@ -54,7 +54,7 @@ We have connections with many incubators. If you would like to obtain financial 
 	  * cgal 3d triangulation (2023-08-23)
 	  * cgal 2d mesh generation (2023-08-23)
 	  * cgal 3d mesh generation (2023-08-23)
-![RUNOOB 图标](images/mesh/cgal/1.png)
+![RUNOOB 图标](images/mesh/cgal/1.jpg)
    * triangle (...)
 3. Contact
    * Hello World! (2023-09-13)
