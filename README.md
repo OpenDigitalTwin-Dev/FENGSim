@@ -66,6 +66,7 @@ We have connections with many incubators. If you would like to obtain financial 
 1. FENGSim
    * qt5->qt6 (...)
    * vtk8->vtk9 (...)
+   
 2. Mesh Generation
    * cgal 2d/3d triangulation and meshing (2023-08-23)
 
@@ -76,7 +77,7 @@ We have connections with many incubators. If you would like to obtain financial 
    * triangle (2023-09-23)
    
    <center>
-   <img decoding="async" src="images/mesh/triangle/1.png" width="600">
+   <img decoding="async" src="images/mesh/triangle/1.jpg" width="600">
    </center>
    
 3. Contact
@@ -100,6 +101,7 @@ We have connections with many incubators. If you would like to obtain financial 
    
    * Domain Decomposition Method, the Poisson equation (2023-08-23)
    * Domain Decomposition Method, the elasticity equation (...)
+   
 4. ROS 
    * <mark>ros-dev-tools</mark> from <mark>infra-variants</mark> in <mark>ros-infrastructure</mark>
 	 > This repository contains package configuration information and automation for the ROS Infrastructure variant packages. Currently there are two variants used for ROS Infrastructure. ros-build-essential contains the base set of packages to be present when building any ROS package on the build farm. ros-dev-tools contains packages that are of general use to ROS developers but which are not dependencies of any particular packages within a ROS distribution.
