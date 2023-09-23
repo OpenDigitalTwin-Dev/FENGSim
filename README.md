@@ -19,25 +19,43 @@ Based on this SDK, we are developing the OpenDigitalTwin project for key applica
 System solutions for complex products, algorithms, and applications !
    
 # Additive Manufacturing
-
-![RUNOOB 图标](images/4.jpg)
-![RUNOOB 图标](images/3.jpg)
+<center>
+<img decoding="async" src="images/4.jpg" width="1800">
+</center>
+<center>
+<img decoding="async" src="images/3.jpg" width="1800">
+</center>
 
 # Composite Materials
-
-![RUNOOB 图标](images/5.jpg)
-![RUNOOB 图标](images/6.jpg)
-![RUNOOB 图标](images/7.jpg)
+<center>
+<img decoding="async" src="images/5.jpg" width="1800">
+</center>
+<center>
+<img decoding="async" src="images/6.jpg" width="1800">
+</center>
+<center>
+<img decoding="async" src="images/7.jpg" width="1800">
+</center>
 
 # Robotics
-![RUNOOB 图标](images/ros1.jpg)
-![RUNOOB 图标](images/ros2.jpg)
+<center>
+<img decoding="async" src="images/ros1.jpg" width="1800">
+</center>
+<center>
+<img decoding="async" src="images/ros2.jpg" width="1800">
+</center>
 
 # Metrology
+<center>
+<img decoding="async" src="images/8.jpg" width="1800">
+</center>
+<center>
+<img decoding="async" src="images/9.jpg" width="1800">
+</center>
+<center>
+<img decoding="async" src="images/10.jpg" width="1800">
+</center>
 
-![RUNOOB 图标](images/8.jpg)
-![RUNOOB 图标](images/9.jpg)
-![RUNOOB 图标](images/10.jpg)
 
 # Incubator
 
@@ -50,16 +68,35 @@ We have connections with many incubators. If you would like to obtain financial 
    * vtk8->vtk9 (...)
 2. Mesh Generation
    * cgal 2d/3d triangulation and meshing (2023-08-23)
+
+	<center>
    <img decoding="async" src="images/mesh/cgal/1.jpg" width="600">
+   </center>
    
    * triangle (2023-09-23)
+   
+   <center>
    <img decoding="async" src="images/mesh/triangle/1.png" width="600">
+   </center>
+   
 3. Contact
    * Hello World! (2023-09-13)
+   
+   <center>
    <img decoding="async" src="images/contact/2.png" width="600">
+   </center>
+   
+   <center>
    <img decoding="async" src="images/contact/3.png" width="600">
+   </center>
+   
+   <center>
    <img decoding="async" src="images/contact/4.png" width="600">
+   </center>
+   
+   <center>
    <img decoding="async" src="images/contact/5.png" width="600">
+   </center>
    
    * Domain Decomposition Method, the Poisson equation (2023-08-23)
    * Domain Decomposition Method, the elasticity equation (...)
