@@ -51,6 +51,7 @@ We have connections with many incubators. If you would like to obtain financial 
 2. Mesh Generation
    * cgal 2d/3d triangulation and meshing (2023-08-23)
    <img decoding="async" src="images/mesh/cgal/1.jpg" width="600">
+   
    * triangle (2023-09-23)
    <img decoding="async" src="images/mesh/triangle/1.png" width="600">
 3. Contact
@@ -59,6 +60,7 @@ We have connections with many incubators. If you would like to obtain financial 
    <img decoding="async" src="images/contact/3.png" width="600">
    <img decoding="async" src="images/contact/4.png" width="600">
    <img decoding="async" src="images/contact/5.png" width="600">
+   
    * Domain Decomposition Method, the Poisson equation (2023-08-23)
    * Domain Decomposition Method, the elasticity equation (...)
 4. ROS 
