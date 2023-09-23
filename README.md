@@ -70,9 +70,9 @@ We have connections with many incubators. If you would like to obtain financial 
 2. Mesh Generation
    * cgal 2d/3d triangulation and meshing (2023-08-23)
 
-	<center>
+	<div align="center">
    <img decoding="async" src="images/mesh/cgal/1.jpg" width="400">
-   </center>
+   </div>
    
    * triangle (2023-09-23)
    
