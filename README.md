@@ -71,32 +71,32 @@ We have connections with many incubators. If you would like to obtain financial 
    * cgal 2d/3d triangulation and meshing (2023-08-23)
 
 	<center>
-   <img decoding="async" src="images/mesh/cgal/1.jpg" width="600">
+   <img decoding="async" src="images/mesh/cgal/1.jpg" width="400">
    </center>
    
    * triangle (2023-09-23)
    
    <center>
-   <img decoding="async" src="images/mesh/triangle/1.jpg" width="600">
+   <img decoding="async" src="images/mesh/triangle/1.jpg" width="400">
    </center>
    
 3. Contact
    * Hello World! (2023-09-13)
    
    <center>
-   <img decoding="async" src="images/contact/2.png" width="600">
+   <img decoding="async" src="images/contact/2.png" width="400">
    </center>
    
    <center>
-   <img decoding="async" src="images/contact/3.png" width="600">
+   <img decoding="async" src="images/contact/3.png" width="400">
    </center>
    
    <center>
-   <img decoding="async" src="images/contact/4.png" width="600">
+   <img decoding="async" src="images/contact/4.png" width="400">
    </center>
    
    <center>
-   <img decoding="async" src="images/contact/5.png" width="600">
+   <img decoding="async" src="images/contact/5.png" width="400">
    </center>
    
    * Domain Decomposition Method, the Poisson equation (2023-08-23)
