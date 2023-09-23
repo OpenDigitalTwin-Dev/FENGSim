@@ -19,42 +19,42 @@ Based on this SDK, we are developing the OpenDigitalTwin project for key applica
 System solutions for complex products, algorithms, and applications !
    
 # Additive Manufacturing
-<center>
+<div align="center">
 <img decoding="async" src="images/4.jpg" width="1800">
-</center>
-<center>
+</div>
+<div align="center">
 <img decoding="async" src="images/3.jpg" width="1800">
-</center>
+</div>
 
 # Composite Materials
-<center>
+<div align="center">
 <img decoding="async" src="images/5.jpg" width="1800">
-</center>
-<center>
+</div>
+<div align="center">
 <img decoding="async" src="images/6.jpg" width="1800">
-</center>
-<center>
+</div>
+<div align="center">
 <img decoding="async" src="images/7.jpg" width="1800">
-</center>
+</div>
 
 # Robotics
-<center>
+<div align="center">
 <img decoding="async" src="images/ros1.jpg" width="1800">
-</center>
-<center>
+</div>
+<div align="center">
 <img decoding="async" src="images/ros2.jpg" width="1800">
-</center>
+</div>
 
 # Metrology
-<center>
+<div align="center">
 <img decoding="async" src="images/8.jpg" width="1800">
-</center>
-<center>
+</div>
+<div align="center">
 <img decoding="async" src="images/9.jpg" width="1800">
-</center>
-<center>
+</div>
+<div align="center">
 <img decoding="async" src="images/10.jpg" width="1800">
-</center>
+</div>
 
 
 # Incubator
@@ -76,28 +76,28 @@ We have connections with many incubators. If you would like to obtain financial 
    
    * triangle (2023-09-23)
    
-   <center>
+   <div align="center">
    <img decoding="async" src="images/mesh/triangle/1.jpg" width="400">
-   </center>
+   </div>
    
 3. Contact
    * Hello World! (2023-09-13)
    
-   <center>
+   <div align="center">
    <img decoding="async" src="images/contact/2.png" width="400">
-   </center>
+   </div>
    
-   <center>
+   <div align="center">
    <img decoding="async" src="images/contact/3.png" width="400">
-   </center>
+   </div>
    
-   <center>
+   <div align="center">
    <img decoding="async" src="images/contact/4.png" width="400">
-   </center>
+   </div>
    
-   <center>
+   <div align="center">
    <img decoding="async" src="images/contact/5.png" width="400">
-   </center>
+   </div>
    
    * Domain Decomposition Method, the Poisson equation (2023-08-23)
    * Domain Decomposition Method, the elasticity equation (...)
