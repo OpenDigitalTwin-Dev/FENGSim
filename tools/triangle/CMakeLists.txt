@@ -2,8 +2,10 @@ cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 project(triangle_api)
 
 include_directories("src")
-add_executable (triangle ../src/triangle.c)
+add_library (triangle SHARED ../src/triangle.c)
 target_link_libraries (triangle /usr/lib/x86_64-linux-gnu/libm.so)
+add_executable (triangle_run ../src/tricall.c)
+target_link_libraries (triangle_run ${CMAKE_BINARY_DIR}/libtriangle.so)
 
 find_package(X11)
 if(X11_FOUND)

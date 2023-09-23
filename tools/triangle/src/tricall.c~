@@ -141,6 +141,7 @@ int reportnorms;
 int main()
 {
   struct triangulateio in, mid, out, vorout;
+
   /* Define input points. */
 
   in.numberofpoints = 4;
