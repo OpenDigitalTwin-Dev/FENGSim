@@ -1,3 +1,0 @@
-#include "m++.h"
-
-void FASPInterface (const Matrix& A, const Vector& b, Vector& x);
