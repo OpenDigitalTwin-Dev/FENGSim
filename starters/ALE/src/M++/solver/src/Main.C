@@ -10,6 +10,7 @@
 #endif
 
 void ElasticityMain ();
+void TElasticityMain ();
 void ContactMain ();
 
 int main (int argv, char** argc) {
@@ -17,6 +18,7 @@ int main (int argv, char** argc) {
 	string Model = "test";
 	ReadConfig(Settings,"Model",Model);
 	if (Model == "Elasticity") ElasticityMain();
+	if (Model == "TElasticity") TElasticityMain();
 	if (Model == "Contact") ContactMain();
 
     return 0;

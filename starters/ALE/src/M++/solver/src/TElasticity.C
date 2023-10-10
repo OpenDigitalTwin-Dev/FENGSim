@@ -4,7 +4,7 @@
 
 #include "m++.h"
 #include "TElasticity.h"
-#include "Rezoning.h"
+//#include "Rezoning.h"
 
 void TElasticityAssemble::SetInitialCondition0 (Vector& x0) {
 	x0 = 0;
