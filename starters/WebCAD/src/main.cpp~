@@ -1,0 +1,39 @@
+#include <iostream>
+#include "TopoDS_Shape.hxx"
+#include "STEPControl_Reader.hxx"
+#include "STEPControl_Writer.hxx"
+#include "StlAPI_Writer.hxx"
+#include "BRepMesh_IncrementalMesh.hxx"
+
+int main (int argv, char** argc) {
+    std::cout << "change stp to stl" << std::endl;
+
+    // import stp file
+    TopoDS_Shape shape;
+    STEPControl_Reader reader;
+    if (!reader.ReadFile("../Models/input.stp")) {
+	std::cout << "read stp failed " << std::endl;
+	return 0;
+    }
+    Standard_Integer NbRoots = reader.NbRootsForTransfer();
+    Standard_Integer NbTrans = reader.TransferRoots();
+    std::cout << NbRoots << " " << NbTrans << std::endl;
+    shape = reader.OneShape();
+
+    // export stp file
+    STEPControl_Writer STPwriter;
+    STPwriter.Transfer(shape,STEPControl_ManifoldSolidBrep);
+    STPwriter.Write("output.stp");
+
+    // export stl file
+    const Standard_Real aLinearDeflection   = 0.01;
+    const Standard_Real anAngularDeflection = 0.5;
+    BRepMesh_IncrementalMesh aMesher (shape, aLinearDeflection, Standard_False, anAngularDeflection, Standard_True);
+    const Standard_Integer aStatus = aMesher.GetStatusFlags();
+    
+    StlAPI_Writer STLwriter;
+    const char* file_name = "../Models/output.stl";
+    STLwriter.Write(shape, file_name);
+ 
+    return 0;
+}

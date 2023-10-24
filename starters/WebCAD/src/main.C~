@@ -1,0 +1,23 @@
+#include <iostream>
+#include "TopoDS_Shape.hxx"
+#include "STEPControl_Reader.hxx"
+#include "StlAPI_Writer.hxx"
+
+int main (int argv, char** argc) {
+    std::cout << "change stp to stl" << std::endl;
+
+    // import stp file
+    TopoDS_Shape shape;
+    STEPControl_Reader reader;
+    if (!reader.ReadFile("input.stp")) std::cout << "read stp failed " << std::endl;
+    //Standard_Integer NbRoots = reader.NbRootsForTransfer();
+    //Standard_Integer NbTrans = reader.TransferRoots();
+    //std::cout << NbRoots << " " << NbTrans << std::endl;
+    shape = reader.OneShape();
+
+    // export stl file
+    //StlAPI_Writer output;
+    //output.Write(reader.OneShape(), "./output");
+ 
+    return 0;
+}

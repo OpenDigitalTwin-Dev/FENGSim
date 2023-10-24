@@ -1,0 +1,5 @@
+#!/bin/sh
+
+sudo docker run -p 80:80 -v ./:/usr/local/apache2/htdocs/ --name webgl -d httpd
+sudo docker exec -it webgl /bin/bash -c ".//htdocs/install2.sh"
+
