@@ -63,11 +63,11 @@ We have connections with many incubators. If you would like to obtain financial 
 
 # [Logs](./logs/logs.md)
 
-1. FENGSim
+## FENGSim
    * qt5->qt6 (...)
    * vtk8->vtk9 (...)
    
-2. Mesh Generation
+## Mesh Generation
    * cgal 2d/3d triangulation and meshing (2023-08-23)
 
 	<div align="center">
@@ -80,7 +80,7 @@ We have connections with many incubators. If you would like to obtain financial 
    <img decoding="async" src="images/mesh/triangle/1.jpg" width="400">
    </div>
    
-3. Contact
+## Contact
    * Hello World! (2023-09-13)
    
    <div align="center">
@@ -102,7 +102,7 @@ We have connections with many incubators. If you would like to obtain financial 
    * Domain Decomposition Method, the Poisson equation (2023-08-23)
    * Domain Decomposition Method, the elasticity equation (...)
    
-4. ROS 
+## ROS 
    * <mark>ros-dev-tools</mark> from <mark>infra-variants</mark> in <mark>ros-infrastructure</mark>
 	 > This repository contains package configuration information and automation for the ROS Infrastructure variant packages. Currently there are two variants used for ROS Infrastructure. ros-build-essential contains the base set of packages to be present when building any ROS package on the build farm. ros-dev-tools contains packages that are of general use to ROS developers but which are not dependencies of any particular packages within a ROS distribution.
    * <mark>rosdep</mark> in <mark>ros-infrastructure</mark>
@@ -115,14 +115,14 @@ We have connections with many incubators. If you would like to obtain financial 
    * Navigation sources and compilation (...)
    
    <div align="center">
-   <img decoding="async" src="images/12.jpg" width="400">
+   <img decoding="async" src="images/12.jpg" width="1800">
    </div>
    
    <div align="center">
-   <img decoding="async" src="images/13.jpg" width="400">
+   <img decoding="async" src="images/13.jpg" width="1800">
    </div>
 
-5. MBD
+## MBD
    * Hello World! (2023-10-24)
    
    <div align="center">
