@@ -70,34 +70,34 @@ We have connections with many incubators. If you would like to obtain financial 
 ## Mesh Generation
    * cgal 2d/3d triangulation and meshing (2023-08-23)
 
-	<div align="center">
-   <img decoding="async" src="images/mesh/cgal/1.jpg" width="400">
-   </div>
+<div align="center">
+<img decoding="async" src="images/mesh/cgal/1.jpg" width="400">
+</div>
    
    * triangle (2023-09-23)
    
-   <div align="center">
-   <img decoding="async" src="images/mesh/triangle/1.jpg" width="400">
-   </div>
+<div align="center">
+<img decoding="async" src="images/mesh/triangle/1.jpg" width="400">
+</div>
    
 ## Contact
    * Hello World! (2023-09-13)
    
-   <div align="center">
-   <img decoding="async" src="images/contact/2.png" width="400">
-   </div>
+<div align="center">
+<img decoding="async" src="images/contact/2.png" width="400">
+</div>
    
-   <div align="center">
-   <img decoding="async" src="images/contact/3.png" width="400">
-   </div>
+<div align="center">
+<img decoding="async" src="images/contact/3.png" width="400">
+</div>
    
-   <div align="center">
-   <img decoding="async" src="images/contact/4.png" width="400">
-   </div>
+<div align="center">
+<img decoding="async" src="images/contact/4.png" width="400">
+</div>
    
-   <div align="center">
-   <img decoding="async" src="images/contact/5.png" width="400">
-   </div>
+<div align="center">
+<img decoding="async" src="images/contact/5.png" width="400">
+</div>
    
    * Domain Decomposition Method, the Poisson equation (2023-08-23)
    * Domain Decomposition Method, the elasticity equation (...)
@@ -114,17 +114,17 @@ We have connections with many incubators. If you would like to obtain financial 
    * MoveIt sources and compilation (...)
    * Navigation sources and compilation (...)
    
-   <div align="center">
-   <img decoding="async" src="images/12.jpg" width="1800">
-   </div>
+<div align="center">
+<img decoding="async" src="images/12.jpg" width="1800">
+</div>
    
-   <div align="center">
-   <img decoding="async" src="images/13.jpg" width="1800">
-   </div>
+<div align="center">
+<img decoding="async" src="images/13.jpg" width="1800">
+</div>
 
 ## MBD
    * Hello World! (2023-10-24)
    
-   <div align="center">
-   <img decoding="async" src="images/webcad/1.png" width="400">
-   </div>
+<div align="center">
+<img decoding="async" src="images/webcad/1.png" width="400">
+</div>
