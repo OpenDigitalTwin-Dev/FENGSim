@@ -126,5 +126,5 @@ We have connections with many incubators. If you would like to obtain financial 
    * Hello World! (2023-10-24)
    
 <div align="center">
-<img decoding="async" src="images/webcad/1.png" width="400">
+<img decoding="async" src="images/webcad/1.png" width="1800">
 </div>
