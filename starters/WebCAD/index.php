@@ -175,7 +175,7 @@
 			    
 	  var loader = new STLLoader();
 	  var modelName = getQueryStringByName('modelName');
-	  loader.load( 'Models/output.stl', function ( geometry ) {
+	  loader.load( 'Models/_output.stl', function ( geometry ) {
 	      geometry.center(); // see from a center
 	      var material = new THREE.MeshPhongMaterial( { color: 0x808080, specular: 0x111111, shininess: 200 } );
 	      var mesh = new THREE.Mesh( geometry, material );

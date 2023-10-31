@@ -32,7 +32,7 @@ int main (int argv, char** argc) {
     const Standard_Integer aStatus = aMesher.GetStatusFlags();
     
     StlAPI_Writer STLwriter;
-    const char* file_name = "./Models/output.stl";
+    const char* file_name = "./Models/_output.stl";
     STLwriter.Write(shape, file_name);
     std::cout << "done xixixi" << std::endl;
  
