@@ -10,7 +10,7 @@
 
     
     <?php
-    exec(".//build/oceSolver")
+    echo exec("./build/oceSolver");
     ?>
 
     <script type="module">

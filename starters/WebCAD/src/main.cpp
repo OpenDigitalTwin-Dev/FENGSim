@@ -11,7 +11,7 @@ int main (int argv, char** argc) {
     // import stp file
     TopoDS_Shape shape;
     STEPControl_Reader reader;
-    if (!reader.ReadFile("Models/input.stp")) {
+    if (!reader.ReadFile("./Models/input.stp")) {
 	std::cout << "read stp failed " << std::endl;
 	return 0;
     }
@@ -23,7 +23,7 @@ int main (int argv, char** argc) {
     // export stp file
     STEPControl_Writer STPwriter;
     STPwriter.Transfer(shape,STEPControl_ManifoldSolidBrep);
-    STPwriter.Write("Models/output.stp");
+    //STPwriter.Write("Models/output.stp");
 
     // export stl file
     const Standard_Real aLinearDeflection   = 0.01;
@@ -32,8 +32,9 @@ int main (int argv, char** argc) {
     const Standard_Integer aStatus = aMesher.GetStatusFlags();
     
     StlAPI_Writer STLwriter;
-    const char* file_name = "Models/output.stl";
+    const char* file_name = "./Models/output.stl";
     STLwriter.Write(shape, file_name);
+    std::cout << "done xixixi" << std::endl;
  
     return 0;
 }

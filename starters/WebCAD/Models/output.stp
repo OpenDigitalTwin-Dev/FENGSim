@@ -1,7 +1,7 @@
 ISO-10303-21;
 HEADER;
 FILE_DESCRIPTION(('Open CASCADE Model'),'2;1');
-FILE_NAME('Open CASCADE Shape Model','2023-10-24T13:52:09',('Author'),(
+FILE_NAME('Open CASCADE Shape Model','2023-10-31T12:58:16',('Author'),(
     'Open CASCADE'),'Open CASCADE STEP processor 6.9','Open CASCADE 6.9'
   ,'Unknown');
 FILE_SCHEMA(('AUTOMOTIVE_DESIGN { 1 0 10303 214 1 1 1 1 }'));
