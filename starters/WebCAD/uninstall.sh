@@ -4,4 +4,3 @@ sudo docker stop webgl
 sudo docker rm webgl
 sudo rm -rf build
 sudo rm -rf oce-OCE-0.18
-sudo rm -rf three.js-master

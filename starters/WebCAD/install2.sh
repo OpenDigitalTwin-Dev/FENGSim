@@ -19,7 +19,6 @@ apt -y install 7zip
 cp dir.conf /etc/apache2/mods-enabled/
 
 7zz x oce-OCE-0.18.7z -o./
-7zz x three.js-master.7z -o./
 cd oce-OCE-0.18
 mkdir build
 cd build
