@@ -131,5 +131,9 @@ We have connections with many incubators. If you would like to obtain financial 
 
 # QQ's words
 
+<div align="center">
+<img decoding="async" src="images/qq/1.jpg" width="300">
+</div>
+
 One Two Three Four Five Six Seven Nine Ten
 
