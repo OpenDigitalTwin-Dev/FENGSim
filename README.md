@@ -147,3 +147,5 @@ One Two Three Four Five Six Seven Nine Ten
 
 2023.11.27 book draw picture football park
 
+2023.11.29 swim Monday Tuesday Wednesday zoo  
+
