@@ -149,3 +149,5 @@ One Two Three Four Five Six Seven Nine Ten
 
 2023.11.29 swim Monday Tuesday Wednesday zoo  
 
+2023.11.30 see film Friday Staurday Sunday
+
