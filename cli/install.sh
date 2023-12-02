@@ -89,3 +89,9 @@ cd build
 cmake ..
 make
 
+cd ../../../starters/GDT
+mkdir build
+cd build
+cmake ..
+make
+
