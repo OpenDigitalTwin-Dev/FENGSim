@@ -141,3 +141,13 @@ One Two Three Four Five Six Seven Nine Ten
 
 2023.11.22 pig farm hen cow duck
 
+2023.11.23 eleven twelve thirteen fourteen fifteen
+
+2023.11.24 hour time work play read home
+
+2023.11.27 book draw picture football park
+
+2023.11.29 swim Monday Tuesday Wednesday zoo  
+
+2023.11.30 see film Friday Staurday Sunday
+
