@@ -68,6 +68,13 @@ cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../cgal_install -DWITH_CGAL_Qt5=OFF
 make -j4
 make install
 
+cd ../../pcl
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../pcl_install -DWITH_QT=OFF
+make -j4
+make install
+
 # build starters
 cd ../../../starters/ALE
 mkdir build
