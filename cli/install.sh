@@ -68,6 +68,9 @@ cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../cgal_install -DWITH_CGAL_Qt5=OFF
 make -j4
 make install
 
+# pcl
+sudo apt -y install libeigen3-dev
+sudo apt -y install libflann-dev
 cd ../../pcl
 mkdir build
 cd build
