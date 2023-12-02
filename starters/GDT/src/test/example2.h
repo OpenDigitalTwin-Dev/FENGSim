@@ -1,0 +1,2 @@
+
+void registration_gdt ();

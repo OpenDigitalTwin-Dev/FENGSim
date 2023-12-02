@@ -2357,7 +2357,7 @@ void MeasureThread2::run () {
     if (measure_exe_id == 2)
     {
         std::cout << "surface profile run in " << path.toStdString() << std::endl;
-        proc->start("../../GDT/build/fengsim_meas");
+        proc->start("../../starters/GDT/build/fengsim_meas");
     }
     else if (measure_exe_id == 3)
     {
