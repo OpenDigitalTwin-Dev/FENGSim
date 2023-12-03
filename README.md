@@ -19,10 +19,8 @@ The product life cycle includes design, manufacturing, operation, and maintenanc
 The Open Digital Twin project is an additive manufacturing operation system.
 1. Interfaces to mathematical libraries like computational geometry, computer algebra, numerical methods, numerical linear algebra, computer graphics and images, probability and statistics, optimization, etc..
 2. Tools for library dependences, package managements, CICD (compile, codes merge, version control, test, deploy).
-3. Tools for communication, control, job managements for machines and sensors.
+3. Interfaces for communication, drive, job managements to machines and sensors.
 4. Physical simulations for manufacturing technologies.
-
-System solutions for additive manufacturing!
    
 # Additive Manufacturing
 <div align="center">
