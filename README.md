@@ -16,11 +16,13 @@ To install:
 
 The product life cycle includes design, manufacturing, operation, and maintenance. In the past, optimization of products focused on the design phase, often overlooking issues that arose in manufacturing, operation, and maintenance. This is where digital twins can help - by extending optimization across the entire product lifecycle. With digital twins, problems can be identified and solved not just in design, but even after production during real-world use. This allows products to be greatly improved through rapid iteration. Digital twins may thus accelerate innovations like manned missions to Mars. 
 
-The core of digital twin technology is CAX - computer-aided design, engineering, manufacturing, and inspection. Our OpenCAXPlus project studies open-source software, physics, mathematics, and computer science to build a knowledge system for digital twins. We have collected numerous open-source tools to develop a software development toolkit (SDK). This SDK is very easy to use - with one command, users can access the full development environment including code, tools, frameworks, and example cases. Researchers in algorithms and mechanics can build solutions much more easily.
+The Open Digital Twin project is an additive manufacturing operation system.
+1. Interfaces to mathematical libraries like computational geometry, computer algebra, numerical methods, numerical linear algebra, computer graphics and images, probability and statistics, optimization, etc..
+2. Tools for library dependences, package managements, CICD (compile, codes merge, version control, test, deploy).
+3. Tools for communication, control, job managements for machines and sensors.
+4. Physical simulations for manufacturing technologies.
 
-Based on this SDK, we are developing the OpenDigitalTwin project for key applications like additive manufacturing, composite materials, robotics, and metrology. You are welcome to join the OpenCAXPlus project and OpenDigitalTwin project.
-
-System solutions for complex products, algorithms, and applications !
+System solutions for additive manufacturing!
    
 # Additive Manufacturing
 <div align="center">
