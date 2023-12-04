@@ -6,10 +6,10 @@ The product life cycle includes design, manufacturing, operation, and maintenanc
 <img decoding="async" src="images/Fengsim_logo_hi.png" height="200">
 </div>
 
-The FENGSim project is an open source project for additive manufacturing operation system.
-1. Framework and interfaces to mathematical libraries like computational geometry, computer algebra, numerical methods, numerical linear algebra, computer graphics and images, probability and statistics, optimization, etc..
-2. Development tools for library dependences, package managements, CICD (compile, codes merge, version control, test, deploy).
-3. Interfaces to equipments and sensors like communications, drivers, job managements.
+The FENGSim project is an adaptive manufacturing operation system.
+1. Interfaces for mathematical libraries such as computational geometry, computer algebra, numerical methods, numerical linear algebra, computer graphics and image processing, probability and statistics, optimization, etc, and software framework.
+2. Tools for library dependences, package management, CICD (compile, code merge, version control, test, deploy).
+3. Interfaces for equipments and sensors such as communications, drivers, job management.
 4. Physical simulations for manufacturing technologies.
 
 To install:
