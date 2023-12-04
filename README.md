@@ -1,4 +1,4 @@
-# [OpenDigitalTwin](https://ocp-docs.readthedocs.io)
+# [FENGSim](https://ocp-docs.readthedocs.io)
 
 <div align="center">
 <img decoding="async" src="images/Fengsim_logo_hi.png" height="200">
