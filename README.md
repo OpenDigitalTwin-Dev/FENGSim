@@ -1,5 +1,13 @@
 # [FENGSim](https://ocp-docs.readthedocs.io)
 
+The product life cycle includes design, manufacturing, operation, and maintenance. In the past, optimization of products focused on the design phase, often overlooking issues that arose in manufacturing, operation, and maintenance. This is where digital twins can help - by extending optimization across the entire product lifecycle. With digital twins, problems can be identified and solved not just in design, but even after production during real-world use. This allows products to be greatly improved through rapid iteration. Digital twins may thus accelerate innovations like manned missions to Mars. 
+
+The FENGSim project is an open source project for additive manufacturing operation system.
+1. Interfaces to mathematical libraries like computational geometry, computer algebra, numerical methods, numerical linear algebra, computer graphics and images, probability and statistics, optimization, etc..
+2. Development tools for library dependences, package managements, CICD (compile, codes merge, version control, test, deploy).
+3. Interfaces to equipments and sensors like communications, drivers, job managements.
+4. Physical simulations for manufacturing technologies.
+
 <div align="center">
 <img decoding="async" src="images/Fengsim_logo_hi.png" height="200">
 </div>
@@ -13,14 +21,6 @@ To install:
 4. In QtCreator, open the FENGSim.pro project file located at:
     starters/FENGSim/FENGSim.pro
 5. Build the prepost module project in QtCreator.
-
-The product life cycle includes design, manufacturing, operation, and maintenance. In the past, optimization of products focused on the design phase, often overlooking issues that arose in manufacturing, operation, and maintenance. This is where digital twins can help - by extending optimization across the entire product lifecycle. With digital twins, problems can be identified and solved not just in design, but even after production during real-world use. This allows products to be greatly improved through rapid iteration. Digital twins may thus accelerate innovations like manned missions to Mars. 
-
-The FENGSim project is an open source project for additive manufacturing operation system.
-1. Interfaces to mathematical libraries like computational geometry, computer algebra, numerical methods, numerical linear algebra, computer graphics and images, probability and statistics, optimization, etc..
-2. Development tools for library dependences, package managements, CICD (compile, codes merge, version control, test, deploy).
-3. Interfaces for communication, drivers, job managements to machines and sensors.
-4. Physical simulations for manufacturing technologies.
    
 # Additive Manufacturing
 <div align="center">
