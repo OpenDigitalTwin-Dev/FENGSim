@@ -74,3 +74,5 @@ One Two Three Four Five Six Seven Nine Ten
 
 2023.11.30 see film Friday Staurday Sunday
 
+2023.12.05 basketball grandma grandpa name each 
+
