@@ -19,19 +19,7 @@
    * Hello World! (2023-09-13)
    
 <div align="center">
-<img decoding="async" src="../images/contact/2.png" width="400">
-</div>
-   
-<div align="center">
-<img decoding="async" src="../images/contact/3.png" width="400">
-</div>
-   
-<div align="center">
-<img decoding="async" src="../images/contact/4.png" width="400">
-</div>
-   
-<div align="center">
-<img decoding="async" src="../images/contact/5.png" width="400">
+<img decoding="async" src="../images/contact/6.png" width="400">
 </div>
    
    * Domain Decomposition Method, the Poisson equation (2023-08-23)

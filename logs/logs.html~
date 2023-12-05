@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<title>logs.html</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+
+</head>
+
+<body>
+
+<h2>FENGSim</h2>
+
+<ul>
+<li>qt5->qt6 (...)</li>
+<li>vtk8->vtk9 (...)</li>
+</ul>
+
+<h2>Mesh Generation</h2>
+
+<ul>
+<li>cgal 2d/3d triangulation and meshing (2023-08-23)</li>
+</ul>
+
+<div align="center">
+<img decoding="async" src="../images/mesh/cgal/1.jpg" width="400">
+</div>
+
+<ul>
+<li>triangle (2023-09-23)</li>
+</ul>
+
+<div align="center">
+<img decoding="async" src="../images/mesh/triangle/1.jpg" width="400">
+</div>
+
+<h2>Contact</h2>
+
+<ul>
+<li>Hello World! (2023-09-13)</li>
+</ul>
+
+<div align="center">
+<img decoding="async" src="../images/contact/2.png" width="400">
+</div>
+
+<div align="center">
+<img decoding="async" src="../images/contact/3.png" width="400">
+</div>
+
+<div align="center">
+<img decoding="async" src="../images/contact/4.png" width="400">
+</div>
+
+<div align="center">
+<img decoding="async" src="../images/contact/5.png" width="400">
+</div>
+
+<div align="center">
+<img decoding="async" src="../images/contact/6.png" width="400">
+</div>
+
+<ul>
+<li>Domain Decomposition Method, the Poisson equation (2023-08-23)</li>
+<li>Domain Decomposition Method, the elasticity equation (...)</li>
+</ul>
+
+<h2>ROS</h2>
+
+<ul>
+<li><mark>ros-dev-tools</mark> from <mark>infra-variants</mark> in <mark>ros-infrastructure</mark>
+<blockquote>
+  <p>This repository contains package configuration information and automation for the ROS Infrastructure variant packages. Currently there are two variants used for ROS Infrastructure. ros-build-essential contains the base set of packages to be present when building any ROS package on the build farm. ros-dev-tools contains packages that are of general use to ROS developers but which are not dependencies of any particular packages within a ROS distribution.</li>
+<li><mark>rosdep</mark> in <mark>ros-infrastructure</mark>
+rosdep is a command-line tool for installing system dependencies. For end-users, rosdep helps you install system dependencies for software that you are building from source. For developers, rosdep simplifies the problem of installing system dependencies on different platforms. Instead of having to figure out which debian package on Ubuntu Oneiric contains Boost, you can just specify a dependency on 'boost'.</li>
+<li><mark>colcon</mark>
+colcon is a command line tool to improve the workflow of building, testing and using multiple software packages. It automates the process, handles the ordering and sets up the environment to use the packages.</li>
+<li><mark>vcstool</mark>
+Vcstool is a version control system (VCS) tool, designed to make working with multiple repositories easier.</li>
+<li>MoveIt sources and compilation (...)</li>
+<li>Navigation sources and compilation (...)</li>
+</ul>
+
+<p>f8567684b03cd7c1d9e18c8093fe5b35</p>
+</blockquote></p>
+
+<div align="center">
+<img decoding="async" src="../images/13.jpg" width="1800">
+</div>
+
+<h2>MBD</h2>
+
+<ul>
+<li>Hello World! (2023-10-24)</li>
+</ul>
+
+<div align="center">
+<img decoding="async" src="../images/webcad/1.png" width="1800">
+</div>
+
+<h1>QQ's words</h1>
+
+<div align="center">
+<img decoding="async" src="../images/qq/1.jpg" width="300">
+</div>
+
+<p>One Two Three Four Five Six Seven Nine Ten</p>
+
+<p>2023.11.21 everyone from grade paper cut </p>
+
+<p>2023.11.22 pig farm hen cow duck</p>
+
+<p>2023.11.23 eleven twelve thirteen fourteen fifteen</p>
+
+<p>2023.11.24 hour time work play read home</p>
+
+<p>2023.11.27 book draw picture football park</p>
+
+<p>2023.11.29 swim Monday Tuesday Wednesday zoo  </p>
+
+<p>2023.11.30 see film Friday Staurday Sunday</p>
+
+</body>
+</html>
