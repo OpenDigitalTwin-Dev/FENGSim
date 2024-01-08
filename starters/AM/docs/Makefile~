@@ -1,0 +1,17 @@
+BOOK=measure_report
+
+all:
+	xelatex addma
+	bibtex addma
+	xelatex addma
+	xelatex addma
+
+#final:
+#	xelatex $(BOOK)
+#	biber $(BOOK)
+#	makeindex $(BOOK)
+#	xelatex $(BOOK)
+#	xelatex $(BOOK)
+
+clean:
+	rm -f *.aux *.mtc* *.out *.idx *.bcf *.log *~ *.ptc *.toc *.run.xml *.maf

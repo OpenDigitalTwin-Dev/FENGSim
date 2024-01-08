@@ -1,0 +1,32 @@
+\begin{thebibliography}{1}
+
+\bibitem{JeanMarietteHerve}
+Jean~Daniel Boissonnat, Mariette Yvinec, and Herve Bronnimann.
+\newblock {\em Algorithmic Geometry}.
+\newblock Cambridge University Press, 2001.
+
+\bibitem{JakobJensFrançoisHenrik}
+Jakob~Andreas Bærentzen, Jens Gravesen, François Anton, and Henrik Aanæs.
+\newblock {\em Guide to Computational Geometry Processing}.
+\newblock Springer, 2012.
+
+\bibitem{MarkMarcMarkOtfried}
+Mark de~Berg, Marc van Kreveld, Mark Overmars, and Otfried Schwarzkopf.
+\newblock {\em Computational Geometry Algorithms and Applications}.
+\newblock Springer, 2012.
+
+\bibitem{PascalPaul}
+Pascal~Jean Frey and Paul-Louis George.
+\newblock {\em Mesh Generation}.
+\newblock HERMES Science Publishing, 2000.
+
+\bibitem{PaulHouman}
+Paul-Louis George and Houman Borouchaki.
+\newblock {\em Delaunay Triangulation and Meshing}.
+\newblock HERMES Science Publishing, 1998.
+
+\bibitem{Erich}
+Erich Hartma.
+\newblock {\em Geometry and Algorithms for COMPUTER AIDED DESIGN}.
+
+\end{thebibliography}

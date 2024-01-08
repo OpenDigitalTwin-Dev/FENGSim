@@ -1,0 +1,151 @@
+% w-bookps.sty 
+\def\pscurrentversion{Feb 16, 2012}
+
+  %****************************************************************%
+  %*                                                              *%
+  %*   PostScript fonts for                                       *%
+  %*                                                              *%
+  %*   Wiley Book Style, Design No.: SD 001C                      *%
+  %*   John Wiley and Sons, Publishers                            *%
+  %*                                                              *%
+  %*   Prepared by Amy Hendrickson, TeXnology Inc.                *%          
+  %*   (617) 738-8029                                             *%
+  %*                                                              *%
+  %*   \documentclass{wileySix}                                   *%
+  %*   or                                                         *%
+  %*   \documentclass{wileySev}                                   *%
+  %*                                                              *%
+  %*   \usepackage{w-bookps}                                      *%
+  %*                                                              *%
+  %****************************************************************%
+
+\typeout{^^J^^J
+Using PostScript Fonts^^J^^J
+Wiley Monograph/Edited Book Style^^J
+\pscurrentversion^^J^^J
+}
+
+%%  Change these definitions, if necessary ====>
+%%  These are the Berry font names, found on most systems
+
+%% Times-Roman
+%------------------
+%% Berry Names:
+ \def\timesroman{ptmr}
+ \def\timesbold{ptmb}
+ \def\timesitalic{ptmri}
+ \def\timesbolditalic{ptmbi}
+
+%% Helvetica
+%------------------
+%% Berry Names:
+ \def\helvetica{phvr}
+ \def\helveticaoblique{phvro}
+ \def\helveticabold{phvb}
+ \def\helveticaboldoblique{phvbo}
+
+%% Courier
+%% Berry Name:
+\def\courier{pcrr}
+
+%% <==== End of changes needed. Please do not make changes below this point.
+%% !!!!!!!!!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% default definitions, since these fonts 
+%% will not be used:
+
+\def\courieroblique{pcrro}
+\def\courierbold{pcrb}
+\def\courierboldoblique{pcrbo}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\renewcommand{\sfdefault}{phv}
+\renewcommand{\rmdefault}{ptm}
+\renewcommand{\ttdefault}{pcr}
+
+%% Times-Roman
+\xdef\timesroman{\timesroman\space}
+\xdef\timesbold{\timesbold\space}
+\xdef\timesitalic{\timesitalic\space}
+\xdef\timesbolditalic{\timesbolditalic\space}
+
+%% Helvetica
+\xdef\helvetica{\helvetica\space}
+\xdef\helveticaoblique{\helveticaoblique\space}
+\xdef\helveticabold{\helveticabold\space}
+\xdef\helveticaboldoblique{\helveticaboldoblique\space}
+
+%% Courier
+\xdef\courier{\courier\space}
+\xdef\courieroblique{\courieroblique\space}
+\xdef\courierbold{\courierbold\space}
+\xdef\courierboldoblique{\courierboldoblique\space}
+
+%% Special Use Fonts
+%%
+%% Table of Contents
+\font\tocarttitlefont=\helveticabold at 12pt
+\font\chaptocfont=\helveticabold at 10pt
+\font\tocfonts=\timesroman at 10pt
+
+%% Running heads
+\font\runningheadfont=\helvetica at6.5pt
+\font\foliofont=\helveticabold at 9pt
+
+%% Book Title, Half title page
+
+\font\halftitlefont=\helveticabold at 20pt
+\font\titlefont=\helveticabold at 24pt
+\font\subtitlefont=\helveticabold at 20pt
+\font\editionfont=\helvetica at 14pt
+\font\authorfont=\helveticabold at 11pt
+\font\affilfont=\helvetica at 10pt
+\font\locfont=\timesbolditalic at 7pt
+
+\font\wileyfont=\helveticabold at 10pt
+\font\imprintfont=\helvetica at 10pt
+
+%% Part Title
+\font\partfont=\helvetica at 24pt
+\font\partnumberfont=\helveticabold at 14pt
+
+%% Chapter Title 
+\font\chapternumberfont=\helveticabold at 14pt
+\font\chaptertitlefont=\helvetica at 18pt
+\font\chapaffilfont=\timesroman at 9pt
+
+%% Section heads
+\font\sectionfont=\helveticabold at 10pt
+\font\subsectionfont=\helveticabold at 10pt
+\font\subsubsectionfont=\helveticaboldoblique at 9pt
+\font\paragraphfont=\helveticaoblique at 9.5pt
+
+%% Caption 
+\font\fignumfont=\timesbold at 9pt
+\font\tabnumfont=\timesbold at 9pt
+\font\figtextfont=\timesroman at 9pt
+\font\tabtextfont=\timesroman at 9pt
+
+%% Table fonts
+\def\tablefontsize{\small}
+\def\tablefootnotesize{\footnotesize}
+
+%% References/Bibliography
+\def\bibfontsize{\small}
+
+%% Text fonts
+\font\bit=\timesbolditalic at 8pt
+
+%% Fake Small Caps
+\font\bigscfont\timesroman at 9.5pt
+\font\smscfont\timesroman at 7.5pt
+\font\wherefont\timesitalic at 8pt
+
+%% Problem Sets
+\font\probfont\timesbolditalic at 10pt
+
+\@normalsize
+
+

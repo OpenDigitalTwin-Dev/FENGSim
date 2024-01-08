@@ -1,0 +1,542 @@
+\chapter{软件设计说明书}
+\label{ch:prelim}
+
+本章通过比较两个开源有限元软件M++和FEniCS来介绍有限元软件开发的基本思路。
+M++是由德国Karlsruhe Institute of Technology数学系的Christian Wieners教授开发的。M++的意思是多重网格方法（\underline{M}ultigrid），这是Wieners的主要研究领域之一。
+Wieners在上个世纪90年代参与了开源有限元软件UG的开发，主要做塑性力学。当时德国有几个团队都在开发有限元软件，UG是Heidelberg University的Peter Bastian等人开发的，DEAL和deal.II是Heidelberg University的W. Bangerth和G. Kanschat等人开发的，ALBERTA是Freiburg University的A. Schmidt和K. G. Siebert等人开发的，这些软件在当时都采用了最先进的理念和算法。UG项目开始的时候，Wieners和Bastian还都是年轻的博士后。UG的意思是非结构网格（\underline{U}nstructured \underline{G}rid），目前开发和维护基本停止了，Bastian开启了另外一个项目DUNE（\underline{D}istributed and \underline{U}nified \underline{N}umerics \underline{E}nvironment）。M++吸收了大量UG开发的经验，又重新建立了自己独特的数据结构DPO（\underline{D}istributed \underline{P}oint \underline{O}bject）。像M++和UG这样互相学习和借鉴的情况，对于开源软件来说是很常见的，deal.II也借鉴了挪威Hans Petter Langtangen教授开发的DiffPack，而Langtangen又参与了下面要介绍的FEniCS项目的开发。
+
+FEniCS是瑞典Chalmers University of Technology数学系的Anders Logg教授在2003年创建的开源有限元软件项目，目前参与开发的科研团队比较多，官方合作伙伴包括挪威Simula Research Lab、瑞典CTH、捷克Charles University、卢森堡Luxemburg University、英国Cambridge University。FEniCS的一大特点是采用了一种类数学语言UFL来定义问题，FFC编译器结合FIAT将UFL编译成C++程序，通过UFC接口供dolfin有限元计算使用。这意味着使用者可以非常轻松的定义模型，而不用深入了解底层代码。这个和瑞典商业仿真软件COMSOL非常类似，也许是因为COMSOL和FEniCS的创始人都是计算数学背景，喜欢简明的数学定义。FEniCS实现了自适应有限元、间断有限元、多重网格、区域分离法等高级算法，实现了大规模并行计算，可以求解各种结构、流体和电磁的问题。瑞典计算流体学派发展源远流长，Logg的博士导师Claes Johnson教授是著名的计算流体专家，为Streamline Diffusion方法做了大量理论分析工作，因此Logg采用自适应和多网格方法，在FEniCS上做了大量复杂的流体和流固耦合计算。
+
+
+
+
+\section{有限元基本算法}
+有限元求解偏微分方程有四步：
+\begin{itemize}
+\item 偏微分方程的初始/边界值问题；
+\item 变分形式；
+\item 有限元离散形式；
+\item 求解线性方程组。
+\end{itemize}
+我们用有限元方法的“hello world！”Poisson方程的边界值问题来介绍这四步。
+\subsubsection{方程和边界条件}
+Poisson方程的边界值问题定义为
+\begin{subequations}
+  \label{eq:1-1:1}
+  \begin{align}
+    \label{eq:1-1:1a}
+    -\Delta u &= f & \textrm{in }\Omega\,,\\
+    u &= u_0 & \textrm{on }\Gamma_D\,,\\
+    \mathbf n\cdot \nabla u &= g & \textrm{on }\Gamma_N\,.
+  \end{align}
+\end{subequations}
+\subsubsection{变分形式}
+高斯divergence定理为
+\begin{align}
+  \label{eq:1-1:2}
+  \int_{\Omega}\nabla\cdot \mathbf w \ud x = \int_{\Gamma}\mathbf n\cdot \mathbf w \ud s\,.
+\end{align}
+将\eqref{eq:1-1:2}中的$\mathbf w$换成$\mathbf wv$
+\begin{align*}
+  \int_{\Omega}\nabla\cdot (\mathbf wv) \ud x &= \int_{\Gamma}\mathbf n\cdot (\mathbf wv) \ud s \,.
+\end{align*}
+\begin{align}
+  \label{eq:1-1:3}
+  \int_{\Omega}\nabla\cdot \mathbf wv \ud x  + \int_{\Omega}\mathbf w\cdot\nabla v \ud x&= \int_{\Gamma}\mathbf n\cdot \mathbf w v\ud s 
+\end{align}
+将\eqref{eq:1-1:3}中的$\mathbf w$换成$\nabla u$
+\begin{align*}
+  \int_{\Omega}\nabla\cdot \nabla u v \ud x  + \int_{\Omega}\nabla u \cdot\nabla v \ud x&= \int_{\Gamma}\mathbf n\cdot \nabla u  v\ud s \,.
+\end{align*}
+\begin{align}
+  \label{eq:1-1:4}
+  \int_{\Omega}\Delta u v \ud x  + \int_{\Omega}\nabla u \cdot\nabla v \ud x&= \int_{\Gamma}\partial_n u  v\ud s 
+\end{align}
+
+将方程\eqref{eq:1-1:1a}两边乘以$v$，再做$\Omega$上的体积分，并使用\eqref{eq:1-1:4}。
+\begin{align*}
+  \int_{\Omega}-\Delta u v\ud x &= \int_{\Omega}fv\ud x \\
+  \int_{\Omega}\nabla u \cdot\nabla v \ud x - \int_{\Gamma}\partial_n u  v\ud s &= \int_{\Omega}fv\ud x
+\end{align*}
+\begin{align}
+  \label{eq:1-1:5}
+    \int_{\Omega}\nabla u \cdot\nabla v \ud x  &= \int_{\Omega}fv\ud x + \int_{\Gamma}\partial_n u  v\ud s
+\end{align}
+根据\eqref{eq:1-1:5}定义变分形式，找到一个$u\in V_{u_0}:=\{v\in H^1(\Omega):v=u_0\textrm{ on }\Gamma_D\}$满足
+\begin{align}
+  \label{eq:1-1:6}
+    \int_{\Omega}\nabla u \cdot\nabla v \ud x  &= \int_{\Omega}fv\ud x + \int_{\Gamma_N}g  v\ud s & \forall v\in V_0:=\{v\in H^1(\Omega):v=0\textrm{ on }\Gamma_D\}\,.
+\end{align}
+
+\subsubsection{有限元离散形式}
+将$\Omega$剖分成网格$\Omega_h$，定义有限元，根据有限元和网格定义连续分段多项式函数空间$V_h$。用$V_h$替代\eqref{eq:1-1:6}中的Sobolev空间$H^1(\Omega)$定义离散形式，找到一个$u_h\in V_{h,u_0}$满足
+\begin{align}
+  \label{eq:1-1:7}
+    \int_{\Omega_h}\nabla u_h \cdot\nabla v_h \ud x  &= \int_{\Omega_h}f_hv_h\ud x + \int_{\Gamma_{h,N}}g_h  v_h\ud s& \forall v_h\in V_{h,0}\,.
+\end{align}
+$V_{h,u_0}$满足Dirichlet边界条件，$V_{h,0}$类似。
+
+
+\subsubsection{求解线性方程组}
+$V_h$有一组基函数$\{\phi_j^{(1)}\}_{j=1}^{N_1}\bigcup\{\phi_j^{(2)}\}_{j=1}^{N_2}$，$\phi_{j}^{(2)}$为在$\Gamma_{h,D}$上函数值不为零的基函数。
+\begin{align}
+  \label{eq:1-1:8}
+  u_h = \sum_{j=1}^{N_1}U_j^{(1)}\phi_j^{(1)} + \sum_{j=1}^{N_2}U_{j}^{(2)}\phi_{j}^{(2)}
+\end{align}
+将\eqref{eq:1-1:8}带入\eqref{eq:1-1:7}
+\begin{align*}
+  \sum_{j=1}^{N_1}U_j^{(1)}\int_{\Omega_h}\nabla \phi_j^{(1)} \cdot\nabla \phi_i^{(1)} \ud x + & \sum_{j=1}^{N_2}U_j^{(2)}\int_{\Omega_h}\nabla \phi_j^{(2)} \cdot\nabla \phi_i^{(1)} \ud x  \\
+  &= \int_{\Omega_h}f_h\phi_i^{(1)}\ud x + \int_{\Gamma_{h,N}}g_h\phi_i^{(1)}\ud s \qquad  i=1,\cdots,N_1\,.
+\end{align*}
+由此得到一个线性方程组
+\begin{align}
+  \label{eq:1-1:9}
+  AU = b\,.
+\end{align}
+
+
+
+\section{网格数据结构}
+有限元是基于网格的算法，网格是由单元、面、边、点构成。
+将算例\ref{exam:1}中的$\Omega$剖分成一个网格如图\ref{fig:1-2:1}，具有13个顶点和24个单元。
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=6cm]{fig/1.2/1-2-1.png}
+  \caption{有限元网格}
+  \label{fig:1-2:1}
+\end{figure}
+
+常用的网格定义包括顶点编号和坐标，如表\ref{tab:1-2:1}，单元编号和单元顶点编号，如表\ref{tab:1-2:2}。表\ref{tab:1-2:1}和\ref{tab:1-2:2}定义了一种数据结构，FEniCS采用这种数据结构。
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{l|l|l|l|l|l}
+    \multicolumn{1}{c|}{id} & \multicolumn{1}{c|}{vertex} & \multicolumn{1}{c|}{id} & \multicolumn{1}{c|}{vertex} & \multicolumn{1}{c|}{id} & \multicolumn{1}{c}{vertex}\\
+    \hline
+    0 & (0,0) & 5 & (0.5,0) & 10 & (0.75,0.25) \\
+    \hline
+    1 & (1,0) & 6 & (0,0.5) & 11 & (0.25,0.75)\\
+    \hline
+    2 & (0,1) & 7 & (0.5,1) & 12 & (0.75,0.75) \\
+    \hline
+    3 & (1,1) & 8 & (1,1) & & \\
+    \hline
+    4 & (0.5,0.5) & 9 & (0.25,0.25) & & 
+  \end{tabular}
+  \caption{顶点编号和坐标}
+  \label{tab:1-2:1}
+\end{table}
+
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{l|l|l|l|l|l}
+    \multicolumn{1}{c|}{id} & \multicolumn{1}{c|}{cell} & \multicolumn{1}{c|}{id} & \multicolumn{1}{c|}{cell} & \multicolumn{1}{c|}{id} & \multicolumn{1}{c}{cell}\\
+    \hline
+    0 & (4,7,9) & 6 & (2,6,11) & 12 & (4,11,12)\\
+    \hline
+    1 & (0,5,7) & 7 & (6,7,11) & 13 & (2,10,11)\\
+    \hline
+    2 & (1,5,9) & 8 & (4,9,12) & 14 & (3,10,12)\\
+    \hline
+    3 & (5,7,9) & 9 & (1,8,9)  & 15 & (10,11,12)\\
+    \hline
+    4 & (4,7,11) & 10 & (3,8,12)  & & \\
+    \hline
+    5 & (0,6,7) & 11 & (8,9,12) & &
+  \end{tabular}
+  \caption{单元编号和单元顶点编号}
+  \label{tab:1-2:2}
+\end{table}
+
+顶点编号分单元局部编号和网格全局编号，表\ref{tab:1-2:1}和\ref{tab:1-2:2}中是网格全局编号，从单元局部编号到网格全局编号有一个映射。图\ref{fig:1-2:2}中灰色三角是网格的第一个单元，顶点的单元局部编号为蓝色数字(0,1,2)，网格全局编号为红色数字(4,7,9)。需要注意的是单元顶点局部编号确定后，单元面和边的局部编号也随之确定。
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=6cm]{fig/1.2/1-2-2.png}
+  \caption{顶点的单元局部编号和网格全局编号}
+  \label{fig:1-2:2}
+\end{figure}
+
+M++里不存在编号和编号映射，单元、面、边、点都用顶点坐标定义，用中心点标识。
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{l|l|l|l|l|l}
+    \multicolumn{1}{c|}{id} & \multicolumn{1}{c|}{vertex} & \multicolumn{1}{c|}{id} & \multicolumn{1}{c|}{vertex} & \multicolumn{1}{c|}{id} & \multicolumn{1}{c}{vertex}\\
+    \hline
+    (0,0) & (0,0) & (1,0.5) & (1,0.5) & (0.75,0.25) & (0.75,0.25) \\
+    \hline
+    (0.5,0) & (0.5,0) & (0,1) & (0,1) & (0.25,0.75) & (0.25,0.75)\\
+    \hline
+    (1,0) & (1,0) & (0.5,1) & (0.5,1) & (0.75,0.75) & (0.75,0.75) \\
+    \hline
+    (0,0.5) & (0,0.5) & (1,1) & (1,1) & & \\
+    \hline
+    (0.5,0.5) & (0.5,0.5) & (0.25,0.25) & (0.25,0.25) & & 
+  \end{tabular}
+  \caption{中心点和顶点}
+  \label{tab:1-2:3}
+\end{table}
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{l|l|l|l}
+    \multicolumn{1}{c|}{id} & \multicolumn{1}{c|}{cell} & \multicolumn{1}{c|}{id} & \multicolumn{1}{c}{cell} \\
+    \hline
+    (0.75,0.92) & (0.5,1) (0.75,0.75) (1,1) & (0.5,0.67) & (0.25,0.75) (0.5,0.5) (0.75,0.75) \\
+    \hline
+    (0.25,0.083) & (0,0) (0.5,0) (0.25,0.25)  & (0.5,0.33) & (0.25,0.25) (0.75,0.25) (0.5,0.5) \\
+    \hline
+    (0.75,0.083) & (0.5,0) (1,0) (0.75,0.25) & (0.17,0.5) & (0,0.5) (0.25,0.25) (0.25,0.75) \\
+    \hline
+    (0.92,0.25) & (1,0) (1,0.5) (0.75,0.25)  & (0.67,0.5) & (0.75,0.25) (0.75,0.75) (0.5,0.5) \\
+    \hline
+    (0.92,0.75) & (1,0.5) (1,1) (0.75,0.75)  & (0.5,0.83) & (0.5,1) (0.25,0.75) (0.75,0.75) \\
+    \hline
+    (0.5,0.17) & (0.25,0.25) (0.5,0) (0.75,0.25) & (0.083,0.25) & (0,0) (0.25,0.25) (0,0.5) \\
+    \hline
+    (0.33,0.5) & (0.25,0.25) (0.5,0.5) (0.25,0.75) & (0.083,0.75) & (0,0.5) (0.25,0.75) (0,1) \\
+    \hline
+    (0.83,0.5) & (0.75,0.25) (1,0.5) (0.75,0.75) & (0.25,0.92) & (0,1) (0.25,0.75) (0.5,1)
+  \end{tabular}
+  \caption{中心点和单元顶点}
+  \label{tab:1-2:4}
+\end{table}
+
+\section{线性代数数据结构}
+有限元计算需要求解线性方程组$AU=b$。向量$b$的数据结构非常简单，我们只讨论矩阵$A$的数据结构。
+$A$是根据连续分段多项式函数空间$V_h$的基函数计算的，基函数对应自由度，自由度对应结点，结点定义在网格的单元、面、边、点上。
+求解算例\ref{exam:1}使用连续分段线性函数空间，图\ref{fig:1-3:1}是一个基函数并对应结点$(0.5,0.5)$，结点也是网格顶点。
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=6cm]{fig/1.3/1-3-1.png}
+  \caption{基函数}
+  \label{fig:1-3:1}
+\end{figure}
+
+定义结点编号，如表\ref{tab:1-3:1}，定义网格单元上的结点编号，如表\ref{tab:1-3:2}。需要注意的是对算例\ref{exam:1}来说结点也是网格顶点，但是编号不同。
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{l|l|l|l|l|l}
+    \multicolumn{1}{c|}{id$_{\mathrm v}$} & \multicolumn{1}{c|}{id$_{\mathrm n}$} & \multicolumn{1}{c|}{id$_{\mathrm v}$} & \multicolumn{1}{c|}{id$_{\mathrm n}$} & \multicolumn{1}{c|}{id$_{\mathrm v}$} & \multicolumn{1}{c}{id$_{\mathrm n}$}\\
+    \hline
+    0 & 12 & 5 & 9 & 10 & 3 \\
+    \hline
+    1 & 4 & 6 & 11 & 11 & 7 \\
+    \hline
+    2 & 8 & 7 & 10 & 12 & 2 \\
+    \hline
+    3 & 0 & 8 & 1 & & \\
+    \hline
+    4 & 6 & 9 & 5 & & 
+  \end{tabular}
+  \caption{顶点编号id$_{\mathrm v}$和结点编号id$_{\mathrm n}$}
+  \label{tab:1-3:1}
+\end{table}
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{l|l|l|l|l|l}
+    \multicolumn{1}{c|}{id} & \multicolumn{1}{c|}{nodals} & \multicolumn{1}{c|}{id} & \multicolumn{1}{c|}{nodals} & \multicolumn{1}{c|}{id} & \multicolumn{1}{c}{nodals}\\
+    \hline
+    0 & (6,10,5) & 6 & (8,11,7) & 12 & (6,7,2)\\
+    \hline
+    1 & (12,9,10) & 7 & (11,10,7) & 13 & (8,3,7)\\
+    \hline
+    2 & (4,9,5) & 8 & (6,5,2) & 14 & (0,3,2)\\
+    \hline
+    3 & (9,10,5) & 9 & (4,1,5)  & 15 & (3,7,2)\\
+    \hline
+    4 & (6,10,7) & 10 & (0,1,2)  & & \\
+    \hline
+    5 & (12,11,10) & 11 & (1,5,2) & &
+  \end{tabular}
+  \caption{单元编号和单元结点编号}
+  \label{tab:1-3:2}
+\end{table}
+
+结点编号分单元局部编号和网格全局编号，表\ref{tab:1-3:1}和\ref{tab:1-3:2}中是网格全局编号，从单元局部编号到网格全局编号有一个映射。图\ref{fig:1-3:2}中灰色三角是网格的第一个单元，结点的单元局部编号为蓝色数字(0,1,2)，网格全局编号为红色数字(6,10,5)。需要注意的是对于一个网格单元，单元、面、边、点局部编号确定后，所有结点单元局部编号也随之确定。矩阵拼装需要结点单元局部编号和网格全局编号之间的映射。FEniCS采用了表\ref{tab:1-3:1}和\ref{tab:1-3:2}的数据结构，M++的结点用坐标标识和定义，因此不需要表\ref{tab:1-3:1}和\ref{tab:1-3:2}的编号数据结构。
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=6cm]{fig/1.3/1-3-2.png}
+  \caption{结点的单元局部编号和网格全局编号}
+  \label{fig:1-3:2}
+\end{figure}
+
+矩阵元素$A_{ij}$的计算公式为
+\begin{align}\label{eq:1-3:1}
+  A_{ij}=\int_{\Omega}\nabla\phi_j\cdot\nabla\phi_i\ud x\,.
+\end{align}
+当$\phi_i$和$\phi_j$函数值不为零的区域有重合时$A_{ij}\neq 0$，如图\ref{fig:1-3:3}，不重合时$A_{ij}=0$，如图\ref{fig:1-3:4}，
+因此$A$是一个稀疏矩阵。
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=6cm]{fig/1.3/1-3-3.png}
+  \caption{不为零区域有重合}
+  \label{fig:1-3:3}
+\end{figure}
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=6cm]{fig/1.3/1-3-4.png}
+  \caption{不为零区域没有重合}
+  \label{fig:1-3:4}
+\end{figure}
+图\ref{fig:1-3:3}中两个基函数对应的结点编号是7和4，这两个结点定义在两个相同的网格单元上。
+图\ref{fig:1-3:4}中两个基函数对应的结点编号是6和4，这两个结点没有定义在任意一个相同的网格单元上。
+因此如果$A_{ij}\neq 0$，对应的结点$i$和$j$必须可以定义在至少一个相同的网格单元上。
+可以根据这个条件来定义稀疏矩阵的结构，如表格\ref{tab:1-3:3}，$0$和$1$表示矩阵元素是否为零。
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{c|c|c|c|c|c|c|c|c|c|c|c|c|c}
+       & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 \\
+    \hline
+   0   & 1 & 1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 &  0 &  0 &  0 \\
+    \hline
+   1   & 1 & 1 & 1 & 0 & 1 & 1 & 0 & 0 & 0 & 0 &  0 &  0 &  0 \\
+    \hline
+   2   & 1 & 1 & 1 & 1 & 0 & 1 & 1 & 1 & 0 & 0 &  0 &  0 &  0 \\
+    \hline
+   3   & 1 & 0 & 1 & 1 & 0 & 0 & 0 & 1 & 1 & 0 &  0 &  0 &  0 \\
+    \hline
+   4   & 0 & 1 & 0 & 0 & 1 & 1 & 0 & 0 & 0 & 1 &  0 &  0 &  0 \\
+    \hline
+   5   & 0 & 1 & 1 & 0 & 1 & 1 & 1 & 0 & 0 & 1 &  1 &  0 &  0 \\
+    \hline
+   6   & 0 & 0 & 1 & 0 & 0 & 1 & 1 & 1 & 0 & 0 &  1 &  0 &  0 \\
+    \hline
+   7   & 0 & 0 & 1 & 1 & 0 & 0 & 1 & 1 & 1 & 0 &  1 &  1 &  0 \\
+    \hline
+   8   & 0 & 0 & 0 & 1 & 0 & 0 & 0 & 1 & 1 & 0 &  0 &  1 &  0 \\
+    \hline
+   9   & 0 & 0 & 0 & 0 & 1 & 1 & 0 & 0 & 0 & 1 &  1 &  0 &  1 \\
+    \hline
+   10  & 0 & 0 & 0 & 0 & 0 & 1 & 1 & 1 & 0 & 1 &  1 &  1 &  1 \\
+    \hline
+   11  & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 & 1 & 0 &  1 &  1 &  1 \\
+    \hline
+   12  & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 1 &  1 &  1 &  1 \\
+  \end{tabular}
+  \caption{稀疏矩阵结构}
+  \label{tab:1-3:3}
+\end{table}
+
+表格\ref{tab:1-3:3}中有大量的矩阵元素为零，显然这些零元素不需要进行存储，采用Compressed Row Storage方法进行存储。CRS由三个向量构成：
+第一个向量维数为矩阵的行数，存储矩阵每行的非零元素个数。第二个向量维数为矩阵所有非零元素总数，存储每个非零元素列序号。
+第三个向量维数为矩阵所有非零元素总数，存储每个非零元素值。FEniCS和M++都采用CRS数据结构，FEniCS通过结点编号标识矩阵非零元素，M++通过
+结点坐标标识结点，通过结点直接标识矩阵非零元素。因此FEniCS矩阵拼装是根据结点单元局部编号和网格全局编号进行的，M++矩阵拼装是根据结点坐标进行的。
+
+
+
+\section{数值积分}
+算例\ref{exam:1}需要计算三个积分，分别为
+\begin{align}\label{eq:1-4:1}
+  \int_{T}\nabla\phi_j\cdot\nabla\phi_i\ud x \qquad \int_{T}f_h\phi_i\ud x \qquad \int_{K}g_h\phi_i\ud s\,.
+\end{align}
+$T$是一个网格单元，$K$是一个边界网格单元。对\eqref{eq:1-4:1}中的积分采用公式推导是复杂和缺少通用性的，
+因此采用数值积分。
+
+定义一个参考单元，参考单元到网格任意单元有一个映射，如图\ref{fig:1-4:1}。
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=6cm]{fig/1.4/1-4-1.png}
+  \caption{从参考单元到网格任意单元的线性映射}
+  \label{fig:1-4:1}
+\end{figure}
+\begin{align*}
+  \left(\begin{array}{l}
+    x_1\\
+    x_2
+  \end{array}\right) =& \left(\begin{array}{l}
+    a_1\\
+    a_2
+  \end{array}\right) + \tilde{x}_1\left[\left(\begin{array}{l}
+    b_1\\
+    b_2
+  \end{array}\right) - \left(\begin{array}{l}
+    a_1\\
+    a_2
+  \end{array}\right)\right] + \tilde{x}_2\left[\left(\begin{array}{l}
+    c_1\\
+    c_2
+  \end{array}\right) - \left(\begin{array}{l}
+    a_1\\
+    a_2
+  \end{array}\right)\right]\\
+  =&\left(\begin{array}{l}
+    a_1\\
+    a_2
+  \end{array}\right) + \left(\begin{array}{ll}
+    b_1-a_1 & c_1-a_1\\
+    b_2-a_2 & c_2-a_2
+  \end{array}\right)\left(\begin{array}{l}
+    \tilde x_1\\
+    \tilde x_2
+  \end{array}\right)\\
+  =&\mathcal G\left(\begin{array}{l}
+    \tilde x_1\\
+    \tilde x_2
+  \end{array}\right)
+\end{align*}
+\begin{align*}
+  \left(\begin{array}{l}
+    \tilde x_1\\
+    \tilde x_2
+  \end{array}\right)=&\left(\begin{array}{ll}
+    b_1-a_1 & c_1-a_1\\
+    b_2-a_2 & c_2-a_2
+  \end{array}\right)^{-1}\left(\left(\begin{array}{l}
+    x_1\\
+    x_2
+  \end{array}\right) - \left(\begin{array}{l}
+    a_1\\
+    a_2
+  \end{array}\right)\right)\\
+=&\frac{1}{(b_1-a_1)(c_2-a_2)-(c_1-a_1)((b_2-a_2))}\left(\begin{array}{ll}
+    c_2-a_2 & -(c_1-a_1)\\
+    -(b_2-a_2) & b_1-a_1
+  \end{array}\right)\left(\left(\begin{array}{l}
+    x_1\\
+    x_2
+  \end{array}\right) - \left(\begin{array}{l}
+    a_1\\
+    a_2
+  \end{array}\right)\right)\\
+  =&\mathcal G^{-1}\left(\begin{array}{l}
+    x_1\\
+    x_2
+  \end{array}\right)
+\end{align*}
+
+
+对\eqref{eq:1-4:1}第一个积分，通过变量替换将任意网格单元$T$上积分转为参考单元$\tilde T$上积分。
+\begin{align}\label{eq:1-4:2}
+  \int_{T}\nabla\phi_i\cdot\nabla\phi_j\ud x = \int_{\tilde T}\nabla_x\phi_i(\mathcal G(\tilde x))\cdot\nabla_x\phi_j(\mathcal G(\tilde x))|J_T(\tilde x)|\ud \tilde x
+\end{align}
+\begin{align*}
+  \nabla_x \phi_i(x) =&
+  \left(\begin{array}{c}
+    \frac{\partial \phi_i(x)}{\partial x_1}\\
+    \frac{\partial \phi_i(x)}{\partial x_2}
+  \end{array}\right) =
+  \left(\begin{array}{c}
+    \frac{\partial \phi_i(\mathcal G(\tilde x))}{\partial x_1}\\
+    \frac{\partial \phi_i(\mathcal G(\tilde x))}{\partial x_2}
+  \end{array}\right)=
+  \left(\begin{array}{c}
+    \frac{\partial \phi_i(\mathcal G(\tilde x))}{\partial \tilde x_1}\frac{\partial \tilde x_1}{\partial x_1} + \frac{\partial \phi_i(\mathcal G(\tilde x))}{\partial \tilde x_2}\frac{\partial \tilde x_2}{\partial x_1}\\
+    \frac{\partial \phi_i(\mathcal G(\tilde x))}{\partial \tilde x_1}\frac{\partial \tilde x_1}{\partial x_2} + \frac{\partial \phi_i(\mathcal G(\tilde x))}{\partial \tilde x_2}\frac{\partial \tilde x_2}{\partial x_2}
+  \end{array}\right)\\
+  =&  \left(\begin{array}{cc}
+    \frac{\partial \tilde x_1}{\partial x_1} & \frac{\partial \tilde x_2}{\partial x_1}\\
+    \frac{\partial \tilde x_1}{\partial x_2} & \frac{\partial \tilde x_2}{\partial x_2}
+  \end{array}\right)(x)\left(\begin{array}{c}
+    \frac{\partial \tilde\phi_i(\tilde x))}{\partial \tilde x_1}\\
+    \frac{\partial \tilde\phi_i(\tilde x))}{\partial \tilde x_2}
+  \end{array}\right)(\mathcal G^{-1} (x))
+\end{align*}
+\begin{align}\label{eq:1-4:3}
+  \nabla_x \phi_i(\mathcal G (\tilde x)) = \left(\begin{array}{cc}
+    \frac{\partial \tilde x_1}{\partial x_1} & \frac{\partial \tilde x_2}{\partial x_1}\\
+    \frac{\partial \tilde x_1}{\partial x_2} & \frac{\partial \tilde x_2}{\partial x_2}
+  \end{array}\right)(\mathcal G (\tilde x))\left(\begin{array}{c}
+    \frac{\partial \tilde\phi_i(\tilde x))}{\partial \tilde x_1}\\
+    \frac{\partial \tilde\phi_i(\tilde x))}{\partial \tilde x_2}
+  \end{array}\right)
+\end{align}
+将\eqref{eq:1-4:3}带入\eqref{eq:1-4:2}并做数值积分得到
+\begin{align*}
+  \int_{T}\nabla\phi_j\cdot\nabla\phi_i\ud x =& \int_{\tilde T}\left(\left(\begin{array}{cc}
+    \frac{\partial \tilde x_1}{\partial x_1} & \frac{\partial \tilde x_2}{\partial x_1}\\
+    \frac{\partial \tilde x_1}{\partial x_2} & \frac{\partial \tilde x_2}{\partial x_2}
+  \end{array}\right)(\mathcal G(\tilde x))\cdot\nabla_{\tilde x}\tilde \phi_j\right)\cdot\left( \left(\begin{array}{cc}
+    \frac{\partial \tilde x_1}{\partial x_1} & \frac{\partial \tilde x_2}{\partial x_1}\\
+    \frac{\partial \tilde x_1}{\partial x_2} & \frac{\partial \tilde x_2}{\partial x_2}
+  \end{array}\right)(\mathcal G(\tilde x))\cdot\nabla_{\tilde x}\tilde \phi_i\right)|J_T(\tilde x)|\ud \tilde x\\
+  \approx &\sum_{l=1}^q\left(\left(\begin{array}{cc}
+    \frac{\partial \tilde x_1}{\partial x_1} & \frac{\partial \tilde x_2}{\partial x_1}\\
+    \frac{\partial \tilde x_1}{\partial x_2} & \frac{\partial \tilde x_2}{\partial x_2}
+  \end{array}\right)(\mathcal G(\tilde x_l))\cdot\nabla_{\tilde x}\tilde \phi_j(\tilde x_l)\right)\cdot\left( \left(\begin{array}{cc}
+    \frac{\partial \tilde x_1}{\partial x_1} & \frac{\partial \tilde x_2}{\partial x_1}\\
+    \frac{\partial \tilde x_1}{\partial x_2} & \frac{\partial \tilde x_2}{\partial x_2}
+  \end{array}\right)(\mathcal G(\tilde x_l))\cdot\nabla_{\tilde x}\tilde \phi_i(\tilde x_l)\right)|J_T(\tilde x_l)|\tilde \omega_l\,.
+\end{align*}
+因此计算\ref{eq:1-4:2}的数值积分，需要表\ref{tab:1-4:1}中的数据。表\ref{tab:1-4:1}中前三列数据和参考单元基函数以及数值积分有关，后两列和参考单元与网格单元之间的映射有关。
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{l|l|l|l|l}
+    $\nabla\widetilde\phi_i(\tilde x_0)$ & $\nabla\widetilde\phi_j(\tilde x_0)$ & $\tilde\omega_0$ & $\left(\begin{array}{cc}
+    \frac{\partial \tilde x_1}{\partial x_1} & \frac{\partial \tilde x_2}{\partial x_1}\\
+    \frac{\partial \tilde x_1}{\partial x_2} & \frac{\partial \tilde x_2}{\partial x_2}
+  \end{array}\right)(\mathcal G(\tilde x_0))$ & $|J_{T}(\tilde x_0)|$\\
+    \hline
+    $\nabla\widetilde\phi_i(\tilde x_1)$ & $\nabla\widetilde\phi_j(\tilde x_1)$ & $\tilde\omega_1$ & $\left(\begin{array}{cc}
+    \frac{\partial \tilde x_1}{\partial x_1} & \frac{\partial \tilde x_2}{\partial x_1}\\
+    \frac{\partial \tilde x_1}{\partial x_2} & \frac{\partial \tilde x_2}{\partial x_2}
+  \end{array}\right)(\mathcal G(\tilde x_1))$ &$|J_{T}(\tilde x_1)|$\\
+    \hline
+    $\cdots$ & $\cdots$  & $\cdots$ & $\cdots$  & $\cdots$ \\
+    \hline
+    $\nabla\widetilde\phi_i(\tilde x_q)$ & $\nabla\widetilde\phi_j(\tilde x_q)$ & $\tilde\omega_q$ & $\left(\begin{array}{cc}
+    \frac{\partial \tilde x_1}{\partial x_1} & \frac{\partial \tilde x_2}{\partial x_1}\\
+    \frac{\partial \tilde x_1}{\partial x_2} & \frac{\partial \tilde x_2}{\partial x_2}
+  \end{array}\right)(\mathcal G(\tilde x_q))$ &$|J_{T}(\tilde x_q)|$\\
+  \end{tabular}
+  \caption{数值积分}
+  \label{tab:1-4:1}
+\end{table}
+
+\eqref{eq:1-4:1}后两个积分类似，我们考虑一个通用形式如\eqref{eq:1-4:4}。
+\begin{align}\label{eq:1-4:4}
+  \int_{T}\phi_j\phi_i\ud x\,.
+\end{align}
+对积分\eqref{eq:1-4:4}通过变量替换将任意网格单元$T$上积分转为参考单元$\tilde T$上积分，并做数值积分。
+\begin{equation*}
+  \label{eq:1-4:5}
+  \begin{split}
+    \int_{T}\phi_j(x)\phi_i(x)\ud x =& \int_{\tilde T}\phi_j(\mathcal G(\tilde x))\phi_i(\mathcal G(\tilde x))|J_{T}(\tilde x)|\ud \tilde x\\
+    =& \int_{\tilde T}\tilde\phi_j(\tilde x)\tilde\phi_i(\tilde x)|J_{T}(\tilde x)|\ud \tilde x\\
+    \approx& \sum_{l=1}^q\tilde\phi_j(\tilde x_l)\tilde\phi_i(\tilde x_l)|J_{T}(\tilde x_l)|\tilde \omega_l
+  \end{split}
+\end{equation*}
+因此计算\eqref{eq:1-4:4}的数值积分，需要表\ref{tab:1-4:2}中的数据。表\ref{tab:1-4:2}中前三列数据和参考单元基函数以及数值积分有关，后一列和参考单元与网格单元之间的映射有关。
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{l|l|l|l}
+    $\widetilde\phi_i(\tilde x_0)$ & $\widetilde\phi_j(\tilde x_0)$ & $\tilde\omega_0$ & $|J_{T}(\tilde x_0)|$\\
+    \hline
+    $\widetilde\phi_i(\tilde x_1)$ & $\widetilde\phi_j(\tilde x_1)$ & $\tilde\omega_1$ & $|J_{T}(\tilde x_1)|$\\
+    \hline
+    $\cdots$ & $\cdots$  & $\cdots$  & $\cdots$ \\
+    \hline
+    $\widetilde\phi_i(\tilde x_q)$ & $\widetilde\phi_j(\tilde x_q)$ & $\tilde\omega_q$ & $|J_{T}(\tilde x_q)|$\\
+  \end{tabular}
+  \caption{数值积分}
+  \label{tab:1-4:2}
+\end{table}
+
+
+\section{数值代数}
+求解线性方程组$AU=b$分为直接法和迭代法，迭代法包括常规迭代方法Jacobi，Gauss-Seidel和Successive Overrelaxation（SOR），和
+Krylov迭代方法Conjugate Gradient和GMRES等等。这里我们用CG算法作为示例，Krylov迭代特点是只需要矩阵和向量的乘积。
+\begin{algorithm}[!htbp]
+  \centering
+  \begin{algorithmic}
+    \Require
+    $r=b-Ax$, $\rho_0=\|r\|_2^2$, $k=1$.
+    \Ensure
+    \While{$\sqrt{\rho_{k-1}}>\epsilon \|b\|_2$ and $k<kmax$}
+    \If{$k=1$}
+    \State $p=r$
+    \Else
+    \State $\beta=\rho_{k-1}/\rho_{k-2}$ and $p=r+\beta p$
+    \EndIf
+    \State $w=Ap$
+    \State $\alpha=\rho_{k-1}/p^Tw$
+    \State $x=x+\alpha p$
+    \State $r=r-\alpha w$
+    \State $\rho_k=\|r\|^2_2$
+    \State $k=k+1$
+    \EndWhile
+  \end{algorithmic}
+  \caption{Conjugate Gradient算法}
+\end{algorithm}
+
+\iffalse
+
+\fi

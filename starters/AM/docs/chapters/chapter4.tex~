@@ -1,0 +1,1007 @@
+\chapter{Benchmark算例报告}
+\label{ch:subdomains}
+
+\iffalse
+算例列表如下：
+\begin{itemize}
+\iffalse
+\item 算例\ref{problem:1a}：Poisson方程（Dirichlet边界条件）
+\item 算例\ref{problem:1}：Poisson方程（Mixed边界条件）
+\item 算例\ref{problem:2}：稳态弹性力学方程（Dirichlet边界条件）
+\item 算例\ref{problem:3}：稳态弹性力学方程（Mixed边界条件）
+\item 算例\ref{problem:4}：稳态弹性力学方程位移/压强形式（Mixed边界条件）
+\item 算例\ref{problem:5}：稳态弹性力学方程位移/压强PPP形式（Mixed边界条件）
+  \fi
+\item 算例\ref{problem:6}：Cook's membrane算例
+\end{itemize}
+\fi
+
+\section{Cook Membrane}
+
+\iffalse
+\subsection{Poisson方程Dirichlet边界条件}
+\begin{problem}\label{problem:1a}
+\end{problem}
+\subsection{Poisson方程Mixed边界条件}
+\begin{problem}\label{problem:1}
+  \begin{align*}
+    -\Delta u &= f & \textrm{in }\Omega\,,\\
+    u &= u_0 & \textrm{on }\Gamma_D\,,\\
+    \n\cdot \nabla u &= g & \textrm{on }\Gamma_N\,.
+  \end{align*}
+$\Omega$，$\Gamma_D$，$u$，$f$，$u_0$和$g$分别为  
+  \begin{align*}
+    &\Omega:=(0,1)^2\,,\\
+    &\Gamma_D:=\{x_1=0\}\cup\{x_2=0\}\,, \\
+    &u(x) = u_0(x) = g(x) = \mathrm e^{x_1+x_2}\,, \\
+    &f(x) = -2\mathrm e^{x_1+x_2}\,.
+  \end{align*}
+\end{problem}
+
+图\ref{fig:1-2:1}中网格的M++和FEniCS计算结果如表\ref{tab:1-6:1}。
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{l|l|l|l}
+    \multicolumn{1}{c|}{nodals} & \multicolumn{1}{c|}{M++} & \multicolumn{1}{c|}{FEniCS} & \multicolumn{1}{c}{$\mathrm e^{x_1+x_2}$}\\
+    \hline
+    (0,0) & 1 & 1 & 1\\
+    \hline
+    (0.5,0) & 1.648721271 & 1.64872 & 1.6487213\\
+    \hline
+    (1,0) & 2.718281828 & 2.71828 & 2.7182818\\
+    \hline
+    (0,0.5) & 1.648721271 & 1.64872 & 1.6487213\\
+    \hline
+    (0.5,0.5) & 2.789028979 & 2.78903 & 2.7182818\\
+    \hline
+    (1,0.5) & 4.514344579 & 4.51434 & 4.4816891\\
+    \hline
+    (0,1) & 2.718281828 & 2.71828 & 2.7182818\\
+    \hline
+    (0.5,1) & 4.514344579 & 4.51434 & 4.4816891\\
+    \hline
+    (1,1) & 7.202782888 & 7.20278  & 7.3890561\\
+    \hline
+    (0.25,0.25) & 1.655239673 & 1.65524 & 1.6487213\\
+    \hline
+    (0.75,0.25) & 2.74047398 & 2.74047 & 2.7182818\\
+    \hline
+    (0.25,0.75) & 2.74047398 & 2.74047 & 2.7182818\\
+    \hline
+    (0.75,0.75) & 4.487430391 & 4.48743 & 4.4816891
+  \end{tabular}
+  \caption{M++和FEniCS计算结果比较，13 dof}
+  \label{tab:1-6:1}
+\end{table}
+
+\begin{figure}[!htbp]
+  \centering
+  \subfigure[M++]{
+    \label{fig:1-6:1}
+    \includegraphics[height=6cm]{fig/1.6/fig:1-6:1.pdf}
+    }
+  \subfigure[FEniCS]{
+    \label{fig:1-6:2}
+  \includegraphics[height=6cm]{fig/1.6/fig:1-6:2.pdf}}
+  \caption{M++和FEniCS计算结果比较，13 dof}
+\end{figure}
+
+M++和FEniCS的L2误差和二次收敛速度如表\ref{tab:1-6:2}。
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{r|l|l|l}
+    \multicolumn{1}{c|}{dof} & \multicolumn{1}{c|}{M++} & \multicolumn{1}{c|}{FEniCS} & \multicolumn{1}{c}{收敛速度} \\
+    \hline
+    5 & 0.1083173886 & 0.108317&   \\
+    \hline
+    13 & 0.03237543009 & 0.0323754 & 3.3456664  \\
+    \hline
+    41 & 0.009185075526 & 0.00918508 & 3.5247865  \\
+    \hline
+    145 & 0.00237017442 & 0.00237017 & 3.8752741  \\
+    \hline
+    545 & 0.0005950260303 & 0.000595026 & 3.9833122  \\
+    \hline
+    2\,113 & 0.0001485953871 & 0.000148595 & 4.0043372  \\
+    \hline
+    8\,321 & 3.710672534e-05 & 3.71066e-05 & 4.0045405 
+  \end{tabular}
+  \caption{M++和FEniCS误差和收敛速度}
+  \label{tab:1-6:2}
+\end{table}
+
+\begin{figure}[!htbp]
+  \centering
+  \subfigure[M++]{
+    \label{fig:1-6:3}
+    \includegraphics[height=6cm]{fig/1.6/fig:1-6:3.pdf}
+    }
+  \subfigure[FEniCS]{
+    \label{fig:1-6:4}
+  \includegraphics[height=6cm]{fig/1.6/fig:1-6:4.pdf}}
+  \caption{M++和FEniCS计算结果比较，2113 dof}
+\end{figure}
+
+\newpage
+\section{线弹性方程}
+\subsection{稳态Dirichlet边界条件}
+\begin{problem}\label{problem:2}
+  \begin{align*}
+    &-(\mu+\lambda)\nabla(\nabla\cdot\mathbf u) - \mu\nabla^2\mathbf u= \mathbf b &\mathbf x\in\Omega\\
+    &\mathbf u = \mathbf g &\mathbf x\in\Gamma
+  \end{align*}
+  \begin{align*}
+    \Omega:=(0,1)^2
+  \end{align*}
+  \begin{align*}
+    \mathbf u =& \left(\begin{array}{c}
+      \sin(\pi x_1)\cos(\pi x_2)\\
+      \cos(\pi x_1)\sin(\pi x_2)
+    \end{array}\right)
+  \end{align*}
+  \begin{align*}
+    \qquad\mathbf b =&-(\mu+\lambda)\nabla(\nabla\cdot\mathbf u) - \mu\nabla^2\mathbf u\\
+    =& -(\mu+\lambda)\left(\begin{array}{c}
+      \frac{\partial^2 u_1}{\partial x_1^2} + \frac{\partial^2 u_2}{\partial x_2\partial x_1}\\
+      \frac{\partial^2 u_1}{\partial x_1\partial x_2} + \frac{\partial^2 u_2}{\partial x_2^2}
+    \end{array}\right)-\mu\left(\begin{array}{c}
+      \frac{\partial^2 u_1}{\partial x_1^2} + \frac{\partial^2 u_1}{\partial x_2^2}\\
+      \frac{\partial^2 u_2}{\partial x_1^2} + \frac{\partial^2 u_2}{\partial x_2^2}
+    \end{array}\right)\\
+    =& -(\mu+\lambda)\left(\begin{array}{c}
+      -2\pi^2\sin(\pi x_1)\cos(\pi x_2)\\
+      -2\pi^2\sin(\pi x_1)\cos(\pi x_2)
+    \end{array}\right)-\mu\left(\begin{array}{c}
+      -2\pi^2\sin(\pi x_1)\cos(\pi x_2)\\
+      -2\pi^2\sin(\pi x_1)\cos(\pi x_2)
+    \end{array}\right)\\
+    =&2(2\mu+\lambda)\pi^2\left(\begin{array}{c}
+      \sin(\pi x_1)\cos(\pi x_2)  \\
+      \cos(\pi x_1)\sin(\pi x_2) 
+    \end{array}\right)
+  \end{align*}
+\end{problem}
+\newpage
+首先比较M++和FEniCS对$(\mu,\lambda)=(1,1)$的计算结果，之后验证二次收敛速度，比较$(\mu,\lambda)=(1,1)$和$(\mu,\lambda)=(1,1000)$的收敛速度。
+\begin{figure}[!htbp]
+  \centering
+  \subfigure[网格]{
+    \label{fig:4-2-1:1a}
+    \includegraphics[height=3.5cm]{fig/4/4-2/4-2-1.pdf}
+  }
+  \subfigure[M++]{
+    \label{fig:4-2-1:1b}
+    \includegraphics[height=3.5cm]{fig/4/4-2/4-2-2.pdf}
+  }
+  \subfigure[FEniCS]{
+    \label{fig:4-2-1:1c}
+    \includegraphics[height=3.5cm]{fig/4/4-2/4-2-2.pdf}
+  }\\
+  \subfigure[网格]{
+    \label{fig:4-2-1:2a}
+    \includegraphics[height=3.5cm]{fig/4/4-2/4-2-4.pdf}
+  }
+  \subfigure[M++]{
+    \label{fig:4-2-1:2b}
+    \includegraphics[height=3.5cm]{fig/4/4-2/4-2-5.pdf}
+  }
+  \subfigure[FEniCS]{
+    \label{fig:4-2-1:2c}
+    \includegraphics[height=3.5cm]{fig/4/4-2/4-2-6.pdf}
+  }
+  \caption{$(\mu,\lambda)=(1,1)$，level 1和level 4}
+  \label{fig:4-2-1:2}
+\end{figure}
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{l|l|l|l}
+    \multicolumn{1}{c|}{nodals} & \multicolumn{1}{c|}{M++} & \multicolumn{1}{c|}{FEniCS} & \multicolumn{1}{c}{$\mathbf u$}\\
+    \hline
+    (0,0) & (0,0) &  & (0,0)\\
+    \hline
+    (0.5,0) & (0.2,0) &  & (0.2,0)\\
+    \hline
+    (1,0) & (2.4493e-17,0) &  & (2.449D-17,0)\\
+    \hline
+    (0,0.5) & (0,0.2) &  & (0,0.2)\\
+    \hline
+    (0.5,0.5) & (-9.063e-10,8.3404e-10) &  & (1.225D-17,1.225D-17)\\
+    \hline
+    (1,0.5) & (1.4998e-33,-0.2) &  & (1.500D-33,-0.2)\\
+    \hline
+    (0,1) & (0,2.4493e-17) &  & (0,2.449D-17)\\
+    \hline
+    (0.5,1) & (-0.2,1.4998e-33) &  & (-0.2,1.500D-33)\\
+    \hline
+    (1,1) & (-2.4493e-17,-2.4493e-17) &   & (-2.449D-17,-2.449D-17)\\
+    \hline
+    (0.25,0.25) & (0.1,0.1) &  & (0.1,0.1)\\
+    \hline
+    (0.75,0.25) & (0.1,-0.1) &  & (0.1,-0.1)\\
+    \hline
+    (0.25,0.75) & (-0.1,0.1) &  & (-0.1,0.1)\\
+    \hline
+    (0.75,0.75) & (-0.1,-0.1) &  & (-0.1,-0.1)
+  \end{tabular}  
+  \caption{$(\mu,\lambda)=(1,1)$，level 1}
+  \label{tab:4-2-1:1}
+\end{table}
+\newpage
+收敛速度受到有限元误差、插值误差、数值积分误差和locking问题的影响。在网格足够加密的情况下，有限元误差占主导产生二次收敛如表\ref{tab:4-2-1:2}。由于$(\mu,\lambda)=(1,1000)$泊松比接近0.5，是近不可压缩材料，产生了明显的locking问题，收敛速度明显减慢如表\ref{tab:4-2-1:3}。
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{c|r|l|l|l}
+    \multicolumn{1}{c|}{level} & \multicolumn{1}{c|}{dof} & \multicolumn{1}{c|}{M++} & \multicolumn{1}{c|}{FEniCS} & \multicolumn{1}{c}{收敛速度} \\
+    \hline
+    0 & 10 &   0.1414      & &   \\
+    \hline
+    1 & 26 & 0.030175 &  &  4.6859983 \\
+    \hline
+    2 & 82 & 0.0079999 &  &  3.7719221 \\
+    \hline
+    3 & 290 & 0.002088 &  &  3.8313697 \\
+    \hline
+    4 & 1\,090 & 0.0005315 &  & 3.9285781  \\
+    \hline
+    5 & 4\,226 & 0.0001336 &  &  3.9779208 \\
+    \hline
+    6 & 16\,642 & 0.0000335 &  & 3.9940811
+  \end{tabular}  
+  \caption{$(\mu,\lambda)=(1,1)$}
+  \label{tab:4-2-1:2}
+\end{table}
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{c|r|l|l|l}
+    \multicolumn{1}{c|}{level} & \multicolumn{1}{c|}{dof} & \multicolumn{1}{c|}{M++} & \multicolumn{1}{c|}{FEniCS} & \multicolumn{1}{c}{收敛速度} \\
+    \hline
+    0 & 10 & 0.1414 & &   \\
+    \hline
+    1 & 26 & 0.030175  &  & 4.6859983 \\
+    \hline
+    2 & 82 & 0.012036  &  &  2.5070621 \\
+    \hline
+    3 & 290 & 0.0092264  &  &  1.3045175 \\
+    \hline
+    4 & 1\,090 & 0.0069234   &  & 1.33264 \\
+    \hline
+    5 & 4\,226 & 0.0037143  &  & 1.8639851 \\
+    \hline
+    6 & 16\,642 & 0.0014707 &  & 2.5255321
+  \end{tabular}
+  \caption{$(\mu,\lambda)=(1,1000)$}
+  \label{tab:4-2-1:3}
+\end{table}
+
+\newpage
+\subsection{稳态Mixed边界条件}
+\begin{problem}\label{problem:3}
+  \begin{align*}
+    &-(\mu+\lambda)\nabla(\nabla\cdot\mathbf u) - \mu\nabla^2\mathbf u= \mathbf b &\mathbf x\in\Omega\\
+    &\mathbf u = \mathbf g &\mathbf x\in\Gamma_D\\
+    &\mathbf \sigma\cdot\mathbf n = \mathbf t &\mathbf x\in\Gamma_N
+  \end{align*}
+  \begin{align*}
+    &\Omega:=(0,1)^2\\
+    &\Gamma_D:=\{x_1=0\}\cup\{x_2=0\}
+  \end{align*}
+  \begin{align*}
+    \mathbf u =& \left(\begin{array}{c}
+      \sin(\pi x_1)\cos(\pi x_2)\\
+      \cos(\pi x_1)\sin(\pi x_2)
+    \end{array}\right)
+  \end{align*}
+  \begin{align*}
+    \qquad\mathbf b =& 2(2\mu+\lambda)\pi ^2\left(\begin{array}{c}
+      \sin(\pi x_1)\cos(\pi x_2)  \\
+      \cos(\pi x_1)\sin(\pi x_2) 
+    \end{array}\right)
+  \end{align*}
+  \begin{align*}
+    \mathbf \sigma =& 2\mu\mathbf \varepsilon + \lambda\mathrm{tr}(\mathbf\varepsilon)\mathbf I \\
+  =&2\mu\left(\begin{array}{cc}
+    \frac{\partial u_1}{\partial x_1} &     \frac{1}{2}\left(\frac{\partial u_1}{\partial x_2} + \frac{\partial u_2}{\partial x_1}\right) \\
+    \frac{1}{2}\left(\frac{\partial u_2}{\partial x_1} + \frac{\partial u_1}{\partial x_2}\right) &     \frac{\partial u_2}{\partial x_2} 
+  \end{array}\right) + \lambda\left(\begin{array}{cc}
+    \sum_{i=1}^2\frac{\partial u_i}{\partial x_i}&     0 \\
+    0 &     \sum_{i=1}^2\frac{\partial u_i}{\partial x_i}
+  \end{array}\right)
+  \end{align*}
+  \begin{align*}
+    &\frac{\partial u_1}{\partial x_1} = \frac{\partial u_2}{\partial x_2} = \pi\cos(\pi x_1)\cos(\pi x_2)\\
+    &\frac{1}{2}\left(\frac{\partial u_1}{\partial x_2} + \frac{\partial u_2}{\partial x_1}\right) = \frac{1}{2}\left(-\pi\sin(\pi x_1)\sin(\pi x_2) - \pi\sin(\pi x_1)\sin(\pi x_2) \right)=-\pi\sin(\pi x_1)\sin(\pi x_2)\\     
+    &\sum_{i=1}^2\frac{\partial u_i}{\partial x_i} = \pi\cos(\pi x_1)\cos(\pi x_2) + \pi \cos(\pi x_1)\cos(\pi x_2) = 2\pi \cos(\pi x_1)\cos(\pi x_2)
+  \end{align*}
+  \begin{align*}
+    \mathbf \sigma 
+  =&2\mu\pi \left(\begin{array}{cc}
+    \cos(\pi x_1)\cos(\pi x_2) &    -\sin(\pi x_1)\sin(\pi x_2) \\
+    -\sin(\pi x_1)\sin(\pi x_2) &     \cos(\pi x_1)\cos(\pi x_2)
+  \end{array}\right) + 2\lambda\pi \left(\begin{array}{cc}
+    \cos(\pi x_1)\cos(\pi x_2)&     0 \\
+    0 &     \cos(\pi x_1)\cos(\pi x_2)
+  \end{array}\right)\\
+   =&\left(\begin{array}{cc}
+    2(\mu+\lambda)\pi \cos(\pi x_1)\cos(\pi x_2) &    -2\mu\pi \sin(\pi x_1)\sin(\pi x_2) \\
+    -2\mu\pi \sin(\pi x_1)\sin(\pi x_2) &     2(\mu+\lambda)\pi \cos(\pi x_1)\cos(\pi x_2)
+  \end{array}\right) 
+  \end{align*}
+  
+\end{problem}
+\newpage
+首先比较M++和FEniCS对$(\mu,\lambda)=(1,1)$的计算结果，之后验证二次收敛速度，比较$(\mu,\lambda)=(1,1)$和$(\mu,\lambda)=(1,1000)$的收敛速度。
+\begin{figure}[!htbp]
+  \centering
+  \subfigure[网格]{
+    \label{fig:4-2-2:1a}
+    \includegraphics[height=3.5cm]{fig/4/4-2/4-2-7.pdf}
+  }
+  \subfigure[M++]{
+    \label{fig:4-2-2:1b}
+    \includegraphics[height=3.5cm]{fig/4/4-2/4-2-8.pdf}
+  }
+  \subfigure[FEniCS]{
+    \label{fig:4-2-2:1c}
+    \includegraphics[height=3.5cm]{fig/4/4-2/4-2-9.pdf}
+  }
+  \subfigure[网格]{
+    \label{fig:4-2-2:1d}
+    \includegraphics[height=3.5cm]{fig/4/4-2/4-2-10.pdf}
+  }
+  \subfigure[M++]{
+    \label{fig:4-2-2:1e}
+    \includegraphics[height=3.5cm]{fig/4/4-2/4-2-11.pdf}
+  }
+  \subfigure[FEniCS]{
+    \label{fig:4-2-2:1f}
+    \includegraphics[height=3.5cm]{fig/4/4-2/4-2-12.pdf}
+  }
+  \caption{$(\mu,\lambda)=(1,1)$，level 1和level 4}
+  \label{fig:4-2-2:1}
+\end{figure}
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{l|l|l|l}
+    \multicolumn{1}{c|}{nodals} & \multicolumn{1}{c|}{M++} & \multicolumn{1}{c|}{FEniCS} & \multicolumn{1}{c}{$\mathbf u$}\\
+    \hline
+    (0,0) & (0,0) &  & (0,0)\\
+    \hline
+    (0.5,0) & (0.2,0) &  & (0.2,0)\\
+    \hline
+    (1,0) & (2.4493e-17,0) &  & (2.449D-17,0)\\
+    \hline
+    (0,0.5) & (0,0.2) &  & (0,0.2)\\
+    \hline
+    (0.5,0.5) & (-0.010062,-0.010062) &  & (1.225D-17,1.225D-17)\\
+    \hline
+    (1,0.5) & (-0.0071918,-0.20934) &  & (1.500D-33,-0.2)\\
+    \hline
+    (0,1) & (0,2.4493e-17) &  & (0,2.449D-17)\\
+    \hline
+    (0.5,1) & (-0.20934,-0.0071918) &  & (-0.2,1.500D-33)\\
+    \hline
+    (1,1) & (-0.039126,-0.039126) &   & (-2.449D-17,-2.449D-17)\\
+    \hline
+    (0.25,0.25) & (0.096536,0.096536) &  & (0.1,0.1)\\
+    \hline
+    (0.75,0.25) & (0.097014,-0.10546) &  & (0.1,-0.1)\\
+    \hline
+    (0.25,0.75) & (-0.10546,0.097014) &  & (-0.1,0.1)\\
+    \hline
+    (0.75,0.75) & (-0.12055,-0.12055) &  & (-0.1,-0.1)
+  \end{tabular}  
+  \caption{$(\mu,\lambda)=(1,1)$，level 1}
+  \label{tab:4-2-2:1}
+\end{table}
+
+\newpage
+收敛速度受到有限元误差、插值误差、数值积分误差和locking问题的影响。在网格足够加密的情况下，有限元误差占主导产生二次收敛如表\ref{tab:4-2-2:2}。由于$(\mu,\lambda)=(1,1000)$泊松比接近0.5，是近不可压缩材料，产生了明显的locking问题，收敛速度明显减慢如表\ref{tab:4-2-2:3}。
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{c|r|l|l|l}
+    \multicolumn{1}{c|}{level} & \multicolumn{1}{c|}{dof} & \multicolumn{1}{c|}{M++} & \multicolumn{1}{c|}{FEniCS} & \multicolumn{1}{c}{收敛速度} \\
+    \hline
+    0 & 10 & 0.13445 & &   \\
+    \hline
+    1 & 26 &  0.028664 &  & 4.6905526  \\
+    \hline
+    2 & 82 & 0.0076485 &  & 3.7476629  \\
+    \hline
+    3 & 290 & 0.002005 &  &  3.8147132 \\
+    \hline
+    4 & 1\,090 & 0.0005116 &  &  3.9188476 \\
+    \hline
+    5 & 4\,226 & 0.0001287 &  &  3.976296 \\
+    \hline
+    6 & 16\,642 & 0.0000322 &  & 3.9948462
+  \end{tabular}
+  \caption{$(\mu,\lambda)=(1,1)$}
+  \label{tab:4-2-2:2}
+\end{table}
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{c|r|l|l|l}
+    \multicolumn{1}{c|}{level} & \multicolumn{1}{c|}{dof} & \multicolumn{1}{c|}{M++} & \multicolumn{1}{c|}{FEniCS} & \multicolumn{1}{c}{收敛速度} \\
+    \hline
+    0 & 10 & 0.1413   & &   \\
+    \hline
+    1 & 26 & 0.030106  &  & 4.6934166\\
+    \hline
+    2 & 82 & 0.01211  &  & 2.4860446 \\
+    \hline
+    3 & 290 & 0.0095471  &  & 1.268448 \\
+    \hline
+    4 & 1\,090 & 0.0088274  &  & 1.0815302 \\
+    \hline
+    5 & 4\,226 & 0.0064062  &  & 1.3779464  \\
+    \hline
+    6 & 16\,642 & 0.0031212 &  & 2.0524798
+  \end{tabular}
+  \caption{$(\mu,\lambda)=(1,1000)$}
+  \label{tab:4-2-2:3}
+\end{table}
+\fi
+
+
+%\newpage
+
+
+  
+%\newpage
+
+
+
+%\newpage
+
+%\subsection{稳态位移/压强PPP形式Mixed边界条件}
+              
+%\subsection{Cook's Membrane算例}
+\begin{problem}\label{problem:4:1}
+  Cook's Membrane算例是著名的静力分析benchmark问题如图\ref{fig:4-1:1}。
+\end{problem}
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=5cm]{fig/4/4.1/1.png}  
+  \caption{Cook's Mebrane}
+  \label{fig:4-1:1}
+\end{figure}
+\begin{align*}
+  y = k x + b
+\end{align*}
+\begin{align*}
+  y_1 = k x_1 + b\\
+  y_2 = k x_2 + b
+\end{align*}
+\begin{align*}
+  k = \frac{y_2-y_1}{x_2-x_1}
+\end{align*}
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{l|l}
+    Young modulus & $E=1$ \\
+    \hline
+    Poisson ratio & $\nu=\frac{1}{3}=0.3333$\\
+    \hline
+    $c$ & $\frac{1}{16}=0.0625$
+  \end{tabular}
+\end{table}
+
+
+\begin{figure}[!htbp]
+  \centering
+  \subfigure[P1P1 $\mathbf u$]{
+    \label{fig:4-2-5:1b}
+    \includegraphics[height=5cm]{fig/4/4.1/2.pdf}
+  }\qquad
+  \subfigure[P1P1 $p$]{
+    \label{fig:4-2-5:1c}
+    \includegraphics[height=5cm]{fig/4/4.1/3.pdf}
+  }\qquad
+  \subfigure[PPP $\mathbf u$]{
+    \label{fig:4-2-5:1e}
+    \includegraphics[height=5cm]{fig/4/4.1/4.pdf}
+  }\qquad
+  \subfigure[PPP $p$]{
+    \label{fig:4-2-5:1f}
+    \includegraphics[height=5cm]{fig/4/4.1/5.pdf}
+  }
+  \caption{$(E,\nu,c)=(1,\frac{1}{3},\frac{1}{16})$}
+  \label{fig:4-2-5:1}
+\end{figure}
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{c|r|l|l}
+    \multicolumn{1}{c|}{level} & \multicolumn{1}{c|}{dof} & \multicolumn{1}{c|}{$u_h$} & \multicolumn{1}{c}{cov} \\
+    \hline
+    0 & 867 & 21.804  &   \\
+    \hline
+    1 & 3\,267 &  22.273  &  0.469 \\
+    \hline
+    2 & 12\,675 & 22.462   & 0.189 \\
+    \hline
+    3 & 49\,923 &  22.542  & 0.08 \\
+    \hline
+    4 & 198\,147 & 22.578  &  0.036 \\
+  \end{tabular}
+  \caption{P1P1 $(E,\nu,c)=(1,\frac{1}{3},\frac{1}{16})$ $u_2(48,60)$}
+  \label{tab:4-2-5:1}
+\end{table}
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{c|r|l|l}
+    \multicolumn{1}{c|}{level} & \multicolumn{1}{c|}{dof} & \multicolumn{1}{c|}{$u_h$} & \multicolumn{1}{c}{cov} \\
+    \hline
+    0 & 867 & 21.824  &   \\
+    \hline
+    1 & 3\,267 & 22.282   & 0.458 \\
+    \hline
+    2 & 12\,675 & 22.466   & 0.184 \\
+    \hline
+    3 & 49\,923 &  22.544  & 0.078 \\
+    \hline
+    4 & 198\,147 & 22.579  &  0.035 \\
+  \end{tabular}
+  \caption{PPP $(E,\nu,c)=(1,\frac{1}{3},\frac{1}{16})$ $u_2(48,60)$}
+  \label{tab:4-2-5:2}
+\end{table}
+
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{l|l}
+    Young modulus & $E=70$ \\
+    \hline
+    Poisson ratio & $\nu=0.4999$\\
+    \hline
+    $c$ & $1$
+  \end{tabular}
+\end{table}
+
+
+\begin{figure}[!htbp]
+  \centering
+  \subfigure[P1P1 $\mathbf u$]{
+    \label{fig:4-2-5:2b}
+    \includegraphics[height=5cm]{fig/4/4-2/4-2-5/fig4-2-5-8.pdf}
+  }\qquad
+  \subfigure[P1P1 $p$]{
+    \label{fig:4-2-5:2c}
+    \includegraphics[height=5cm]{fig/4/4-2/4-2-5/fig4-2-5-9.pdf}
+  }\qquad
+  \subfigure[PPP $\mathbf u$]{
+    \label{fig:4-2-5:2e}
+    \includegraphics[height=5cm]{fig/4/4-2/4-2-5/fig4-2-5-11.pdf}
+  }\qquad
+  \subfigure[PPP $p$]{
+    \label{fig:4-2-5:2f}
+    \includegraphics[height=5cm]{fig/4/4-2/4-2-5/fig4-2-5-12.pdf}
+  }
+  \caption{$(E,\nu,c)=(70,0.4999,1)$}
+  \label{fig:4-2-5:2}
+\end{figure}
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{c|r|l|l}
+    \multicolumn{1}{c|}{level} & \multicolumn{1}{c|}{dof} & \multicolumn{1}{c|}{$u_h$}  & \multicolumn{1}{c}{cov} \\
+    \hline
+    0 & 867 & 4.2368  &   \\
+    \hline
+    1 & 3\,267 &  4.3496  &  \\
+    \hline
+    2 & 12\,675 &  4.3992  &  \\
+    \hline
+    3 & 49\,923 &  4.4214  &  \\
+    \hline
+    4 & 198\,147 &   &   \\
+  \end{tabular}
+  \caption{P1P1 $(E,\nu,c)=(70,0.4999,1)$ $u_2(48,60)$}
+  \label{tab:4-2-5:3}
+\end{table}
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{c|r|l|l|l}
+    \multicolumn{1}{c|}{level} & \multicolumn{1}{c|}{dof} & \multicolumn{1}{c|}{$u_h$} & \multicolumn{1}{c}{cov} \\
+    \hline
+    0 & 867 & 3.7593  &   \\
+    \hline
+    1 & 3\,267 & 4.1556   & 0.3963 \\
+    \hline
+    2 & 12\,675 & 4.3319   & 0.1763 \\
+    \hline
+    3 & 49\,923 & 4.3947   & 0.0628 \\
+    \hline
+    4 & 198\,147 & 4.42  & 0.0253  \\ 
+  \end{tabular}
+  \caption{PPP $(E,\nu,c)=(70,0.4999,1)$ $u_2(48,60)$}
+  \label{tab:4-2-5:4}
+\end{table}
+
+
+\newpage
+
+\iffalse
+\subsection{瞬态线弹性方程}
+\subsubsection{Dirichlet边界条件}
+
+对于混合边界条件, 我们做两个实际点的例子. 对一个正方形的左边进行固定, 右边施加一个力, 一个算例是右边力始终保持, 这种情况下正方形发生形变后会进入稳定状态, 也就是力平衡. 另外一个算例是先施加右边力, 再放松掉, 这种情况下正方形会像弹簧一样来回摆动, 最后恢复到初始形状.
+
+\begin{figure}[!htbp]
+  \centering
+  \subfigure[$t=0$]{
+    \label{fig:4-3-2:2a}
+    \includegraphics[height=3.5cm]{fig/4/4-3-2/4-3-2-2.png}
+  }\quad
+  \subfigure[$t=5$]{
+    \label{fig:4-3-2:2b}
+    \includegraphics[height=3.5cm]{fig/4/4-3-2/4-3-2-3.png}
+  }\\
+  \subfigure[$t=10$]{
+    \label{fig:4-3-2:2c}
+    \includegraphics[height=3.5cm]{fig/4/4-3-2/4-3-2-4.png}
+  }\quad
+  \subfigure[$t=15$]{
+    \label{fig:4-3-2:2d}
+    \includegraphics[height=3.5cm]{fig/4/4-3-2/4-3-2-5.png}
+  }
+  \caption{$(E,\nu)=(2.5,0.25)$}
+  \label{fig:4-3-2:2}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \subfigure[$t=0$]{
+    \label{fig:4-3-2:3a}
+    \includegraphics[height=3.5cm]{fig/4/4-3-2/4-3-2-6.png}
+  }\quad
+  \subfigure[$t=1$]{
+    \label{fig:4-3-2:3b}
+    \includegraphics[height=3.5cm]{fig/4/4-3-2/4-3-2-7.png}
+  }\\
+  \subfigure[$t=5$]{
+    \label{fig:4-3-2:3c}
+    \includegraphics[height=3.5cm]{fig/4/4-3-2/4-3-2-8.png}
+  }\quad
+  \subfigure[$t=10$]{
+    \label{fig:4-3-2:3d}
+    \includegraphics[height=3.5cm]{fig/4/4-3-2/4-3-2-9.png}
+  }
+  \caption{$(E,\nu)=(2.5,0.25)$}
+  \label{fig:4-3-2:3}
+\end{figure}
+
+从图\ref{fig:4-3-2:2}和\ref{fig:4-3-2:3}可以看出计算结果和物理现象是一致的. 我们再简单的看看线弹性材料是否可以模拟切削过程.
+对正方形的左边和下边进行固定, 对右边$[0.8,1]$区间上施加方向向左的大小为$1$的推力. 
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=7cm]{fig/4/4-3-2/4-3-2-10.png}
+  \caption{$T=0.15$, $(E,\nu)=(1,0.4)$}
+  \label{fig:4-3-2:4}
+\end{figure}
+从该图发现在0.8的高度, 由于材料没有发生塑性变化, 因此低于0.8高度的部分和高于0.8高度部分产生了弹性的拖拽, 导致0.8高度以上没有呈现出
+横切的效果. 如果是塑性变化, 0.8高度左右横切的推进速度会快很多. 
+
+\fi
+
+
+             
+            
+           
+\newpage
+\section{Taylor impact test}
+\begin{problem}
+  
+\end{problem}
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{l|l}
+    speed & 227m/s \\
+    \hline
+    length & 32.4 mm \\
+    \hline
+    radius & 3.2 mm \\
+    \hline
+    density & 8930 $kg / m^33$ \\
+    \hline
+    Young's modulus & $1.17\times 10^5$MPa\\
+    \hline
+    Poisson's ratio & 0.35 \\
+    \hline
+    initial yield stress & 400 MPa\\
+    \hline
+    hardening modulus &  100 MPa
+    \end{tabular}
+\end{table}
+
+\begin{figure}[!htbp]
+  \centering
+  \subfigure[$t=0$]{
+    \label{fig:4-3-2:3a}
+    \includegraphics[height=5cm]{fig/4/4.2/1.pdf}
+  }\qquad
+  \subfigure[$t=20$]{
+    \label{fig:4-3-2:3b}
+    \includegraphics[height=5cm]{fig/4/4.2/2.pdf}
+  }
+  \caption{$(E,\nu)=(2.999001,0.4995005)$}
+  \label{fig:4-3-2:3}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=7cm]{fig/4/4.2/3.png}
+  \caption{Taylor impact test}
+  \label{fig:4-3-2:3}
+\end{figure}
+
+\newpage
+\section{Thermo-mechanical traction test}
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{l|l}
+    Elastic Modulus &  206900 MPa \\
+    \hline
+    Poisson         &  0,3 \\
+    \hline
+    Density        &   7800 $Kg/m^3$ \\
+    \hline
+    Yield Stress    &  450 MPa \\
+    \hline
+    Saturation Stress &      715 MPa \\
+    \hline
+    Strain Hardening Modulus &     129,24 MPa \\
+    \hline
+    Hardening Exponent       &  16,93 \\
+    \hline
+    Heat Conductivity &       45 N/sK \\
+    \hline
+    Heat Capacity      &  0,49e9$mm^2 /s^2 K$ \\
+    \hline
+    Thermal expansion  & 1e-5 (1/K) \\
+    \hline
+    Thermal softening modulus &  0,002 (1/K)
+    \end{tabular}
+\end{table}
+
+\begin{figure}[!htbp]
+  \centering
+  \subfigure[$t=0$]{
+    \label{fig:4-3-2:3a}
+    \includegraphics[height=5cm]{fig/4/4.2/1.pdf}
+  }\qquad
+  \subfigure[$t=20$]{
+    \label{fig:4-3-2:3b}
+    \includegraphics[height=5cm]{fig/4/4.2/2.pdf}
+  }
+  \caption{$(E,\nu)=(2.999001,0.4995005)$}
+  \label{fig:4-3-2:3}
+\end{figure}
+
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[width=7cm]{fig/4/4.3/1.png}
+  \caption{Taylor impact test}
+  \label{fig:4-3-2:3}
+\end{figure}
+
+
+
+\newpage
+\section{Machining steel}
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{l|l}
+    Elastic Modulus &  206900 MPa \\
+    \hline
+    Poisson         &  0,3 \\
+    \hline
+    Density        &   7800 $Kg/m^3$ \\
+    \hline
+    Yield Stress    &  450 MPa \\
+    \hline
+    Saturation Stress &      715 MPa \\
+    \hline
+    Strain Hardening Modulus &     129,24 MPa \\
+    \hline
+    Hardening Exponent       &  16,93 \\
+    \hline
+    Heat Conductivity &       45 N/sK \\
+    \hline
+    Heat Capacity      &  0,49e9$mm^2 /s^2 K$ \\
+    \hline
+    Thermal expansion  & 1e-5 (1/K) \\
+    \hline
+    Thermal softening modulus &  0,002 (1/K)
+    \end{tabular}
+\end{table}
+
+\begin{figure}[!htbp]
+  \centering
+  \subfigure[von Mises]{
+    \label{fig:4-3-2:3a}
+    \includegraphics[height=5cm]{fig/4/4.4/1.png}
+  }\qquad
+  \subfigure[temperature]{
+    \label{fig:4-3-2:3b}
+    \includegraphics[height=5cm]{fig/4/4.4/2.png}
+  }
+  \caption{machining steel}
+  \label{fig:4-3-2:3}
+\end{figure}
+
+
+\newpage
+\section{Machining AISI 4340 using different rake angles}
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{l|l}
+    Elastic Modulus  & 200500 MPa \\
+    \hline
+    Poisson  & 0,3 \\
+    \hline
+    Material Constant A  & 792MPa \\
+    \hline
+    Material Constant B  & 510 MPa \\
+    \hline
+    Material Constant C  & 0,0014 \\
+    \hline
+    Material Constant n  & 0,26 \\
+    \hline
+    Material Constant m  & 1,03 \\
+    \hline
+    Heat Conductivity    & 50 N/sK \\
+    \hline
+    Heat Capacity        & 0,49e9$mm^2 /s^2 K$ \\
+    \hline
+    Thermal expansion    & 1e-5 (1/K) \\
+    \hline
+    Density              & 7844 $Kg/m^3$
+    \end{tabular}
+\end{table}
+
+
+\begin{figure}[!htbp]
+  \centering
+  \subfigure[rake angle $6^{\circ}$]{
+    \label{fig:4-3-2:3a}
+    \includegraphics[height=4cm]{fig/4/4.5/1.png}
+  }\qquad
+  \subfigure[rake angle $0^{\circ}$]{
+    \label{fig:4-3-2:3b}
+    \includegraphics[height=4cm]{fig/4/4.5/2.png}
+  }
+  \caption{machining AISI 4340}
+  \label{fig:4-3-2:3}
+\end{figure}
+
+\newpage
+\section{Machining Ti6Al4V using different cutting speeds}
+
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{l|l}
+    Density & 4420 kg/m 3\\
+    \hline
+    Poisson & 0,3\\
+    \hline
+    Elastic modulus & 105GPa\\
+    \hline
+    Heat Conductivity at 20$^{\circ}$ & 6,785 N/sK \\
+    \hline
+    Heat Conductivity at 1185$^{\circ}$ & 24,375 N/sK\\
+    \hline
+    Heat Capacity at 20$^{\circ}$ & 0,49e9$mm^2 /s^2 K$\\
+    \hline
+    Heat Capacity at 1185$^{\circ}$ 0,756e9$mm^2/s^2K$\\
+    \hline
+    Material Constant C &  0,302\\
+    \hline
+    Material Constant $K_0$ & 2260 MPa\\
+    \hline
+    Material Constant $n_0$ & 0,339\\
+    \hline
+    Material Constant $T_{mt}$ & 825K\\
+    \hline
+    Material Constant m & 2
+    \end{tabular}
+\end{table}
+
+\begin{figure}[!htbp]
+  \centering
+  \subfigure[2m/s]{
+    \label{fig:4-3-2:3a}
+    \includegraphics[height=4cm]{fig/4/4.6/2.png}
+  }\qquad
+  \subfigure[5m/s]{
+    \label{fig:4-3-2:3b}
+    \includegraphics[height=4cm]{fig/4/4.6/3.png}
+  }
+  \caption{machining Ti6Al4V}
+  \label{fig:4-3-2:3}
+\end{figure}
+
+
+\newpage
+\section{Machining AISI 4340 with deformable tool: frictionless}
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{l|l}
+    Elastic Modulus  & 200500 MPa \\
+    \hline
+    Poisson  & 0,3 \\
+    \hline
+    Material Constant A  & 792MPa \\
+    \hline
+    Material Constant B  & 510 MPa \\
+    \hline
+    Material Constant C  & 0,0014 \\
+    \hline
+    Material Constant n  & 0,26 \\
+    \hline
+    Material Constant m  & 1,03 \\
+    \hline
+    Heat Conductivity    & 50 N/sK \\
+    \hline
+    Heat Capacity        & 0,49e9$mm^2 /s^2 K$ \\
+    \hline
+    Thermal expansion    & 1e-5 (1/K) \\
+    \hline
+    Density              & 7844 $Kg/m^3$
+    \end{tabular}
+\end{table}
+
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3.5cm]{fig/4/4.7/1.png}
+  \caption{von Mises, machining AISI 4340 with deformable tool}
+  \label{fig:4-3-2:3}
+\end{figure}
+
+\newpage
+\section{Machining AISI 4340 with deformable tool: friction and heat transfer}
+
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{l|l}
+    Elastic Modulus  & 200500 MPa \\
+    \hline
+    Poisson  & 0,3 \\
+    \hline
+    Material Constant A  & 792MPa \\
+    \hline
+    Material Constant B  & 510 MPa \\
+    \hline
+    Material Constant C  & 0,0014 \\
+    \hline
+    Material Constant n  & 0,26 \\
+    \hline
+    Material Constant m  & 1,03 \\
+    \hline
+    Heat Conductivity    & 50 N/sK \\
+    \hline
+    Heat Capacity        & 0,49e9$mm^2 /s^2 K$ \\
+    \hline
+    Thermal expansion    & 1e-5 (1/K) \\
+    \hline
+    Density              & 7844 $Kg/m^3$
+    \end{tabular}
+\end{table}
+
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=4cm]{fig/4/4.8/1.png}
+  \caption{von Mises, machining AISI 4340 with deformable tool}
+  \label{fig:4-3-2:3}
+\end{figure}

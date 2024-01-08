@@ -1,0 +1,132 @@
+\chapter{层网格剖分}
+
+增材制造工艺仿真的残余应力和变形计算中，可以分为小尺度和构件尺度，小尺度考虑热循环细节，采用生死单元法，构件尺度忽略热循环细节，采用固有应变法。生死单元法中需要根据热源移动激活网格单元，热源是根据事先规划好的路径进行移动，路径是逐层规划的，因此对网格剖分提出了特殊的要求，网格单元需要尽可能在一层。固有应变法也需要对网格进行分块。因此我们针对增材制造特殊要求，整理开源软件中网格剖分算法，实现层网格剖分软件。计算几何请参考\cite{JeanMarietteHerve}、\cite{JakobJensFrançoisHenrik}和\cite{MarkMarcMarkOtfried}，网格剖分请参考\cite{PascalPaul}和\cite{PaulHouman}，计算机辅助设计（CAD）请参考\cite{Erich}。
+
+\section{非结构性网格}
+
+狄利克雷镶嵌（Dirichlet Tessellation），沃罗诺伊图（Voronoi Diagram）和德劳内三角网格（Delaunay Triangulation）是网格剖分的基本概念。狄利克雷首先提出了可以将平面分割成凸单元，其次沃罗诺伊进行了进一步研究，并扩展到三维，最后德劳内验证了可以通过沃罗诺伊图的对偶获取三角网格，这种三角网格具有唯一性和很好的性质，最小角比其他存在的三角网格的最小角都大。沃罗诺伊图定义中单元和点集中某一点对应，单元中的点离该点距离比离点集其他点都近，如果是二维问题就是由连接两邻点直线的垂直平分线围成的多边形。德劳内三角网格生成有不同方法，可以根据沃罗诺伊图对偶生成，比较常用的是递增法（Incremental Method），递增法是基于德劳内引理。德劳内引理证明了如果对于每对相邻单形都满足空外接圆准则，那么整个网格满足空外接圆准则并且是德劳内三角网格。基于德劳内引理，定义德劳内核，德劳内核原理是往旧网格中插入一点，如果该点在某一网格单元内，将该点和网格单元三个顶点连线，如果该点在网格单元某一边相邻网格单元外接圆内，则将该边进行翻转，从而获取新网格。插入点还有落在所有网格单元外的情况，为了避免这种情况，采用了一个技巧（Reduced Incremental Method），定义一个盒子包括了整个点集。我们梳理了主要开源网格剖分软件中的数据结构和算法，包括CGAL、Triangle、Netgen、Tetgen、Gmsh、OpenCASCADE、Slice2Mesh，OpenCASCADE是CAD软件也需要表面网格剖分，从而形成了非结构性层网格剖分框架。
+
+\subsection{CGAL}
+
+\subsubsection{数据结构和算法}
+CGAL是一个重模板的软件，新版本程序全部都写在头文件中，因此不需要编译。CGAL中包括二维和三维的点集生成三角网格（Triangulation），包括二维和三维的网格剖分（Mesh Generation），两者的区别是网格剖分是在点集生成的三角网格基础上根据网格质量准则进一步处理，比如进行德劳内加密。在三维网格剖分中有周期性网格剖分，后边将测试是否可以用于层网格剖分。CGAL中二维点集生成三角网格有四个算法，分别为Triangulation\_2、Delaunay\_triangulation\_2、Constrained\_triangulation\_2、Constrained\_Delaunay\_triangulation\_2，还有一些其他算法，程序在Triangulation\_2文件夹中。第二个算法和第三个算法基于第一个算法，第四个算法基于第三个算法，第一个算法实现了点递增插入，第二个算法增加了翻转，第三个算法增加了约束，第四个算法增加了翻转和约束。通常来说网格数据结构包括顶点坐标和单元编号两部分，在这四个算法中默认定义的数据结构是Triangulation\_data\_structure\_2，程序在TDS\_2文件夹中。Triangulation\_data\_structure\_2中采用了两个Compact\_container数据结构分别保存顶点和单元，Compact\_container是CGAL自己定义的数据结构，程序在STL\_Extension文件夹中。CGAL中二维网格剖分算法有Delaunay\_mesher\_2，程序在Mesh\_2文件夹中，Delaunay\_mesher\_2需要先提供一个已知点集生成的三角网格。CGAL中三维点集生成四面体网格有三个算法，分别为Triangulation\_3、Delaunay\_triangulation\_3和Regular\_triangulation\_3，第二个算法和第三个算法基于第一个算法，程序在Triangulation\_3文件夹中。数据结构采用了Triangulation\_data\_structure\_3，程序在TDS\_3文件夹中，同样采用了Compact\_container数据结构保存点和单元。CGAL中三维网格剖分算法有make\_mesh\_3，实现了德劳内加密，其中定义了Mesh\_complex\_3\_in\_triangulation\_3，并依赖Mesh\_complex\_3\_in\_triangulation\_3\_base，其中定义了点和单元数据结构，程序在Mesh\_3文件夹中。
+
+\subsubsection{算例}
+图\ref{fig:1-1}是Triangulation\_2，因此没有发生翻转。图\ref{fig:1-2}是Delaunay\_triangulation\_2，发生了翻转。图\ref{fig:1-3}是Constrained\_Delaunay\_triangulation\_2，对边进行约束，因此进行了约束下翻转。图\ref{fig:1-4}是Delaunay\_mesher\_2，对边进行了约束，因此进行了约束下翻转，并进行了德劳内加密。
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/1.png}
+  \caption{Triangulation\_2}
+  \label{fig:1-1}
+\end{figure}
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/2.png}
+  \caption{Delaunay\_triangulation\_2}
+  \label{fig:1-2}
+\end{figure}
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/3.png}
+  \caption{Constrained\_Delaunay\_triangulation\_2}
+  \label{fig:1-3}
+\end{figure}
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/4.png}
+  \caption{Delaunay\_mesher\_2}
+  \label{fig:1-4}
+\end{figure}
+
+\newpage
+图\ref{fig:1-5}是Triangulation\_3，因此没有发生翻转。图\ref{fig:1-6}是Delaunay\_triangulation\_3，发生了翻转。图\ref{fig:1-7}采用OFF文件定义了多面体，多面体的面只能为三角形，进行了网格剖分。
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/5.png}
+  \caption{Triangulation\_3}
+  \label{fig:1-5}
+\end{figure}
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/6.png}
+  \caption{Delaunay\_triangulation\_3}
+  \label{fig:1-6}
+\end{figure}
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/7.png}
+  \caption{make\_mesh\_3}
+  \label{fig:1-7}
+\end{figure}
+
+
+\subsection{Triangle}
+
+\subsubsection{数据结构和算法}
+
+\subsubsection{算例}
+
+\subsection{Netgen}
+
+\subsubsection{数据结构和算法}
+
+\subsubsection{算例}
+
+\subsection{Tetgen}
+
+\subsubsection{数据结构和算法}
+
+\subsubsection{算例}
+
+\subsection{Gmsh}
+
+\subsubsection{数据结构和算法}
+
+\subsubsection{算例}
+
+\subsection{OpenCASCADE}
+
+\subsubsection{数据结构和算法}
+
+\subsection{Slice2Mesh}
+
+\subsubsection{数据结构和算法}
+
+\subsubsection{算例}
+
+\section{结构性网格}
+
+\subsection{协调性网格}
+
+\subsubsection{Clipper}
+
+\subsubsection{RnD}
+
+\subsubsection{数据结构}
+
+\subsubsection{算法算例}
+
+\subsection{非协调性网格}
+
+\subsubsection{数据结构}
+
+\subsubsection{算法算例}
+
+\chapter{网格自适应性}
+
+\section{非结构性网格}
+
+\section{结构性网格}
+
+\chapter{网格并行}
+
+\section{Metis}
+
+\chapter{残余应力和变形}
+
+\section{热弹塑性}
+
+\section{小尺度}
+
+\section{构件尺度}
