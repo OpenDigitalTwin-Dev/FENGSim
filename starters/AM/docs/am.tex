@@ -34,6 +34,7 @@
 \def\ud{\mathrm{d}}
 
 \usepackage{graphicx}
+\usepackage{wrapfig}
 \usepackage{ctex}
 \usepackage{titlesec}
 \usepackage{ulem}
@@ -160,6 +161,7 @@ skipabove=\topsep,skipbelow=\topsep, backgroundcolor = red!15
 \titleformat{\chapter}{\raggedright\Huge\bfseries}{第\,\thechapter\,章}{1em}{}
 
 \begin{document}
+\begin{sloppypar}
 
 %\booktitle{并行自适应层网格剖分}
 %\subtitle{Machining}
@@ -953,6 +955,6 @@ K.J. O'Connor, ``A Pipelined 32b Microprocessor with 13 kb of Cache Memory,''
 \bibliographystyle{plain}
 \bibliography{sample}
 
-
+\end{sloppypar}
 \end{document}
 
