@@ -233,7 +233,7 @@
 /*   TRILIBRARY symbol.  Read the file triangle.h for details on how to call */
 /*   the procedure triangulate() that results.                               */
 
-#define TRILIBRARY
+//#define TRILIBRARY
 
 /* It is possible to generate a smaller version of Triangle using one or     */
 /*   both of the following symbols.  Define the REDUCED symbol to eliminate  */
@@ -15677,6 +15677,8 @@ struct triangulateio *vorout;
 #endif /* not ANSI_DECLARATORS */
 
 #else /* not TRILIBRARY */
+
+
 
 #ifdef ANSI_DECLARATORS
 int main(int argc, char **argv)
