@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2023.5.31)  15 JAN 2024 20:57
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2023.5.31)  22 JAN 2024 21:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -899,11 +899,12 @@ Chapter 1.
 [5
 
 ]
-Underfull \hbox (badness 1117) in paragraph at lines 12--13
+Underfull \hbox (badness 1117) in paragraph at lines 14--15
 []\TU/ptm/m/sl/10.53937 CGAL \TU/FandolSong-Regular(0)/m/n/10.53937 是 一 个 重 模 板
  的 软 件，|  新 版 本 程 序 全 部 都 写 在 头 文 件 中，|  因 此 不 需 要 编 译。|
  []
 
+[6]
 File: fig/1/1.png Graphic file (type bmp)
 <fig/1/1.png>
 File: fig/1/2.png Graphic file (type bmp)
@@ -918,7 +919,7 @@ File: fig/1/6.png Graphic file (type bmp)
 <fig/1/6.png>
 File: fig/1/7.png Graphic file (type bmp)
 <fig/1/7.png>
-[6] [7] [8]
+ [7] [8]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [9]
@@ -954,7 +955,7 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 Here is how much of TeX's memory you used:
  16192 strings out of 476191
  391668 string characters out of 5812072
- 724705 words of memory out of 5000000
+ 726705 words of memory out of 5000000
  36637 multiletter control sequences out of 15000+600000
  510619 words of font info for 143 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
