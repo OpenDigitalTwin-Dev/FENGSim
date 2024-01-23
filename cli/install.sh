@@ -47,6 +47,7 @@ cmake .. -DQt5_DIR=$PWD/../../qt/5.12.12/lib/cmake/Qt5 -DCMAKE_INSTALL_PREFIX=$P
 make -j4
 make install
 
+# oce install
 cd ../../oce
 mkdir build
 cd build
@@ -54,6 +55,7 @@ cmake .. -DVTK_DIR=$PWD/../../vtk_install/lib/cmake/vtk-8.1 -DOCE_INSTALL_PREFIX
 make -j4
 make install
 
+# gmsh install
 cd ../../gmsh
 mkdir build
 cd build
@@ -61,6 +63,7 @@ cmake .. -DOCC_INC=$PWD/../../oce_install/include/oce -DCMAKE_INSTALL_PREFIX=$PW
 make -j4
 make install
 
+# cgal install
 cd ../../cgal
 mkdir build
 cd build
@@ -68,7 +71,7 @@ cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../cgal_install -DWITH_CGAL_Qt5=OFF
 make -j4
 make install
 
-# pcl
+# pcl install
 sudo apt -y install libeigen3-dev
 sudo apt -y install libflann-dev
 cd ../../pcl
@@ -78,13 +81,14 @@ cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../pcl_install -DWITH_QT=OFF
 make -j4
 make install
 
-# build starters
+# starters:ale
 cd ../../../starters/ALE
 mkdir build
 cd build
 cmake ..
 make
 
+# starters:cgal
 cd ../../../starters/CGAL
 mkdir data/output
 mkdir build
@@ -92,6 +96,7 @@ cd build
 cmake ..
 make
 
+# starters:gdt
 cd ../../../starters/GDT
 mkdir build
 cd build
