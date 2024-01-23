@@ -65,7 +65,7 @@ CGAL是一个重模板的软件，新版本程序全部都写在头文件中，�
 
 \subsection{Triangle}
 
-Triangle是一个二维Delauany网格剖分的软件，是Jonathan Richard Shewchuk开发的。软件包括四个文件，triangle.h和triangle.c，可视化用的showme.c，以及一个c语言接口例子tricall.c。很有意思的是showme是直接基于x11开发的。其中triangle.c中有main函数定义，可以直接从triangle.c编译成可执行程序，但是需要注释掉TRILIBRARY的定义，也可以将triangle.c编译成链接库，然后tricall.c调用链接库，将tricall.c编译成可执行程序，或者将triangle.c和tricall.c放在一起编译成可执行程序。Triangle中给了一个例子，读取A.poly文件中数据进行网格剖分，结果会生成A.1.*的文件，然后用showme打开。在CMakeLists里将var设置成ON，是将triangle.c编译成可执行程序，设置成OFF，是将tricall.c编译成可执行程序。运行install.sh文件，编译安装后在triangle$\_$install/bin文件夹中可以运行triangle$\_$run -p A进行测试，用showme A.poly打开查看。
+Triangle是一个二维Delauany网格剖分的软件，是Jonathan Richard Shewchuk开发的。软件包括四个文件，triangle.h和triangle.c，可视化用的showme.c，以及一个c语言接口例子tricall.c。很有意思的是showme是直接基于x11开发的。其中triangle.c中有main函数定义，可以直接从triangle.c编译成可执行程序，但是需要注释掉TRILIBRARY的定义，也可以将triangle.c编译成链接库，然后tricall.c调用链接库，将tricall.c编译成可执行程序，或者将triangle.c和tricall.c放在一起编译成可执行程序。Triangle中给了一个例子，读取A.poly文件中数据进行网格剖分，结果会生成A.1.*的文件，然后用showme打开。在CMakeLists里将var设置成ON，将lib设置成OFF，是将triangle.c编译成可执行程序,将lib设置成ON，编译成动态链接库，var设置成OFF，是将triangle.c和tricall.c一起编译成可执行程序。运行install.sh文件，编译安装后在triangle$\_$install/bin文件夹中可以运行命令triangle$\_$run -p A进行测试，用命令showme A.poly打开查看。
 
 
 \subsubsection{数据结构和算法}

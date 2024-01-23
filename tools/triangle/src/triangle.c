@@ -15717,12 +15717,19 @@ char **argv;
 #endif /* not TRILIBRARY */
   m.steinerleft = b.steiner;
 
+
+
+ 
+
+  
+  
 #ifdef TRILIBRARY
   transfernodes(&m, &b, in->pointlist, in->pointattributelist,
                 in->pointmarkerlist, in->numberofpoints,
                 in->numberofpointattributes);
 #else /* not TRILIBRARY */
   readnodes(&m, &b, b.innodefilename, b.inpolyfilename, &polyfile);
+
 #endif /* not TRILIBRARY */
 
 #ifndef NO_TIMER
