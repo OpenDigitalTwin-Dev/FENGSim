@@ -357,6 +357,7 @@
 #include "triangle.h"
 #endif /* TRILIBRARY */
 
+
 /* A few forward declarations.                                               */
 
 #ifndef TRILIBRARY
@@ -13889,7 +13890,7 @@ void readnodes(struct mesh *m, struct behavior *b, char *nodefilename,
                char *polyfilename, FILE **polyfile)
 #else /* not ANSI_DECLARATORS */
 void readnodes(m, b, nodefilename, polyfilename, polyfile)
-struct mesh *m;
+	 struct mesh *m;
 struct behavior *b;
 char *nodefilename;
 char *polyfilename;
@@ -13897,23 +13898,23 @@ FILE **polyfile;
 #endif /* not ANSI_DECLARATORS */
 
 {
-  FILE *infile;
-  vertex vertexloop;
-  char inputline[INPUTLINESIZE];
-  char *stringptr;
-  char *infilename;
-  REAL x, y;
-  int firstnode;
-  int nodemarkers;
-  int currentmarker;
-  int i, j;
-
-  if (b->poly) {
-    /* Read the vertices from a .poly file. */
-    if (!b->quiet) {
-      printf("Opening %s.\n", polyfilename);
-    }
-    *polyfile = fopen(polyfilename, "r");
+	FILE *infile;
+	vertex vertexloop;
+	char inputline[INPUTLINESIZE];
+	char *stringptr;
+	char *infilename;
+	REAL x, y;
+	int firstnode;
+	int nodemarkers;
+	int currentmarker;
+	int i, j;
+	
+	if (b->poly) {
+		/* Read the vertices from a .poly file. */
+		if (!b->quiet) {
+			printf("Opening %s.\n", polyfilename);
+		}
+		*polyfile = fopen(polyfilename, "r");
     if (*polyfile == (FILE *) NULL) {
       printf("  Error:  Cannot access file %s.\n", polyfilename);
       triexit(1);
@@ -14028,44 +14029,45 @@ FILE **polyfile;
     y = (REAL) strtod(stringptr, &stringptr);
     vertexloop[0] = x;
     vertexloop[1] = y;
+
     /* Read the vertex attributes. */
     for (j = 2; j < 2 + m->nextras; j++) {
-      stringptr = findfield(stringptr);
-      if (*stringptr == '\0') {
-        vertexloop[j] = 0.0;
-      } else {
-        vertexloop[j] = (REAL) strtod(stringptr, &stringptr);
-      }
+		stringptr = findfield(stringptr);
+		if (*stringptr == '\0') {
+			vertexloop[j] = 0.0;
+		} else {
+			vertexloop[j] = (REAL) strtod(stringptr, &stringptr);
+		}
     }
     if (nodemarkers) {
-      /* Read a vertex marker. */
-      stringptr = findfield(stringptr);
-      if (*stringptr == '\0') {
-        setvertexmark(vertexloop, 0);
-      } else {
-        currentmarker = (int) strtol(stringptr, &stringptr, 0);
-        setvertexmark(vertexloop, currentmarker);
-      }
+		/* Read a vertex marker. */
+		stringptr = findfield(stringptr);
+		if (*stringptr == '\0') {
+			setvertexmark(vertexloop, 0);
+		} else {
+			currentmarker = (int) strtol(stringptr, &stringptr, 0);
+			setvertexmark(vertexloop, currentmarker);
+		}
     } else {
-      /* If no markers are specified in the file, they default to zero. */
-      setvertexmark(vertexloop, 0);
+		/* If no markers are specified in the file, they default to zero. */
+		setvertexmark(vertexloop, 0);
     }
     setvertextype(vertexloop, INPUTVERTEX);
     /* Determine the smallest and largest x and y coordinates. */
     if (i == 0) {
-      m->xmin = m->xmax = x;
-      m->ymin = m->ymax = y;
+		m->xmin = m->xmax = x;
+		m->ymin = m->ymax = y;
     } else {
-      m->xmin = (x < m->xmin) ? x : m->xmin;
-      m->xmax = (x > m->xmax) ? x : m->xmax;
-      m->ymin = (y < m->ymin) ? y : m->ymin;
-      m->ymax = (y > m->ymax) ? y : m->ymax;
+		m->xmin = (x < m->xmin) ? x : m->xmin;
+		m->xmax = (x > m->xmax) ? x : m->xmax;
+		m->ymin = (y < m->ymin) ? y : m->ymin;
+		m->ymax = (y > m->ymax) ? y : m->ymax;
     }
   }
   if (m->readnodefile) {
-    fclose(infile);
+	  fclose(infile);
   }
-
+  
   /* Nonexistent x value used as a flag to mark circle events in sweepline */
   /*   Delaunay algorithm.                                                 */
   m->xminextreme = 10 * m->xmin - 9 * m->xmax;
@@ -15755,10 +15757,13 @@ char **argv;
                              b.inpolyfilename, polyfile);
 #endif /* not TRILIBRARY */
   } else {
+
     m.hullsize = delaunay(&m, &b);              /* Triangulate the vertices. */
+
   }
 #endif /* not CDT_ONLY */
 
+  
 #ifndef NO_TIMER
   if (!b.quiet) {
     gettimeofday(&tv2, &tz);
@@ -16009,7 +16014,60 @@ char **argv;
 #endif /* not REDUCED */
 
   triangledeinit(&m, &b);
+
+
+
+
+
+
+
+
+
+
+
 #ifndef TRILIBRARY
+
+
+
+
+
+
+
+
+
+  printf("export to vtk\n");
+  FILE *_fp1 = fopen("A.1.node", "r");
+  char _str1[1024];
+  fgets(_str1, INPUTLINESIZE, _fp1);
+  printf("%s", _str1);
+  int a1,a2,a3,a4;
+  char* _str2 = (char*)malloc(strlen(_str1)+1);
+  strcpy(_str2, _str1);
+  printf("%s", _str2);
+  int a[4];
+  sscanf(_str2, "%d %d %d %d", a, a+1, a+2, a+3);
+  printf("%d %d %d %d\n", a[0], a[1], a[2], a[3]);
+
+  
+  //FILE *_fp2 = fopen("A.vtk", "w");
+  //fprintf(_fp2, "%d  %d\n", 1, 99);
+
+
+
+
+
+
+  
   return 0;
 #endif /* not TRILIBRARY */
+
+
+
+
+
+  
+  
+
+
+
 }
