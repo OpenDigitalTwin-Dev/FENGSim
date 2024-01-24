@@ -16039,18 +16039,60 @@ char **argv;
   FILE *_fp1 = fopen("A.1.node", "r");
   char _str1[1024];
   fgets(_str1, INPUTLINESIZE, _fp1);
-  printf("%s", _str1);
-  int a1,a2,a3,a4;
+  //printf("%s", _str1);
   char* _str2 = (char*)malloc(strlen(_str1)+1);
   strcpy(_str2, _str1);
-  printf("%s", _str2);
+  //printf("%s", _str2);
   int a[4];
   sscanf(_str2, "%d %d %d %d", a, a+1, a+2, a+3);
-  printf("%d %d %d %d\n", a[0], a[1], a[2], a[3]);
+  //printf("%d %d %d %d\n", a[0], a[1], a[2], a[3]);
 
+  FILE *_fp2 = fopen("A.vtk", "w");
+  fprintf(_fp2, "# vtk DataFile Version 2.0\n");
+  fprintf(_fp2, "Structured Grid by Portage\n");
+  fprintf(_fp2, "ASCII\n");
+  fprintf(_fp2, "DATASET UNSTRUCTURED_GRID\n");
+  fprintf(_fp2, "POINTS %d float\n", a[0]);
+
+  for (int i=0; i<a[0]; i++) {
+      fgets(_str1, INPUTLINESIZE, _fp1);
+      //printf("%s", _str1);
+      _str2 = (char*)malloc(strlen(_str1)+1);
+      strcpy(_str2, _str1);
+      //printf("%s", _str2);
+      double a[4];
+      sscanf(_str2, "%lf %lf %lf %lf", a, a+1, a+2, a+3);
+      fprintf(_fp2,"%lf %lf 0\n", a[1], a[2]);
+  }
+
+  _fp1 = fopen("A.1.ele", "r");
+  fgets(_str1, INPUTLINESIZE, _fp1);
+  //printf("%s", _str1);
+  _str2 = (char*)malloc(strlen(_str1)+1);
+  strcpy(_str2, _str1);
+  //printf("%s", _str2);
+  sscanf(_str2, "%d %d %d", a, a+1, a+2);
+  //printf("%d %d %d\n", a[0], a[1], a[2]);
+
+  fprintf(_fp2, "CELLS %d %d\n", a[0], 4*a[0]);
+
+  for (int i=0; i<a[0]; i++) {
+      fgets(_str1, INPUTLINESIZE, _fp1);
+      //printf("%s", _str1);
+      _str2 = (char*)malloc(strlen(_str1)+1);
+      strcpy(_str2, _str1);
+      //printf("%s", _str2);
+      int a[4];
+      sscanf(_str2, "%d %d %d %d", a, a+1, a+2, a+3);
+      fprintf(_fp2,"3 %d %d %d\n", a[1]-1, a[2]-1, a[3]-1);
+  }
+
+  fprintf(_fp2, "CELL_TYPES %d\n", a[0]);
+  for (int i=0; i<a[0]; i++) {
+      fprintf(_fp2,"5\n");
+  }
   
-  //FILE *_fp2 = fopen("A.vtk", "w");
-  //fprintf(_fp2, "%d  %d\n", 1, 99);
+
 
 
 
