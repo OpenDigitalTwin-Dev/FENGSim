@@ -70,7 +70,44 @@ Triangle是一个二维Delauany网格剖分的软件，是Jonathan Richard Shewc
 
 \subsubsection{数据结构和算法}
 
+Triangle里定义了网格数据结构mesh，mesh中定义了各种memorypool，其中包括vertices和triangles，memorypool是list中的一个节点，其中firstblock定义了初始位置，nowblock定义了当前位置，nextitem定义了下一个item位置，用poolalloc函数往memorypool里插入新节点，poolalloc会返回一个指针，指针类型可以是triangle、vertex等等，triangle是REAL类型的双重指针，可以对triangle进行赋值，vertex是REAL类型的指针，可以对vertex进行赋值。Triangle里定了命令行操作的数据结构behavior。Triangle网格剖分函数为delaunay，实现了三种剖分方法，分别为divconqdelaunay、incrementaldelaunay和sweeplinedelaunay函数，在incrementaldelaunay中insertvertex实现了Delaunay算法中的反转操作。
+
 \subsubsection{算例}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/8.png}
+  \caption{Delaunay网格剖分发生翻转}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/9.png}
+  \caption{在.poly中增加从$(1,0)$到$(0,1)$的约束，翻转不发生}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/10.png}
+  \caption{用命令./trianglerun -pa0.001 A进行加密}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/11.png}
+  \caption{在.poly中增加从$(1,0)$到$(0,1)$的约束，用命令./trianglerun -pa0.001 A进行加密}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/12.png}
+  \caption{在.poly中增加从$(1,0)$到$(0,1)$的约束，用命令./trianglerun -pqa0.001 A进行加密和提高网格质量}
+  \label{fig:1-7}
+\end{figure}
 
 \subsection{Netgen}
 
