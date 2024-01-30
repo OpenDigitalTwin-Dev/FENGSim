@@ -18,7 +18,6 @@
 
    * tetgen (2024-01-29)
 
-
 <div align="center">
 <img decoding="async" src="../images/mesh/tetgen/1.jpg" width="400">
 </div>
