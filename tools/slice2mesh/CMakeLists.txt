@@ -22,18 +22,19 @@ message(${CMAKE_BINARY_DIR})
 include_directories("include")
 include_directories("src")
 add_executable (slice2mesh_exec ../src/main.cpp ../src/plc2tet.cpp  ../src/slice2plc.cpp  ../src/trianglulate.cpp ../src/edge_processing.cpp)
-target_link_libraries (slice2mesh_exec ${CMAKE_BINARY_DIR}/../../tetgen_install/lib/libtetgen.so ${CMAKE_BINARY_DIR}/../../triangle_install/lib/libtriangle.so) #${Boost_LIBRARIES})
+target_link_libraries (slice2mesh_exec ${CMAKE_BINARY_DIR}/../../tetgen_install/lib/libtetgen.so ${CMAKE_BINARY_DIR}/../../triangle_install/lib/libtriangle.so)
+#${Boost_LIBRARIES})
 
 install(TARGETS
-    slice2mesh_exec
-    # for executables and dll on Win
-    RUNTIME DESTINATION bin
-    # shared libraries
-    LIBRARY DESTINATION lib
-    # for static libraries
-    ARCHIVE DESTINATION lib
-    INCLUDES DESTINATION include
-    )
+  slice2mesh_exec
+  # for executables and dll on Win
+  RUNTIME DESTINATION bin
+  # shared libraries
+  LIBRARY DESTINATION lib
+  # for static libraries
+  ARCHIVE DESTINATION lib
+  INCLUDES DESTINATION include
+  )
 
 
 
