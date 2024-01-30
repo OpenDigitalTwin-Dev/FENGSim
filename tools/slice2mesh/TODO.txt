@@ -1,0 +1,2 @@
+- remove QT compilation system and make a simple Makefile
+- make a parallel copy (in another branch?) for the GUI version of the tool
