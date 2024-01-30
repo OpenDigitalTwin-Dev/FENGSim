@@ -6,11 +6,7 @@ The product life cycle includes design, manufacturing, operation, and maintenanc
 <img decoding="async" src="images/Fengsim_logo_hi.png" height="200">
 </div>
 
-The FENGSim project is an adaptive manufacturing operation system.
-1. Interfaces for mathematical libraries such as computational geometry, computer algebra, numerical methods, numerical linear algebra, computer graphics and image processing, probability and statistics, optimization, etc, and software framework.
-2. Tools for library dependences, package management, CICD (compile, code merge, version control, test, deploy).
-3. Interfaces for equipments and sensors such as communications, drivers, job management.
-4. Physical simulations for manufacturing technologies.
+The FENGSim project is an adaptive manufacturing operational system that incorporates interfaces for various mathematical libraries, including computational geometry, computer algebra, numerical methods, numerical linear algebra, computer graphics, image processing, probability and statistics, and optimization, among others, as well as the CAX software framework. It also provides tools for managing library dependencies, package management, and CICD (compile, code merge, version control, test, deploy) processes. Additionally, the project includes interfaces for equipment and sensor integration, encompassing communications, drivers, and job management, as well as physical simulations for manufacturing technologies.
 
 To install:
 1. Navigate to the cli directory in your terminal/command prompt.
