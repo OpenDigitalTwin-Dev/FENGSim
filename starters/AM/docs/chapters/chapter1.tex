@@ -109,13 +109,73 @@ Triangle里定义了网格数据结构mesh，mesh中定义了各种memorypool，
   \label{fig:1-7}
 \end{figure}
 
+
+\subsection{Tetgen}
+
+Tetgen是德国Weierstrass Institute for Applied Analysis and Stochastics的Hang Si开发的，非常有意思的是Tetgen借鉴了很多triangle的工作，triangle是二维的Delaunay网格剖分，Tetgen是三维的Delaunay网格剖分，增加了网格自适应算法，Hang Si博士论文即为自适应算法。Tetgen并不复杂，主要包括tetgen.h和tetgen.cxx两个文件，可以用cmake生成Makefile并编译成可执行程序和链接库，需要在CMakeLists.txt中将BUILD$\_$EXECUTABLE或者BUILD$\_$LIBRARY设置成ON或者OFF，并且在tetgen.h中第55行修改TETLIBRARY定义。Tetgen读入的文件格式和triangle是一样的poly格式，poly格式是triangle开发者J. Shewchuk定义的，同样Tetgen采用了和triangle类似的命令行设置，Tetgen可以直接生成vtk格式的网格文件。
+
+\subsubsection{数据结构和算法}
+Tetgen包括tetgenio、tetgenbehavior、tetgenmesh，和triangle类似，其中tetgenio用于数据输入输出，tetgenbehavior用于操作设置，tetgenmesh是网格数据结构。网格数据结构中包括了REAL类型双重指针定义的tetrahedron和REAL类型指针定义的point，采用了triangle中的memorypool数据结构，定义了tetrahedrons和points，其外还定义了subfaces和subsegs。Delaunay网格剖分算法主要通过incrementaldelaunay函数和constraineddelaunay函数实现，incrementaldelaunay函数实现了两种算法，分别为the Bowyer-Watson (B-W) algorithm和the incremental flip algorithm of Edelsbrunner and Shah，incrementalflip函数实现反转功能。delaunayrefinement函数实现了网格加密，网格可以一致加密也可以局部加密。tetrahedralize函数是Tetgen网格剖分的接口。poly格式中定义顶点，首先定义顶点个数、空间维数、属性个数、标识个数，再具体定义。定义多面体面，首先定义面个数、标识个数，再定义每个面上多边形个数、孔个数、边界标识个数，再具体定义。
+
+\subsubsection{算例}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/13.png}
+  \caption{采用./tetgen -pk A.poly命令，k生成vtk，产生了翻转。}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/14.png}
+  \caption{采用./tetgen -pk A.poly命令，k生成vtk，将A.poly中12行注释掉，取消13行注释，27和28行取消注释，增加约束，抑制了翻转。}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/15.png}
+  \caption{采用./tetgen -pka0.0001 A.poly命令，一致加密。}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/16.png}
+  \caption{采用./tetgen -pkqm A.poly命令，q提高网格质量并通过m读取A.mtr文件中间点密度条件。}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/19.png}
+  \caption{采用./tetgen -pk example.poly命令。}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/17.png}
+  \caption{采用./tetgen -pkqm example.poly命令。}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/18.png}
+  \caption{采用./tetgen -pkqm example.poly命令，将第2行设置为0.001。}
+  \label{fig:1-7}
+\end{figure}
+
+
 \subsection{Netgen}
 
 \subsubsection{数据结构和算法}
 
 \subsubsection{算例}
 
-\subsection{Tetgen}
+\subsection{mmg}
 
 \subsubsection{数据结构和算法}
 

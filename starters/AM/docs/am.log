@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2023.11.16)  25 JAN 2024 16:28
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2023.5.31)  30 JAN 2024 12:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -809,6 +809,27 @@ LaTeX Warning: Label `fig:1-7' multiply defined.
 
 LaTeX Warning: Label `fig:1-7' multiply defined.
 
+
+LaTeX Warning: Label `fig:1-7' multiply defined.
+
+
+LaTeX Warning: Label `fig:1-7' multiply defined.
+
+
+LaTeX Warning: Label `fig:1-7' multiply defined.
+
+
+LaTeX Warning: Label `fig:1-7' multiply defined.
+
+
+LaTeX Warning: Label `fig:1-7' multiply defined.
+
+
+LaTeX Warning: Label `fig:1-7' multiply defined.
+
+
+LaTeX Warning: Label `fig:1-7' multiply defined.
+
 )
 \openout1 = `am.aux'.
 
@@ -946,19 +967,38 @@ File: fig/1/11.png Graphic file (type bmp)
 <fig/1/11.png>
 File: fig/1/12.png Graphic file (type bmp)
 <fig/1/12.png>
- [9] [10] [11] [12
+ [9] [10]
+File: fig/1/13.png Graphic file (type bmp)
+<fig/1/13.png>
+File: fig/1/14.png Graphic file (type bmp)
+<fig/1/14.png>
+File: fig/1/15.png Graphic file (type bmp)
+<fig/1/15.png>
+File: fig/1/16.png Graphic file (type bmp)
+<fig/1/16.png>
+File: fig/1/19.png Graphic file (type bmp)
+<fig/1/19.png>
+File: fig/1/17.png Graphic file (type bmp)
+<fig/1/17.png>
+File: fig/1/18.png Graphic file (type bmp)
+<fig/1/18.png>
+ [11] [12]
+Overfull \vbox (232.32373pt too high) has occurred while \output is active []
 
-]
-Chapter 2.
+
 [13] [14
 
 ]
-Chapter 3.
+Chapter 2.
 [15] [16
 
 ]
+Chapter 3.
+[17] [18
+
+]
 Chapter 4.
-) [17] (./am.bbl [18
+) [19] (./am.bbl [20
 
 
 ]
@@ -967,7 +1007,7 @@ Underfull \hbox (badness 2521) in paragraph at lines 14--17
 ied Schwarzkopf.
  []
 
-) [19] (./am.aux)
+) [21] (./am.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
@@ -976,12 +1016,12 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 16232 strings out of 477728
- 392277 string characters out of 5842237
- 725071 words of memory out of 5000000
- 36580 multiletter control sequences out of 15000+600000
+ 16288 strings out of 476191
+ 393152 string characters out of 5812072
+ 728746 words of memory out of 5000000
+ 36721 multiletter control sequences out of 15000+600000
  510619 words of font info for 143 fonts, out of 8000000 for 9000
- 264 hyphenation exceptions out of 8191
- 89i,6n,97p,1238b,518s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 1348 hyphenation exceptions out of 8191
+ 89i,6n,97p,1238b,530s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on am.pdf (19 pages).
+Output written on am.pdf (21 pages).
