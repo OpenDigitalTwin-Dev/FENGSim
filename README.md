@@ -1,12 +1,10 @@
 # [FENGSim](https://ocp-docs.readthedocs.io)
 
-The product life cycle includes design, manufacturing, operation, and maintenance. In the past, optimization of products focused on the design phase, often overlooking issues that arose in manufacturing, operation, and maintenance. This is where digital twins can help - by extending optimization across the entire product lifecycle. With digital twins, problems can be identified and solved not just in design, but even after production during real-world use. This allows products to be greatly improved through rapid iteration. Digital twins may thus accelerate innovations like manned missions to Mars. 
+The FENGSim project is an adaptive manufacturing operational system that incorporates interfaces for various mathematical libraries, including computational geometry, computer algebra, numerical methods, numerical linear algebra, computer graphics, image processing, probability and statistics, and optimization, among others, as well as the CAX software framework. It also provides tools for managing library dependencies, package management, and CICD (compile, code merge, version control, test, deploy) processes. Additionally, the project includes interfaces for equipment and sensor integration, encompassing communications, drivers, and job management, as well as physical simulations for manufacturing technologies.
 
 <div align="center">
 <img decoding="async" src="images/Fengsim_logo_hi.png" height="200">
 </div>
-
-The FENGSim project is an adaptive manufacturing operational system that incorporates interfaces for various mathematical libraries, including computational geometry, computer algebra, numerical methods, numerical linear algebra, computer graphics, image processing, probability and statistics, and optimization, among others, as well as the CAX software framework. It also provides tools for managing library dependencies, package management, and CICD (compile, code merge, version control, test, deploy) processes. Additionally, the project includes interfaces for equipment and sensor integration, encompassing communications, drivers, and job management, as well as physical simulations for manufacturing technologies.
 
 To install:
 1. Navigate to the cli directory in your terminal/command prompt.
