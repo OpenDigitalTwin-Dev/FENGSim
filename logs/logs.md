@@ -1,13 +1,6 @@
-| Computational Geometry    |   Numerical Methods | Computer Graphics |
----------------------------------------------------
-| occ                    |   M++             | vtk            |
-| cgal                   |                   | |
-| triangle                   |                    | |
-| tetgen                   |                   ||
-| slice2mesh                   |                 |  |
-| cinolib                   |                   ||
-
-
+<div align="center">
+<img decoding="async" src="../images/log/1.jpg" width="400">
+</div>
 
 ## FENGSim
    * qt5->qt6 (...)
