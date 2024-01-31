@@ -11,7 +11,7 @@
    * cgal 2d/3d triangulation and meshing (2023-08-23)
 
 <div align="center">
-<img decoding="async" src="../images/mesh/cgal/1.jpg" width="400">
+<img decoding="async" src="../images/mesh/cgal/1.jpg" width="600">
 </div>
    
    * triangle (2024-01-29)
