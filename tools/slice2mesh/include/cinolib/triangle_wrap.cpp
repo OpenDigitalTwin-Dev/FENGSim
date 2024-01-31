@@ -53,7 +53,7 @@
     #endif
     extern "C" // set C-like linking style (i.e. no name mungling)
     {
-    #include <../../triangle_install/include/triangle.h>
+    #include "./../../../triangle_install/include/triangle.h"
     }
 #endif
 
@@ -125,8 +125,11 @@ void triangle_wrap(const std::vector<double> & coords_in,
     std::string s = flags + "pzB";
 
     std::cout << s << std::endl;
-    
-    triangulate(const_cast<char*>(s.c_str()), &in, &out, NULL);
+
+	char* ss = new char[strlen(s.c_str()) + 1];
+    std::strcpy(ss, s.c_str());
+    //triangulate(const_cast<char*>(s.c_str()), &in, &out, NULL);
+	triangulate(ss, &in, &out, NULL);
 
     coords_out.reserve(out.numberofpoints*2);
     for(int vid=0; vid<out.numberofpoints; ++vid)

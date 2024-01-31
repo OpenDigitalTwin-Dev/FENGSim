@@ -37,7 +37,7 @@
 #include <cinolib/vector_serialization.h>
 
 #ifdef CINOLIB_USES_TETGEN
-#include <../../tetgen_install/include/tetgen.h>
+#include "./../../../tetgen_install/include/tetgen.h"
 #endif
 
 namespace cinolib
@@ -106,7 +106,7 @@ void tetgen_wrap(const std::vector<double>            & coords_in,
     //
     std::string s = "p" + flags;
 
-    //tetrahedralize(const_cast<char*>(s.c_str()), &in, &out);
+    tetrahedralize(const_cast<char*>(s.c_str()), &in, &out);
 
     // generate tetmesh
     //
