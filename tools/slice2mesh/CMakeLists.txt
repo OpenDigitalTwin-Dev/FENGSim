@@ -35,5 +35,15 @@ install(FILES
   DESTINATION bin
   )
 
+install(FILES
+  ${CMAKE_SOURCE_DIR}/../tetgen_install/lib/libtetgen.so
+  DESTINATION bin
+  )
+
+install(FILES
+  ${CMAKE_SOURCE_DIR}/../triangle_install/lib/libtriangle.so
+  DESTINATION bin
+  )
+
 file(COPY "msh2geo.py" DESTINATION ${CMAKE_BINARY_DIR}/)
 
