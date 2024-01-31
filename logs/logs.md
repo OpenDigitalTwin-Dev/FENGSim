@@ -1,5 +1,5 @@
 <div align="center">
-<img decoding="async" src="../images/log/1.jpg" width="400">
+<img decoding="async" src="../images/log/1.jpg" width="600">
 </div>
 
 ## FENGSim
