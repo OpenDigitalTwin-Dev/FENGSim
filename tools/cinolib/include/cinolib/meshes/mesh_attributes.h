@@ -1,0 +1,131 @@
+/********************************************************************************
+*  This file is part of CinoLib                                                 *
+*  Copyright(C) 2016: Marco Livesu                                              *
+*                                                                               *
+*  The MIT License                                                              *
+*                                                                               *
+*  Permission is hereby granted, free of charge, to any person obtaining a      *
+*  copy of this software and associated documentation files (the "Software"),   *
+*  to deal in the Software without restriction, including without limitation    *
+*  the rights to use, copy, modify, merge, publish, distribute, sublicense,     *
+*  and/or sell copies of the Software, and to permit persons to whom the        *
+*  Software is furnished to do so, subject to the following conditions:         *
+*                                                                               *
+*  The above copyright notice and this permission notice shall be included in   *
+*  all copies or substantial portions of the Software.                          *
+*                                                                               *
+*  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR   *
+*  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,     *
+*  FITNESS FOR A PARTICULAR PURPOSE AND NON INFRINGEMENT. IN NO EVENT SHALL THE *
+*  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER       *
+*  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING      *
+*  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS *
+*  IN THE SOFTWARE.                                                             *
+*                                                                               *
+*  Author(s):                                                                   *
+*                                                                               *
+*     Marco Livesu (marco.livesu@gmail.com)                                     *
+*     http://pers.ge.imati.cnr.it/livesu/                                       *
+*                                                                               *
+*     Italian National Research Council (CNR)                                   *
+*     Institute for Applied Mathematics and Information Technologies (IMATI)    *
+*     Via de Marini, 6                                                          *
+*     16149 Genoa,                                                              *
+*     Italy                                                                     *
+*********************************************************************************/
+#ifndef CINO_MESH_ATTRIBUTES_H
+#define CINO_MESH_ATTRIBUTES_H
+
+#include <cinolib/geometry/vec3.h>
+#include <cinolib/color.h>
+#include <string>
+
+namespace cinolib
+{
+
+/* These are the MINIMAL attributes required by CinoLib.
+ * If omitted, the library will not compile!!!!!!!!!!!
+ *
+ * NOTE: you do not need to specify them, they have been
+ * set as default template arguments in any mesh available
+ * within the library. Meshes can therefore be declared as
+ * follows:
+ *
+ * Trimesh<>        my_trimesh;
+ * Quadmesh<>       my_quadmesh;
+ * Polygonmesh<>    my_polygonmesh;
+ * Tetmesh<>        my_tetmesh;
+ * Hexmesh<>        my_hexmesh;
+ * Polyhedralmesh<> my_polyhedralmesh;
+ *
+ * Otherwise, if more attributes are necessary, you can always
+ * extend the current structures, and use explicit templates:
+ *
+ * Trimesh<M,V,E,P>          my_trimesh;
+ * Quadmesh<M,V,E,P>         my_quadmesh;
+ * Polygonmesh<M,V,E,P>      my_polygonmesh;
+ * Tetmesh<M,V,E,F,P>        my_tetmesh;
+ * Hexmesh<M,V,E,F,P>        my_hexmesh;
+ * Polyhedralmesh<M,V,E,F,P> my_hexmesh;
+*/
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+typedef struct
+{
+    std::string filename;
+}
+Mesh_std_attributes;
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+typedef struct
+{
+    vec3d  normal  = vec3d(0,0,0);
+    Color  color   = Color::WHITE();
+    vec3d  uvw     = vec3d(0,0,0);
+    int    label   = -1;
+    float  quality = 0.0;
+    bool   marked  = false;
+}
+Vert_std_attributes;
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+typedef struct
+{
+    Color color  = Color::BLACK();
+    bool  marked = false;
+    int   label  = -1;
+}
+Edge_std_attributes;
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+typedef struct
+{
+    vec3d  normal   = vec3d(0,0,0);
+    Color  color    = Color::WHITE();
+    int    label    = -1;
+    bool   visible  = true;
+    float  quality  = 0.0;
+    bool   marked   = false;
+    float  AO       = 1.0;
+}
+Polygon_std_attributes;
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+typedef struct
+{
+    Color  color   = Color::WHITE();
+    int    label   = -1;
+    bool   visible = true;
+    float  quality = 0.0;
+    bool   marked  = false;
+}
+Polyhedron_std_attributes;
+
+}
+
+#endif // CINO_MESH_ATTRIBUTES_H

@@ -1,40 +1,55 @@
 cmake_minimum_required(VERSION 3.1)
 project(tetgen)
 
-option(BUILD_EXECUTABLE "Build tetgen executable" ON)
-option(BUILD_LIBRARY    "Build libtetgen library" OFF)
+option(BUILD_EXECUTABLE "Build tetgen executable" OFF)
+option(BUILD_LIBRARY    "Build libtetgen library" ON)
 
 if(BUILD_LIBRARY)
-  add_library(tetgen STATIC tetgen.cxx predicates.cxx)
+  include_directories("src")
+  add_library(tetgen SHARED ../src/tetgen.cxx ../src/predicates.cxx)
   target_compile_definitions(tetgen PRIVATE -DTETLIBRARY)
   # Generate position independent code
   set_target_properties(tetgen PROPERTIES POSITION_INDEPENDENT_CODE ON)
+  
+  install(TARGETS
+    tetgen
+    # for executables and dll on Win
+    RUNTIME DESTINATION bin
+    # shared libraries
+    LIBRARY DESTINATION lib
+    # for static libraries
+    ARCHIVE DESTINATION lib
+    INCLUDES DESTINATION include
+    )  
+  install(FILES
+    src/tetgen.h
+    DESTINATION include
+    )
 endif()
 
 
 if(BUILD_EXECUTABLE)
-  add_executable(tetgen_exec tetgen.cxx predicates.cxx)
+  include_directories("src")
+  add_executable(tetgen_exec ../src/tetgen.cxx ../src/predicates.cxx)
   set_target_properties(tetgen_exec PROPERTIES OUTPUT_NAME tetgen)
   install(TARGETS
-  tetgen_exec
-  # for executables and dll on Win
-  RUNTIME DESTINATION bin
-  # shared libraries
-  LIBRARY DESTINATION lib
-  # for static libraries
-  ARCHIVE DESTINATION lib
-  INCLUDES DESTINATION include
-  )
-
-install(FILES
-  A.poly
-  DESTINATION bin
-  )
-
-install(FILES
-  A.mtr
-  DESTINATION bin
-  )
+    tetgen_exec
+    # for executables and dll on Win
+    RUNTIME DESTINATION bin
+    # shared libraries
+    LIBRARY DESTINATION lib
+    # for static libraries
+    ARCHIVE DESTINATION lib
+    INCLUDES DESTINATION include
+    )
+  install(FILES
+    A.poly
+    DESTINATION bin
+    )
+  install(FILES
+    A.mtr
+    DESTINATION bin
+    )
 
 endif()
 
