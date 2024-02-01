@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.1)
 project(slice2mesh)
 
+set(CMAKE_SKIP_BUILD_RPATH FALSE)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+set(CMAKE_INSTALL_RPATH $ORIGIN)
+
 add_definitions(-DCINOLIB_USES_BOOST)
 add_definitions(-DCINOLIB_USES_TRIANGLE)
 add_definitions(-DCINOLIB_USES_TETGEN)
@@ -46,4 +50,6 @@ install(FILES
   )
 
 file(COPY "msh2geo.py" DESTINATION ${CMAKE_BINARY_DIR}/)
+file(COPY "../triangle_install/lib/libtriangle.so" DESTINATION ${CMAKE_BINARY_DIR}/)
+file(COPY "../tetgen_install/lib/libtetgen.so" DESTINATION ${CMAKE_BINARY_DIR}/)
 
