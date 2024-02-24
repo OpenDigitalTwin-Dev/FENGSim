@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2023.5.31)  1 FEB 2024 10:38
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2023.5.31)  23 FEB 2024 16:39
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -833,6 +833,9 @@ LaTeX Warning: Label `fig:1-7' multiply defined.
 
 LaTeX Warning: Label `fig:1-7' multiply defined.
 
+
+LaTeX Warning: Label `fig:1-7' multiply defined.
+
 )
 \openout1 = `am.aux'.
 
@@ -988,6 +991,8 @@ File: fig/1/18.png Graphic file (type bmp)
  [11] [12] [13]
 File: fig/1/20.png Graphic file (type bmp)
 <fig/1/20.png>
+File: fig/1/21.png Graphic file (type bmp)
+<fig/1/21.png>
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
@@ -1022,10 +1027,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 16296 strings out of 476191
- 393277 string characters out of 5812072
+ 16304 strings out of 476191
+ 393402 string characters out of 5812072
  728746 words of memory out of 5000000
- 36728 multiletter control sequences out of 15000+600000
+ 36735 multiletter control sequences out of 15000+600000
  510619 words of font info for 143 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  89i,6n,97p,1238b,530s stack positions out of 5000i,500n,10000p,200000b,80000s

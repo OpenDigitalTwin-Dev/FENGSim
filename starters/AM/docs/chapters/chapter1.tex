@@ -197,12 +197,21 @@ Slice2Mesh是意大利CNR IMATI团队开发的，基于Triangle和Tetgen，Slice
 
 \subsubsection{数据结构和算法}
 
+Slice2Mesh的算法分为三部分，首先对切片用Triangle进行二维网格剖分，然后将切片进行拉伸，进行网格协调性处理，最后生成Piecewise Linear Complex模型用Tetgen进行网格剖分，需要注意的是切片作为Tetgen的约束保证了层网格剖分。运行./slice2mesh$\_$exec ../data/pyramid$\_$l0.03.cli -tetflags a0.000001命令，然后运行python3 msh2vtk.py生成vtk文件。
+
 \subsubsection{算例}
 
 \begin{figure}[!htbp]
   \centering
   \includegraphics[height=3cm]{fig/1/20.png}
-  \caption{采用./slice2mesh$\_$exec ../data/pyramid$\_$l0.03.cli -tetflags a1命令生成网格，用python3 msh2geo.py生成vtk文件。}
+  \caption{采用./slice2mesh$\_$exec ../data/pyramid$\_$l0.03.cli -tetflags a1命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/21.png}
+  \caption{采用./slice2mesh$\_$exec ../data/pyramid$\_$l0.03.cli -tetflags a0.000001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
   \label{fig:1-7}
 \end{figure}
 
