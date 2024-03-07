@@ -69,7 +69,7 @@
 <img decoding="async" src="../images/webcad/1.png" width="1800">
 </div>
 
-# QQ's words
+# Others
 
 <div align="center">
 <img decoding="async" src="../images/qq/1.jpg" width="300">

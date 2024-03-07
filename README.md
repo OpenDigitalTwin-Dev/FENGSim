@@ -15,8 +15,11 @@ To install:
 4. In QtCreator, open the FENGSim.pro project file located at:
     starters/FENGSim/FENGSim.pro
 5. Build the prepost module project in QtCreator.
-   
-# Additive Manufacturing
+
+
+# Solutions
+
+## Additive Manufacturing
 <div align="center">
 <img decoding="async" src="images/4.jpg" width="1800">
 </div>
@@ -24,7 +27,7 @@ To install:
 <img decoding="async" src="images/3.jpg" width="1800">
 </div>
 
-# Composite Materials
+## Composite Materials
 <div align="center">
 <img decoding="async" src="images/5.jpg" width="1800">
 </div>
@@ -35,7 +38,7 @@ To install:
 <img decoding="async" src="images/7.jpg" width="1800">
 </div>
 
-# Robotics
+## Robotics
 <div align="center">
 <img decoding="async" src="images/ros1.jpg" width="1800">
 </div>
@@ -43,7 +46,7 @@ To install:
 <img decoding="async" src="images/ros2.jpg" width="1800">
 </div>
 
-# Metrology
+## Metrology
 <div align="center">
 <img decoding="async" src="images/8.jpg" width="1800">
 </div>
@@ -53,11 +56,6 @@ To install:
 <div align="center">
 <img decoding="async" src="images/10.jpg" width="1800">
 </div>
-
-
-# Incubator
-
-We have connections with many incubators. If you would like to obtain financial support, please contact us.
 
 # [Logs](./logs/logs.md)
 
