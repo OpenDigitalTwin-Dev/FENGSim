@@ -27,6 +27,7 @@ make -j4
 make install
 cd ..
 cd ..
+
 mkdir build
 cd build
 cmake ..
@@ -34,4 +35,5 @@ make
 cd ..
 chmod -R 777 Models
 .//build/oceSolver
+chmod -R 777 Models
 
