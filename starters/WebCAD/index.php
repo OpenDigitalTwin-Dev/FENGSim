@@ -6,11 +6,11 @@
     <meta charset="utf-8">
   </head>
   <body>
-    <h1>Modeling Based System Engineering</h1>
+    <h1>Modeling Based Definition</h1>
 
     
     <?php
-    echo exec("./build/oceSolver");
+     echo exec("./build/oceSolver");
     ?>
 
     <script type="module">
