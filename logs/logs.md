@@ -62,14 +62,14 @@
 <img decoding="async" src="../images/13.jpg" width="1800">
 </div>
 
-## MBD
+## WebGL
    * Hello World! (2023-10-24)
    
 <div align="center">
 <img decoding="async" src="../images/webcad/1.png" width="1800">
 </div>
 
-# Painting
+# Paintings
 
 <div align="center">
 <img decoding="async" src="../images/qq/1.jpg" width="300">
