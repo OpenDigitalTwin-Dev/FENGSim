@@ -69,42 +69,8 @@
 <img decoding="async" src="../images/webcad/1.png" width="1800">
 </div>
 
-# Others
+# Painting
 
 <div align="center">
 <img decoding="async" src="../images/qq/1.jpg" width="300">
 </div>
-
-One Two Three Four Five Six Seven Nine Ten
-
-2023.11.21 everyone from grade paper cut 
-
-2023.11.22 pig farm hen cow duck
-
-2023.11.23 eleven twelve thirteen fourteen fifteen
-
-2023.11.24 hour time work play read home
-
-2023.11.27 book draw picture football park
-
-2023.11.29 swim Monday Tuesday Wednesday zoo  
-
-2023.11.30 see film Friday Staurday Sunday
-
-2023.12.05 basketball grandma grandpa name each 
-
-2023.12.06 animal parent weekend say special
-
-2023.12.10 sing dance aunt museum her
-
-2023.12.11 school today tomorrow sorry week
-
-2023.12.12 uncle great chess boat nice
-
-2023.12.18 eye body leg old big
-
-2023.12.19 thin bird sit dog cat
-
-2023.12.20 toy these chase run bear
-
-2023.12.25 elephant giraffe monkey panda 
