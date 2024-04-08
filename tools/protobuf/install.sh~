@@ -1,0 +1,12 @@
+#!/bin/sh
+
+apt update
+apt -y install cmake
+apt -y install make
+apt -y install gcc g++
+rm -rf build
+mkdir build
+cd build
+./../configure --prefix=$PWD/../../protobuf_install
+make -j4
+make install
