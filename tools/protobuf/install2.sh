@@ -1,12 +1,12 @@
 #!/bin/sh
 
-apt update
-apt -y install cmake
-apt -y install make
-apt -y install gcc
-apt -y install g++
-apt -y install automake
-apt -y install libtool
+sudo apt update
+sudo apt -y install cmake
+sudo apt -y install make
+sudo apt -y install gcc
+sudo apt -y install g++
+sudo apt -y install automake
+sudo apt -y install libtool
 ./autogen.sh
 rm -rf build
 mkdir build
