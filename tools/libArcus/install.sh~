@@ -1,5 +1,0 @@
-#!/bin/sh
-
-apt update
-mkdir build
-cd build
