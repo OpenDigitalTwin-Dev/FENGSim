@@ -1,5 +1,8 @@
 #!/bin/sh
 
+
+# We need to install protobuf and libarcus firstly.
+
 sudo apt install libstb-dev
 
 mkdir build
