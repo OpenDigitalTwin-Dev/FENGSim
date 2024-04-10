@@ -2898,9 +2898,12 @@ void MainWindow::AMSetPathPlanningVisible()
 void MainWindow::AMSlices2Mesh()
 {
     QProcess *proc = new QProcess(); 
-    proc->setWorkingDirectory(meas_path+QString("/../../../software/slice2mesh-master/build-slice2mesh-Desktop_Qt_5_12_10_GCC_64bit-Debug"));
-    std::cout << (QString("./slice2mesh ./data/am/slices_meshing.cli ") + additive_manufacturing_dock->ui->lineEdit_2->text()).toStdString() << std::endl;
-    QString command(QString("./slice2mesh ")
+    proc->setWorkingDirectory(meas_path+QString("/../../tools/slice2mesh_install/bin"));
+    std::cout << (QString("./slice2mesh_exec ")
+                  +meas_path
+                  +QString("/data/am/slices_meshing.cli ")
+                  + additive_manufacturing_dock->ui->lineEdit_2->text()).toStdString() << std::endl;
+    QString command(QString("./slice2mesh_exec ")
                     +meas_path
                     +QString("/data/am/slices_meshing.cli ")
                     + additive_manufacturing_dock->ui->lineEdit_2->text());
@@ -2908,7 +2911,7 @@ void MainWindow::AMSlices2Mesh()
 
     if (proc->waitForFinished(-1)) {
         MM.FileFormatMeshToVTK(meas_path
-                               +QString("/../../../software/slice2mesh-master/build-slice2mesh-Desktop_Qt_5_12_10_GCC_64bit-Debug")
+                               +QString("/../../tools/slice2mesh_install/bin")
                                +QString("/amslices2mesh.mesh"),
                                "./data/am/mesh.vtk");
 
