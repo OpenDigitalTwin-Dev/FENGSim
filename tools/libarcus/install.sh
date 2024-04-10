@@ -4,7 +4,6 @@ sudo apt update
 sudo apt -y install python3.10-dev
 sudo apt -y install python3-sip-dev
 
-rm -rf build
 mkdir build
 cd build
 cmake .. \

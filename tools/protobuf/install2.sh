@@ -7,8 +7,8 @@ sudo apt -y install gcc
 sudo apt -y install g++
 sudo apt -y install automake
 sudo apt -y install libtool
+
 ./autogen.sh
-rm -rf build
 mkdir build
 cd build
 ./../configure --prefix=$PWD/../../protobuf_install
