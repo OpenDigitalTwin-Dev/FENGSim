@@ -2689,7 +2689,7 @@ void MainWindow::AMOpenCAD()
 
 
     // file name
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "/home/jiping/OpenDT/CAM/data/",
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "../AM/data",
                                                     tr("CAD Files (*.stp *.step)"),
                                                     0 , QFileDialog::DontUseNativeDialog);
     if (fileName.isNull()) return;
