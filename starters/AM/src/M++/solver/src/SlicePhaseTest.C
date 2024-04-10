@@ -14,11 +14,8 @@
 
 //using namespace cura;
 void SlicePhaseTestMain (int argc, char** argv) {
-
-	std::cout << "check" << std::endl;
-
-	std::ifstream is;
-    is.open(std::string("./Cura/conf/cura.conf").c_str());
+    std::ifstream is;
+    is.open(std::string("./solver/conf/cura.conf").c_str());
     const int len = 512;
     char L[len];
     is.getline(L,len);

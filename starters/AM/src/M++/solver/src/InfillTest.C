@@ -52,17 +52,17 @@ namespace cura
         coord_t line_distance;
 		
         std::string name;
-		
+	
         InfillParameters(const EFillMethod& pattern, const bool& zig_zagify, const bool& connect_polygons, const coord_t& line_distance) :
             pattern(pattern),
             zig_zagify(zig_zagify),
             connect_polygons(connect_polygons),
             line_distance(line_distance)
-			{
-				name = makeName("InfillParameters_%d_%d_%d_%lld", (int)pattern, (int)zig_zagify, (int)connect_polygons, line_distance);
-			}
+	    {
+		name = makeName("InfillParameters_%d_%d_%d_%lld", (int)pattern, (int)zig_zagify, (int)connect_polygons, line_distance);
+	    }
     };
-	
+    
     class InfillTestParameters
     {
     public:
@@ -89,8 +89,8 @@ namespace cura
             result_lines(Polygons()),
             result_polygons(Polygons()),
             name("UNNAMED")
-			{
-			}
+	    {
+	    }
 		
         InfillTestParameters(const InfillParameters& params, const size_t& test_polygon_id, const Polygons& outline_polygons, const Polygons& result_lines, const Polygons& result_polygons) :
             valid(true),
@@ -100,14 +100,14 @@ namespace cura
             outline_polygons(outline_polygons),
             result_lines(result_lines),
             result_polygons(result_polygons)
-			{
-				name = makeName("InfillTestParameters_P%d_Z%d_C%d_L%lld__%lld", (int)params.pattern, (int)params.zig_zagify, (int)params.connect_polygons, params.line_distance, test_polygon_id);
-			}
+	    {
+		name = makeName("InfillTestParameters_P%d_Z%d_C%d_L%lld__%lld", (int)params.pattern, (int)params.zig_zagify, (int)params.connect_polygons, params.line_distance, test_polygon_id);
+	    }
 		
         friend std::ostream& operator<<(std::ostream& os, const InfillTestParameters& params)
-			{
-				return os << params.name << "(" << (params.valid ? std::string("input OK") : params.fail_reason) << ")";
-			}
+	    {
+		return os << params.name << "(" << (params.valid ? std::string("input OK") : params.fail_reason) << ")";
+	    }
     };
 
     constexpr coord_t outline_offset = 0;
@@ -135,20 +135,20 @@ namespace cura
         const coord_t line_distance = params.line_distance;
 
         Infill infill
-        (
-            pattern,
-            zig_zagify,
-            connect_polygons,
-            outline_polygons,
-            outline_offset,
-            infill_line_width,
-            line_distance,
-            infill_overlap,
-            infill_multiplier,
-            fill_angle,
-            z,
-            shift
-        ); // There are some optional parameters, but these will do for now (future improvement?).
+	    (
+		pattern,
+		zig_zagify,
+		connect_polygons,
+		outline_polygons,
+		outline_offset,
+		infill_line_width,
+		line_distance,
+		infill_overlap,
+		infill_multiplier,
+		fill_angle,
+		z,
+		shift
+		); // There are some optional parameters, but these will do for now (future improvement?).
 
         Polygons result_polygons;
         Polygons result_lines;
@@ -243,9 +243,9 @@ namespace cura
 	
         std::vector<Polygons> shapes;
         if (!readTestPolygons(polygon_filenames, shapes))
-        {
-            return { InfillTestParameters() };  // return an invalid singleton, that'll trip up the 'file read' assertion in the TEST_P's
-        }
+	    {
+		return { InfillTestParameters() };  // return an invalid singleton, that'll trip up the 'file read' assertion in the TEST_P's
+	    }
 	
         /* Skip methods:
 	   - that require the SierpinskyInfillProvider class, since these test classes aren't equipped to handle that yet
@@ -257,32 +257,32 @@ namespace cura
 
         std::vector<EFillMethod> methods;
         for (int i_method = 0; i_method < static_cast<int>(EFillMethod::NONE); ++i_method)
-        {
-            const EFillMethod method = static_cast<EFillMethod>(i_method);
-            if (std::find(skip_methods.begin(), skip_methods.end(), method) == skip_methods.end()) // Only use if not in skipped.
-            {
-                methods.push_back(method);
-            }
-        }
+	    {
+		const EFillMethod method = static_cast<EFillMethod>(i_method);
+		if (std::find(skip_methods.begin(), skip_methods.end(), method) == skip_methods.end()) // Only use if not in skipped.
+		    {
+			methods.push_back(method);
+		    }
+	    }
 
         std::vector<coord_t> line_distances = { 350, 400, 600, 800, 1200 };
 
         std::vector<InfillTestParameters> parameters_list;
         size_t test_polygon_id = 0;
         for (const Polygons& polygons : shapes)
-        {
-            for (const EFillMethod& method : methods)
-            {
-                for (const coord_t& line_distance : line_distances)
-                {
-                    parameters_list.push_back(generateInfillToTest(InfillParameters(method, dont_zig_zaggify, dont_connect_polygons, line_distance), test_polygon_id, polygons));
-                    parameters_list.push_back(generateInfillToTest(InfillParameters(method, dont_zig_zaggify, do_connect_polygons, line_distance), test_polygon_id, polygons));
-                    parameters_list.push_back(generateInfillToTest(InfillParameters(method, do_zig_zaggify, dont_connect_polygons, line_distance), test_polygon_id, polygons));
-                    parameters_list.push_back(generateInfillToTest(InfillParameters(method, do_zig_zaggify, do_connect_polygons, line_distance), test_polygon_id, polygons));
-                }
-            }
-            ++test_polygon_id;
-        }
+	    {
+		for (const EFillMethod& method : methods)
+		    {
+			for (const coord_t& line_distance : line_distances)
+			    {
+				parameters_list.push_back(generateInfillToTest(InfillParameters(method, dont_zig_zaggify, dont_connect_polygons, line_distance), test_polygon_id, polygons));
+				parameters_list.push_back(generateInfillToTest(InfillParameters(method, dont_zig_zaggify, do_connect_polygons, line_distance), test_polygon_id, polygons));
+				parameters_list.push_back(generateInfillToTest(InfillParameters(method, do_zig_zaggify, dont_connect_polygons, line_distance), test_polygon_id, polygons));
+				parameters_list.push_back(generateInfillToTest(InfillParameters(method, do_zig_zaggify, do_connect_polygons, line_distance), test_polygon_id, polygons));
+			    }
+		    }
+		++test_polygon_id;
+	    }
 
 	//ExportOutLinesToVtk(parameters_list[1].outline_polygons, "infill_outlines_nonzig.vtk");
 	//ExportPathLinesToVtk(parameters_list[1].result_lines, "infill_pathlines_nonzig.vtk");
@@ -356,7 +356,7 @@ namespace cura
         constexpr bool dont_connect_polygons = false;
 
 	std::ifstream is;
-	is.open(std::string("./Cura/conf/cura.conf").c_str());
+	is.open(std::string("./solver/conf/cura.conf").c_str());
 	const int len = 512;
 	char L[len];
 	is.getline(L,len);
@@ -386,10 +386,10 @@ namespace cura
 
 	
 	/*
-        if (!readTestPolygons(polygon_filenames, shapes))
-        {
-            return { InfillTestParameters() };  // return an invalid singleton, that'll trip up the 'file read' assertion in the TEST_P's
-	    }*/
+	  if (!readTestPolygons(polygon_filenames, shapes))
+	  {
+	  return { InfillTestParameters() };  // return an invalid singleton, that'll trip up the 'file read' assertion in the TEST_P's
+	  }*/
 	
         /* Skip methods:
 	   - that require the SierpinskyInfillProvider class, since these test classes aren't equipped to handle that yet
@@ -401,13 +401,13 @@ namespace cura
 
         std::vector<EFillMethod> methods;
         for (int i_method = 0; i_method < static_cast<int>(EFillMethod::NONE); ++i_method)
-        {
-            const EFillMethod method = static_cast<EFillMethod>(i_method);
-            if (std::find(skip_methods.begin(), skip_methods.end(), method) == skip_methods.end()) // Only use if not in skipped.
-            {
-                methods.push_back(method);
-            }
-        }
+	    {
+		const EFillMethod method = static_cast<EFillMethod>(i_method);
+		if (std::find(skip_methods.begin(), skip_methods.end(), method) == skip_methods.end()) // Only use if not in skipped.
+		    {
+			methods.push_back(method);
+		    }
+	    }
 
         //std::vector<coord_t> line_distances = { 350, 400, 600, 800, 1200 };
 	std::vector<coord_t> line_distances = { 500, 400, 600, 800, 1200 };
@@ -417,7 +417,7 @@ namespace cura
         for (const Polygons& polygons : shapes) {
 	    //for (const EFillMethod& method : methods) {
 	    //for (const coord_t& line_distance : line_distances) {
-	  //parameters_list.push_back(generateInfillToTest(InfillParameters(methods[0], dont_zig_zaggify, dont_connect_polygons, line_distances[0]), test_polygon_id, polygons));
+	    //parameters_list.push_back(generateInfillToTest(InfillParameters(methods[0], dont_zig_zaggify, dont_connect_polygons, line_distances[0]), test_polygon_id, polygons));
 	    //parameters_list.push_back(generateInfillToTest(InfillParameters(method, dont_zig_zaggify, do_connect_polygons, line_distance), test_polygon_id, polygons));
 	    parameters_list.push_back(generateInfillToTest(InfillParameters(methods[0], do_zig_zaggify, dont_connect_polygons, line_distances[0]), test_polygon_id, polygons));
 	    //parameters_list.push_back(generateInfillToTest(InfillParameters(method, do_zig_zaggify, do_connect_polygons, line_distance), test_polygon_id, polygons));
