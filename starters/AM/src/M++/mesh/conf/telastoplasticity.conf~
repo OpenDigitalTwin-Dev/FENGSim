@@ -1,0 +1,127 @@
+#Model = TElastoPlasticity;
+#Model = TElastoPlasticity2;
+#Model = TElastoPlasticity3;
+#Model = TElastoPlasticity4;
+#Model = TElastoPlasticity5;
+#Model = TElastoPlasticity6;
+Model = TElastoPlasticity7;
+Model = StressStrain;
+
+GeoPath = solver/;
+EXAMPLE = 10;
+#Mesh = tri;
+Mesh = quad2;
+#Mesh = stressstrain;
+#Mesh = InternallyPressurisedCylinder;
+#Mesh = InternallyPressurized3d;
+plevel = 1; # plevel =1 has some errors
+level = 4;
+
+Discretization = linear;
+Overlap_Distribution = 0;
+Overlap = none;
+Distribution = Stripes;
+
+# EXAM 1 EXAM 2
+#Young = 2.5; 
+#PoissonRatio = 0.25;
+#k_0 = 1e100;
+#h_0 = 0;
+#Time = 0.5;
+#TimeSteps = 2048;
+
+# EXAM 3 EXAM 4
+#Young = 210; 
+#PoissonRatio = 0.3;
+#k_0 = 0.24;
+#h_0 = 0;
+
+# EXAM 5
+#PoissonRatio = 0.29
+#Young = 2.069e+05
+#k_0 = 367.423461;
+#h_0 = 0.1;
+#Time = 150;
+#TimeSteps = 15;
+#TimeLevel = 5;
+
+# EXAM 6
+#Young = 210;	
+#PoissonRatio = 0.3;
+#k_0 = 0.24;
+#h_0 = 0.1;
+#Time = 2;
+#TimeSteps = 100;
+#TimeLevel = 5;
+
+# EXAM 7
+#Young = 210;	
+#PoissonRatio = 0.3;
+#k_0 = 0.24;
+#h_0 = 0.0;
+#Time = 1.0;
+#TimeSteps = 2000;
+
+# EXAM 8
+#Young = 100000000; 
+#PoissonRatio = 0.0;
+#k_0 = 1e100;
+#h_0 = 0;
+#Time = 1.0;
+#TimeSteps = 160000;
+
+# EXAM 9
+#Young = 2.5; 
+#PoissonRatio = 0.25;
+#Time = 1.0;
+#TimeSteps = 5000;
+#NGeom = 1;
+#k_0 = 0.24;
+#k_0 = 1e6;
+#h_0 = 0;
+
+# EXAM 10
+Young = 1e5; 
+PoissonRatio = 0.0;
+Time = 1.0;
+TimeSteps = 5000;
+NGeom = 1;
+k_0 = 10;
+#k_0 = 1e6;
+#h_0 = 0;
+
+# EXAM 11
+Young = 210; 
+PoissonRatio = 0.3;
+#k_0 = 1e100;
+k_0 = 0.24;
+#h_0 = 0;
+NGeom = 1;
+Time = 1;
+TimeSteps = 5000;
+
+# EXAM 12 13 14 for dynamic explicit
+#Young = 210; 
+#PoissonRatio = 0.3;
+#k_0 = 1e100;
+#k_0 = 0.24;
+#h_0 = 0;
+#NGeom = 1;
+#Time = 1;
+#TimeSteps = 1000;
+
+
+LinearSolver = CG;
+Preconditioner = Jacobi;
+LinearSolver = GMRES;
+Preconditioner = GaussSeidel;
+#LinearSolver = gmres;
+#Preconditioner = NoPreconditioner;
+
+LinearSteps = 100000;	
+LinearEpsilon = 1e-10;
+LinearReduction = 1e-10;
+
+QuadratureCell = 2;
+QuadratureBoundary = 1;
+precision = 10;

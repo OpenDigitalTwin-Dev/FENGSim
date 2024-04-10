@@ -1,0 +1,48 @@
+#Model = HelmholtzDirichletProblem;
+#Model = HelmholtzNeumannProblem;
+#Model = MaxwellDirichletProblem;
+#Model = MaxwellNeumannProblem;
+#Model = LaplaceDirichletFEM;
+Model = test;
+
+GeoPath = BEM/;
+
+Mesh = Cube24;
+
+level = 1;
+
+Quadrature = Qtri7;
+
+gnuplot = 1;
+
+TimeLevel = 2;
+
+precision = 5;
+
+Helmholtz_k = 0;
+#Helmholtz_k = 0;
+
+Accelerator = 0;
+
+ClusterTreeMaxLevel = 3;
+
+ClusterTreeMaxLeafSize = 50;
+
+AdmissibleCondition = 2;
+
+ACATol = 1e-12;
+
+CGTol = 1e-15;
+
+LinearSolver = CG;
+#Preconditioner = SuperLU_local;
+LinearSteps = 30000;	
+LinearEpsilon = 1e-10;
+LinearReduction = 1e-10;
+Overlap_Distribution = 1;
+Overlap = boundary;
+
+# finite element method
+QuadratureCell = 3;
+QuadratureBoundary = 2;
+

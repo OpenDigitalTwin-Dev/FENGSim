@@ -1,0 +1,69 @@
+Model = ElastoPlasticity;
+Model = QuasiElastoPlasticity;
+
+GeoPath = solver/;
+EXAMPLE = 3;
+#Mesh = tri;
+#Mesh = quad;
+#Mesh = example3;
+Mesh = internalpressure2d;
+plevel = 2; # plevel =1 has some errors
+level = 0;
+
+Discretization = linear;
+Overlap_Distribution = 0;
+Overlap = none;
+Distribution = Stripes;
+
+# EXAM 1 EXAM 2
+#Young = 2.5; 
+#PoissonRatio = 0.25;
+#k_0 = 1e100;
+#h_0 = 0;
+
+# EXAM 3 EXAM 4
+Young = 210; 
+PoissonRatio = 0.3;
+k_0 = 0.24;
+h_0 = 0;
+
+# EXAM 5
+#PoissonRatio = 0.29
+#Young = 2.069e+05
+#k_0 = 367.423461;
+#h_0 = 0.1;
+#Time = 150;
+#TimeSteps = 15;
+#TimeLevel = 5;
+
+# EXAM 6
+#Young = 210;	
+#PoissonRatio = 0.3;
+#k_0 = 0.24;
+#h_0 = 0.1;
+#Time = 2;
+#TimeSteps = 100;
+#TimeLevel = 5;
+
+# EXAM 7
+Young = 210;	
+PoissonRatio = 0.3;
+k_0 = 0.24;
+h_0 = 0.0;
+Time = 0.1;
+TimeSteps = 800;
+
+#LinearSolver = gmres;
+LinearSolver = CG;
+#Preconditioner = NoPreconditioner;
+Preconditioner = Jacobi;
+LinearSolver = GMRES;
+Preconditioner = GaussSeidel;
+
+LinearSteps = 300000;	
+LinearEpsilon = 1e-20;
+LinearReduction = 1e-20;
+
+QuadratureCell = 2;
+QuadratureBoundary = 1;
+precision = 5;

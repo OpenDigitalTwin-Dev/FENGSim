@@ -1,0 +1,37 @@
+# file:    Makefile.inc
+# purpose: make includes
+# $Header: /public/M++/conf/Makefile.inc,v 1.18 2009-09-21 16:35:27 wieners Exp $
+
+CC = mpicxx
+F77 = mpif77
+
+.SUFFIXES:
+.SUFFIXES: .o .C .d .f
+
+.PHONY: clean depend distclean explicit new lib
+
+LIB_DIR = -L../../lib
+
+DEBUGOPTIONS = -g
+OPIMIZEOPTIONS = -O3
+
+#LINK_LIB = -lsuperlu -llapack -lblas
+#LINK_LIB = -llapack -lg2c -lilu_ml -lsuperlu
+#LINK_LIB = -lilu_ml -lsuperlu_3.0 -llapack
+LINK_LIB = -lilu_ml -lsuperlu_3.0 -L/opt/intel/Compiler/11.1/064/mkl/lib/em64t -Wl,-rpath,/opt/intel/Compiler/11.1/064/mkl/lib/em64t -lmkl -lguide -lpthread
+
+GENERAL_COMPILEOPTIONS = $(INCLUDE_DIR) -fPIC
+GENERAL_LINKOPTIONS = $(LIB_DIR)
+
+COMPILEOPTIONS = $(GENERAL_COMPILEOPTIONS) $(DEBUGOPTIONS) $(OPIMIZEOPTIONS)
+LINKOPTIONS =  $(GENERAL_LINKOPTIONS) -lm++ -L$(HOME)/../../usr/lib $(LINK_LIB)
+
+.C.o:
+	$(CC) -c $(COMPILEOPTIONS) -I../../src $<
+
+.C.d:
+	($(SHELL) -ec '$(CC) -MM -c -I../../src $< \
+			| sed '\''s/\($*\)\.o[ :]*/\1.o $@ : /g'\'' > $@; \
+            [ -s $@ ] || rm -f $@')
+
+.f.o:   $(F77) -c $(COMPILEOPTIONS) -I../../src $<

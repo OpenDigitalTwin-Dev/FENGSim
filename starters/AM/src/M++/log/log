@@ -1,0 +1,42 @@
+start program on 1 procs at Mon Jul 25 20:06:06 2022
+  default ... DebugLevel = 0
+  default ... TimeLevel = 0
+  reading ... Model = Linear
+  reading ... Mesh = example2
+  reading ... GeoPath = solver/
+  reading ... level = 4
+  reading ... plevel = 2
+  reading ... Distribution = Stripes
+  reading ... EXAMPLE = 2
+  reading ... Discretization = linear
+  reading ... Discretization = linear
+  reading ... QuadratureCell = 3
+  reading ... QuadratureBoundary = 2
+  reading ... EXAMPLE = 2
+  reading ... EXAMPLE = 2
+  reading ... Discretization = linear
+  reading ... Discretization = linear
+  reading ... QuadratureCell = 3
+  reading ... QuadratureBoundary = 2
+41 unknowns 
+145 unknowns 
+545 unknowns 
+assemble matrix:  0.01 seconds
+assemble vector:  0.01 seconds
+  reading ... Preconditioner = Jacobi
+  default ... PreconditionerVerbose = 0
+  default ... PreconditionerDamp = 1
+  default ... SHIFTspecial = 0
+  reading ... LinearSolver = CG
+  default ... LinearVerbose = 0
+  reading ... LinearSteps = 50000
+  default ... LinearLineSearchSteps = 3
+  reading ... LinearEpsilon = 1e-15
+  reading ... LinearReduction = 1e-15
+  PCG: d(112)= 1.9855e-14 rate 0.73449 time  0.01 seconds
+L2 error: 0.0011314
+  default ... gnuplot = 0
+  default ... dxplot = 0
+  default ... tecplot = 0
+  default ... vtkplot = 0
+end program after  0.05 seconds on 1 procs at Mon Jul 25 20:06:06 2022
