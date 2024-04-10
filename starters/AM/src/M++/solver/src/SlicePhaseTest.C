@@ -3,12 +3,12 @@
 
 #include <gtest/gtest.h>
 
-#include "/home/jiping/software/CuraEngine/src/Application.h" //To set up a slice with settings.
-#include "/home/jiping/software/CuraEngine/src/Slice.h" //To set up a scene to slice.
-#include "/home/jiping/software/CuraEngine/src/slicer.h" //Starts the slicing phase that we want to test.
-#include "/home/jiping/software/CuraEngine/src/utils/floatpoint.h" //For FMatrix3x3 to load STL files.
-#include "/home/jiping/software/CuraEngine/src/utils/polygon.h" //Creating polygons to compare to sliced layers.
-#include "/home/jiping/software/CuraEngine/src/utils/polygonUtils.h" //Comparing similarity of polygons.
+#include "../../../../../../tools/cura_engine/src/Application.h"
+#include "../../../../../../tools/cura_engine/src/Slice.h"
+#include "../../../../../../tools/cura_engine/src/slicer.h"
+#include "../../../../../../tools/cura_engine/src/utils/floatpoint.h"
+#include "../../../../../../tools/cura_engine/src/utils/polygon.h"
+#include "../../../../../../tools/cura_engine/src/utils/polygonUtils.h"
 
 #include "fstream"
 

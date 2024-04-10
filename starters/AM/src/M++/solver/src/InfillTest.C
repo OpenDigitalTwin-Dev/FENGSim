@@ -3,7 +3,7 @@
 
 #include <gtest/gtest.h>
 
-#include "/home/jiping/software/CuraEngine/src/infill.h"
+#include "../../../../../../tools/cura_engine/src/infill.h"
 #include "ReadTestPolygons.h"
 
 //#define TEST_INFILL_SVG_OUTPUT

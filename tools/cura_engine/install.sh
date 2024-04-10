@@ -3,7 +3,7 @@
 
 # We need to install protobuf and libarcus firstly.
 
-sudo apt install libstb-dev
+apt install libstb-dev
 
 mkdir build
 cd build

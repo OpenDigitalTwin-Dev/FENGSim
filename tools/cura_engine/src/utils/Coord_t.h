@@ -6,7 +6,7 @@
 
 
 //Include Clipper to get the ClipperLib::IntPoint definition, which we reuse as Point definition.
-#include <clipper.hpp>
+#include "../../libs/clipper/clipper.hpp"
 
 namespace cura
 {
