@@ -22,7 +22,7 @@
       </font>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="icon">
@@ -1897,12 +1897,12 @@
   </layout>
  </widget>
  <resources>
-  <include location="../MeshWindow.qrc"/>
   <include location="../AMWindow.qrc"/>
   <include location="../CADWindow.qrc"/>
+  <include location="../MeshWindow.qrc"/>
   <include location="../MainWindow.qrc"/>
-  <include location="../MeasureWidnow.qrc"/>
   <include location="../FEMWindow.qrc"/>
+  <include location="../MeasureWidnow.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -1539,15 +1539,15 @@ void MainWindow::AMStlModelToSlices()
                                                   "Slice files (*.cli);;", 0 , QFileDialog::DontUseNativeDialog);
     std::cout << "check cli file name: " << cli_file_name.toStdString() << std::endl;
     ofstream out;
-    out.open("./Cura/Cura/conf/cura.conf");
+    out.open("./../AM/build/solver/conf/cura.conf");
     out << "Model = SlicePhaseTest" << endl;
     out << stl_file_name.toStdString().c_str() << endl;
     out << cli_file_name.toStdString() + ".cli" << endl;
     out << cli_file_name.toStdString() + ".vtk" << endl;
 
     QProcess *proc = new QProcess();
-    proc->setWorkingDirectory( "./Cura" );
-    proc->start("./CuraRun");
+    proc->setWorkingDirectory( "./../AM/build" );
+    proc->start("./AMSolver");
 
     if (proc->waitForFinished(-1)) {
         //MM.ClearSlices();
@@ -2814,7 +2814,7 @@ void MainWindow::AMSTL2Slices()
 {
     if (am_parts->size() == 0) return;
     ofstream out;
-    QString file = meas_path+QString("/../../CAM/Cura/Cura/conf/cura.conf");
+    QString file = meas_path+QString("/../AM/build/solver/conf/cura.conf");
     std::cout << file.toStdString() << std::endl;
     out.open(file.toStdString());
     out << "Model = SlicePhaseTest" << endl;
@@ -2826,8 +2826,8 @@ void MainWindow::AMSTL2Slices()
     out << additive_manufacturing_dock->ui->doubleSpinBox_2->text().toDouble() << endl;
 
     QProcess *proc = new QProcess();
-    proc->setWorkingDirectory((meas_path+QString("/../../CAM/Cura/")));
-    proc->start("./CuraRun");
+    proc->setWorkingDirectory((meas_path+QString("/../AM/build")));
+    proc->start("./AMSolver");
 
     if (proc->waitForFinished(-1)) {
         //MM.ClearSlices();
@@ -2856,15 +2856,16 @@ void MainWindow::AMSetSlicesVisible()
 void MainWindow::AMSlices2PathPlanning()
 {
     ofstream out;
-    QString file = meas_path+QString("/../../CAM/Cura/Cura/conf/cura.conf");
+    QString file = meas_path+QString("/../AM/build/solver/conf/cura.conf");
+    std::cout << meas_path.toStdString() << std::endl;
     out.open(file.toStdString());
     out << "Model = InfillTest" << endl;
     out << meas_path.toStdString() << "/data/am/slices_pathplanning.vtk" << endl;
     out << meas_path.toStdString() << "/data/am/pathplanning.vtk" << endl;
 
     QProcess *proc = new QProcess();
-    proc->setWorkingDirectory((meas_path+QString("/../../CAM/Cura/")));
-    proc->start("./CuraRun");
+    proc->setWorkingDirectory((meas_path+QString("/../AM/build/")));
+    proc->start("./AMSolver");
 
     if (proc->waitForFinished(-1)) {
         //MM.ClearSlices();
