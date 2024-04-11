@@ -17,7 +17,7 @@ To install:
 5. Build the prepost module project in QtCreator.
 
 <div align="center">
-<img decoding="async" src="/images/log/1.jpg" width="600">
+<img decoding="async" src="/images/log/1.jpg" width="500">
 </div>
 
 # Solutions
