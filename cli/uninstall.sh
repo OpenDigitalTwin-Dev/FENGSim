@@ -1,26 +1,26 @@
 #!/bin/sh
 
-rm -rf $PWD/../tools/vtk/build
-rm -rf $PWD/../tools/vtk_install
-rm -rf $PWD/../tools/oce/build
-rm -rf $PWD/../tools/oce_install
-rm -rf $PWD/../tools/gmsh/build
-rm -rf $PWD/../tools/gmsh_install
-rm -rf $PWD/../tools/cgal/build
-rm -rf $PWD/../tools/cgal_install
-rm -rf $PWD/../tools/pcl/build
-rm -rf $PWD/../tools/pcl_install
+rm -rf $PWD/../toolkit/vtk/build
+rm -rf $PWD/../toolkit/vtk_install
+rm -rf $PWD/../toolkit/oce/build
+rm -rf $PWD/../toolkit/oce_install
+rm -rf $PWD/../toolkit/gmsh/build
+rm -rf $PWD/../toolkit/gmsh_install
+rm -rf $PWD/../toolkit/cgal/build
+rm -rf $PWD/../toolkit/cgal_install
+rm -rf $PWD/../toolkit/pcl/build
+rm -rf $PWD/../toolkit/pcl_install
 
-rm -rf $PWD/../tools/qt/5.12.12
-rm -rf $PWD/../tools/qt/icu
-rm -rf $PWD/../tools/qt/qtcreator/bin
-rm -rf $PWD/../tools/qt/qtcreator/lib
-rm -rf $PWD/../tools/qt/qtcreator/libexec
-rm -rf $PWD/../tools/qt/qtcreator/share
+rm -rf $PWD/../toolkit/qt/5.12.12
+rm -rf $PWD/../toolkit/qt/icu
+rm -rf $PWD/../toolkit/qt/qtcreator/bin
+rm -rf $PWD/../toolkit/qt/qtcreator/lib
+rm -rf $PWD/../toolkit/qt/qtcreator/libexec
+rm -rf $PWD/../toolkit/qt/qtcreator/share
 
-rm -rf $PWD/../starters/build*
-rm -rf $PWD/../starters/FENGSim/*.pro.user
-rm -rf $PWD/../starters/ALE/build
-rm -rf $PWD/../starters/CGAL/build
-rm -rf $PWD/../starters/CGAL/data/output
-rm -rf $PWD/../starters/GDT/build
+rm -rf $PWD/../starter/build*
+rm -rf $PWD/../starter/FENGSim/*.pro.user
+rm -rf $PWD/../starter/ALE/build
+rm -rf $PWD/../starter/CGAL/build
+rm -rf $PWD/../starter/CGAL/data/output
+rm -rf $PWD/../starter/GDT/build
