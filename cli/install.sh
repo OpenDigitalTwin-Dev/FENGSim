@@ -11,18 +11,18 @@ sudo apt -y install libopenmpi-dev
 sudo apt -y install p7zip-full
 
 # qt install
-rm -rf $PWD/../tools/qt/5.12.12
-rm -rf $PWD/../tools/qt/icu
-rm -rf $PWD/../tools/qt/qtcreator/bin
-rm -rf $PWD/../tools/qt/qtcreator/lib
-rm -rf $PWD/../tools/qt/qtcreator/libexec
-rm -rf $PWD/../tools/qt/qtcreator/share
-7za x ../tools/qt/5.12.12.7z -o/$PWD/../tools/qt
-7za x ../tools/qt/icu.7z -o/$PWD/../tools/qt
-7za x ../tools/qt/qtcreator/bin.7z -o/$PWD/../tools/qt/qtcreator
-7za x ../tools/qt/qtcreator/lib.7z -o/$PWD/../tools/qt/qtcreator
-7za x ../tools/qt/qtcreator/libexec.7z -o/$PWD/../tools/qt/qtcreator
-7za x ../tools/qt/qtcreator/share.7z -o/$PWD/../tools/qt/qtcreator
+rm -rf $PWD/../toolkit/qt/5.12.12
+rm -rf $PWD/../toolkit/qt/icu
+rm -rf $PWD/../toolkit/qt/qtcreator/bin
+rm -rf $PWD/../toolkit/qt/qtcreator/lib
+rm -rf $PWD/../toolkit/qt/qtcreator/libexec
+rm -rf $PWD/../toolkit/qt/qtcreator/share
+7za x ../toolkit/qt/5.12.12.7z -o/$PWD/../toolkit/qt
+7za x ../toolkit/qt/icu.7z -o/$PWD/../toolkit/qt
+7za x ../toolkit/qt/qtcreator/bin.7z -o/$PWD/../toolkit/qt/qtcreator
+7za x ../toolkit/qt/qtcreator/lib.7z -o/$PWD/../toolkit/qt/qtcreator
+7za x ../toolkit/qt/qtcreator/libexec.7z -o/$PWD/../toolkit/qt/qtcreator
+7za x ../toolkit/qt/qtcreator/share.7z -o/$PWD/../toolkit/qt/qtcreator
 
 sudo apt -y install libxcb-xinerama0-dev
 sudo apt -y install libpcre2-dev
@@ -38,11 +38,11 @@ sudo apt -y install libgmp-dev
 sudo apt -y install libmpfr-dev
 sudo apt -y install libboost-all-dev
 
-sed -i 11c"<value type=\"QString\" key=\"QMakePath\">"$PWD/../tools/qt/5.12.12/bin/qmake"</value>" $PWD/../tools/qt/qtcreator/share/qtcreator/QtProject/qtcreator/qtversion.xml
+sed -i 11c"<value type=\"QString\" key=\"QMakePath\">"$PWD/../toolkit/qt/5.12.12/bin/qmake"</value>" $PWD/../toolkit/qt/qtcreator/share/qtcreator/QtProject/qtcreator/qtversion.xml
 
 # vtk install
-mkdir ../tools/vtk/build
-cd ../tools/vtk/build
+mkdir ../toolkit/vtk/build
+cd ../toolkit/vtk/build
 cmake .. -DQt5_DIR=$PWD/../../qt/5.12.12/lib/cmake/Qt5 -DCMAKE_INSTALL_PREFIX=$PWD/../../vtk_install
 make -j4
 make install
@@ -81,23 +81,23 @@ cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../pcl_install -DWITH_QT=OFF
 make -j4
 make install
 
-# starters:ale
-cd ../../../starters/ALE
+# starter:ale
+cd ../../../starter/ALE
 mkdir build
 cd build
 cmake ..
 make
 
-# starters:cgal
-cd ../../../starters/CGAL
+# starter:cgal
+cd ../../../starter/CGAL
 mkdir data/output
 mkdir build
 cd build
 cmake ..
 make
 
-# starters:gdt
-cd ../../../starters/GDT
+# starter:gdt
+cd ../../../starter/GDT
 mkdir build
 cd build
 cmake ..
