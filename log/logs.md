@@ -1,5 +1,5 @@
 <div align="center">
-<img decoding="async" src="../images/log/1.jpg" width="600">
+<img decoding="async" src="../image/log/1.jpg" width="600">
 </div>
 
 ## FENGSim
@@ -11,32 +11,32 @@
    * cgal 2d/3d triangulation and meshing (2023-08-23)
 
 <div align="center">
-<img decoding="async" src="../images/mesh/cgal/1.jpg" width="600">
+<img decoding="async" src="../image/mesh/cgal/1.jpg" width="600">
 </div>
    
    * triangle (2024-01-29)
    
 <div align="center">
-<img decoding="async" src="../images/mesh/triangle/12.jpg" width="400">
+<img decoding="async" src="../image/mesh/triangle/12.jpg" width="400">
 </div>
 
    * tetgen (2024-01-29)
 
 <div align="center">
-<img decoding="async" src="../images/mesh/tetgen/1.jpg" width="400">
+<img decoding="async" src="../image/mesh/tetgen/1.jpg" width="400">
 </div>
 
    * slice2mesh (2024-01-31)
 
 <div align="center">
-<img decoding="async" src="../images/log/2.jpg" width="400">
+<img decoding="async" src="../image/log/2.jpg" width="400">
 </div>
    
 ## Contact
    * Hello World! (2023-09-13)
    
 <div align="center">
-<img decoding="async" src="../images/contact/6.png" width="400">
+<img decoding="async" src="../image/contact/6.png" width="400">
 </div>
    
    * Domain Decomposition Method, the Poisson equation (2023-08-23)
@@ -55,22 +55,22 @@
    * Navigation sources and compilation (...)
    
 <div align="center">
-<img decoding="async" src="../images/12.jpg" width="1800">
+<img decoding="async" src="../image/12.jpg" width="1800">
 </div>
    
 <div align="center">
-<img decoding="async" src="../images/13.jpg" width="1800">
+<img decoding="async" src="../image/13.jpg" width="1800">
 </div>
 
 ## WebGL
    * Hello World! (2023-10-24)
    
 <div align="center">
-<img decoding="async" src="../images/webcad/1.png" width="1800">
+<img decoding="async" src="../image/webcad/1.png" width="1800">
 </div>
 
 # Paintings
 
 <div align="center">
-<img decoding="async" src="../images/qq/1.jpg" width="300">
+<img decoding="async" src="../image/qq/1.jpg" width="300">
 </div>
