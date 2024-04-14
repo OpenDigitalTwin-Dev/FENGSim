@@ -7,7 +7,7 @@
 #include <string>
 #include <vector>
 
-#include "../../../../../../tools/cura_engine/src/utils/polygon.h"
+#include "../../../../../../toolkit/cura_engine/src/utils/polygon.h"
 
 /* A reader for a very simple 2D polygon format, usefull for tests.
  * It's currently uesd to read all the './tests/resources/polygon_*.txt' files.
