@@ -124,16 +124,16 @@ RESOURCES += \
     Machining/machining.qrc \
     TransportWindow.qrc
 
-INCLUDEPATH += $$PWD/../../tools/oce_install/include/oce $$PWD/../../tools/gmsh_install/include/gmsh $$PWD/../../tools/vtk_install/include/vtk-8.1
+INCLUDEPATH += $$PWD/../../toolkit/oce_install/include/oce $$PWD/../../toolkit/gmsh_install/include/gmsh $$PWD/../../toolkit/vtk_install/include/vtk-8.1
 
-LIBS += -L$$PWD/../../tools/oce_install/lib \
+LIBS += -L$$PWD/../../toolkit/oce_install/lib \
 -lTKBinL     -lTKBO     -lTKFeat      -lTKGeomBase  -lTKMath    -lTKOpenGl  -lTKService      -lTKSTEP209   -lTKTObj     -lTKXCAFSchema  -lTKXmlL \
 -lTKBin      -lTKBRep   -lTKFillet    -lTKHLR       -lTKMesh    -lTKPCAF    -lTKShapeSchema  -lTKSTEPAttr  -lTKTopAlgo  -lTKXCAF        -lTKXml \
 -lTKBinTObj  -lTKCAF    -lTKG2d       -lTKIGES      -lTKMeshVS  -lTKPLCAF   -lTKShHealing    -lTKSTEPBase  -lTKV3d      -lTKXDEIGES     -lTKXmlTObj \
 -lTKBinXCAF  -lTKCDF    -lTKG3d       -lTKIVtk      -lTKNIS     -lTKPrim    -lTKStdLSchema   -lTKSTEP      -lTKVoxel    -lTKXDESTEP     -lTKXmlXCAF \
 -lTKBool     -lTKernel  -lTKGeomAlgo  -lTKLCAF      -lTKOffset  -lTKPShape  -lTKStdSchema    -lTKSTL       -lTKVRML     -lTKXMesh       -lTKXSBase
-LIBS += -L$$PWD/../../tools/gmsh_install/lib -lGmsh
-LIBS += -L$$PWD/../../tools/vtk_install/lib \
+LIBS += -L$$PWD/../../toolkit/gmsh_install/lib -lGmsh
+LIBS += -L$$PWD/../../toolkit/vtk_install/lib \
 -lvtkalglib-8.1                       -lvtkFiltersHyperTree-8.1        -lvtkImagingFourier-8.1        -lvtkIOLSDyna-8.1        -lvtkRenderingAnnotation-8.1 \
 -lvtkChartsCore-8.1                   -lvtkFiltersImaging-8.1          -lvtkImagingGeneral-8.1        -lvtkIOMINC-8.1          -lvtkRenderingContext2D-8.1 \
 -lvtkCommonColor-8.1                  -lvtkFiltersModeling-8.1         -lvtkImagingHybrid-8.1         -lvtkIOMovie-8.1         -lvtkRenderingContextOpenGL2-8.1 \
