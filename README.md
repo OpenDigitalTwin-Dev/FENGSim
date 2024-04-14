@@ -60,5 +60,5 @@ To install:
 <img decoding="async" src="image/10.jpg" width="1800">
 </div>
 
-# [Logs](./logs/logs.md)
+# [Logs](./log/logs.md)
 
