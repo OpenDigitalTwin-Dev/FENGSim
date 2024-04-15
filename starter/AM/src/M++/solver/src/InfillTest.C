@@ -27,19 +27,19 @@ namespace cura
     coord_t getPatternMultiplier(const EFillMethod& pattern)
     {
         switch (pattern)
-			{
-			case EFillMethod::GRID: // fallthrough
-			case EFillMethod::TETRAHEDRAL: // fallthrough
-			case EFillMethod::QUARTER_CUBIC:
-				return 2;
-			case EFillMethod::TRIANGLES: // fallthrough
-			case EFillMethod::TRIHEXAGON: // fallthrough
-			case EFillMethod::CUBIC: // fallthrough
-			case EFillMethod::CUBICSUBDIV:
-				return 3;
-			default:
-				return 1;
-			}
+	    {
+	    case EFillMethod::GRID: // fallthrough
+	    case EFillMethod::TETRAHEDRAL: // fallthrough
+	    case EFillMethod::QUARTER_CUBIC:
+		return 2;
+	    case EFillMethod::TRIANGLES: // fallthrough
+	    case EFillMethod::TRIHEXAGON: // fallthrough
+	    case EFillMethod::CUBIC: // fallthrough
+	    case EFillMethod::CUBICSUBDIV:
+		return 3;
+	    default:
+		return 1;
+	    }
     }
   
     struct InfillParameters
@@ -419,7 +419,8 @@ namespace cura
 	    //for (const coord_t& line_distance : line_distances) {
 	    //parameters_list.push_back(generateInfillToTest(InfillParameters(methods[0], dont_zig_zaggify, dont_connect_polygons, line_distances[0]), test_polygon_id, polygons));
 	    //parameters_list.push_back(generateInfillToTest(InfillParameters(method, dont_zig_zaggify, do_connect_polygons, line_distance), test_polygon_id, polygons));
-	    parameters_list.push_back(generateInfillToTest(InfillParameters(methods[0], do_zig_zaggify, dont_connect_polygons, line_distances[0]), test_polygon_id, polygons));
+	    //parameters_list.push_back(generateInfillToTest(InfillParameters(methods[0], do_zig_zaggify, dont_connect_polygons, line_distances[0]), test_polygon_id, polygons));
+	    parameters_list.push_back(generateInfillToTest(InfillParameters(methods[0], dont_zig_zaggify, dont_connect_polygons, 200), test_polygon_id, polygons));
 	    //parameters_list.push_back(generateInfillToTest(InfillParameters(method, do_zig_zaggify, do_connect_polygons, line_distance), test_polygon_id, polygons));
 	    //}
 	    //}
@@ -514,34 +515,34 @@ void InfillTestMain () {
 
 
 
-  /*
-    class InfillTest : public testing::TestWithParam<InfillTestParameters> {};
+/*
+  class InfillTest : public testing::TestWithParam<InfillTestParameters> {};
 
-    INSTANTIATE_TEST_CASE_P(InfillTestcases, InfillTest, testing::ValuesIn(generateInfillTests()), [](testing::TestParamInfo<InfillTestParameters> info) { return info.param.name; });
+  INSTANTIATE_TEST_CASE_P(InfillTestcases, InfillTest, testing::ValuesIn(generateInfillTests()), [](testing::TestParamInfo<InfillTestParameters> info) { return info.param.name; });
 
-    TEST_P(InfillTest, TestInfillSanity)
-    {
-        InfillTestParameters params = GetParam();
-        ASSERT_TRUE(params.valid) << params.fail_reason;
-        ASSERT_FALSE(params.result_polygons.empty() && params.result_lines.empty()) << "Infill should have been generated.";
+  TEST_P(InfillTest, TestInfillSanity)
+  {
+  InfillTestParameters params = GetParam();
+  ASSERT_TRUE(params.valid) << params.fail_reason;
+  ASSERT_FALSE(params.result_polygons.empty() && params.result_lines.empty()) << "Infill should have been generated.";
 
-#ifdef TEST_INFILL_SVG_OUTPUT
-        writeTestcaseSVG(params);
-#endif //TEST_INFILL_SVG_OUTPUT
+  #ifdef TEST_INFILL_SVG_OUTPUT
+  writeTestcaseSVG(params);
+  #endif //TEST_INFILL_SVG_OUTPUT
 
-        const double min_available_area = std::abs(params.outline_polygons.offset(-params.params.line_distance / 2).area());
-        const double max_available_area = std::abs(params.outline_polygons.offset( params.params.line_distance / 2).area());
-        const double min_expected_infill_area = (min_available_area * infill_line_width) / params.params.line_distance;
-        const double max_expected_infill_area = (max_available_area * infill_line_width) / params.params.line_distance;
+  const double min_available_area = std::abs(params.outline_polygons.offset(-params.params.line_distance / 2).area());
+  const double max_available_area = std::abs(params.outline_polygons.offset( params.params.line_distance / 2).area());
+  const double min_expected_infill_area = (min_available_area * infill_line_width) / params.params.line_distance;
+  const double max_expected_infill_area = (max_available_area * infill_line_width) / params.params.line_distance;
 
-        const double out_infill_area = ((params.result_polygons.polygonLength() + params.result_lines.polyLineLength()) * infill_line_width) / getPatternMultiplier(params.params.pattern);
+  const double out_infill_area = ((params.result_polygons.polygonLength() + params.result_lines.polyLineLength()) * infill_line_width) / getPatternMultiplier(params.params.pattern);
 
-        ASSERT_GT((coord_t)max_available_area, (coord_t)out_infill_area) << "Infill area should allways be less than the total area available.";
-        ASSERT_GT((coord_t)out_infill_area, (coord_t)min_expected_infill_area) << "Infill area should be greater than the minimum area expected to be covered.";
-        ASSERT_LT((coord_t)out_infill_area, (coord_t)max_expected_infill_area) << "Infill area should be less than the maximum area to be covered.";
+  ASSERT_GT((coord_t)max_available_area, (coord_t)out_infill_area) << "Infill area should allways be less than the total area available.";
+  ASSERT_GT((coord_t)out_infill_area, (coord_t)min_expected_infill_area) << "Infill area should be greater than the minimum area expected to be covered.";
+  ASSERT_LT((coord_t)out_infill_area, (coord_t)max_expected_infill_area) << "Infill area should be less than the maximum area to be covered.";
 
-        const Polygons padded_shape_outline = params.outline_polygons.offset(infill_line_width / 2);
-        ASSERT_EQ(padded_shape_outline.intersectionPolyLines(params.result_lines).polyLineLength(), params.result_lines.polyLineLength()) << "Infill (lines) should not be outside target polygon.";
-        ASSERT_EQ(params.result_polygons.difference(padded_shape_outline).area(), 0) << "Infill (polys) should not be outside target polygon.";
-    }
-  */
+  const Polygons padded_shape_outline = params.outline_polygons.offset(infill_line_width / 2);
+  ASSERT_EQ(padded_shape_outline.intersectionPolyLines(params.result_lines).polyLineLength(), params.result_lines.polyLineLength()) << "Infill (lines) should not be outside target polygon.";
+  ASSERT_EQ(params.result_polygons.difference(padded_shape_outline).area(), 0) << "Infill (polys) should not be outside target polygon.";
+  }
+*/

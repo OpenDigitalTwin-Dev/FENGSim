@@ -170,7 +170,7 @@ void SlicePhaseTestMain (int argc, char** argv) {
 	    }
 	}
     }
-    out << "POLYGONS " << slicer.layers.size() << " " << slicer.layers.size() + n << std::endl;
+    out << "POLYGONS " << slicer.layers.size()-1 << " " << slicer.layers.size()-1 + n << std::endl;
     m = 0;
     for(int i = 1; i < slicer.layers.size(); i++) {
         const cura::SlicerLayer& layer = slicer.layers[i];
@@ -208,25 +208,25 @@ void SlicePhaseTestMain (int argc, char** argv) {
     const cura::SlicerLayer& layer = slicer.layers[0];
     out << "$$LAYER/" << cube_mesh.getAABB().min.z << std::endl;
     for (int j = 0; j < layer.polygons.size(); j++) {
-      cura::Polygon sliced_polygon = layer.polygons[j];
-      out << "$$POLYLINE/0,1," << sliced_polygon.size() + 1;
-      for(int k = 0; k < sliced_polygon.size(); k++) {
-	  out << "," << (sliced_polygon[k].X) / scale << "," << (sliced_polygon[k].Y) / scale;
-      }
-      out << "," << (sliced_polygon[0].X) / scale << "," << (sliced_polygon[0].Y) / scale
-	  << std::endl;
+	cura::Polygon sliced_polygon = layer.polygons[j];
+	out << "$$POLYLINE/0,1," << sliced_polygon.size() + 1;
+	for(int k = 0; k < sliced_polygon.size(); k++) {
+	    out << "," << (sliced_polygon[k].X) / scale << "," << (sliced_polygon[k].Y) / scale;
+	}
+	out << "," << (sliced_polygon[0].X) / scale << "," << (sliced_polygon[0].Y) / scale
+	    << std::endl;
     }
-
+    
     const cura::SlicerLayer& layer1 = slicer.layers[1];
     out << "$$LAYER/" << initial_layer_thickness / scale << std::endl;
     for (int j = 0; j < layer1.polygons.size(); j++) {
-      cura::Polygon sliced_polygon = layer1.polygons[j];
-      out << "$$POLYLINE/0,1," << sliced_polygon.size() + 1;
-      for(int k = 0; k < sliced_polygon.size(); k++) {
-	  out << "," << (sliced_polygon[k].X) / scale << "," << (sliced_polygon[k].Y) / scale;
-      }
-      out << "," << (sliced_polygon[0].X) / scale << "," << (sliced_polygon[0].Y) / scale
-	  << std::endl;
+	cura::Polygon sliced_polygon = layer1.polygons[j];
+	out << "$$POLYLINE/0,1," << sliced_polygon.size() + 1;
+	for(int k = 0; k < sliced_polygon.size(); k++) {
+	    out << "," << (sliced_polygon[k].X) / scale << "," << (sliced_polygon[k].Y) / scale;
+	}
+	out << "," << (sliced_polygon[0].X) / scale << "," << (sliced_polygon[0].Y) / scale
+	    << std::endl;
     }
 
     
