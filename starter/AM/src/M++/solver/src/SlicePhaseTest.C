@@ -3,6 +3,9 @@
 
 #include "SlicePhaseTest.h"
 
+
+// the original codes are in the path "FENGSim/toolkit/cura_engine/tests/integration/SlicePhaseTest.cpp"
+
 //using namespace cura;
 void SlicePhaseTestMain (int argc, char** argv) {
     std::ifstream is;
@@ -52,9 +55,6 @@ void SlicePhaseTestMain (int argc, char** argv) {
     cura::MeshGroup& mesh_group = scene.mesh_groups.back();
     const cura::FMatrix3x3 transformation;
     cura::loadMeshIntoMeshGroup(&mesh_group, stlfile.c_str(), transformation, scene.settings);
-    //cura::loadMeshIntoMeshGroup(&mesh_group, "Cura/conf/geo/sphere.stl", transformation, scene.settings);
-    //cura::loadMeshIntoMeshGroup(&mesh_group, "Cura/conf/geo/cube.stl", transformation, scene.settings);
-    //cura::loadMeshIntoMeshGroup(&mesh_group, "Cura/conf/geo/cylinder1000.stl", transformation, scene.settings);
     cura::Mesh& cube_mesh = mesh_group.meshes[0];
 
     // generate slices
@@ -67,133 +67,25 @@ void SlicePhaseTestMain (int argc, char** argv) {
     std::cout << "The number of layers in the output must equal the requested number of layers." << std::endl 
 			  << "  " << slicer.layers.size() << " " << num_layers << std::endl;
 
-
-    double scale = 1000;
-
     // *************************************************
-    //
     // export slices for visualization
-    //
     // *************************************************
 
-    Export2VTK (vtkfile, slicer, initial_layer_thickness, layer_thickness);
+    Export2VTK(vtkfile, slicer, initial_layer_thickness, layer_thickness);
 	
     // *************************************************
-    //
     // export slices for path planning
-    //
     // *************************************************
 
-
-    int n = 0;
-    for(int i = 1; i < slicer.layers.size(); i++) {
-	const cura::SlicerLayer& layer = slicer.layers[i];
-	for (int j = 0; j < layer.polygons.size(); j++) {
-	    cura::Polygon sliced_polygon = layer.polygons[j];
-	    n += sliced_polygon.size();
-	}
-    }
-    
-    //std::cout << n << std::endl;
-    //std::cout << cube_mesh.getAABB().min.z << " " << cube_mesh.getAABB().max.z << std::endl;
-    //std::cout << cube_mesh.getAABB().min.x << " " << cube_mesh.getAABB().max.x << std::endl;
-    //std::cout << cube_mesh.getAABB().min.y << " " << cube_mesh.getAABB().max.y << std::endl;
-
-    std::ofstream out;
-    out.open(vtkfile_pathplanning.c_str());
-    //out.open("/home/jiping/M++/data/vtk/slices.vtk");
-    out <<"# vtk DataFile Version 2.0" << std::endl;
-    out << "slices example" << std::endl;
-    out << "ASCII" << std::endl;
-    out << "DATASET POLYDATA" << std::endl;
-    out << "POINTS " << n << " float" << std::endl;
-    for(int i = 1; i < slicer.layers.size(); i++) {
-        const cura::SlicerLayer& layer = slicer.layers[i];
-	for (int j = 0; j < layer.polygons.size(); j++) {
-	    cura::Polygon sliced_polygon = layer.polygons[j];
-	    for(int k = 0; k < sliced_polygon.size(); k++) {
-	        out << sliced_polygon[k].X / scale << " " << sliced_polygon[k].Y / scale  << " " << (initial_layer_thickness + i * layer_thickness) / scale << std::endl;
-	    }
-	}
-    }
-    out << "POLYGONS " << slicer.layers.size()-1 << " " << slicer.layers.size()-1 + n << std::endl;
-    int m = 0;
-    for(int i = 1; i < slicer.layers.size(); i++) {
-        const cura::SlicerLayer& layer = slicer.layers[i];
-	for (int j = 0; j < layer.polygons.size(); j++) {
-	    cura::Polygon sliced_polygon = layer.polygons[j];
-	    out << sliced_polygon.size();
-	    for(int k = 0; k < sliced_polygon.size(); k++) {
-	        out << " " << m;
-		m++;
-	    }
-	    out << std::endl;
-	}
-    }
-    out.close();
-
-
-
+    Export2VTK4PathPlanning(vtkfile_pathplanning, slicer, initial_layer_thickness, layer_thickness);
     
     // *************************************************
     //
     // export slices for meshing
     //
     // *************************************************
-    out.open(clifile_meshing.c_str());
-    out << "$$HEADERSTART" << std::endl;
-    out << "$$ASCII" << std::endl;
-    out << "$$UNITS/1" << std::endl;
-    out << "$$DATE/230718" << std::endl;
-    out << "$$LAYERS/" << slicer.layers.size() + 1<< std::endl;
-    out << "$$HEADEREND" << std::endl;
-    out << "$$GEOMETRYSTART" << std::endl;
 
-
-
-    const cura::SlicerLayer& layer = slicer.layers[0];
-    out << "$$LAYER/" << cube_mesh.getAABB().min.z << std::endl;
-    for (int j = 0; j < layer.polygons.size(); j++) {
-	cura::Polygon sliced_polygon = layer.polygons[j];
-	out << "$$POLYLINE/0,1," << sliced_polygon.size() + 1;
-	for(int k = 0; k < sliced_polygon.size(); k++) {
-	    out << "," << (sliced_polygon[k].X) / scale << "," << (sliced_polygon[k].Y) / scale;
-	}
-	out << "," << (sliced_polygon[0].X) / scale << "," << (sliced_polygon[0].Y) / scale
-	    << std::endl;
-    }
-    
-    const cura::SlicerLayer& layer1 = slicer.layers[1];
-    out << "$$LAYER/" << initial_layer_thickness / scale << std::endl;
-    for (int j = 0; j < layer1.polygons.size(); j++) {
-	cura::Polygon sliced_polygon = layer1.polygons[j];
-	out << "$$POLYLINE/0,1," << sliced_polygon.size() + 1;
-	for(int k = 0; k < sliced_polygon.size(); k++) {
-	    out << "," << (sliced_polygon[k].X) / scale << "," << (sliced_polygon[k].Y) / scale;
-	}
-	out << "," << (sliced_polygon[0].X) / scale << "," << (sliced_polygon[0].Y) / scale
-	    << std::endl;
-    }
-
-    
-    for(int i = 1; i < slicer.layers.size(); i++) {
-        const cura::SlicerLayer& layer2 = slicer.layers[i];
-	out << "$$LAYER/" << (initial_layer_thickness + i * layer_thickness) / scale << std::endl;
-	for (int j = 0; j < layer2.polygons.size(); j++) {
-	    cura::Polygon sliced_polygon = layer2.polygons[j];
-	    out << "$$POLYLINE/0,1," << sliced_polygon.size() + 1;
-	    for(int k = 0; k < sliced_polygon.size(); k++) {
-	        out << "," << (sliced_polygon[k].X) / scale << "," << (sliced_polygon[k].Y) / scale;
-	    }
-	    out << "," << (sliced_polygon[0].X) / scale << "," << (sliced_polygon[0].Y) / scale
-		<< std::endl;
-	}
-    }
-    out << "$$GEOMETRYEND" << std::endl;
-    
-    out.close();
-
-
+    Export2Cli4Mesh(clifile_meshing, slicer, initial_layer_thickness, layer_thickness, cube_mesh.getAABB().min.z);
 
     
 
