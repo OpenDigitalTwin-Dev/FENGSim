@@ -33,6 +33,10 @@ void Export2VTK (std::string vtkfile, cura::Slicer slicer, const cura::coord_t i
 		out << sliced_polygon[k].X / scale << " "
 		    << sliced_polygon[k].Y / scale << " "
 		    << (initial_layer_thickness + i * layer_thickness) / scale << std::endl;
+		// *************************************************
+		// hi pay attention, the initial_layer_thickness / 2 is the initial height to cut the stl mesh.
+		//<< layer.z / scale << std::endl;
+		// *************************************************
 	    }
 	}
     }	
