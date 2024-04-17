@@ -48,8 +48,8 @@ void SlicePhaseTestMain (int argc, char** argv) {
     scene.settings.add("meshfix_extensive_stitching", "false");
     scene.settings.add("meshfix_keep_open_polygons", "false");
     scene.settings.add("minimum_polygon_circumference", "1");
-    scene.settings.add("meshfix_maximum_resolution", "0.04");
-    scene.settings.add("meshfix_maximum_deviation", "0.02");
+    scene.settings.add("meshfix_maximum_resolution", "0.00001");
+    scene.settings.add("meshfix_maximum_deviation", "0.00001");
     scene.settings.add("xy_offset", "0");
     scene.settings.add("xy_offset_layer_0", "0");
     
