@@ -1,6 +1,8 @@
 # [FENGSim](https://ocp-docs.readthedocs.io)
 
-The FENGSim project is an adaptive manufacturing operational system that incorporates interfaces for various mathematical libraries, including computational geometry, computer algebra, numerical methods, numerical linear algebra, computer graphics, image processing, probability and statistics, and optimization, among others, as well as the CAX software framework. It also provides tools for managing library dependencies, package management, and CICD (compile, code merge, version control, test, deploy) processes. Additionally, the project includes interfaces for equipment and sensor integration, encompassing communications, drivers, and job management, as well as physical simulations for manufacturing technologies.
+The FENGSim project is an adaptive manufacturing operational system that integrates interfaces for a range of mathematical libraries, such as computational geometry, computer algebra, numerical methods, numerical linear algebra, computer graphics, image processing, probability and statistics, and optimization, alongside the CAX software framework. It also offers utilities for handling library dependencies, package management, and CICD (compile, code merge, version control, test, deploy) procedures. Furthermore, the initiative features interfaces for integrating equipment and sensors, covering communications, drivers, and job management, as well as physical simulations for manufacturing technologies.
+
+For Ubuntu 20.04 or 22.04, utilizing FENGSim is straightforward with the provided commands.
 
 ```
 	cd cli
