@@ -2,15 +2,16 @@
 
 The FENGSim project is an adaptive manufacturing operational system that incorporates interfaces for various mathematical libraries, including computational geometry, computer algebra, numerical methods, numerical linear algebra, computer graphics, image processing, probability and statistics, and optimization, among others, as well as the CAX software framework. It also provides tools for managing library dependencies, package management, and CICD (compile, code merge, version control, test, deploy) processes. Additionally, the project includes interfaces for equipment and sensor integration, encompassing communications, drivers, and job management, as well as physical simulations for manufacturing technologies.
 
-<div align="center">
-<img decoding="async" src="image/Fengsim_logo_hi.png" height="160">
-</div>
-
 ```
 	cd cli
 	./install.sh or ./uninstall.sh
 	./qtcreator.sh
 ```
+
+<div align="center">
+<img decoding="async" src="image/Fengsim_logo_hi.png" height="160">
+</div>
+
 <div align="center">
 <img decoding="async" src="/image/log/1.jpg" width="500">
 </div>
