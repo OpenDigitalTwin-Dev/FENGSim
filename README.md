@@ -6,16 +6,11 @@ The FENGSim project is an adaptive manufacturing operational system that incorpo
 <img decoding="async" src="image/Fengsim_logo_hi.png" height="160">
 </div>
 
-To install:
-1. Navigate to the cli directory in your terminal/command prompt.
-2. Run the install script by entering:
-    ./install.sh
-3. Once installation is complete, launch QtCreator with:
-    ./qtcreator.sh 
-4. In QtCreator, open the FENGSim.pro project file located at:
-    starters/FENGSim/FENGSim.pro
-5. Build the prepost module project in QtCreator.
-
+```
+	cd cli
+	./install.sh or ./uninstall.sh
+	./qtcreator.sh
+```
 <div align="center">
 <img decoding="async" src="/image/log/1.jpg" width="500">
 </div>
