@@ -9,7 +9,7 @@ The FENGSim project is an adaptive manufacturing operational system that incorpo
 ```
 
 <div align="center">
-<img decoding="async" src="image/Fengsim_logo_hi.png" height="160">
+<img decoding="async" src="image/Fengsim_logo_hi.png" height="120">
 </div>
 
 <div align="center">
