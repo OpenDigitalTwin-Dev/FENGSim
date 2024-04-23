@@ -5,7 +5,7 @@ The FENGSim project is an adaptive manufacturing operational system that integra
 For Ubuntu 20.04 or 22.04, utilizing FENGSim is straightforward with the provided commands.
 
 ```
-	cd cli
+	cd FENGSim/cli
 	./install.sh or ./uninstall.sh
 	./qtcreator.sh
 ```
