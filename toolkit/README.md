@@ -8,13 +8,15 @@
 	./install.sh or ./uninstall.sh
 ```
 
-You can also download NSM, CFD, CEM, CM, NLA repositories from GitHub by cloning them.
+You can also download NSM, CFD, CEM, DAE, CM, NLA repositories from GitHub by cloning them.
 
 https://github.com/OpenDigitalTwin-Dev/NSM.git
 
 https://github.com/OpenDigitalTwin-Dev/CFD.git
 
 https://github.com/OpenDigitalTwin-Dev/CEM.git
+
+https://github.com/OpenDigitalTwin-Dev/DAE.git
 
 https://github.com/OpenDigitalTwin-Dev/CM.git
 
