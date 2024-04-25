@@ -13,7 +13,7 @@ message(${CMAKE_BINARY_DIR})
 message(${CMAKE_SOURCE_DIR})
 
 # for cinolib
-include_directories(${CMAKE_SOURCE_DIR}/../install/cinolib/include)
+include_directories(${CMAKE_SOURCE_DIR}/../cinolib/include)
 include_directories(/usr/include/eigen3)
 include_directories(${CMAKE_SOURCE_DIR}/../install/triangle_install/include)
 include_directories(${CMAKE_SOURCE_DIR}/../install/tetgen_install/include)
