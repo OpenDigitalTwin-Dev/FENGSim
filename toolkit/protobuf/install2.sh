@@ -11,6 +11,6 @@ sudo apt -y install libtool
 ./autogen.sh
 mkdir build
 cd build
-./../configure --prefix=$PWD/../../protobuf_install
+./../configure --prefix=$PWD/../../install/protobuf_install
 make -j4
 make install
