@@ -9,7 +9,17 @@
 ```
 
 ```
+	cd FENGSim/toolkit/gmsh
+	./install.sh or ./uninstall.sh
+```
+
+```
 	cd FENGSim/toolkit/triangle
+	./install.sh or ./uninstall.sh
+```
+
+```
+	cd FENGSim/toolkit/tetgen
 	./install.sh or ./uninstall.sh
 ```
 
