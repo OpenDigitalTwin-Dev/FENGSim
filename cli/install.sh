@@ -41,14 +41,11 @@ sudo apt -y install libboost-all-dev
 sed -i 11c"<value type=\"QString\" key=\"QMakePath\">"$PWD/../toolkit/qt/5.12.12/bin/qmake"</value>" $PWD/../toolkit/qt/qtcreator/share/qtcreator/QtProject/qtcreator/qtversion.xml
 
 # vtk install
-mkdir ../toolkit/vtk/build
-cd ../toolkit/vtk/build
-cmake .. -DQt5_DIR=$PWD/../../qt/5.12.12/lib/cmake/Qt5 -DCMAKE_INSTALL_PREFIX=$PWD/../../install/vtk_install
-make -j4
-make install
+cd ../toolkit/vtk
+./install.sh
 
 # oce install
-cd ../../oce
+cd ../oce
 mkdir build
 cd build
 cmake .. -DVTK_DIR=$PWD/../../install/vtk_install/lib/cmake/vtk-8.1 -DOCE_INSTALL_PREFIX=$PWD/../../install/oce_install
