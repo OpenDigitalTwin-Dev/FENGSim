@@ -1,4 +1,4 @@
 #!/bin/sh
 
 rm -rf build
-rm -rf ../triangle_install
+rm -rf ../install/triangle_install
