@@ -65,21 +65,13 @@ make install
 
 # cgal install
 cd ../../cgal
-mkdir build
-cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../install/cgal_install -DWITH_CGAL_Qt5=OFF
-make -j4
-make install
+./install.sh
 
 # pcl install
 sudo apt -y install libeigen3-dev
 sudo apt -y install libflann-dev
 cd ../../pcl
-mkdir build
-cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../install/pcl_install -DWITH_QT=OFF
-make -j4
-make install
+./install.sh
 
 # starter:ale
 cd ../../../starter/ALE
