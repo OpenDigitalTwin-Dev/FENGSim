@@ -49,32 +49,29 @@ cd ../oce
 ./install.sh
 
 # gmsh install
-cd ../../gmsh
-mkdir build
-cd build
-cmake .. -DOCC_INC=$PWD/../../install/oce_install/include/oce -DCMAKE_INSTALL_PREFIX=$PWD/../../install/gmsh_install -DENABLE_BUILD_DYNAMIC=ON -DENABLE_BUILD_SHARED=ON -DENABLE_PETSC=OFF -DENABLE_FLTK=OFF -DENABLE_MMG3D=OFF -DENABLE_MED=OFF 
-make -j4
-make install
+cd ../gmsh
+./install.sh
 
 # cgal install
-cd ../../cgal
+cd ../cgal
 ./install.sh
 
 # pcl install
 sudo apt -y install libeigen3-dev
 sudo apt -y install libflann-dev
-cd ../../pcl
+
+cd ../pcl
 ./install.sh
 
 # starter:ale
-cd ../../../starter/ALE
+cd ../../starter/ALE
 mkdir build
 cd build
 cmake ..
 make
 
 # starter:cgal
-cd ../../../starter/CGAL
+cd ../../CGAL
 mkdir data/output
 mkdir build
 cd build
@@ -82,7 +79,7 @@ cmake ..
 make
 
 # starter:gdt
-cd ../../../starter/GDT
+cd ../../GDT
 mkdir build
 cd build
 cmake ..
