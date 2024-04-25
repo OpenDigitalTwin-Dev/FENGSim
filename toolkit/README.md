@@ -1,15 +1,20 @@
 ```
-	cd vtk
+	cd FENGSim/toolkit/vtk
 	./install.sh or ./uninstall.sh
 ```
 
 ```
-	cd triangle
+	cd FENGSim/toolkit/oce
 	./install.sh or ./uninstall.sh
 ```
 
 ```
-	cd vcglib
+	cd FENGSim/toolkit/triangle
+	./install.sh or ./uninstall.sh
+```
+
+```
+	cd FENGSim/toolkit/vcglib
 	./install.sh or ./uninstall.sh
 ```
 
