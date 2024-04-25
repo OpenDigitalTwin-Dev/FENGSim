@@ -6,6 +6,6 @@
 
 mkdir build
 cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../slice2mesh_install
+cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../install/slice2mesh_install
 make -j4
 make install

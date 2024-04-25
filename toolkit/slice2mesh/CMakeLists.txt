@@ -13,15 +13,15 @@ message(${CMAKE_BINARY_DIR})
 message(${CMAKE_SOURCE_DIR})
 
 # for cinolib
-include_directories(${CMAKE_SOURCE_DIR}/../cinolib/include)
+include_directories(${CMAKE_SOURCE_DIR}/../install/cinolib/include)
 include_directories(/usr/include/eigen3)
-include_directories(${CMAKE_SOURCE_DIR}/../triangle_install/include)
-include_directories(${CMAKE_SOURCE_DIR}/../tetgen_install/include)
+include_directories(${CMAKE_SOURCE_DIR}/../install/triangle_install/include)
+include_directories(${CMAKE_SOURCE_DIR}/../install/tetgen_install/include)
 # for slice2mesh
 include_directories("src")
 
 add_executable (slice2mesh_exec ../src/main.cpp ../src/plc2tet.cpp  ../src/slice2plc.cpp  ../src/trianglulate.cpp ../src/edge_processing.cpp)
-target_link_libraries (slice2mesh_exec ${CMAKE_SOURCE_DIR}/../tetgen_install/lib/libtetgen.so ${CMAKE_SOURCE_DIR}/../triangle_install/lib/libtriangle.so)
+target_link_libraries (slice2mesh_exec ${CMAKE_SOURCE_DIR}/../install/tetgen_install/lib/libtetgen.so ${CMAKE_SOURCE_DIR}/../install/triangle_install/lib/libtriangle.so)
 
 install(TARGETS
   slice2mesh_exec
@@ -40,16 +40,16 @@ install(FILES
   )
 
 install(FILES
-  ${CMAKE_SOURCE_DIR}/../tetgen_install/lib/libtetgen.so
+  ${CMAKE_SOURCE_DIR}/../install/tetgen_install/lib/libtetgen.so
   DESTINATION bin
   )
 
 install(FILES
-  ${CMAKE_SOURCE_DIR}/../triangle_install/lib/libtriangle.so
+  ${CMAKE_SOURCE_DIR}/../install/triangle_install/lib/libtriangle.so
   DESTINATION bin
   )
 
 file(COPY "msh2geo.py" DESTINATION ${CMAKE_BINARY_DIR}/)
-file(COPY "../triangle_install/lib/libtriangle.so" DESTINATION ${CMAKE_BINARY_DIR}/)
-file(COPY "../tetgen_install/lib/libtetgen.so" DESTINATION ${CMAKE_BINARY_DIR}/)
+file(COPY "../install/triangle_install/lib/libtriangle.so" DESTINATION ${CMAKE_BINARY_DIR}/)
+file(COPY "../install/tetgen_install/lib/libtetgen.so" DESTINATION ${CMAKE_BINARY_DIR}/)
 
