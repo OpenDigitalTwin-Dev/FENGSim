@@ -1,4 +1,4 @@
 #!/bin/sh
 
 rm -rf build
-rm -rf ../protobuf_install
+rm -rf ../install/protobuf_install

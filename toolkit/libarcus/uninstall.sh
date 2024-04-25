@@ -1,4 +1,4 @@
 #!/bin/sh
 
 rm -rf build
-rm -rf ../libarcus_install
+rm -rf ../install/libarcus_install
