@@ -43,7 +43,7 @@ sed -i 11c"<value type=\"QString\" key=\"QMakePath\">"$PWD/../toolkit/qt/5.12.12
 # vtk install
 mkdir ../toolkit/vtk/build
 cd ../toolkit/vtk/build
-cmake .. -DQt5_DIR=$PWD/../../qt/5.12.12/lib/cmake/Qt5 -DCMAKE_INSTALL_PREFIX=$PWD/../../vtk_install
+cmake .. -DQt5_DIR=$PWD/../../qt/5.12.12/lib/cmake/Qt5 -DCMAKE_INSTALL_PREFIX=$PWD/../../install/vtk_install
 make -j4
 make install
 
@@ -51,7 +51,7 @@ make install
 cd ../../oce
 mkdir build
 cd build
-cmake .. -DVTK_DIR=$PWD/../../vtk_install/lib/cmake/vtk-8.1 -DOCE_INSTALL_PREFIX=$PWD/../../oce_install
+cmake .. -DVTK_DIR=$PWD/../../install/vtk_install/lib/cmake/vtk-8.1 -DOCE_INSTALL_PREFIX=$PWD/../../install/oce_install
 make -j4
 make install
 
@@ -59,7 +59,7 @@ make install
 cd ../../gmsh
 mkdir build
 cd build
-cmake .. -DOCC_INC=$PWD/../../oce_install/include/oce -DCMAKE_INSTALL_PREFIX=$PWD/../../gmsh_install -DENABLE_BUILD_DYNAMIC=ON -DENABLE_BUILD_SHARED=ON -DENABLE_PETSC=OFF -DENABLE_FLTK=OFF -DENABLE_MMG3D=OFF -DENABLE_MED=OFF 
+cmake .. -DOCC_INC=$PWD/../../install/oce_install/include/oce -DCMAKE_INSTALL_PREFIX=$PWD/../../install/gmsh_install -DENABLE_BUILD_DYNAMIC=ON -DENABLE_BUILD_SHARED=ON -DENABLE_PETSC=OFF -DENABLE_FLTK=OFF -DENABLE_MMG3D=OFF -DENABLE_MED=OFF 
 make -j4
 make install
 
@@ -67,7 +67,7 @@ make install
 cd ../../cgal
 mkdir build
 cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../cgal_install -DWITH_CGAL_Qt5=OFF
+cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../install/cgal_install -DWITH_CGAL_Qt5=OFF
 make -j4
 make install
 
@@ -77,7 +77,7 @@ sudo apt -y install libflann-dev
 cd ../../pcl
 mkdir build
 cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../pcl_install -DWITH_QT=OFF
+cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../install/pcl_install -DWITH_QT=OFF
 make -j4
 make install
 

@@ -1,15 +1,15 @@
 #!/bin/sh
 
 rm -rf $PWD/../toolkit/vtk/build
-rm -rf $PWD/../toolkit/vtk_install
+rm -rf $PWD/../toolkit/install/vtk_install
 rm -rf $PWD/../toolkit/oce/build
-rm -rf $PWD/../toolkit/oce_install
+rm -rf $PWD/../toolkit/install/oce_install
 rm -rf $PWD/../toolkit/gmsh/build
-rm -rf $PWD/../toolkit/gmsh_install
+rm -rf $PWD/../toolkit/install/gmsh_install
 rm -rf $PWD/../toolkit/cgal/build
-rm -rf $PWD/../toolkit/cgal_install
+rm -rf $PWD/../toolkit/install/cgal_install
 rm -rf $PWD/../toolkit/pcl/build
-rm -rf $PWD/../toolkit/pcl_install
+rm -rf $PWD/../toolkit/install/pcl_install
 
 rm -rf $PWD/../toolkit/qt/5.12.12
 rm -rf $PWD/../toolkit/qt/icu
