@@ -1,4 +1,4 @@
 #!/bin/sh
 
 rm -rf build
-rm -rf ../tetgen_install
+rm -rf ../install/tetgen_install
