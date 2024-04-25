@@ -1,4 +1,9 @@
 ```
+	cd vtk
+	./install.sh or ./uninstall.sh
+```
+
+```
 	cd triangle
 	./install.sh or ./uninstall.sh
 ```
