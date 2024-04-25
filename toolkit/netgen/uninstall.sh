@@ -1,4 +1,4 @@
 #!/bin/sh
 
 rm -rf build
-rm -rf ../netgen_install
+rm -rf ../install/netgen_install
