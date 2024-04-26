@@ -10,6 +10,7 @@
 
 void SlicePhaseTestMain (int argc, char** argv);
 void InfillTestMain ();
+void AMMain ();
 
 int main (int argc, char** argv) {
     DPO dpo(&argc,&argv);
