@@ -2,13 +2,13 @@
 // author: Jiping Xin
 
 #include "m++.h"
-#include "PoissonProblem.h"
+#include "AMProblem.h"
 #include "ThermoElasticityBVP.h"
 
-class PoissonAssemble : public PoissonProblems {
+class AMPoissonAssemble : public AMBVP {
     Discretization disc;
 public:
-    PoissonAssemble () {}
+    AMPoissonAssemble () {}
     void SetDirichletValues (Vector& u) {
 	u = 0;
 	for (cell c = u.GetMesh().cells(); c != u.GetMesh().cells_end(); ++c) {	  
@@ -183,7 +183,7 @@ public:
 		    for (int q = 0; q < ED.nQ(); q++) {
 		        b_c(i,k) += -(2.0 * mu * Frobenius(sym(ED.VectorGradient(q,i,k)),sym(ED.VectorGradient(q,u0)))
 				      + lambda * ED.Divergence(q,i,k) * ED.Divergence(q,u0)
-			    ) * ED.QWeight(q);
+				      ) * ED.QWeight(q);
 		    }
 		}
 	    }
@@ -209,17 +209,22 @@ public:
     }
 };
 
-void PoissonSolver (Meshes& M, PathPlanning* pp) {     
+void AMPoissonSolver (Meshes& M, PathPlanning* pp) { 
+
+    
     Date Start;
     // mesh
     //string name = "UnitCube";
     //ReadConfig(Settings, "Mesh", name);
     //Meshes M(name.c_str());
-    PoissonAssemble L;
+    AMPoissonAssemble L;
     L.pp = pp;
     L.SetDomain(M.fine());
     L.SetBoundary(M.fine());
 
+
+
+    
     // discretization
     Discretization disc;
     MatrixGraphs G(M,disc);
@@ -250,6 +255,8 @@ void PoissonSolver (Meshes& M, PathPlanning* pp) {
     string filename = string("am_temp_") + to_string(pp->cur_index());
     P.vtk_vertexdata(filename.c_str());
 
+
+
     // elasticity
     ThermoElasticityGeoID GeoID;
     GeoID.SetSubDomain(M.fine());
@@ -277,13 +284,21 @@ void PoissonSolver (Meshes& M, PathPlanning* pp) {
     return;
 }
 
+
+
 void AMMain () {
+    
+
+
     Date Start;
     // mesh
     string name = "UnitCube";
     ReadConfig(Settings, "Mesh", name);
     Meshes M(name.c_str());
 
+
+
+    
     PathPlanning* PP = new PathPlanning;
     PP->Initial();
 
@@ -296,6 +311,7 @@ void AMMain () {
     ReadConfig(Settings, "TimeLevel", l);
     //n = pow(2, l);
     double dt = T/n;    
+
         
     for (int i = 0; i < n+1; i++) {
         mout << "*******************" << endl;
@@ -303,17 +319,34 @@ void AMMain () {
 	mout << "*******************" << endl;
 	if (PP->stop(i, dt)) break;
 	
+
 	PP->SetCurrentPosition(i, dt);
 	PP->ExportCurrentMesh(M.fine());
 	ReadConfig(Settings, "Mesh2", name);
 	Meshes M2(name.c_str());
 
-	PoissonSolver(M2, PP); 
+
+
+	AMPoissonSolver(M2, PP); 
 	
+
+
 	ofstream out("./data/vtk/am_current_pos_" + to_string(i) + ".vtk");
 	out << PP->SetCurrentPosition(i, dt) << endl;
 	out.close();
+
+
+
     }
+
+
+
+    
+
+
+
+
+    
     return;
 }
 

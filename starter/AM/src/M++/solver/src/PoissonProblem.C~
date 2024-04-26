@@ -3,7 +3,7 @@
 
 #include "AMProblem.h"
 
-void AMBVP::SetDomain (Mesh& M) {
+void PoissonProblems::SetDomain (Mesh& M) {
     int id;
     ReadConfig(Settings, "EXAMPLE", id);
     for (cell c = M.cells(); c != M.cells_end(); c++) {
@@ -22,7 +22,7 @@ void AMBVP::SetDomain (Mesh& M) {
     }
 }
 
-void AMBVP::SetBoundary (Mesh& M) {
+void PoissonProblems::SetBoundary (Mesh& M) {
     int id;
     ReadConfig(Settings, "EXAMPLE", id);
     for (bnd_face bf = M.bnd_faces(); bf != M.bnd_faces_end(); bf++) {
@@ -55,7 +55,7 @@ void AMBVP::SetBoundary (Mesh& M) {
     }
 }
 
-bool AMBVP::IsDirichlet (int id) {
+bool PoissonProblems::IsDirichlet (int id) {
     switch (example_id) {
     case EX1 :
 	if (id == 1 || id == 2)
@@ -73,7 +73,7 @@ bool AMBVP::IsDirichlet (int id) {
     }
 }
 
-double AMBVP::Coefficient (Point p) const { 
+double PoissonProblems::Coefficient (Point p) const { 
     switch (example_id) {
     case EX1 : 
 	return 0.1;
@@ -87,7 +87,7 @@ double AMBVP::Coefficient (Point p) const {
     }
 }
 
-double AMBVP::Source (Point p) const { 
+double PoissonProblems::Source (Point p) const { 
     switch (example_id) {
     case EX1 : 
 	return 0;
@@ -102,7 +102,7 @@ double AMBVP::Source (Point p) const {
     return 0.0;
 }
 
-double AMBVP::Dirichlet (Point p, int id) const { 
+double PoissonProblems::Dirichlet (Point p, int id) const { 
     switch (example_id) {
     case EX1 :
 	if (id == 1)
@@ -120,7 +120,7 @@ double AMBVP::Dirichlet (Point p, int id) const {
     }
 }
 
-double AMBVP::Neumann (Point p, int id) const {
+double PoissonProblems::Neumann (Point p, int id) const {
     switch (example_id) {
     case EX1 :
 	if (id == 3)
@@ -141,7 +141,7 @@ double AMBVP::Neumann (Point p, int id) const {
     }
 }
 
-double AMBVP::Solution (const Point& p) const { 
+double PoissonProblems::Solution (const Point& p) const { 
     switch (example_id) {
     case EX1 : 
 	return 0;
