@@ -1,1 +1,2 @@
-loadconf = solver/conf/cura.conf;
+#loadconf = solver/conf/cura.conf;
+loadconf = solver/conf/am.conf;
