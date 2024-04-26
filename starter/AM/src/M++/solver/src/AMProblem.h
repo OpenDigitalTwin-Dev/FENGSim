@@ -3,13 +3,16 @@
 
 #include "m++.h"
 
-#include "exampleid.h"
-
-
-
+enum BOUNARYTYPE { DIRICHLET = 1, NEUMANN = 0};
+enum EXAMPLE {EX1 = 1, EX2 = 2, EX3 = 3, 
+	      EX4 = 4, EX5 = 5, EX6 = 6,
+	      EX7 = 7, EX8 = 8, EX9 = 9,
+	      EX10 = 10, EX11 = 11, EX12 = 12,
+	      EX13 = 13, EX14 = 14, EX15 = 15,
+	      EX16 = 16, EX17 = 17, EX18 = 18};
 
 class Segment {
-  public:
+public:
     Point a1;
     Point a2;
     double length () const {
@@ -19,10 +22,7 @@ class Segment {
     }
 };
 
-class PathPlanning {
-    
-    
- 
+class PathPlanning { 
     vector<Segment> am_path_planning;
     double source_v;
     double source_x;
@@ -32,13 +32,11 @@ class PathPlanning {
     double ppdistance;
     Point cur_pos;
     int cur_id;
-    
- public:
-    
+public:
     PathPlanning () {}
     void Initial () {
 	ifstream is;
-	is.open("./AdditiveManufacturing/conf/geo/pathplanning.vtk");
+	is.open("./solver/conf/geo/pathplanning.vtk");
 	const int len = 256;
 	char L[len];
 	double z[3];
@@ -63,9 +61,9 @@ class PathPlanning {
 	    is.getline(L,len);
 	}
 	/*
-	for (int i = 0; i < am_path_planning.size(); i++) {
-	    cout << am_path_planning[i].a1 << ": " << am_path_planning[i].a2 << endl;
-	}
+	  for (int i = 0; i < am_path_planning.size(); i++) {
+	  cout << am_path_planning[i].a1 << ": " << am_path_planning[i].a2 << endl;
+	  }
 	*/	
 	ReadConfig(Settings, "SourceV", source_v);
 	ReadConfig(Settings, "SourceX", source_x);
@@ -119,7 +117,7 @@ class PathPlanning {
     }
     void ExportCurrentMesh (Mesh& M) {
 	if (!PPM->master()) return;
-	string filename = string("./AdditiveManufacturing/conf/geo/thinwall2.geo");  
+	string filename = string("./solver/conf/geo/thinwall2.geo");  
 	ofstream out(filename.c_str()); 
 	out<< "POINTS:" << endl;
 	int n = 0;
@@ -163,7 +161,7 @@ class PathPlanning {
 
 class AMBVP {
     int example_id;
-  public:
+public:
     AMBVP () {
 	ReadConfig(Settings, "EXAMPLE", example_id);
     }
