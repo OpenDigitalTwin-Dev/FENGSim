@@ -19,12 +19,12 @@ target_link_libraries (AMSolver /usr/lib/x86_64-linux-gnu/libblas.so /usr/lib/x8
 set_target_properties(AMSolver PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 message(${CMAKE_BINARY_DIR})
-target_link_libraries (AMSolver ${CMAKE_BINARY_DIR}/../../../toolkit/cura_engine_install/lib/lib_CuraEngine.a)
-target_link_libraries (AMSolver ${CMAKE_BINARY_DIR}/../../../toolkit/cura_engine_install/lib/libclipper.a)
-target_link_libraries (AMSolver ${CMAKE_BINARY_DIR}/../../../toolkit/protobuf_install/lib/libprotobuf.so)
-target_link_libraries (AMSolver ${CMAKE_BINARY_DIR}/../../../toolkit/protobuf_install/lib/libprotobuf-lite.so)
-target_link_libraries (AMSolver ${CMAKE_BINARY_DIR}/../../../toolkit/protobuf_install/lib/libprotoc.so)
-target_link_libraries (AMSolver ${CMAKE_BINARY_DIR}/../../../toolkit/libarcus_install/lib/libArcus.so)
+target_link_libraries (AMSolver ${CMAKE_BINARY_DIR}/../../../toolkit/install/cura_engine_install/lib/lib_CuraEngine.a)
+target_link_libraries (AMSolver ${CMAKE_BINARY_DIR}/../../../toolkit/install/cura_engine_install/lib/libclipper.a)
+target_link_libraries (AMSolver ${CMAKE_BINARY_DIR}/../../../toolkit/install/protobuf_install/lib/libprotobuf.so)
+target_link_libraries (AMSolver ${CMAKE_BINARY_DIR}/../../../toolkit/install/protobuf_install/lib/libprotobuf-lite.so)
+target_link_libraries (AMSolver ${CMAKE_BINARY_DIR}/../../../toolkit/install/protobuf_install/lib/libprotoc.so)
+target_link_libraries (AMSolver ${CMAKE_BINARY_DIR}/../../../toolkit/install/libarcus_install/lib/libArcus.so)
 target_link_libraries (AMSolver /usr/lib/x86_64-linux-gnu/libgomp.so.1)
 
 file(COPY "log" DESTINATION ${CMAKE_BINARY_DIR})
