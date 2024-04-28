@@ -18,5 +18,6 @@ int main (int argc, char** argv) {
     ReadConfig(Settings,"Model",Model);
     if (Model == "SlicePhaseTest") SlicePhaseTestMain(argc, argv);
     if (Model == "InfillTest") InfillTestMain();
+    if (Model == "AM") AMMain();
     return 0;
 }

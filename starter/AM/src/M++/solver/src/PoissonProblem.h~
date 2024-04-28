@@ -3,6 +3,14 @@
 
 #include "m++.h"
 
+enum BOUNARYTYPE { DIRICHLET = 1, NEUMANN = 0};
+enum EXAMPLE {EX1 = 1, EX2 = 2, EX3 = 3, 
+	      EX4 = 4, EX5 = 5, EX6 = 6,
+	      EX7 = 7, EX8 = 8, EX9 = 9,
+	      EX10 = 10, EX11 = 11, EX12 = 12,
+	      EX13 = 13, EX14 = 14, EX15 = 15,
+	      EX16 = 16, EX17 = 17, EX18 = 18};
+
 class Segment {
 public:
     Point a1;
@@ -21,10 +29,9 @@ class PathPlanning {
     double source_y;
     double source_z;
     double source_h;
-    double total_distance;
+    double ppdistance;
     Point cur_pos;
     int cur_id;
-    double active_height;
 public:
     PathPlanning () {}
     void Initial () {
@@ -38,7 +45,7 @@ public:
 	}
 	Point seg[2];
 	int n = 0;
-	total_distance = 0;
+	ppdistance = 0;
 	while (strncasecmp("CELLS",L,5)) {
 	    sscanf(L, "%lf %lf %lf", z, z + 1, z + 2);
 	    seg[n] = Point(z[0], z[1], z[2]);
@@ -49,7 +56,7 @@ public:
 		S.a2 = seg[1];
 		am_path_planning.push_back(S);
 		n = 0;
-		total_distance += S.length();
+		ppdistance += S.length();
 	    }
 	    is.getline(L,len);
 	}
@@ -63,7 +70,6 @@ public:
 	ReadConfig(Settings, "SourceY", source_y);
 	ReadConfig(Settings, "SourceZ", source_z);
 	ReadConfig(Settings, "SourceH", source_h);
-	active_height = 0;
     }
     Point SetCurrentPosition (double num, double dt) {
 	cur_id = num;
@@ -82,7 +88,7 @@ public:
 	    if (s >= d) {
 		double t = (s - d) / am_path_planning[i].length();
 		cur_pos = am_path_planning[i].a1  + (am_path_planning[i].a2 - am_path_planning[i].a1) * (1 - t);
-		mout << "  path planning: " << total_distance << " d: " << d << " s: " << s << " cur_pos: " << cur_pos << endl;
+		mout << "  path planning: " << ppdistance << " d: " << d << " s: " << s << " cur_pos: " << cur_pos << endl;
 		return cur_pos;
 	    }
 	}
@@ -94,29 +100,43 @@ public:
 	return cur_pos;
     }
     double distance () {
-	return total_distance;
+	return ppdistance;
     }
     bool stop (double id, double dt) {
-	if (id*dt*source_v >= total_distance)
+	if (id*dt*source_v >= ppdistance)
 	    return true;
+	return false;
+    }
+    bool IsActive (cell c) {
+	Point p = cur_pos;
+	if (p[0]-source_x < c()[0] && c()[0] < p[0]+source_x)
+	    if (p[1]-source_y < c()[1] && c()[1] < p[1]+source_y)
+		if (p[2]-source_z < c()[2] && c()[2] <= p[2])
+		    return true;
 	return false;
     }
     void ExportCurrentMesh (Mesh& M) {
 	if (!PPM->master()) return;
-	if (cur_pos[2] > active_height) {
-	    active_height = cur_pos[2];
-	}
-	else {
-	    return;
-	}
 	string filename = string("./solver/conf/geo/thinwall2.geo");  
 	ofstream out(filename.c_str()); 
 	out<< "POINTS:" << endl;
 	int n = 0;
 	for (cell c = M.cells(); c != M.cells_end(); c++) {
-	    if (c()[2] < active_height) {
+	    if (IsActive(c)) {
 		hash_map<Point,Cell*,Hash>::iterator it = M.Cells::find(c());
 		it->second->SetSubdomain(1);
+		for (int i = 0; i < c.Corners(); i++)
+		    out << c.Corner(i) << endl;
+		n++;
+	    }
+	    else if (c()[2] < source_h) {
+		hash_map<Point,Cell*,Hash>::iterator it = M.Cells::find(c());
+		it->second->SetSubdomain(1);
+		for (int i = 0; i < c.Corners(); i++)
+		    out << c.Corner(i) << endl;
+		n++;
+	    }
+	    else if (c.Subdomain() == 1) {
 		for (int i = 0; i < c.Corners(); i++)
 		    out << c.Corner(i) << endl;
 		n++;

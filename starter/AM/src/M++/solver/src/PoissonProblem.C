@@ -10,12 +10,12 @@ void PoissonProblems::SetDomain (Mesh& M) {
 	Point p(c());
 	hash_map<Point,Cell*,Hash>::iterator it = M.Cells::find(p);
 	switch (id) {
-	case EX1 : // thin wall
+	case 1 : // thin wall
 	    break;
-	case EX2 : // poisson mixed 2d
+	case 2 : // poisson mixed 2d
 	    it->second->SetSubdomain(0);
 	    break;
-	case EX3 : // poisson mixed 3d
+	case 3 : // poisson mixed 3d
 	    it->second->SetSubdomain(0);
 	    break;
 	}
@@ -29,7 +29,7 @@ void PoissonProblems::SetBoundary (Mesh& M) {
 	Point p(bf());
 	hash_map<Point,BoundaryFace,Hash>::iterator it = M.BoundaryFaces::find(p);
 	switch (id) {
-	case EX1 : {
+	case 1 : {
 	    if (pp->IsSource(bf)) {
 		it->second.SetPart(1);
 	    }
@@ -39,17 +39,17 @@ void PoissonProblems::SetBoundary (Mesh& M) {
 		it->second.SetPart(3);
 	    break;
 	}
-	case EX2 :
+	case 2 :
 	    if (p[0] == 0 || p[1] == 0)
 		it->second.SetPart(111); 
 	    else
 		it->second.SetPart(222);
 	    break;
-	case EX3 :
+	case 3 :
 	    if (p[0] == 0 || p[1] == 0 || p[2] == 0)
-		it->second.SetPart(DIRICHLET); 
+		it->second.SetPart(1); 
 	    else
-		it->second.SetPart(NEUMANN);
+		it->second.SetPart(0);
 	    break;
 	}
     }
@@ -57,17 +57,17 @@ void PoissonProblems::SetBoundary (Mesh& M) {
 
 bool PoissonProblems::IsDirichlet (int id) {
     switch (example_id) {
-    case EX1 :
+    case 1 :
 	if (id == 1 || id == 2)
 	    return true;
 	return false;
 	break;
-    case EX2 :
+    case 2 :
 	if (id == 111)
 	    return true;
 	return false;
 	break;
-    case EX3 : 
+    case 3 : 
 	return 1.0;
 	break;
     }
@@ -75,13 +75,13 @@ bool PoissonProblems::IsDirichlet (int id) {
 
 double PoissonProblems::Coefficient (Point p) const { 
     switch (example_id) {
-    case EX1 : 
+    case 1 : 
 	return 0.1;
 	break;
-    case EX2 : 
+    case 2 : 
 	return 1.0;
 	break;
-    case EX3 : 
+    case 3 : 
 	return 1.0;
 	break;
     }
@@ -89,13 +89,13 @@ double PoissonProblems::Coefficient (Point p) const {
 
 double PoissonProblems::Source (Point p) const { 
     switch (example_id) {
-    case EX1 : 
+    case 1 : 
 	return 0;
 	break;
-    case EX2 : 
+    case 2 : 
 	return -2.0 * exp(p[0] + p[1]);
 	break;
-    case EX3 : 
+    case 3 : 
 	return -3.0 * exp(p[0] + p[1] + p[2]);
 	break;
     }
@@ -104,17 +104,17 @@ double PoissonProblems::Source (Point p) const {
 
 double PoissonProblems::Dirichlet (Point p, int id) const { 
     switch (example_id) {
-    case EX1 :
+    case 1 :
 	if (id == 1)
 	    return 1;
 	else if (id == 2)
 	    return 0;
 	break;
-    case EX2 :
+    case 2 :
 	if (id == 111)
 	    return exp(p[0] + p[1]); 
 	break;
-    case EX3 : 
+    case 3 : 
 	return exp(p[0] + p[1] + p[2]); 
 	break;
     }
@@ -122,15 +122,15 @@ double PoissonProblems::Dirichlet (Point p, int id) const {
 
 double PoissonProblems::Neumann (Point p, int id) const {
     switch (example_id) {
-    case EX1 :
+    case 1 :
 	if (id == 3)
 	    return 0;
 	break;
-    case EX2 :
+    case 2 :
 	if (id == 222)
 	    return exp(p[0] + p[1]); 
 	break;
-    case EX3 :
+    case 3 :
 	if (p[0] == 1)
 	    return exp(p[0] + p[1] + p[2]);
 	else if (p[1] == 1)
@@ -143,13 +143,13 @@ double PoissonProblems::Neumann (Point p, int id) const {
 
 double PoissonProblems::Solution (const Point& p) const { 
     switch (example_id) {
-    case EX1 : 
+    case 1 : 
 	return 0;
 	break;
-    case EX2 : 
+    case 2 : 
 	return exp(p[0] + p[1]);
 	break;
-    case EX3 : 
+    case 3 : 
 	return exp(p[0] + p[1] + p[2]);
 	break;
     }

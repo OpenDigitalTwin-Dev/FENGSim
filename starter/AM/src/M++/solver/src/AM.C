@@ -209,7 +209,7 @@ public:
     }
 };
 
-void PoissonSolver (Meshes& M, PathPlanning* pp) {     
+void AMSolver (Meshes& M, PathPlanning* pp) {     
     Date Start;
     // mesh
     //string name = "UnitCube";
@@ -250,6 +250,8 @@ void PoissonSolver (Meshes& M, PathPlanning* pp) {
     string filename = string("am_temp_") + to_string(pp->cur_index());
     P.vtk_vertexdata(filename.c_str());
 
+    return;
+    
     // elasticity
     ThermoElasticityGeoID GeoID;
     GeoID.SetSubDomain(M.fine());
@@ -308,7 +310,7 @@ void AMMain () {
 	ReadConfig(Settings, "Mesh2", name);
 	Meshes M2(name.c_str());
 
-	PoissonSolver(M2, PP); 
+	AMSolver(M2, PP); 
 	
 	ofstream out("./data/vtk/am_current_pos_" + to_string(i) + ".vtk");
 	out << PP->SetCurrentPosition(i, dt) << endl;
