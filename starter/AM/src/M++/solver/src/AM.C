@@ -247,8 +247,8 @@ void AMSolver (Meshes& M, PathPlanning* pp) {
     
     Plot P(M.fine());
     P.vertexdata(x);
-    string filename = string("am_temp_") + to_string(pp->cur_index());
-    P.vtk_vertexdata(filename.c_str());
+    //string filename = string("am_temp_") + to_string(pp->cur_index());
+    //P.vtk_vertexdata(filename.c_str());
 
     return;
     
@@ -273,8 +273,8 @@ void AMSolver (Meshes& M, PathPlanning* pp) {
     x_d += u_d;
 
     P.vertexdata(x_d,dim);
-    filename = string("am_mesh_") + to_string(pp->cur_index());
-    P.vtk_vertexdata(filename.c_str(),0,1);
+    //filename = string("am_mesh_") + to_string(pp->cur_index());
+    //P.vtk_vertexdata(filename.c_str(),0,1);
 
     return;
 }
@@ -287,7 +287,6 @@ void AMMain () {
     Meshes M(name.c_str());
 
     PathPlanning* PP = new PathPlanning;
-    PP->Initial();
 
     // time interval
     double T = 1;
@@ -305,15 +304,15 @@ void AMMain () {
 	mout << "*******************" << endl;
 	if (PP->stop(i, dt)) break;
 	
-	PP->SetCurrentPosition(i, dt);
-	PP->ExportCurrentMesh(M.fine());
+	PP->GetPosition(i, dt);
+	PP->ExportMesh(M.fine());
 	ReadConfig(Settings, "Mesh2", name);
 	Meshes M2(name.c_str());
 
 	AMSolver(M2, PP); 
 	
 	ofstream out("./data/vtk/am_current_pos_" + to_string(i) + ".vtk");
-	out << PP->SetCurrentPosition(i, dt) << endl;
+	out << PP->GetPosition(i, dt) << endl;
 	out.close();
     }
     return;

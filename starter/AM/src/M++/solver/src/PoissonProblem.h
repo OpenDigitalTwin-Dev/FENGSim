@@ -21,13 +21,11 @@ class PathPlanning {
     double source_y;
     double source_z;
     double source_h;
-    double total_distance;
     Point cur_pos;
-    int cur_id;
+    double total_distance;
     double active_height;
 public:
-    PathPlanning () {}
-    void Initial () {
+    PathPlanning () {
 	ifstream is;
 	is.open("./solver/conf/geo/pathplanning.vtk");
 	const int len = 256;
@@ -53,11 +51,6 @@ public:
 	    }
 	    is.getline(L,len);
 	}
-	/*
-	  for (int i = 0; i < am_path_planning.size(); i++) {
-	  cout << am_path_planning[i].a1 << ": " << am_path_planning[i].a2 << endl;
-	  }
-	*/	
 	ReadConfig(Settings, "SourceV", source_v);
 	ReadConfig(Settings, "SourceX", source_x);
 	ReadConfig(Settings, "SourceY", source_y);
@@ -65,15 +58,12 @@ public:
 	ReadConfig(Settings, "SourceH", source_h);
 	active_height = 0;
     }
-    Point SetCurrentPosition (double num, double dt) {
-	cur_id = num;
-        // ==============================================================
-	//                   
+    Point GetPosition (double num, double dt) {
+        // %%%%%
 	//       1.    ------d-------s
 	//
 	//       2.    --------------s(d)
-	//
-	// ==============================================================
+	// %%%%%
 	double time = num * dt;
 	double d = time * source_v;
 	double s = 0;
@@ -87,21 +77,12 @@ public:
 	    }
 	}
     }
-    int cur_index () {
-	return cur_id;
-    }
-    Point cur_position () {
-	return cur_pos;
-    }
-    double distance () {
-	return total_distance;
-    }
     bool stop (double id, double dt) {
 	if (id*dt*source_v >= total_distance)
 	    return true;
 	return false;
     }
-    void ExportCurrentMesh (Mesh& M) {
+    void ExportMesh (Mesh& M) {
 	if (!PPM->master()) return;
 	if (cur_pos[2] > active_height) {
 	    active_height = cur_pos[2];
@@ -135,9 +116,8 @@ public:
 	    }
 	}
 	return false;
-    }    
+    }
 };
-
 
 class PoissonProblems {
     int example_id;
