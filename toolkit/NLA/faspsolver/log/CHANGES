@@ -1,0 +1,1555 @@
+File Name: CHANGES
+
+08/02/2023 FASP 2.8.7:
+- Update cmake version support;
+- Update faspsolver for thermal solvers in fasp4blkoil;
+- Fix some bugs introduced due to thermal solvers.
+
+02/11/2023 FASP 2.8.6:
+- Add weighted Jacboi for F-points;
+- Add reduction-based AMG;
+- Test reduction-based AMG;
+- Remove cxx_fc_compilers;
+- Update cmake for WITHFC;
+- Fix rpath problem in MacOS;
+- Update VS22 solution for Strumpack.
+
+10/16/2022 FASP 2.8.5:
+- Use clang-format from OCP;
+- Add GSF smoother (GS for F-points);
+- Add a Fortran wrapper for Strumpack.
+
+10/09/2022 FASP 2.8.4:
+- Remove xcode support, move to VSCode+cmake completely;
+- Add and reset .vscode settings;
+- Update git ignores;
+- Simplify cmake files;
+- Test on arm64 computer.
+
+10/03/2022 FASP 2.8.3:
+- Add STRUMPACK as a direct solver;
+- Wrong solution when used with STRUMPACK_METIS re-ordering for old METIS;
+- Updated to METIS-5.1.0; seems to work using STRUMPACK_METIS now;;
+- Update FindMETIS.cmake.
+
+09/26/2022 FASP 2.8.2:
+- Chang default behavoir: Do not require Fortran compilers!!!
+- Do not compile Fortran by default;
+- Use -DWITHFC=ON in cmake to enable Fortran support.
+
+09/21/2022 FASP 2.8.1:
+- Add OpenMP DLL version for Windows;
+- Longer output format for residuals.
+
+09/06/2022 FASP 2.8.0:
+- Major Change: Need to update all FASP projects;
+- Add abstol to KSM functions;
+- Prepare for Iterative Refinement;
+- Add LONGREAL (long double by default).
+
+09/03/2022 FASP 2.7.9:
+- Unify number of digits for output.
+
+08/30/2022 FASP 2.7.8:
+- Output stat information from MUMPS;
+- Output stat information from UMFPACK;
+- Output stat information from PARDISO;
+- Test MUMPS, UMFPACK, and PARDISO with problems from DLD and Huawei;
+- MUMPS-5.5.1 built with gfortran (does not work with ifort);
+- SuiteSparse-5.12.0 built with clang (work with icc/gcc);
+- Remove the GUI installation tcl/tk script;
+- Update the outdated User Guide!!!
+
+08/28/2022 FASP 2.7.7:
+- Add output subroutine for MTX format;
+- Test PARDISO and MUMPS;
+- Modify the main test example: test.c;
+- Fix a coarse level dof size bug: SHORT --> INT;
+- Report MUMPS seg fault bug on OSX;
+- Update documantation and webpage;
+- Fix Doxygen problems.
+
+08/28/2022 FASP 2.7.6:
+- Prepare for Huawei's test problems;
+- Merge different versions;
+- Add MKL support for Mac OS X;
+- Add METIS and GKlib support;
+- Test linking to MUMPS;
+- Test linking to MKL Pardiso;
+- Add reading subroutine for Huawei's problems;
+- Add support to MUMPS and Pardiso; need to test;
+- Add Huawei test problems;
+- Add DLD test problems.
+
+08/14/2022 FASP 2.7.5:
+- Checking return status of UMFPACK;
+- Fixing regression test failure of fasp4blkoil.
+
+07/27/2022 FASP 2.7.4:
+- Fix Pardiso and Umfpack timer output;
+- Test OpenMP for DLD problem.
+
+04/08/2022 FASP 2.7.3:
+- Reading input parameters from a file for fasp4ns project;
+- Remove unused variables in UMFPACK interface;
+- Update Fortran wrapper for Krylov_AMG;
+
+03/08/2022 FASP 2.7.2:
+- Fix a bug due the ISNAN macro not recognized by some compilers;
+- Use isnan() to replace ISNAN;
+- Fix a TeX problem with Doxygen;
+- Fix math.lib linkage problem;
+- Fix cmake debug mode for Windows;
+- Add oneAPI MKL support for Linux;
+- Update webpage;
+- Update Doxygen.
+
+01/27/2022 FASP 2.7.1:
+- Add VS2022 + Intel 2022 oneAPI solution file;
+- Fix unused variables and other warnings by oneAPI;
+- Update webpage;
+- Update Doxygen.
+
+08/14/2021 FASP 2.7.0:
+- Update webpage;
+- Update warning level in UA AMG;
+- Update Doxygen;
+- Git becomes public.
+
+05/12/2021 FASP 2.6.8:
+- Update README and cmake examples;
+- Remove support for VS10 and VS15;
+- Update webpage and documentation;
+- Update VS19 setting with more aggressive optimization;
+- Change README to MarkDown format;
+- Update matrix inversion subroutine and give return values.
+
+04/27/2021 FASP 2.6.7:
+- Eamon Zhang reported several bugs;
+- Fix the bug caused by inversion of smat matrices;
+- Fix the bug cuased by uninitialized ILU param;
+- Fix other small problems in DEBUG mode;
+- Fix a bug in external.cmake for linking to MKL etc.
+
+03/23/2021 FASP 2.6.6:
+- Update CMake and add backup target;
+- Saving coarse matrices for debugging.
+
+03/13/2021 FASP 2.6.5:
+- Fix DEBUG information in SmatInv;
+- Fix Windows VS19 OpenMP flag;
+- Test OpenMP for icc;
+- Rewrite cmake: Replace FASP_SOURCE_DIR with general dir.
+
+03/05/2021 FASP 2.6.4:
+- Remove testlib from VS19;
+- Add DLL version for Windows;
+- Fix DLL version for vscode/cmake/msvc;
+- Fix OpenMP version for cmake.
+
+02/13/2021 FASP 2.6.3:
+- Remove BLAS from CMake;
+- Make CMake work on Windows + VSCode + CMake;
+- Fix MSVC flag: _CRT_SECURE_NO_WARNINGS.
+
+02/10/2021 FASP 2.6.2:
+- Update output information for UA AMG setup;
+- Add decoup_type for choosing decoupling methods in BSR;
+- Update test problems in main/test.c;
+- Update CMake external packages.
+
+02/05/2021 FASP 2.6.1:
+- Add uninstall target to the new CMakeFile.txt;
+- Now both old and new cmake work!
+- Change output of fasp_solver_amg();
+- Update header file;
+- Update return values for AMG solvers;
+- Add Release/Debug targets into cmake.
+
+01/25/2021 FASP 2.6.0:
+- Switch cmake style.
+- Use the same compile and link style as fasp4blkoil.
+- Check compatibility with PennSim new version!
+- Update benchmark test input format.
+- Double-check PARDISO interface.
+
+01/15/2021 FASP 2.5.9:
+- Fix divide-by-zero in GCG for NAMLI.
+- Fix some typos in comments.
+
+01/10/2021 FASP 2.5.8:
+- Add benchmark test based on SuiteSparse Matrix Market.
+- Modify test/main/test.c slightly.
+- Update error messages for reading files.
+- Rewrite fasp_dbsr_print.
+- Make a separate dir for benchmark test.
+- Fix problems with icc compiler for Linux.
+
+12/15/2020 FASP 2.5.7:
+- Check trivial solution case Ax=0 for AMG cycles.
+- Update cmake required version.
+- Update cmake CC search list.
+- Do not check for Doxygen by default.
+- Add VW and WV hybrid cycles.
+
+11/04/2020 FASP 2.5.6:
+- Fix new warnings in GCC10.
+- Fix unsigned long problem for INT.
+- Fix debug mode.
+- Update version information.
+
+10/13/2020 FASP 2.5.5:
+- Important fixes to UA AMG: handle possible divide by zero error.
+- Update INT definition and test INT=int and long.
+- Caution: INT cannot be short or unsigned int.
+- Update other FASP repositories accordingly. 
+
+10/03/2020 FASP 2.5.4:
+- Update Windows version to VS2019 and Intel2020.1.
+
+07/18/2020 FASP 2.5.3:
+- Modify test problems.
+- Skip comments in the beginning of data files.
+- When reading CSR matrix starting from 1, shift by -1.
+- Ignore ex and mk files from git.
+- A possible bug: test.ex, problem 14, W-cycle?
+- Update webpage setting.
+- Update webpage and documentation.
+
+05/16/2020 FASP 2.5.2:
+- Add VS19 solution.
+- Fix encoding warning in VS19.
+- Fix problems with Intel compiler 2020.1 version.
+
+05/07/2020 FASP 2.5.1:
+- Fix UMFPACK test run problem.
+- Fix METIS module.
+- Fix CHOLMOD module.
+- Add general cycling type on each level.
+
+01/20/2020 FASP 2.5.0:
+- Migrate from BitBucket to GitHub!
+
+01/20/2020 FASP 2.2.0:
+- Update cmake behavoir due to cmake changes since 3.14.1.
+- Test new version on OS X 10.14.6, RedHat 4.8.5; need more tests.
+- Fix warnings for fscanf in Ubuntu.
+- Update webpage, documentation, and user guide.
+- Fix a mistake in User Guide.
+- Update Fortran wrapper for direct solver.
+
+01/26/2019 FASP 2.1.1:
+- Find a problem when users try to free precond_data.
+- Fix a memory leakage problem in tutorial/poisson-pcg.c.
+- Change matrix format in fasp_dcoo_read1, make it consistent with fasp_dcoo_read.
+- Update VS setting and use VS2015 as default.
+- Update documentation and webpage.
+- Update push script for multigrid.org.
+
+08/04/2018 FASP 2.1.0:
+- Fix OpenMP problem with FASP1.
+- Fix a typo in KryPvfgmres.c.
+- Update regression results.
+- Update FD for Poisson/Heat example.
+- Update to new Xcode setting.
+- Update refman.pdf and webpage.
+- Move official webpage to multigrid.org/fasp.
+- Check compiling order from cmake. 
+
+04/11/2018 FASP 2.0.9:
+- Update Fortran wrappers: add a new one.
+- Update Fortran wrapper function names; update examples accordingly.
+- Clean up BLC preconditioners and solvers.
+- Fix a few wrong function names. 
+- Fix a memory problem in BSR SA method.
+- Find more problems with BSR AMG methods; to fix.
+- Check 'cannot allocate memory' warning in VFGMRes.
+- Fix a policy problem for older CMAKE versions.
+
+03/24/2018 FASP 2.0.8:
+- Remove unused arguments in several functions.
+- Remove unused OMP counter from fasp.h.
+- Change interger definitions of a few local variables.
+- Update function decrorations in fasp_functs.h.
+- Get rid of all clock().
+- Check CPU time output again.
+- Update regression results.
+- Fixan OMP bug; find another.
+- Add VS15 solution.
+
+03/15/2018 FASP 2.0.7:
+- Update copyright information.
+- Fix some ANSI C uncompatible problems; a lot more still there.
+- Update VS10 setting: set FP model to '/precise' in order to get same results in Windows.
+- Locate the parameter difference in OpenMP version.
+- Move definition ILU_MC_OMP from fasp_const.h to fasp.h.
+- Modify README: MS VC compiler does not work for our C code if we do not change .c to .cpp.
+
+03/09/2018 FASP 2.0.6:
+- Fix a bug in fasp_mem_free. Set all memory pointers to NULL by hand.
+- Update documentation and fasp webpage.
+- Update VS10 settings for OMP version in Windows 7.
+- Try to remove unused parts in OMP and look for bugs causing divergence.
+- Update the diagonally dominant check function.
+- Modify the ordering of default direct solvers.
+
+01/04/2018 FASP 2.0.5:
+- Try to unify itsolver and itsolver_s. 
+- Add regression tests for itsolver_s (iterative methods with safe-net).
+- Update regression test results.
+- New TODO list.
+- Update user's guide for the recent changes.
+- Update webpage documentation zip file.
+- Update fasp webpage.
+
+10/21/2017 FASP 2.0.4:
+- Format WARNING messages for all functions.
+- Format ERROR messages for all functions.
+- Format DEBUG messages for all functions.
+- Fix several TODO's listed in the functions.
+- Get rid of ALL warnings in DEBUG mode.
+- Replace Direct with Pardiso; Direct.lib is NOT used any more on Windows.
+- Update CMakeFile Policy for OpenMP and clean up.
+- Update regression results for MM and MF; new version is better.
+- Update TODO list.
+
+09/24/2017 FASP 2.0.3:
+- Add testgs.c; preparing for testing new sparse matrix data structures.
+- When reading matrix data, check and quit if error occurs.
+- Important: Name change for some file reading functions.
+- Important: Name change for preconditioner data in BSR.
+- Fix ALL warnings from Doxygen.
+- Update reference manual and user's guide.
+- Update regression results.
+- Update tutorial example output.
+
+09/23/2017 FASP 2.0.2:
+- Remove almost ALL unused variables and functions.
+- Rewrite "skip rest of the line" to avoid problems with long lines.
+- Get rid of some OMP pragma which causes indentation problems.
+- Change some function names in pairwise aggregation.
+- Fix problems with auto-indentation except for ItrSmootherCSRpoly.c!!!
+- Fix an input parameter problem in fasp4ns.
+- Test GCC7.2 and it works just fine.
+- Add an SA AMG parameter for smoothing restriction or not.
+- Update output information for AMG, iterative, etc.
+- Update regression results.
+
+09/20/2017 FASP 2.0.1:
+- Prepare for optimization: 1. vectorization loops.
+- Pass weigth to Jacobi smoother.
+- Enforce const check for GMG routines.
+- Change mg2d behavior; need to double-check this.
+- Update regression result.
+- Revise fasp_ivec_set according to fasp_dvec_set.
+- Fix a bug in ILU setup: ILU type not initialized.
+- Get rid of warnings from Xcode and VS10.
+- Get rid of unsupported C features in VS10.
+
+08/21/2017 FASP 2.0.0:
+- Add duplicated column check for BSR matrices.
+- Fix ILU hanging problem when there are duplicated columns.
+- Fix a bug in ILU setup which could cause stack overflow.
+- Fix a bug in coarsening when coarsening ratio is too high.
+- Fix a bug in OpenMP version of merge_col.
+- Update VS2010 solution.
+- Clean up a little bit and change a few uncompatible function names.
+
+03/29/2017 FASP 1.9.9:
+- Fix ILUtp problem with permutation.
+- Separate BlaIOUtil.inl from BlaIO.c.
+- Set pointer to NULL after fasp_mem_free().
+- Update user's guide.
+- Remove the old BiCGstab code.
+- Fix problem 9 in regression_mm: results are OK now.
+- Fix problem 7 in regression_mm for AMG as well.
+- Fix a bug in AuxInput.c: exit with an error message if parameter is unknown.
+- Update regression test results.
+
+02/10/2017 FASP 1.9.8:
+- Now automatic build test works.
+- Add and test BitBucket Pipelines automatic test tool.
+- Fix warnings about fgets, fread, fscanf, scanf, etc in Ubuntu.
+- Remove CHMEM_MODE with DEBUG_MODE > 1.
+- Update output of tutorial examples.
+- Update user's guide to the most updated version.
+- Update TODO list.
+- Update documentation and reference manual.
+- Test fasp webapge. 
+
+02/01/2017 FASP 1.9.7:
+- Clean up *.inl files.
+- Fix more warnings by xcode; some still left: unused functions, doxygen.
+- Change header file auto-generator output.
+- Clean up TCL installation script and help message.
+- Change a few functions from public to private.
+- Mark TODO's in various C files.
+- Update reference manual.
+- Test CMake on Linux 2.6.18-164.el5.perfctr x86_64.
+- Add PGCR for BLC matrices.
+
+01/30/2017 FASP 1.9.6:
+- Modify fasp.h (affect all FASP projects).
+  -- Change itsolver_param ==> ITS_param.
+  -- Change Schwarz_* ==> SWZ_*.
+  -- Change precond_diagstr ==> precond_diag_str.
+  -- Reordering.
+- Update parameters in ini/*.
+- Change a few inconsistent function names: _array_ ==> _darray_.
+- Move things around.
+- Clean up all files.
+- Add legal information.
+- Update file dependency information.
+- Remove a few unwanted functions, e.g., fasp_mem_check.
+- Change name of some private functions.
+- Change CMake behavior a little: finding Fortran part.
+- Add xcode project for faspsolver.
+- Fix Doxgyen problems found by xcode.
+
+01/28/2017 FASP 1.9.5:
+- Happy Chinese New Year!
+- Test GCC 5.4.0.
+- Fix most warnings and mark unresolved warnings.
+- Fix Doxygen problems.
+- Further clean up on Aux*.c and Bla*.c files.
+- Update documentation.
+- Update VS10 solution.
+- Add more todo's to the list.
+- Move things around.
+- Move function form_tentative_p_bsr to fasp4blkoil.
+
+01/27/2017 FASP 1.9.4:
+- Fix a few memory leaks.
+- Update input parameters in test/ini/input.dat.
+- Remove fasp_dcsr_check().
+- Clean up BlaSmallMat.c: Add const, remove some functions.
+- Update regression results.
+- File name changed: AuxSmallMat.c ==> BlaSmallMatInv.c.
+- Update a few function names in BlaSmallMatInv.c.
+- Clean up Aux*.c and Bla*.c files, delete deprecated functions.
+- Move things around.
+
+01/23/2017 FASP 1.9.3:
+- Clean up Level 4 (Pre) functions.
+- Clean up Level 3 (Kry) functions.
+- Clean up Level 2 (Itr) functions.
+- Clean up Level 1 (Bla) functions.
+- Clean up Level x (Xtr) functions.
+- Function name change: *_Schwarz* ==> *_schwarz*.
+- Change function name of a few private functions in GMG.
+- Separate SA/UA AMG for CSR and BSR.
+- Separate aggregation for CSR and BSR.
+- Function name change: Upper case ==> Lower case in AuxThreads.c.
+- Update reference manual and Doxygen.
+- Update regression tests and results again.
+- Update VS10 and test in Windows.
+
+01/21/2017 FASP 1.9.2:
+- Change filenames according to package structure.
+- Change filenames of interface to external packages.
+- Change filenames of FEM and FDM tests.
+- Add file dependency in each file.
+- Add description for the new structure in Doxygen.
+- Slightly change names of GMG solvers.
+- Change structure for "matrix-free" solvers.
+- Remove calls to old ilu.f from FASP.
+- Fix warnings in Doxygen.
+- Move some of the definitions from fasp.h to fasp_grid.h and PreAMGUtil.inl.
+- Clean up Level 5 (Sol) functions.
+- Update regression results. 
+
+01/15/2017 FASP 1.9.1:
+- Prepare to change the structure of faspsolver.
+- Merge *_mf.c files with corresponding Krylov methods.
+- Move quadrature.c to test/src.
+- File name change: auxiliary.c ==> auxiliary.inl.
+
+01/15/2017 FASP 1.9.0:
+- Separate data structures and routines for reservoir simulation from base.
+- Change block_iCSRmat to iBLCmat and corresponding functions.
+- Delete some deprecated functions.
+- Fix a bug in interpolation.c: reported by Liu Hui.
+- Remove ilu.f from SparseKit.
+- Clean up GMG code.
+- Fix a typo: _sympat ==> _sympart.
+- File name change: _block.c ==> _blc.c. 
+
+01/10/2017 FASP 1.8.9:
+- Fix some memory leaks in AMG setup routines while early termination.
+- Fix some warnings in PVBiCGstab.
+- Fix some warnings in ILU.
+
+12/30/2016 FASP 1.8.8:
+- Update docomentation and webpage. 
+- Add ILU subroutines with OpenMP support.
+- Change block_dCSRmat to dBLCmat and corresponding functions.
+- Change _bdcsr_ to _dblc_.
+- Modify VS10 for new function names.
+- Major changes which makes previous versions not compatible.
+
+10/18/2016 FASP 1.8.7:
+- Fix a bug in dvec_axpyz.
+- Fix Makefile when FASP.mk is missing.
+
+09/22/2016 FASP 1.8.6:
+- Make changes for new preconditioners in FASP4BLKOIL.
+- Translate ILU from Fortran to C.
+- Add a new flag for using C version ILU.
+- Add symbfactor in C.
+- Modify VS10 for new ILU routines accordingly.
+- Remove ilu.f from the windows VS10 version.
+- Correct coarsening for positive off-diag entries.
+- Test FASP on macOS Sierra 10.12; seems consistently slower than 10.11.
+
+03/06/2016 FASP 1.8.5:
+- Fix a bug in BSR AMG.
+- Add some comments and reference for GCR.
+- Add a new version of BiCGstab implementation.
+- Update regeression results.
+- Refresh function decroration in fasp_functs.h.
+
+02/15/2016 FASP 1.8.4:
+- Add an interface to Intel MKL PARDISO.
+- Add PARDISO option for coarse solver of AMG.
+- Remove some warnings.
+- Test GCC 5.3.
+- Reformat CMakeFile.
+- Update developer list.
+- Update website and documentation.
+
+11/02/2015 FASP 1.8.3:
+- Fixed the broken FASP package on fasp.sf.net.
+
+10/18/2015 FASP 1.8.2:
+- Removed password protect from fasp.sf.net.
+- Updated the webpage and documentation.
+- Added more output for Makefiles and INSTALL.
+- Update VS10 solution according to structure changes.
+- Update Makefile(s) in tutorial and test subdirectories. 
+- Added "write_config.cmake" to $(faspsolver)/modules which writes 
+  CC, FC, CXX, and FASP_INSTALL_PREFIX variables so that they can 
+  be included from Makefiles in test tutorial or user defined ones.
+- Updated userguide.tex saying that the tests in $(faspsolver)/test 
+  and the examples in $(faspsolver)/tutorial can be build with both
+  "cmake" as well as custom created Makefile(s).
+- Updated userguide including listing of Config.mk.
+- Update building strategy: build library and examples separately.
+- Update the documentation (user guide) accordingly. 
+- Remove forts_ns.h which was a header included by several source files
+  but never used by them. 
+- Separate include to two parts base/include for FASP headers and 
+  base/extra/include for external headers.
+- Add Makefiles for test and tutorial.
+- Update tutorial examples in user's guide.
+- Update faspsolver webpage and documentation.
+- Add a tutorial example for BSR matrices.
+- Fix a few small format problems.
+- Skip some checking steps in PCG if convergence rate is OK.
+- Update test/ini/ua.dat.
+
+10/12/2015 FASP 1.8.1:
+- Add `const' to declaring constant variables.
+- Check regression results again.
+- Check and remove a few deprecated functions.
+- Clean up print out messages.
+- Test DIAG_PREF option with the new version.
+- Test and modify regression_mm.c; log results in test/out/reg_mm.out.
+- Update Doxygen.
+- Update the ini files according to changes in FASP.
+- Reformat a few functions such that it can print well in user guide.
+- Rewrite user's guide and now it updates from source code.
+- Complete the to-be-added parts in user's guide.
+- Change regression result filenames to reg_mf.out and reg_mm.out.
+- Update all regression results.
+- Remove testomp.c and test_rsamg_omp.c from test/main.
+- Rename: testamg.c --> testbamg.c and update test/ini/bamg.c.
+- Update VS10 and remove testamg project.
+- Rename: test_smat.c --> testsmat.c.
+- Remove testbsr.c from test/main, testbamg.c does the same thing.
+- Change function parameters for transz().
+- Fix a bug in initializaing UMFPACK in amg_setup_rs.c.
+- Fix memory leakage in numerical factorization interface to UMFPACK.
+- Fix a bug in testgmg and revise tutorial example for GMG.
+
+09/30/2015 FASP 1.8.0:
+- Fix Clang warnings when comparing an address with NULL.
+- Fix more warnings with debug=ALL except unused symbols.
+- Fix missing Fortran file in VS10.
+- Add FASP_VERSION macro in fasp.h.
+- Update Doxygen settings.
+- Update Doxygen and webpage.
+
+09/15/2015 FASP 1.7.9:
+- Add new version of transpose, permutation, and sort for dCSRmat.
+- Update paramters for SA AMG.
+- Update regression results after changing SA parameters.
+- Replace trans and sort by transz in UMFPACK and test.
+- Slightly modify printing format for the AMG parameters.
+- Fix and update some parameters in ini.
+- Revise some warning messages in Makefile.
+- Confirm FEniCS conf problem: It sets CC=/usr/bin/gcc.
+- Change filename: from fasp.mk to FASP.mk.
+- Clean up interfaces to direct solvers and add reference.
+- Clean up header files
+- Update util/stat.h.
+- Update Doxygen and webpage.
+
+09/09/2015 FASP 1.7.8:
+- Remove factor.f from the repo.
+- Update VS10 to fix a directory problem in WIN32 configuration.
+- Clean up Doxygen for a few functions.
+
+09/04/2015 FASP 1.7.7:
+- Replace the Fortran version of Schwarz smoother by the C version.
+- Test V, AMLI, Nonlinear AMLI, F cycles with the Schwarz smoother.
+- Update Doxygen and FASP webpage.
+- Remove VS08; stop supporting Visual Studio before 2010.
+
+08/19/2015 FASP 1.7.6:
+- Update CMAKE and its modules.
+- Fix UMFPACK and MUMPS link problems.
+- Add util/fix_fenics.sh script and fix FEniCS conf problems.
+- Add fasp.mk for user-specific make options.
+- Add a warning when CC and FC version does not match.
+- Add and update Q&A for install problems. 
+- Reformat Makefile output.
+- Update FASP webpage and Doxygen.
+
+07/19/2015 FASP 1.7.5:
+- Fix a bug: a memory problem in AMG for BSR format.
+- Fix a few typos in pcg.
+- Fix undefined Doxygen function.
+- Update release version compiler options in Makefile.
+- Revert test/ini/input.dat.
+- Update website and documentation.
+- Update regression test results using GCC 4.9.2.
+
+06/14/2015 FASP 1.7.4:
+- Test very small tolerance: machine eps.
+- Test on OS X 10.10.3 with GCC 4.9.2: works fine.
+- Fix convergence problem in regression test when using DIAG_PERF.
+- Update the regression test results. 
+- Modify cmake Doxygen output: If not present, does not print warning.
+- Update README. 
+- Update the web, documentation, etc.
+
+05/10/2015 FASP 1.7.3:
+- Fix a bug: cmake does not recognize CC env variable sometimes.
+- Fix a bug: ILU static memory allocation causes seg fault for large problems.
+- Fix a bug: ILU "implicit none" missing.
+- Fix warnings: except unused functions and unused labels.
+- Fix a bug: array out of bound in GMG 2D case.
+- Fix memory leakage in base/src/coarsening_rs.c.
+- Fix memory leakage in base/src/pgcr.c.
+- Clean up pvfgmres for stopping types.
+- Add stopping types to pvfgmres.
+
+04/26/2015 FASP 1.7.2:
+- Fix a bug: Output of Krylov methods with saft-net.
+- Move the NaN checking so that Fortran NaN runtime exception does not appear.
+- Remove some unwanted test code.
+- Fix a bug: ILU setup memory allocation size is not right.
+- Fix a bug: Change ILU static memory to dynamic allocation.
+- Change MUMPS search directory.
+- Change back default setting: Not using MUMPS.
+- Update documentation and website. 
+
+04/13/2015 FASP 1.7.1:
+- Fix a bug: Add a lower bound for quality_bound.
+- Fix a bug: Invert small dense matrices with zero diagonal entries.
+- Fix a problem with the web version: missing Doxygen setting file.
+- Update the webpage and documentation.
+- Add Guass elmination with pivoting.
+- Update regression test results.
+- Revise TODO list.
+
+03/24/2015 FASP 1.7.0:
+- Add a parameter for aggregation quality bound.
+- Add an adaptive strategy to choose quality bound.
+- Fix a bug in input.c: skip unknown keywords.
+- Fix a bug in printing parameters.
+- Fix a bug in initializing AMG parameters.
+- Slightly change the print out.
+- Update ini data files: add AMG_quality_bound.
+- Update regression test results.
+- Update documentation and website.
+
+03/19/2015 FASP 1.6.9:
+- Clean up some redundant code.
+- Update regression test results.
+- Fix problems in DEBUG MODE; add DEBUG output level.
+- Fix relative residual print out bug in vFGMRES.
+- Add a script for clean up executables.
+- Clean up comments in iterative methods.
+
+02/25/2015 FASP 1.6.8:
+- Further clean up Doxygen.
+- Unify output messages, fix several print problems.
+- Fix multiple Doxgen problems.
+- Fix a few warning in DEBUG compiler setting.
+- TABs are changed to SPACEs: done!
+- Clean up code for better style.
+- Update developer information in Doxygen.
+- Update block preconditioners.
+- Update documentation and webpage.
+
+02/06/2015 FASP 1.6.7:
+- Remove ISTART, N2C, and C2N.
+- Fix initial residual check for Krylov methods: check absolute and relative residuals.
+- Add a safe-guard step in UA setup in order to avoid Divided-by-Zero.
+- Fix a typo in automatic header generation.
+- Clean up format a little bit.
+- Initialize cycle_type in mgl[lvl], fix the bug in NA.
+- Initialize ILU_levels in mgl[lvl], fix the bug when calling ILU in NA.
+- Initialize Schwarz_levels in mgl[lvl].
+- Update regression results, better convergence for NA now.
+
+01/27/2015 FASP 1.6.6:
+- Clean up the code and prepare for releasing the package.
+- Clean up aggregation code.
+- Clean up some error, warning, debug messages.
+- Clean up comments and fix typos in the comments.
+- Fix wrong warning messages in iterative methods.
+- Remove unused variables. 
+- Check Doxygen errors and messages.
+- If cmake does not find Doxygen file, do not quit; just give warning.
+- Do not archive VS08 any more; remove support to VS08 and earlier versions.
+- Update Doxygen, documentation, and webpage.
+
+01/13/2015 FASP 1.6.5:
+- Rearrange multilevel cycles in nonlinear AMLI.
+- Fix memory leakage in MUMPS interface.
+- Modify INSTALL and README messages.
+- Slightly change Makefile, especially the screen messages and optimal options.
+- Reduce number of memory allocations in pairwise aggregation.
+- Fix some false WARNINGs in iterative methods; more need to be changed.
+- Add some controls on coarsening quality: like coarsening rate.
+- Update regression results for new pairwise aggregation.
+- Update Doxygen and webpage.
+- Update Readme file.
+
+01/01/2015 FASP 1.6.4:
+- Fix GCR file name conflicition, spgcr.c -> pgcr.c.
+- Update VS2010 solution, changing from CPP to C, use C99 option.
+- Change workspace length from LONG to unsigned LONG for GMRES methods.
+- Fix warning messages for memory allocation.
+- Fix memory leakage for pairwise aggregation when matrix is nonsymmetric.
+- Re-format a few source codes for better printing.
+- Fix a warning in pgcg.c; should rewrite this file. 
+
+12/30/2014 FASP 1.6.3:
+- Add new pairwise aggregation code.
+- Add new GCR iterative solver.
+- Update nonlinear AMLI cycle.
+- Find a bug in DIAG_PREF option.
+- Stop using old Schwarz smoother.
+- Format C code a little.
+- Update regression test and its results.
+- Update log.
+
+12/26/2014 FASP 1.6.2:
+- Modify CMAKE compiler preference: use CC environment first.
+- Add aggressive coarsening based on MIS.
+- Add GCR for CSR sparse matrices.
+- Fix additive Schwarz preconditioner.
+- Fix a bug found in regression tests.
+- Update VS10 solution.
+- Update log.
+
+10/12/2014 FASP 1.6.1:
+- Fix MUMPS link problem due to system directory and pthread in Ubuntu.
+- Add Schwarz smoothers: C version.
+- Add input parameter for Schwarz block solver type.
+- Add a new shell for compare regression results.
+- Add CMK and Reversed CMK ordering. 
+- Remove unused variables in Schwarz method.
+- Fix possible problems (uninitialized and unused variables).
+- Fix wrong data type in MUMPS interface. 
+- Fix VS10 problems for the new version.
+- Update webpage and documentation.
+
+10/06/2014 FASP 1.6.0:
+- Update website and documentation.
+- Fix a bug with MUMPS in VS2010 setting. 
+- Modify debug information in MUMPS interface.
+- Test FASP in the new Pangolin and fix several minor bugs.
+- Fix VS2010 DEBUG mode bug.
+- Fix a problem in test/main/test_bsr.c.
+- Test regression_mm.c and record output in mm.out.
+- Test regression_mf.c and record output in mf.out.
+- Add a safty step for coarse correction scaling.
+- Update FASP tutorial, make Fortran version gives same results as C version.
+- Update Doxygen, webpage and TCL.
+- Fix MUMPS dependence check for cmake.
+
+09/24/2014 FASP 1.5.9:
+- Update PGMRES code. 
+- Add new regression tests and update regression results. 
+- Add upper limit for GMRES restarting number.
+- Change default max number of levels back to 20.
+- Check AMG coarse levels: decay ratio, density, min DOF. 
+- Resolve multiple warnings in *.c files.
+- Remove an unnecessary step: setting residual initial value.
+- Fix missing variables for UMFPACK.
+- Fix a potential problem in CMAKE when finding UMFPACK.
+- Update Poisson FEM/FDM test results in out/poisson.out.
+- Update TODO list.
+- Modify Makefile and separate debug=yes and debug=all (all with FASP debug info).
+
+09/22/2014 FASP 1.5.8:
+- Update documentation and webpage.
+- Regression test for fasp4blkoil due to a bug for setting parameters.
+- Modify warning print level: less important warnings requires level>PRINT_MIN.
+- Modify error print level and exit output.
+- Fix several small problems in GMRES-type methods.
+- Fix an AMG setup bug when setting up coarsest systems for direct solvers. 
+- Fix a bug in setting restart number for pvgmres_mf.
+- Fix warnings in VS2010 Win32 version.
+- Fix a bug in timing subroutine which caused wrong wall time for some systems.
+- File name change to avoid conflicts: message.h -> fasp_const.h.
+- Reorganize GMRES code. 
+- Update regression test results.
+
+09/15/2014 FASP 1.5.7:
+- Add a user option for choosing coarse level solvers.
+- Fix average number of nonzeros output format problem. 
+- Change AMG complexities output format. 
+- Test VS10 and Intel Composer 2015 version.
+- Update VS10 setting for MUMPS.
+- Stop supporting VS08 in Windows.
+- Update todo list.
+
+08/12/2014 FASP 1.5.6:
+- Handling errors when RS coarsening does not succeed. 
+- Handling errors when Pairwise aggreation does not succeed. 
+- Handling errors when VMB aggreation does not succeed. 
+- When AMG setup fail on the finest level, use coarse solver.
+- Check max level and make sure allocate at least one level.
+- Add a name for G0 points (for pairwise aggregation).
+- Uniformize debug output format.
+- Change adaptive GMRES (various versions) restart number.
+- Remove unused *_omp() functions.
+- Update webpage.
+
+07/26/2014 FASP 1.5.5:
+- Modify the parameter for pairwise aggregation.
+- Fix warnings for data type REAL in sparse_bsr.c
+- Update results of the regression test.
+- Add block preconditioners for MHD.
+- Update block preconditioners.
+- Change dCOOmat entries to avoid conflicts with complex.h.
+- Revise debug output for iterative methods and more. 
+- Add error handling for classical AMG setup. 
+
+06/20/2014 FASP 1.5.4:
+- Fix a bug in io.c.
+- Fix incompability in Windows VC++/IC++: mkheaders.awk reverted to the previous version.
+- Fix a bug in aggregation_csr.inl for OpenMP.
+- Fix a bug in smat.c for 4X4 matrix inversion. 
+- Fix a bug in BSR_COO output function.
+- Fix a bug in OpenMP in AMG direct interpolation. 
+- Fix VS10 setting for OpenMP.
+- When using FASP function in CPP file, now need to use extern "C". 
+- Update Windows VS10 solution: Updated to Intel C++ 14.0.3.
+- Update regression test results. 
+
+06/08/2014 FASP 1.5.3:
+- Add Smoothed Aggregation AMG for BSR format.
+- Add solver for linear elasiticy (under development).
+- Add subroutines for read in and write HB format files.
+- Change some macros to prevent confliction with MPI.h.
+- Change macros accordingly for interfaces and other FASP projects.
+- Fix a bug in tutorial when using AMG as a solver.
+- Fix a bug in SPE1 tutorial example.
+- Fix a bug in mkheaders.awk which cause incompatible linkage with cpp.
+- Fix a few Doxygen problems. 
+- Update documentation and website.
+
+05/27/2014 FASP 1.5.2:
+- Update some more 'char *' to 'const char *'.
+- Fix BiCGstab divided by zero problem.
+- Fix pairwise aggregation core dumped bug caused by number of passes.
+- Fix a '}' caused by openmp parallelization in smooth_agg subroutine.
+- Fix a potential memory bug in multipass pairwise aggregation.
+- Adjust default parameters slightly.
+- Update webpage.
+
+05/17/2014 FASP 1.5.1:
+- Seperate factorization and solve for UMFpack.
+- Add sweeping preconditioner.
+- Fix a few compiler warnings recently introduced.
+- Fix VS08 and VS10 solutions and prepare to test new code in BlkOil.
+- Fix a bug in BCSR mat-vec multiplication.
+- Change 'char *' to 'const char *' in io.c to prevent unsafe string pass.
+
+04/24/2014 FASP 1.5.0:
+- Add matching-base AMG methods (UA and SA).
+- Fix a bug in dcsr_read.
+- Fix an early exit problem in AMG coarsening. 
+- Close an old branch (dead) and merge branches.
+- Fix a wrong sign in smoothed aggregation method.
+- Change a few internal function names for SA AMG.
+- Update default strong_coupling parameter for VMB aggregation algorithm.
+- Fix Doxygen problems introduced recently.
+
+04/16/2014 FASP 1.4.9:
+- Add free function for block_dCSRmat matrices. 
+- Add block preconditioners for block_dCSRmat matrices.
+- Add clang to default compiler searching list.
+- Fix a typo in coarsening_rs.c.
+- Add pairwise aggregation for AMG setup phase.
+
+04/02/2014 FASP 1.4.8:
+- Add ini/ua.dat and ini/sa.dat parameters.
+- Clean up make/cmake files.
+- Fix multiple doxygen problems.
+- Update FASP website.
+- Change names of the aggregation inclusion files.
+- Prepare aggregation code for testing Notay's algorithm.
+- Fix potential memory leakage in CSR to BSR conversions. 
+
+03/31/2014 FASP 1.4.7:
+- Fix a bug which makes regression results depend on the default parameters unwantedly. 
+- Fix a coarsest level iterative method tolerance problem for AMG.
+- Update regression test results.
+- Test GCC4.8 on OS X Mavericks.
+- Rewrite fasp_format_dcsr_dbsr routine.
+- Change timing output in FAMG.
+- Add MUMPS support to FASP.
+
+03/19/2014 FASP 1.4.6:
+- Change AMG setup output layout. 
+- Clean up a few files for further optimization.
+- Check diagonal preference branch for GS.
+- Modify default parameters in input files. 
+- Update FASP header files.
+- Update VS10 solution settings.
+- Update FASP webpage.
+
+03/14/2014 FASP 1.4.5:
+- Fix a return value inconsistent problem in interface_samg.c
+- Fix a macro typo in amg_setup_sa.c 
+- Use specified name of parameter instead of value in parameters.c
+- Fix a relative directory problem in VS08.
+- Fix file property problem for *.sh files.
+- Fix number of iterations problem in regression.c.
+- Update regression test results. 
+- Update TODO list.
+
+02/26/2014 FASP 1.4.4:
+- Fix missing print information in Fortran wrapper.
+- Fix a typo in test.c and test.f90.
+- Add SuperLU to CMake.
+- Fix an initial parameter problem for iterative solvers.
+
+02/01/2014 FASP 1.4.3:
+- Fix a bug introduced in the previous version.
+- Fix wront regression test results caused by -ffast-math.
+- Fix several un-used variable warnings.
+- Fix a bug due to disk failures. 
+- Remove DEBUG_MODE setting from fasp.h and add it to Makefile.
+- Add version tag to the current version.
+- Update webpage and developer list.
+
+01/18/2014 FASP 1.4.2:
+- Add command line options for FASP functions.
+- Report a bug in testbsr.c during ILU setup.
+- Add input parameter check.
+- Check auto-vectorization results: a few subroutines need to be fixed.
+- Update TODO list and website.
+
+12/27/2013 FASP 1.4.1:
+- Fix a bug in ADD of CSR matrices.
+- Fix a merge problem in HG.
+
+12/25/2013 FASP 1.4.0:
+- Check C1 criteria in CF splitting.
+- Fix a bug in standard interpolation.
+- Fix a typo in interpolation.
+- Tested in UNCONG. 
+- Modify VS08 and VS10 compiling parameters.
+- Update FASP webpage and documentation.
+- Update regression test results.
+
+12/09/2013 FASP 1.3.8:
+- Delete '
+' caused by '\n' in windows in the file graphic.c.
+- Fix a relative path problem for MUMPS interface.
+- Fix an OpenMP setting problem in VS08 x64 Release configuration.
+
+11/17/2013 FASP 1.3.7:
+- Add OpenMP versions to VS08 and VS10 solutions.
+- Add more GCC versions to cmake list.
+- Modify testomp.c according to the new OpenMP setting.
+- Fix some warnings due to duplicate definitions in fasp.h.
+- Update documentation: HTML and TeX.
+- Fix a printing bug in io.c.
+- Add plot function for BSR matrices. 
+
+09/28/2013 FASP 1.3.6:
+- Modify VS08 and VS10 dependency setup.
+- Update stat script.
+- Change Makefile default settings for release and debug versions.
+- Add a reference manual generated by Doxygen.
+- Revise the user guide.
+- Proof read the user guide by Xiaozhe Hu.
+- Change file name in test/main: testmm --> regression_mm.
+- Change file name in test/main: test_matfree --> regression_mf.
+
+09/17/2013 FASP 1.3.5:
+- If allocation memory failed, output warning and return NULL, instead of exit.
+- Add safe-guard for GMRES: when memory not enough, reduce restart number.
+- Fix a bug in interpolation: OMP version.
+- Clean up Doxygen and modify homepage.
+- Update user guide.
+- Fix Doxygen errors. 
+- Update VS08 and VS10 according to recent filename changes.
+- Update documentation.
+
+07/10/2013 FASP 1.3.4:
+- Update VS08 and VS10 solutions.
+- Add a tutorial example for GMG V-cycle.
+- Fix a bug in conditional compiling caused by "omp.h".
+- Revise interface for GMG.
+- Fix the tutorial and test for GMG.
+- Update documentation and FASP website.
+
+06/20/2013 FASP 1.3.3:
+- Add geometric multigrid for Poisson in 1,2,3D.
+- Fix a bug in cfsplitting_cls.
+- Update developers and website.
+- Simplify standard interpolation and add more comments.
+- Test cfsplitting_clsp.
+- Fix a bug in GMG in 1D: convergence rate optimal.
+- Improve GMG efficiency, remove unused variables, free up memory.
+- Fix a bug in BSR AMG introduced earlier.
+
+06/02/2103 FASP 1.3.2:
+- Add VS2010 support.
+- Fix a bug introduced in coarsening_rs in 1.3.1.
+- Match regression test and update reg.out.
+
+05/17/2013 FASP 1.3.1:
+- Separate interpolation_em.c from interpolation.c.
+- Make the truncation step as a stand-alone function.
+- Clean up direct interpolation: without allocate a temporary P.
+- Flattern nested if and for in interpolation routines.
+- Further improve structure and efficiency of interpolation.
+- Add a few auxiliary functions. 
+- Test performance of AMG when there are strong positive couplings. 
+
+05/11/2013 FASP 1.3.0:
+- Add a new input parameter AMG_smooth_order.
+- Fix matrix-free regression test and add a sample output.
+- Clean up AMG setup routines and re-did the code structure.
+- Separte C/F splitting phase 1 and phase 2. 
+- Add an AMG complexity print-out function for the BSR format.
+- Add more comments in coarsening_rs.c
+- Flattern nested if and for { } in coarsening routines. 
+- Clean up coarsening routines: shorten the code, change several function names, etc.
+- Remove interp_type as an input for C/F splitting.
+- Remove an old coarsening routine: generate_S_rs.
+
+05/09/2013 FASP 1.2.9:
+- When coarsening step not succeed, stop setup instead of quit.
+- Change interface to MUMPS a little bit.
+- Fix an output memory out-of-bound bug in pvfgmres.
+- Modify io.c a little, not important.
+- Add error handling in AMG setup in case problems happen.
+- Remove error handling for AMG setup in amg.c/famg.c: now in amg_setup.c.
+- Change output format slightly.
+- Update regression tests.
+- Fix memory leakages, definite and possible, reported by valgrind.
+- Fix a parameter initialization bug.
+- Revise matrix-free iterative solvers.
+
+04/30/2013 FASP 1.2.8:
+- Change filename blas_block.c --> blas_bcsr.c.
+- Change filename threads_schedule.c --> threads.c.
+- Change directory setting for fasp-based packages.
+- Update VS08 solution according to the recent changes of faspsolver.
+- Start to clean up fasp4blkoil; some functions related are changed.
+- Remove unused variables.
+- Fix a safe-guard saving bug in BiCGstab.
+
+04/27/2013 FASP 1.2.7:
+- Add a multicoloring scheme.
+- Fix a typo in the AMG output.
+- Add coarsening types to message.h.
+- Add two parameters to control aggressive coarsening levels and paths for strong coupled C points.
+- Update BLAS operations for Block_CSR and STR.
+- Fix a direct solver calling bug for BSR.
+- Fix a VS08 warning.
+- Separte linked list from RS coarsening.
+- Update sf.net and documentation.
+
+04/09/2013 FASP 1.2.6:
+- Add NAN check to SPCG.
+- Prepare BiCGstab for adding safe-guard.
+- Fix a bug in computing reduction factor in BiCGstab.
+- Add a safer version of BiCGstab: SBCGS.
+- Fix a typo in the print out function.
+- Add stop type support to GMRes. 
+- Prepare GMRes for adding safe-guard.
+- Add a safer version of PGMRes: SPGMRes.
+- Finish up VGMRes and prepare it for adding safe-guard.
+- Add a safer version of PVGMRes: SPVGMRes.
+- Complete PMinRes and add a safer version PMinRes: SPMinRes.
+- Add numbers for "safe" krylov methods in message.h.
+- Fix a PBiCGstab unexpected exit bug.
+
+03/28/2013 FASP 1.2.5:
+- Update MUMPS support.
+- Revise cmake to support cmake version 2.6.
+- Fix bugs in block AMG.
+- Update Intel compiler version to 2013.2.149 for VS2008 solution.
+- Add initial step print out for PCG.
+- Prepare PCG for adding safe-guard.
+- Fix a bug in computing reduction factor in PCG.
+- Add a safer version of PCG: SPCG.
+
+02/28/2013 FASP 1.2.4:
+- Add a TCL GUI for installing FASP.
+- Add TCL GUI support for UMFPACK.
+- Add a cmake module for finding SparseSuite (UMFPACK).
+- Fix a bug in test.c calling UMFPACK.
+- Divide calling to MUMPS in three steps to improve efficiency.
+- Change VS2008 setting to accomodate changes in MUMPS 4.10.0.
+- Update FASP homepage.
+
+02/27/2013 FASP 1.2.3:
+- Add an intial version of cmake.
+- Remove the origianl make and scons.
+- Update online documention, README, etc according to cmake.
+- Update cmake with several options: shared, openmp, verbose, etc.
+- Add interface to MUMPS.
+- Update interface function names.
+- Change preprocessor: "WITH_DISOLVE" -> "WITH_MUMPS".
+- Update VS08 solution for the new direct solver interface. 
+
+02/23/2013 FASP 1.2.2:
+- Prepare to switch from make to cmake.
+- Add check for NAN.
+- Add a safe-net for coarse level iterative solver.
+- Remove non-standard examples from test.c.
+- Fix and test DEBUG build in VS08.
+
+02/21/2013 FASP 1.2.1:
+- Add monolithic AMG for system of PDEs.
+- Fix a bug in the Makefile inside the "test/" dir.
+- Modify push2sf.sh.
+- Change smoother names: GS -> SMOOTHER_GS, etc.
+- Modify coarse level solver definition according to a bug report for fasp4blkoil.
+- Change preprocessor: "With_DISOLVE" -> "WITH_DISOLVE", etc to be consistent with VS08.
+- Some small changes with variable names.
+- Remove some unnecessary parts in Makefile.
+- Add a top level Makefile for cleanup and backup.
+
+02/02/2013 FASP 1.2.0:
+- Fix the bug in Windows: MINRES wrong in release version; remove /ffast option.
+- Revise Makefile's.
+- Update Documentation.
+- Available online now.
+- A public version is available online at fasp.sf.net.
+- Update the webpage.
+
+01/19/2013 FASP 1.1.8:
+- Modify Windows VS08 compiler options.
+- Add a test problem for testing (block) AMGs.
+- Find a bug in Windows: MINRES gives wrong results in release version.
+- Find a bug in VGMRES: Might use too big "restart".
+
+01/17/2013 FASP 1.1.7:
+- Fix unmatch brackets in OMP version.
+- Fix a bunch of bugs when using "long int" as INT-type in AMG and related.
+- Fix a bunch of bugs in regression when using "long int". 
+- There is a bug in ILU when using "long int". 
+- There might be non-matching types in i/o when using "long int".
+- Test different optimization parameters for gcc.
+- Fix a bug in testfem example.
+- Add DIAG_PREF for a couple OMP functions.
+
+01/02/2013 FASP 1.1.6:
+- Modify library dependence order in Makefile's. 
+- Revise make.inc to include source compiling rules.
+- Add i/o routines for binary file.
+- Add a uniform i/o routine for ASCII and Binary file formats.
+- Add precond_free to free up memory used by preconditioner.
+- Update README and User Guide.
+
+11/26/2012 FASP 1.1.5:
+- Fix the SuperLU interface.
+- Fix a bug in SA setup for OMP.
+- Fix a problem in SCons for Windows. 
+- Modify the documentation: add instructions on how to compile FASP on Windows.
+- Revise the userguide.
+- Modify VS08 debug setting.
+
+10/25/2012 FASP 1.1.4:
+- Fix an error in scons help.
+- Fix a bug in OMP version of EM-AMG.
+- Modify a few OMP functions.
+- Modify comments in fasp_block.h.
+- Add OMP version of P'AP for CSR matrices. 
+- Fix a bug in OMP version of the Standard Interpolation.
+- Add OMP version of fasp_blas_dcsr_rap_agg.
+- Add OMP version of fasp_blas_dbsr_rap.
+
+10/15/2012 FASP 1.1.3:
+- Add scons support for shared library.
+- Add scons support for OpenMP.
+- Add scons help message.
+- Update documentation.
+- Fix a potential bug in Aggregation AMG.
+- Change filename: fasp_gettime.c --> timing.c.
+- Update VS08 solutions.
+- Add distclean-like target to scons.
+
+10/13/2012 FASP 1.1.2:
+- Add matrix-free version of iterative methods.
+- Add a test example for matrix-free format. 
+- Some changes to OMP routines.
+- Fix an OMP timing bug.
+- Add OMP support for formats.c and amg_setup_sa.c.
+
+09/22/2012 FASP 1.1.1:
+- Add scons support for base/.
+- Add red-black GS as a smoother for structured grids.
+- Use single-file interprocedual optimization as default for Intel IPO; multi-file will generate very large lib files.
+- Modify OMP version for smoothers.
+- Format amg.c and tutorial/poisson-amg.c.
+- Clarify some comments in tutorial examples.
+- Test DIAGONAL_PERF for CF smoothing.
+
+09/15/2012 FASP 1.1.0:
+- Use Direct solvers as default in VS2008 Release version.
+- Fix bug in VS2008 Release setting.
+- Fix regression.c.
+
+09/12/2012 FASP 1.0.9:
+- Fix warnings from VS2008.
+- Upadet ICC compiler in VS2008.
+- Compare classical AMG implementation with an older version and make a few changes.
+- Locate the difference between the old AMG and new one: CF-ordering is used as default.
+- Fix warning in VS2008 due to coarset level solver. 
+- Bug fixing: Modify precond_data for Black Oil to fix the parameter passing problem. 
+
+09/11/2012 FASP 1.0.8:
+- Merge two branches.
+- Fix a bug in BiCGstab output.
+- Fix a bug in OpenMP related to "critical" in transpose operation.
+- Set -Wall as default, saved in make.inc.default.
+- Fix all gcc warnings, except schwarz.f --need to be replaced later.
+
+09/04/2012 FASP 1.0.7:
+- Change some filenames to keep naming consistent.
+- Some more OMP changes, make changes to fasp4monix accordingly.
+- Several OMP optimization changes.
+- Change default parameters: coarse_scaling is not safe.
+- Modify make.inc and prepare it for debug environment.
+
+08/25/2012 FASP 1.0.6:
+- Replace "#if FASP_USE_OPENMP" by the system environment variable "_OPENMP".
+- Some changes to OMP functions for sparse matrix operations.
+- Some changes for fasp4monix/SPE10.
+- Fix a typo in README for building FASP.
+- Change filename: amg_setup_aggregation.inl -> amg_setup_aggregation_csr.inl.
+- Revert test.c and input.ini to their orginal state.
+- Fix a strange HG version problem.
+- Upgrade Doxygen to 1.8.2.
+
+08/22/2012 FASP 1.0.5:
+- Replace "if (FASP_USE_OPENMP)" by preprocessing "#if".
+
+08/02/2012 FASP 1.0.4:
+- Update block Jacobi in OMP.
+- Fix function name bugs in io.c.
+
+07/12/2012 FASP 1.0.3:
+- Update a few OMP routines.
+- Prepare testing OMP version on Windows.
+- Modify the TODO list.
+
+07/05/2012 FASP 1.0.2:
+- Modify the interface of Schwarz to make it consistent with AMG and ILU.
+- Update a few OMP routines. 
+- Fix a VC++ compability problem in fort_ns.h.
+- Fix a data type bug and other possible problems according to VC++ warnings.
+- Remove user-defined make.inc files.
+
+06/27/2012 FASP 1.0.1:
+- Fix a few GCC warnings and Doxygen warnings.
+- Update documentation.
+- Update a few OMP routines.
+
+06/26/2012 FASP 1.0.0:
+- Bug fixes: the OMP warnings and implicit definied functions.
+- Fix Doxygen in the new added functions for OMP.
+- Update documentation.
+
+06/23/2012 FASP 0.9.9:
+- Fix warnings in the serial version except *.f files.
+- Find bugs in the OMP version with implicit function definitions.
+
+06/20/2012 FASP 0.9.8: alpha testing stage
+- Fix a bug in OMP conditional preprocessing.
+- Fix a bug in fasp_icsr_tran and fasp_dcsr_tran.
+- Test the current version with gcc4.4, 4.5, and 4.6 in various of Linux systems.
+- OMP version merging is completed.
+- Modify default parameters based on performance tests.
+- Fix a function name bug. 
+
+06/19/2012 FASP 0.9.6:
+- Bug fixes: core dump error in gcc-4.6.3.
+- Fix the OMP merging problems.
+- Move OMP switch from fasp.h to make.inc.
+
+06/16/2012 FASP 0.9.5:
+- Change OMP threshold.
+- Bug fixes in FEM assembling.
+- Add rsync support for SourceForge.net.
+- Revise FASP starting web page. 
+- Find a new bug in BiCGstab: need to be fixed.
+- Find a new bug when using gcc-4.6.3 in OMP version.
+
+06/15/2012 FASP 0.9.4:
+- Merge the new OMP version.
+- Change the name "core" to "base", including documentation.
+- Fix a small bug in BSR format. 
+- Fix a typo in doxygen.h.
+
+06/14/2012 FASP 0.9.3:
+- Fix a bunch of WARNINGS in gcc when -Wall open.
+- Fix a few errors in VC++.
+- Bug fixes in various functions when fixing WARNINGS.
+
+06/14/2012 FASP 0.9.2:
+- Add 12 test problems from Matrix Market.
+- Add test/main/testmm.c for these new test problems from Matrix Market.
+- Adjust slightly in itsolver.c for testmm.
+
+06/12/2012 FASP 0.9.1:
+- Formatting some more routines for printing.
+- Modify doxygen.h a little, add developers pages.
+- Modify formatting of input parameters.
+- Almost finish the first version of user's guide.
+
+06/10/2012 FASP 0.9.0:
+- Modify the polynomial smoother and add aggressive coarsening.
+- Modify input parameters and more for better formatting in the user's guide.
+- Format fasp.h and fasp_block.h in order to use them in the user's guide.
+- Revise doxygen.h according to the new HG setting.
+
+06/04/2012 FASP 0.8.9:
+- Remove duplicated test data and move test matrices to faspsolver/data.
+- Modify test and tutorial according to the change to "data". 
+- Modify testbsr.c and add testbsr to Makefile. 
+- Fix most of Doxygen problems; still a few functions not documented.
+
+06/02/2012 FASP 0.8.8:
+- Fix "small s" and "restarting" bugs in BiCGstab.
+- Fix a bug in FMG when there is only one level.
+- Add FMG tests in regression.c.
+- Fix the Doxygen problem in schwarz_setup.c.
+
+05/27/2012 FASP 0.8.7:
+- Bug fixes for conversion routines from the BSR format.
+- Revise the interface of the routine from CSR to BSR.
+- Add tests in the BSR format to regression.c.
+- Modify the Makefile and make.inc setting.
+
+05/26/2012 FASP 0.8.6:
+- Add standard interpolation.
+- Remove Fortran version of Energy-min interpolation.
+- Fix a new bug introduced after interface changes in coarsening_rs().
+- Add STANDARD and ENERGY-MIN in regression.c. 
+
+05/22/2012 FASP 0.8.5:
+- Fix a small bug in mkheaders*.
+- Add Schwarz smoothers.
+- Modify "test" and "tutorial" according to input requirement by Schwarz.
+- Add a tutorial example for BSR matrices. There is a bug in BSR ILU. Need to fix it!
+
+05/20/2012 FASP 0.8.4:
+- Revise matrix and rhs read/write routines.
+- Create P1 FEM in dcsrvec2 format. Replace the old test problem with the new one. 
+- Add more "write" routines for different formats in "core/src/io.c".
+- A bug fix in "core/src/io.c" for a reading routine.
+- Unify test problems in "test" and "tutorial". 
+- Change test data: mat and rhs.
+
+05/18/2012 FASP 0.8.3:
+- Add safe-guard check for MaxIt and tol to prevent unexpected error in iterative methods.
+- Change the format the input files in "test/ini" slightly.
+- Make output of iterative methods more uniform.
+- Add a precond_setup interface for setting up preconditioners; Revise iterative methods accordingly.
+- Add a PCG tutorial example.
+
+05/16/2012 FASP 0.8.2: 
+- Fix a bug in refinement. Make generation of mesh_aux data structure work for any number of elements. 
+- Add a few examples in "tutorial".
+- Change inparam.itsolver_type to inparam.solver_type to make the name more logical.
+- Change input file in "test/ini" for the new setting.
+- Revise a few functions arguments which should be "const" but did not assigned as "const".
+- Modify linked list data structure slightly.
+
+05/13/2012 FASP 0.8.1: 
+- Further optimizations on P1 FEM; more coming.
+- Format source code in "test"; and some minor format and code changes.
+- Fix a bug in src/io.c for BSR output.
+- Clean up several BSR rouitnes, including their Doxygen. 
+
+05/02/2012 FASP 0.8.0: 
+- Auto indentation of sources, mostly.
+
+05/01/2012 FASP 0.7.8: 
+- Update Doxygen: Fix a few bugs in Doxygen.
+- Update interface of GCG. 
+- Clean up and update interfaces for vGMRES and vFGMRES.
+- Clean up and update interfaces for PGMRES.
+- Rewrite part of PMINRES.
+
+05/01/2012 FASP 0.7.4: 
+- Rewrite PBCGS for optimizing memory and CPU usage.
+
+04/30/2012 FASP 0.7.3: 
+- Clean up and update interfaces of PBCGS.
+- Clean up and update interfaces of PCG.
+
+04/26/2012 FASP 0.7.1: 
+- Move factor.f to core/src/and add documentation.
+- Fix a bug in Makefile. 
+
+04/25/2012 FASP 0.7.0: 
+- Put external packages into different directories. 
+
+04/21/2012 FASP 0.6.7: 
+- Remove the non-GPL ILU from ilu.f and make changes for "core" accordingly.
+
+04/10/2012 FASP 0.6.5: 
+- Rename "examples" as "tutorial". 
+- Add the new "Todo" list.
+
+04/09/2012 FASP 0.6.4: 
+- Fix some Doxygen format problems. 
+- Restructure the test problems in "test" directory. 
+- Code optimization for P1 FEM method for the Poisson. 
+- Add FEM for the Heat equation. 
+
+03/20/2012 FASP 0.6.0: 
+- Fix more Doxygen format problems. Finish all *.c file, except *_omp.c.
+- Modify a few function names and variable names. 
+- Revise regression test and examples.
+
+03/18/2012 FASP 0.5.9: 
+- Get rid of annoying warning in some OMP routines on MAC. 
+- Some changes to the test functions as well.
+
+03/16/2012 FASP 0.5.8: 
+- Remove several functions specially designed for the Stokes problem.
+
+03/13/2012 FASP 0.5.7: 
+- Fix more Doxygen format problems. Finish from io.c to message.c, not including *_omp.c. 
+
+03/12/2012 FASP 0.5.6: 
+- Modify testfem and add AMG solver to solve the linear system.
+- Fix more Doxygen format problems. Finish from amg.c to io.c, not including *_omp.c.
+
+03/10/2012 FASP 0.5.5: 
+- Fix hundreds of Doxygen warnings.
+
+03/09/2012 FASP 0.5.4: 
+- Revise tree structure, README and Makefile's. 
+- Revise Doxygen for a few files. 
+
+03/07/2012 FASP 0.5.3: 
+- Add new FDM 2D/3D test code.
+
+03/07/2012 FASP 0.5.2: 
+- Add new FEM P1 test code.
+
+03/06/2012 FASP 0.5.1: 
+- Bug fix: Several problems when compile on VS2008.
+
+03/05/2012 FASP 0.5.0: 
+- Revise Makefile, README, and INPUT for the new restructured package. 
+
+01/17/2012 FASP 0.4.5: 
+- Finish restructure serial version.
+- Fix a bug in BiCGstab. 
+- Rewrite the regression test.
+
+01/05/2012 FASP 0.4.2: 
+- Add nonlinear AMLI-cycle.
+
+12/14/2011 FASP 0.4.1: 
+- Start to restructure the code; start to add INT and REAL. 
+- Bug fix: a divide-by-zero in BiCGstab might occur -- add safe-net. 
+- Bug fix: coarse level solver could fail -- add safe-net. 
+
+11/22/2011 FASP 0.3.5: 
+- Improve efficiency for 2 phase oil reservoir simulation. 
+- Bug fix: Fix a few warnings from VS2008. 
+- Add Debug mode to VS2008 solutions.
+
+11/09/2011 FASP 0.3.4: 
+- New feature: Start to build in CUDA supports. 
+- Bug fix: A bug in precond_monix_bsr.c for cases other than 3 and 5 was caught. 
+
+09/20/2011 FASP 0.3.3: 
+- Bug fix: Makefile link problem in Ubuntu 11.04.
+
+09/12/2011 FASP 0.3.2: 
+- Some minor bug fixes, add a test for P1 FEM assembling.
+
+09/01/2011 FASP 0.3.0: 
+- Modify the README, Makefiles, as well as Doxygen documentation.
+
+06/16/2011 FASP 0.2.3: 
+- Bug fix: Remove some error/warnings when using g++ compiler.
+
+03/04/2011 FASP 0.2.0: 
+- Major interface and structure changes.  
+
+01/08/2011 FASP 0.1.12: 
+- Some code optimization. Improve efficiency. 
+- Update documentation. 
+
+12/02/2010 FASP 0.1.11: 
+- Bug fixes: Add memory check for several important algorithms. 
+
+10/03/2010 FASP 0.1.10: 
+- Add non-recursive multigrid structure. 
+- Add names to different types of points: coarse, fine, isolated, etc.
+
+09/06/2010 FASP 0.1.9: 
+- Optimize memory usage and allocations in AMG routines. 
+
+08/13/2010 FASP 0.1.8: 
+- Add memory check and debug mode; add several more test problems. 
+- Modify the structure of interpolations. 
+
+06/25/2010 FASP 0.1.7: 
+- Add UMFPACK option for coarse level solvers.
+
+06/05/2010 FASP 0.1.6: 
+- Add block iterative solvers and block preconditioners.
+
+05/12/2010 FASP 0.1.5: 
+- Code optimization for a few files. Setup is still not linear.
+- Add ILUtp and more optimization. Add STR ILU(0) and ILU(1).
+
+05/08/2010 FASP 0.1.4: 
+- Major changes to sparse triple multiplication.
+
+04/22/2010 FASP 0.1.3: 
+- Make it work for VC++/IFC compilers in Windows. 
+
+04/07/2010 FASP 0.1.2: 
+- Change AMG_data and functions related to it. 
+
+04/04/2010 FASP 0.1.1: 
+- Remodel abstract multigrid matching code. 
+
+04/01/2010 FASP 0.1.0: 
+- Starting the FASP project based on the old MSC code.

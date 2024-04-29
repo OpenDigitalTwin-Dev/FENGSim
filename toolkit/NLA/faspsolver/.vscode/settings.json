@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "fasp.h": "c",
+        "__locale": "c",
+        "locale": "c",
+        "thread": "c"
+    }
+}

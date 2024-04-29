@@ -1,0 +1,83 @@
+name: Test library
+
+on: [push, pull_request]
+
+jobs:
+  test-minimal-ubuntu:
+    name: Ubuntu minimal build and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get install cmake clang
+
+      - name: Configure
+        run: cmake -DCMAKE_C_COMPILER=clang -B build
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+  test-extended-ubuntu:
+    name: Ubuntu extended build and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: sudo apt-get install cmake doxygen gcc gfortran
+
+      - name: Configure
+        run: cmake -Denable_doc=on -Denable_fortran=on -B build
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+  test-minimal-windows:
+    name: Windows build
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure
+        run: cmake -B build
+
+      - name: Build
+        run: cmake --build build
+
+  test-extended-windows:
+    name: Windows extended build and test
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          git clone https://github.com/alex85k/wingetopt
+          cd wingetopt
+          cmake -B build
+          cmake --build build --config Release
+          cd ..
+
+      - name: Configure
+        run: cmake -B build -DWinGetOpt_INCLUDE_DIR=wingetopt/src -DWinGetOpt_LIBRARY="wingetopt/build/Release/wingetopt.lib"
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Test
+        run: ctest --test-dir build -C Release --output-on-failure

@@ -1,0 +1,120 @@
+\begin{thebibliography}{10}
+
+\bibitem{Bramble.Bramble.1993fk}
+J.~Bramble.
+\newblock {\em Multigrid methods}, volume 294 of {\em Pitman Research Notes in
+  Mathematics Series}.
+\newblock Longman Scientific \& Technical, Harlow, 1993.
+
+\bibitem{Brandt.BrandtMcCormick.1982uq}
+A.~Brandt, S.~McCormick, and J.~Ruge.
+\newblock {Algebraic multigrid (AMG) for automatic multigrid solution with
+  application to geodetic computations, Report}.
+\newblock {\em Inst. Comp. Studies Colorado State Univ}, 109:110, 1982.
+
+\bibitem{Brannick.BrannickZikatanov.2007zr}
+J.~Brannick and L.~Zikatanov.
+\newblock {Algebraic multigrid methods based on compatible relaxation and
+  energy minimization}.
+\newblock {\em Lecture Notes in Computational Science and Engineering}, 55:15,
+  2007.
+
+\bibitem{Brezina.BrezinaCleary.2000ly}
+M.~Brezina, A.~Cleary, R.~Falgout, V.~Henson, J.~Jones, T.~A. Manteuffel, S.~F.
+  McCormick, and J.~W. Ruge.
+\newblock Algebraic multigrid based on element interpolation ({AMGe}).
+\newblock {\em SIAM Journal on Scientific Computing}, 22(5):1570--1592, 2000.
+
+\bibitem{Chartier.ChartierFalgout.2003ve}
+T.~Chartier, R.~Falgout, V.~Henson, J.~Jones, T.~Manteuffel, S.~McCormick,
+  J.~Ruge, and P.~Vassilevski.
+\newblock Spectral {AMG}e ({$\rho$}{AMG}e).
+\newblock {\em SIAM J. Sci. Comput.}, 25(1):1--26, 2003.
+
+\bibitem{Falgout.FalgoutVassilevski.2004bh}
+R.~Falgout and P.~Vassilevski.
+\newblock On generalizing the algebraic multigrid framework.
+\newblock {\em SIAM J. Numer. Anal.}, 42(4):1669--1693 (electronic), 2004.
+
+\bibitem{Henson.HensonVassilevski.2001cr}
+V.~Henson and P.~Vassilevski.
+\newblock Element-free {AMG}e: general algorithms for computing interpolation
+  weights in {AMG}.
+\newblock {\em SIAM J. Sci. Comput.}, 23(2):629--650, 2001.
+
+\bibitem{Hu.X;Vassilevski.P;Xu.J.2013a}
+X.~Hu, P.~S. Vassilevski, and J.~Xu.
+\newblock Comparative convergence analysis of nonlinear amli-cycle multigrid.
+\newblock {\em SIAM J. Num. Anal}, 51(2):1349--1369, 2013.
+
+\bibitem{Livne.Livne.2004kl}
+O.~E. Livne.
+\newblock Coarsening by compatible relaxation.
+\newblock {\em Numer. Linear Algebra Appl.}, 11(2-3):205--227, 2004.
+
+\bibitem{Mellor-crummey2004}
+J.~Mellor-crummey and J.~Garvin.
+\newblock {Optimizing Sparse Matrix-Vector Product Computations Using Unroll
+  and Jam}.
+\newblock {\em International Journal of High Performance Computing
+  Applications}, 18(2):225----236, 2004.
+
+\bibitem{Muresan.MuresanNotay.2008tg}
+A.~Muresan and Y.~Notay.
+\newblock Analysis of aggregation-based multigrid.
+\newblock {\em SIAM Journal on Scientific Computing}, 30(2):1082--1103, 2008.
+
+\bibitem{Pissanetzky.Pissanetzky.1984hc}
+S.~Pissanetzky.
+\newblock {\em Sparse matrix technology}.
+\newblock Academic Press Inc. [Harcourt Brace Jovanovich Publishers], London,
+  1984.
+
+\bibitem{Ruge.RugeStuben.1985ij}
+J.~Ruge and K.~Stuben.
+\newblock {Efficient solution of finite difference and finite element
+  equations}.
+\newblock In D.~J. Paddon and H.~Holstein, editors, {\em Multigrid Methods for
+  Integral and Differential Equations}, volume~3, pages 169--212. Clarendon
+  Press, 1985.
+
+\bibitem{Ruge.RugeStuben.1987bs}
+J.~Ruge and K.~St\"uben.
+\newblock {Algebraic multigrid}.
+\newblock {\em Multigrid methods}, 3:73--130, 1987.
+
+\bibitem{Saad.Saad.2003fv}
+Y.~Saad.
+\newblock {\em Iterative methods for sparse linear systems}.
+\newblock Society for Industrial and Applied Mathematics, Philadelphia, PA,
+  second edition, 2003.
+
+\bibitem{Trottenberg.TrottenbergOosterlee.2001fu}
+U.~Trottenberg, C.~Oosterlee, and A.~Sch{\"u}ller.
+\newblock {Multigrid}.
+\newblock {\em With contributions by A. Brandt, P. Oswald and K. Stuben}, 2001.
+
+\bibitem{Vanek.VanekMandel.1996kl}
+P.~Van{\v{e}}k, J.~Mandel, and M.~Brezina.
+\newblock {Algebraic multigrid by smoothed aggregation for second and fourth
+  order elliptic problems}.
+\newblock {\em Computing}, 56(3):179--196, 1996.
+
+\bibitem{Wan.WanChan.2000qa}
+W.~Wan, T.~Chan, and B.~Smith.
+\newblock {An energy-minimizing interpolation for robust multigrid methods}.
+\newblock {\em SIAM Journal on Scientific Computing}, 21(4):1632--1649, 2000.
+
+\bibitem{Xu.Xu.2010ff}
+J.~Xu.
+\newblock {Fast Poisson-Based Solvers for Linear and Nonlinear PDEs Jinchao
+  Xu}.
+\newblock In {\em Proceedings of the International Congress of Mathematicians},
+  pages 2886--2912, 2010.
+
+\bibitem{Xu.XuZikatanov.2004pi}
+J.~Xu and L.~Zikatanov.
+\newblock {On an energy minimizing basis for algebraic multigrid methods}.
+\newblock {\em Computing and Visualization in Science}, 7(3):121--127, 2004.
+
+\end{thebibliography}

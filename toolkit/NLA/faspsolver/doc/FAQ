@@ -1,0 +1,102 @@
+========================
+Questions and Answers
+========================
+
+================================
+I. FASP and SuiteSparse
+================================
+
+I.1. How to install FASP with minimal UMFPACK installation?
+
+To compile and link (correctly) the FASP sources and libraries with
+the UMFPACK direct solver libraries (part of the SuiteSparse package),
+and, without installing the complete SuiteSparse package, the
+SuiteSparse configuration/installation should be changed as follows:
+
+I.1.a In the configuration file
+      SuiteSparse_config/SuiteSparse_config.mk: On a MAC OS X machine
+      remove "-lrt" from "LIB = -lm -lrt" and add to the definition of
+      the variable “CF” "-DNTIMER", by writing "CF += -DNTIMER" after
+      the definition of "CF".
+
+I.1.b Check that you have "UMFPACK_CONFIG = -DNCHOLMOD” (to compile
+      and install the UMFPACK library without CHOLMOD).
+
+I.1.c In the same file you can also set INSTALL_LIB and
+      INSTALL_INCLUDE directories.
+
+I.1.d "cd AMD ; make ;  make install"
+
+I.I.e "cd SuiteSparse_config ; make ;  make install"
+
+I.I.f "cd UMFPACK ; make ; make install"
+
+--------------------------------
+
+I.2. How to change the FASP (faspsolver) Makefile to use a system-wise
+     UMFPACK installation?
+
+I.2.a If you have installed the UMFPACK libraries in a "standard"
+      location, such as "/usr/local/include" and "/usr/local/lib" or
+      other such standard locations then in the Makefile of the
+      faspsolver just uncomment "umfpack = yes".
+
+I.2.b If you have installed the libraries and the header files in a
+      custom location, say "INSTALL_DIR_SUITESPARSE" then, in addition
+      to the action in 2a. in the faspsolver Makefile write
+
+      	 suitesparsedir=INSTALL_DIR_SUITESPARSE
+
+      The subdirectories "INSTALL_DIR_SUITESPARSE/include" and
+      "INSTALL_DIR_SUITESPARSE/lib" must contain the SuiteSparse
+      header and library files so that the faspsolver configuration
+      script can locate them.
+
+================================
+II. FASP and FEniCS
+================================
+
+II.1. How to install FASP when FEniCS-1.5.0 configuration file is loaded?
+
+II.1.a Problem: When FEniCS (at least 1.5.0 version is installed) and
+       fenics.conf file is loaded, some versions of gfortran do not
+       work properly which causes the configuration of FASP to
+       crash.
+
+II.1.b The cause of the problem is that FEniCS does not have
+       the latest libraries "libgmp**" in their directory and the
+       fenics.conf file sets the DYLD_LIBRARY_PATH or LD_LIBRARY_PATH
+       environmental variable so that the directory with the FEniCS
+       custom libraries is searched by compiler/linker first.
+
+II.1.c Solution: Back up the libgmp library that ships with FEniCS (on
+       MAC OS X these files are:
+       "/Applications/FEniCS.app/Contents/Resources/lib/libgmp*"
+       Download the source of the latest release for the GNU Multiple
+       Precision Arithmetic Library (a.k.a. GMP) and install it in
+       place of the FEniCS ones. After this the gfortran compilers
+       work properly and FASP will configure with no problem.
+
+II.1.d There is another way to fix this problem. You can edit the 
+       FEniCS conf file by replacing "DYLD_LIBRARY_PATH" with 
+       "DYLD_FALLBACK_LIBRARY_PATH". The conf file is located at
+       "FEniCS.app/Contents/Resources/share/fenics/fenics.conf".
+
+--------------------------------
+
+II.2. I use GCC on my Mac OS X. Why "make config" gives warnings like
+      "** WARNING: CC and FC mismatch. ..."?
+
+This is due to FEniCS conf sets CC to /usr/bin/gcc. By default, this
+is an Apple clang compiler. There is no corresponding Fortran compiler
+for clang. This is the reason why config complains. You can either:
+
+II.2.a Ignore the warning and continue with building and installing.
+
+II.2.b Add CC=/dir/to/gcc in your FASP.mk to tell the config where is
+       your GNU C compiler installed. 
+
+II.2.c Use "make config CC=/dir/to/gcc" to tell the config where is
+       your GNU C compiler installed. 
+
+=============

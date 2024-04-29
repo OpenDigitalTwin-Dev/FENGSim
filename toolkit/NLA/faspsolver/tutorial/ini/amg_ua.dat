@@ -1,0 +1,106 @@
+%----------------------------------------------%
+% input parameters: Aggregation                %
+% lines starting with % are comments           %
+% must have spaces around the equal sign "="   %
+%----------------------------------------------%
+
+workdir = ../data/  % work directory, no more than 128 characters
+ 
+%----------------------------------------------%
+% problem, solver, and output type             %
+%----------------------------------------------%
+
+problem_num              = 10     % test problem number 
+print_level              = 3      % how much information to print out 
+output_type              = 0      % 0 to screen | 1 to file
+solver_type              = 1      % 1 CG | 2 BiCGstab | 3 MinRes | 4 GMRes |
+                                  % 5 vGMRes | 6 vFGMRes | 7 GCG |
+                                  %--------------------------------------
+                                  % 21 AMG Solver | 22 FMG Solver |
+                                  %--------------------------------------
+                                  % 31 SuperLU | 32 UMFPACK | 33 MUMPS
+
+%----------------------------------------------%
+% parameters for iterative solvers             %
+%----------------------------------------------%
+
+precond_type             = 2      % 0 None | 1 Diag | 2 AMG | 3 FMG | 4 ILU | 5 Schwarz
+itsolver_tol             = 1e-6   % solver tolerance 
+itsolver_maxit           = 1000   % maximal iteration number 
+stop_type                = 1      % 1 ||r||/||b|| | 2 ||r||_B/||b||_B | 3 ||r||/||x||  
+itsolver_restart         = 30     % restart number for GMRES
+
+%----------------------------------------------%
+% parameters for ILU preconditioners           %
+%----------------------------------------------%
+
+ILU_type                 = 1      % 1 ILUk | 2 ILUt | 3 ILUtp 
+ILU_lfil                 = 0      % level of fill-in for ILUk
+ILU_droptol              = 0.1    % ILU drop tolerance
+ILU_permtol              = 0.001  % permutation toleration for ILUtp
+ILU_relax                = 0.9    % add dropped entries to diagonal with relaxation
+
+%----------------------------------------------%
+% parameters for Schwarz preconditioners       %
+%----------------------------------------------%
+
+SWZ_mmsize               = 200    % max block size
+SWZ_maxlvl               = 2      % level used to form blocks
+SWZ_type                 = 1      % 1 forward | 2 backward | 3 symmetric
+
+%----------------------------------------------%
+% parameters for multilevel iteration          %
+%----------------------------------------------%
+
+AMG_type                 = UA     % C classic AMG
+                                  % SA smoothed aggregation
+                                  % UA unsmoothed aggregation
+AMG_cycle_type           = NA     % V V-cycle | W W-cycle
+                                  % A AMLI-cycle | NA Nonlinear AMLI-cycleA
+AMG_tol                  = 1e-6   % tolerance for AMG
+AMG_maxit                = 1      % number of AMG iterations
+AMG_levels               = 10     % max number of levels
+AMG_coarse_dof           = 200    % max number of coarse degrees of freedom
+AMG_coarse_solver        = 0      % coarse level solver: 31 SuperLU | 32 UMFPack | 33 MUMPS
+AMG_coarse_scaling       = OFF    % switch of scaling of the coarse grid correction
+AMG_amli_degree          = 2      % degree of the polynomial used by AMLI cycle
+AMG_nl_amli_krylov_type  = 7	  % Krylov method in NLAMLI cycle: 6 FGMRES | 7 GCG
+
+%----------------------------------------------%
+% parameters for AMG smoothing                 %
+%----------------------------------------------%
+
+AMG_smoother             = GS     % GS | JACOBI | SGS SOR | SSOR | 
+                                  % GSOR | SGSOR | POLY | L1DIAG | CG
+AMG_smooth_order         = NO     % NO: natural order | CF: CF order
+AMG_ILU_levels           = 0      % number of levels using ILU smoother
+AMG_SWZ_levels           = 0	  % number of levels using Schwarz smoother
+AMG_relaxation	         = 1.1    % relaxation parameter for SOR smoother 
+AMG_polynomial_degree	 = 2      % degree of the polynomial smoother
+AMG_presmooth_iter       = 1      % number of presmoothing sweeps
+AMG_postsmooth_iter      = 1      % number of postsmoothing sweeps
+
+%----------------------------------------------%
+% parameters for classical AMG SETUP           %
+%----------------------------------------------%
+
+AMG_coarsening_type      = 1      % 1 Modified RS
+                                  % 2 Mofified RS for positive off-diags
+                                  % 3 Compatible Relaxation
+                                  % 4 Aggressive 
+AMG_interpolation_type   = 1      % 1 Direct | 2 Standard | 3 Energy-min
+AMG_strong_threshold     = 0.25   % Strong threshold
+AMG_truncation_threshold = 0.4    % Truncation threshold
+AMG_max_row_sum          = 0.9    % Max row sum
+
+%----------------------------------------------%
+% parameters for aggregation-type AMG SETUP    %
+%----------------------------------------------%
+
+AMG_aggregation_type     = 1      % 1 Matching | 2 VMB 
+AMG_pair_number          = 2      % Number of pairs in matching
+AMG_strong_coupled       = 0.08   % Strong coupled threshold
+AMG_max_aggregation      = 100    % Max size of aggregations
+AMG_tentative_smooth     = 0.67   % Smoothing factor for tentative prolongation
+AMG_smooth_filter        = OFF    % Switch for filtered matrix for smoothing
+AMG_quality_bound        = 8.0    % quality threshold for aggregation:8.0(sysmm) 10.0(unsymm)

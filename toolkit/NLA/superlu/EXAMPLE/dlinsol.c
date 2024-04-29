@@ -1,0 +1,144 @@
+/*
+Copyright (c) 2003, The Regents of the University of California, through
+Lawrence Berkeley National Laboratory (subject to receipt of any required 
+approvals from U.S. Dept. of Energy) 
+
+All rights reserved. 
+
+The source code is distributed under BSD license, see the file License.txt
+at the top-level directory.
+*/
+
+/*
+ * -- SuperLU routine (version 3.0) --
+ * Univ. of California Berkeley, Xerox Palo Alto Research Center,
+ * and Lawrence Berkeley National Lab.
+ * October 15, 2003
+ *
+ */
+
+/*! \file
+ * \brief LU factorization from dgstrf (DGSSV)
+ *
+ * \ingroup Example
+ */
+
+#include "slu_ddefs.h"
+
+int main(int argc, char *argv[])
+{
+    SuperMatrix A;
+    NCformat *Astore;
+    double   *a;
+    int_t    *asub, *xa;
+    int      *perm_c; /* column permutation vector */
+    int      *perm_r; /* row permutations from partial pivoting */
+    SuperMatrix L;      /* factor L */
+    SCformat *Lstore;
+    SuperMatrix U;      /* factor U */
+    NCformat *Ustore;
+    SuperMatrix B;
+    int      nrhs, ldx, m, n;
+    int_t    nnz, info;
+    double   *xact, *rhs;
+    mem_usage_t   mem_usage;
+    superlu_options_t options;
+    SuperLUStat_t stat;
+    FILE      *fp = stdin;
+    
+#if ( DEBUGlevel>=1 )
+    CHECK_MALLOC("Enter main()");
+#endif
+
+    /* Set the default input options:
+	options.Fact = DOFACT;
+        options.Equil = YES;
+    	options.ColPerm = COLAMD;
+	options.DiagPivotThresh = 1.0;
+    	options.Trans = NOTRANS;
+    	options.IterRefine = NOREFINE;
+    	options.SymmetricMode = NO;
+    	options.PivotGrowth = NO;
+    	options.ConditionNumber = NO;
+    	options.PrintStat = YES;
+     */
+    set_default_options(&options);
+    //options.ColPerm = METIS_ATA;
+
+    /* Read the matrix in Harwell-Boeing format. */
+#if 0
+    dreadMM(fp, &m, &n, &nnz, &a, &asub, &xa);
+#else    
+    dreadhb(fp, &m, &n, &nnz, &a, &asub, &xa);
+    //dreadtriple_noheader(&m, &n, &nnz, &a, &asub, &xa);
+#endif    
+
+    dCreate_CompCol_Matrix(&A, m, n, nnz, a, asub, xa, SLU_NC, SLU_D, SLU_GE);
+    Astore = A.Store;
+    printf("Dimension %dx%d; # nonzeros %d\n", (int)A.nrow, (int)A.ncol, (int)Astore->nnz);
+    printf("sizeof(int_t) %zu\n", sizeof(int_t));
+    
+    nrhs   = 1;
+    if ( !(rhs = doubleMalloc(m * nrhs)) ) ABORT("Malloc fails for rhs[].");
+    dCreate_Dense_Matrix(&B, m, nrhs, rhs, m, SLU_DN, SLU_D, SLU_GE);
+    xact = doubleMalloc(n * nrhs);
+    ldx = n;
+    dGenXtrue(n, nrhs, xact, ldx);
+    dFillRHS(options.Trans, nrhs, xact, ldx, &A, &B);
+
+    if ( !(perm_c = int32Malloc(n)) ) ABORT("Malloc fails for perm_c[].");
+    if ( !(perm_r = int32Malloc(m)) ) ABORT("Malloc fails for perm_r[].");
+
+    /* Initialize the statistics variables. */
+    StatInit(&stat);
+
+    printf("A.nrow %d, A.ncol %d\n", (int)A.nrow, (int)A.ncol);
+    dgssv(&options, &A, perm_c, perm_r, &L, &U, &B, &stat, &info);
+    
+    if ( info == 0 ) {
+
+	/* This is how you could access the solution matrix. */
+        double *sol = (double*) ((DNformat*) B.Store)->nzval; 
+        (void)sol;  // suppress unused variable warning
+
+	 /* Compute the infinity norm of the error. */
+	dinf_norm_error(nrhs, &B, xact);
+
+	Lstore = (SCformat *) L.Store;
+	Ustore = (NCformat *) U.Store;
+    	printf("No of nonzeros in factor L = %lld\n", (long long) Lstore->nnz);
+    	printf("No of nonzeros in factor U = %lld\n", (long long) Ustore->nnz);
+    	printf("No of nonzeros in L+U = %lld\n", (long long) Lstore->nnz + Ustore->nnz - n);
+    	printf("FILL ratio = %.1f\n", (float)(Lstore->nnz + Ustore->nnz - n)/nnz);
+	
+	dQuerySpace(&L, &U, &mem_usage);
+	printf("L\\U MB %.3f\ttotal MB needed %.3f\n",
+	       mem_usage.for_lu/1e6, mem_usage.total_needed/1e6);
+	
+    } else {
+	printf("dgssv() error returns INFO= %lld\n", (long long)info);
+	if ( info <= n ) { /* factorization completes */
+	    dQuerySpace(&L, &U, &mem_usage);
+	    printf("L\\U MB %.3f\ttotal MB needed %.3f\n",
+		   mem_usage.for_lu/1e6, mem_usage.total_needed/1e6);
+	}
+    }
+
+    if ( options.PrintStat ) StatPrint(&stat);
+    StatFree(&stat);
+
+    SUPERLU_FREE (rhs);
+    SUPERLU_FREE (xact);
+    SUPERLU_FREE (perm_r);
+    SUPERLU_FREE (perm_c);
+    Destroy_CompCol_Matrix(&A);
+    Destroy_SuperMatrix_Store(&B);
+    Destroy_SuperNode_Matrix(&L);
+    Destroy_CompCol_Matrix(&U);
+
+#if ( DEBUGlevel>=1 )
+    CHECK_MALLOC("Exit main()");
+#endif
+    return EXIT_SUCCESS;
+}
+

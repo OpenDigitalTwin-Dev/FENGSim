@@ -1,0 +1,76 @@
+Test Problem 11
+fasp_dcoo_read: reading file ../../data/coomat_1046529.dat...
+A: m = 1046529, n = 1046529, nnz = 7317521
+b: n = 1046529
+
+       Parameters in itsolver_param
+-----------------------------------------------
+Solver print level:                3
+Solver type:                       1
+Solver precond type:               2
+Solver max num of iter:            1000
+Solver tolerance:                  1.00e-06
+Solver stopping type:              1
+-----------------------------------------------
+
+
+       Parameters in AMG_param
+-----------------------------------------------
+AMG print level:                   3
+AMG max num of iter:               1
+AMG type:                          1
+AMG tolerance:                     1.00e-08
+AMG max levels:                    20
+AMG cycle type:                    1
+AMG scaling of coarse correction:  0
+AMG smoother type:                 2
+AMG smoother order:                1
+AMG num of presmoothing:           1
+AMG num of postsmoothing:          1
+AMG coarsening type:               1
+AMG interpolation type:            1
+AMG dof on coarsest grid:          100
+AMG strong threshold:              0.3000
+AMG truncation threshold:          0.4000
+AMG max row sum:                   0.9000
+-----------------------------------------------
+
+-----------------------------------------------
+  Level     Num of rows      Num of nonzeros
+-----------------------------------------------
+    0         1046529           7317521
+    1          523265           7828523
+    2          261633           7029341
+    3           65789           1373867
+    4           16635            246953
+    5            8255            214907
+    6            2109             42267
+    7             584              8304
+    8             282              5968
+    9              94              1492
+-----------------------------------------------
+AMG grid complexity     = 1.840
+AMG operator complexity = 3.289
+Ruge-Stuben AMG setup costs 2.1985 seconds.
+Calling PCG solver ...
+---------------------------------------------------------------
+It Num |    ||r||/||b||    |     ||r||      |  Conv. Factor
+---------------------------------------------------------------
+     1 |    1.338532e-02   |  1.451869e+01  |     0.0134
+     2 |    1.734435e-03   |  1.881294e+00  |     0.1296
+     3 |    4.150786e-04   |  4.502244e-01  |     0.2393
+     4 |    1.465046e-04   |  1.589095e-01  |     0.3530
+     5 |    6.215807e-05   |  6.742116e-02  |     0.4243
+     6 |    2.616318e-05   |  2.837849e-02  |     0.4209
+     7 |    1.130392e-05   |  1.226105e-02  |     0.4321
+     8 |    5.970526e-06   |  6.476066e-03  |     0.5282
+     9 |    3.533251e-06   |  3.832421e-03  |     0.5918
+    10 |    1.895860e-06   |  2.056387e-03  |     0.5366
+    11 |    1.065012e-06   |  1.155190e-03  |     0.5618
+    12 |    6.949568e-07   |  7.538007e-04  |     0.6525
+Number of iterations = 12 with relative residual 6.949568e-07.
+Iterative method costs 2.0682 seconds.
+AMG_Krylov method totally costs 4.3047 seconds.
+
+Solver finished successfully!
+

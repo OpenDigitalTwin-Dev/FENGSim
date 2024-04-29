@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="gb2312"?>
+<VisualStudioProject
+	ProjectType="Intel C++ Project"
+	Version="13.0"
+	Name="regression"
+	ProjectGUID="{4F7357A2-8EB3-4A6D-A07A-6E806FB239FA}"
+	VCNestedProjectGUID="{74ADA9F7-1B6D-49AF-B9A0-AA39538F86BD}"
+	VCNestedProjectFileName="regression.vcproj"
+	>
+	<Configurations>
+		<Configuration
+			Name="Release|Win32"
+			>
+			<Tool
+				Name="CppCmplrTool"
+				Optimization="1000"
+				InterproceduralOptimization="1"
+				OptimizeForWindowsApplication="true"
+				EnableMatrixMultiplyLibraryCall="1"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|x64"
+			>
+			<Tool
+				Name="CppCmplrTool"
+				Optimization="1000"
+				InterproceduralOptimization="1"
+				OptimizeForWindowsApplication="true"
+				EnableMatrixMultiplyLibraryCall="1"
+			/>
+		</Configuration>
+	</Configurations>
+	<Files/>
+</VisualStudioProject>

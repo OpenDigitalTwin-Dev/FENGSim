@@ -1,0 +1,59 @@
+
+========================================
+||   FASP: SPE01 -- ITS BSR version   ||
+========================================
+
+fasp_dbsr_read: reading file ../data/bsrmat_SPE01.dat...
+fasp_dvec_read: reading file ../data/rhs_SPE01.dat...
+A: m = 302, n = 302, nnz = 1788
+b: n = 906
+
+       Parameters in ITS_param
+-----------------------------------------------
+Solver print level:                2
+Solver type:                       1
+Solver precond type:               2
+Solver max num of iter:            500
+Solver tolerance:                  1.00e-06
+Solver stopping type:              1
+-----------------------------------------------
+
+
+       Parameters in ILU_param
+-----------------------------------------------
+ILU print level:                   2
+ILU type:                          1
+ILU level of fill-in:              0
+ILU relaxation factor:             0.0000
+ILU drop tolerance:                1.00e-03
+ILU permutation tolerance:         0.00e+00
+-----------------------------------------------
+
+BSR ILU(0) setup costs 0.000185 seconds.
+
+Calling GMRes solver (BSR) ...
+-----------------------------------------------------------
+It Num |   ||r||/||b||   |     ||r||      |  Conv. Factor
+-----------------------------------------------------------
+     0 |  1.000000e+00   |  8.207069e+03  |     -.-- 
+     1 |  9.999991e-01   |  8.207062e+03  |     1.0000
+     2 |  9.991891e-01   |  8.200415e+03  |     0.9992
+     3 |  9.984917e-01   |  8.194691e+03  |     0.9993
+     4 |  9.581382e-01   |  7.863507e+03  |     0.9596
+     5 |  9.387736e-01   |  7.704580e+03  |     0.9798
+     6 |  8.996932e-01   |  7.383844e+03  |     0.9584
+     7 |  8.970099e-01   |  7.361822e+03  |     0.9970
+     8 |  8.570704e-01   |  7.034036e+03  |     0.9555
+     9 |  5.309276e-01   |  4.357360e+03  |     0.6195
+    10 |  1.462587e-01   |  1.200355e+03  |     0.2755
+    11 |  3.520599e-02   |  2.889380e+02  |     0.2407
+    12 |  8.488230e-03   |  6.966349e+01  |     0.2411
+    13 |  2.019708e-03   |  1.657588e+01  |     0.2379
+    14 |  4.524916e-04   |  3.713630e+00  |     0.2240
+    15 |  9.670973e-05   |  7.937035e-01  |     0.2137
+    16 |  1.970931e-05   |  1.617557e-01  |     0.2038
+    17 |  3.905034e-06   |  3.204889e-02  |     0.1981
+    18 |  8.553378e-07   |  7.019817e-03  |     0.2190
+Number of iterations = 18 with relative residual 8.553446e-07.
+Iterative method costs 0.0009 seconds.
+ILUk_Krylov method totally costs 0.0011 seconds.
