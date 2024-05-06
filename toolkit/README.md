@@ -1,15 +1,16 @@
+vtk
 ```
 	cd FENGSim/toolkit/vtk
 	./install.sh or ./uninstall.sh
 ```
-
+oce
 ```
 	cd FENGSim/toolkit/vtk
 	./install.sh
 	cd FENGSim/toolkit/oce
 	./install.sh or ./uninstall.sh
 ```
-
+gmsh
 ```
 	cd FENGSim/toolkit/vtk
 	./install.sh
@@ -18,27 +19,27 @@
 	cd FENGSim/toolkit/gmsh
 	./install.sh or ./uninstall.sh
 ```
-
+triangle
 ```
 	cd FENGSim/toolkit/triangle
 	./install.sh or ./uninstall.sh
 ```
-
+tetgen
 ```
 	cd FENGSim/toolkit/tetgen
 	./install.sh or ./uninstall.sh
 ```
-
-```
-	cd FENGSim/toolkit/vcglib
-	./install.sh or ./uninstall.sh
-```
-
+slice2mesh
 ```
 	cd FENGSim/toolkit/triangle
 	./install.sh
 	cd FENGSim/toolkit/tetgen
 	./install.sh
+	cd FENGSim/toolkit/slice2mesh
+	./install.sh or ./uninstall.sh
+```
+vcglib
+```
 	cd FENGSim/toolkit/vcglib
 	./install.sh or ./uninstall.sh
 ```
