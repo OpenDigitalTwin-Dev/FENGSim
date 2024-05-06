@@ -73,7 +73,8 @@ int main(int argc, char *argv[]) {
     plc.save((base_name+"_plc.off").c_str());
     
     Trimesh<> plc_srf;
-    export_cluster(plc, {SRF_FACE_VERT, SRF_FACE_DOWN, SRF_FACE_UP}, plc_srf);
+    //export_cluster(plc, {SRF_FACE_VERT, SRF_FACE_DOWN, SRF_FACE_UP}, plc_srf);
+    export_cluster(plc, {INTERNAL_FACE}, plc_srf);
     plc_srf.save((base_name+"_plc_srf.off").c_str());
 
     if(export_tetmesh) {
