@@ -175,12 +175,6 @@ Tetgen包括tetgenio、tetgenbehavior、tetgenmesh，和triangle类似，其中t
 
 \subsubsection{算例}
 
-\subsection{mmg}
-
-\subsubsection{数据结构和算法}
-
-\subsubsection{算例}
-
 \subsection{Gmsh}
 
 \subsubsection{数据结构和算法}
@@ -193,11 +187,11 @@ Tetgen包括tetgenio、tetgenbehavior、tetgenmesh，和triangle类似，其中t
 
 \subsection{Slice2Mesh}
 
-Slice2Mesh是意大利CNR IMATI团队开发的，基于Triangle和Tetgen，Slice2Mesh原始是用Qt进行编译生成可执行程序，我们增加了CMakeLists进行编译。由于Slice2Mesh需要调用Triangle和Tetgen函数，需要将Triangle和Tetgen编译成链接库，编译链接库需要在triangle.c文件第236行定义TRILIBRARY，需要在tetgen.h文件第55行定义TETLIBRARY，实际上TRILIBRARY和TETLIBRARY定义是通过CMakeLists里的add$\_$definitions（CMakeLists第8行）和target$\_$compile$\_$definitions（CMakeLists第10行）定义的。编译后可在路径tools/triangle$\_$install和tools/tetgen$\_$install下找到相关头文件和动态链接库。slice2mesh还需要cinolib，cinolib只有头文件，不需要编译，cinolib也有cpp文件，但是只是被头文件引用。在slice2mesh引用cinolib头文件的时候，cinolib的CINOLIB$\_$USES$\_$BOOST、CINOLIB$\_$USES$\_$TRIANGLE、CINOLIB$\_$USES$\_$TETGEN需要在slice2mesh的CMakeLists中定义，建立cinolib和Boost、Triangle、Tetgen的接口，由于Tetgen头文件tetgen.h第2475行的tetrahedralize函数定义也需要TETLIBRARY定义，因此在slice2mesh引用Tetgen头文件的时候也需要定义TETLIBRARY，因此在slice2mesh的CMakeLists中第七行也定义了TETLIBRARY。
+Slice2Mesh是意大利CNR IMATI团队开发的，基于Triangle和Tetgen，Slice2Mesh原始是用Qt进行编译生成可执行程序，我们增加了CMakeLists进行编译。由于Slice2Mesh需要调用Triangle和Tetgen函数，需要将Triangle和Tetgen编译成链接库，编译链接库需要在triangle.c文件第236行定义TRILIBRARY，需要在tetgen.h文件第55行定义TETLIBRARY，实际上TRILIBRARY和TETLIBRARY定义是通过CMakeLists里的add$\_$definitions（CMakeLists第8行）和target$\_$compile$\_$definitions（CMakeLists第10行）定义的。编译后可在路径tool/install/triangle$\_$install和tool/install/tetgen$\_$install下找到相关头文件和动态链接库。slice2mesh还需要cinolib，cinolib只有头文件，不需要编译，cinolib也有cpp文件，但是只是被头文件引用。在slice2mesh引用cinolib头文件的时候，cinolib的CINOLIB$\_$USES$\_$BOOST、CINOLIB$\_$USES$\_$TRIANGLE、CINOLIB$\_$USES$\_$TETGEN需要在slice2mesh的CMakeLists中定义，建立cinolib和Boost、Triangle、Tetgen的接口，由于Tetgen头文件tetgen.h第2475行的tetrahedralize函数定义也需要TETLIBRARY定义，因此在slice2mesh引用Tetgen头文件的时候也需要定义TETLIBRARY，因此在slice2mesh的CMakeLists中第七行也定义了TETLIBRARY。
 
 \subsubsection{数据结构和算法}
 
-Slice2Mesh的算法分为三部分，首先对切片用Triangle进行二维网格剖分，然后将切片进行拉伸，进行网格协调性处理，最后生成Piecewise Linear Complex模型用Tetgen进行网格剖分，需要注意的是切片作为Tetgen的约束保证了层网格剖分。运行./slice2mesh$\_$exec ../data/pyramid$\_$l0.03.cli -tetflags a0.000001命令，然后运行python3 msh2vtk.py生成vtk文件。
+Slice2Mesh的算法分为三部分，首先对切片用Triangle进行二维网格剖分，然后将切片进行拉伸，进行网格协调性处理，再进行侧面网格剖分，最后生成Piecewise Linear Complex模型用Tetgen进行网格剖分，需要注意的是切片作为Tetgen的约束保证了层网格剖分。运行./slice2mesh$\_$exec ../data/pyramid$\_$l0.03.cli -tetflags a0.000001命令，然后运行python3 msh2vtk.py生成vtk文件。
 
 \subsubsection{算例}
 
@@ -214,6 +208,12 @@ Slice2Mesh的算法分为三部分，首先对切片用Triangle进行二维网�
   \caption{采用./slice2mesh$\_$exec ../data/pyramid$\_$l0.03.cli -tetflags a0.000001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
   \label{fig:1-7}
 \end{figure}
+
+\subsection{mmg}
+
+\subsubsection{数据结构和算法}
+
+\subsubsection{算例}
 
 \section{结构性网格}
 
