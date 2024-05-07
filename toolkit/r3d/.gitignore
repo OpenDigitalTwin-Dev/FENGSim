@@ -1,0 +1,5 @@
+*.a
+*.o
+.vscode/
+r*d_unit_tests
+test_brep/test_intersection
