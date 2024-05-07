@@ -67,36 +67,57 @@
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {1.1.6.1}数据结构和算法}{13}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {1.1.7}Slice2Mesh}{13}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {1.1.7.1}数据结构和算法}{14}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.1.7.2}算例}{14}{}\protected@file@percent }
-\@writefile{lof}{\contentsline {figure}{\numberline {1.20}{\ignorespaces 采用./slice2mesh$\_$exec ../data/pyramid$\_$l0.03.cli -tetflags a1命令生成网格，用python3 msh2vtk.py生成vtk文件。}}{14}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1.20}{\ignorespaces off格式非常简单，图中260为定点个数，578为三角单元个数，定点坐标和单元编号之间没有其他注释。}}{14}{}\protected@file@percent }
 \newlabel{fig:1-7}{{1.20}{14}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1.21}{\ignorespaces 采用./slice2mesh$\_$exec ../data/pyramid$\_$l0.03.cli -tetflags a0.000001命令生成网格，用python3 msh2vtk.py生成vtk文件。}}{14}{}\protected@file@percent }
-\newlabel{fig:1-7}{{1.21}{14}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.1.8}mmg}{15}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.1.8.1}数据结构和算法}{15}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.1.8.2}算例}{15}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {1.2}结构性网格}{15}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.2.1}协调性网格}{15}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.1.1}Clipper}{15}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.1.2}RnD}{15}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.1.3}数据结构和算法}{15}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.1.4}算例}{15}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsection}{\numberline {1.2.2}非协调性网格}{15}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.2.1}数据结构和算法}{15}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.2.2}算例}{15}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {2}网格自适应性}{17}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1.21}{\ignorespaces cli格式非常简单，图中POLYLINE后边三位数，第一位为id，第二位为方向，可以是顺时针或者逆时针或者开放，第三位是该多边形顶点个数。}}{15}{}\protected@file@percent }
+\newlabel{fig:1-7}{{1.21}{15}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1.22}{\ignorespaces 采用./slice2mesh$\_$exec ../data/pyramid$\_$l0.03.cli命令生成amslices2mesh$\_$plc.off，修改plc2vtk.py中读入文件名称，用python3 plc2vtk.py生成vtk文件。}}{15}{}\protected@file@percent }
+\newlabel{fig:1-7}{{1.22}{15}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1.23}{\ignorespaces 采用./slice2mesh$\_$exec ../data/pyramid$\_$l0.03.cli命令生成amslices2mesh$\_$plc.off，修改plc2vtk.py中读入文件名称，用python3 plc2vtk.py生成vtk文件。}}{15}{}\protected@file@percent }
+\newlabel{fig:1-7}{{1.23}{15}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1.24}{\ignorespaces 采用./slice2mesh$\_$exec ../data/pyramid$\_$l0.03.cli命令生成amslices2mesh$\_$srf.off，修改plc2vtk.py中读入文件名称，用python3 plc2vtk.py生成vtk文件。}}{16}{}\protected@file@percent }
+\newlabel{fig:1-7}{{1.24}{16}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1.25}{\ignorespaces 采用./slice2mesh$\_$exec ../data/pyramid$\_$l0.03.cli命令生成amslices2mesh$\_$srf.off，修改plc2vtk.py中读入文件名称，用python3 plc2vtk.py生成vtk文件。}}{16}{}\protected@file@percent }
+\newlabel{fig:1-7}{{1.25}{16}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1.26}{\ignorespaces 采用./slice2mesh$\_$exec ../data/pyramid$\_$l0.03.cli命令生成amslices2mesh$\_$in.off，修改plc2vtk.py中读入文件名称，用python3 plc2vtk.py生成vtk文件。}}{16}{}\protected@file@percent }
+\newlabel{fig:1-7}{{1.26}{16}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1.27}{\ignorespaces 采用./slice2mesh$\_$exec ../data/pyramid$\_$l0.03.cli命令生成amslices2mesh$\_$in.off，修改plc2vtk.py中读入文件名称，用python3 plc2vtk.py生成vtk文件。}}{16}{}\protected@file@percent }
+\newlabel{fig:1-7}{{1.27}{16}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.1.7.2}算例}{17}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1.28}{\ignorespaces 采用./slice2mesh$\_$exec ../data/pyramid$\_$l0.03.cli -tetflags a1命令生成网格，用python3 msh2vtk.py生成vtk文件。}}{17}{}\protected@file@percent }
+\newlabel{fig:1-7}{{1.28}{17}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1.29}{\ignorespaces 采用./slice2mesh$\_$exec ../data/pyramid$\_$l0.03.cli -tetflags a0.000001命令生成网格，用python3 msh2vtk.py生成vtk文件。}}{17}{}\protected@file@percent }
+\newlabel{fig:1-7}{{1.29}{17}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1.30}{\ignorespaces 采用./slice2mesh$\_$exec ../data/T$\_$supported.cli命令生成网格，用python3 msh2vtk.py生成vtk文件。}}{17}{}\protected@file@percent }
+\newlabel{fig:1-7}{{1.30}{17}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1.31}{\ignorespaces 采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.1命令生成网格，用python3 msh2vtk.py生成vtk文件。}}{18}{}\protected@file@percent }
+\newlabel{fig:1-7}{{1.31}{18}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1.32}{\ignorespaces 采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}}{18}{}\protected@file@percent }
+\newlabel{fig:1-7}{{1.32}{18}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.1.8}mmg}{18}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.1.8.1}数据结构和算法}{18}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.1.8.2}算例}{18}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {1.2}结构性网格}{18}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2.1}协调性网格}{18}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.1.1}RnD}{18}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.1.2}数据结构和算法}{18}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.1.3}算例}{18}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2.2}非协调性网格}{18}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.2.1}数据结构和算法}{18}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {1.2.2.2}算例}{18}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {2}网格自适应性}{19}{}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {chapter}{\numberline {3}网格并行}{19}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {3}网格并行}{21}{}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {3.1}Metis}{19}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {chapter}{\numberline {4}残余应力和变形}{21}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.1}Metis}{21}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {4}残余应力和变形}{23}{}\protected@file@percent }
 \@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\contentsline {section}{\numberline {4.1}热弹塑性}{21}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.2}小尺度热循环生死单元法}{21}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {4.3}构件尺度固有应变法}{21}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.1}热弹塑性}{23}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}小尺度热循环生死单元法}{23}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.3}构件尺度固有应变法}{23}{}\protected@file@percent }
 \bibstyle{plain}
 \bibdata{sample}
 \bibcite{JeanMarietteHerve}{{1}{}{{}}{{}}}
@@ -106,4 +127,4 @@
 \bibcite{PaulHouman}{{5}{}{{}}{{}}}
 \bibcite{Erich}{{6}{}{{}}{{}}}
 \providecommand\NAT@force@numbers{}\NAT@force@numbers
-\gdef \@abspage@last{23}
+\gdef \@abspage@last{25}

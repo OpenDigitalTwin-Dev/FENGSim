@@ -193,6 +193,65 @@ Slice2Mesh是意大利CNR IMATI团队开发的，基于Triangle和Tetgen，Slice
 
 Slice2Mesh的算法分为三部分，首先对切片用Triangle进行二维网格剖分，然后将切片进行拉伸，进行网格协调性处理，再进行侧面网格剖分，最后生成Piecewise Linear Complex模型用Tetgen进行网格剖分，需要注意的是切片作为Tetgen的约束保证了层网格剖分。运行./slice2mesh$\_$exec ../data/pyramid$\_$l0.03.cli -tetflags a0.000001命令，然后运行python3 msh2vtk.py生成vtk文件。
 
+Slice2Mesh中的Trimesh是来自cinolib，slice2plc将切片转为Piecewise Linear Complex模型，plc2tet进行内部网格剖分，在slice2plc中，先用mesh$\_$horizontal进行水平网格剖分，再用mesh$\_$vertical进行侧面网格剖分。Piecewise Linear Complex模型的三角单元都进行了标识，包括SRF$\_$FACE$\_$VERT、SRF$\_$FACE$\_$DOWN、SRF$\_$FACE$\_$U、PINTERNAL$\_$FACE，然后采用cinolib中的export$\_$cluster输出成off文件，off文件格式如下图。运行python3 plc2vtk.py可以将off文件转成vtk文件。读入文件格式为cli，COMMON LAYER INTERFACE，输出为mesh格式。
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=5cm]{fig/1/1.1.7.1:0.png}
+  \caption{off格式非常简单，图中260为定点个数，578为三角单元个数，定点坐标和单元编号之间没有其他注释。}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=5cm]{fig/1/1.1.7.1:00.png}
+  \caption{cli格式非常简单，图中POLYLINE后边三位数，第一位为id，第二位为方向，可以是顺时针或者逆时针或者开放，第三位是该多边形顶点个数。}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/1.1.7.1:1.png}
+  \caption{采用./slice2mesh$\_$exec ../data/pyramid$\_$l0.03.cli命令生成amslices2mesh$\_$plc.off，修改plc2vtk.py中读入文件名称，用python3 plc2vtk.py生成vtk文件。}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/1.1.7.1:2.png}
+  \caption{采用./slice2mesh$\_$exec ../data/pyramid$\_$l0.03.cli命令生成amslices2mesh$\_$plc.off，修改plc2vtk.py中读入文件名称，用python3 plc2vtk.py生成vtk文件。}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/1.1.7.1:3.png}
+  \caption{采用./slice2mesh$\_$exec ../data/pyramid$\_$l0.03.cli命令生成amslices2mesh$\_$srf.off，修改plc2vtk.py中读入文件名称，用python3 plc2vtk.py生成vtk文件。}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/1.1.7.1:4.png}
+  \caption{采用./slice2mesh$\_$exec ../data/pyramid$\_$l0.03.cli命令生成amslices2mesh$\_$srf.off，修改plc2vtk.py中读入文件名称，用python3 plc2vtk.py生成vtk文件。}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/1.1.7.1:5.png}
+  \caption{采用./slice2mesh$\_$exec ../data/pyramid$\_$l0.03.cli命令生成amslices2mesh$\_$in.off，修改plc2vtk.py中读入文件名称，用python3 plc2vtk.py生成vtk文件。}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/1.1.7.1:6.png}
+  \caption{采用./slice2mesh$\_$exec ../data/pyramid$\_$l0.03.cli命令生成amslices2mesh$\_$in.off，修改plc2vtk.py中读入文件名称，用python3 plc2vtk.py生成vtk文件。}
+  \label{fig:1-7}
+\end{figure}
+
+
 \subsubsection{算例}
 
 \begin{figure}[!htbp]
@@ -209,6 +268,27 @@ Slice2Mesh的算法分为三部分，首先对切片用Triangle进行二维网�
   \label{fig:1-7}
 \end{figure}
 
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/1.1.7.2:3.png}
+  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/1.1.7.2:4.png}
+  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.1命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/1.1.7.2:5.png}
+  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+  \label{fig:1-7}
+\end{figure}
+
 \subsection{mmg}
 
 \subsubsection{数据结构和算法}
@@ -218,8 +298,6 @@ Slice2Mesh的算法分为三部分，首先对切片用Triangle进行二维网�
 \section{结构性网格}
 
 \subsection{协调性网格}
-
-\subsubsection{Clipper}
 
 \subsubsection{RnD}
 
