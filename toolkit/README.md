@@ -48,6 +48,11 @@ mmg
 	cd FENGSim/toolkit/mmg
 	./install.sh or ./uninstall.sh
 ```
+r3d
+```
+	cd FENGSim/toolkit/r3d
+	./install.sh or ./uninstall.sh
+```
 
 You can also download NSM, CFD, CEM, DAE, CM, NLA repositories from GitHub by cloning them.
 
