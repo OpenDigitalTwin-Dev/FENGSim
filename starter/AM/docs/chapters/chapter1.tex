@@ -181,10 +181,6 @@ Tetgen包括tetgenio、tetgenbehavior、tetgenmesh，和triangle类似，其中t
 
 \subsubsection{算例}
 
-\subsection{OpenCASCADE}
-
-\subsubsection{数据结构和算法}
-
 \subsection{Slice2Mesh}
 
 Slice2Mesh是意大利CNR IMATI团队开发的，基于Triangle和Tetgen，Slice2Mesh原始是用Qt进行编译生成可执行程序，我们增加了CMakeLists进行编译。由于Slice2Mesh需要调用Triangle和Tetgen函数，需要将Triangle和Tetgen编译成链接库，编译链接库需要在triangle.c文件第236行定义TRILIBRARY，需要在tetgen.h文件第55行定义TETLIBRARY，实际上TRILIBRARY和TETLIBRARY定义是通过CMakeLists里的add$\_$definitions（CMakeLists第8行）和target$\_$compile$\_$definitions（CMakeLists第10行）定义的。编译后可在路径tool/install/triangle$\_$install和tool/install/tetgen$\_$install下找到相关头文件和动态链接库。slice2mesh还需要cinolib，cinolib只有头文件，不需要编译，cinolib也有cpp文件，但是只是被头文件引用。在slice2mesh引用cinolib头文件的时候，cinolib的CINOLIB$\_$USES$\_$BOOST、CINOLIB$\_$USES$\_$TRIANGLE、CINOLIB$\_$USES$\_$TETGEN需要在slice2mesh的CMakeLists中定义，建立cinolib和Boost、Triangle、Tetgen的接口，由于Tetgen头文件tetgen.h第2475行的tetrahedralize函数定义也需要TETLIBRARY定义，因此在slice2mesh引用Tetgen头文件的时候也需要定义TETLIBRARY，因此在slice2mesh的CMakeLists中第七行也定义了TETLIBRARY。
@@ -289,82 +285,110 @@ Slice2Mesh中的Trimesh是来自cinolib，slice2plc将切片转为Piecewise Line
   \label{fig:1-7}
 \end{figure}
 
-\subsection{mmg}
-
-\subsubsection{数据结构和算法}
-
-\subsubsection{算例}
 
 \section{结构性网格}
 
-\subsection{协调性网格}
-
-\subsubsection{RnD}
+\subsection{RnD}
 
 \subsubsection{数据结构和算法}
 
 \subsubsection{算例}
 
-\subsection{非协调性网格}
-
-\subsubsection{数据结构和算法}
-
-\subsubsection{算例}
-
-\chapter{网格自适应性}
-
-\chapter{网格并行}
-
-\section{Metis}
-
-\chapter{残余应力和变形}
-
-残余应力和变形计算是多尺度问题，小尺度采用热循环计算，如图\ref{fig:4-1}，大尺度采用固有应变法，如图\ref{fig:4-4}。在热循环计算中采用生死单元法，生死单元有两种情况，一种是计算区域是有真实的变化，需要添加网格单元，暂时称为激活单元，如图\ref{fig:4-2}，另外一种情况是计算区域没有变化，通过改变材料系数增加单元，暂时称为静单元，我们采用激活单元和静单元的混合形式，逐层增加网格，然后再对每一层修改材料系数，如图\ref{fig:4-4}。计算区域如图\ref{fig:4-5}，和图\ref{fig:4-6}中研究类似，具体几何参数可以调整。具体问题可以只计算热传导，或者计算热弹塑性，热弹塑性采用最简单的理想塑性本构。
-
 \begin{figure}[!htbp]
   \centering
-  \includegraphics[height=3cm]{fig/4/1.png}
-  \caption{热循环残余应力和变形计算}
-  \label{fig:4-1}
+  \includegraphics[height=3cm]{fig/1/1.2/1.png}
+  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+  \label{fig:1-7}
 \end{figure}
 
 \begin{figure}[!htbp]
   \centering
-  \includegraphics[height=3cm]{fig/4/2.png}
-  \caption{激活单元}
-  \label{fig:4-2}
+  \includegraphics[height=3cm]{fig/1/1.2/2.png}
+  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+  \label{fig:1-7}
 \end{figure}
 
 \begin{figure}[!htbp]
   \centering
-  \includegraphics[height=3cm]{fig/4/3.png}
-  \caption{激活单元和静单元混合形式}
-  \label{fig:4-3}
+  \includegraphics[height=3cm]{fig/1/1.2/3.png}
+  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+  \label{fig:1-7}
 \end{figure}
 
 \begin{figure}[!htbp]
   \centering
-  \includegraphics[height=3cm]{fig/4/4.png}
-  \caption{固有应变法残余应力和变形计算}
-  \label{fig:4-4}
+  \includegraphics[height=3cm]{fig/1/1.2/4.png}
+  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+  \label{fig:1-7}
 \end{figure}
 
 \begin{figure}[!htbp]
   \centering
-  \includegraphics[height=5cm]{fig/4/5.png}
-  \caption{CAD模型}
-  \label{fig:4-5}
+  \includegraphics[height=3cm]{fig/1/1.2/5.png}
+  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+  \label{fig:1-7}
 \end{figure}
 
 \begin{figure}[!htbp]
   \centering
-  \includegraphics[height=5cm]{fig/4/6.png}
-  \caption{固有应变法}
-  \label{fig:4-6}
+  \includegraphics[height=3cm]{fig/1/1.2/6.png}
+  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+  \label{fig:1-7}
 \end{figure}
 
-\section{热弹塑性}
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/1.2/7.png}
+  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+  \label{fig:1-7}
+\end{figure}
 
-\section{小尺度热循环生死单元法}
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/1.2/8.png}
+  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+  \label{fig:1-7}
+\end{figure}
 
-\section{构件尺度固有应变法}
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/1.2/9.png}
+  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/1.2/10.png}
+  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/1.2/11.png}
+  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/1.2/12.png}
+  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/1.2/13.png}
+  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/1.2/14.png}
+  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+  \label{fig:1-7}
+\end{figure}
+
