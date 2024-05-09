@@ -290,105 +290,112 @@ Slice2Mesh中的Trimesh是来自cinolib，slice2plc将切片转为Piecewise Line
 
 \subsection{RnD}
 
+RnD是为了remapping开发的，首先是从四面体网格到六面体网格的remapping，需要四面体和六面体相交算法，然后计算moments，其中moments$\_$vox[0]为四面体和六面体相交的体积，因此除了做remapping，还可以对多面体进行像素网格剖分。将多面体进行四面体网格剖分，然后根据像素网格中六面体和四面体是否相交排除多余的六面体。在deprecated/examples/路径中有一个像素网格剖分的例子，其中vox$\_$size可以调整像素网格大小。
+
 \subsubsection{数据结构和算法}
+r3d$\_$dest$\_$grid为网格数据结构，定义在r3d.h中，定义四面体的面，用r3d$\_$voxelize$\_$tet函数计算像素网格和四面体相交，定义在r3d.h中，r3d$\_$dest$\_$grid的moments中保存了相交体积。
 
 \subsubsection{算例}
 
 \begin{figure}[!htbp]
   \centering
   \includegraphics[height=3cm]{fig/1/1.2/1.png}
-  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+  \caption{$(0,0,0),(1,0,0),(0,1,0),(0,0,1)$，运行$.\\$voxelize，像素大小为$1/8$}
   \label{fig:1-7}
 \end{figure}
 
 \begin{figure}[!htbp]
   \centering
   \includegraphics[height=3cm]{fig/1/1.2/2.png}
-  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+  \caption{$(0,0,0),(1,0,0),(0,1,0),(0,0,1)$，运行$.\\$voxelize，像素大小为$1/16$}
   \label{fig:1-7}
 \end{figure}
 
 \begin{figure}[!htbp]
   \centering
   \includegraphics[height=3cm]{fig/1/1.2/3.png}
-  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+    \caption{$(0,0,0),(1,0,0),(0,1,0),(0,0,1)$，运行$.\\$voxelize，像素大小为$1/32$}
   \label{fig:1-7}
 \end{figure}
 
 \begin{figure}[!htbp]
   \centering
   \includegraphics[height=3cm]{fig/1/1.2/4.png}
-  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+    \caption{$(0,0,0),(1,0,0),(0,1,0),(0,0,1)$，运行$.\\$voxelize，像素大小为$1/64$}
   \label{fig:1-7}
 \end{figure}
 
 \begin{figure}[!htbp]
   \centering
   \includegraphics[height=3cm]{fig/1/1.2/5.png}
-  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+  \caption{$(0,0,0),(1/2,0,0),(0,1/3,0),(0,0,1/4)$，运行$.\\$voxelize，像素大小为$1/8$}
   \label{fig:1-7}
 \end{figure}
 
 \begin{figure}[!htbp]
   \centering
   \includegraphics[height=3cm]{fig/1/1.2/6.png}
-  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+    \caption{$(0,0,0),(1/2,0,0),(0,1/3,0),(0,0,1/4)$，运行$.\\$voxelize，像素大小为$1/16$}
   \label{fig:1-7}
 \end{figure}
 
 \begin{figure}[!htbp]
   \centering
   \includegraphics[height=3cm]{fig/1/1.2/7.png}
-  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+    \caption{$(0,0,0),(1/2,0,0),(0,1/3,0),(0,0,1/4)$，运行$.\\$voxelize，像素大小为$1/32$}
   \label{fig:1-7}
 \end{figure}
 
 \begin{figure}[!htbp]
   \centering
   \includegraphics[height=3cm]{fig/1/1.2/8.png}
-  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+    \caption{$(0,0,0),(1/2,0,0),(0,1/3,0),(0,0,1/4)$，运行$.\\$voxelize，像素大小为$1/64$}
   \label{fig:1-7}
 \end{figure}
 
 \begin{figure}[!htbp]
   \centering
   \includegraphics[height=3cm]{fig/1/1.2/9.png}
-  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+  \caption{$(0,0,0),(1,0,0),(0,1,0),(0,0,1),(0.9,0.9,0.9)$，运行$.\\$voxelize，像素大小为$1/8$}
   \label{fig:1-7}
 \end{figure}
 
 \begin{figure}[!htbp]
   \centering
   \includegraphics[height=3cm]{fig/1/1.2/10.png}
-  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+    \caption{$(0,0,0),(1,0,0),(0,1,0),(0,0,1),(0.9,0.9,0.9)$，运行$.\\$voxelize，像素大小为$1/16$}
   \label{fig:1-7}
 \end{figure}
 
 \begin{figure}[!htbp]
   \centering
   \includegraphics[height=3cm]{fig/1/1.2/11.png}
-  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+    \caption{$(0,0,0),(1,0,0),(0,1,0),(0,0,1),(0.9,0.9,0.9)$，运行$.\\$voxelize，像素大小为$1/32$}
   \label{fig:1-7}
 \end{figure}
 
 \begin{figure}[!htbp]
   \centering
   \includegraphics[height=3cm]{fig/1/1.2/12.png}
-  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+    \caption{$(0,0,0),(1,0,0),(0,1,0),(0,0,1),(0.9,0.9,0.9)$，运行$.\\$voxelize，像素大小为$1/64$}
   \label{fig:1-7}
 \end{figure}
+
+\newpage
+
+对像素网格进行加密放粗，很容易获取非协调性网格，从而提高像素网格的模型精度，并降低网格数量。
 
 \begin{figure}[!htbp]
   \centering
   \includegraphics[height=3cm]{fig/1/1.2/13.png}
-  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+  \caption{非协调性网格}
   \label{fig:1-7}
 \end{figure}
 
 \begin{figure}[!htbp]
   \centering
   \includegraphics[height=3cm]{fig/1/1.2/14.png}
-  \caption{采用./slice2mesh$\_$exec ../data/T$\_$supported.cli -tetflags a0.0001命令生成网格，用python3 msh2vtk.py生成vtk文件。}
+  \caption{非协调性网格}
   \label{fig:1-7}
 \end{figure}
 

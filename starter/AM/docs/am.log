@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2024.4.15)  9 MAY 2024 10:19
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2024.4.15)  9 MAY 2024 13:50
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1098,13 +1098,13 @@ File: fig/1/1.1.7.2:4.png Graphic file (type bmp)
 <fig/1/1.1.7.2:4.png>
 File: fig/1/1.1.7.2:5.png Graphic file (type bmp)
 <fig/1/1.1.7.2:5.png>
-File: fig/1/1.2/1.png Graphic file (type bmp)
-<fig/1/1.2/1.png>
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [14]
 [15] [16] [17]
+File: fig/1/1.2/1.png Graphic file (type bmp)
+<fig/1/1.2/1.png>
 File: fig/1/1.2/2.png Graphic file (type bmp)
 <fig/1/1.2/2.png>
 File: fig/1/1.2/3.png Graphic file (type bmp)
@@ -1127,15 +1127,16 @@ File: fig/1/1.2/11.png Graphic file (type bmp)
 <fig/1/1.2/11.png>
 File: fig/1/1.2/12.png Graphic file (type bmp)
 <fig/1/1.2/12.png>
+ [18] [19] [20] [21]
 File: fig/1/1.2/13.png Graphic file (type bmp)
 <fig/1/1.2/13.png>
 File: fig/1/1.2/14.png Graphic file (type bmp)
 <fig/1/1.2/14.png>
-) (./chapters/chapter2.tex [18] [19] [20] [21] [22
-
-]
+) (./chapters/chapter2.tex [22]
 Chapter 2.
-) (./chapters/chapter3.tex [23] [24
+) (./chapters/chapter3.tex [23
+
+] [24
 
 ]
 Chapter 3.
@@ -1183,6 +1184,6 @@ Here is how much of TeX's memory you used:
  36873 multiletter control sequences out of 15000+600000
  510611 words of font info for 142 fonts, out of 8000000 for 9000
  264 hyphenation exceptions out of 8191
- 89i,6n,97p,1238b,502s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 89i,6n,97p,1238b,498s stack positions out of 5000i,500n,10000p,200000b,80000s
 
 Output written on am.pdf (31 pages).
