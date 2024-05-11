@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2024.4.15)  9 MAY 2024 13:50
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2024.4.15)  11 MAY 2024 15:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -734,64 +734,64 @@ LaTeX Info: Redefining \hbar on input line 50.
 \sectsavebox=\box76
 
 
-Package mathptmx Warning: There are no bold math fonts on input line 149.
+Package mathptmx Warning: There are no bold math fonts on input line 151.
 
 LaTeX Font Info:    Trying to load font information for OT1+ztmcm on input line
- 149.
+ 151.
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ztmcm.fd
 File: ot1ztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ztmcm.
 )
 LaTeX Font Info:    Trying to load font information for OML+ztmcm on input line
- 149.
+ 151.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omlztmcm.fd
 File: omlztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ztmcm.
 )
 LaTeX Font Info:    Trying to load font information for OMS+ztmcm on input line
- 149.
+ 151.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsztmcm.fd
 File: omsztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/ztmcm.
 )
 LaTeX Font Info:    Trying to load font information for OMX+ztmcm on input line
- 149.
+ 151.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omxztmcm.fd
 File: omxztmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/ztmcm.
 )
-LaTeX Font Info:    Trying to load font information for U+msa on input line 149
+LaTeX Font Info:    Trying to load font information for U+msa on input line 151
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 149
+LaTeX Font Info:    Trying to load font information for U+msb on input line 151
 .
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Trying to load font information for OT1+ptm on input line 1
-49.
+51.
 
 (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 149.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 151.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 149.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 151.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 149.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 151.
 Package translations Info: No language package found. I am going to use `englis
-h' as default language. on input line 163.
+h' as default language. on input line 165.
 LaTeX Font Info:    Trying to load font information for TU+ptm on input line 16
-3.
-LaTeX Font Info:    No file TUptm.fd. on input line 163.
+5.
+LaTeX Font Info:    No file TUptm.fd. on input line 165.
 
 
 LaTeX Font Warning: Font shape `TU/ptm/m/n' undefined
-(Font)              using `TU/lmr/m/n' instead on input line 163.
+(Font)              using `TU/lmr/m/n' instead on input line 165.
 
 (./am.aux
 
@@ -911,25 +911,31 @@ LaTeX Warning: Label `fig:1-7' multiply defined.
 
 LaTeX Warning: Label `fig:1-7' multiply defined.
 
+
+LaTeX Warning: Label `fig:4.1.1:1' multiply defined.
+
+
+LaTeX Warning: Label `fig:4.1.1:2' multiply defined.
+
 )
 \openout1 = `am.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 163.
-LaTeX Font Info:    ... okay on input line 163.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 163.
-LaTeX Font Info:    ... okay on input line 163.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 163.
-LaTeX Font Info:    ... okay on input line 163.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 163.
-LaTeX Font Info:    ... okay on input line 163.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 163.
-LaTeX Font Info:    ... okay on input line 163.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 163.
-LaTeX Font Info:    ... okay on input line 163.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 163.
-LaTeX Font Info:    ... okay on input line 163.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 163.
-LaTeX Font Info:    ... okay on input line 163.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 165.
+LaTeX Font Info:    ... okay on input line 165.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 165.
+LaTeX Font Info:    ... okay on input line 165.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 165.
+LaTeX Font Info:    ... okay on input line 165.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 165.
+LaTeX Font Info:    ... okay on input line 165.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 165.
+LaTeX Font Info:    ... okay on input line 165.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 165.
+LaTeX Font Info:    ... okay on input line 165.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 165.
+LaTeX Font Info:    ... okay on input line 165.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 165.
+LaTeX Font Info:    ... okay on input line 165.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: xetex
@@ -972,11 +978,11 @@ File: translations-basic-dictionary-english.trsl (english translation file `tra
 nslations-basic-dictionary')
 )
 Package translations Info: loading dictionary `translations-basic-dictionary' f
-or `english'. on input line 163.
+or `english'. on input line 165.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12.045> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 185.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 187.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <8> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 185.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 187.
 
 
 LaTeX Warning: No \author given.
@@ -987,14 +993,14 @@ LaTeX Warning: No \author given.
 ]
 
 LaTeX Font Warning: Font shape `TU/ptm/m/sl' undefined
-(Font)              using `TU/ptm/m/n' instead on input line 223.
+(Font)              using `TU/ptm/m/n' instead on input line 225.
 
 [2
 
 ]
 
 LaTeX Font Warning: Font shape `TU/ptm/b/n' undefined
-(Font)              using `TU/ptm/m/n' instead on input line 223.
+(Font)              using `TU/ptm/m/n' instead on input line 225.
 
 (./am.toc
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10.53937> not available
@@ -1087,11 +1093,11 @@ File: fig/1/21.png Graphic file (type bmp)
 File: fig/1/1.1.7.2:3.png Graphic file (type bmp)
 <fig/1/1.1.7.2:3.png>
 
-Underfull \hbox (badness 2119) in paragraph at lines 270--270
-[]\TU/FandolSong-Regular(0)/m/n/10.53937 图 \TU/ptm/m/sl/10.53937 1.30: \TU/Fand
-olSong-Regular(0)/m/n/10.53937 采 用\TU/ptm/m/sl/10.53937 ./slice2mesh$[]$exec ..
-/data/T$[]$supported.cli \TU/FandolSong-Regular(0)/m/n/10.53937 命 令 生 成 网 格，|  
-用 \TU/ptm/m/sl/10.53937 python3
+Underfull \hbox (badness 1005) in paragraph at lines 270--270
+[]\TU/FandolSong-Regular(0)/m/n/10.53937 图 \TU/ptm/m/sl/10.53937 1.1.30: \TU/Fa
+ndolSong-Regular(0)/m/n/10.53937 采 用\TU/ptm/m/sl/10.53937 ./slice2mesh$[]$exec 
+../data/T$[]$supported.cli \TU/FandolSong-Regular(0)/m/n/10.53937 命 令 生 成 网 格，|
+  用 \TU/ptm/m/sl/10.53937 python3
  []
 
 File: fig/1/1.1.7.2:4.png Graphic file (type bmp)
@@ -1144,6 +1150,24 @@ Chapter 3.
 
 ]
 Chapter 4.
+
+LaTeX Warning: Reference `fig:4-1' on page 27 undefined on input line 3.
+
+
+LaTeX Warning: Reference `fig:4-4' on page 27 undefined on input line 3.
+
+
+LaTeX Warning: Reference `fig:4-2' on page 27 undefined on input line 3.
+
+
+LaTeX Warning: Reference `fig:4-4' on page 27 undefined on input line 3.
+
+
+LaTeX Warning: Reference `fig:4-5' on page 27 undefined on input line 3.
+
+
+LaTeX Warning: Reference `fig:4-6' on page 27 undefined on input line 3.
+
 File: fig/4/1.png Graphic file (type bmp)
 <fig/4/1.png>
 File: fig/4/2.png Graphic file (type bmp)
@@ -1152,15 +1176,19 @@ File: fig/4/3.png Graphic file (type bmp)
 <fig/4/3.png>
 File: fig/4/4.png Graphic file (type bmp)
 <fig/4/4.png>
-File: fig/4/5.png Graphic file (type bmp)
-<fig/4/5.png>
 File: fig/4/6.png Graphic file (type bmp)
 <fig/4/6.png>
-)
+
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [27]
-[28] [29] (./am.bbl [30
+[28] [29]
+File: fig/4/fig:1.1.1:1.png Graphic file (type bmp)
+<fig/4/fig:1.1.1:1.png>
+ [30]
+File: fig/4/fig:1.1.1:2.png Graphic file (type bmp)
+<fig/4/fig:1.1.1:2.png>
+) [31] (./am.bbl [32
 
 
 ]
@@ -1169,21 +1197,24 @@ Underfull \hbox (badness 2521) in paragraph at lines 14--17
 ied Schwarzkopf.
  []
 
-) [31] (./am.aux)
+) [33] (./am.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+
+LaTeX Warning: There were undefined references.
 
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 16555 strings out of 477728
- 398511 string characters out of 5842238
- 724139 words of memory out of 5000000
- 36873 multiletter control sequences out of 15000+600000
- 510611 words of font info for 142 fonts, out of 8000000 for 9000
+ 16592 strings out of 477728
+ 399948 string characters out of 5842238
+ 725327 words of memory out of 5000000
+ 36907 multiletter control sequences out of 15000+600000
+ 510619 words of font info for 143 fonts, out of 8000000 for 9000
  264 hyphenation exceptions out of 8191
- 89i,6n,97p,1238b,498s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 89i,10n,97p,1238b,518s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on am.pdf (31 pages).
+Output written on am.pdf (33 pages).

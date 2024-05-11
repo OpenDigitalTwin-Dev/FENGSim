@@ -27,5 +27,6 @@
 \contentsline {section}{\numberline {3.1}Metis}{25}{}%
 \contentsline {chapter}{\numberline {4}残余应力和变形}{27}{}%
 \contentsline {section}{\numberline {4.1}热弹塑性}{29}{}%
-\contentsline {section}{\numberline {4.2}小尺度热循环生死单元法}{29}{}%
-\contentsline {section}{\numberline {4.3}构件尺度固有应变法}{29}{}%
+\contentsline {subsection}{\numberline {4.1.1}泊松方程}{29}{}%
+\contentsline {section}{\numberline {4.2}小尺度热循环生死单元法}{31}{}%
+\contentsline {section}{\numberline {4.3}构件尺度固有应变法}{31}{}%
