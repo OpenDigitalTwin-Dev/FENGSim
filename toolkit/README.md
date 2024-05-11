@@ -56,16 +56,22 @@ r3d
 
 You can also download NSM, CFD, CEM, DAE, CM, NLA repositories from GitHub by cloning them.
 
-https://github.com/OpenDigitalTwin-Dev/NSM.git
+cd FENGSim/toolkit/
+git clone https://github.com/OpenDigitalTwin-Dev/NSM.git
 
-https://github.com/OpenDigitalTwin-Dev/CFD.git
+cd FENGSim/toolkit/
+git clone https://github.com/OpenDigitalTwin-Dev/CFD.git
 
-https://github.com/OpenDigitalTwin-Dev/CEM.git
+cd FENGSim/toolkit/
+git clone https://github.com/OpenDigitalTwin-Dev/CEM.git
 
-https://github.com/OpenDigitalTwin-Dev/DAE.git
+cd FENGSim/toolkit/
+git clone https://github.com/OpenDigitalTwin-Dev/DAE.git
 
-https://github.com/OpenDigitalTwin-Dev/CM.git
+cd FENGSim/toolkit/
+git clone https://github.com/OpenDigitalTwin-Dev/CM.git
 
-https://github.com/OpenDigitalTwin-Dev/NLA.git
+cd FENGSim/toolkit/
+git clone https://github.com/OpenDigitalTwin-Dev/NLA.git
 
 
