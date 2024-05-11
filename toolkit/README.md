@@ -56,6 +56,7 @@ r3d
 
 You can also download NSM, CFD, CEM, DAE, CM, NLA repositories from GitHub by cloning them.
 
+```
 cd FENGSim/toolkit/
 git clone https://github.com/OpenDigitalTwin-Dev/NSM.git
 
@@ -73,5 +74,5 @@ git clone https://github.com/OpenDigitalTwin-Dev/CM.git
 
 cd FENGSim/toolkit/
 git clone https://github.com/OpenDigitalTwin-Dev/NLA.git
-
+```
 
