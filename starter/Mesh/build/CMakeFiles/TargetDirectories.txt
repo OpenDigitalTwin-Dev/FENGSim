@@ -1,4 +1,0 @@
-/home/jiping/FENGSim/starter/Mesh/build/CMakeFiles/edit_cache.dir
-/home/jiping/FENGSim/starter/Mesh/build/CMakeFiles/rebuild_cache.dir
-/home/jiping/FENGSim/starter/Mesh/build/src/CMakeFiles/edit_cache.dir
-/home/jiping/FENGSim/starter/Mesh/build/src/CMakeFiles/rebuild_cache.dir
