@@ -2,6 +2,7 @@
 // author: Jiping Xin
 
 #include "m++.h"
+#include "PoissonProblems.h"
 #include "PoissonProblem.h"
 #include "ThermoElasticityBVP.h"
 
@@ -20,7 +21,7 @@ public:
 		for (int j = 0; j < disc.NodalPointsOnFace(c,i); ++j) {
 		    int k = disc.NodalPointOnFace(c,i,j);
 		    u_c.D(k) = true;
-		    u_c(k) = Dirichlet(E[k](),u_c.bc(i));
+		    //u_c(k) = Dirichlet(E[k](),u_c.bc(i));
 		}
 	    }
 	}
@@ -34,7 +35,7 @@ public:
 	    for (int i = 0; i < E.size(); ++i) {
 		for (int j = 0; j < E.size(); ++j) {
 		    for (int q = 0; q < E.nQ(); q++) {
-			A_c(i,j) += Coefficient(E.QPoint(q)) * E.Derivative(q,i) * E.Derivative(q,j) * E.QWeight(q);
+		      //A_c(i,j) += Coefficient(E.QPoint(q)) * E.Derivative(q,i) * E.Derivative(q,j) * E.QWeight(q);
 		    }
 		}
 	    }
@@ -49,13 +50,13 @@ public:
 	    // source
 	    for (int i = 0; i < E.size(); ++i) {
 		for (int q = 0; q < E.nQ(); q++) {
-		    b_c(i) += E.Value(q,i) * Source(E.QPoint(q)) * E.QWeight(q);
+		  //b_c(i) += E.Value(q,i) * Source(E.QPoint(q)) * E.QWeight(q);
 		}
 	    }
 	    // dirichlet
 	    for (int i = 0; i < E.size(); ++i) {
 		for (int q = 0; q < E.nQ(); q++) {
-		    b_c(i) += (-1.0) * Coefficient(E.QPoint(q)) * E.Derivative(q,i) * E.Derivative(q,u) * E.QWeight(q);
+		  //b_c(i) += (-1.0) * Coefficient(E.QPoint(q)) * E.Derivative(q,i) * E.Derivative(q,u) * E.QWeight(q);
 		}
 	    }
 	    // neumann
@@ -67,7 +68,7 @@ public:
 		    for (int j = 0; j < disc.NodalPointsOnFace(c,i); ++j) {
 			int k = disc.NodalPointOnFace(c,i,j);
 			for (int q = 0; q < E.nQ(); q++) {
-			    u_c(k) += E.Value(q,j) * Neumann(E.QPoint(q),u_c.bc(i)) * E.QWeight(q);
+			  //u_c(k) += E.Value(q,j) * Neumann(E.QPoint(q),u_c.bc(i)) * E.QWeight(q);
 			}
 		    }
 		}
@@ -81,7 +82,7 @@ public:
 	for (cell c = x.GetMesh().cells(); c != x.GetMesh().cells_end(); c++) {
 	    ScalarElement E(disc,x,c);
 	    for (int q = 0; q < E.nQ(); q++) {
-		t += pow(Solution(E.QPoint(q)) - E.Value(q,x),2) * E.QWeight(q);
+	      //t += pow(Solution(E.QPoint(q)) - E.Value(q,x),2) * E.QWeight(q);
 	    }
 	}
 	double s = PPM->Sum(t);
@@ -216,7 +217,7 @@ void AMSolver (Meshes& M, PathPlanning* pp) {
     //ReadConfig(Settings, "Mesh", name);
     //Meshes M(name.c_str());
     PoissonAssemble L;
-    L.pp = pp;
+    //L.pp = pp;
     L.SetDomain(M.fine());
     L.SetBoundary(M.fine());
 

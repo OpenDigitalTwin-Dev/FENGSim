@@ -3,6 +3,7 @@
 
 #include "PoissonProblem.h"
 
+/*
 void PoissonProblems::SetDomain (Mesh& M) {
     int id;
     ReadConfig(Settings, "EXAMPLE", id);
@@ -154,3 +155,4 @@ double PoissonProblems::Solution (const Point& p) const {
 	break;
     }
 }
+*/

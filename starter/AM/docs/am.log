@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2024.4.15)  11 MAY 2024 15:30
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2024.4.15)  13 MAY 2024 14:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -911,12 +911,6 @@ LaTeX Warning: Label `fig:1-7' multiply defined.
 
 LaTeX Warning: Label `fig:1-7' multiply defined.
 
-
-LaTeX Warning: Label `fig:4.1.1:1' multiply defined.
-
-
-LaTeX Warning: Label `fig:4.1.1:2' multiply defined.
-
 )
 \openout1 = `am.aux'.
 
@@ -1076,8 +1070,40 @@ File: fig/1/1.1.7.1:00.png Graphic file (type bmp)
 <fig/1/1.1.7.1:00.png>
 File: fig/1/1.1.7.1:1.png Graphic file (type bmp)
 <fig/1/1.1.7.1:1.png>
+
+Underfull \hbox (badness 10000) in paragraph at lines 211--211
+[]\TU/FandolSong-Regular(0)/m/n/10.53937 图 \TU/ptm/m/sl/10.53937 1.1.6.3: \TU/F
+andolSong-Regular(0)/m/n/10.53937 采 用\TU/ptm/m/sl/10.53937 ./slice2mesh$[]$exec
+ ../data/pyramid$[]$l0.03.cli \TU/FandolSong-Regular(0)/m/n/10.53937 命 令 生 成 \T
+U/ptm/m/sl/10.53937 am-
+ []
+
+
+Underfull \hbox (badness 3000) in paragraph at lines 211--211
+\TU/ptm/m/sl/10.53937 slices2mesh$[]$plc.off\TU/FandolSong-Regular(0)/m/n/10.53
+937 ，|  修 改 \TU/ptm/m/sl/10.53937 plc2vtk.py \TU/FandolSong-Regular(0)/m/n/10.5
+3937 中 读 入 文 件 名 称，|  用 \TU/ptm/m/sl/10.53937 python3 plc2vtk.py \TU/FandolSong
+-Regular(0)/m/n/10.53937 生 成
+ []
+
 File: fig/1/1.1.7.1:2.png Graphic file (type bmp)
 <fig/1/1.1.7.1:2.png>
+
+Underfull \hbox (badness 10000) in paragraph at lines 218--218
+[]\TU/FandolSong-Regular(0)/m/n/10.53937 图 \TU/ptm/m/sl/10.53937 1.1.6.4: \TU/F
+andolSong-Regular(0)/m/n/10.53937 采 用\TU/ptm/m/sl/10.53937 ./slice2mesh$[]$exec
+ ../data/pyramid$[]$l0.03.cli \TU/FandolSong-Regular(0)/m/n/10.53937 命 令 生 成 \T
+U/ptm/m/sl/10.53937 am-
+ []
+
+
+Underfull \hbox (badness 3000) in paragraph at lines 218--218
+\TU/ptm/m/sl/10.53937 slices2mesh$[]$plc.off\TU/FandolSong-Regular(0)/m/n/10.53
+937 ，|  修 改 \TU/ptm/m/sl/10.53937 plc2vtk.py \TU/FandolSong-Regular(0)/m/n/10.5
+3937 中 读 入 文 件 名 称，|  用 \TU/ptm/m/sl/10.53937 python3 plc2vtk.py \TU/FandolSong
+-Regular(0)/m/n/10.53937 生 成
+ []
+
 File: fig/1/1.1.7.1:3.png Graphic file (type bmp)
 <fig/1/1.1.7.1:3.png>
 File: fig/1/1.1.7.1:4.png Graphic file (type bmp)
@@ -1092,14 +1118,6 @@ File: fig/1/21.png Graphic file (type bmp)
 <fig/1/21.png>
 File: fig/1/1.1.7.2:3.png Graphic file (type bmp)
 <fig/1/1.1.7.2:3.png>
-
-Underfull \hbox (badness 1005) in paragraph at lines 270--270
-[]\TU/FandolSong-Regular(0)/m/n/10.53937 图 \TU/ptm/m/sl/10.53937 1.1.30: \TU/Fa
-ndolSong-Regular(0)/m/n/10.53937 采 用\TU/ptm/m/sl/10.53937 ./slice2mesh$[]$exec 
-../data/T$[]$supported.cli \TU/FandolSong-Regular(0)/m/n/10.53937 命 令 生 成 网 格，|
-  用 \TU/ptm/m/sl/10.53937 python3
- []
-
 File: fig/1/1.1.7.2:4.png Graphic file (type bmp)
 <fig/1/1.1.7.2:4.png>
 File: fig/1/1.1.7.2:5.png Graphic file (type bmp)
@@ -1150,24 +1168,6 @@ Chapter 3.
 
 ]
 Chapter 4.
-
-LaTeX Warning: Reference `fig:4-1' on page 27 undefined on input line 3.
-
-
-LaTeX Warning: Reference `fig:4-4' on page 27 undefined on input line 3.
-
-
-LaTeX Warning: Reference `fig:4-2' on page 27 undefined on input line 3.
-
-
-LaTeX Warning: Reference `fig:4-4' on page 27 undefined on input line 3.
-
-
-LaTeX Warning: Reference `fig:4-5' on page 27 undefined on input line 3.
-
-
-LaTeX Warning: Reference `fig:4-6' on page 27 undefined on input line 3.
-
 File: fig/4/1.png Graphic file (type bmp)
 <fig/4/1.png>
 File: fig/4/2.png Graphic file (type bmp)
@@ -1188,33 +1188,40 @@ File: fig/4/fig:1.1.1:1.png Graphic file (type bmp)
  [30]
 File: fig/4/fig:1.1.1:2.png Graphic file (type bmp)
 <fig/4/fig:1.1.1:2.png>
-) [31] (./am.bbl [32
+ [31] [32]
+File: fig/4/fig:1.1.1:2.png Graphic file (type bmp)
+<fig/4/fig:1.1.1:2.png>
 
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
-]
+ [33]
+File: fig/4/fig:1.1.1:2.png Graphic file (type bmp)
+<fig/4/fig:1.1.1:2.png>
+)
+[34] (./am.bbl
 Underfull \hbox (badness 2521) in paragraph at lines 14--17
 []\TU/ptm/m/sl/10.53937 Mark de Berg, Marc van Kreveld, Mark Overmars, and Otfr
 ied Schwarzkopf.
  []
 
-) [33] (./am.aux)
+) [35
+
+
+] (./am.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
-
-
-LaTeX Warning: There were undefined references.
 
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 16592 strings out of 477728
- 399948 string characters out of 5842238
- 725327 words of memory out of 5000000
- 36907 multiletter control sequences out of 15000+600000
+ 16591 strings out of 477728
+ 399937 string characters out of 5842238
+ 724421 words of memory out of 5000000
+ 36906 multiletter control sequences out of 15000+600000
  510619 words of font info for 143 fonts, out of 8000000 for 9000
  264 hyphenation exceptions out of 8191
  89i,10n,97p,1238b,518s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on am.pdf (33 pages).
+Output written on am.pdf (35 pages).

@@ -119,7 +119,7 @@ public:
     }
 };
 
-class PoissonProblems {
+/*class PoissonProblems {
     int example_id;
 public:
     PoissonProblems () {
@@ -135,4 +135,4 @@ public:
     double Dirichlet (Point p, int id) const;
     double Neumann (Point p, int id) const;
     double Solution (const Point& p) const;
-};
+    };*/

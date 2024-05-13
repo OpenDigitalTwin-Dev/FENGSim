@@ -1,2 +1,3 @@
 #loadconf = solver/conf/cura.conf;
-loadconf = solver/conf/am.conf;
+#loadconf = solver/conf/am.conf;
+loadconf = solver/conf/heat.conf;

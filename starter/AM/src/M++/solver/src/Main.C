@@ -1,5 +1,5 @@
 // file:   Main.C
-// author: Christian Wieners Jiping Xin
+// author: Jiping Xin
 
 #include "m++.h" 
 #include "mpi.h"
@@ -11,6 +11,8 @@
 void SlicePhaseTestMain (int argc, char** argv);
 void InfillTestMain ();
 void AMMain ();
+void PoissonMain ();
+void HeatMain ();
 
 int main (int argc, char** argv) {
     DPO dpo(&argc,&argv);
@@ -19,5 +21,7 @@ int main (int argc, char** argv) {
     if (Model == "SlicePhaseTest") SlicePhaseTestMain(argc, argv);
     if (Model == "InfillTest") InfillTestMain();
     if (Model == "AM") AMMain();
+    if (Model == "Poisson") PoissonMain();
+    if (Model == "Heat") HeatMain();
     return 0;
 }
