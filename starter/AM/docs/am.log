@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2024.4.15)  14 MAY 2024 16:06
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2024.4.15)  14 MAY 2024 16:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -929,6 +929,15 @@ LaTeX Warning: Label `fig:1-7' multiply defined.
 
 LaTeX Warning: Label `fig:1-7' multiply defined.
 
+
+LaTeX Warning: Label `fig:1-7' multiply defined.
+
+
+LaTeX Warning: Label `fig:1-7' multiply defined.
+
+
+LaTeX Warning: Label `fig:1-7' multiply defined.
+
 )
 \openout1 = `am.aux'.
 
@@ -1194,7 +1203,13 @@ File: fig/1/1.1.4/5.png Graphic file (type bmp)
 <fig/1/1.1.4/5.png>
 File: fig/1/1.1.4/6.png Graphic file (type bmp)
 <fig/1/1.1.4/6.png>
- [14] [15]
+File: fig/1/1.1.4/7.png Graphic file (type bmp)
+<fig/1/1.1.4/7.png>
+File: fig/1/1.1.4/8.png Graphic file (type bmp)
+<fig/1/1.1.4/8.png>
+File: fig/1/1.1.4/9.png Graphic file (type bmp)
+<fig/1/1.1.4/9.png>
+ [14] [15] [16]
 File: fig/1/1.1.7.1:0.png Graphic file (type bmp)
 <fig/1/1.1.7.1:0.png>
 File: fig/1/1.1.7.1:00.png Graphic file (type bmp)
@@ -1202,7 +1217,7 @@ File: fig/1/1.1.7.1:00.png Graphic file (type bmp)
 File: fig/1/1.1.7.1:1.png Graphic file (type bmp)
 <fig/1/1.1.7.1:1.png>
 
-Underfull \hbox (badness 10000) in paragraph at lines 255--255
+Underfull \hbox (badness 10000) in paragraph at lines 276--276
 []\TU/FandolSong-Regular(0)/m/n/10.53937 图 \TU/ptm/m/sl/10.53937 1.1.6.3: \TU/F
 andolSong-Regular(0)/m/n/10.53937 采 用\TU/ptm/m/sl/10.53937 ./slice2mesh$[]$exec
  ../data/pyramid$[]$l0.03.cli \TU/FandolSong-Regular(0)/m/n/10.53937 命 令 生 成 \T
@@ -1210,7 +1225,7 @@ U/ptm/m/sl/10.53937 am-
  []
 
 
-Underfull \hbox (badness 3000) in paragraph at lines 255--255
+Underfull \hbox (badness 3000) in paragraph at lines 276--276
 \TU/ptm/m/sl/10.53937 slices2mesh$[]$plc.off\TU/FandolSong-Regular(0)/m/n/10.53
 937 ，|  修 改 \TU/ptm/m/sl/10.53937 plc2vtk.py \TU/FandolSong-Regular(0)/m/n/10.5
 3937 中 读 入 文 件 名 称，|  用 \TU/ptm/m/sl/10.53937 python3 plc2vtk.py \TU/FandolSong
@@ -1220,7 +1235,7 @@ Underfull \hbox (badness 3000) in paragraph at lines 255--255
 File: fig/1/1.1.7.1:2.png Graphic file (type bmp)
 <fig/1/1.1.7.1:2.png>
 
-Underfull \hbox (badness 10000) in paragraph at lines 262--262
+Underfull \hbox (badness 10000) in paragraph at lines 283--283
 []\TU/FandolSong-Regular(0)/m/n/10.53937 图 \TU/ptm/m/sl/10.53937 1.1.6.4: \TU/F
 andolSong-Regular(0)/m/n/10.53937 采 用\TU/ptm/m/sl/10.53937 ./slice2mesh$[]$exec
  ../data/pyramid$[]$l0.03.cli \TU/FandolSong-Regular(0)/m/n/10.53937 命 令 生 成 \T
@@ -1228,7 +1243,7 @@ U/ptm/m/sl/10.53937 am-
  []
 
 
-Underfull \hbox (badness 3000) in paragraph at lines 262--262
+Underfull \hbox (badness 3000) in paragraph at lines 283--283
 \TU/ptm/m/sl/10.53937 slices2mesh$[]$plc.off\TU/FandolSong-Regular(0)/m/n/10.53
 937 ，|  修 改 \TU/ptm/m/sl/10.53937 plc2vtk.py \TU/FandolSong-Regular(0)/m/n/10.5
 3937 中 读 入 文 件 名 称，|  用 \TU/ptm/m/sl/10.53937 python3 plc2vtk.py \TU/FandolSong
@@ -1245,7 +1260,6 @@ File: fig/1/1.1.7.1:6.png Graphic file (type bmp)
 <fig/1/1.1.7.1:6.png>
 File: fig/1/20.png Graphic file (type bmp)
 <fig/1/20.png>
-[16] [17] [18]
 File: fig/1/21.png Graphic file (type bmp)
 <fig/1/21.png>
 File: fig/1/1.1.7.2:3.png Graphic file (type bmp)
@@ -1254,7 +1268,7 @@ File: fig/1/1.1.7.2:4.png Graphic file (type bmp)
 <fig/1/1.1.7.2:4.png>
 File: fig/1/1.1.7.2:5.png Graphic file (type bmp)
 <fig/1/1.1.7.2:5.png>
- [19] [20]
+[17] [18] [19] [20]
 File: fig/1/1.2/1.png Graphic file (type bmp)
 <fig/1/1.2/1.png>
 File: fig/1/1.2/2.png Graphic file (type bmp)
@@ -1344,10 +1358,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 16634 strings out of 477728
- 400897 string characters out of 5842238
+ 16655 strings out of 477728
+ 401371 string characters out of 5842238
  724421 words of memory out of 5000000
- 36948 multiletter control sequences out of 15000+600000
+ 36969 multiletter control sequences out of 15000+600000
  510619 words of font info for 143 fonts, out of 8000000 for 9000
  264 hyphenation exceptions out of 8191
  89i,10n,97p,1238b,518s stack positions out of 5000i,500n,10000p,200000b,80000s
