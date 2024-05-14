@@ -171,9 +171,53 @@ Tetgen包括tetgenio、tetgenbehavior、tetgenmesh，和triangle类似，其中t
 
 \subsection{Netgen}
 
+Netgen的编译先去掉OCCT，因为OCE和OCCT版本不对。Netgen代码在libsrc路径下，编译后生成libngcore.so和libnglib.so两个链接库文件，再用cmake的find$\_$package调用Netgen的时候NETGEN$\_$LIBRARIES无效，需要指定链接库路径。Netgen安装在FENGSim/toolkit/install/netgen$\_$install，调用Netgen进行网格剖分的程序在FENGSim/starter/Mesh中，mkdir build/cd build/cmake ../make后，会生成mesh可执行程序在build中。
 \subsubsection{数据结构和算法}
+Netgen核心代码在libsrc路径下，接口代码在nglib路径下，见nglib.h。Netgen基本几何定义在libsrc/gprim路径下，几何点Point定义在libsrc/gprim/geomobjects.hpp中。Netgen网格剖分数据结构和算法都在libsrc/meshing路径下，其中libsrc/meshing/meshtype.hpp中定义了MeshPoint、Element，MeshPoint基于Point定义，网格数据结构定义在libsrc/meshing/meshclass.hpp中，其中T$\_$POINTS为网格顶点，基于MeshPoint定义的Array，之后还定义了segments、surfelements、volelements，volelements是基于Element定义的Array。FENGSim/starter/Mesh中的例子是对stl模型进行网格剖分，算法包括对边进行网格剖分，对面进行网格剖分，对实体进行网格剖分，分别调用了函数Ng$\_$STL$\_$MakeEdges、Ng$\_$STL$\_$GenerateSurfaceMesh、Ng$\_$GenerateVolumeMesh，这些函数都定义在FENGSim/toolkit/netgen/nglib/nglib.h中。Ng$\_$GenerateVolumeMesh函数中调用了MeshVolume函数，MeshVolume函数定义在FENGSim/toolkit/netgen/libsrc/meshing/meshfunc.hpp，MeshVolume函数中调用了MeshDomain函数，MeshDomain函数定义在FENGSim/toolkit/netgen/libsrc/meshing/meshfunc.hpp，MeshDomain中调用了unique$\_$ptr<Meshing3> meshing进行网格剖分，Meshing3类定义在FENGSim/toolkit/netgen/libsrc/meshing/meshing3.hpp中，实现了前沿推进法。前沿推进法可以和Delaunay进行混合，Netgen里还有单独的二维Delaunay网格剖分。
 
 \subsubsection{算例}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/1.1.4/1.png}
+  \caption{./mesh ../data/2.stl，stl网格}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/1.1.4/2.png}
+  \caption{./mesh ../data/2.stl，网格剖分}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/1.1.4/3.png}
+  \caption{./mesh ../data/2.stl，网格加密}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/1.1.4/4.png}
+  \caption{./mesh ../data/1.stl，stl网格}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/1.1.4/5.png}
+  \caption{./mesh ../data/1.stl，网格剖分}
+  \label{fig:1-7}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/1/1.1.4/6.png}
+  \caption{./mesh ../data/1.stl，网格加密}
+  \label{fig:1-7}
+\end{figure}
 
 \subsection{Gmsh}
 

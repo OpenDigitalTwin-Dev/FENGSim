@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2024.4.15)  13 MAY 2024 14:37
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2024.4.15)  14 MAY 2024 16:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -911,6 +911,24 @@ LaTeX Warning: Label `fig:1-7' multiply defined.
 
 LaTeX Warning: Label `fig:1-7' multiply defined.
 
+
+LaTeX Warning: Label `fig:1-7' multiply defined.
+
+
+LaTeX Warning: Label `fig:1-7' multiply defined.
+
+
+LaTeX Warning: Label `fig:1-7' multiply defined.
+
+
+LaTeX Warning: Label `fig:1-7' multiply defined.
+
+
+LaTeX Warning: Label `fig:1-7' multiply defined.
+
+
+LaTeX Warning: Label `fig:1-7' multiply defined.
+
 )
 \openout1 = `am.aux'.
 
@@ -1063,7 +1081,120 @@ File: fig/1/17.png Graphic file (type bmp)
 <fig/1/17.png>
 File: fig/1/18.png Graphic file (type bmp)
 <fig/1/18.png>
- [11] [12] [13]
+ [11] [12]
+Underfull \hbox (badness 7203) in paragraph at lines 176--177
+\TU/FandolSong-Regular(0)/m/n/10.53937 中 定 义 了 \TU/ptm/m/sl/10.53937 MeshPoint\
+TU/FandolSong-Regular(0)/m/n/10.53937 、| \TU/ptm/m/sl/10.53937 Element\TU/Fando
+lSong-Regular(0)/m/n/10.53937 ，| \TU/ptm/m/sl/10.53937 MeshPoint \TU/FandolSong
+-Regular(0)/m/n/10.53937 基 于 \TU/ptm/m/sl/10.53937 Point \TU/FandolSong-Regular
+(0)/m/n/10.53937 定 义，|  网 格 数 据 结 构 定 义
+ []
+
+
+Underfull \hbox (badness 7221) in paragraph at lines 176--177
+\TU/FandolSong-Regular(0)/m/n/10.53937 在 \TU/ptm/m/sl/10.53937 libsrc/meshing/m
+eshclass.hpp \TU/FandolSong-Regular(0)/m/n/10.53937 中，|  其 中 \TU/ptm/m/sl/10.53
+937 T$[]$POINTS \TU/FandolSong-Regular(0)/m/n/10.53937 为 网 格 顶 点，|  基 于 \TU/ptm
+/m/sl/10.53937 Mesh-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 176--177
+\TU/ptm/m/sl/10.53937 Point \TU/FandolSong-Regular(0)/m/n/10.53937 定 义 的 \TU/pt
+m/m/sl/10.53937 Array\TU/FandolSong-Regular(0)/m/n/10.53937 ，|  之 后 还 定 义 了 \TU
+/ptm/m/sl/10.53937 segments\TU/FandolSong-Regular(0)/m/n/10.53937 、| \TU/ptm/m/
+sl/10.53937 surfelements\TU/FandolSong-Regular(0)/m/n/10.53937 、| \TU/ptm/m/sl/
+10.53937 volelements\TU/FandolSong-Regular(0)/m/n/10.53937 ，| \TU/ptm/m/sl/10.5
+3937 volele-
+ []
+
+
+Underfull \hbox (badness 4954) in paragraph at lines 176--177
+\TU/ptm/m/sl/10.53937 ments \TU/FandolSong-Regular(0)/m/n/10.53937 是 基 于 \TU/pt
+m/m/sl/10.53937 Element \TU/FandolSong-Regular(0)/m/n/10.53937 定 义 的 \TU/ptm/m/
+sl/10.53937 Array\TU/FandolSong-Regular(0)/m/n/10.53937 。| \TU/ptm/m/sl/10.5393
+7 FENGSim/starter/Mesh \TU/FandolSong-Regular(0)/m/n/10.53937 中 的 例 子 是 对 \TU/p
+tm/m/sl/10.53937 stl
+ []
+
+
+Underfull \hbox (badness 4543) in paragraph at lines 176--177
+\TU/FandolSong-Regular(0)/m/n/10.53937 模 型 进 行 网 格 剖 分，|  算 法 包 括 对 边 进 行 网 格 剖
+ 分，|  对 面 进 行 网 格 剖 分，|  对 实 体 进 行
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 176--177
+\TU/FandolSong-Regular(0)/m/n/10.53937 网 格 剖 分，|  分 别 调 用 了 函 数 \TU/ptm/m/sl/10
+.53937 Ng$[]$STL$[]$MakeEdges\TU/FandolSong-Regular(0)/m/n/10.53937 、| \TU/ptm/
+m/sl/10.53937 Ng$[]$STL$[]$GenerateSurfaceMesh\TU/FandolSong-Regular(0)/m/n/10.
+53937 、|
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 176--177
+\TU/ptm/m/sl/10.53937 Ng$[]$GenerateVolumeMesh\TU/FandolSong-Regular(0)/m/n/10.
+53937 ，|  这 些 函 数 都 定 义 在 \TU/ptm/m/sl/10.53937 FENGSim/toolkit/netgen/nglib/ng
+lib.h
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 176--177
+\TU/FandolSong-Regular(0)/m/n/10.53937 中。| \TU/ptm/m/sl/10.53937 Ng$[]$Generate
+VolumeMesh \TU/FandolSong-Regular(0)/m/n/10.53937 函 数 中 调 用 了 \TU/ptm/m/sl/10.5
+3937 MeshVolume \TU/FandolSong-Regular(0)/m/n/10.53937 函 数，| \TU/ptm/m/sl/10.53
+937 MeshVol-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 176--177
+\TU/ptm/m/sl/10.53937 ume \TU/FandolSong-Regular(0)/m/n/10.53937 函 数 定 义 在 \TU/
+ptm/m/sl/10.53937 FENGSim/toolkit/netgen/libsrc/meshing/meshfunc.hpp\TU/FandolS
+ong-Regular(0)/m/n/10.53937 ，|
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 176--177
+\TU/ptm/m/sl/10.53937 MeshVolume \TU/FandolSong-Regular(0)/m/n/10.53937 函 数 中 调
+ 用 了 \TU/ptm/m/sl/10.53937 MeshDomain \TU/FandolSong-Regular(0)/m/n/10.53937 函 
+数，| \TU/ptm/m/sl/10.53937 MeshDomain \TU/FandolSong-Regular(0)/m/n/10.53937 函 数
+ 定 义 在
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 176--177
+\TU/ptm/m/sl/10.53937 FENGSim/toolkit/netgen/libsrc/meshing/meshfunc.hpp\TU/Fan
+dolSong-Regular(0)/m/n/10.53937 ，| \TU/ptm/m/sl/10.53937 MeshDomain \TU/FandolS
+ong-Regular(0)/m/n/10.53937 中 调
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 176--177
+\TU/FandolSong-Regular(0)/m/n/10.53937 用 了 \TU/ptm/m/sl/10.53937 unique$[]$ptr<
+Meshing3> meshing \TU/FandolSong-Regular(0)/m/n/10.53937 进 行 网 格 剖 分，| \TU/ptm/
+m/sl/10.53937 Meshing3 \TU/FandolSong-Regular(0)/m/n/10.53937 类 定 义 在
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 176--177
+\TU/ptm/m/sl/10.53937 FENGSim/toolkit/netgen/libsrc/meshing/meshing3.hpp \TU/Fa
+ndolSong-Regular(0)/m/n/10.53937 中，|  实 现 了 前 沿 推 进 法。|  前 沿
+ []
+
+[13]
+File: fig/1/1.1.4/1.png Graphic file (type bmp)
+<fig/1/1.1.4/1.png>
+File: fig/1/1.1.4/2.png Graphic file (type bmp)
+<fig/1/1.1.4/2.png>
+File: fig/1/1.1.4/3.png Graphic file (type bmp)
+<fig/1/1.1.4/3.png>
+File: fig/1/1.1.4/4.png Graphic file (type bmp)
+<fig/1/1.1.4/4.png>
+File: fig/1/1.1.4/5.png Graphic file (type bmp)
+<fig/1/1.1.4/5.png>
+File: fig/1/1.1.4/6.png Graphic file (type bmp)
+<fig/1/1.1.4/6.png>
+ [14] [15]
 File: fig/1/1.1.7.1:0.png Graphic file (type bmp)
 <fig/1/1.1.7.1:0.png>
 File: fig/1/1.1.7.1:00.png Graphic file (type bmp)
@@ -1071,7 +1202,7 @@ File: fig/1/1.1.7.1:00.png Graphic file (type bmp)
 File: fig/1/1.1.7.1:1.png Graphic file (type bmp)
 <fig/1/1.1.7.1:1.png>
 
-Underfull \hbox (badness 10000) in paragraph at lines 211--211
+Underfull \hbox (badness 10000) in paragraph at lines 255--255
 []\TU/FandolSong-Regular(0)/m/n/10.53937 图 \TU/ptm/m/sl/10.53937 1.1.6.3: \TU/F
 andolSong-Regular(0)/m/n/10.53937 采 用\TU/ptm/m/sl/10.53937 ./slice2mesh$[]$exec
  ../data/pyramid$[]$l0.03.cli \TU/FandolSong-Regular(0)/m/n/10.53937 命 令 生 成 \T
@@ -1079,7 +1210,7 @@ U/ptm/m/sl/10.53937 am-
  []
 
 
-Underfull \hbox (badness 3000) in paragraph at lines 211--211
+Underfull \hbox (badness 3000) in paragraph at lines 255--255
 \TU/ptm/m/sl/10.53937 slices2mesh$[]$plc.off\TU/FandolSong-Regular(0)/m/n/10.53
 937 ，|  修 改 \TU/ptm/m/sl/10.53937 plc2vtk.py \TU/FandolSong-Regular(0)/m/n/10.5
 3937 中 读 入 文 件 名 称，|  用 \TU/ptm/m/sl/10.53937 python3 plc2vtk.py \TU/FandolSong
@@ -1089,7 +1220,7 @@ Underfull \hbox (badness 3000) in paragraph at lines 211--211
 File: fig/1/1.1.7.1:2.png Graphic file (type bmp)
 <fig/1/1.1.7.1:2.png>
 
-Underfull \hbox (badness 10000) in paragraph at lines 218--218
+Underfull \hbox (badness 10000) in paragraph at lines 262--262
 []\TU/FandolSong-Regular(0)/m/n/10.53937 图 \TU/ptm/m/sl/10.53937 1.1.6.4: \TU/F
 andolSong-Regular(0)/m/n/10.53937 采 用\TU/ptm/m/sl/10.53937 ./slice2mesh$[]$exec
  ../data/pyramid$[]$l0.03.cli \TU/FandolSong-Regular(0)/m/n/10.53937 命 令 生 成 \T
@@ -1097,7 +1228,7 @@ U/ptm/m/sl/10.53937 am-
  []
 
 
-Underfull \hbox (badness 3000) in paragraph at lines 218--218
+Underfull \hbox (badness 3000) in paragraph at lines 262--262
 \TU/ptm/m/sl/10.53937 slices2mesh$[]$plc.off\TU/FandolSong-Regular(0)/m/n/10.53
 937 ，|  修 改 \TU/ptm/m/sl/10.53937 plc2vtk.py \TU/FandolSong-Regular(0)/m/n/10.5
 3937 中 读 入 文 件 名 称，|  用 \TU/ptm/m/sl/10.53937 python3 plc2vtk.py \TU/FandolSong
@@ -1114,6 +1245,7 @@ File: fig/1/1.1.7.1:6.png Graphic file (type bmp)
 <fig/1/1.1.7.1:6.png>
 File: fig/1/20.png Graphic file (type bmp)
 <fig/1/20.png>
+[16] [17] [18]
 File: fig/1/21.png Graphic file (type bmp)
 <fig/1/21.png>
 File: fig/1/1.1.7.2:3.png Graphic file (type bmp)
@@ -1122,11 +1254,7 @@ File: fig/1/1.1.7.2:4.png Graphic file (type bmp)
 <fig/1/1.1.7.2:4.png>
 File: fig/1/1.1.7.2:5.png Graphic file (type bmp)
 <fig/1/1.1.7.2:5.png>
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [14]
-[15] [16] [17]
+ [19] [20]
 File: fig/1/1.2/1.png Graphic file (type bmp)
 <fig/1/1.2/1.png>
 File: fig/1/1.2/2.png Graphic file (type bmp)
@@ -1151,20 +1279,20 @@ File: fig/1/1.2/11.png Graphic file (type bmp)
 <fig/1/1.2/11.png>
 File: fig/1/1.2/12.png Graphic file (type bmp)
 <fig/1/1.2/12.png>
- [18] [19] [20] [21]
+ [21] [22] [23]
 File: fig/1/1.2/13.png Graphic file (type bmp)
 <fig/1/1.2/13.png>
 File: fig/1/1.2/14.png Graphic file (type bmp)
 <fig/1/1.2/14.png>
-) (./chapters/chapter2.tex [22]
+) (./chapters/chapter2.tex [24]
 Chapter 2.
-) (./chapters/chapter3.tex [23
+) (./chapters/chapter3.tex [25
 
-] [24
+] [26
 
 ]
 Chapter 3.
-) (./chapters/chapter4.tex [25] [26
+) (./chapters/chapter4.tex [27] [28
 
 ]
 Chapter 4.
@@ -1181,30 +1309,30 @@ File: fig/4/6.png Graphic file (type bmp)
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [27]
-[28] [29]
+ [29]
+[30] [31]
 File: fig/4/fig:1.1.1:1.png Graphic file (type bmp)
 <fig/4/fig:1.1.1:1.png>
- [30]
+ [32]
 File: fig/4/fig:1.1.1:2.png Graphic file (type bmp)
 <fig/4/fig:1.1.1:2.png>
- [31] [32]
+ [33] [34]
 File: fig/4/fig:1.1.1:2.png Graphic file (type bmp)
 <fig/4/fig:1.1.1:2.png>
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [33]
+ [35]
 File: fig/4/fig:1.1.1:2.png Graphic file (type bmp)
 <fig/4/fig:1.1.1:2.png>
 )
-[34] (./am.bbl
+[36] (./am.bbl
 Underfull \hbox (badness 2521) in paragraph at lines 14--17
 []\TU/ptm/m/sl/10.53937 Mark de Berg, Marc van Kreveld, Mark Overmars, and Otfr
 ied Schwarzkopf.
  []
 
-) [35
+) [37
 
 
 ] (./am.aux)
@@ -1216,12 +1344,12 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 16591 strings out of 477728
- 399937 string characters out of 5842238
+ 16634 strings out of 477728
+ 400897 string characters out of 5842238
  724421 words of memory out of 5000000
- 36906 multiletter control sequences out of 15000+600000
+ 36948 multiletter control sequences out of 15000+600000
  510619 words of font info for 143 fonts, out of 8000000 for 9000
  264 hyphenation exceptions out of 8191
  89i,10n,97p,1238b,518s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on am.pdf (35 pages).
+Output written on am.pdf (37 pages).
