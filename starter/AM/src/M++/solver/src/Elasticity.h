@@ -1,5 +1,5 @@
 // file: Elasticity.h
-// author: Dr. Jiping Xin
+// author: Jiping Xin
 
 #include "m++.h"
 #include "ElasticityProblems.h"

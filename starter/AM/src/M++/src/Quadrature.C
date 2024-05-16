@@ -209,10 +209,14 @@ const double Qpri8_w[] ={ -0.28125,
 			  0.2604166666666666 };
 const Quadrature Qpri8(8,Qpri8_z,Qpri8_w);   
 
+//const Point Qhex1_z[] = { 
+//  Point(X,X,X) };
+//const double Qhex1_w[] = { 0.5 };
+//const Quadrature Qhex1(1,Qhex1_z,Qhex1_w);
 const Point Qhex1_z[] = { 
-    Point(X,X,X) };
-const double Qhex1_w[] = { 0.5 };
-const Quadrature Qhex1(1,Qhex1_z,Qhex1_w);   
+    Point(0.5,0.5,0.5) };
+const double Qhex1_w[] = { 1.0 };
+const Quadrature Qhex1(1,Qhex1_z,Qhex1_w);
 
 const Point Qhex8_z[] = { 
     Point(X,X,X), Point(X,Y,X), Point(Y,X,X), Point(Y,Y,X), 

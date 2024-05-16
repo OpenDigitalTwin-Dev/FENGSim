@@ -157,30 +157,31 @@ void HeatMain () {
     Solver S;
     for (int i = 1; i < n+1; i++) {	      
         mout << "time step: " << i << endl;
-		HA.SetDirichletBC(g_d, i*dt);
-		
-		Start = Date();
-		HA.AssembleVector(x1, g_d, b, i*dt);
-		mout << "assemble vector: " << Date() - Start << endl;
-		
-		Start = Date();
-		S(A);
-		x2 = 0;
-		S.multiply_plus(x2, b);
-		x2 += g_d;
-		tout(1) << Date() - Start << endl;
-		
-		P.vertexdata(x2);
-		string filename = string("heat_") + to_string(i);
-		P.vtk_vertexdata(filename.c_str());
-		
-		x1 = x2;
-		mout << endl;
+	HA.SetDirichletBC(g_d, i*dt);
+	
+	Start = Date();
+	HA.AssembleVector(x1, g_d, b, i*dt);
+	mout << "assemble vector: " << Date() - Start << endl;
+	
+	Start = Date();
+	S(A);
+	x2 = 0;
+	S.multiply_plus(x2, b);
+	x2 += g_d;
+	tout(1) << Date() - Start << endl;
+	
+	P.vertexdata(x2);
+	string filename = string("heat_") + to_string(i);
+	P.vtk_vertexdata(filename.c_str());
+	
+	x1 = x2;
+	mout << endl;
     }
     
     mout << endl << "L2 error: " << HA.L2Error(x2, T) << endl;
-	SetMaxMin(x2, max, min);
-	mout << max << " " << min << endl;
+
+    SetMaxMin(x2, max, min);
+    mout << "max and min: " << max << " " << min << endl;
     
     return;
 }

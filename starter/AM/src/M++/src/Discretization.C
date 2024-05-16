@@ -22,7 +22,7 @@ void Discretization::fill (int m, int dim) {
 							GetQuadrature("Qint3"));
 		S[1][0] = new P1quad(GetQuadrature("Qquad1"),
 							 GetQuadrature("Qint1"));
-		S[2][0] = new P1tet(GetQuadrature("Qtet1"),
+		S[2][0] = new P1tet(GetQuadrature("Qtet4"),
 							GetQuadrature("Qtri1"));
 		S[4][0] = new P1hex(GetQuadrature(cell3D),
 							GetQuadrature(bnd3D));

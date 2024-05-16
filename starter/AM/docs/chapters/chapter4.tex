@@ -310,6 +310,139 @@ Dirichlet和Neumann边界条件定义为
 \end{figure}
 
 
+\subsection{静态线弹}
+
+线弹性问题的偏微分方程如\eqref{eq:4.1.3:1}。
+
+\begin{align}\label{eq:4.1.3:1}
+  -\nabla\cdot\sigma=& \mathbf f  \qquad \mathbf x\in\Omega
+\end{align}
+
+Dirichlet边界条件和Neumann边界条件如\eqref{eq:4.1.3:2}。
+
+\begin{subequations}\label{eq:4.1.3:2}
+  \begin{align}
+    \sigma\cdot\mathbf n =& \mathbf g_{\mathrm N} \qquad \mathbf x\in\Gamma_{\mathrm N}\\
+    \mathbf u =& \mathbf g_{\mathrm D} \qquad \mathbf x\in\Gamma_{\mathrm D}
+  \end{align}
+\end{subequations}
+
+\eqref{eq:4.1.3:1}两边点乘$\mathbf v$，再在$\Omega$上积分得到\eqref{eq:4.1.3:3}，通过散度定理得到变分形式\eqref{eq:4.1.3:4}。
+
+\begin{align}\label{eq:4.1.3:3}
+  -\int_{\Omega}\nabla\cdot\sigma\cdot\mathbf v\ud x =& \int_{\Omega}\mathbf f\cdot\mathbf v\ud x
+\end{align}
+  
+\begin{align}\label{eq:4.1.3:4}
+   \int_{\Omega}\sigma:\varepsilon(\mathbf v)\ud x = \int_{\Omega}\mathbf f\cdot\mathbf v\ud x + \int_{\Gamma}\sigma\cdot\mathbf n\cdot\mathbf v\ud s_x
+\end{align}
+
+本构关系如\eqref{eq:4.1.3:5}。
+
+\begin{align}\label{eq:4.1.3:5}
+  \sigma(\mathbf u) = 2\mu\mathbf \varepsilon(\mathbf u) + \lambda\mathrm{tr}(\mathbf\varepsilon(\mathbf u))\mathbf I
+\end{align}
+
+将\eqref{eq:4.1.3:5}代入\eqref{eq:4.1.3:4}得到\eqref{eq:4.1.3:6}。  
+   
+\begin{align}\label{eq:4.1.3:6}
+  \int_{\Omega}\left(2\mu\mathbf \varepsilon(\mathbf u) :\mathbf\varepsilon(\mathbf v)+\lambda\nabla\cdot\mathbf u \nabla\cdot\mathbf v\right)\ud x =
+  \int_{\Gamma}\sigma\cdot\mathbf n\cdot\mathbf v\ud s_x + \int_{\Omega}\mathbf f\cdot\mathbf v\ud x
+\end{align}
+
+采用线性单元对\eqref{eq:4.1.3:6}进行离散得到线性方程组\eqref{eq:4.1.3:7}。
+   
+\begin{align}\label{eq:4.1.3:7}
+  KU = b
+\end{align}
+
+\eqref{eq:4.1.3:8}定义解析解验证收敛性。
+
+\begin{equation}\label{eq:4.1.3:8}
+  \begin{split}
+    &\Omega:=(0,1)^3\\
+    &\Gamma_{\mathrm D}:=\{x_1=0\}\cup\{x_2=0\}\cup\{x_3=0\} \\
+    &\mathbf u = \left(\begin{array}{c} 
+      \mathrm e^{x_1+x_2+x_3}\\
+      \mathrm e^{x_1+x_2+x_3}\\
+      \mathrm e^{x_1+x_2+x_3}
+    \end{array}\right)\\
+    &\mathbf b = \left(\begin{array}{c}
+      -3  (2  \mu + \lambda)  \mathrm e^{x_1+x_2+x_3}\\
+      -3  (2  \mu + \lambda)  \mathrm e^{x_1+x_2+x_3}\\
+      -3  (2  \mu + \lambda)  \mathrm e^{x_1+x_2+x_3}
+    \end{array}\right)\\
+    &\mathbf \sigma 
+    =\left(\begin{array}{ccc}
+      (2\mu + 3\lambda)\mathrm e^{x_1+x_2+x_3} & 2\mu\mathrm e^{x_1+x_2+x_3} & 2\mu\mathrm e^{x_1+x_2+x_3}\\
+      2\mu\mathrm e^{x_1+x_2+x_3} & (2\mu + 3\lambda)\mathrm e^{x_1+x_2+x_3} &  2\mu\mathrm e^{x_1+x_2+x_3}\\
+      2\mu\mathrm e^{x_1+x_2+x_3} & 2\mu\mathrm e^{x_1+x_2+x_3} & (2\mu + 3\lambda)\mathrm e^{x_1+x_2+x_3}  
+    \end{array}\right)
+  \end{split}
+\end{equation}
+
+图\ref{fig:4.1.3:1}为网格加密3次的结果，表\ref{tab:4.1.3:1}中验证了二次收敛速度。
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=5cm]{fig/4/4.1.3:1.png}
+  \caption{三维线弹性方程，弹性模量2.5，泊松比0.25，加密3次，体单元积分点个数为4，边界面单元积分点个数为1}
+  \label{fig:4.1.3:1}
+\end{figure}
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{c|l|l}
+    & $\|\mathbf u-\mathbf u_h\|_{L^2}$ & ROC\\
+    \hline
+    3 & 0.0002305107    & \\
+    \hline
+    4 & 0.0000581654   & 3.963020971  \\
+    \hline
+    5 & 0.0000145494  &  3.99778685 \\
+    \hline
+    6 & 0.0000036350 &  4.00258597
+  \end{tabular}
+  \label{tab:4.1.3:1}
+  \caption{三维线弹性方程，弹性模量2.5，泊松比0.25，体单元积分点个数为4，边界面单元积分点个数为1。}
+\end{table}
+
+\newpage
+图\ref{fig:4.1.3:1}为网格加密3次的结果，表\ref{tab:4.1.3:1}中验证了二次收敛速度。
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=5cm]{fig/4/4.1.3:2.png}
+  \caption{三维线弹性方程，弹性模量2.5，泊松比0.25，加密3次，体单元积分点个数为1，边界面单元积分点个数为1}
+  \label{fig:4.1.3:2}
+\end{figure}
+
+\begin{table}[!htbp]
+  \centering
+  \begin{tabular}{c|l|l}
+    & $\|\mathbf u-\mathbf u_h\|_{L^2}$ & ROC\\
+    \hline
+    3 &  0.0004850991   & \\
+    \hline
+    4 & 0.0001214924   &  3.992834943 \\
+    \hline
+    5 & 0.0000303867  &   3.998209743 \\
+    \hline
+    6 & 0.0000075975 &  3.999565647
+  \end{tabular}
+  \label{tab:4.1.3:1}
+  \caption{三维线弹性方程，弹性模量2.5，泊松比0.25，体单元积分点个数为1，边界面单元积分点个数为1。}
+\end{table}
+
+
+
+
+
+
+
+
+
+
 \iffalse
 
 

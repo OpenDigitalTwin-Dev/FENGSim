@@ -13,6 +13,7 @@ void InfillTestMain ();
 void AMMain ();
 void PoissonMain ();
 void HeatMain ();
+void ElasticityMain ();
 
 int main (int argc, char** argv) {
     DPO dpo(&argc,&argv);
@@ -23,5 +24,6 @@ int main (int argc, char** argv) {
     if (Model == "AM") AMMain();
     if (Model == "Poisson") PoissonMain();
     if (Model == "Heat") HeatMain();
+    if (Model == "Elasticity") ElasticityMain();
     return 0;
 }
