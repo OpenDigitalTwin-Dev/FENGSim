@@ -64,7 +64,7 @@ cd ../pcl
 ./install.sh
 
 # starter:ale
-cd ../../starter/ALE
+cd ../../starter/Elasticity
 mkdir build
 cd build
 cmake ..

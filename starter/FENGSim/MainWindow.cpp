@@ -3135,7 +3135,7 @@ void MainWindow::FEMCompute()
     // cout << QDir::currentPath().toStdString().c_str() << endl;
     // cout << QCoreApplication::applicationDirPath().toStdString().c_str() << endl;
     QProcess *proc = new QProcess();
-    proc->setWorkingDirectory( "../ALE/build" );
+    proc->setWorkingDirectory( "../Elasticity/build" );
     // set equation
     //fem_dock->MainModule();
     //fem_dock->Configure();
@@ -3144,10 +3144,10 @@ void MainWindow::FEMCompute()
 
 
 
-    proc->start("./M++Solver");
+    proc->start("./ElasticitySolver");
     if (proc->waitForFinished(-1)) {
         vtk_widget->Hide();
-        vtk_widget->ImportVTKFile(std::string("../ALE/build/data/vtk/elasticity_3_deform.vtk"));
+        vtk_widget->ImportVTKFile(std::string("../Elasticity/build/data/vtk/elasticity_3_deform.vtk"));
 
 
     }

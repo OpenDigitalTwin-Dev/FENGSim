@@ -62,7 +62,7 @@ void MeshModule::FileFormat ()
     char L[len];
     // out .geo file
     //out.open(filename.toStdString().c_str());
-    out.open("../ALE/build/solver/conf/geo/fengsim_mesh.geo");
+    out.open("../Elasticity/build/solver/conf/geo/fengsim_mesh.geo");
     out << "POINTS" << endl;
     // vertices
     for (int i = 0; i < 5; i++) is.getline(L,len);
