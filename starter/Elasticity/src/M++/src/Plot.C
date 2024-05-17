@@ -531,6 +531,12 @@ void Plot::vtk_celltensor(ostream& out, int k) {
 void Plot::vtk_scalar(ostream& out, int k) {
     out << "SCALARS scalar_value float 1"<<endl
         << "LOOKUP_TABLE default"<<endl;
+    if (k==100) {
+      for (plotdata p=plotdata(VD.begin()); p!=plotdata(VD.end()); ++p) {
+	  out << sqrt(p[0] * p[0] + p[1] * p[1] + p[2] * p[2]) << endl;
+      }
+      return;
+    }
     for (plotdata p=plotdata(VD.begin()); p!=plotdata(VD.end()); ++p) {
         if (abs(p[k]) < PlotTolerance) out << "0"<<endl;
 	else                           out << p[k]<<endl;
