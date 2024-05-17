@@ -317,7 +317,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
 
     // *******************************************************
     // fem
-    connect(fem_dock->ui->pushButton_2, SIGNAL(clicked()), this, SLOT(FEMExampleCompute()));
+   // connect(fem_dock->ui->pushButton_2, SIGNAL(clicked()), this, SLOT(FEMExampleCompute()));
 
 
 
@@ -3212,50 +3212,50 @@ void MainWindow::FEMExampleCompute()
 
 
 
-    if (fem_dock->ui->comboBox_4->currentText().toStdString() == "Poisson")
-    {
-        ofstream out;
-        out.open("/home/jiping/FENGSim/Cura/conf/m++conf");
-        out << "loadconf = Poisson/conf/poisson.conf;" << endl;
-        out << "#loadconf = Heat/conf/heat.conf;" << endl;
-        out << "#loadconf = Elasticity/conf/m++conf;" << endl;
-        out << "loadconf = ElastoPlasticity/conf/m++conf;" << endl;
-        out << "#loadconf = ThermoElasticity/conf/m++conf;" << endl;
-        out << "#loadconf = AdditiveManufacturing/conf/m++conf;" << endl;
-        out << "loadconf = Cura/conf/m++conf;" << endl;
+//    if (fem_dock->ui->comboBox_4->currentText().toStdString() == "Poisson")
+//    {
+//        ofstream out;
+//        out.open("/home/jiping/FENGSim/Cura/conf/m++conf");
+//        out << "loadconf = Poisson/conf/poisson.conf;" << endl;
+//        out << "#loadconf = Heat/conf/heat.conf;" << endl;
+//        out << "#loadconf = Elasticity/conf/m++conf;" << endl;
+//        out << "loadconf = ElastoPlasticity/conf/m++conf;" << endl;
+//        out << "#loadconf = ThermoElasticity/conf/m++conf;" << endl;
+//        out << "#loadconf = AdditiveManufacturing/conf/m++conf;" << endl;
+//        out << "loadconf = Cura/conf/m++conf;" << endl;
 
-        proc->start("mpirun -np 4 ./PoissonRun");
-        if (proc->waitForFinished(-1)) {
-            vtk_widget->FEMImportResults("/home/jiping/M++/data/vtk/poisson_linear.vtk");
-        }
-        return;
-    }
-    if (fem_dock->ui->comboBox_4->currentText().toStdString() == "Heat")
-    {
-        ofstream out;
-        out.open("/home/jiping/FENGSim/Cura/conf/m++conf");
-        out << "#loadconf = Poisson/conf/poisson.conf;" << endl;
-        out << "loadconf = Heat/conf/heat.conf;" << endl;
-        out << "#loadconf = Elasticity/conf/m++conf;" << endl;
-        out << "loadconf = ElastoPlasticity/conf/m++conf;" << endl;
-        out << "#loadconf = ThermoElasticity/conf/m++conf;" << endl;
-        out << "#loadconf = AdditiveManufacturing/conf/m++conf;" << endl;
-        out << "loadconf = Cura/conf/m++conf;" << endl;
+//        proc->start("mpirun -np 4 ./PoissonRun");
+//        if (proc->waitForFinished(-1)) {
+//            vtk_widget->FEMImportResults("/home/jiping/M++/data/vtk/poisson_linear.vtk");
+//        }
+//        return;
+//    }
+//    if (fem_dock->ui->comboBox_4->currentText().toStdString() == "Heat")
+//    {
+//        ofstream out;
+//        out.open("/home/jiping/FENGSim/Cura/conf/m++conf");
+//        out << "#loadconf = Poisson/conf/poisson.conf;" << endl;
+//        out << "loadconf = Heat/conf/heat.conf;" << endl;
+//        out << "#loadconf = Elasticity/conf/m++conf;" << endl;
+//        out << "loadconf = ElastoPlasticity/conf/m++conf;" << endl;
+//        out << "#loadconf = ThermoElasticity/conf/m++conf;" << endl;
+//        out << "#loadconf = AdditiveManufacturing/conf/m++conf;" << endl;
+//        out << "loadconf = Cura/conf/m++conf;" << endl;
 
-        proc->start("mpirun -np 4 ./HeatRun");
-        if (proc->waitForFinished(-1)) {
-            QDir dir("/home/jiping/M++/data/vtk");
-            QStringList stringlist_vtk;
-            stringlist_vtk << "heat_*.vtk";
-            dir.setNameFilters(stringlist_vtk);
-            QFileInfoList fileinfolist;
-            fileinfolist = dir.entryInfoList();
-            fem_file_num = fileinfolist.size();
-            fem_file_id = 0;
-            fem_timer->singleShot(1, this, SLOT(FEMAnimation()));
-        }
-        return;
-    }
+//        proc->start("mpirun -np 4 ./HeatRun");
+//        if (proc->waitForFinished(-1)) {
+//            QDir dir("/home/jiping/M++/data/vtk");
+//            QStringList stringlist_vtk;
+//            stringlist_vtk << "heat_*.vtk";
+//            dir.setNameFilters(stringlist_vtk);
+//            QFileInfoList fileinfolist;
+//            fileinfolist = dir.entryInfoList();
+//            fem_file_num = fileinfolist.size();
+//            fem_file_id = 0;
+//            fem_timer->singleShot(1, this, SLOT(FEMAnimation()));
+//        }
+//        return;
+//    }
 
 
 

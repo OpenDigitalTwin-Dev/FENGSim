@@ -406,11 +406,11 @@ QTabWidget:focus, QCheckBox:focus, QRadioButton:focus, QSlider:focus
 QLineEdit
 {
     background-color: black;
-    padding: 5px;
+    padding: 0px;
     border-style: solid;
     border: 0px solid #76797C;
     border-radius: 2px;
-    color: #eff0f1;
+    color: white;
 }
 
 QAbstractItemView QLineEdit

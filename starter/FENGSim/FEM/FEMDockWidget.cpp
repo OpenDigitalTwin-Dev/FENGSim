@@ -10,10 +10,10 @@ FEMDockWidget::FEMDockWidget(QWidget *parent) :
         //ui->comboBox->addItem("Heat");
         ui->comboBox->addItem("Elasticity");
         ui->comboBox->addItem("ElastoPlasticity");
-        ui->comboBox_4->addItem("Poisson");
-        ui->comboBox_4->addItem("Heat");
-        ui->comboBox_4->addItem("Elasticity");
-        ui->comboBox_4->addItem("ElastoPlasticity");
+        //ui->comboBox_4->addItem("Poisson");
+        //ui->comboBox_4->addItem("Heat");
+        //ui->comboBox_4->addItem("Elasticity");
+        //ui->comboBox_4->addItem("ElastoPlasticity");
         //connect(ui->lineEdit, SIGNAL(selectionChanged()), this, SLOT(OpenMeshFile()));
 }
 
@@ -94,16 +94,16 @@ void FEMDockWidget::Configure()
                 out.open(std::string("/home/jiping/M++/ElasticityModule/conf/linear_elasticity_qt.conf").c_str());
                 //out << "Model = " + ui->comboBox_2->currentText().toStdString() + ";" << std::endl;
                 out << "GeoPath = ElasticityModule/;" << std::endl;
-                if (!ui->pushButton_2->isChecked())
-                {
-                        out << "EXAMPLE = " + std::to_string(-1) + "; " << std::endl;
-                        out << "Mesh = " + mesh_file.toStdString() << std::endl;
-                }
-                else
-                {
-                        out << "EXAMPLE = " + std::to_string(ui->comboBox_4->currentIndex() + 1) + "; " << std::endl;
-                        out << "Mesh = example" + std::to_string(ui->comboBox_4->currentIndex()+1) + ";" << std::endl;
-                }
+//                if (!ui->pushButton_2->isChecked())
+//                {
+//                        out << "EXAMPLE = " + std::to_string(-1) + "; " << std::endl;
+//                        out << "Mesh = " + mesh_file.toStdString() << std::endl;
+//                }
+//                else
+//                {
+//                        out << "EXAMPLE = " + std::to_string(ui->comboBox_4->currentIndex() + 1) + "; " << std::endl;
+//                        out << "Mesh = example" + std::to_string(ui->comboBox_4->currentIndex()+1) + ";" << std::endl;
+//                }
                 out << "plevel = 0;" << std::endl;
                 //out << "level = " + ui->comboBox_3->currentText().toStdString() + ";" << std::endl;
                 out << "Discretization = linear;" << std::endl;
