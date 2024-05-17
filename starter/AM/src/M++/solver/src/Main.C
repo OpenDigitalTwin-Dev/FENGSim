@@ -14,6 +14,7 @@ void AMMain ();
 void PoissonMain ();
 void HeatMain ();
 void ElasticityMain ();
+void TElasticityMain ();
 
 int main (int argc, char** argv) {
     DPO dpo(&argc,&argv);
@@ -25,5 +26,6 @@ int main (int argc, char** argv) {
     if (Model == "Poisson") PoissonMain();
     if (Model == "Heat") HeatMain();
     if (Model == "Elasticity") ElasticityMain();
+    if (Model == "TElasticity") TElasticityMain();
     return 0;
 }

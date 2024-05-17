@@ -2,5 +2,5 @@
 #loadconf = solver/conf/am.conf;
 #loadconf = solver/conf/poisson.conf;
 #loadconf = solver/conf/heat.conf;
-loadconf = solver/conf/elasticity.conf;
+#loadconf = solver/conf/elasticity.conf;
 loadconf = solver/conf/telasticity.conf;

@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2024.4.15)  16 MAY 2024 13:33
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2024.4.15)  17 MAY 2024 10:01
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1346,10 +1346,20 @@ File: fig/4/fig:1.1.1:2.png Graphic file (type bmp)
 [36]
 File: fig/4/4.1.3:1.png Graphic file (type bmp)
 <fig/4/4.1.3:1.png>
- [37] [38]
+ [37]
 File: fig/4/4.1.3:2.png Graphic file (type bmp)
 <fig/4/4.1.3:2.png>
-) [39] (./am.bbl [40
+ [38]
+File: fig/4/4.1.4/1.png Graphic file (type bmp)
+<fig/4/4.1.4/1.png>
+File: fig/4/4.1.4/2.png Graphic file (type bmp)
+<fig/4/4.1.4/2.png>
+ [39] [40]
+File: fig/4/4.1.4/3.png Graphic file (type bmp)
+<fig/4/4.1.4/3.png>
+File: fig/4/4.1.4/4.png Graphic file (type bmp)
+<fig/4/4.1.4/4.png>
+) [41] (./am.bbl [42
 
 
 ]
@@ -1358,7 +1368,7 @@ Underfull \hbox (badness 2521) in paragraph at lines 14--17
 ied Schwarzkopf.
  []
 
-) [41] (./am.aux)
+) [43] (./am.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
@@ -1367,12 +1377,12 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 16682 strings out of 477728
- 401836 string characters out of 5842238
- 725584 words of memory out of 5000000
- 36994 multiletter control sequences out of 15000+600000
+ 16719 strings out of 477728
+ 402580 string characters out of 5842238
+ 725704 words of memory out of 5000000
+ 37030 multiletter control sequences out of 15000+600000
  510619 words of font info for 143 fonts, out of 8000000 for 9000
  264 hyphenation exceptions out of 8191
  89i,21n,97p,1238b,526s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on am.pdf (41 pages).
+Output written on am.pdf (43 pages).
