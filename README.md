@@ -10,7 +10,7 @@ To install FENGSim on Ubuntu 22.04, you can employ the following commands.
 	cd FENGSim/cli
 	./install.sh or ./uninstall.sh
 ```
-To launch the Qt project for Fengsim, you can employ the following commands.
+To launch the Qt project for FENGSim, you can employ the following commands.
 
 ```
 	cd FENGSim/cli
