@@ -2,7 +2,7 @@
 
 The FENGSim project is an adaptive manufacturing operational system that integrates interfaces and adapters for a range of mathematical libraries such as computational geometry, computer algebra, numerical methods, numerical linear algebra, computer graphics, image processing, probability and statistics, optimization, and artificial intelligence within the CAX software framework and illustrative examples. Furthermore, it offers functionalities for managing library dependencies, package management, and CICD (compile, code merge, version control, test, deploy) processes. Additionally, the project includes interfaces for the integration of machinery and sensors, covering drivers, communications, control applications, and physical simulations related to manufacturing technologies.
 
-To install FENGSim on Ubuntu 22.04, you can employ the following commands.
+To install FENGSim on Ubuntu 22.04:
 
 ```
 	sudo apt install git
@@ -10,7 +10,7 @@ To install FENGSim on Ubuntu 22.04, you can employ the following commands.
 	cd FENGSim/cli
 	./install.sh or ./uninstall.sh
 ```
-To launch the Qt project for FENGSim, you can employ the following commands.
+To launch the Qt project for FENGSim:
 
 ```
 	cd FENGSim/cli
