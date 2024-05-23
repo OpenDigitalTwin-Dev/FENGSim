@@ -1,7 +1,7 @@
 // file: Poisson.C
 // author: Jiping Xin
 #include "Poisson.h"
-#include "FASPInterface.h"
+//#include "FASPInterface.h"
 
 void PoissonAssemble::SetDirichletValues (Vector& u) {
     u = 0;

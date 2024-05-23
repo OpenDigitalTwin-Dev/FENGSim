@@ -417,7 +417,7 @@ void inp2geo () {
 	mout << L << endl;
 	double z[3];
 	int d = sscanf(L,"%*lf, %lf, %lf, %lf",z,z+1,z+2);
-	out << z[0] << " "  << z[1] << " "  << z[2] << endl;
+	out << std::fixed << std::setprecision(12) << z[0] << " "  << z[1] << " "  << z[2] << endl;
     }
     out << "CELLS" << endl;
     while (strncasecmp("*Nset",L,5) != 0) {
@@ -511,11 +511,11 @@ void TElastoPlasticity2Main () {
 	EPA.Update(x1,epsilonp1,alpha1,beta1);
 	char buffer [10];
 	sprintf(buffer,"%d",i);
-	string filename1 = string("telastoplasticity_deform") + buffer;
-	string filename2 = string("telastoplasticity_undeform") + buffer;	
+	string filename1 = string("telastoplasticity_deform_") + buffer;
+	string filename2 = string("telastoplasticity_undeform_") + buffer;
 	P.vertexdata(x3, dim);
 	P.vtk_vertex_vector(filename1.c_str(), 0, 1);
-	P.vtk_vertex_vector(filename2.c_str(), 0, 0);
+	//P.vtk_vertex_vector(filename2.c_str(), 0, 0);
     }
     
     mout << "l2 error: " << EPA.L2Error(x3) << endl;

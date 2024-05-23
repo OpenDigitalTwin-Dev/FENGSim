@@ -782,7 +782,8 @@ public:
 };
 
 void Plot::vertexdata (const Vector& u, int m, int shift) {
-    vertexdata(VectorVertexData(u,m),shift); }
+    vertexdata(VectorVertexData(u,m),shift);
+}
 
 void Plot::celldata  (const Vector& u, int m, int shift) {
     celldata(VectorCellData(u,m),shift);

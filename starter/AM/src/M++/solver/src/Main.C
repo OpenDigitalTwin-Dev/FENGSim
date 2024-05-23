@@ -16,6 +16,7 @@ void HeatMain ();
 void ElasticityMain ();
 void TElasticityMain ();
 void TElastoPlasticity2Main ();
+void inp2geo ();
 
 int main (int argc, char** argv) {
     DPO dpo(&argc,&argv);
@@ -29,5 +30,6 @@ int main (int argc, char** argv) {
     if (Model == "Elasticity") ElasticityMain();
     if (Model == "TElasticity") TElasticityMain();
     if (Model == "TElastoPlasticity2") TElastoPlasticity2Main();
+    if (Model == "inp2geo") inp2geo();
     return 0;
 }
