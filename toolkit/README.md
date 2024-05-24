@@ -53,6 +53,27 @@ r3d
 	cd FENGSim/toolkit/r3d
 	./install.sh or ./uninstall.sh
 ```
+protobuf
+```
+	cd FENGSim/toolkit/protobuf
+	./install.sh or ./uninstall.sh
+```
+libarcus
+```
+	cd FENGSim/toolkit/protobuf
+	./install.sh
+	cd FENGSim/toolkit/libarcus
+	./install.sh or ./uninstall.sh
+```
+cura_engine
+```
+	cd FENGSim/toolkit/protobuf
+	./install.sh
+	cd FENGSim/toolkit/libarcus
+	./install.sh
+	cd FENGSim/toolkit/cura_engine
+	./install.sh or ./uninstall.sh
+```
 
 You can also download NSM, CFD, CEM, DAE, CM, NLA repositories from GitHub by cloning them.
 
