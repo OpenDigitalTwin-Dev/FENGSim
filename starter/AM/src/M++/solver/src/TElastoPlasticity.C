@@ -403,32 +403,6 @@ double TElastoPlasticityAssemble::Residual2 (Vector& b, Vector& g_D, Vector& x0,
     Collect(b);
 }
 
-void inp2geo () {
-    ifstream is("./solver/conf/geo/Job-1.inp");
-    ofstream out("./solver/conf/geo/Job-1.geo"); 
-    const int len = 256;
-    char L[len];
-    for (int i=0; i<9; i++) {
-	is.getline(L,len);
-    }
-    out << "POINTS" << endl;
-    while (strncasecmp("*Element",L,8) != 0) {
-	is.getline(L,len);
-	mout << L << endl;
-	double z[3];
-	int d = sscanf(L,"%*lf, %lf, %lf, %lf",z,z+1,z+2);
-	out << std::fixed << std::setprecision(12) << z[0] << " "  << z[1] << " "  << z[2] << endl;
-    }
-    out << "CELLS" << endl;
-    while (strncasecmp("*Nset",L,5) != 0) {
-	is.getline(L,len);
-	mout << L << endl;
-	int z[4];
-	int d = sscanf(L,"%*d, %d, %d, %d, %d",z,z+1,z+2,z+3);
-	out << "4 0 " << z[0]-1 << " " << z[1]-1 << " " << z[2]-1 << " " << z[3]-1 << endl;
-    }
-}
-
 void TElastoPlasticity2Main () {
     Date Start;  
     string name = "UnitCube";

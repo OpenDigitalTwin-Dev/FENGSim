@@ -13,9 +13,10 @@ if(MPI_FOUND)
 endif()
 
 include_directories("src")
+include_directories(${CMAKE_BINARY_DIR}/../../../toolkit/install/tetgen_install/include)
 aux_source_directory(solver/src solver_DIR_SRCS)
 add_executable (AMSolver ${solver_DIR_SRCS} src/Identify.C src/MatrixGraph.C src/Algebra.C src/Shape.C src/Point.C src/Parallel.C src/Time.C src/ctools.C src/IO.C src/Mesh.C src/Cell.C src/Distribution.C src/Plot.C src/Quadrature.C src/DoF.C src/Sparse.C src/Interface.C src/Discretization.C src/LinearSolver.C src/DD.C src/Preconditioner.C src/TimeSeries.C src/ESolver.C src/Transfer.C src/Element.C src/FaceElement.C src/Newton.C src/Newmark.C src/Euler.C src/Small.C src/Schur.C)
-target_link_libraries (AMSolver /usr/lib/x86_64-linux-gnu/libblas.so /usr/lib/x86_64-linux-gnu/liblapack.so ${MPI_LIBRARIES} /usr/lib/x86_64-linux-gnu/libsuperlu.so)
+target_link_libraries (AMSolver /usr/lib/x86_64-linux-gnu/libblas.so /usr/lib/x86_64-linux-gnu/liblapack.so ${MPI_LIBRARIES} /usr/lib/x86_64-linux-gnu/libsuperlu.so ${CMAKE_BINARY_DIR}/../../../toolkit/install/tetgen_install/lib/libtetgen.so)
 set_target_properties(AMSolver PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 message(${CMAKE_BINARY_DIR})
