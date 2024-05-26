@@ -3131,6 +3131,7 @@ void MainWindow::AMSimulationAnimation()
 void MainWindow::FEMCompute()
 {
 
+    fem_dock->Configure();
 
     FEMThread1* td1 = new FEMThread1;
     td1->start();
@@ -3141,6 +3142,10 @@ void MainWindow::FEMCompute()
 
 
     return;
+
+
+
+
     //vtk_widget->ImportVTKFile(std::string("/home/jiping/M++/data/vtk/linear_elasticity_deform_4.vtk"));
 
     //return;
@@ -3196,7 +3201,7 @@ void MainWindow::FEMCompute()
 
 void MainWindow::FEMPlot () {
     vtk_widget->Hide();
-    vtk_widget->ImportVTKFile(std::string("../Elasticity/build/data/vtk/elasticity_3_deform.vtk"));
+    vtk_widget->ImportVTKFile(std::string("../Elasticity/build/data/vtk/fengsim_3_deform.vtk"));
     fem_dock->ui->pushButton->setEnabled(true);
 }
 

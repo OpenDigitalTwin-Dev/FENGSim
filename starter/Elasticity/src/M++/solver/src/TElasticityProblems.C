@@ -8,6 +8,8 @@ void TElasticityProblems::SetSubDomain (Mesh& M) {
 	Point p(c());
 	hash_map<Point,Cell*,Hash>::iterator it = M.Cells::find(p);
 	switch (example_id) {
+	case 0 : // fengsim 
+			break;
 	case 1 : // 2d dirichlet boundary condition
 	    it->second->SetSubdomain(0);
 	    break;
@@ -38,6 +40,8 @@ void TElasticityProblems::SetBoundaryType (Mesh& M) {
 	Point p(bf());
 	hash_map<Point,BoundaryFace,Hash>::iterator it = M.BoundaryFaces::find(p);		
 	switch (example_id) {
+	case 0 :
+		break;
 	case 1 : 
 	    it->second.SetPart(1);
 	    break;
@@ -85,8 +89,16 @@ void TElasticityProblems::SetBoundaryType (Mesh& M) {
 
 bool TElasticityProblems::IsDirichlet (int id) {
     switch (example_id) {
+	case 0 : {
+		if (id == -1) return false;
+		if (bc[id-1][0] == 0) {
+			return true;
+		}
+		return false;
+		break;
+    }
     case 1 : 
-	if (id == 1)
+		if (id == 1)
 	    return true;
 	return false;
 	break;
@@ -136,6 +148,19 @@ bool TElasticityProblems::IsDirichlet (int id) {
 void TElasticityProblems::g_D (Point p, double time, int k, RowBndValues& u_c, int id) {
     Point pp = zero;
     switch (example_id) {
+	case 0 : {
+		Point pp;
+		pp[0] = bc[id-1][1];
+		pp[1] = bc[id-1][2];
+		pp[2] = bc[id-1][3];
+		u_c.D(k, 0) = true;
+	    u_c(k, 0) = bc[id-1][1];
+	    u_c.D(k, 1) = true;
+	    u_c(k, 1) = bc[id-1][2];
+		u_c.D(k, 2) = true;
+	    u_c(k, 2) = bc[id-1][3];
+		break;
+    }
     case 1 : { 
 	if (id == 1) {
 	    pp[0] = sin(Pi * p[0]) * cos(Pi * p[1]);
@@ -226,6 +251,13 @@ void TElasticityProblems::g_D (Point p, double time, int k, RowBndValues& u_c, i
 Point TElasticityProblems::g_N (Point p, double t, int id) {
     Point pp;
     switch (example_id) {
+	case 0 : {
+		Point pp;
+		pp[0] = bc[id-1][1];
+		pp[1] = bc[id-1][2];
+		pp[2] = bc[id-1][3];
+		return pp;
+	}
     case 2 : 
 	if (id == 2) {
 	    pp[0] = 2 * (mu + lambda) * Pi * cos(Pi*p[0]) * cos(Pi*p[1]);

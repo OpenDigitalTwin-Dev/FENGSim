@@ -148,12 +148,12 @@ void ElasticityMain () {
     
     Plot P(M.fine());
     P.vertexdata(x,dim);
-    P.vtk_vertex_vector("elasticity_deform",0,1);
-    P.vtk_vertex_vector("elasticity_undeform",0,0);
+    P.vtk_vertex_vector("fengsim_deform",0,1);
+    P.vtk_vertex_vector("fengsim_undeform",0,0);
     //P.vtk_vertexdata("elasticity_3_deform",dim-1,1);
     //P.vtk_vertexdata("elasticity_3_undeform",dim-1,0);
-    P.vtk_vertexdata("elasticity_3_deform",100,1);
-    P.vtk_vertexdata("elasticity_3_undeform",100,0);
+    P.vtk_vertexdata("fengsim_3_deform",100,1);
+    P.vtk_vertexdata("fengsim_3_undeform",100,0);
 	
     
     return;

@@ -12,15 +12,7 @@ public:
     double PoissonRatio = 1;
 	vector<vector<double>> bc;
 public:
-	ElasticityProblems () {
-        ReadConfig(Settings, "EXAMPLE", example_id);
-		ReadConfig(Settings, "Young", Young);
-		ReadConfig(Settings, "PoissonRatio", PoissonRatio);
-		// elasticity parameters
-		mu = Young / 2.0 / (1 + PoissonRatio);
-		lambda = Young * PoissonRatio / (1 + PoissonRatio) / (1 - 2 * PoissonRatio);
-		mout << "mu: " << mu << " lambda: " << lambda << endl;
-
+	void setbc () {
 		if (example_id==0) {
 			ifstream is("./../../build-FENGSim-Desktop_Qt_5_12_12_GCC_64bit-Debug/BndConditions.txt");
 			const int len = 256;
@@ -42,6 +34,16 @@ public:
 				mout << endl;
 			}
 		}
+	}
+	ElasticityProblems () {
+        ReadConfig(Settings, "EXAMPLE", example_id);
+		ReadConfig(Settings, "Young", Young);
+		ReadConfig(Settings, "PoissonRatio", PoissonRatio);
+		setbc();
+		// elasticity parameters
+		mu = Young / 2.0 / (1 + PoissonRatio);
+		lambda = Young * PoissonRatio / (1 + PoissonRatio) / (1 - 2 * PoissonRatio);
+		mout << "mu: " << mu << " lambda: " << lambda << endl;
     }
     void SetSubDomain (Mesh& M);
     void SetBoundaryType (Mesh& M);    

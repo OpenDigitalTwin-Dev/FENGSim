@@ -205,6 +205,8 @@ void TElasticityMain () {
 	    P.vtk_vertex_vector((string("telasticity_deform")+to_string(1)).c_str(), 0, 1);
 	    P.vtk_vertex_vector((string("telasticity_undeform")+to_string(1)).c_str(), 0, 0);
 	}
+	P.vtk_vertexdata("fengsim_3_deform",100,1);
+    P.vtk_vertexdata("fengsim_3_undeform",100,0);
 	
 	x0 = x1;
 	x1 = x2;
