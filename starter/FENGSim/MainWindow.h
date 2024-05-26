@@ -398,6 +398,7 @@ private:
     QTimer* fem_timer =  new QTimer;
 public slots:
     void FEMCompute ();
+    void FEMPlot ();
     void FEMExampleCompute ();
     void FEMAnimation ();
 

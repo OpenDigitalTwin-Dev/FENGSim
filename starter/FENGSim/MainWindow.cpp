@@ -317,7 +317,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
 
     // *******************************************************
     // fem
-   // connect(fem_dock->ui->pushButton_2, SIGNAL(clicked()), this, SLOT(FEMExampleCompute()));
+    // connect(fem_dock->ui->pushButton_2, SIGNAL(clicked()), this, SLOT(FEMExampleCompute()));
 
 
 
@@ -525,7 +525,7 @@ void MainWindow::NewProject ()
 
 void MainWindow::OpenProject ()
 {
-    QString fileName = QFileDialog::getOpenFileName(this,tr("Open File"),"/home/jiping/OpenDigitalTwin/",
+    QString fileName = QFileDialog::getOpenFileName(this,tr("Open File"),"../FENGSim/data",
                                                     tr("CAD Files (*.stp *.step *.vtk)")
                                                     , 0 , QFileDialog::DontUseNativeDialog);
     cout << fileName.toStdString() << endl;
@@ -2897,7 +2897,7 @@ void MainWindow::AMSetPathPlanningVisible()
 
 void MainWindow::AMSlices2Mesh()
 {
-    QProcess *proc = new QProcess(); 
+    QProcess *proc = new QProcess();
     proc->setWorkingDirectory(meas_path+QString("/../../toolkit/install/slice2mesh_install/bin"));
     std::cout << (meas_path+QString("/../../toolkit/install/slice2mesh_install/bin")).toStdString() << std::endl;
     std::cout << (QString("./slice2mesh_exec ")
@@ -2920,8 +2920,8 @@ void MainWindow::AMSlices2Mesh()
         //        MM.FileFormatMeshToGeo("/home/jiping/software/slice2mesh-master/build-slice2mesh-Desktop_Qt_5_12_10_GCC_64bit-Debug/amslices2mesh.mesh",
         //                               "/home/jiping/FENGSim/AM/Elasticity/conf/geo/thinwall.geo");
         MM.FileFormatMeshToGeo((meas_path
-                               +QString("/../../../software/slice2mesh-master/build-slice2mesh-Desktop_Qt_5_12_10_GCC_64bit-Debug")
-                               +QString("/amslices2mesh.mesh")).toStdString().c_str(),
+                                +QString("/../../../software/slice2mesh-master/build-slice2mesh-Desktop_Qt_5_12_10_GCC_64bit-Debug")
+                                +QString("/amslices2mesh.mesh")).toStdString().c_str(),
                                (meas_path+QString("/../../AM/AdditiveManufacturing/conf/geo/thinwall.geo")).toStdString().c_str());
 
         vtk_widget->AMImportMesh();
@@ -3127,8 +3127,20 @@ void MainWindow::AMSimulationAnimation()
 
 // #include "QDir"
 // #include "QCoreApplication"
+#include "FEM/FEMThread1.h"
 void MainWindow::FEMCompute()
 {
+
+
+    FEMThread1* td1 = new FEMThread1;
+    td1->start();
+    connect(td1, SIGNAL(finished()), this, SLOT(FEMPlot()));
+    fem_dock->ui->pushButton->setEnabled(false);
+
+
+
+
+    return;
     //vtk_widget->ImportVTKFile(std::string("/home/jiping/M++/data/vtk/linear_elasticity_deform_4.vtk"));
 
     //return;
@@ -3182,6 +3194,12 @@ void MainWindow::FEMCompute()
     }
 }
 
+void MainWindow::FEMPlot () {
+    vtk_widget->Hide();
+    vtk_widget->ImportVTKFile(std::string("../Elasticity/build/data/vtk/elasticity_3_deform.vtk"));
+    fem_dock->ui->pushButton->setEnabled(true);
+}
+
 #include <QDir>
 
 void MainWindow::FEMAnimation()
@@ -3212,50 +3230,50 @@ void MainWindow::FEMExampleCompute()
 
 
 
-//    if (fem_dock->ui->comboBox_4->currentText().toStdString() == "Poisson")
-//    {
-//        ofstream out;
-//        out.open("/home/jiping/FENGSim/Cura/conf/m++conf");
-//        out << "loadconf = Poisson/conf/poisson.conf;" << endl;
-//        out << "#loadconf = Heat/conf/heat.conf;" << endl;
-//        out << "#loadconf = Elasticity/conf/m++conf;" << endl;
-//        out << "loadconf = ElastoPlasticity/conf/m++conf;" << endl;
-//        out << "#loadconf = ThermoElasticity/conf/m++conf;" << endl;
-//        out << "#loadconf = AdditiveManufacturing/conf/m++conf;" << endl;
-//        out << "loadconf = Cura/conf/m++conf;" << endl;
+    //    if (fem_dock->ui->comboBox_4->currentText().toStdString() == "Poisson")
+    //    {
+    //        ofstream out;
+    //        out.open("/home/jiping/FENGSim/Cura/conf/m++conf");
+    //        out << "loadconf = Poisson/conf/poisson.conf;" << endl;
+    //        out << "#loadconf = Heat/conf/heat.conf;" << endl;
+    //        out << "#loadconf = Elasticity/conf/m++conf;" << endl;
+    //        out << "loadconf = ElastoPlasticity/conf/m++conf;" << endl;
+    //        out << "#loadconf = ThermoElasticity/conf/m++conf;" << endl;
+    //        out << "#loadconf = AdditiveManufacturing/conf/m++conf;" << endl;
+    //        out << "loadconf = Cura/conf/m++conf;" << endl;
 
-//        proc->start("mpirun -np 4 ./PoissonRun");
-//        if (proc->waitForFinished(-1)) {
-//            vtk_widget->FEMImportResults("/home/jiping/M++/data/vtk/poisson_linear.vtk");
-//        }
-//        return;
-//    }
-//    if (fem_dock->ui->comboBox_4->currentText().toStdString() == "Heat")
-//    {
-//        ofstream out;
-//        out.open("/home/jiping/FENGSim/Cura/conf/m++conf");
-//        out << "#loadconf = Poisson/conf/poisson.conf;" << endl;
-//        out << "loadconf = Heat/conf/heat.conf;" << endl;
-//        out << "#loadconf = Elasticity/conf/m++conf;" << endl;
-//        out << "loadconf = ElastoPlasticity/conf/m++conf;" << endl;
-//        out << "#loadconf = ThermoElasticity/conf/m++conf;" << endl;
-//        out << "#loadconf = AdditiveManufacturing/conf/m++conf;" << endl;
-//        out << "loadconf = Cura/conf/m++conf;" << endl;
+    //        proc->start("mpirun -np 4 ./PoissonRun");
+    //        if (proc->waitForFinished(-1)) {
+    //            vtk_widget->FEMImportResults("/home/jiping/M++/data/vtk/poisson_linear.vtk");
+    //        }
+    //        return;
+    //    }
+    //    if (fem_dock->ui->comboBox_4->currentText().toStdString() == "Heat")
+    //    {
+    //        ofstream out;
+    //        out.open("/home/jiping/FENGSim/Cura/conf/m++conf");
+    //        out << "#loadconf = Poisson/conf/poisson.conf;" << endl;
+    //        out << "loadconf = Heat/conf/heat.conf;" << endl;
+    //        out << "#loadconf = Elasticity/conf/m++conf;" << endl;
+    //        out << "loadconf = ElastoPlasticity/conf/m++conf;" << endl;
+    //        out << "#loadconf = ThermoElasticity/conf/m++conf;" << endl;
+    //        out << "#loadconf = AdditiveManufacturing/conf/m++conf;" << endl;
+    //        out << "loadconf = Cura/conf/m++conf;" << endl;
 
-//        proc->start("mpirun -np 4 ./HeatRun");
-//        if (proc->waitForFinished(-1)) {
-//            QDir dir("/home/jiping/M++/data/vtk");
-//            QStringList stringlist_vtk;
-//            stringlist_vtk << "heat_*.vtk";
-//            dir.setNameFilters(stringlist_vtk);
-//            QFileInfoList fileinfolist;
-//            fileinfolist = dir.entryInfoList();
-//            fem_file_num = fileinfolist.size();
-//            fem_file_id = 0;
-//            fem_timer->singleShot(1, this, SLOT(FEMAnimation()));
-//        }
-//        return;
-//    }
+    //        proc->start("mpirun -np 4 ./HeatRun");
+    //        if (proc->waitForFinished(-1)) {
+    //            QDir dir("/home/jiping/M++/data/vtk");
+    //            QStringList stringlist_vtk;
+    //            stringlist_vtk << "heat_*.vtk";
+    //            dir.setNameFilters(stringlist_vtk);
+    //            QFileInfoList fileinfolist;
+    //            fileinfolist = dir.entryInfoList();
+    //            fem_file_num = fileinfolist.size();
+    //            fem_file_id = 0;
+    //            fem_timer->singleShot(1, this, SLOT(FEMAnimation()));
+    //        }
+    //        return;
+    //    }
 
 
 
@@ -3881,15 +3899,15 @@ void MainWindow::TransportMCRun()
 
 
 
-//        data_analyze results;
-//        std::vector<double> results_show(results.analyze());
+        //        data_analyze results;
+        //        std::vector<double> results_show(results.analyze());
 
-//        std::cout << results_show.size() << std::endl;
-//        for (int i=0; i<results_show.size(); i++)
-//            std::cout << results_show[i] << " ";
-//        std::cout << std::endl;
-//        for (int i=0; i<9; i++)
-//            transport_dock->ui->tableWidget_2->item(i,0)->setText(QString::number(results_show[i]));
+        //        std::cout << results_show.size() << std::endl;
+        //        for (int i=0; i<results_show.size(); i++)
+        //            std::cout << results_show[i] << " ";
+        //        std::cout << std::endl;
+        //        for (int i=0; i<9; i++)
+        //            transport_dock->ui->tableWidget_2->item(i,0)->setText(QString::number(results_show[i]));
 
         return;
 

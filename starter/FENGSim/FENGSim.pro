@@ -19,6 +19,7 @@ TEMPLATE = app
 
 SOURCES +=\
     CAD/PhysicsDockWidget.cpp \
+    FEM/FEMThread1.cpp \
     Main.cpp \
     MainWindow.cpp \
     CAD/OCCWidget.cpp \
@@ -58,6 +59,7 @@ SOURCES +=\
 
 HEADERS  += \
     CAD/PhysicsDockWidget.h \
+    FEM/FEMThread1.h \
     Machining/MakeTools.h \
     MainWindow.h \
     CAD/OCCWidget.h \

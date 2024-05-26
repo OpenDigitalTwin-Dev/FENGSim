@@ -9,7 +9,8 @@ FEMDockWidget::FEMDockWidget(QWidget *parent) :
         //ui->comboBox->addItem("Poisson");
         //ui->comboBox->addItem("Heat");
         ui->comboBox->addItem("Elasticity");
-        ui->comboBox->addItem("ElastoPlasticity");
+        ui->comboBox->addItem("Dynamic Elasticity");
+        ui->comboBox->addItem("Dynamic Elastoplasticity");
         //ui->comboBox_4->addItem("Poisson");
         //ui->comboBox_4->addItem("Heat");
         //ui->comboBox_4->addItem("Elasticity");
