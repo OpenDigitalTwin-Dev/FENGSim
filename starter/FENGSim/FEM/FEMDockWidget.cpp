@@ -91,45 +91,6 @@ void FEMDockWidget::Configure()
         out.open(std::string("../Elasticity/build/solver/conf/m++conf").c_str());
         out << "loadconf = solver/conf/elasticity.conf;" << std::endl;
         out.close();
-
-
-
-
-        out.open(std::string("/home/jiping/M++/ElasticityModule/conf/linear_elasticity_qt.conf").c_str());
-        //out << "Model = " + ui->comboBox_2->currentText().toStdString() + ";" << std::endl;
-        out << "GeoPath = ElasticityModule/;" << std::endl;
-        //                if (!ui->pushButton_2->isChecked())
-        //                {
-        //                        out << "EXAMPLE = " + std::to_string(-1) + "; " << std::endl;
-        //                        out << "Mesh = " + mesh_file.toStdString() << std::endl;
-        //                }
-        //                else
-        //                {
-        //                        out << "EXAMPLE = " + std::to_string(ui->comboBox_4->currentIndex() + 1) + "; " << std::endl;
-        //                        out << "Mesh = example" + std::to_string(ui->comboBox_4->currentIndex()+1) + ";" << std::endl;
-        //                }
-        out << "plevel = 0;" << std::endl;
-        //out << "level = " + ui->comboBox_3->currentText().toStdString() + ";" << std::endl;
-        out << "Discretization = linear;" << std::endl;
-        out << "Overlap_Distribution = 0;" << std::endl;
-        out << "Overlap = none;" << std::endl;
-        out << "Distribution = Stripes;" << std::endl;
-        out << "Young = 2.5;" << std::endl;
-        out << "PoissonRatio = 0.25;" << std::endl;
-
-        out << "NewtonSteps = 10;" << std::endl;
-        out << "NewtonResidual = 1e-20;" << std::endl;
-
-        out << "LinearSolver = CG;" << std::endl;
-        out << "Preconditioner = Jacobi;" << std::endl;
-        out << "LinearSteps = 50000;" << std::endl;
-        out << "LinearEpsilon = 1e-15;" << std::endl;
-        out << "LinearReduction = 1e-15;" << std::endl;
-
-        out << "QuadratureCell = 3;" << std::endl;
-        out << "QuadratureBoundary = 2;" << std::endl;
-
-        out << "precision = 5;" << std::endl;
     }
     else if (ui->comboBox->currentText().toStdString() == "Dynamic Elasticity")
     {

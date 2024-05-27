@@ -148,7 +148,7 @@ void TElasticityMain () {
     ReadConfig(Settings, "Time", T);
     ReadConfig(Settings, "TimeSteps", n);
     ReadConfig(Settings, "TimeLevel", l);
-    n = pow(2, l);
+    //n = pow(2, l);
     double dt = T/n;
     
     TElasticityAssemble TEA(dim, dt);
@@ -191,22 +191,24 @@ void TElasticityMain () {
 	mout << "L2 error: "<< TEA.L2Error(x0, x1, x2, (i - 1) * dt) << endl;
 	
 	// plot
-	string filename1 = string("telasticity_deform") + to_string(i);
-	string filename2 = string("telasticity_undeform") + to_string(i);
+	string filename1 = string("telasticity_deform_") + to_string(i);
+	string filename2 = string("telasticity_undeform_") + to_string(i);
 	Plot P(M.fine());
 	P.vertexdata(x2, dim);
-	P.vtk_vertex_vector(filename1.c_str(), 0, 1);
-	P.vtk_vertex_vector(filename2.c_str(), 0, 0);
+	//P.vtk_vertex_vector(filename1.c_str(), 0, 1);
+	//P.vtk_vertex_vector(filename2.c_str(), 0, 0);
+	P.vtk_vertexdata(filename1.c_str(),100,1);
 	if (i == 2) {
 	    P.vertexdata(x0, 2);
-	    P.vtk_vertex_vector((string("telasticity_deform")+to_string(0)).c_str(), 0, 1);
-	    P.vtk_vertex_vector((string("telasticity_undeform")+to_string(0)).c_str(), 0, 0);
+	    //P.vtk_vertex_vector((string("telasticity_deform_")+to_string(0)).c_str(), 0, 1);
+	    //P.vtk_vertex_vector((string("telasticity_undeform")+to_string(0)).c_str(), 0, 0);
+	    P.vtk_vertexdata((string("telasticity_deform_")+to_string(0)).c_str(),100,1);
 	    P.vertexdata(x1, 2);
-	    P.vtk_vertex_vector((string("telasticity_deform")+to_string(1)).c_str(), 0, 1);
-	    P.vtk_vertex_vector((string("telasticity_undeform")+to_string(1)).c_str(), 0, 0);
+	    //P.vtk_vertex_vector((string("telasticity_deform_")+to_string(1)).c_str(), 0, 1);
+	    //P.vtk_vertex_vector((string("telasticity_undeform")+to_string(1)).c_str(), 0, 0);
+	    P.vtk_vertexdata((string("telasticity_deform_")+to_string(1)).c_str(),100,1);
 	}
-	P.vtk_vertexdata("fengsim_3_deform",100,1);
-    P.vtk_vertexdata("fengsim_3_undeform",100,0);
+	
 	
 	x0 = x1;
 	x1 = x2;

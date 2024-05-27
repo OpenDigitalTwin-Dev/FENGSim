@@ -8,6 +8,8 @@ void TElastoPlasticityProblems::SetSubDomain (Mesh& M) {
 	Point p(c());
 	hash_map<Point,Cell*,Hash>::iterator it = M.Cells::find(p);
 	switch (example_id) {
+	case 0 : // fengsim 
+	    break;
 	case 1 : // 2d elasticity dirichlet b.c. 
 	    it->second->SetSubdomain(0);
 	    break;
@@ -56,6 +58,8 @@ void TElastoPlasticityProblems::SetBoundaryType (Mesh& M, double time) {
 	Point p(bf());
 	hash_map<Point,BoundaryFace,Hash>::iterator it = M.BoundaryFaces::find(p);
 	switch (example_id) {
+	case 0 :
+	    break;
 	case 1 :
 	    it->second.SetPart(1);
 	    break;
@@ -149,6 +153,14 @@ void TElastoPlasticityProblems::SetBoundaryType (Mesh& M, double time) {
 
 bool TElastoPlasticityProblems::IsDirichlet (int id) {
     switch (example_id) {
+    case 0 : {
+	if (id == -1) return false;
+	if (bc[id-1][0] == 0) {
+	    return true;
+	}
+	return false;
+	break;
+    }
     case 1 : {
 	if (id == 1) {
 	    return true;
@@ -246,6 +258,19 @@ bool TElastoPlasticityProblems::IsDirichlet (int id) {
 void TElastoPlasticityProblems::Dirichlet (Point p, double T, int k, RowBndValues& u_c, int id) {
     Point pp = zero;
     switch (example_id) {
+    case 0 : {
+	Point pp;
+	pp[0] = bc[id-1][1];
+	pp[1] = bc[id-1][2];
+	pp[2] = bc[id-1][3];
+	u_c.D(k, 0) = true;
+	u_c(k, 0) = bc[id-1][1]*T;
+	u_c.D(k, 1) = true;
+	u_c(k, 1) = bc[id-1][2]*T;
+	u_c.D(k, 2) = true;
+	u_c(k, 2) = bc[id-1][3]*T;
+	break;
+    }
     case 1 : {
 	if (id == 1) {
 	    pp[0] = sin(Pi*p[0]) * cos(Pi*p[1]);
@@ -414,6 +439,13 @@ void TElastoPlasticityProblems::Dirichlet (Point p, double T, int k, RowBndValue
 Point TElastoPlasticityProblems::Neumann (Point p, double t, int id) {
     Point pp;
     switch (example_id) {
+    case 0 : {
+	Point pp;
+	pp[0] = bc[id-1][1];
+	pp[1] = bc[id-1][2];
+	pp[2] = bc[id-1][3];
+	return pp;
+    }
     case 2 : {
 	if (id == 2) {
 	    pp[0] = 2 * (mu + lambda) * Pi * cos(Pi*p[0]) * cos(Pi*p[1]);
@@ -501,6 +533,11 @@ Point TElastoPlasticityProblems::Neumann (Point p, double t, int id) {
 Point TElastoPlasticityProblems::Source (Point p, double time) {
     Point pp = zero;
     switch (example_id) {
+    case 0 : {
+	pp = zero;
+	return pp;
+	break;
+    }
     case 1 : {
 	pp[0] = (1.0 + 2.0 * (2.0 * mu + lambda) * Pi * Pi) * sin(Pi * p[0]) * cos(Pi * p[1]);
 	pp[1] = (1.0 + 2.0 * (2.0 * mu + lambda) * Pi * Pi) * cos(Pi * p[0]) * sin(Pi * p[1]);
@@ -623,6 +660,9 @@ Point TElastoPlasticityProblems::Solution (Point p, double t) {
 Point TElastoPlasticityProblems::h0 (Point p) {
     Point pp = zero;
     switch (example_id) {
+    case 0 :
+        return zero;
+        break;
     case 1 : 
 	pp[0] = sin(Pi * p[0]) * cos(Pi * p[1]);
 	pp[1] = cos(Pi * p[0]) * sin(Pi * p[1]);
@@ -684,6 +724,9 @@ Point TElastoPlasticityProblems::h0 (Point p) {
 Point TElastoPlasticityProblems::h1 (Point p, double dt) {
     Point pp = zero;
     switch (example_id) {
+    case 0 :
+        return zero;
+        break;
     case 1 : 
 	pp[0] = sin(Pi * p[0]) * cos(Pi * p[1]);
 	pp[1] = cos(Pi * p[0]) * sin(Pi * p[1]);

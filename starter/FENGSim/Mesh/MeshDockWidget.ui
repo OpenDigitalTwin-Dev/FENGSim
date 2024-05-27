@@ -225,6 +225,9 @@
           <property name="styleSheet">
            <string notr="true">padding-left: 3px;</string>
           </property>
+          <property name="decimals">
+           <number>5</number>
+          </property>
           <property name="maximum">
            <double>10000.000000000000000</double>
           </property>

@@ -140,20 +140,20 @@ void ElasticityMain () {
     tout(1) << Date() - Start << endl;
     mout << "L2 error: "<< EA.L2Error(x) << endl;
 
-	if (EA.example_id == 5) {
-		if (dim == 2 && x.find_row(Point(48,60)) != x.rows_end()) {
-			cout << x(Point(48,60),0) << " " << x(Point(48,60),1) << endl;
-		}
+    if (EA.example_id == 5) {
+	if (dim == 2 && x.find_row(Point(48,60)) != x.rows_end()) {
+	    cout << x(Point(48,60),0) << " " << x(Point(48,60),1) << endl;
 	}
+    }
     
     Plot P(M.fine());
     P.vertexdata(x,dim);
-    P.vtk_vertex_vector("fengsim_deform",0,1);
-    P.vtk_vertex_vector("fengsim_undeform",0,0);
+    //P.vtk_vertex_vector("fengsim_deform",0,1);
+    //P.vtk_vertex_vector("fengsim_undeform",0,0);
     //P.vtk_vertexdata("elasticity_3_deform",dim-1,1);
     //P.vtk_vertexdata("elasticity_3_undeform",dim-1,0);
-    P.vtk_vertexdata("fengsim_3_deform",100,1);
-    P.vtk_vertexdata("fengsim_3_undeform",100,0);
+    P.vtk_vertexdata("fengsim_deform",100,1);
+    //P.vtk_vertexdata("fengsim_undeform",100,0);
 	
     
     return;

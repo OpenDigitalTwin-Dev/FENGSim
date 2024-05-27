@@ -11,7 +11,7 @@
 
 void ElasticityMain ();
 void TElasticityMain ();
-void ContactMain ();
+void TElastoPlasticity2Main ();
 
 int main (int argv, char** argc) {
 	DPO dpo(&argv,&argc);
@@ -19,7 +19,7 @@ int main (int argv, char** argc) {
 	ReadConfig(Settings,"Model",Model);
 	if (Model == "Elasticity") ElasticityMain();
 	if (Model == "TElasticity") TElasticityMain();
-	if (Model == "Contact") ContactMain();
+	if (Model == "TElastoPlasticity2") TElastoPlasticity2Main();
 
     return 0;
 }

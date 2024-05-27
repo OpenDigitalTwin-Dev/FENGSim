@@ -12,6 +12,7 @@ if(MPI_FOUND)
   add_definitions(${MPI_DEFINITIONS})
 endif()
 
+add_definitions(-DTETLIBRARY)
 include_directories("src")
 include_directories(${CMAKE_BINARY_DIR}/../../../toolkit/install/tetgen_install/include)
 aux_source_directory(solver/src solver_DIR_SRCS)

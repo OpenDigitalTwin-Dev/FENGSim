@@ -32,6 +32,7 @@
 #include "AdditiveManufacturing/AMThread2.h"
 #include "OCPoro/OCPoroDockWidget.h"
 #include "OCPoro/OCPoroDialog.h"
+#include "Mesh/MeshGeneration.h"
 
 // ui design
 namespace Ui {
@@ -225,7 +226,10 @@ public slots:
     void OpenMachiningModule ();
     // mesh
 public slots:
+
     void MeshGen ();
+    void MeshPlot ();
+
     // fem
     // void ImportVTKFile () { vtk_dock->ImportVTKFile(); }
     // physical definition
@@ -385,11 +389,6 @@ public slots:
 
 
 
-
-
-
-
-
     // *******************************************************
     // FEM
 private:
@@ -397,6 +396,7 @@ private:
     int fem_file_id;
     QTimer* fem_timer =  new QTimer;
 public slots:
+    void FEMConfigure ();
     void FEMCompute ();
     void FEMPlot ();
     void FEMExampleCompute ();

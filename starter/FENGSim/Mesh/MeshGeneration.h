@@ -63,11 +63,11 @@ public:
 };
 
 class MeshModule {
-    int mesh_dim;
     Slices slices;
     vector<Polygon> poly;
     vector<VoxelMesh> voxel_mesh;
     double voxel_h = 0.1;
+    int mesh_dim;
 public:
     MeshModule () {}
     void MeshGeneration (TopoDS_Shape* S, double size = 0.5, int refine_level = 0, QString path ="");
@@ -82,6 +82,8 @@ public:
         }
         return false;
     }
+    void setdim (int n) {mesh_dim = n;}
+    int getdim () {return mesh_dim;}
     void FileFormatCliToVTK (QString filename);
     void FileFormatMeshToVTK (QString Ain, QString Aout);
     void FileFormatMeshToVTK2 (QString Ain, QString Aout);

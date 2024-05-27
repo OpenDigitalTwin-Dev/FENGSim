@@ -29,6 +29,7 @@ SOURCES +=\
     Measure/MeasureICP.cpp \
     Measure/MeasureThread1.cpp \
     Measure/MeasureThread3.cpp \
+    Mesh/MeshThread1.cpp \
     OCPoro/OCPoroDialog.cpp \
     OCPoro/OCPoroDockWidget.cpp \
 #    Transport/data_analyze.cpp \
@@ -69,6 +70,7 @@ HEADERS  += \
     Measure/MeasureICP.h \
     Measure/MeasureThread1.h \
     Measure/MeasureThread3.h \
+    Mesh/MeshThread1.h \
     OCPoro/OCPoroDialog.h \
     OCPoro/OCPoroDockWidget.h \
 #    Transport/data_analyze.h \

@@ -197,7 +197,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     // FEM
 
     connect(fem_dock->ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(FEMCompute()));
-
+    connect(vtk_dock->ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(FEMPlot()));
 
 
 
@@ -1301,21 +1301,28 @@ void MainWindow::OpenSPCModule()
 #include "Mesh/MeshGeneration.h"
 #include "vtkUnstructuredGridReader.h"
 #include "vtkDataSetMapper.h"
+#include "Mesh/MeshThread1.h"
 
 void MainWindow::MeshGen()
 {
     if (parts->size() == 0) return;
     std::cout << "mesh check " << parts->size() << std::endl;
-    MM.MeshGeneration(parts->Union(),mesh_dock->ui->doubleSpinBox->value(),0,meas_path);
+    MeshThread1* mth1 = new MeshThread1;
+    mth1->S = parts->Union();
+    mth1->size = mesh_dock->ui->doubleSpinBox->value();
+    mth1->refine_level = 0;
+    mth1->path = meas_path;
+    mth1->MM = &MM;
+    mesh_dock->ui->pushButton->setEnabled(false);
+    mth1->start();
+    connect(mth1, SIGNAL(finished()), this, SLOT(MeshPlot()));
+}
+
+void MainWindow::MeshPlot() {
+    mesh_dock->ui->pushButton->setEnabled(true);
     vtk_widget->Hide();
-    //vtk_widget->ImportVTKFile(std::string("/home/jiping/FENGSim/build-FENGSim-Desktop_Qt_5_12_10_GCC_64bit-Release/FENGSimDT.vtk"));
     MM.FileFormat();
-
-    //        MM.FileFormatMeshToVTK2("/home/jiping/M++/ElastoPlasticity/conf/geo/InternallyPressurisedCylinder.mesh",
-    //                                "/home/jiping/M++/ElastoPlasticity/conf/geo/InternallyPressurisedCylinder.vtk");
     vtk_widget->ImportVTKFile((meas_path+QString("/data/mesh/fengsim_mesh.vtk")).toStdString());
-
-
 }
 
 #include "Poly_Triangulation.hxx"
@@ -3128,10 +3135,128 @@ void MainWindow::AMSimulationAnimation()
 // #include "QDir"
 // #include "QCoreApplication"
 #include "FEM/FEMThread1.h"
+
+void MainWindow::FEMConfigure() {
+    std::ofstream out;
+    if (fem_dock->ui->comboBox->currentText().toStdString() == "Elasticity")
+    {
+        out.open(std::string("../Elasticity/build/solver/conf/m++conf").c_str());
+        out << "loadconf = solver/conf/elasticity.conf;" << std::endl;
+        out.close();
+        out.open(std::string("../Elasticity/build/solver/conf/elasticity.conf").c_str());
+        out << "Model = Elasticity;" << std::endl;
+        out << "GeoPath = solver/;" << std::endl;
+        out << "EXAMPLE = 0;" << std::endl;
+        out << "Mesh = fengsim_mesh;" << std::endl;
+        out << "plevel = 0;" << std::endl;
+        out << "level = 0;" << std::endl;
+
+        out << "Discretization = linear;" << std::endl;
+        out << "Overlap_Distribution = 0;" << std::endl;
+        out << "Overlap = none;" << std::endl;
+        out << "Distribution = Stripes;" << std::endl;
+
+        out << "Young = " << physics_dock->ui->doubleSpinBox_5->value() << std::endl;
+        out << "PoissonRatio = " << physics_dock->ui->doubleSpinBox_4->value() << std::endl;
+
+        out << "LinearSolver = CG;" << std::endl;
+        out << "Preconditioner = Jacobi;" << std::endl;
+        out << "LinearSteps = 10000000;	" << std::endl;
+        out << "LinearEpsilon = 1e-15;" << std::endl;
+        out << "LinearReduction = 1e-15;" << std::endl;
+
+        out << "QuadratureCell = 3;" << std::endl;
+        out << "QuadratureBoundary = 2;" << std::endl;
+
+        out << "precision = 5;" << std::endl;
+        out.close();
+    }
+    else if (fem_dock->ui->comboBox->currentText().toStdString() == "Dynamic Elasticity")
+    {
+        out.open(std::string("../Elasticity/build/solver/conf/m++conf").c_str());
+        out << "loadconf = solver/conf/telasticity.conf;" << std::endl;
+        out.close();
+
+        out.open(std::string("../Elasticity/build/solver/conf/telasticity.conf").c_str());
+        out << "Model = TElasticity;" << std::endl;
+        out << "GeoPath = solver/;" << std::endl;
+        out << "EXAMPLE = 0;" << std::endl;
+        out << "Mesh = fengsim_mesh;" << std::endl;
+        out << "plevel = 2; # plevel =1 has some errors" << std::endl;
+        out << "level = 0;" << std::endl;
+
+        out << "Discretization = linear;" << std::endl;
+        out << "Overlap_Distribution = 0;" << std::endl;
+        out << "Overlap = none;" << std::endl;
+        out << "Distribution = Stripes;" << std::endl;
+
+        out << "Young = " << physics_dock->ui->doubleSpinBox_5->value() << std::endl;
+        out << "PoissonRatio = " << physics_dock->ui->doubleSpinBox_4->value() << std::endl;
+
+        out << "Time = 1.0;" << std::endl;
+        out << "TimeSteps = " << fem_dock->ui->doubleSpinBox->value() << std::endl;
+        out << "TimeLevel = 8;" << std::endl;
+
+        out << "LinearSolver = CG;" << std::endl;
+        out << "Preconditioner = Jacobi;" << std::endl;
+        out << "LinearSteps = 1000000;" << std::endl;
+        out << "LinearEpsilon = 1e-15;" << std::endl;
+        out << "LinearReduction = 1e-15;" << std::endl;
+
+        out << "QuadratureCell = 3;" << std::endl;
+        out << "QuadratureBoundary = 2;" << std::endl;
+
+        out << "precision = 5;" << std::endl;
+    }
+    else if (fem_dock->ui->comboBox->currentText().toStdString() == "Dynamic Elastoplasticity")
+    {
+        out.open(std::string("../Elasticity/build/solver/conf/m++conf").c_str());
+        out << "loadconf = solver/conf/telastoplasticity.conf;" << std::endl;
+        out.close();
+
+        out.open(std::string("../Elasticity/build/solver/conf/telastoplasticity.conf").c_str());
+        out << "Model = TElastoPlasticity2;  ### small strain, dynamic explicit, mass lumping" << std::endl;
+        out << "GeoPath = solver/;" << std::endl;
+        out << "EXAMPLE = 0;" << std::endl;
+        out << "Mesh = fengsim_mesh;" << std::endl;
+        out << "plevel = 0; # plevel =1 has some errors" << std::endl;
+        out << "level = 0;" << std::endl;
+
+        out << "Discretization = linear;" << std::endl;
+        out << "Overlap_Distribution = 0;" << std::endl;
+        out << "Overlap = none;" << std::endl;
+        out << "Distribution = Stripes;" << std::endl;
+
+        out << "Young = " << physics_dock->ui->doubleSpinBox_5->value() << std::endl;
+        out << "PoissonRatio = " << physics_dock->ui->doubleSpinBox_4->value() << std::endl;
+        out << "k_0 = " << physics_dock->ui->doubleSpinBox_8->value() << std::endl;
+        out << "h_0 = 0;" << std::endl;
+
+        out << "Time = 1.0;" << std::endl;
+        out << "TimeSteps = " << fem_dock->ui->doubleSpinBox->value() << std::endl;
+        out << "TimeLevel = 8;" << std::endl;
+
+        out << "LinearSolver = CG;" << std::endl;
+        out << "Preconditioner = Jacobi;" << std::endl;
+        out << "LinearSteps = 100000;	" << std::endl;
+        out << "LinearEpsilon = 1e-10;" << std::endl;
+        out << "LinearReduction = 1e-10;" << std::endl;
+
+        out << "QuadratureCell = 1;" << std::endl;
+        out << "QuadratureBoundary = 1;" << std::endl;
+        out << "precision = 10;" << std::endl;
+    }
+
+}
+
+
+
 void MainWindow::FEMCompute()
 {
 
-    fem_dock->Configure();
+    FEMConfigure();
+    fem_file_id = 0;
+    fem_file_num = fem_dock->ui->doubleSpinBox->value();
 
     FEMThread1* td1 = new FEMThread1;
     td1->start();
@@ -3156,26 +3281,12 @@ void MainWindow::FEMCompute()
     // set equation
     //fem_dock->MainModule();
     //fem_dock->Configure();
-
-
-
-
-
     proc->start("./ElasticitySolver");
     if (proc->waitForFinished(-1)) {
         vtk_widget->Hide();
         vtk_widget->ImportVTKFile(std::string("../Elasticity/build/data/vtk/elasticity_3_deform.vtk"));
-
-
     }
     return;
-
-
-
-
-
-
-
     if (fem_dock->ui->comboBox->currentText().toStdString() == "Poisson")
     {
         //proc->start("mpirun -np 4 ./PoissonRun");
@@ -3200,9 +3311,40 @@ void MainWindow::FEMCompute()
 }
 
 void MainWindow::FEMPlot () {
-    vtk_widget->Hide();
-    vtk_widget->ImportVTKFile(std::string("../Elasticity/build/data/vtk/fengsim_3_deform.vtk"));
-    fem_dock->ui->pushButton->setEnabled(true);
+    if (fem_dock->ui->comboBox->currentText().toStdString() == "Elasticity") {
+        vtk_widget->Hide();
+        vtk_widget->ImportVTKFile(std::string("../Elasticity/build/data/vtk/fengsim_deform.vtk"));
+        vtk_widget->RePlot();
+        fem_dock->ui->pushButton->setEnabled(true);
+    }
+    else if (fem_dock->ui->comboBox->currentText().toStdString() == "Dynamic Elasticity") {
+        if (fem_file_id<fem_file_num+1) {
+            vtk_widget->Hide();
+            vtk_widget->ImportVTKFile("../Elasticity/build/data/vtk/telasticity_deform_"+QString::number(fem_file_id).toStdString()+".vtk");
+            vtk_widget->RePlot();
+            fem_file_id++;
+            fem_timer->singleShot(1, this, SLOT(FEMPlot()));
+        }
+        else {
+            fem_file_id=0;
+            fem_dock->ui->pushButton->setEnabled(true);
+            return;
+        }
+    }
+    else if (fem_dock->ui->comboBox->currentText().toStdString() == "Dynamic Elastoplasticity") {
+        if (fem_file_id<fem_file_num+1) {
+            vtk_widget->Hide();
+            vtk_widget->ImportVTKFile("../Elasticity/build/data/vtk/telastoplasticity_deform_"+QString::number(fem_file_id).toStdString()+".vtk");
+            vtk_widget->RePlot();
+            fem_file_id++;
+            fem_timer->singleShot(1, this, SLOT(FEMPlot()));
+        }
+        else {
+            fem_file_id=0;
+            fem_dock->ui->pushButton->setEnabled(true);
+            return;
+        }
+    }
 }
 
 #include <QDir>

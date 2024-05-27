@@ -4,9 +4,7 @@
 void meshcoarsing () {
     tetgenio in, out, addin, bgmin;
     in.load_stl("./solver/conf/geo/test.stl");
-    tetgenbehavior b;
-    b.parse_commandline("-pk");
-    tetrahedralize(&b, &in, &out);
+    tetrahedralize("pk", &in, NULL);
 
     return;
     out.save_nodes("barout");

@@ -488,9 +488,13 @@ void TElastoPlasticity2Main () {
 	string filename1 = string("telastoplasticity_deform_") + buffer;
 	string filename2 = string("telastoplasticity_undeform_") + buffer;
 	P.vertexdata(x3, dim);
-	P.vtk_vertex_vector(filename1.c_str(), 0, 1);
+	//P.vtk_vertex_vector(filename1.c_str(), 0, 1);
 	//P.vtk_vertex_vector(filename2.c_str(), 0, 0);
+	P.vtk_vertexdata(filename1.c_str(), 100, 1);
     }
+
+    //P.vtk_vertexdata("fengsim_deform",100,1);
+    //P.vtk_vertexdata("fengsim_undeform",100,0);
     
     mout << "l2 error: " << EPA.L2Error(x3) << endl;
     
