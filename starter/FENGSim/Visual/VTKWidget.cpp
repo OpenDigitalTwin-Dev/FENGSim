@@ -49,6 +49,8 @@ VTKWidget::VTKWidget (QWidget *parent) : QVTKOpenGLWidget(parent)
     // vtk renderer
     renderer = vtkSmartPointer<vtkRenderer>::New();
 
+    scalarBar->SetBarRatio(0.2);
+
 
 
     //        vtkSmartPointer<vtkLight> myLight = vtkSmartPointer<vtkLight>::New();
@@ -673,6 +675,7 @@ void VTKWidget::ImportSTLFile(std::string name)
 }
 #include "vtkPointData.h"
 #include "vtkCellData.h"
+#include "vtkScalarBarActor.h"
 
 void VTKWidget::ImportVTKFile(std::string name)
 {
@@ -701,8 +704,12 @@ void VTKWidget::ImportVTKFile(std::string name)
     mapper->SetLookupTable(lut);
     mapper->Update();
 
+    // colorbar
 
-
+    scalarBar->SetLookupTable(mapper->GetLookupTable());
+    scalarBar->SetTitle("Displacement");
+    scalarBar->SetNumberOfLabels(5);
+    scalarBar->SetDragable(true);
 
 
     // actor
@@ -715,6 +722,7 @@ void VTKWidget::ImportVTKFile(std::string name)
     //actor->GetProperty()->SetEdgeColor(255.0/255.0,255.0/255.0,255.0/255.0);
     // renderer
     renderer->AddActor(actor);
+    renderer->AddActor2D(scalarBar);
     //renderer->ResetCamera();
     // Automatically set up the camera based on the visible actors.
     // The camera will reposition itself to view the center point of the actors,

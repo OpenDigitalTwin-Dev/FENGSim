@@ -204,7 +204,7 @@
          <double>2000.000000000000000</double>
         </property>
         <property name="value">
-         <double>1000.000000000000000</double>
+         <double>100.000000000000000</double>
         </property>
        </widget>
       </item>
@@ -431,6 +431,29 @@
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_2">
+          <property name="minimumSize">
+           <size>
+            <width>25</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>25</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../FEMWindow.qrc">
+            <normaloff>:/fem_wind/figure/fem_wind/fem_movie.png</normaloff>:/fem_wind/figure/fem_wind/fem_movie.png</iconset>
+          </property>
+         </widget>
+        </item>
        </layout>
       </item>
       <item>
@@ -456,6 +479,7 @@
  </widget>
  <resources>
   <include location="../CADWindow.qrc"/>
+  <include location="../FEMWindow.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -27,10 +27,13 @@
 #include "vtkSTLReader.h"
 #include "vtkTransformFilter.h"
 #include "vtkVoxelGrid.h"
+#include "vtkScalarBarActor.h"
 
 class VTKWidget : public QVTKOpenGLWidget
 {
 public:
+    vtkNew<vtkScalarBarActor> scalarBar;
+
     VTKWidget(QWidget *parent = 0);
     // add
     void Plot (TopoDS_Shape S, bool t = true);

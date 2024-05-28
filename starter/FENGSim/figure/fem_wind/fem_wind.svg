@@ -2,26 +2,25 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   xmlns:ns0="http://www.iki.fi/pav/software/textext/"
-   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    width="210mm"
    height="297mm"
    viewBox="0 0 744.09448819 1052.3622047"
    id="svg2"
    version="1.1"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)"
+   inkscape:version="1.1.2 (0a00cf5339, 2022-02-04)"
    sodipodi:docname="fem_wind.svg"
    inkscape:export-filename="/home/jiping/FENGSim/FENGSim/figure/cad_wind/box.png"
    inkscape:export-xdpi="300"
-   inkscape:export-ydpi="300">
+   inkscape:export-ydpi="300"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:ns0="http://www.iki.fi/pav/software/textext/">
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -29,18 +28,19 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="3.9999998"
-     inkscape:cx="54.295708"
-     inkscape:cy="489.67638"
+     inkscape:zoom="0.49999998"
+     inkscape:cx="197.00001"
+     inkscape:cy="429.00002"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
-     inkscape:window-width="1853"
-     inkscape:window-height="1025"
-     inkscape:window-x="67"
-     inkscape:window-y="27"
+     inkscape:window-width="1850"
+     inkscape:window-height="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1"
-     showguides="false">
+     showguides="false"
+     inkscape:pagecheckerboard="0">
     <inkscape:grid
        type="xygrid"
        id="grid4136" />
@@ -720,7 +720,7 @@
     </marker>
     <linearGradient
        id="linearGradient6013"
-       osb:paint="solid">
+       inkscape:swatch="solid">
       <stop
          style="stop-color:#000000;stop-opacity:1;"
          offset="0"
@@ -1015,7 +1015,7 @@
        id="filter6276"
        x="-0.020800002"
        width="1.0416"
-       y="-0.028363633"
+       y="-0.028363634"
        height="1.0567273">
       <feGaussianBlur
          inkscape:collect="always"
@@ -1208,7 +1208,8 @@
          id="flowPara4550">line width px 3</flowPara><flowPara
          id="flowPara4552">color 135 165 167</flowPara><flowPara
          id="flowPara4554">no blue</flowPara><flowPara
-         id="flowPara5199">in</flowPara></flowRoot>    <path
+         id="flowPara5199">in</flowPara></flowRoot>
+    <path
        style="opacity:1;fill:url(#linearGradient4772);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:2.65650034;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        d="m 208.10302,373.84827 c -3.56512,-0.37637 -7.02792,-1.61022 -8.62793,-3.07424 -1.22127,-1.11746 -1.81641,0.0722 5.31095,-10.61694 3.45278,-5.17828 6.33488,-9.41505 6.40468,-9.41505 0.0698,0 2.96165,4.25717 6.42633,9.46038 l 6.29942,9.46036 -0.42399,0.50851 c -1.55216,1.86164 -5.10155,3.24998 -9.43354,3.68994 -1.43306,0.14554 -4.51822,0.13883 -5.95592,-0.0129 z"
        id="path4748"
@@ -3311,12 +3312,12 @@
     <flowRoot
        xml:space="preserve"
        id="flowRoot5063"
-       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:32px;line-height:1;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#31363b;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:3.86666656;stroke-dasharray:none"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:32px;line-height:1;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#31363b;fill-opacity:1;stroke:none;stroke-width:2;stroke-miterlimit:3.86667;stroke-dasharray:none"
        transform="matrix(0.54140282,0,0,0.54140282,41.635581,231.88009)"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300"><flowRegion
          id="flowRegion5065"
-         style="font-size:32px;line-height:1;fill:#31363b;fill-opacity:1;stroke-width:2;stroke-miterlimit:3.86666656;stroke-dasharray:none"><rect
+         style="font-size:32px;line-height:1;fill:#31363b;fill-opacity:1;stroke-width:2;stroke-miterlimit:3.86667;stroke-dasharray:none"><rect
            id="rect5067"
            width="26.672964"
            height="37.683018"
@@ -3324,7 +3325,8 @@
            y="532.51971"
            style="font-size:32px;line-height:1;fill:#31363b;fill-opacity:1;stroke-width:2;stroke-miterlimit:3.86666656;stroke-dasharray:none" /></flowRegion><flowPara
          id="flowPara5069"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:27.70580292px;line-height:1;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#31363b;fill-opacity:1;stroke-width:2;stroke-miterlimit:3.86666656;stroke-dasharray:none">P</flowPara></flowRoot>    <g
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:27.7058px;line-height:1;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold';fill:#31363b;fill-opacity:1;stroke-width:2;stroke-miterlimit:3.86667;stroke-dasharray:none">P</flowPara></flowRoot>
+    <g
        id="g6488"
        transform="translate(-4.3688374)"
        inkscape:export-xdpi="300"
@@ -3839,7 +3841,8 @@
 
 </g>
 </g>
-</g>    <path
+</g>
+    <path
        style="opacity:1;fill:#87a7a5;fill-opacity:1;fill-rule:evenodd;stroke:#87a7a5;stroke-width:0.99436897;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        d="m -159.375,236.73718 c -5.16711,-1.63843 -8.91089,-5.97447 -9.78254,-11.33013 -0.69505,-4.27052 0.93162,-8.99895 4.13953,-12.03286 5.66566,-5.35833 14.01788,-5.28689 19.55994,0.16734 7.29083,7.17525 4.38398,19.66604 -5.35656,23.01727 -2.17915,0.74974 -6.4761,0.83928 -8.56037,0.17838 z m 7.8793,-12.38631 6.879,-6.88486 -1.75152,-1.72977 -1.75152,-1.72975 -5.29034,5.2981 -5.29034,5.2981 -2.33618,-2.32059 -2.33618,-2.32058 -1.63828,1.66329 -1.63829,1.6633 3.96345,3.97381 c 2.1799,2.18558 4.04169,3.9738 4.13732,3.9738 0.0956,0 3.26942,-3.09819 7.05288,-6.88485 z"
        id="path1474-2"
@@ -4169,5 +4172,53 @@
        inkscape:connector-curvature="0"
        inkscape:export-xdpi="300"
        inkscape:export-ydpi="300" />
+    <path
+       style="fill:#87a7a5;fill-opacity:1;stroke:none;stroke-width:0.75px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;paint-order:fill markers stroke"
+       d="m -234.375,588.75 18.75,15 -18.75,15 z"
+       id="path1214-36"
+       inkscape:connector-curvature="0"
+       inkscape:export-xdpi="300"
+       inkscape:export-ydpi="300" />
+    <path
+       style="fill:#9e9e9e;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.50081;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       d="m -934.7461,-209.39575 a 21.50433,21.50433 0 0 0 -21.5039,21.5039 21.50433,21.50433 0 0 0 21.5039,21.50391 21.50433,21.50433 0 0 0 21.50391,-21.50391 21.50433,21.50433 0 0 0 -21.50391,-21.5039 z m 5.12878,9.06189 v 24.88403 l -17.75573,-12.44202 z"
+       id="path1238"
+       inkscape:export-xdpi="94.596718"
+       inkscape:export-ydpi="94.596718" />
+    <g
+       id="g4430"
+       transform="matrix(3.5433071,0,0,3.5433071,-1996.8751,-272.09649)">
+      <path
+         inkscape:export-ydpi="94.083473"
+         inkscape:export-xdpi="94.083473"
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="path4318"
+         d="m 481.54169,148.43751 -16.15,34.99999 16.15,-8.74999 16.15,8.74999 z"
+         style="fill:#7b8aa7;fill-opacity:1;stroke:none;stroke-width:0.210143px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+      <rect
+         inkscape:export-ydpi="94.083473"
+         inkscape:export-xdpi="94.083473"
+         y="141.9375"
+         x="457.54169"
+         height="48"
+         width="48"
+         id="rect4320"
+         style="opacity:1;fill:none;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.71561;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke" />
+    </g>
+    <path
+       style="fill:#7b8aa7;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.50081;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       d="m -550.37109,517.98706 a 21.50433,21.50433 0 0 0 21.5039,-21.50391 21.50433,21.50433 0 0 0 -21.5039,-21.5039 21.50433,21.50433 0 0 0 -21.50391,21.5039 21.50433,21.50433 0 0 0 21.50391,21.50391 z m -5.12878,-9.06189 v -24.88404 l 17.75573,12.44202 z"
+       id="path1238-7"
+       inkscape:export-xdpi="94.596718"
+       inkscape:export-ydpi="94.596718"
+       inkscape:export-filename="/home/jiping/FENGSim/starter/FENGSim/figure/fem_wind/fem_movie.png" />
+    <path
+       style="fill:#7b8aa7;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2.50081;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       d="m -437.8711,667.98706 a -21.50433,21.50433 0 0 1 -21.5039,-21.50391 -21.50433,21.50433 0 0 1 21.5039,-21.5039 -21.50433,21.50433 0 0 1 21.50391,21.5039 -21.50433,21.50433 0 0 1 -21.50391,21.50391 z m 5.12878,-9.06189 v -24.88404 l -17.75573,12.44202 z"
+       id="path1238-7-3"
+       inkscape:export-xdpi="94.596718"
+       inkscape:export-ydpi="94.596718"
+       inkscape:export-filename="/home/jiping/FENGSim/starter/FENGSim/figure/fem_wind/fem_movie (copy).png" />
   </g>
 </svg>

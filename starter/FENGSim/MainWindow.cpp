@@ -197,6 +197,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     // FEM
 
     connect(fem_dock->ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(FEMCompute()));
+    connect(fem_dock->ui->pushButton_2, SIGNAL(clicked(bool)), this, SLOT(FEMPlot()));
     connect(vtk_dock->ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(FEMPlot()));
 
 
