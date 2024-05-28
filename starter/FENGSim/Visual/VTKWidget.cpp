@@ -708,7 +708,7 @@ void VTKWidget::ImportVTKFile(std::string name)
 
     scalarBar->SetLookupTable(mapper->GetLookupTable());
     scalarBar->SetTitle("Displacement");
-    scalarBar->SetNumberOfLabels(5);
+    scalarBar->SetNumberOfLabels(10);
     scalarBar->SetDragable(true);
 
 
