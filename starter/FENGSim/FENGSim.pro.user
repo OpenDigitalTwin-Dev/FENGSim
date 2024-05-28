@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.13.1, 2024-05-28T18:48:19. -->
+<!-- Written by QtCreator 4.13.1, 2024-05-28T20:37:00. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -100,7 +100,6 @@
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">QtProjectManager.QMakeBuildStep</value>
-      <value type="QString" key="QtProjectManager.QMakeBuildStep.QMakeArguments"></value>
       <value type="bool" key="QtProjectManager.QMakeBuildStep.QMakeForced">false</value>
       <valuelist type="QVariantList" key="QtProjectManager.QMakeBuildStep.SelectedAbis"/>
      </valuemap>
@@ -109,8 +108,6 @@
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.MakeStep</value>
       <valuelist type="QVariantList" key="Qt4ProjectManager.MakeStep.BuildTargets"/>
       <value type="bool" key="Qt4ProjectManager.MakeStep.Clean">false</value>
-      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeArguments"></value>
-      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeCommand"></value>
       <value type="bool" key="Qt4ProjectManager.MakeStep.OverrideMakeflags">false</value>
      </valuemap>
      <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">2</value>
@@ -125,7 +122,6 @@
       <valuelist type="QVariantList" key="Qt4ProjectManager.MakeStep.BuildTargets"/>
       <value type="bool" key="Qt4ProjectManager.MakeStep.Clean">true</value>
       <value type="QString" key="Qt4ProjectManager.MakeStep.MakeArguments">clean</value>
-      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeCommand"></value>
       <value type="bool" key="Qt4ProjectManager.MakeStep.OverrideMakeflags">false</value>
      </valuemap>
      <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">1</value>
@@ -154,7 +150,6 @@
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">QtProjectManager.QMakeBuildStep</value>
-      <value type="QString" key="QtProjectManager.QMakeBuildStep.QMakeArguments"></value>
       <value type="bool" key="QtProjectManager.QMakeBuildStep.QMakeForced">false</value>
       <valuelist type="QVariantList" key="QtProjectManager.QMakeBuildStep.SelectedAbis"/>
      </valuemap>
@@ -163,8 +158,6 @@
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.MakeStep</value>
       <valuelist type="QVariantList" key="Qt4ProjectManager.MakeStep.BuildTargets"/>
       <value type="bool" key="Qt4ProjectManager.MakeStep.Clean">false</value>
-      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeArguments"></value>
-      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeCommand"></value>
       <value type="bool" key="Qt4ProjectManager.MakeStep.OverrideMakeflags">false</value>
      </valuemap>
      <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">2</value>
@@ -179,7 +172,6 @@
       <valuelist type="QVariantList" key="Qt4ProjectManager.MakeStep.BuildTargets"/>
       <value type="bool" key="Qt4ProjectManager.MakeStep.Clean">true</value>
       <value type="QString" key="Qt4ProjectManager.MakeStep.MakeArguments">clean</value>
-      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeCommand"></value>
       <value type="bool" key="Qt4ProjectManager.MakeStep.OverrideMakeflags">false</value>
      </valuemap>
      <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">1</value>
@@ -206,7 +198,6 @@
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">QtProjectManager.QMakeBuildStep</value>
-      <value type="QString" key="QtProjectManager.QMakeBuildStep.QMakeArguments"></value>
       <value type="bool" key="QtProjectManager.QMakeBuildStep.QMakeForced">false</value>
       <valuelist type="QVariantList" key="QtProjectManager.QMakeBuildStep.SelectedAbis"/>
      </valuemap>
@@ -215,8 +206,6 @@
       <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.MakeStep</value>
       <valuelist type="QVariantList" key="Qt4ProjectManager.MakeStep.BuildTargets"/>
       <value type="bool" key="Qt4ProjectManager.MakeStep.Clean">false</value>
-      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeArguments"></value>
-      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeCommand"></value>
       <value type="bool" key="Qt4ProjectManager.MakeStep.OverrideMakeflags">false</value>
      </valuemap>
      <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">2</value>
@@ -231,7 +220,6 @@
       <valuelist type="QVariantList" key="Qt4ProjectManager.MakeStep.BuildTargets"/>
       <value type="bool" key="Qt4ProjectManager.MakeStep.Clean">true</value>
       <value type="QString" key="Qt4ProjectManager.MakeStep.MakeArguments">clean</value>
-      <value type="QString" key="Qt4ProjectManager.MakeStep.MakeCommand"></value>
       <value type="bool" key="Qt4ProjectManager.MakeStep.OverrideMakeflags">false</value>
      </valuemap>
      <value type="int" key="ProjectExplorer.BuildStepList.StepsCount">1</value>
@@ -285,7 +273,6 @@
     <value type="bool" key="Analyzer.QmlProfiler.AggregateTraces">false</value>
     <value type="bool" key="Analyzer.QmlProfiler.FlushEnabled">false</value>
     <value type="uint" key="Analyzer.QmlProfiler.FlushInterval">1000</value>
-    <value type="QString" key="Analyzer.QmlProfiler.LastTraceFile"></value>
     <value type="bool" key="Analyzer.QmlProfiler.Settings.UseGlobalSettings">true</value>
     <valuelist type="QVariantList" key="Analyzer.Valgrind.AddedSuppressionFiles"/>
     <value type="bool" key="Analyzer.Valgrind.Callgrind.CollectBusEvents">false</value>
@@ -328,16 +315,13 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">FENGSim2</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/home/jiping/FENGSim/starter/FENGSim/FENGSim.pro</value>
     <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/jiping/FENGSim/starter/FENGSim/FENGSim.pro</value>
-    <value type="QString" key="RunConfiguration.Arguments"></value>
     <value type="bool" key="RunConfiguration.Arguments.multi">false</value>
-    <value type="QString" key="RunConfiguration.OverrideDebuggerStartup"></value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseMultiProcess">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-    <value type="QString" key="RunConfiguration.WorkingDirectory"></value>
     <value type="QString" key="RunConfiguration.WorkingDirectory.default">/home/jiping/FENGSim/starter/build-FENGSim-Desktop_Qt_5_12_12_GCC_64bit-Debug</value>
    </valuemap>
    <value type="int" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
@@ -350,6 +334,36 @@
  <data>
   <variable>ProjectExplorer.Project.Updater.FileVersion</variable>
   <value type="int">22</value>
+ </data>
+ <data>
+  <variable>UserStickyKeys</variable>
+  <valuelist type="QVariantList">
+   <value type="QString">ProjectExplorer.Project.Target.0</value>
+   <value type="QString">ProjectExplorer.Project.Target.0/ProjectExplorer.ProjectConfiguration.DefaultDisplayName</value>
+   <value type="QString">ProjectExplorer.Project.Target.0/ProjectExplorer.ProjectConfiguration.DisplayName</value>
+   <value type="QString">ProjectExplorer.Project.Target.0/ProjectExplorer.Target.BuildConfiguration.0</value>
+   <value type="QString">ProjectExplorer.Project.Target.0/ProjectExplorer.Target.BuildConfiguration.0/ProjectExplorer.BuildConfiguration.BuildStepList.0</value>
+   <value type="QString">ProjectExplorer.Project.Target.0/ProjectExplorer.Target.BuildConfiguration.0/ProjectExplorer.BuildConfiguration.BuildStepList.0/ProjectExplorer.BuildStepList.Step.0</value>
+   <value type="QString">ProjectExplorer.Project.Target.0/ProjectExplorer.Target.BuildConfiguration.0/ProjectExplorer.BuildConfiguration.BuildStepList.0/ProjectExplorer.BuildStepList.Step.1</value>
+   <value type="QString">ProjectExplorer.Project.Target.0/ProjectExplorer.Target.BuildConfiguration.0/ProjectExplorer.BuildConfiguration.BuildStepList.1</value>
+   <value type="QString">ProjectExplorer.Project.Target.0/ProjectExplorer.Target.BuildConfiguration.0/ProjectExplorer.BuildConfiguration.BuildStepList.1/ProjectExplorer.BuildStepList.Step.0</value>
+   <value type="QString">ProjectExplorer.Project.Target.0/ProjectExplorer.Target.BuildConfiguration.1</value>
+   <value type="QString">ProjectExplorer.Project.Target.0/ProjectExplorer.Target.BuildConfiguration.1/ProjectExplorer.BuildConfiguration.BuildStepList.0</value>
+   <value type="QString">ProjectExplorer.Project.Target.0/ProjectExplorer.Target.BuildConfiguration.1/ProjectExplorer.BuildConfiguration.BuildStepList.0/ProjectExplorer.BuildStepList.Step.0</value>
+   <value type="QString">ProjectExplorer.Project.Target.0/ProjectExplorer.Target.BuildConfiguration.1/ProjectExplorer.BuildConfiguration.BuildStepList.0/ProjectExplorer.BuildStepList.Step.1</value>
+   <value type="QString">ProjectExplorer.Project.Target.0/ProjectExplorer.Target.BuildConfiguration.1/ProjectExplorer.BuildConfiguration.BuildStepList.1</value>
+   <value type="QString">ProjectExplorer.Project.Target.0/ProjectExplorer.Target.BuildConfiguration.1/ProjectExplorer.BuildConfiguration.BuildStepList.1/ProjectExplorer.BuildStepList.Step.0</value>
+   <value type="QString">ProjectExplorer.Project.Target.0/ProjectExplorer.Target.BuildConfiguration.2</value>
+   <value type="QString">ProjectExplorer.Project.Target.0/ProjectExplorer.Target.BuildConfiguration.2/ProjectExplorer.BuildConfiguration.BuildStepList.0</value>
+   <value type="QString">ProjectExplorer.Project.Target.0/ProjectExplorer.Target.BuildConfiguration.2/ProjectExplorer.BuildConfiguration.BuildStepList.0/ProjectExplorer.BuildStepList.Step.0</value>
+   <value type="QString">ProjectExplorer.Project.Target.0/ProjectExplorer.Target.BuildConfiguration.2/ProjectExplorer.BuildConfiguration.BuildStepList.0/ProjectExplorer.BuildStepList.Step.1</value>
+   <value type="QString">ProjectExplorer.Project.Target.0/ProjectExplorer.Target.BuildConfiguration.2/ProjectExplorer.BuildConfiguration.BuildStepList.1</value>
+   <value type="QString">ProjectExplorer.Project.Target.0/ProjectExplorer.Target.BuildConfiguration.2/ProjectExplorer.BuildConfiguration.BuildStepList.1/ProjectExplorer.BuildStepList.Step.0</value>
+   <value type="QString">ProjectExplorer.Project.Target.0/ProjectExplorer.Target.RunConfiguration.0</value>
+   <value type="QString">ProjectExplorer.Project.Target.0/ProjectExplorer.Target.RunConfiguration.0/ProjectExplorer.ProjectConfiguration.Id</value>
+   <value type="QString">ProjectExplorer.Project.Target.0/ProjectExplorer.Target.RunConfiguration.0/ProjectExplorer.RunConfiguration.BuildKey</value>
+   <value type="QString">ProjectExplorer.Project.Target.0/ProjectExplorer.Target.RunConfiguration.0/RunConfiguration.WorkingDirectory.default</value>
+  </valuelist>
  </data>
  <data>
   <variable>Version</variable>

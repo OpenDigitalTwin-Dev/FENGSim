@@ -12,7 +12,7 @@ public:
     void run () {
         QProcess *proc = new QProcess();
         proc->setWorkingDirectory( "../Elasticity/build" );
-        QString command(QString("./ElasticitySolver"));
+        QString command(QString("mpirun -np 4 ./ElasticitySolver"));
         proc->start(command);
         if (proc->waitForFinished(-1)) {
             quit();
