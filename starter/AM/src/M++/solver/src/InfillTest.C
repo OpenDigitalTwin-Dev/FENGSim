@@ -409,8 +409,8 @@ namespace cura
 		    }
 	    }
 
-        //std::vector<coord_t> line_distances = { 350, 400, 600, 800, 1200 };
-	std::vector<coord_t> line_distances = { 500, 400, 600, 800, 1200 };
+        std::vector<coord_t> line_distances = { 300, 400, 600, 800, 1200 };
+	//std::vector<coord_t> line_distances = { 500, 400, 600, 800, 1200 };
 	
         std::vector<InfillTestParameters> parameters_list;
         size_t test_polygon_id = 0;
@@ -419,9 +419,9 @@ namespace cura
 	    //for (const coord_t& line_distance : line_distances) {
 	    //parameters_list.push_back(generateInfillToTest(InfillParameters(methods[0], dont_zig_zaggify, dont_connect_polygons, line_distances[0]), test_polygon_id, polygons));
 	    //parameters_list.push_back(generateInfillToTest(InfillParameters(method, dont_zig_zaggify, do_connect_polygons, line_distance), test_polygon_id, polygons));
-	    //parameters_list.push_back(generateInfillToTest(InfillParameters(methods[0], do_zig_zaggify, dont_connect_polygons, line_distances[0]), test_polygon_id, polygons));
-	    parameters_list.push_back(generateInfillToTest(InfillParameters(methods[0], dont_zig_zaggify, dont_connect_polygons, 200), test_polygon_id, polygons));
-	    //parameters_list.push_back(generateInfillToTest(InfillParameters(method, do_zig_zaggify, do_connect_polygons, line_distance), test_polygon_id, polygons));
+	  //parameters_list.push_back(generateInfillToTest(InfillParameters(methods[0], do_zig_zaggify, dont_connect_polygons, line_distances[0]), test_polygon_id, polygons));
+	    //parameters_list.push_back(generateInfillToTest(InfillParameters(methods[0], dont_zig_zaggify, dont_connect_polygons, 200), test_polygon_id, polygons));
+	    parameters_list.push_back(generateInfillToTest(InfillParameters(methods[0], do_zig_zaggify, do_connect_polygons, line_distances[0]), test_polygon_id, polygons));
 	    //}
 	    //}
 	    ++test_polygon_id;
