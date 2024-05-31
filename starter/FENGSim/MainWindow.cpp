@@ -1547,11 +1547,25 @@ void MainWindow::AMStlModelToSlices()
                                                   "Slice files (*.cli);;", 0 , QFileDialog::DontUseNativeDialog);
     std::cout << "check cli file name: " << cli_file_name.toStdString() << std::endl;
     ofstream out;
-    out.open("./../AM/build/solver/conf/cura.conf");
+    out.open("./../AM/build/solver/conf/m++.conf");
+    out << "loadconf = solver/conf/slicing.conf;" << endl;
+    out << "#loadconf = solver/conf/am.conf;" << endl;
+    out << "#loadconf = solver/conf/poisson.conf;" << endl;
+    out << "#loadconf = solver/conf/heat.conf;" << endl;
+    out << "#loadconf = solver/conf/elasticity.conf;" << endl;
+    out << "#loadconf = solver/conf/telasticity.conf;" << endl;
+    out << "#loadconf = solver/conf/telastoplasticity.conf" << endl;
+    out << "#loadconf = solver/conf/meshcoarsing.conf" << endl;
+    out.close();
+    out.open("./../AM/build/solver/conf/slicing.conf");
     out << "Model = SlicePhaseTest" << endl;
-    out << stl_file_name.toStdString().c_str() << endl;
-    out << cli_file_name.toStdString() + ".cli" << endl;
-    out << cli_file_name.toStdString() + ".vtk" << endl;
+    out << "../../build-FENGSim-Desktop_Qt_5_12_12_GCC_64bit-Debug/data/am/am.stl" << endl;
+    out << "../../build-FENGSim-Desktop_Qt_5_12_12_GCC_64bit-Debug/data/am/slices.vtk" << endl;
+    out << "../../build-FENGSim-Desktop_Qt_5_12_12_GCC_64bit-Debug/data/am/slices_pathplanning.vtk" << endl;
+    out << "../../build-FENGSim-Desktop_Qt_5_12_12_GCC_64bit-Debug/data/am/slices_meshing.cli" << endl;
+    out << additive_manufacturing_dock->ui->doubleSpinBox->value() << endl;
+    out << additive_manufacturing_dock->ui->doubleSpinBox_2->value() << endl;
+    out.close();
 
     QProcess *proc = new QProcess();
     proc->setWorkingDirectory( "./../AM/build" );
@@ -1573,14 +1587,26 @@ void MainWindow::AMSlicesToPathPlanning()
                                                    QString("/home/jiping/OpenDT/FENGSim/FENGSim/data"),
                                                    "Path files (*.vtk);;", 0 , QFileDialog::DontUseNativeDialog);
     ofstream out;
-    out.open("./Cura/Cura/conf/cura.conf");
+    out.open("./../AM/build/solver/conf/m++.conf");
+    out << "#loadconf = solver/conf/slicing.conf;" << endl;
+    out << "loadconf = solver/conf/pathplanning.conf;" << endl;
+    out << "#loadconf = solver/conf/am.conf;" << endl;
+    out << "#loadconf = solver/conf/poisson.conf;" << endl;
+    out << "#loadconf = solver/conf/heat.conf;" << endl;
+    out << "#loadconf = solver/conf/elasticity.conf;" << endl;
+    out << "#loadconf = solver/conf/telasticity.conf;" << endl;
+    out << "#loadconf = solver/conf/telastoplasticity.conf" << endl;
+    out << "#loadconf = solver/conf/meshcoarsing.conf" << endl;
+    out.close();
+    out.open("./../AM/build/solver/conf/pathplanning.conf");
     out << "Model = InfillTest" << endl;
     out << cli_file_name.toStdString() + ".vtk" << endl;
     out << path_file_name.toStdString() << endl;
+    out.close();
 
     QProcess *proc = new QProcess();
-    proc->setWorkingDirectory( "./Cura" );
-    proc->start("./CuraRun");
+    proc->setWorkingDirectory( "./../AM/build" );
+    proc->start("./AMSolver");
 
     if (proc->waitForFinished(-1)) {
         //MM.ClearSlices();
@@ -2822,9 +2848,19 @@ void MainWindow::AMSTL2Slices()
 {
     if (am_parts->size() == 0) return;
     ofstream out;
-    QString file = meas_path+QString("/../AM/build/solver/conf/cura.conf");
+    QString file = meas_path+QString("/../AM/build/solver/conf/m++conf");
     std::cout << file.toStdString() << std::endl;
-    out.open(file.toStdString());
+    out.open("./../AM/build/solver/conf/m++.conf");
+    out << "loadconf = solver/conf/slicing.conf;" << endl;
+    out << "#loadconf = solver/conf/am.conf;" << endl;
+    out << "#loadconf = solver/conf/poisson.conf;" << endl;
+    out << "#loadconf = solver/conf/heat.conf;" << endl;
+    out << "#loadconf = solver/conf/elasticity.conf;" << endl;
+    out << "#loadconf = solver/conf/telasticity.conf;" << endl;
+    out << "#loadconf = solver/conf/telastoplasticity.conf" << endl;
+    out << "#loadconf = solver/conf/meshcoarsing.conf" << endl;
+    out.close();
+    out.open("./../AM/build/solver/conf/slicing.conf");
     out << "Model = SlicePhaseTest" << endl;
     out << meas_path.toStdString() << "/data/am/am.stl"  << endl;
     out << meas_path.toStdString() << "/data/am/slices.vtk" << endl;
@@ -2832,6 +2868,7 @@ void MainWindow::AMSTL2Slices()
     out << meas_path.toStdString() << "/data/am/slices_meshing.cli" << endl;
     out << additive_manufacturing_dock->ui->doubleSpinBox->text().toDouble() << endl;
     out << additive_manufacturing_dock->ui->doubleSpinBox_2->text().toDouble() << endl;
+    out.close();
 
     QProcess *proc = new QProcess();
     proc->setWorkingDirectory((meas_path+QString("/../AM/build")));
@@ -2864,12 +2901,24 @@ void MainWindow::AMSetSlicesVisible()
 void MainWindow::AMSlices2PathPlanning()
 {
     ofstream out;
-    QString file = meas_path+QString("/../AM/build/solver/conf/cura.conf");
-    std::cout << meas_path.toStdString() << std::endl;
-    out.open(file.toStdString());
+    QString file = meas_path+QString("/../AM/build/solver/conf/m++conf");
+    std::cout << file.toStdString() << std::endl;
+    out.open("./../AM/build/solver/conf/m++conf");
+    out << "loadconf = solver/conf/pathplanning.conf;" << endl;
+    out << "#loadconf = solver/conf/slicing.conf;" << endl;
+    out << "#loadconf = solver/conf/am.conf;" << endl;
+    out << "#loadconf = solver/conf/poisson.conf;" << endl;
+    out << "#loadconf = solver/conf/heat.conf;" << endl;
+    out << "#loadconf = solver/conf/elasticity.conf;" << endl;
+    out << "#loadconf = solver/conf/telasticity.conf;" << endl;
+    out << "#loadconf = solver/conf/telastoplasticity.conf" << endl;
+    out << "#loadconf = solver/conf/meshcoarsing.conf" << endl;
+    out.close();
+    out.open("./../AM/build/solver/conf/pathplanning.conf");
     out << "Model = InfillTest" << endl;
     out << meas_path.toStdString() << "/data/am/slices_pathplanning.vtk" << endl;
     out << meas_path.toStdString() << "/data/am/pathplanning.vtk" << endl;
+    out.close();
 
     QProcess *proc = new QProcess();
     proc->setWorkingDirectory((meas_path+QString("/../AM/build/")));

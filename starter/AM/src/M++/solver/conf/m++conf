@@ -1,7 +1,1 @@
-#loadconf = solver/conf/cura.conf;
-#loadconf = solver/conf/am.conf;
-#loadconf = solver/conf/poisson.conf;
-#loadconf = solver/conf/heat.conf;
-#loadconf = solver/conf/elasticity.conf;
-#loadconf = solver/conf/telasticity.conf;
-loadconf = solver/conf/telastoplasticity.conf
+

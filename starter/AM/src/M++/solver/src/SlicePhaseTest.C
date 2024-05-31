@@ -11,7 +11,7 @@
 //using namespace cura;
 void SlicePhaseTestMain (int argc, char** argv) {
     std::ifstream is;
-    is.open(std::string("./solver/conf/cura.conf").c_str());
+    is.open(std::string("./solver/conf/slicing.conf").c_str());
     const int len = 512;
     char L[len];
     is.getline(L,len);
@@ -62,12 +62,14 @@ void SlicePhaseTestMain (int argc, char** argv) {
     // generate slices
     const cura::coord_t layer_thickness = scene.settings.get<cura::coord_t>("layer_height");
     const cura::coord_t initial_layer_thickness = scene.settings.get<cura::coord_t>("layer_height_0");
+
     constexpr bool variable_layer_height = false;
     constexpr std::vector<cura::AdaptiveLayer>* variable_layer_height_values = nullptr;
     const size_t num_layers = (cube_mesh.getAABB().max.z - initial_layer_thickness) / layer_thickness + 1;
     cura::Slicer slicer(&cube_mesh, layer_thickness, num_layers, variable_layer_height, variable_layer_height_values);
+    
     std::cout << "The number of layers in the output must equal the requested number of layers." << std::endl 
-			  << "  " << slicer.layers.size() << " " << num_layers << std::endl;
+	      << "  " << slicer.layers.size() << " " << num_layers << std::endl;
 
     // *************************************************
     // export slices for visualization

@@ -356,7 +356,7 @@ namespace cura
         constexpr bool dont_connect_polygons = false;
 
 	std::ifstream is;
-	is.open(std::string("./solver/conf/cura.conf").c_str());
+	is.open(std::string("./solver/conf/pathplanning.conf").c_str());
 	const int len = 512;
 	char L[len];
 	is.getline(L,len);
