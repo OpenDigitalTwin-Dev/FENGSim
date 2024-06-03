@@ -253,12 +253,37 @@
         </item>
         <item>
          <property name="text">
-          <string>Strain</string>
+          <string>Strain11</string>
          </property>
         </item>
         <item>
          <property name="text">
-          <string>Stress</string>
+          <string>Strain12</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Strain13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Strain22</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Strain23</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Strain33</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Stress11</string>
          </property>
         </item>
        </widget>
@@ -348,9 +373,9 @@
   </layout>
  </widget>
  <resources>
-  <include location="../CADWindow.qrc"/>
-  <include location="../MainWindow.qrc"/>
   <include location="../FEMWindow.qrc"/>
+  <include location="../MainWindow.qrc"/>
+  <include location="../CADWindow.qrc"/>
  </resources>
  <connections/>
 </ui>

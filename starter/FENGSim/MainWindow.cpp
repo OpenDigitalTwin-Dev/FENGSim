@@ -3362,10 +3362,24 @@ void MainWindow::FEMCompute()
 
 void MainWindow::FEMPlot () {
     if (fem_dock->ui->comboBox->currentText().toStdString() == "Elasticity") {
-        vtk_widget->Hide();
-        vtk_widget->ImportVTKFile(std::string("../Elasticity/build/data/vtk/fengsim_deform.vtk"));
-        vtk_widget->RePlot();
-        fem_dock->ui->pushButton->setEnabled(true);
+        if (vtk_dock->ui->comboBox->currentText().toStdString() == "Strain11") {
+            vtk_widget->Hide();
+            vtk_widget->ImportVTKFile(std::string("../Elasticity/build/data/vtk/fengsim_deform_strain.vtk"),0);
+            vtk_widget->RePlot();
+            fem_dock->ui->pushButton->setEnabled(true);
+        }
+        else if (vtk_dock->ui->comboBox->currentText().toStdString() == "Stress11") {
+            vtk_widget->Hide();
+            vtk_widget->ImportVTKFile(std::string("../Elasticity/build/data/vtk/fengsim_deform_stress.vtk"),0);
+            vtk_widget->RePlot();
+            fem_dock->ui->pushButton->setEnabled(true);
+        }
+        else if (vtk_dock->ui->comboBox->currentText().toStdString() == "Displacement") {
+            vtk_widget->Hide();
+            vtk_widget->ImportVTKFile(std::string("../Elasticity/build/data/vtk/fengsim_deform.vtk"),0);
+            vtk_widget->RePlot();
+            fem_dock->ui->pushButton->setEnabled(true);
+        }
     }
     else if (fem_dock->ui->comboBox->currentText().toStdString() == "Dynamic Elasticity") {
         if (fem_file_id<fem_file_num+1) {

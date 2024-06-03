@@ -143,6 +143,8 @@ class Plot {
     void dx_mesh (ostream& out, bool deformed = false);
     
     void vtk_vector(ostream& out, int k=0);
+
+    void vtk_tensor(ostream& out);
     
     void vtk_cellvector(ostream& out, int k=0);    
 
@@ -157,6 +159,8 @@ class Plot {
     void vtk_2d_graph (ostream& out, int k =0);
  public:
     void vtk_vertex_vector (const char* name, int k = 0, int deformed = 0);
+
+    void vtk_vertex_tensor(const char* name, int deformed);
     
     void vtk_vertexdata (const char* name, int k = 0, bool deformed = false);
 

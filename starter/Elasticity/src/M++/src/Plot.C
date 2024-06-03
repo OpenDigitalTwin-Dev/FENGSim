@@ -163,11 +163,9 @@ template <class D>
 void PlotCellDatas::data (const Mesh& M, const D& d, int shift) {
     ExchangeBuffer E;
     int m = d.size();
-//    mout <<"m "<<m<<endl;
+    
     for (cell c=M.cells(); c!=M.cells_end(); ++c) {
-//	mout<<"c "<<c<<endl;
-        for (int j=0; j<m; ++j) E.Send(0) << d(c(),j);
-//	mout<<"zzzz"<<endl;
+	for (int j=0; j<m; ++j) E.Send(0) << d(c(),j);
     }
     E.Communicate();
     int i = 0;
@@ -489,6 +487,52 @@ void Plot::vtk_vector(ostream& out, int k) {
 
 }
 
+void Plot::vtk_tensor(ostream& out) {
+    //out << "TENSORS tensor_value float"<<endl;
+    for (int i=0; i<9; i++) {
+	out << "SCALARS PRESSURE" << i << " float 1"<<endl;
+	out << "LOOKUP_TABLE default"<<endl;
+
+	double t = 0;
+
+    
+	for (plotdata p=plotdata(VD.begin()); p!=plotdata(VD.end()); ++p) {
+
+
+	    t += p[0] * p[0] + p[1] * p[1] + p[2] * p[2];
+	    
+	    
+	    /*if (abs(p[k]) < PlotTolerance) out << "0";
+	      else                           out << p[k];
+	      if (abs(p[k+1]) < PlotTolerance) out << " 0";
+	      else                           out << " "<<p[k+1];
+	      if (M.dim() == 2) out<<" 0"<<endl;
+	      else {
+	      if (abs(p[k+2]) < PlotTolerance) out << " 0"<<endl;
+	      else                           out << " "<<p[k+2]<<endl;
+	      }*/
+
+	    // 0 3 4
+	    // 3 1 5
+	    // 4 5 2
+	    if (i==0) out << p[3] << endl;
+	    if (i==1) out << p[6] << endl;
+	    if (i==2) out << p[7] << endl;
+	    if (i==3) out << p[6] << endl;
+	    if (i==4) out << p[4] << endl;
+	    if (i==5) out << p[8] << endl;
+	    if (i==6) out << p[7] << endl;
+	    if (i==7) out << p[8] << endl;
+	    if (i==8) out << p[5] << endl;
+
+	    //out << p[3] << " " << p[6] << " " << p[7] << endl;
+	    //out << p[6] << " " << p[4] << " " << p[8] << endl;
+	    //out << p[7] << " " << p[8] << " " << p[5] << endl << endl;
+	}
+    }
+
+}
+
 void Plot::vtk_cellvector(ostream& out, int k) {
     out << "VECTORS vector_value float"<<endl;
     for (int i=0; i<CD.size(); ++i) {
@@ -516,7 +560,7 @@ void Plot::vtk_celltensor(ostream& out, int k) {
         if (abs(CD[i][k+1]) < PlotTolerance) out << " 0";
         else                               out << " " << CD[i][k+1];
         if (abs(CD[i][k+5]) < PlotTolerance) out << " 0"<<endl;
-        else                               out << " " << CD[i][k+4]<<endl;
+        else                               out << " " << CD[i][k+5]<<endl;
 
         if (abs(CD[i][k+4]) < PlotTolerance) out << "0";
         else                               out << CD[i][k+4];
@@ -559,6 +603,15 @@ void Plot::vtk_vertex_vector(const char* name, int k, int deformed) {
     vtk_mesh(out,deformed);
     vtk_point_data(out);
     vtk_vector(out,k);
+}
+
+void Plot::vtk_vertex_tensor(const char* name, int deformed) {
+    if (!PPM->master()) return;
+    string filename = string("data/vtk/") + name + string(".vtk");  
+    M_ofstream out(filename.c_str());  
+    vtk_mesh(out,deformed);
+    vtk_point_data(out);
+    vtk_tensor(out);
 }
 
 void Plot::vtk_vertexdata(const char* name, int k, bool deformed) {

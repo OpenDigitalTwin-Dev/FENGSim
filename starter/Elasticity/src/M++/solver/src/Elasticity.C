@@ -110,8 +110,8 @@ void ElasticityMain () {
     ReadConfig(Settings, "Mesh", name);
     Meshes M(name.c_str());
     int dim = M.dim();
-	mout << M.fine().Cells::size() << endl;
-
+    mout << M.fine().Cells::size() << endl;
+	
     ElasticityAssemble EA(dim);
     EA.SetSubDomain(M.fine());
     EA.SetBoundaryType(M.fine());
@@ -154,7 +154,51 @@ void ElasticityMain () {
     //P.vtk_vertexdata("elasticity_3_undeform",dim-1,0);
     P.vtk_vertexdata("fengsim_deform",100,1);
     //P.vtk_vertexdata("fengsim_undeform",100,0);
-	
+
+
+    Discretization disc2(9);
+    MatrixGraphs G2(M, disc2);
+    Vector x_strain(G2.fine());
+    Vector x_stress(G2.fine());
+    x_strain = 0;
+    x_stress = 0;
+    for (cell c=x.cells(); c!=x.cells_end(); c++) {
+	VectorFieldElement E(disc,x,c);
+	for (int i=0; i<c.Corners(); i++) {
+	    Tensor T = sym(E.VectorGradient(c.Corner(i),x));
+	    // 0 3 4
+	    // 3 1 5
+	    // 4 5 2
+	    x_strain(c.Corner(i),0) = x(c.Corner(i),0);
+	    x_strain(c.Corner(i),1) = x(c.Corner(i),1);
+	    x_strain(c.Corner(i),2) = x(c.Corner(i),2);
+	    x_strain(c.Corner(i),3) = T[0][0];
+	    x_strain(c.Corner(i),4) = T[1][1];
+	    x_strain(c.Corner(i),5) = T[2][2];
+	    x_strain(c.Corner(i),6) = T[0][1];
+	    x_strain(c.Corner(i),7) = T[0][2];
+	    x_strain(c.Corner(i),8) = T[1][2];
+	    Tensor TT = 2.0 * EA.mu * T + EA.lambda * trace(T) * One;
+	    // 0 3 4
+	    // 3 1 5
+	    // 4 5 2
+	    x_stress(c.Corner(i),0) = x(c.Corner(i),0);
+	    x_stress(c.Corner(i),1) = x(c.Corner(i),1);
+	    x_stress(c.Corner(i),2) = x(c.Corner(i),2);
+	    x_stress(c.Corner(i),3) = TT[0][0];
+	    x_stress(c.Corner(i),4) = TT[1][1];
+	    x_stress(c.Corner(i),5) = TT[2][2];
+	    x_stress(c.Corner(i),6) = TT[0][1];
+	    x_stress(c.Corner(i),7) = TT[0][2];
+	    x_stress(c.Corner(i),8) = TT[1][2];
+	}
+    }
+    
+    Plot P2(M.fine(),9,6);
+    P2.vertexdata(x_strain,9);
+    P2.vtk_vertex_tensor("fengsim_deform_strain",1);
+    P2.vertexdata(x_stress,9);
+    P2.vtk_vertex_tensor("fengsim_deform_stress",1);
     
     return;
 }

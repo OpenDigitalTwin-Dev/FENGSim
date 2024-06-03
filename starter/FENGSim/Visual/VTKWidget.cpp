@@ -677,7 +677,7 @@ void VTKWidget::ImportSTLFile(std::string name)
 #include "vtkCellData.h"
 #include "vtkScalarBarActor.h"
 
-void VTKWidget::ImportVTKFile(std::string name)
+void VTKWidget::ImportVTKFile(std::string name, int n)
 {
     fstream _file;
     _file.open(name, ios::in);
@@ -688,7 +688,8 @@ void VTKWidget::ImportVTKFile(std::string name)
     reader->ReadAllScalarsOn();
     reader->Update();
 
-    //reader->GetOutput()->GetCellData()->SetActiveAttribute(0,0);
+    //reader->GetOutput()->GetCellData()->SetActiveAttribute(n,0);
+    reader->GetOutput()->GetPointData()->SetActiveAttribute(n,0);
     //std::cout << reader->GetOutput()->GetCellData()->GetArrayName(1) << std::endl;
     //std::cout << reader->GetOutput()->GetCellData()->GetNumberOfArrays() << std::endl;
 
