@@ -56,7 +56,9 @@ void SlicePhaseTestMain (int argc, char** argv) {
     // import stl mesh
     cura::MeshGroup& mesh_group = scene.mesh_groups.back();
     const cura::FMatrix3x3 transformation;
+
     cura::loadMeshIntoMeshGroup(&mesh_group, stlfile.c_str(), transformation, scene.settings);
+
     cura::Mesh& cube_mesh = mesh_group.meshes[0];
 
     // generate slices
@@ -66,26 +68,39 @@ void SlicePhaseTestMain (int argc, char** argv) {
     constexpr bool variable_layer_height = false;
     constexpr std::vector<cura::AdaptiveLayer>* variable_layer_height_values = nullptr;
     const size_t num_layers = (cube_mesh.getAABB().max.z - initial_layer_thickness) / layer_thickness + 1;
+
     cura::Slicer slicer(&cube_mesh, layer_thickness, num_layers, variable_layer_height, variable_layer_height_values);
     
     std::cout << "The number of layers in the output must equal the requested number of layers." << std::endl 
 	      << "  " << slicer.layers.size() << " " << num_layers << std::endl;
 
-    // *************************************************
-    // export slices for visualization
-    // *************************************************
+    /*****************************************************************************/
+    /*                                                                           */
+    /*   export slices for visualization                                         */
+    /*                                                                           */
+    /*****************************************************************************/
 
     Export2VTK(vtkfile, slicer, initial_layer_thickness, layer_thickness);
-	
-    // *************************************************
-    // export slices for path planning
-    // *************************************************
+
+    /*****************************************************************************/
+    /*                                                                           */
+    /* export slices for path planning                                           */
+    /*                                                                           */
+    /* the difference between Export2VTK and Export2VTK4PathPlanning is that     */
+    /* initial layer and need to pay attention the initial layer hieight is in   */
+    /* fact the 0.5 of the buttom                                                */
+    /*                                                                           */
+    /*****************************************************************************/
 
     Export2VTK4PathPlanning(vtkfile_pathplanning, slicer, initial_layer_thickness, layer_thickness);
-    
-    // *************************************************
-    // export slices for meshing
-    // *************************************************
+
+    /*****************************************************************************/
+    /*                                                                           */
+    /* export slices for meshing                                                 */
+    /*                                                                           */
+    /* different format                                                          */
+    /*                                                                           */
+    /*****************************************************************************/
 
     Export2Cli4Mesh(clifile_meshing, slicer, initial_layer_thickness, layer_thickness, cube_mesh.getAABB().min.z);
 
