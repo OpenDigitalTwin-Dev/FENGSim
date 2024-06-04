@@ -676,8 +676,10 @@ void VTKWidget::ImportSTLFile(std::string name)
 #include "vtkPointData.h"
 #include "vtkCellData.h"
 #include "vtkScalarBarActor.h"
+#include "vtkExtractTensorComponents.h"
+#include "vtkDoubleArray.h"
 
-void VTKWidget::ImportVTKFile(std::string name, int n)
+void VTKWidget::ImportVTKFile(std::string name, int type, int n)
 {
     fstream _file;
     _file.open(name, ios::in);
@@ -685,13 +687,48 @@ void VTKWidget::ImportVTKFile(std::string name, int n)
     // read a vtk file
     vtkSmartPointer<vtkUnstructuredGridReader> reader = vtkSmartPointer<vtkUnstructuredGridReader>::New();
     reader->SetFileName(name.c_str());
-    reader->ReadAllScalarsOn();
+    //reader->ReadAllScalarsOn();
     reader->Update();
 
-    //reader->GetOutput()->GetCellData()->SetActiveAttribute(n,0);
-    reader->GetOutput()->GetPointData()->SetActiveAttribute(n,0);
-    //std::cout << reader->GetOutput()->GetCellData()->GetArrayName(1) << std::endl;
-    //std::cout << reader->GetOutput()->GetCellData()->GetNumberOfArrays() << std::endl;
+    //std::cout << reader->GetOutput()->GetCellData()->GetTensors()->GetSize() << std::endl;
+
+
+    //    vtkSmartPointer<vtkExtractTensorComponents> extract = vtkSmartPointer<vtkExtractTensorComponents>::New();
+    //    extract->SetInputConnection(reader->GetOutputPort());
+    //    extract->ExtractScalarsOn();
+    //    extract->SetScalarModeToComponent();
+    //    extract->SetScalarComponents(0,0);
+    //    extract->Update();
+    //    std::cout << extract->GetOutput()->GetPointData()->GetScalars()->GetSize() << std::endl;
+    //    reader->GetOutput()->GetCellData()->SetScalars(extract->GetOutput()->GetCellData()->GetScalars());
+
+    QString color_name;
+    color_name = QString("displacement");
+
+    if (n>0) {
+        vtkSmartPointer<vtkDoubleArray> values =
+                vtkSmartPointer<vtkDoubleArray>::New();
+        int num = reader->GetOutput()->GetCellData()->GetTensors()->GetSize()/9-1;
+        std::cout << "tensor numbers: " << num << std::endl;
+        values->SetNumberOfValues(num);
+        values->SetName ("strains");
+        for (int i=0; i<num; i++) {
+            double s = reader->GetOutput()->GetCellData()->GetTensors()->GetComponent(i,n-1);
+            values->SetValue(i,s);
+        }
+        reader->GetOutput()->GetCellData()->SetScalars(values);
+        reader->Update();
+        if (type == 1)
+            color_name = QString("strain");
+        else if (type == 2)
+            color_name = QString("stress");
+    }
+
+
+
+
+
+
 
     // mapper
     vtkSmartPointer<vtkDataSetMapper> mapper = vtkSmartPointer<vtkDataSetMapper>::New();
@@ -708,7 +745,7 @@ void VTKWidget::ImportVTKFile(std::string name, int n)
     // colorbar
 
     scalarBar->SetLookupTable(mapper->GetLookupTable());
-    scalarBar->SetTitle("Displacement");
+    scalarBar->SetTitle(color_name.toStdString().c_str());
     scalarBar->SetNumberOfLabels(10);
     scalarBar->SetDragable(true);
 

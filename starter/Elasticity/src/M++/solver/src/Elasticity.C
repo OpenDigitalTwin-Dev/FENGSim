@@ -139,14 +139,8 @@ void ElasticityMain () {
     x += u_d;
     tout(1) << Date() - Start << endl;
     mout << "L2 error: "<< EA.L2Error(x) << endl;
-
-    if (EA.example_id == 5) {
-	if (dim == 2 && x.find_row(Point(48,60)) != x.rows_end()) {
-	    cout << x(Point(48,60),0) << " " << x(Point(48,60),1) << endl;
-	}
-    }
-    
-    Plot P(M.fine());
+        
+    Plot P(M.fine(),1,6);
     P.vertexdata(x,dim);
     //P.vtk_vertex_vector("fengsim_deform",0,1);
     //P.vtk_vertex_vector("fengsim_undeform",0,0);
@@ -155,8 +149,7 @@ void ElasticityMain () {
     P.vtk_vertexdata("fengsim_deform",100,1);
     //P.vtk_vertexdata("fengsim_undeform",100,0);
 
-
-    Discretization disc2(9);
+    Discretization disc2("cell",6);
     MatrixGraphs G2(M, disc2);
     Vector x_strain(G2.fine());
     Vector x_stress(G2.fine());
@@ -164,41 +157,32 @@ void ElasticityMain () {
     x_stress = 0;
     for (cell c=x.cells(); c!=x.cells_end(); c++) {
 	VectorFieldElement E(disc,x,c);
-	for (int i=0; i<c.Corners(); i++) {
-	    Tensor T = sym(E.VectorGradient(c.Corner(i),x));
-	    // 0 3 4
-	    // 3 1 5
-	    // 4 5 2
-	    x_strain(c.Corner(i),0) = x(c.Corner(i),0);
-	    x_strain(c.Corner(i),1) = x(c.Corner(i),1);
-	    x_strain(c.Corner(i),2) = x(c.Corner(i),2);
-	    x_strain(c.Corner(i),3) = T[0][0];
-	    x_strain(c.Corner(i),4) = T[1][1];
-	    x_strain(c.Corner(i),5) = T[2][2];
-	    x_strain(c.Corner(i),6) = T[0][1];
-	    x_strain(c.Corner(i),7) = T[0][2];
-	    x_strain(c.Corner(i),8) = T[1][2];
-	    Tensor TT = 2.0 * EA.mu * T + EA.lambda * trace(T) * One;
-	    // 0 3 4
-	    // 3 1 5
-	    // 4 5 2
-	    x_stress(c.Corner(i),0) = x(c.Corner(i),0);
-	    x_stress(c.Corner(i),1) = x(c.Corner(i),1);
-	    x_stress(c.Corner(i),2) = x(c.Corner(i),2);
-	    x_stress(c.Corner(i),3) = TT[0][0];
-	    x_stress(c.Corner(i),4) = TT[1][1];
-	    x_stress(c.Corner(i),5) = TT[2][2];
-	    x_stress(c.Corner(i),6) = TT[0][1];
-	    x_stress(c.Corner(i),7) = TT[0][2];
-	    x_stress(c.Corner(i),8) = TT[1][2];
-	}
+	Tensor T = sym(E.VectorGradient(Point(0.25,0.25,0.25),x));
+	// 0 3 4
+	// 3 1 5
+	// 4 5 2
+	x_strain(c(),0) = T[0][0];
+	x_strain(c(),1) = T[1][1];
+	x_strain(c(),2) = T[2][2];
+	x_strain(c(),3) = T[0][1];
+	x_strain(c(),4) = T[0][2];
+	x_strain(c(),5) = T[1][2];
+	Tensor TT = 2.0 * EA.mu * T + EA.lambda * trace(T) * One;
+	// 0 3 4
+	// 3 1 5
+	// 4 5 2
+	x_stress(c(),0) = TT[0][0];
+	x_stress(c(),1) = TT[1][1];
+	x_stress(c(),2) = TT[2][2];
+	x_stress(c(),3) = TT[0][1];
+	x_stress(c(),4) = TT[0][2];
+	x_stress(c(),5) = TT[1][2];
     }
     
-    Plot P2(M.fine(),9,6);
-    P2.vertexdata(x_strain,9);
-    P2.vtk_vertex_tensor("fengsim_deform_strain",1);
-    P2.vertexdata(x_stress,9);
-    P2.vtk_vertex_tensor("fengsim_deform_stress",1);
+    P.celldata(x_strain,6);
+    P.vtk_celltensor("fengsim_deform_strain",0,1);
+    P.celldata(x_stress,6);
+    P.vtk_celltensor("fengsim_deform_stress",0,1);
     
     return;
 }

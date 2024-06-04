@@ -3362,24 +3362,48 @@ void MainWindow::FEMCompute()
 
 void MainWindow::FEMPlot () {
     if (fem_dock->ui->comboBox->currentText().toStdString() == "Elasticity") {
+        int n = 0;
+        int type = 0;
+        QString file_name("../Elasticity/build/data/vtk/fengsim_deform.vtk");
         if (vtk_dock->ui->comboBox->currentText().toStdString() == "Strain11") {
-            vtk_widget->Hide();
-            vtk_widget->ImportVTKFile(std::string("../Elasticity/build/data/vtk/fengsim_deform_strain.vtk"),0);
-            vtk_widget->RePlot();
-            fem_dock->ui->pushButton->setEnabled(true);
+            n = 1;
+            type = 1;
+            file_name = QString("../Elasticity/build/data/vtk/fengsim_deform_strain.vtk");
+        }
+        if (vtk_dock->ui->comboBox->currentText().toStdString() == "Strain12") {
+            n = 2;
+            type = 1;
+            file_name = QString("../Elasticity/build/data/vtk/fengsim_deform_strain.vtk");
+        }
+        if (vtk_dock->ui->comboBox->currentText().toStdString() == "Strain13") {
+            n = 3;
+            type = 1;
+            file_name = QString("../Elasticity/build/data/vtk/fengsim_deform_strain.vtk");
+        }
+        if (vtk_dock->ui->comboBox->currentText().toStdString() == "Strain22") {
+            n = 5;
+            type = 1;
+            file_name = QString("../Elasticity/build/data/vtk/fengsim_deform_strain.vtk");
+        }
+        if (vtk_dock->ui->comboBox->currentText().toStdString() == "Strain23") {
+            n = 6;
+            type = 1;
+            file_name = QString("../Elasticity/build/data/vtk/fengsim_deform_strain.vtk");
+        }
+        if (vtk_dock->ui->comboBox->currentText().toStdString() == "Strain33") {
+            n = 9;
+            type = 1;
+            file_name = QString("../Elasticity/build/data/vtk/fengsim_deform_strain.vtk");
         }
         else if (vtk_dock->ui->comboBox->currentText().toStdString() == "Stress11") {
-            vtk_widget->Hide();
-            vtk_widget->ImportVTKFile(std::string("../Elasticity/build/data/vtk/fengsim_deform_stress.vtk"),0);
-            vtk_widget->RePlot();
-            fem_dock->ui->pushButton->setEnabled(true);
+            n = 1;
+            type = 2;
+            file_name = QString("../Elasticity/build/data/vtk/fengsim_deform_stress.vtk");
         }
-        else if (vtk_dock->ui->comboBox->currentText().toStdString() == "Displacement") {
-            vtk_widget->Hide();
-            vtk_widget->ImportVTKFile(std::string("../Elasticity/build/data/vtk/fengsim_deform.vtk"),0);
-            vtk_widget->RePlot();
-            fem_dock->ui->pushButton->setEnabled(true);
-        }
+        vtk_widget->Hide();
+        vtk_widget->ImportVTKFile(file_name.toStdString(),type,n);
+        vtk_widget->RePlot();
+        fem_dock->ui->pushButton->setEnabled(true);
     }
     else if (fem_dock->ui->comboBox->currentText().toStdString() == "Dynamic Elasticity") {
         if (fem_file_id<fem_file_num+1) {

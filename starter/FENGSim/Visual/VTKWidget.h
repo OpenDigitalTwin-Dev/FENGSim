@@ -57,7 +57,7 @@ public:
     void Hide ();
     void Reset ();
     void Clear ();
-    void ImportVTKFile (std::string name, int n=0);
+    void ImportVTKFile (std::string name, int type=0, int n=0);
 
 
     void ImportVTKFileCloudColorFinal(double t=0.05);

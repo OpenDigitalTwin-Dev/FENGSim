@@ -286,6 +286,31 @@
           <string>Stress11</string>
          </property>
         </item>
+        <item>
+         <property name="text">
+          <string>Stress12</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Stress13</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Stress22</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Stress23</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Stress33</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>
@@ -373,9 +398,9 @@
   </layout>
  </widget>
  <resources>
-  <include location="../FEMWindow.qrc"/>
-  <include location="../MainWindow.qrc"/>
   <include location="../CADWindow.qrc"/>
+  <include location="../MainWindow.qrc"/>
+  <include location="../FEMWindow.qrc"/>
  </resources>
  <connections/>
 </ui>
