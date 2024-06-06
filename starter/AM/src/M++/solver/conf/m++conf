@@ -1,6 +1,6 @@
-loadconf = solver/conf/pathplanning.conf;
+#loadconf = solver/conf/pathplanning.conf;
 #loadconf = solver/conf/slicing.conf;
-#loadconf = solver/conf/meshcoarsing.conf
+loadconf = solver/conf/meshcoarsing.conf
 #loadconf = solver/conf/am.conf;
 #loadconf = solver/conf/poisson.conf;
 #loadconf = solver/conf/heat.conf;
