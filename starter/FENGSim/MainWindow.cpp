@@ -1547,7 +1547,7 @@ void MainWindow::AMStlModelToSlices()
                                                   "Slice files (*.cli);;", 0 , QFileDialog::DontUseNativeDialog);
     std::cout << "check cli file name: " << cli_file_name.toStdString() << std::endl;
     ofstream out;
-    out.open("./../AM/build/solver/conf/m++.conf");
+    out.open("./../AM/build/solver/conf/m++conf");
     out << "loadconf = solver/conf/slicing.conf;" << endl;
     out << "#loadconf = solver/conf/am.conf;" << endl;
     out << "#loadconf = solver/conf/poisson.conf;" << endl;
@@ -1587,7 +1587,7 @@ void MainWindow::AMSlicesToPathPlanning()
                                                    QString("/home/jiping/OpenDT/FENGSim/FENGSim/data"),
                                                    "Path files (*.vtk);;", 0 , QFileDialog::DontUseNativeDialog);
     ofstream out;
-    out.open("./../AM/build/solver/conf/m++.conf");
+    out.open("./../AM/build/solver/conf/m++conf");
     out << "#loadconf = solver/conf/slicing.conf;" << endl;
     out << "loadconf = solver/conf/pathplanning.conf;" << endl;
     out << "#loadconf = solver/conf/am.conf;" << endl;
@@ -2850,7 +2850,7 @@ void MainWindow::AMSTL2Slices()
     ofstream out;
     QString file = meas_path+QString("/../AM/build/solver/conf/m++conf");
     std::cout << file.toStdString() << std::endl;
-    out.open("./../AM/build/solver/conf/m++.conf");
+    out.open("./../AM/build/solver/conf/m++conf");
     out << "loadconf = solver/conf/slicing.conf;" << endl;
     out << "#loadconf = solver/conf/am.conf;" << endl;
     out << "#loadconf = solver/conf/poisson.conf;" << endl;
