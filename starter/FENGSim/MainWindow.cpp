@@ -2976,10 +2976,11 @@ void MainWindow::AMSlices2Mesh()
         // this is old work for machining live and dead element
         //        MM.FileFormatMeshToGeo("/home/jiping/software/slice2mesh-master/build-slice2mesh-Desktop_Qt_5_12_10_GCC_64bit-Debug/amslices2mesh.mesh",
         //                               "/home/jiping/FENGSim/AM/Elasticity/conf/geo/thinwall.geo");
-        MM.FileFormatMeshToGeo((meas_path
-                                +QString("/../../../software/slice2mesh-master/build-slice2mesh-Desktop_Qt_5_12_10_GCC_64bit-Debug")
-                                +QString("/amslices2mesh.mesh")).toStdString().c_str(),
-                               (meas_path+QString("/../../AM/AdditiveManufacturing/conf/geo/thinwall.geo")).toStdString().c_str());
+
+        MM.FileFormatMeshToGeo(meas_path
+                               +QString("/../../toolkit/install/slice2mesh_install/bin")
+                               +QString("/amslices2mesh.mesh"),
+                               "./../AM/build/solver/conf/geo/thinwall.geo");
 
         vtk_widget->AMImportMesh();
         additive_manufacturing_dock->ui->pushButton_23->setChecked(true);

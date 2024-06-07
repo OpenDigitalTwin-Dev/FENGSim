@@ -1,14 +1,130 @@
 #include<iostream>
 #include "tetgen.h"
+#include "m++.h"
 
 void meshcoarsing () {
-    tetgenio in, out, addin, bgmin;
-    in.load_stl("./solver/conf/geo/test.stl");
-    tetrahedralize("pk", &in, NULL);
+
+    Date Start;
+    string name = "UnitCube";
+    ReadConfig(Settings, "Mesh", name);
+    Meshes M(name.c_str());
+    int dim = M.dim();
+    mout << M.fine().Cells::size() << endl;
+
+
+    std::ofstream out;
+    out.open("./solver/conf/geo/test.off");
+    
+    out << "OFF" << endl;
+    for (bnd_face bf=M.fine().bnd_faces(); bf!=M.fine().bnd_faces_end(); bf++) {
+	if (M.fine().find_face(bf()).Left()==Infty) {
+	    cell c = M.fine().find_cell(M.fine().find_face(bf()).Right());
+	    for (int i=0; i<c.Faces(); i++) {
+		if (c.Face(i)==bf()) {
+		    for (int j=0; j<c.FaceCorners(i); j++) {
+			out << c.FaceCorner(i,j)[0]
+			    << " " << c.FaceCorner(i,j)[1]
+			    << " " << c.FaceCorner(i,j)[2]
+			    << endl;
+		    }
+		}
+	    }
+	}
+	else if (M.fine().find_face(bf()).Right()==Infty) {
+	    cell c = M.fine().find_cell(M.fine().find_face(bf()).Left());
+	    for (int i=0; i<c.Faces(); i++) {
+		if (c.Face(i)==bf()) {
+		    for (int j=0; j<c.FaceCorners(i); j++) {
+			out << c.FaceCorner(i,j)[0]
+			    << " " << c.FaceCorner(i,j)[1]
+			    << " " << c.FaceCorner(i,j)[2]
+			    << endl;
+		    }
+		}
+	    }
+	}
+    }
+    for (int i=0; i<M.fine().BoundaryFaces::size(); i++) {
+	out << "3 " << 0+i*3 << " " << 1+i*3 << " " << 2+i*3 << endl;
+    }
+
+    /*
+    std::ofstream out;
+    out.open("./solver/conf/geo/test.poly");
+    
+    out << "# Part 1 - node list" << endl;
+    out << "# node count, 3 dim, no attribute, no boundary marker" << endl;
+    out << M.fine().BoundaryFaces::size()*3 << " 3 0 0" << endl;
+    out << "# Node index, node coordinates" << endl;
+    int n = 0;
+    for (bnd_face bf=M.fine().bnd_faces(); bf!=M.fine().bnd_faces_end(); bf++) {
+	if (M.fine().find_face(bf()).Left()==Infty) {
+	    cell c = M.fine().find_cell(M.fine().find_face(bf()).Right());
+	    for (int i=0; i<c.Faces(); i++) {
+		if (c.Face(i)==bf()) {
+		    for (int j=0; j<c.FaceCorners(i); j++) {
+			n++;
+			out << n
+			    << " " << c.FaceCorner(i,j)[0]
+			    << " " << c.FaceCorner(i,j)[1]
+			    << " " << c.FaceCorner(i,j)[2]
+			    << endl;
+		    }
+		}
+	    }
+	}
+	else if (M.fine().find_face(bf()).Right()==Infty) {
+	    cell c = M.fine().find_cell(M.fine().find_face(bf()).Left());
+	    for (int i=0; i<c.Faces(); i++) {
+		if (c.Face(i)==bf()) {
+		    for (int j=0; j<c.FaceCorners(i); j++) {
+			n++;
+			out << n
+			    << " " << c.FaceCorner(i,j)[0]
+			    << " " << c.FaceCorner(i,j)[1]
+			    << " " << c.FaceCorner(i,j)[2]
+			    << endl;
+		    }
+		}
+	    }
+	}
+    }
+
+    out << "# Part 2 - facet list" << endl;
+    out << "# facet count, no boundary marker" << endl;
+    out << M.fine().BoundaryFaces::size() << " 0" << endl;
+    out << "# facets" << endl;
+    for (int i=0; i<M.fine().BoundaryFaces::size(); i++) {
+	out << 1 << endl;
+	out << "3 " << 1+i*3 << " " << 2+i*3 << " " << 3+i*3 << endl;
+    }
+
+    out << "# Part 3 - hole list" << endl;
+    out << "0 # no hole" << endl;
+
+    out << "# Part 4 - region list" << endl;
+    out << "0 # no region" << endl;
+    */
+
+
+
+
+
+
+
+
+
+
+
+
+
+    tetgenio tin, tout, addin, bgmin;
+    tin.load_off("./solver/conf/geo/point_cloud_3");
+    tetrahedralize("pk", &tin, NULL);
 
     return;
-    out.save_nodes("barout");
-    out.save_elements("barout");
-    out.save_faces("barout");
-    out.save_poly("barout");
+    //out.save_nodes("barout");
+    //out.save_elements("barout");
+    //out.save_faces("barout");
+    //out.save_poly("barout");
 }
