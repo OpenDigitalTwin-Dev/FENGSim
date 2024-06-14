@@ -3,7 +3,7 @@
 #include "m++.h"
 
 void meshcoarsing () {
-
+    
     Date Start;
     string name = "UnitCube";
     ReadConfig(Settings, "Mesh", name);
@@ -11,22 +11,37 @@ void meshcoarsing () {
     int dim = M.dim();
     mout << M.fine().Cells::size() << endl;
 
+    Discretization disc(dim);
+    MatrixGraphs G(M, disc);
+    Vector x(G.fine());
+    x = 0;
+    int k = 0;
+    for (row r=x.rows(); r!=x.rows_end(); r++) {
+	x(r,0) = k;
+	k++;
+    }
+    Plot P(M.fine());
+    P.vertexdata(x,dim);
+    P.vtk_vertexdata("meshcoarsing",0,0);
 
     std::ofstream out;
     out.open("./solver/conf/geo/test.off");
     
     out << "OFF" << endl;
+    out << M.fine().Vertices::size() << " " << M.fine().BoundaryFaces::size() << " 0"<< endl;
+    for (row r=x.rows(); r!=x.rows_end(); r++) {
+	out << r() << endl;
+    }
     for (bnd_face bf=M.fine().bnd_faces(); bf!=M.fine().bnd_faces_end(); bf++) {
 	if (M.fine().find_face(bf()).Left()==Infty) {
 	    cell c = M.fine().find_cell(M.fine().find_face(bf()).Right());
 	    for (int i=0; i<c.Faces(); i++) {
 		if (c.Face(i)==bf()) {
+		    out << "3 ";
 		    for (int j=0; j<c.FaceCorners(i); j++) {
-			out << c.FaceCorner(i,j)[0]
-			    << " " << c.FaceCorner(i,j)[1]
-			    << " " << c.FaceCorner(i,j)[2]
-			    << endl;
+			out << x(c.FaceCorner(i,j),0) << " ";
 		    }
+		    out << endl;
 		}
 	    }
 	}
@@ -34,20 +49,17 @@ void meshcoarsing () {
 	    cell c = M.fine().find_cell(M.fine().find_face(bf()).Left());
 	    for (int i=0; i<c.Faces(); i++) {
 		if (c.Face(i)==bf()) {
+		    out << "3 ";
 		    for (int j=0; j<c.FaceCorners(i); j++) {
-			out << c.FaceCorner(i,j)[0]
-			    << " " << c.FaceCorner(i,j)[1]
-			    << " " << c.FaceCorner(i,j)[2]
-			    << endl;
+			out << x(c.FaceCorner(i,j),0) << " ";
 		    }
+		    out << endl;
 		}
 	    }
 	}
     }
-    for (int i=0; i<M.fine().BoundaryFaces::size(); i++) {
-	out << "3 " << 0+i*3 << " " << 1+i*3 << " " << 2+i*3 << endl;
-    }
-
+    out.close();
+    
     /*
     std::ofstream out;
     out.open("./solver/conf/geo/test.poly");
@@ -119,7 +131,7 @@ void meshcoarsing () {
 
 
     tetgenio tin, tout, addin, bgmin;
-    tin.load_off("./solver/conf/geo/point_cloud_3");
+    tin.load_off("./solver/conf/geo/test");
     tetrahedralize("pk", &tin, NULL);
 
     return;
