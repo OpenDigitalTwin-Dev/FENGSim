@@ -132,7 +132,7 @@ void meshcoarsing () {
 
     tetgenio tin, tout, addin, bgmin;
     tin.load_off("./solver/conf/geo/test");
-    tetrahedralize("pk", &tin, NULL);
+    tetrahedralize("pka0.01", &tin, NULL);
 
     return;
     //out.save_nodes("barout");

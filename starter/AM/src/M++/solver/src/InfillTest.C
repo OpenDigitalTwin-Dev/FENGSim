@@ -217,6 +217,7 @@ namespace cura {
     //std::vector<double> heights;
 
     void VtkToPolygons (std::string filename, std::vector<Polygons>& layers, std::vector<double>& heights);
+  void ExportPathLinesToVtk (std::string pathfile, std::vector<InfillTestParameters> parameters_list, std::vector<double>& heights);
 
     std::vector<InfillTestParameters> generateInfillTests(std::string filename) {
         constexpr bool do_zig_zaggify = true;
@@ -312,11 +313,13 @@ namespace cura {
 
 
 	
-
+	ExportPathLinesToVtk(pathfile, parameters_list, heights);
 
 
 	return parameters_list;
 
+
+	
 	
     }
 
