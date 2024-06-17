@@ -24,13 +24,53 @@ void meshcoarsing () {
     P.vertexdata(x,dim);
     P.vtk_vertexdata("meshcoarsing",0,0);
 
+
+
+
+
+    Vertices vs;
+    for (bnd_face bf=M.fine().bnd_faces(); bf!=M.fine().bnd_faces_end(); bf++) {
+	if (M.fine().find_face(bf()).Left()==Infty) {
+	    cell c = M.fine().find_cell(M.fine().find_face(bf()).Right());
+	    for (int i=0; i<c.Faces(); i++) {
+		if (c.Face(i)==bf()) {
+		    for (int j=0; j<c.FaceCorners(i); j++) {
+			Point v = c.FaceCorner(i,j);
+			if (vs.find(v)==vs.end()) {
+			    vs.Insert(v);
+			}
+		    }
+		}
+	    }
+	}
+	else if (M.fine().find_face(bf()).Right()==Infty) {
+	    cell c = M.fine().find_cell(M.fine().find_face(bf()).Left());
+	    for (int i=0; i<c.Faces(); i++) {
+		if (c.Face(i)==bf()) {
+		    for (int j=0; j<c.FaceCorners(i); j++) {
+			Point v = c.FaceCorner(i,j);
+			if (vs.find(v)==vs.end()) {
+			    vs.Insert(v);
+			}
+		    }
+		}
+	    }
+	}
+    }
+
+    int num = 0;
+    for (vertex v=vs.vertices(); v!=vs.vertices_end(); v++) {
+	vs.find(v)->second.SetPart(num);
+	num++;
+    }
+
     std::ofstream out;
     out.open("./solver/conf/geo/test.off");
-    
+
     out << "OFF" << endl;
-    out << M.fine().Vertices::size() << " " << M.fine().BoundaryFaces::size() << " 0"<< endl;
-    for (row r=x.rows(); r!=x.rows_end(); r++) {
-	out << r() << endl;
+    out << vs.size() << " " << M.fine().BoundaryFaces::size() << " 0"<< endl;
+    for (vertex v=vs.vertices(); v!=vs.vertices_end(); v++) {
+	out << v()[0] << " " << v()[1] << " " << v()[2] << endl;
     }
     for (bnd_face bf=M.fine().bnd_faces(); bf!=M.fine().bnd_faces_end(); bf++) {
 	if (M.fine().find_face(bf()).Left()==Infty) {
@@ -39,7 +79,7 @@ void meshcoarsing () {
 		if (c.Face(i)==bf()) {
 		    out << "3 ";
 		    for (int j=0; j<c.FaceCorners(i); j++) {
-			out << x(c.FaceCorner(i,j),0) << " ";
+			out << vs.find(c.FaceCorner(i,j))->second._part() << " ";
 		    }
 		    out << endl;
 		}
@@ -51,7 +91,7 @@ void meshcoarsing () {
 		if (c.Face(i)==bf()) {
 		    out << "3 ";
 		    for (int j=0; j<c.FaceCorners(i); j++) {
-			out << x(c.FaceCorner(i,j),0) << " ";
+			out << vs.find(c.FaceCorner(i,j))->second._part() << " ";
 		    }
 		    out << endl;
 		}
@@ -132,7 +172,7 @@ void meshcoarsing () {
 
     tetgenio tin, tout, addin, bgmin;
     tin.load_off("./solver/conf/geo/test");
-    tetrahedralize("pka0.01", &tin, NULL);
+    tetrahedralize("pkYa5", &tin, NULL);
 
     return;
     //out.save_nodes("barout");

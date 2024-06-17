@@ -216,7 +216,7 @@ namespace cura {
     //std::vector<Point3> pnts;
     //std::vector<double> heights;
 
-    void VtkToPolygons (std::string filename, std::vector<Polygons>& layers, std::vector<double>& heights);
+  void VtkToPolygons (std::string filename, std::vector<Polygons>& layers, std::vector<double>& heights);
   void ExportPathLinesToVtk (std::string pathfile, std::vector<InfillTestParameters> parameters_list, std::vector<double>& heights);
 
     std::vector<InfillTestParameters> generateInfillTests(std::string filename) {

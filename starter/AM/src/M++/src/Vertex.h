@@ -18,6 +18,7 @@ public:
     void inc () { ++cnt; }
     short dec () { return --cnt; }
     void SetPart (short p) { part = p; }
+    int _part () { return part; }
     friend ostream& operator << (ostream& s, const Vertex& V) {
 	return s<< V.part << " [" << V.cnt << "]"; 
     }
