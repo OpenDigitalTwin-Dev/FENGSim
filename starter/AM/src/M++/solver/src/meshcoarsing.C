@@ -2,33 +2,7 @@
 #include "tetgen.h"
 #include "m++.h"
 
-void meshcoarsing () {
-    
-    Date Start;
-    string name = "UnitCube";
-    ReadConfig(Settings, "Mesh", name);
-    Meshes M(name.c_str());
-    int dim = M.dim();
-    mout << M.fine().Cells::size() << endl;
-
-    Discretization disc(dim);
-    MatrixGraphs G(M, disc);
-    Vector x(G.fine());
-    x = 0;
-    int k = 0;
-    for (row r=x.rows(); r!=x.rows_end(); r++) {
-	x(r,0) = k;
-	k++;
-    }
-    Plot P(M.fine());
-    P.vertexdata(x,dim);
-    P.vtk_vertexdata("meshcoarsing",0,0);
-
-
-
-
-
-    Vertices vs;
+void get_bnd_vertices (Vertices& vs, const Meshes& M) {
     for (bnd_face bf=M.fine().bnd_faces(); bf!=M.fine().bnd_faces_end(); bf++) {
 	if (M.fine().find_face(bf()).Left()==Infty) {
 	    cell c = M.fine().find_cell(M.fine().find_face(bf()).Right());
@@ -57,13 +31,36 @@ void meshcoarsing () {
 	    }
 	}
     }
+}
 
+void get_slices_vertices (Vertices& vs, const Meshes& M, double h0, double h1) {
+    for (cell c=M.fine().cells(); c!=M.fine().cells_end(); c++) {
+	for (int i=0; i<c.Faces(); i++) {
+	    double k = std::fmod(c.Face(i)[2]-h0,h1);
+	    if (k==0) {
+		int l = (c.Face(i)[2]-h0) / h1;
+		if (c()[2] < h0+l*h1 && c()[2] > h0) {
+		    for (int j=0; j<c.FaceCorners(i); j++) {
+			Point v = c.FaceCorner(i,j);
+			if (vs.find(v)==vs.end()) {
+			    vs.Insert(v);
+			}
+		    }
+		}
+	    }
+	}
+    }
+}
+
+void set_vertices_ordering (Vertices& vs) {
     int num = 0;
     for (vertex v=vs.vertices(); v!=vs.vertices_end(); v++) {
 	vs.find(v)->second.SetPart(num);
 	num++;
     }
+}
 
+void export_to_off (Vertices& vs, const Meshes& M, double h0, double h1) {
     std::ofstream out;
     out.open("./solver/conf/geo/test.off");
 
@@ -98,85 +95,58 @@ void meshcoarsing () {
 	    }
 	}
     }
+    for (cell c=M.fine().cells(); c!=M.fine().cells_end(); c++) {
+	for (int i=0; i<c.Faces(); i++) {
+	    double k = std::fmod(c.Face(i)[2]-h0,h1);
+	    if (k==0) {
+		int l = (c.Face(i)[2]-h0) / h1;
+		if (c()[2] < h0+l*h1 && c()[2] > h0) {
+		    out << "3 ";
+		    for (int j=0; j<c.FaceCorners(i); j++) {
+			out << vs.find(c.FaceCorner(i,j))->second._part() << " ";
+		    }
+		    out << endl;
+		}
+	    }
+	}
+    }
     out.close();
+}
+
+void mesh_coarsing () {
     
-    /*
-    std::ofstream out;
-    out.open("./solver/conf/geo/test.poly");
-    
-    out << "# Part 1 - node list" << endl;
-    out << "# node count, 3 dim, no attribute, no boundary marker" << endl;
-    out << M.fine().BoundaryFaces::size()*3 << " 3 0 0" << endl;
-    out << "# Node index, node coordinates" << endl;
-    int n = 0;
-    for (bnd_face bf=M.fine().bnd_faces(); bf!=M.fine().bnd_faces_end(); bf++) {
-	if (M.fine().find_face(bf()).Left()==Infty) {
-	    cell c = M.fine().find_cell(M.fine().find_face(bf()).Right());
-	    for (int i=0; i<c.Faces(); i++) {
-		if (c.Face(i)==bf()) {
-		    for (int j=0; j<c.FaceCorners(i); j++) {
-			n++;
-			out << n
-			    << " " << c.FaceCorner(i,j)[0]
-			    << " " << c.FaceCorner(i,j)[1]
-			    << " " << c.FaceCorner(i,j)[2]
-			    << endl;
-		    }
-		}
-	    }
-	}
-	else if (M.fine().find_face(bf()).Right()==Infty) {
-	    cell c = M.fine().find_cell(M.fine().find_face(bf()).Left());
-	    for (int i=0; i<c.Faces(); i++) {
-		if (c.Face(i)==bf()) {
-		    for (int j=0; j<c.FaceCorners(i); j++) {
-			n++;
-			out << n
-			    << " " << c.FaceCorner(i,j)[0]
-			    << " " << c.FaceCorner(i,j)[1]
-			    << " " << c.FaceCorner(i,j)[2]
-			    << endl;
-		    }
-		}
-	    }
-	}
-    }
+    Date Start;
+    string name = "UnitCube";
+    ReadConfig(Settings, "Mesh", name);
+    Meshes M(name.c_str());
+    int dim = M.dim();
+    mout << M.fine().Cells::size() << endl;
 
-    out << "# Part 2 - facet list" << endl;
-    out << "# facet count, no boundary marker" << endl;
-    out << M.fine().BoundaryFaces::size() << " 0" << endl;
-    out << "# facets" << endl;
-    for (int i=0; i<M.fine().BoundaryFaces::size(); i++) {
-	out << 1 << endl;
-	out << "3 " << 1+i*3 << " " << 2+i*3 << " " << 3+i*3 << endl;
-    }
+    Discretization disc(dim);
+    MatrixGraphs G(M, disc);
+    Vector x(G.fine());
+    x = 0;
+    Plot P(M.fine());
+    P.vertexdata(x,dim);
+    P.vtk_vertexdata("meshcoarsing",0,0);
 
-    out << "# Part 3 - hole list" << endl;
-    out << "0 # no hole" << endl;
+    /* polygon coarsing */
+    double h0 = 2;
+    double h1 = 1;
+    ReadConfig(Settings, "h0", h0);
+    ReadConfig(Settings, "h1", h1);
+    Vertices vs;
+    get_bnd_vertices (vs, M);
+    get_slices_vertices (vs, M, h0, h1);
+    set_vertices_ordering (vs);
+    export_to_off (vs, M, h0, h1);
 
-    out << "# Part 4 - region list" << endl;
-    out << "0 # no region" << endl;
-    */
-
-
-
-
-
-
-
-
-
-
-
-
-
+    /* remeshing with the constraints */
+    string flags = "pkYa5";
+    ReadConfig(Settings, "tetgenflags", flags);
     tetgenio tin, tout, addin, bgmin;
     tin.load_off("./solver/conf/geo/test");
-    tetrahedralize("pkYa5", &tin, NULL);
+    tetrahedralize(const_cast<char*>(flags.c_str()), &tin, NULL);
 
     return;
-    //out.save_nodes("barout");
-    //out.save_elements("barout");
-    //out.save_faces("barout");
-    //out.save_poly("barout");
 }
