@@ -116,7 +116,7 @@ void export_to_off (Vertices& vs, const Meshes& M, double h0, double h1) {
 void mesh_coarsing () {
     
     Date Start;
-    string name = "UnitCube";
+    /*    string name = "UnitCube";
     ReadConfig(Settings, "Mesh", name);
     Meshes M(name.c_str());
     int dim = M.dim();
@@ -128,9 +128,9 @@ void mesh_coarsing () {
     x = 0;
     Plot P(M.fine());
     P.vertexdata(x,dim);
-    P.vtk_vertexdata("meshcoarsing",0,0);
+    P.vtk_vertexdata("thinmesh",0,0);
 
-    /* polygon coarsing */
+    // polygon coarsing 
     double h0 = 2;
     double h1 = 1;
     ReadConfig(Settings, "h0", h0);
@@ -141,12 +141,35 @@ void mesh_coarsing () {
     set_vertices_ordering (vs);
     export_to_off (vs, M, h0, h1);
 
-    /* remeshing with the constraints */
+    // remeshing with the constraints 
     string flags = "pkYa5";
     ReadConfig(Settings, "tetgenflags", flags);
     tetgenio tin, tout, addin, bgmin;
     tin.load_off("./solver/conf/geo/test");
     tetrahedralize(const_cast<char*>(flags.c_str()), &tin, NULL);
+    */
 
+    
+    Meshes M2("thinwall");
+    Discretization disc2linear(M2.dim());
+    MatrixGraphs G2linear(M2, disc2linear);
+    Vector x2linear(G2linear.fine());
+    x2linear = 0;
+    mout << x2linear.size() << endl;
+
+    Discretization disc2cell("cell",1);
+    MatrixGraphs G2cell(M2, disc2cell);
+    Vector x2cell(G2cell.fine());
+    x2cell = PPM->proc();
+    mout << x2cell.size() << endl;
+
+
+    Plot P2(M2.fine(),3,1);
+    P2.vertexdata(x2linear,M2.dim());
+    P2.vtk_vertexdata("mesh_parallel",0,0);
+
+    P2.celldata(x2cell,1);
+    P2.vtk_celldata("mesh_parallel",0,0);
+    
     return;
 }
