@@ -157,7 +157,9 @@ class Plot {
     void vtk_2d_graph (ostream& out, int k =0);
  public:
     void vtk_vertex_vector (const char* name, int k = 0, int deformed = 0);
-    
+
+    void vtk_mesh (const char* name, int k = 0, bool deformed = false);
+  
     void vtk_vertexdata (const char* name, int k = 0, bool deformed = false);
 
     void vtk_vertexdata_smoothing (const char* name, int k = 0, bool deformed = false);

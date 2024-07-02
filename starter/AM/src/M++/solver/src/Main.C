@@ -19,6 +19,8 @@ void TElastoPlasticity2Main ();
 
 void inp2geo ();
 void mesh_coarsing ();
+void mesh_adaptive ();
+void mesh_partitioning ();
 
 int main (int argc, char** argv) {
     DPO dpo(&argc,&argv);
@@ -34,5 +36,7 @@ int main (int argc, char** argv) {
     if (Model == "TElastoPlasticity2") TElastoPlasticity2Main();
     if (Model == "inp2geo") inp2geo();
     if (Model == "meshcoarsing") mesh_coarsing();
+    if (Model == "meshadaptive") mesh_adaptive();
+    if (Model == "meshpartitioning") mesh_partitioning();
     return 0;
 }

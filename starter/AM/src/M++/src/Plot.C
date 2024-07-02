@@ -555,6 +555,13 @@ void Plot::vtk_vertex_vector(const char* name, int k, int deformed) {
     vtk_vector(out,k);
 }
 
+void Plot::vtk_mesh(const char* name, int k, bool deformed) {
+    if (!PPM->master()) return;
+    string filename = string("data/vtk/") + name + string(".vtk");  
+    M_ofstream out(filename.c_str());  
+    vtk_mesh(out, deformed);
+}
+
 void Plot::vtk_vertexdata(const char* name, int k, bool deformed) {
     if (!PPM->master()) return;
     string filename = string("data/vtk/") + name + string(".vtk");  
