@@ -116,6 +116,15 @@ void export_to_off (Vertices& vs, const Meshes& M, double h0, double h1) {
 
 void vtk2geo ();
 
+void meshing () {
+    string flags = "pkYa1";
+    ReadConfig(Settings, "tetgenflags", flags);
+    mout << flags << endl;
+    tetgenio tin, tout, addin, bgmin;
+    tin.load_off("./solver/conf/geo/tetgen_test_1");
+    tetrahedralize(const_cast<char*>(flags.c_str()), &tin, NULL);
+}
+
 void mesh_coarsing () {    
     Date Start;
     string name = "UnitCube";

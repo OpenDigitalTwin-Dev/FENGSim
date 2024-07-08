@@ -23,6 +23,8 @@
 \contentsline {subsubsection}{\numberline {1.2.1.1}数据结构和算法}{21}{}%
 \contentsline {subsubsection}{\numberline {1.2.1.2}算例}{21}{}%
 \contentsline {chapter}{\numberline {2}网格自适应性}{25}{}%
+\contentsline {section}{\numberline {2.1}网格自适应加密放粗}{25}{}%
+\contentsline {section}{\numberline {2.2}层网格自适应加密放粗}{25}{}%
 \contentsline {chapter}{\numberline {3}网格并行}{27}{}%
 \contentsline {section}{\numberline {3.1}Metis}{27}{}%
 \contentsline {chapter}{\numberline {4}残余应力和变形}{29}{}%
