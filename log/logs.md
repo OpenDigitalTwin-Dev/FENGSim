@@ -2,6 +2,22 @@
 <img decoding="async" src="../image/log/1.jpg" width="600">
 </div>
 
+
+# eigen (ok)
+# fmt        an open-source library that provides a fast and safe alternative to C stdio and C++ iostreams. 
+# gslib      sparse communication library
+# hypre (ok)
+# json
+# libceed (ok)    code for Efficient Extensible Discretizations
+# libxsmm    LIBXSMM is a library for specialized dense and sparse matrix operations as well as for deep learning primitives such as small convolutions. 
+# metis (ok)
+# mfem (ok)
+# parmetis
+# petsc (ok)
+# slepc
+# superlu (ok)
+
+
 ## FENGSim
    * qt5->qt6 (...)
    * vtk8->vtk9 (...)
