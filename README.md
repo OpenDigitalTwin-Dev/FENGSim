@@ -22,7 +22,7 @@ To launch the Qt project for FENGSim:
 ```
 
 <div align="center">
-<img decoding="async" src="/image/log/1.jpg" width="400">
+<img decoding="async" src="/image/log/1.jpg" width="450">
 </div>
 
 # Solutions
