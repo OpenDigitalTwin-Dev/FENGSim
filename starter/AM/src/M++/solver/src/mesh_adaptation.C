@@ -127,12 +127,12 @@ void meshing () {
     tetrahedralize(const_cast<char*>("pk"), &tin, NULL, &addin);
 
     mout << " *** test adaptive by .vol *** " << endl << endl;
-    tin2.load_tetmesh("tetgen-tmpfile.1",tetgenbehavior::MESH);
+    tin2.load_tetmesh("./solver/conf/geo/tetgen-tmpfile.1",tetgenbehavior::MESH);
     tetrahedralize(const_cast<char*>("pkra"), &tin2, NULL);
 
     mout << " *** test adaptive by .mtr *** " << endl << endl;
-    tin3.load_poly("A");
-    tin3.load_mtr("A");
+    tin3.load_poly("./solver/conf/geo/A");
+    tin3.load_mtr("./solver/conf/geo/A");
     tetrahedralize(const_cast<char*>("pkqm"), &tin3, NULL);
 }
 
