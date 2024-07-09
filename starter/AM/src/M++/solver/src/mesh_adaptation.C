@@ -120,9 +120,20 @@ void meshing () {
     string flags = "pkYa1";
     ReadConfig(Settings, "tetgenflags", flags);
     mout << flags << endl;
-    tetgenio tin, tout, addin, bgmin;
+    tetgenio tin, tin2, tin3, tout, addin, bgmin;
     tin.load_off("./solver/conf/geo/tetgen_test_1");
-    tetrahedralize(const_cast<char*>(flags.c_str()), &tin, NULL);
+    addin.load_node("./solver/conf/geo/tetgen_test_1_add");
+    //tetrahedralize(const_cast<char*>("pki"), &tin, NULL, &addin);
+    tetrahedralize(const_cast<char*>("pk"), &tin, NULL, &addin);
+
+    mout << " *** test adaptive by .vol *** " << endl << endl;
+    tin2.load_tetmesh("tetgen-tmpfile.1",tetgenbehavior::MESH);
+    tetrahedralize(const_cast<char*>("pkra"), &tin2, NULL);
+
+    mout << " *** test adaptive by .mtr *** " << endl << endl;
+    tin3.load_poly("A");
+    tin3.load_mtr("A");
+    tetrahedralize(const_cast<char*>("pkqm"), &tin3, NULL);
 }
 
 void mesh_coarsing () {    
