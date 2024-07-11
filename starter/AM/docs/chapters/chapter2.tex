@@ -15,5 +15,105 @@ hierarchic methods（继承方法）、多重网格、非协调和重叠方法�
   \label{fig:2-1}
 \end{figure}
 
+以Tetgen为例测试局部加密放粗。第一个例子是通过插入点进行加密，第二个例子是通过设置单元大小进行加密，第三个例子是通过设置顶点网格密度进行加密。第一个例子通过.off格式文件读入
+多面体，同时通过.node格式文件读入插入点，需要在操作命令序列中设置i命令。第二个例子需要读入网格文件，包括单元、面、边、点，同时通过.vol格式文件读入单元大小，需要注意的是操作命令序列中需要先设置r命令再设置a命令，设置r才会读入.vol文件，设置a会按照单元大小加密。第三个例子通过.poly格式文件读入多面体，同时通过.mtr格式文件读入顶点网格密度，需要在操作命令序列中设置m命令。
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/2/2.png}
+  \caption{例一：原始网格}
+  \label{fig:2-1}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/2/3.png}
+  \caption{例一：插入1个点进行加密}
+  \label{fig:2-1}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/2/4.png}
+  \caption{例一：插入7个点进行加密}
+  \label{fig:2-1}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/2/5.png}
+  \caption{例一：原始网格一致加密后（pka0.001i），插入7个点再加密}
+  \label{fig:2-1}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/2/6.png}
+  \caption{例一：原始网格一致加密后（pka0.001i），插入7个点再加密}
+  \label{fig:2-1}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/2/7.png}
+  \caption{例二：原始网格，有三个单元}
+  \label{fig:2-1}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/2/8.png}
+  \caption{例二：将第三个单元大小设置为0.1}
+  \label{fig:2-1}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/2/9.png}
+  \caption{例二：将第三个单元大小设置为0.01}
+  \label{fig:2-1}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/2/10.png}
+  \caption{例二：将第三个单元大小设置为0.001}
+  \label{fig:2-1}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/2/11.png}
+  \caption{例二：将第三个单元大小设置为0.0001}
+  \label{fig:2-1}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/2/12.png}
+  \caption{例三：原始网格，一共五个顶点}
+  \label{fig:2-1}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/2/13.png}
+  \caption{例三：将所有顶点网格密度设置为0.25}
+  \label{fig:2-1}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/2/14.png}
+  \caption{例三：将第一个顶点网格密度设置为0.05}
+  \label{fig:2-1}
+\end{figure}
+
+\begin{figure}[!htbp]
+  \centering
+  \includegraphics[height=3cm]{fig/2/15.png}
+  \caption{例三：将第一个顶点网格密度设置为0.01}
+  \label{fig:2-1}
+\end{figure}
 
 \section{层网格自适应加密放粗}

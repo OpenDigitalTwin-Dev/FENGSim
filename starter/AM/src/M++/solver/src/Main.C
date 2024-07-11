@@ -18,7 +18,7 @@ void TElasticityMain ();
 void TElastoPlasticity2Main ();
 
 void inp2geo ();
-void meshing ();
+void mesh_adaptive_test ();
 void mesh_coarsing ();
 void mesh_adaptive ();
 void mesh_partitioning ();
@@ -39,6 +39,6 @@ int main (int argc, char** argv) {
     if (Model == "meshcoarsing") mesh_coarsing();
     if (Model == "meshadaptive") mesh_adaptive();
     if (Model == "meshpartitioning") mesh_partitioning();
-    if (Model == "meshing") meshing();
+    if (Model == "meshadaptivetest") mesh_adaptive_test();
     return 0;
 }

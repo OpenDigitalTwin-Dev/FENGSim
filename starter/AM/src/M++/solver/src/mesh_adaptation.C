@@ -116,24 +116,35 @@ void export_to_off (Vertices& vs, const Meshes& M, double h0, double h1) {
 
 void vtk2geo ();
 
-void meshing () {
-    string flags = "pkYa1";
-    ReadConfig(Settings, "tetgenflags", flags);
-    mout << flags << endl;
-    tetgenio tin, tin2, tin3, tout, addin, bgmin;
-    tin.load_off("./solver/conf/geo/tetgen_test_1");
-    addin.load_node("./solver/conf/geo/tetgen_test_1_add");
-    //tetrahedralize(const_cast<char*>("pki"), &tin, NULL, &addin);
-    tetrahedralize(const_cast<char*>("pk"), &tin, NULL, &addin);
+void mesh_adaptive_test () {
+    int test_id = 1;
+    ReadConfig(Settings, "test_id", test_id);
+    
+    tetgenio tin, tin2, tin3, tin4, tout, addin, addin4, bgmin;
 
-    mout << " *** test adaptive by .vol *** " << endl << endl;
-    tin2.load_tetmesh("./solver/conf/geo/tetgen-tmpfile.1",tetgenbehavior::MESH);
-    tetrahedralize(const_cast<char*>("pkra"), &tin2, NULL);
-
-    mout << " *** test adaptive by .mtr *** " << endl << endl;
-    tin3.load_poly("./solver/conf/geo/A");
-    tin3.load_mtr("./solver/conf/geo/A");
-    tetrahedralize(const_cast<char*>("pkqm"), &tin3, NULL);
+    if (test_id==1) {
+	mout << endl << " ***** test adaptive by inserting points ***** " << endl << endl;
+	tin.load_off("./solver/conf/geo/tetgen_test_1");
+	addin.load_node("./solver/conf/geo/tetgen_test_1_add");
+	tetrahedralize("pki", &tin, NULL, &addin);
+    }
+    else if (test_id==2) {
+	mout << endl << " ***** test adaptive by .vol ***** " << endl << endl;
+	tin2.load_tetmesh("./solver/conf/geo/tetgen_test_2",tetgenbehavior::MESH);
+	tetrahedralize("pkra", &tin2, NULL);
+    }
+    else if (test_id==3) {
+	mout << endl << " ***** test adaptive by .mtr ***** " << endl << endl;
+	tin3.load_poly("./solver/conf/geo/tetgen_test_3");
+	tin3.load_mtr("./solver/conf/geo/tetgen_test_3");
+	tetrahedralize("pkqm", &tin3, NULL);
+    }
+    else if (test_id==4) {
+	mout << endl << " ***** test crack adaptive by inserting points ***** " << endl << endl;
+	tin4.load_poly("./solver/conf/geo/tetgen_test_4");
+	addin4.load_node("./solver/conf/geo/tetgen_test_4_add");
+	tetrahedralize("pkqa0.01i", &tin4, NULL, &addin4);
+    }
 }
 
 void mesh_coarsing () {    

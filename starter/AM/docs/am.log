@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2024.4.15)  8 JUL 2024 15:28
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2024.4.15)  11 JUL 2024 15:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -939,6 +939,48 @@ LaTeX Warning: Label `fig:1-7' multiply defined.
 LaTeX Warning: Label `fig:1-7' multiply defined.
 
 
+LaTeX Warning: Label `fig:2-1' multiply defined.
+
+
+LaTeX Warning: Label `fig:2-1' multiply defined.
+
+
+LaTeX Warning: Label `fig:2-1' multiply defined.
+
+
+LaTeX Warning: Label `fig:2-1' multiply defined.
+
+
+LaTeX Warning: Label `fig:2-1' multiply defined.
+
+
+LaTeX Warning: Label `fig:2-1' multiply defined.
+
+
+LaTeX Warning: Label `fig:2-1' multiply defined.
+
+
+LaTeX Warning: Label `fig:2-1' multiply defined.
+
+
+LaTeX Warning: Label `fig:2-1' multiply defined.
+
+
+LaTeX Warning: Label `fig:2-1' multiply defined.
+
+
+LaTeX Warning: Label `fig:2-1' multiply defined.
+
+
+LaTeX Warning: Label `fig:2-1' multiply defined.
+
+
+LaTeX Warning: Label `fig:2-1' multiply defined.
+
+
+LaTeX Warning: Label `fig:2-1' multiply defined.
+
+
 LaTeX Warning: Label `tab:4.1.3:1' multiply defined.
 
 
@@ -1353,13 +1395,42 @@ File: fig/1/1.2/14.png Graphic file (type bmp)
 Chapter 2.
 File: fig/2/1.png Graphic file (type bmp)
 <fig/2/1.png>
-) (./chapters/chapter3.tex [25
+[25
 
-] [26
+]
+File: fig/2/2.png Graphic file (type bmp)
+<fig/2/2.png>
+File: fig/2/3.png Graphic file (type bmp)
+<fig/2/3.png>
+File: fig/2/4.png Graphic file (type bmp)
+<fig/2/4.png>
+File: fig/2/5.png Graphic file (type bmp)
+<fig/2/5.png>
+File: fig/2/6.png Graphic file (type bmp)
+<fig/2/6.png>
+File: fig/2/7.png Graphic file (type bmp)
+<fig/2/7.png>
+File: fig/2/8.png Graphic file (type bmp)
+<fig/2/8.png>
+File: fig/2/9.png Graphic file (type bmp)
+<fig/2/9.png>
+File: fig/2/10.png Graphic file (type bmp)
+<fig/2/10.png>
+File: fig/2/11.png Graphic file (type bmp)
+<fig/2/11.png>
+File: fig/2/12.png Graphic file (type bmp)
+<fig/2/12.png>
+File: fig/2/13.png Graphic file (type bmp)
+<fig/2/13.png>
+File: fig/2/14.png Graphic file (type bmp)
+<fig/2/14.png>
+File: fig/2/15.png Graphic file (type bmp)
+<fig/2/15.png>
+) (./chapters/chapter3.tex [26] [27] [28] [29] [30
 
 ]
 Chapter 3.
-) (./chapters/chapter4.tex [27] [28
+) (./chapters/chapter4.tex [31] [32
 
 ]
 Chapter 4.
@@ -1376,35 +1447,35 @@ File: fig/4/6.png Graphic file (type bmp)
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [29]
-[30] [31]
+ [33]
+[34] [35]
 File: fig/4/fig:1.1.1:1.png Graphic file (type bmp)
 <fig/4/fig:1.1.1:1.png>
- [32]
+ [36]
 File: fig/4/fig:1.1.1:2.png Graphic file (type bmp)
 <fig/4/fig:1.1.1:2.png>
- [33] [34]
+ [37] [38]
 File: fig/4/fig:1.1.1:2.png Graphic file (type bmp)
 <fig/4/fig:1.1.1:2.png>
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [35]
+ [39]
 File: fig/4/fig:1.1.1:2.png Graphic file (type bmp)
 <fig/4/fig:1.1.1:2.png>
 
-[36]
+[40]
 File: fig/4/4.1.3:1.png Graphic file (type bmp)
 <fig/4/4.1.3:1.png>
- [37]
+ [41]
 File: fig/4/4.1.3:2.png Graphic file (type bmp)
 <fig/4/4.1.3:2.png>
- [38]
+ [42]
 File: fig/4/4.1.4/1.png Graphic file (type bmp)
 <fig/4/4.1.4/1.png>
 File: fig/4/4.1.4/2.png Graphic file (type bmp)
 <fig/4/4.1.4/2.png>
- [39] [40]
+ [43] [44]
 File: fig/4/4.1.4/3.png Graphic file (type bmp)
 <fig/4/4.1.4/3.png>
 File: fig/4/4.1.4/4.png Graphic file (type bmp)
@@ -1441,7 +1512,7 @@ File: fig/4/4.1.5/10.png Graphic file (type bmp)
 <fig/4/4.1.5/10.png>
 File: fig/4/4.1.5/10-1.png Graphic file (type bmp)
 <fig/4/4.1.5/10-1.png>
-) [41] [42] [43] [44] [45] (./am.bbl [46
+) [45] [46] [47] [48] [49] (./am.bbl [50
 
 
 ]
@@ -1450,7 +1521,7 @@ Underfull \hbox (badness 2521) in paragraph at lines 14--17
 ied Schwarzkopf.
  []
 
-) [47] (./am.aux)
+) [51] (./am.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
@@ -1459,12 +1530,12 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 16858 strings out of 477728
- 406127 string characters out of 5842238
- 724720 words of memory out of 5000000
- 37159 multiletter control sequences out of 15000+600000
+ 16956 strings out of 477728
+ 407793 string characters out of 5842238
+ 724721 words of memory out of 5000000
+ 37257 multiletter control sequences out of 15000+600000
  510619 words of font info for 143 fonts, out of 8000000 for 9000
  264 hyphenation exceptions out of 8191
  89i,21n,97p,1238b,544s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on am.pdf (47 pages).
+Output written on am.pdf (51 pages).
