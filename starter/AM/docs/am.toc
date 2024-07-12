@@ -24,7 +24,7 @@
 \contentsline {subsubsection}{\numberline {1.2.1.2}算例}{21}{}%
 \contentsline {chapter}{\numberline {2}网格自适应性}{25}{}%
 \contentsline {section}{\numberline {2.1}网格自适应加密放粗}{25}{}%
-\contentsline {section}{\numberline {2.2}层网格自适应加密放粗}{29}{}%
+\contentsline {section}{\numberline {2.2}层网格自适应加密放粗}{30}{}%
 \contentsline {chapter}{\numberline {3}网格并行}{31}{}%
 \contentsline {section}{\numberline {3.1}Metis}{31}{}%
 \contentsline {chapter}{\numberline {4}残余应力和变形}{33}{}%

@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2024.4.15)  11 JUL 2024 15:20
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2024.4.15)  12 JUL 2024 14:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -981,6 +981,12 @@ LaTeX Warning: Label `fig:2-1' multiply defined.
 LaTeX Warning: Label `fig:2-1' multiply defined.
 
 
+LaTeX Warning: Label `fig:2-1' multiply defined.
+
+
+LaTeX Warning: Label `fig:2-1' multiply defined.
+
+
 LaTeX Warning: Label `tab:4.1.3:1' multiply defined.
 
 
@@ -1426,11 +1432,15 @@ File: fig/2/14.png Graphic file (type bmp)
 <fig/2/14.png>
 File: fig/2/15.png Graphic file (type bmp)
 <fig/2/15.png>
-) (./chapters/chapter3.tex [26] [27] [28] [29] [30
-
-]
+File: fig/2/16.png Graphic file (type bmp)
+<fig/2/16.png>
+File: fig/2/17.png Graphic file (type bmp)
+<fig/2/17.png>
+) (./chapters/chapter3.tex [26] [27] [28] [29] [30]
 Chapter 3.
-) (./chapters/chapter4.tex [31] [32
+) (./chapters/chapter4.tex [31
+
+] [32
 
 ]
 Chapter 4.
@@ -1530,10 +1540,10 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 16956 strings out of 477728
- 407793 string characters out of 5842238
+ 16970 strings out of 477728
+ 408039 string characters out of 5842238
  724721 words of memory out of 5000000
- 37257 multiletter control sequences out of 15000+600000
+ 37271 multiletter control sequences out of 15000+600000
  510619 words of font info for 143 fonts, out of 8000000 for 9000
  264 hyphenation exceptions out of 8191
  89i,21n,97p,1238b,544s stack positions out of 5000i,500n,10000p,200000b,80000s

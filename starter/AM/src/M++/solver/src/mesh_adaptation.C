@@ -120,7 +120,7 @@ void mesh_adaptive_test () {
     int test_id = 1;
     ReadConfig(Settings, "test_id", test_id);
     
-    tetgenio tin, tin2, tin3, tin4, tout, addin, addin4, bgmin;
+    tetgenio tin, tin2, tin3, tin4, tin5, tin6, tout, addin, addin4, bgmin;
 
     if (test_id==1) {
 	mout << endl << " ***** test adaptive by inserting points ***** " << endl << endl;
@@ -143,7 +143,19 @@ void mesh_adaptive_test () {
 	mout << endl << " ***** test crack adaptive by inserting points ***** " << endl << endl;
 	tin4.load_poly("./solver/conf/geo/tetgen_test_4");
 	addin4.load_node("./solver/conf/geo/tetgen_test_4_add");
-	tetrahedralize("pkqa0.01i", &tin4, NULL, &addin4);
+	tetrahedralize("pkqa0.0001i", &tin4, NULL, &addin4);
+    }
+    else if (test_id==5) {
+	mout << endl << " ***** test coarsing by removing points ***** " << endl << endl;
+	tin5.load_tetmesh("./solver/conf/geo/tetgen_test_5",tetgenbehavior::MESH);
+	tin5.load_node("./solver/conf/geo/tetgen_test_5");
+	tetrahedralize("kr", &tin5, NULL);
+    }
+    else if (test_id==6) {
+	mout << endl << " ***** test adaptive with constraints by .mtr ***** " << endl << endl;
+	tin6.load_poly("./solver/conf/geo/tetgen_test_6");
+	tin6.load_mtr("./solver/conf/geo/tetgen_test_6");
+	tetrahedralize("pkqm", &tin6, NULL);
     }
 }
 
