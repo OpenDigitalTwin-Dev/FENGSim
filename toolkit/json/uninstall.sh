@@ -1,4 +1,4 @@
 #!/bin/sh
 
-rm -rf build
+rm -rf json
 rm -rf $PWD/../install/json_install
