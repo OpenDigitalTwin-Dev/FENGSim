@@ -1,2 +1,0 @@
-bool SegmentIntersection (double* x);		
-

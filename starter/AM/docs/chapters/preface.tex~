@@ -1,9 +1,0 @@
-\chapter*{前言}
-\addcontentsline{toc}{chapter}{前言}\\
-
-本书主要介绍了基于开源有限元软件FEniCS开发金属切削PFEM求解器。
-
-\vspace{1cm}
-
-\noindent
-    {\it Beijing and Smögen, November 2016} \hfill  {\it Jiping Xin, Anders Logg}
