@@ -1,0 +1,8 @@
+sudo apt -y install cmake make gcc g++
+sudo apt -y install catch catch2
+
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../install/indexingcsvparser_install
+make -j4
+make install
