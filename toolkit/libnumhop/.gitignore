@@ -1,0 +1,5 @@
+*~
+*.pro.user*
+*.a
+test/Catch
+build

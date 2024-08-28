@@ -1,0 +1,40 @@
+# Use trusty instead of obsolete precise
+dist: trusty
+sudo: required
+
+# Enable C++ support
+language: cpp
+
+# Compiler selection
+compiler:
+  - gcc
+  - clang
+  
+# Build steps
+script:
+  - mkdir -p build
+  - cd build
+  - cmake .. && make
+  - ctest
+
+# Coverity scan related settings
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "d60OlVwC0TE6lpsMITkiK6ZmKaIssihnmiKrtKz29JUV14YMFXob0RSCgYLCPolQQleRPiUMhhLwidkTdHkcjKZWSqogCQ8F7fkDWSYAzRY0Xj/qGr7DUnnMx1U+alSFbIstahrNHrMXpGB/aLPo5MFvR7C9OSb6XR+mdIFgbesIlBu1ZdDW0uB/yZtPUlvZ1NMBedEto+jV13c4hZsHZ6FbD1E/W4G3oF3LmuUyHzT7wBhGyV7UOxQv3mmelnquVMeFpm9bEq0EW2aCdHoYAbT90PWReqjtNqVfcZ9PBHTm+v3oTGpVq9SO7WXqbBoH1LbQUQZLCltfJfxzZN66lBe1aB4zCtGfpD/yex/zb4j1GbGlt6rMpNW7D8ML6Xoj/HG6JbJ3BdXwh9SLR5EL8ZzMKUdkVXXdmVcGjNuVZAV14rRSdexugcxhpUU7+QdWxRL/Tnd330RwWI0/ff+aRJauu5sQfly9f7FfbFd4ndikWSu0EpFVTiIf+rm5Z8oaO23RCEZ+Dtre2tufFB0gt8rdUEK/vY/EGdfdF4DFuP1nV9ziAbrEyqVq1G9z0tYWFOHA+2ldjesCpM9YPW2fmQ4IMZgJ1JCrL/Yje1i0g4Ih4LJcELTeaEXfBeqs/snqjXcw3N/gjhLREdEhv93H291xOOc30Lb9XWkXZY03CHA="
+   # Notification email
+   - secure: "z+E5wp7ft5uKfXuC62APN2BcHKaBwgjJVkN6+aSsJuIi0uMPLMx3Qr4P6W9YSm2MNcsBLvusxHtPIi9DbagXAalEBaqdRygIxe4HsCHeuRqO7OuothH24wX/le0JbcTAL139URjAwko9gCuQMxVxq1xcas93zz6vdOeXjoKW3K8jBzTcZ95q33YQQclNWOd7nrDiYJGxL8k2cgRBpTmXPb0z8UlQk4h/9y59rV0FDK1XDIkWcyk3aXj/0MiSgQkva5HZcluhYzaOkV3Lu0qrZ6gcO5bI49uFc20kmrXUND5cXV8/PLHZVL65zpcGATzd/XPkJMchfeL5LE2hVNKnebPv41iMXXM5Ynfk4dxP/9g3WB66SF4aAeyBzU4J4JGHwDgaQMu0z/pGLqAy7DeGPnzzroFKnMPwJPZ7B0LxH6O4kkOb1InSUANhotpAv11I5j1aQz16eJsxA/yJvUIM7ReflauyHt7HnIxwbClaNCfGZb91too5NADmvPeYE80UmhaqGBHbvUucO8ci6LRkoR+q2zPwlnwq3Thoqy0+YkWDj6005zmtLNzGEk1Hmhin6jVrQcFGOPn0q/xgx7eZCVvkhlvYMZ3cStffirp5O96ssc9n8b9OMdIhrX2gRauK1yHRYUT/qmLgX4AUKQknzfb0t5LLGhY4l9EQP+GU5T8="
+
+before_install:
+  - echo -n | openssl s_client -connect scan.coverity.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+
+addons:
+  coverity_scan:
+    project:
+      name: "peterNordin/libNumHop"
+      description: "Build submitted via Travis CI"
+    notification_email: $NOTIFY_EMAIL
+    build_command_prepend: "mkdir -p build; cd build; cmake ..; make clean"
+    build_command: "make"
+    branch_pattern: coverity_scan
