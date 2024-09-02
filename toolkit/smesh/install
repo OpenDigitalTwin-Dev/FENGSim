@@ -1,4 +1,4 @@
-sudo apt -y install cmake make gcc g++ gcc-9 g++-9 libboost-dev
+sudo apt -y install cmake make gcc g++ gcc-9 g++-9 libboost-dev libsm-dev libx11-dev libxext-dev libgl-dev libglu1-mesa-dev libfreetype-dev
 sudo apt -y install p7zip-full
 
 rm -rf test
