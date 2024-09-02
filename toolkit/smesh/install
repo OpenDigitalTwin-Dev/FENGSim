@@ -1,0 +1,11 @@
+sudo apt -y install cmake make gcc g++ gcc-9 g++-9 libboost-dev
+sudo apt -y install p7zip-full
+
+rm -rf test
+7za x $PWD/test.7z -o/$PWD/
+
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../install/smesh_install -DOCE_DIR=$PWD/../../install/oce_install/lib/oce-0.18 -DCMAKE_CXX_COMPILER=/usr/bin/g++-9
+make -j4
+make install
