@@ -117,6 +117,25 @@ void CGAL_MeshGeneration_2() {
     mesher.refine_mesh();
     CGAL::lloyd_optimize_mesh_2(T,CGAL::parameters::max_iteration_number = 10);
     CGAL_ExportTriangulation_2<CDT>(T, "./../data/output/cgal_2_4.vtk");
+
+	// pay attention
+	// the boundary should also be constraints.
+
+	
+	// fracture
+	/*
+	for (int i=0; i<10; i++) {
+		std::cout << 0.1+0.03+0.03*cos(2*3.1415926/10*i) << " " << 0.5+0.03*sin(2*3.1415926/10*i)
+				  << " "
+				  << 0.1+0.03+0.03*cos(2*3.1415926/10*(i+1)) << " " << 0.5+0.03*sin(2*3.1415926/10*(i+1))
+				  << std::endl; 
+	}
+	for (int i=0; i<11; i++) {
+		std::cout << 0.1+0.03 << " " << 0.5
+				  << " "
+				  << 0.1+0.03+0.03*cos(2*3.1415926/10*i) << " " << 0.5+0.03*sin(2*3.1415926/10*i)
+				  << std::endl; 
+				  }*/
 }
 
 #include <CGAL/Triangulation_3.h>
