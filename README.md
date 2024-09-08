@@ -41,7 +41,11 @@ To launch the Qt project for FENGSim:
 
 ## Additive Manufacturing
 <div align="center">
-<img decoding="async" src="image/4.jpg" width="1800">
+<img decoding="async" src="image/4.1.6.16.png" width="1800">
+</div>
+
+<div align="center">
+<img decoding="async" src="image/4.1.6.10.png" width="1800">
 </div>
 
 ## Composite Materials
