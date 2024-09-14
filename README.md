@@ -40,15 +40,17 @@ To launch the Qt project for FENGSim:
 </div>
 
 ## Additive Manufacturing
-<div align="center">
-<img decoding="async" src="image/4.1.6.16.png" width="1800">
-</div>
 
 <div align="center">
 <img decoding="async" src="image/4.1.6.10.png" width="1800">
 </div>
 
+<div align="center">
+<img decoding="async" src="image/4.1.6.16.png" width="1800">
+</div>
+
 ## Composite Materials
+
 <div align="center">
 <img decoding="async" src="image/5.jpg" width="1800">
 </div>
@@ -60,11 +62,13 @@ To launch the Qt project for FENGSim:
 </div>
 
 ## Robotics
+
 <div align="center">
 <img decoding="async" src="image/ros2.jpg" width="1800">
 </div>
 
 ## Metrology
+
 <div align="center">
 <img decoding="async" src="image/8.jpg" width="1800">
 </div>
