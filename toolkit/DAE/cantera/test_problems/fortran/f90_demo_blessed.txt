@@ -1,0 +1,108 @@
+
+ ********   Fortran 90 Test Program   ********
+ Initial state properties:
+
+
+Temperature:       1200.0     K
+Pressure:         0.10132E+06 Pa
+Density:          0.28921     kg/m3
+Molar Enthalpy:   0.23514E+08 J/kmol
+Molar Entropy:    0.20594E+06 J/kmol-K
+Molar cp:          27056.     J/kmol-K
+
+
+ Equilibrium state properties:
+
+
+Temperature:       2800.9     K
+Pressure:         0.10133E+06 Pa
+Density:          0.13658     kg/m3
+Molar Enthalpy:   0.25920E+08 J/kmol
+Molar Entropy:    0.24314E+06 J/kmol-K
+Molar cp:          32363.     J/kmol-K
+
+
+2 O + M <=> O2 + M            0.56821E-02   0.56821E-02  -0.86736E-17 kmol/m3/s
+H + O + M <=> OH + M          0.56583E-02   0.56583E-02   0.86736E-18 kmol/m3/s
+H2 + O <=> H + OH             0.13445E+03   0.13445E+03  -0.34106E-12 kmol/m3/s
+HO2 + O <=> O2 + OH           0.22106E+00   0.22106E+00  -0.10825E-14 kmol/m3/s
+H2O2 + O <=> HO2 + OH         0.14203E-01   0.14203E-01  -0.38164E-16 kmol/m3/s
+H + O2 + M <=> HO2 + M        0.27607E-01   0.27607E-01   0.10755E-15 kmol/m3/s
+H + O2 + O2 <=> HO2 + O2      0.14337E-01   0.14337E-01   0.55511E-16 kmol/m3/s
+H + O2 + H2O <=> HO2 + H2O    0.64778E+00   0.64778E+00   0.25535E-14 kmol/m3/s
+H + O2 + N2 <=> HO2 + N2      0.00000E+00   0.00000E+00   0.00000E+00 kmol/m3/s
+H + O2 + AR <=> HO2 + AR      0.69116E-01   0.69116E-01   0.27756E-15 kmol/m3/s
+H + O2 <=> O + OH             0.14255E+03   0.14255E+03   0.56843E-13 kmol/m3/s
+2 H + M <=> H2 + M            0.15624E-02   0.15624E-02   0.00000E+00 kmol/m3/s
+2 H + H2 <=> H2 + H2          0.88217E-04   0.88217E-04   0.00000E+00 kmol/m3/s
+2 H + H2O <=> H2 + H2O        0.54975E-02   0.54975E-02  -0.86736E-18 kmol/m3/s
+H + OH + M <=> H2O + M        0.13038E+00   0.13038E+00   0.69389E-15 kmol/m3/s
+H + HO2 <=> H2O + O           0.19776E-01   0.19776E-01   0.72858E-16 kmol/m3/s
+H + HO2 <=> H2 + O2           0.20780E+00   0.20780E+00  -0.36082E-15 kmol/m3/s
+H + HO2 <=> 2 OH              0.42115E+00   0.42115E+00  -0.13323E-14 kmol/m3/s
+H + H2O2 <=> H2 + HO2         0.73139E-02   0.73139E-02  -0.86736E-18 kmol/m3/s
+H + H2O2 <=> H2O + OH         0.10271E-02   0.10271E-02   0.00000E+00 kmol/m3/s
+H2 + OH <=> H + H2O           0.22906E+03   0.22906E+03   0.93792E-12 kmol/m3/s
+2 OH (+M) <=> H2O2 (+M)       0.54038E+00   0.54038E+00   0.33307E-15 kmol/m3/s
+2 OH <=> H2O + O              0.37533E+03   0.37533E+03   0.25011E-11 kmol/m3/s
+HO2 + OH <=> H2O + O2         0.40738E+00   0.40738E+00   0.72164E-15 kmol/m3/s
+H2O2 + OH <=> H2O + HO2       0.16600E-02   0.16600E-02   0.69389E-17 kmol/m3/s
+H2O2 + OH <=> H2O + HO2       0.77286E+01   0.77286E+01   0.32863E-13 kmol/m3/s
+2 HO2 <=> H2O2 + O2           0.29976E-05   0.29976E-05  -0.46587E-20 kmol/m3/s
+2 HO2 <=> H2O2 + O2           0.83671E-03   0.83671E-03  -0.14095E-17 kmol/m3/s
+HO2 + OH <=> H2O + O2         0.57067E+01   0.57067E+01   0.97700E-14 kmol/m3/s
+
+
+Viscosity:                0.10415E-03  Pa-s
+Thermal conductivity:     0.16396      W/m/K
+
+ Species Diffusion Coefficient
+ H2                     0.36495E-02 m2/s
+ H                      0.61986E-02 m2/s
+ O                      0.15513E-02 m2/s
+ O2                     0.99488E-03 m2/s
+ OH                     0.15280E-02 m2/s
+ H2O                    0.14315E-02 m2/s
+ HO2                    0.97725E-03 m2/s
+ H2O2                   0.97012E-03 m2/s
+ AR                     0.75972E-03 m2/s
+ N2                     0.97802E-03 m2/s
+ Species molar cp, molar enthalpy, normalized Gibbs free energy
+ H2                      36617.     J/kmol-K   0.81393E+08 J/kmol   -20.604    -
+ H                       20786.     J/kmol-K   0.27002E+09 J/kmol   -7.8028    -
+ O                       20896.     J/kmol-K   0.30159E+09 J/kmol   -12.099    -
+ O2                      39570.     J/kmol-K   0.90189E+08 J/kmol   -30.018    -
+ OH                      36680.     J/kmol-K   0.12182E+09 J/kmol   -25.365    -
+ H2O                     56098.     J/kmol-K  -0.12540E+09 J/kmol   -39.436    -
+ HO2                     59581.     J/kmol-K   0.14047E+09 J/kmol   -34.100    -
+ H2O2                    77993.     J/kmol-K   0.32003E+08 J/kmol   -43.168    -
+ AR                      20786.     J/kmol-K   0.52023E+08 J/kmol   -21.976    -
+ N2                      36896.     J/kmol-K   0.85374E+08 J/kmol   -28.119    -
+
+ ********   Interface Kinetics Test   ********
+
+ Equation                                    Fwd rate      Net rate
+ H2 + 2 PT(S) => 2 H(S)                     0.33954E-01   0.33954E-01
+ 2 H(S) => H2 + 2 PT(S)                     0.00000E+00   0.00000E+00
+ H + PT(S) => H(S)                          0.00000E+00   0.00000E+00
+ O2 + 2 PT(S) => 2 O(S)                     0.16078E-01   0.16078E-01
+ O2 + 2 PT(S) => 2 O(S)                     0.21646E-01   0.21646E-01
+ 2 O(S) => O2 + 2 PT(S)                     0.15097E-07   0.15097E-07
+ O + PT(S) => O(S)                          0.00000E+00   0.00000E+00
+ H2O + PT(S) => H2O(S)                      0.36181E+00   0.36181E+00
+ H2O(S) => H2O + PT(S)                      0.00000E+00   0.00000E+00
+ OH + PT(S) => OH(S)                        0.00000E+00   0.00000E+00
+ OH(S) => OH + PT(S)                        0.00000E+00   0.00000E+00
+ H(S) + O(S) <=> OH(S) + PT(S)              0.00000E+00   0.00000E+00
+ H(S) + OH(S) <=> H2O(S) + PT(S)            0.00000E+00   0.00000E+00
+ 2 OH(S) <=> H2O(S) + O(S)                  0.00000E+00   0.00000E+00
+ CO + PT(S) => CO(S)                        0.13341E+00   0.13341E+00
+ CO(S) => CO + PT(S)                        0.17716E+00   0.17716E+00
+ CO2(S) => CO2 + PT(S)                      0.00000E+00   0.00000E+00
+ CO(S) + O(S) => CO2(S) + PT(S)             0.13844E-01   0.13844E-01
+ CH4 + 2 PT(S) => CH3(S) + H(S)             0.00000E+00   0.00000E+00
+ CH3(S) + PT(S) => CH2(S)s + H(S)           0.00000E+00   0.00000E+00
+ CH2(S)s + PT(S) => CH(S) + H(S)            0.00000E+00   0.00000E+00
+ CH(S) + PT(S) => C(S) + H(S)               0.00000E+00   0.00000E+00
+ C(S) + O(S) => CO(S) + PT(S)               0.00000E+00   0.00000E+00
+ CO(S) + PT(S) => C(S) + O(S)               0.10900E-06   0.10900E-06

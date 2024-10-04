@@ -1,0 +1,52 @@
+from buildutils import multi_glob, compiler_flag_list
+
+Import('env', 'build', 'install')
+localenv = env.Clone()
+
+# Copy man pages
+if env['INSTALL_MANPAGES']:
+    install('$inst_mandir', multi_glob(localenv, '#platform/posix/man', '*'))
+
+### Generate customized scripts ###
+
+# cantera.pc for use with pkg-config
+
+pc_libs = list(localenv['cantera_shared_libs'])
+pc_libdirs = []
+pc_incdirs = []
+pc_cflags = list(localenv['CXXFLAGS'])
+
+if 'Accelerate' in localenv['FRAMEWORKS']:
+    pc_cflags.append('-framework Accelerate')
+
+if '-pthread' in localenv['thread_flags']:
+    pc_cflags.append('-pthread')
+    pc_libs.append('pthread')
+
+flag_excludes = []
+if localenv["package_build"]:
+    flag_excludes.extend(("-isysroot", "-mmacosx", "-march", "-mtune",
+                          "-fdebug-prefix-map", ".*/_build_env/"))
+else:
+    pc_incdirs.extend(localenv["extra_inc_dirs"])
+    pc_libdirs.extend(localenv["extra_lib_dirs"])
+
+    if localenv['system_sundials'] and localenv["sundials_include"]:
+        pc_incdirs.append(localenv['sundials_include'])
+
+    if localenv["boost_inc_dir"]:
+        pc_incdirs.append(localenv['boost_inc_dir'])
+
+    if localenv["use_hdf5"]:
+        pc_incdirs.append(localenv["hdf_include"])
+
+pc_cflags.extend(f"-isystem {dir}" for dir in pc_incdirs if dir)
+
+# Generate cantera.pc for use with pkg-config
+localenv["pc_prefix"] = localenv["prefix"]
+localenv["pc_libdirs"] = " ".join(f"-L{dir}" for dir in pc_libdirs if dir)
+localenv["pc_libs"] = " ".join(f"-l{lib}" for lib in pc_libs)
+localenv["pc_cflags"] = " ".join(compiler_flag_list(pc_cflags, env["CC"], flag_excludes))
+
+pc = build(localenv.SubstFile("cantera.pc", "cantera.pc.in"))
+install("$inst_libdir/pkgconfig", pc)

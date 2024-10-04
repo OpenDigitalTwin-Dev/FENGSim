@@ -1,0 +1,77 @@
+[metadata]
+name = Cantera
+version = @cantera_version@
+description = Cantera is an open-source suite of tools for problems involving chemical kinetics, thermodynamics, and transport processes.
+long_description = file: README.rst
+long_description_content_type = text/x-rst
+license_files = LICENSE.txt
+url = https://cantera.org
+author = Cantera Developers
+author_email = developers@cantera.org
+keywords = chemistry physics
+license = BSD 3-Clause License
+classifiers =
+    Development Status :: 5 - Production/Stable
+    Intended Audience :: Education
+    Intended Audience :: Science/Research
+    License :: OSI Approved :: BSD License
+    Operating System :: MacOS :: MacOS X
+    Operating System :: Microsoft :: Windows
+    Operating System :: POSIX :: Linux
+    Programming Language :: C
+    Programming Language :: C++
+    Programming Language :: Cython
+    Programming Language :: Fortran
+    Programming Language :: Python :: 3 :: Only
+    Programming Language :: Python :: 3.8
+    Programming Language :: Python :: 3.9
+    Programming Language :: Python :: 3.10
+    Programming Language :: Python :: 3.11
+    Programming Language :: Python :: 3.12
+    Programming Language :: Python :: Implementation :: CPython
+    Topic :: Scientific/Engineering :: Chemistry
+    Topic :: Scientific/Engineering :: Physics
+project_urls =
+    Documentation = https://cantera.org/documentation
+    Funding = https://numfocus.org/donate-to-cantera
+    Source = https://github.com/Cantera/cantera
+    Tracker = https://github.com/Cantera/cantera/issues
+
+[options]
+zip_safe = False
+install_requires =
+    numpy @numpy_version_spec_str@
+    ruamel.yaml @ruamel_version_spec_str@
+python_requires = @py_requires_ver_str@
+packages =
+    cantera
+    cantera.data
+    cantera.data.example_data
+    cantera.test
+    cantera.examples
+    cantera.with_units
+
+[options.package_data]
+# The module extension needs to be here since we don't want setuptools to compile
+# the extension, so there are no ``source`` files in the setup.py ``extension`` and
+# we have to treat the module as package data.
+cantera = *.pxd, *.dll, *@py_module_ext@
+cantera.data = *.*
+cantera.data.example_data = *.*
+cantera.test = *.txt
+cantera.examples = *.txt
+
+[options.extras_require]
+pandas = pandas
+units =
+    pint
+    numpy<2.0; python_version <= '3.9'
+graphviz = graphviz
+
+[options.entry_points]
+console_scripts =
+    ck2yaml = cantera.ck2yaml:main
+    cti2yaml = cantera.cti2yaml:main
+    ctml2yaml = cantera.ctml2yaml:main
+    yaml2ck = cantera.yaml2ck:main
+    lxcat2yaml = cantera.lxcat2yaml:main

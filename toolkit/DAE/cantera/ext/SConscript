@@ -1,0 +1,182 @@
+from pathlib import Path
+from buildutils import *
+
+Import('env', 'build', 'install', 'libraryTargets')
+localenv = env.Clone()
+copyenv = localenv.Clone() # no CPPPATH addition, to avoid circular dependencies
+
+license_files = {"Cantera": File("#License.txt")}
+
+def prep_default(env):
+    localenv = env.Clone()
+
+    # Suppress warnings from external code and auto-generated code
+    if 'g++' in localenv['CXX'] or 'clang' in localenv['CXX']:
+        localenv.Append(CCFLAGS='-w')
+
+    return localenv
+
+
+def prep_gtest(env):
+    localenv = prep_default(env)
+    localenv.Prepend(CPPPATH=[Dir('#ext/googletest/googletest'),
+                              Dir('#ext/googletest/googletest/include')],
+                     CPPDEFINES={'GTEST_HAS_PTHREAD': 0})
+    return localenv
+
+
+def prep_gmock(env):
+    localenv = prep_default(env)
+    localenv.Prepend(CPPPATH=[Dir('#ext/googletest/googletest/include'),
+                              Dir('#ext/googletest/googlemock'),
+                              Dir('#ext/googletest/googlemock/include')],
+                     CPPDEFINES={'GTEST_HAS_PTHREAD': 0})
+    return localenv
+
+
+def prep_yamlcpp(env):
+    localenv = prep_default(env)
+    if env['CC'] == 'cl':
+        # "class ... needs to have dll-interface to be used by clients of class ..."
+        localenv.Append(CCFLAGS='/wd4251')
+    return localenv
+
+ext_copies = []
+
+if not env['system_fmt']:
+    license_files["fmtlib"] = File("#ext/fmt/LICENSE.rst")
+    localenv = prep_default(env)
+    localenv.Prepend(CPPPATH=Dir('#ext/fmt/include'))
+    libraryTargets.extend(localenv.SharedObject(['fmt/src/format.cc', 'fmt/src/os.cc']))
+    for name in ('format.h', 'ostream.h', 'printf.h', 'core.h', 'format-inl.h'):
+        ext_copies.extend(
+            copyenv.Command("#include/cantera/ext/fmt/" + name,
+                            "#ext/fmt/include/fmt/" + name,
+                            Copy("$TARGET", "$SOURCE"))
+        )
+
+if env['system_sundials'] == 'n':
+    localenv = prep_default(env)
+    localenv.Prepend(CPPPATH=[Dir('#include/cantera/ext'),
+                              Dir('#ext/sundials/src/sundials')])
+    license_files["Sundials"] = File("#ext/sundials/LICENSE")
+
+    # Generate sundials_config.h
+    sundials_configh = {}
+    if env['OS'] != 'Windows':
+        sundials_configh['SUNDIALS_USE_GENERIC_MATH'] = 1
+    if env['use_lapack']:
+        sundials_configh['SUNDIALS_BLAS_LAPACK'] = 1
+    sundials_configh_build = env.Command("#build/ext/sundials_config.h.build",
+                                         "sundials_config.h.in",
+                                         ConfigBuilder(sundials_configh))
+    # This separate copy operation, which SCons will skip if sundials_config.h.build is
+    # unmodified, prevents unnecessary re-copies of files in the #include directory
+    localenv.AlwaysBuild(sundials_configh_build)
+    ext_copies.extend(
+        localenv.Command("#include/cantera/ext/sundials/sundials_config.h",
+                         "#build/ext/sundials_config.h.build",
+                         Copy("$TARGET", "$SOURCE"))
+    )
+
+    # Copy sundials header files into common include directory
+    for subdir in ('sundials', 'nvector', 'cvodes', 'idas', 'sunmatrix',
+                   'sunlinsol', 'sunnonlinsol'):
+        for header in multi_glob(env, 'sundials/include/'+subdir, 'h'):
+            ext_copies.extend(
+                copyenv.Command(f"#include/cantera/ext/{subdir}/{header.name}",
+                                f"#ext/sundials/include/{subdir}/{header.name}",
+                                Copy("$TARGET", "$SOURCE"))
+            )
+
+    # Compile Sundials source files. Skip files related to the Sundials Fortran
+    # interface, which start with 'fsun'.
+    subdirs = ['sundials', 'nvector/serial', 'cvodes', 'idas', 'sunmatrix/band',
+               'sunmatrix/dense', 'sunmatrix/sparse', 'sunlinsol/dense',
+               'sunlinsol/band','sunlinsol/spgmr', 'sunnonlinsol/newton']
+    if env['use_lapack']:
+        subdirs.extend(('sunlinsol/lapackdense', 'sunlinsol/lapackband'))
+
+    for subdir in subdirs:
+        libraryTargets.extend(localenv.SharedObject(
+            [f for f in multi_glob(localenv, 'sundials/src/'+subdir, 'c')
+             if not f.name.startswith('fsun')]))
+
+if not env['system_yamlcpp']:
+    localenv = prep_default(env)
+    localenv.Prepend(CPPPATH=Dir('#include/cantera/ext'))
+    license_files["YAML-CPP"] = File("#ext/yaml-cpp/LICENSE")
+
+    # Copy header files into common include directory
+    for subdir in ('', 'contrib', 'node', 'node/detail'):
+        for header in multi_glob(env, 'yaml-cpp/include/yaml-cpp/'+subdir, 'h'):
+            ext_copies.extend(
+                localenv.Command(
+                    f"#include/cantera/ext/yaml-cpp/{subdir}/{header.name}",
+                    f"#ext/yaml-cpp/include/yaml-cpp/{subdir}/{header.name}",
+                    Copy("$TARGET", "$SOURCE")
+                )
+            )
+
+    # Compile yaml-cpp source files
+    for subdir in ('', 'contrib'):
+        libraryTargets.extend(localenv.SharedObject(
+            [f for f in multi_glob(localenv, 'yaml-cpp/src/'+subdir, 'cpp')]))
+
+
+if not env['system_eigen']:
+    license_files["Eigen"] = File("#ext/eigen/COPYING.MPL2")
+    h = build(copyenv.Command('#include/cantera/ext/Eigen', '#ext/eigen/Eigen',
+                              Copy('$TARGET', '$SOURCE')))
+    copyenv.Depends(copyenv['config_h_target'], h)
+    ext_copies.extend(h)
+
+if not env["system_highfive"]:
+    localenv = prep_default(env)
+    license_files["HighFive"] = File("#ext/HighFive/LICENSE")
+    h = build(copyenv.Command('#include/cantera/ext/HighFive', '#ext/HighFive/include/highfive',
+                              Copy('$TARGET', '$SOURCE')))
+    copyenv.Depends(copyenv['config_h_target'], h)
+    ext_copies.extend(h)
+
+# Google Test: Used internally for Cantera unit tests.
+if env['googletest'] == 'submodule':
+    localenv = prep_gtest(env)
+    gtest = build(localenv.Library('../lib/gtest',
+                                   source=['googletest/googletest/src/gtest-all.cc']))
+    localenv = prep_gmock(env)
+    gmock = build(localenv.Library('../lib/gmock',
+                                   source=['googletest/googlemock/src/gmock-all.cc']))
+
+env["ext_include_copies_target"] = build(ext_copies)
+
+
+def generate_license(target, source, env):
+    target = Path(target[0].abspath)
+    stars = "*" * 50 + "\n" + "*" * 50 + "\n"
+    tpl = stars + "The following license applies to {}\n" + stars + "\n{}\n"
+
+    license = []
+    for package, license_file in env["license_files"].items():
+        license_file = Path(license_file.abspath)
+        license.append(tpl.format(package, license_file.read_text().strip()))
+    license = "\n".join(license)
+    if target.suffix == ".rtf":
+        license = license.replace("\\", "\\\\").replace("{", "\\{").replace("}", "\\}")
+        license = license.replace("\n", " \\par\n")
+        license = (r"{\rtf1\ansi{\fonttbl\f0\fswiss Arial;}\f0\pard\fs16 "
+                   + license + "}")
+
+    target.write_text(license)
+
+
+localenv["license_files"] = license_files
+license = build(localenv.Command("LICENSE.txt", list(license_files.values()),
+                                 generate_license))
+env["license_target"] = license
+install('$inst_docdir', license)
+
+if env['OS'] == 'Windows':
+    # RTF version is required for Windows installer
+    build(localenv.Command("LICENSE.rtf", list(license_files.values()),
+                           generate_license))

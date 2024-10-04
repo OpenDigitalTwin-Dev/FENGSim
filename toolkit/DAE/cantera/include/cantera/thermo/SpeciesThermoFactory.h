@@ -1,0 +1,54 @@
+/**
+ *  @file SpeciesThermoFactory.h
+ *    Header for factory functions to build instances of classes that manage the
+ *    standard-state thermodynamic properties of a set of species
+ *    (see @ref spthermo);
+ */
+
+// This file is part of Cantera. See License.txt in the top-level directory or
+// at https://cantera.org/license.txt for license and copyright information.
+
+#ifndef SPECIESTHERMO_FACTORY_H
+#define SPECIESTHERMO_FACTORY_H
+
+#include "SpeciesThermoInterpType.h"
+
+namespace Cantera
+{
+
+class AnyMap;
+
+//! Create a new SpeciesThermoInterpType object given a corresponding constant.
+/*!
+ *  @param type A constant specifying the type to be created
+ *  @param tlow The lowest temperature at which the parameterization is valid
+ *  @param thigh The highest temperature at which the parameterization is valid
+ *  @param pref The reference pressure for the parameterization
+ *  @param coeffs The array of coefficients for the parameterization
+ *  @returns The pointer to the newly allocated SpeciesThermoInterpType object
+ */
+SpeciesThermoInterpType* newSpeciesThermoInterpType(int type, double tlow,
+    double thigh, double pref, const double* coeffs);
+
+//! Create a new SpeciesThermoInterpType object given a string
+/*!
+ *  @param type String name for the species thermo type
+ *  @param tlow The lowest temperature at which the parameterization is valid
+ *  @param thigh The highest temperature at which the parameterization is valid
+ *  @param pref The reference pressure for the parameterization
+ *  @param coeffs The array of coefficients for the parameterization
+ *  @returns the pointer to the newly allocated SpeciesThermoInterpType object
+ */
+SpeciesThermoInterpType* newSpeciesThermoInterpType(const string& type,
+    double tlow, double thigh, double pref, const double* coeffs);
+
+//! Create a new SpeciesThermoInterpType object using the specified parameters
+/*!
+ * @param thermo_node  An AnyMap specifying the model type (for example, "NASA") and any
+ *                     model parameters necessary to instantiate the object
+ */
+unique_ptr<SpeciesThermoInterpType> newSpeciesThermo(const AnyMap& thermo_node);
+
+}
+
+#endif

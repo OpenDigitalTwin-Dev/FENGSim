@@ -1,0 +1,62 @@
+html {
+    --pst-icon-external-link: "";
+}
+
+html[data-theme=light] {
+    /* Improve contrast with foreground colors */
+    --pst-color-surface: rgb(250, 250, 250);
+    --pst-color-primary: rgb(4, 97, 113);
+}
+
+p + div.math {
+    /* Remove post-paragraph space ahead of equation to center vertically */
+    margin-top: -1.15em;
+}
+
+.sphx-glr-download-link-note {
+    /* Hide top-of-page note about download link at bottom */
+    display: none;
+    visibility: hidden;
+}
+
+/* Make extra room for header section links when page isn't wide enough */
+@media(max-width: 1199.88px) {
+    /* Collapse search field to just a button */
+    button.search-button-field .search-button__default-text {
+        display: none;
+        visibility: hidden;
+    }
+    .search-button-field > :not(svg) {
+        display: none;
+        visibility: hidden;
+    }
+
+    /* Hide text portion of the Cantera logo */
+    .navbar-brand img {
+        width: 36px;
+        object-fit: cover;
+        object-position: left
+    }
+}
+
+/* Make "tip" background color different from "versionadded" */
+.admonition.tip,
+div.admonition.tip {
+  border-color:var(--pst-color-info)
+}
+.admonition.tip>.admonition-title:before,
+div.admonition.tip>.admonition-title:before {
+  background-color:var(--pst-color-info-bg);
+}
+.admonition.tip>.admonition-title:after,
+div.admonition.tip>.admonition-title:after {
+  color:var(--pst-color-info);
+  content:var(--pst-icon-admonition-tip)
+}
+
+div.highlight pre {
+    /* Reduced padding around code blocks from default of 1 rem */
+    padding: .5rem;
+    /* Slight reduction in font size so 80 characters fit on most display sizes */
+    font-size: 0.78rem;
+}
