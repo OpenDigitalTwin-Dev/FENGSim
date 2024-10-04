@@ -1,4 +1,0 @@
-sudo apt install g++ gcc make cmake scons
-
-scons build optimize=n prefix=$PWD/../install/cantera_install
-scons install

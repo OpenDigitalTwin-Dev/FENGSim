@@ -1,3 +1,0 @@
-rm -rf build
-rm -rf ../install/ngspice_install
-rm -rf autom4te.cache

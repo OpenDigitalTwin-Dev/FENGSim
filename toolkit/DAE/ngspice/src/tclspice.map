@@ -1,5 +1,0 @@
-TCLSPICE_0.2
-{
-    global: Spice_Init;
-    local: *;
-};

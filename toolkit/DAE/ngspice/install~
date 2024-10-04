@@ -1,6 +1,0 @@
-sudo apt install gcc g++ make cmake
-
-./autogen
-mkdir build
-cd build
-../configure

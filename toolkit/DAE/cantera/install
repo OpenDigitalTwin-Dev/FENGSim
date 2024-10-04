@@ -1,4 +1,0 @@
-sudo apt -y install g++ gcc make cmake scons python3 python3-packaging libfmt-dev libyaml-cpp-dev libeigen3-dev libboost-dev
-
-scons build optimize=n prefix=$PWD/../install/cantera_install
-scons install

@@ -1,3 +1,0 @@
-scons clean
-#scons uninstall
-rm -rf ../install/cantera_install/

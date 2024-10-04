@@ -1,9 +1,0 @@
-description: |-
-  This is an alternative description.
-
-foo:
-- spam
-- eggs
-
-bar:
-  spam: eggs
