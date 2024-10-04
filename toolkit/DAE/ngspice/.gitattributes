@@ -1,6 +1,0 @@
-#
-# do not change crlf line endings of visual studio project files
-#
-*.vcproj   -text
-*.sln      -text
-*.vcxproj  -text
