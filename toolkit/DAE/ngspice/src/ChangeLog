@@ -1,0 +1,189 @@
+2002-01-03  Paolo Nenzi  <p.nenzi@ieee.org>
+
+	* main.c: Some code additions for Windows support (Holger Vogt patch).
+	
+	* maths/cmaths/Makefile.am: reintegrated test code removed from 
+	   Holger Vogt patch (this may cause trouble under Windows).
+	  
+	* maths/cmaths/cmath1.c, maths/cmaths/test_cx_ph.c: small changes to 
+	  support Windows (Holger Vogt patch).
+	  
+	* winmain.c: added file for Windows port (Holger Vogt).
+	
+
+2001-12-04  Emmanuel Rouat  <emmanuel.rouat@wanadoo.fr>
+
+	* maths/cmaths/Makefile.am (noinst_PROGRAMS): test programs
+	shouldnt get installed
+
+2000-10-13  Arno W. Peters  <A.W.Peters@ieee.org>
+
+	* ngspice.txt: changes SPICE: to NGSPICE: to restore help
+	functionality.  Thanks go to Michael Widlok for the analysis.
+
+2000-07-21  Arno W. Peters  <A.W.Peters@ieee.org>
+
+	* src/analysis/*: Moved these files into src/devices/analysis.
+	The files in this directory implement the analysis and simulation
+	for electrical circuits.
+
+	This is the final step to separating the Spice sources into a
+	library part and a frontend part.  Now, the devices subdirectory
+	has to be renamed to spicelib and the devices that are now
+	scattered in that directory should be moved into a new devices
+	directory.
+
+	* configure.in, src/Makefile.am, src/devices/Makefile.am: Files
+	affected by the move.
+	
+2000-07-20  Arno W. Peters  <A.W.Peters@ieee.org>
+
+	* src/hlp/*: moved these files into src/frontend/help.  The files
+	in this directory implement the help system for the frontend.
+
+	* configure.in, src/Makefile.am, src/frontend/Makefile.am: Files
+	affected by the move.
+
+	* src/circuit/*: moved these files into src/devices/parser.  The
+	files in this directory take a model line from the input file and
+	add the corresponding element to the representation of
+	the circuit in memory.
+
+	* configure.in, src/Makefile.am, src/devices/Makefile.am: Files
+	affected by the move.
+
+2000-07-18  Arno W. Peters  <A.W.Peters@ieee.org>
+
+	* main.c: Added the call to the initialization function of the
+	devices.
+
+2000-07-07  Arno W. Peters  <A.W.Peters@ieee.org>
+
+	* parser/cshpar.c: Separated out com_chdir(), com_echo(),
+	com_rehash() and com_shell() and moved them into frontend
+	directory.
+
+	* frontend/com_chdir.c, frontend/com_echo.c, frontend/com_rehash.c,
+	frontend/com_shell.c: Their new homes.
+
+	* parser/quote.c, parser/quote.h: The quote/unquote functions are
+	used exclusively in the frontend, moved them there.
+
+	* frontend/quote.c, frontend/quote.h: Their new location.
+
+	* parser/input.c, parser/input.h: Input, output and error streams
+	handled in the frontend.  Moved to the frontend directory.
+
+	* frontend/streams.c: Its new home.
+	
+	* frontend/Makefile.am: Updates for new files.
+
+	* frontend/breakp2.c, frontend/newcoms.c, frontend/postcoms.c,
+	frontend/resource.c, frontend/terminal.h, frontend/variable.c,
+	frontend/variable.h, frontend/com_compose.c,
+	frontend/com_display.c, frontend/com_setscale.c,
+	frontend/com_strcmp.c: Include files update.
+
+	* parser/var2.c, parser/var2.h: Empty files, removed.
+
+	* parser/Makefile.am: Updates for removed files.
+
+	* parser/lexical.c: Small adjustments
+
+2000-04-04  Paolo Nenzi <p.nenzi@ieee.org>
+
+	* ngspice.c: Added support for BSIM4.
+	
+	* Makefile.am: Added support for bsim4 shared library.
+
+2000-01-14  Paolo Nenzi <p.nenzi@ieee.org>
+
+	* conf.c: inserted definitions for bsim3v2 and bsim3v1 devices.
+ 	It is necessary to include old models for commercially available
+	components libraries.
+	
+1999-12-01  Emmanuel Rouat  <emmanuel.rouat@wanadoo.fr>
+
+	* source code: created new directory 'frontend' mainly filled with
+ 	files from 'fte' - remaing files go into maths/cmaths (complex maths
+	routines)
+
+1999-11-30  Emmanuel Rouat  <emmanuel.rouat@wanadoo.fr>
+
+	* tune.c: removed 
+ 	
+	* conf.c/nconf.c : simplified
+
+1999-09-07  Arno  <A.W.Peters@ieee.org>
+
+	* conf.c: removed unused variables `devs' and `ans'
+
+	* help.c: return value from main() changed to int
+
+1999-09-04  Emmanuel Rouat  <emmanuel.rouat@wanadoo.fr>
+
+	* main.c: removed #include patchlec.h and suffix.h (and related code)
+
+	* Makefile.am: updated to reflect filename changes in fte/
+
+1999-08-31  Emmanuel Rouat  <emmanuel.rouat@wanadoo.fr>
+
+	* help.c: renamed helpfile 'ngspice'
+
+	* main.c: renamed helpfile 'ngspice' 
+
+1999-08-28  Emmanuel Rouat  <emmanuel.rouat@wanadoo.fr>
+
+	* Removed all #includes of misc.h and util.h (now in spice.h)
+
+1999-08-24  Paolo Nenzi <pnenzi@ieee.ing.uniroma1.it>
+
+	* conf.c: linked the jfet2 model to the devices table.
+	
+1999-08-08  Emmanuel Rouat  <emmanuel.rouat@wanadoo.fr>
+
+	* makeidx.c: removed HAS_MAC_ARCARGV related code
+
+	* main.c: removed all code related to dos and macos features
+
+1999-08-06  Emmanuel Rouat  <emmanuel.rouat@wanadoo.fr>
+
+	* proc2mod.c: removed test on HAS_VPERROR (always true on Unix)
+
+	* main.c (main): changed HAS_ISATTY in HAVE_ISATTY
+	(main): removed test on HAS_LONGJUMP (always have it)
+	(main): removed test on HAS_UNIX_SIGS (always true on Unix)
+	(main): removed test on HAS_UNLINK (always true on Unix)
+
+1999-08-05  Emmanuel Rouat  <emmanuel.rouat@wanadoo.fr>
+
+	* main.c: changed HAS_GETPW in HAVE_PWD_H
+	(main): removed test on HAS_GETPID
+
+1999-08-02  Emmanuel Rouat  <emmanuel.rouat@wanadoo.fr>
+
+	* Makefile.am (LIBS): removed '-lm' since it is handled by autoconf
+
+1999-08-01  Emmanuel Rouat  <emmanuel.rouat@wanadoo.fr>
+
+	* conf.c: changed SIMinfo entry to 'ngspice'
+
+	* Makefile.am: changed binary name to ngspice
+
+1999-07-31  Emmanuel Rouat  <emmanuel.rouat@wanadoo.fr>
+
+	* Makefile.am: added @X_CFLAGS@ to INCLUDES list
+
+1999-07-30  Emmanuel Rouat  <emmanuel.rouat@wanadoo.fr>
+
+	* Makefile.am : fixed breaking of 'make distcheck'
+
+29-07-1999 emmanuel.rouat@wanadoo.fr (Manu Rouat)
+
+	* tune.c: includes <config.h> which defines SPICEBINDIR etc
+	
+28-07-1999 emmanuel.rouat@wanadoo.fr (Manu Rouat)
+
+	* help.c: Changed HAS_X11 define to X_DISPLAY_MISSING (supplied by
+	autoconf in config.h)
+	* removed HAS_X11 in defs flag in Makefile.am
