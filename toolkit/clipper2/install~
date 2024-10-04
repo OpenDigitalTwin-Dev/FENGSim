@@ -1,8 +1,0 @@
-sudo apt install gcc g++ make cmake
-
-cd CPP
-mkdir build
-cd build
-cmake ..
-make
-make install
