@@ -1,0 +1,8 @@
+sudo apt install gcc g++ make cmake
+
+cd CPP
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../../install/clipper2_install
+make -j4
+make install

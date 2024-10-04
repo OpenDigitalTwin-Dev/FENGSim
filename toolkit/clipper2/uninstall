@@ -1,0 +1,2 @@
+rm -rf CPP/build
+rm -rf ../install/clipper2_install
