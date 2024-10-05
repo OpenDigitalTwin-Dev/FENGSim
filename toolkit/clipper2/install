@@ -1,4 +1,6 @@
-sudo apt install gcc g++ make cmake
+sudo apt install gcc g++ make cmake p7zip-full
+
+7za x CPP/Tests/googletest.7z -o/$PWD/CPP/Tests/
 
 cd CPP
 mkdir build
