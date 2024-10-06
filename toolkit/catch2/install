@@ -1,0 +1,7 @@
+sudo apt -y install gcc g++ cmake make
+
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../install/catch2_install
+make -j4
+make install
