@@ -1,0 +1,604 @@
+*****************************************************************************
+                     Release Notes for SAMRAI v1.2
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+*****************************************************************************
+
+NOTE:  These release notes are more descriptive and detailed than is usual
+       for software release notes.  The reason for this is that presently
+       complete documentation does not exist for most of the items listed.
+       Until sufficient user documentation becomes available, descriptions
+       such as those that follow will be part of SAMRAI release notes.
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+*****************************************************************************
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report it
+to us so that we may fix it.  We will make every effort to fix bugs
+in a timely manner.  Depending on the severity or the complexity of the
+bug, we will either fix the bug for a subsequent library release or send
+a code fix to users so that their work is minimally interrupted.
+
+LLNL users should report bugs using the CASC bug tracking web pages:
+
+        http://www-casc.llnl.gov/bugs/
+
+Enter the bug into the appropriate are of the SAMRAI project section.
+
+Bugs found by other users should send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                    Summary of what's changed
+-----------------------------------------------------------------------------
+
+This section contains a summary of changes to SAMRAI.  More detailed 
+descriptions of items in the following list are provided below.
+
+(1) Constant spatial refinement and coarsening operators have been changed
+so that the class names no longer contain the word "Cartesian". 
+
+(2) The variable database has been enhanced to allow mapping patch data 
+indices to variables without considering variable contexts.  There are
+also additional functions to add, clone, and delete descriptor indices.
+
+(3) The index integer has been removed as an argument to the constructor 
+for the variable context class.
+
+(4) Several minor changes have been made to the SAMRAI vector class for
+efficiency and to interact with the variable database directly when adding
+components, cloning and freeing vectors.
+
+(5) The plotting classes have been renamed.
+
+(6) The default C compiler has changed when using the KAI KCC compiler.
+
+(7) The registerModelVariables() method has been removed from TimeRefinement
+LevelStrategy and HyperbolicLevelIntegrator and replaced with a method called
+initializeLevelIntegrator(). The argument list has also changed.
+
+(8) A number of changes were made to the TagAndInitializeStrategy and 
+StandardTagAndInitialize classes to add functionality for re-gridding 
+operations.
+
+(9) Some changes in the transfer package have been made to avoid redundant
+calculation of overlaps between patches.
+
+(10) The functions in the HDF5 database class to check whether a key exists
+in the database and to get all keys in the database were previously broken.
+They are now all fixed.  This may affect user code that relied on the 
+broken behavior of preceding versions of SAMRAI.
+
+(11) The use of the coarsen patch strategy in the creation and usage of 
+coarsen communication schedules has changed slightly to be consistent 
+with similar recent changes in the refine communication schedules.
+
+(12) Several flags were removed from the default KCC configuration to
+enhance efficiency and portability.  As a result, however, the *.o object
+files and *.a libraries will NOT be compatible with those from previous
+releases.  Also, removal of the flags causes purify to mistakenly identify
+a number of mismatched memory calls when used with KCC.
+
+(13) The location of the latest bug-fixed installation of the libraries
+has been moved from /home/casc/software/samrai to /usr/casc/samrai.  
+
+(14) The hier_PatchHierarchy::getRatioToCoarser() method was removed.  
+
+(15) Several changes to algs_HyperbolicLevelIntegrator() to support
+applications that require three time levels.
+
+(16) Minor changes in use of tbox_IEEE::getSignalingNan() method.
+
+(17) A boolean argument was added the pure virtual function getLevelDt()
+in the abstract base class algs_TimeRefinementLevelStrategyX to indicate
+whether this routine is called at the initial simulation time. 
+
+(18) Some changes were made to interface class algs_HyperbolicPatchStrategyX.
+
+(19) The "tag value" argument has been removed from gridding routines that
+call user code and user-supplied overloaded virtual functions.
+
+(20) "Noprefix" headers for the Array, Boolean, IEEE, List, MPI, and String
+classes have been removed.
+
+(21) X11 plotting libraries are not included by default.
+
+
+-----------------------------------------------------------------------------
+                         Summary of what's new
+-----------------------------------------------------------------------------
+
+This section contains a summary of additions to SAMRAI.  More detailed 
+descriptions of items in the following list are provided below.
+
+(1) Richardson extrapolation enhanced to support refinement ratios of 3
+and interfaces to regridding classes cleaned up.
+
+(2) Combinations of tagging methods (e.g. gradient detector, Richardson
+extrapolation, and static refine boxes) may be specified in the 
+StandardTagAndInitialize class. 
+
+(3) SAMRAI code that interfaces with the PETSc library has been updated to
+be consistent with the most current version of PETSc; i.e., 2.1.0.  The new
+version is being linked to by default.
+
+(4) Limited support for building as a shared library.
+
+(5) An installation of the latest bug-fixed version of the latest release 
+on compass/tera, blue, and casc cluster is maintained in /usr/casc/samrai.
+
+(6) Support for generating source code documentation using Doxygen.
+
+(7) Added support for setting signaling NaN on IBM, compaq platforms. Also
+added new functions for setting values to NaN and checking if they are NaN.
+
+(8) Some new classes were added to make generation of Vizamrai plot files
+much easier for users.
+
+(9) Gradient detection routines in Euler/LinAdv examples were enhanced to
+allow multiple tagging options on different levels and at different times.
+
+(10) Smart pointers have been added for several algorithm classes.
+
+(11) New user documents added.
+
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+                    Details about what's changed
+-----------------------------------------------------------------------------
+
+(1) Constant spatial refinement and coarsening operators have been changed
+so that the class names no longer contain the word "Cartesian".  Also, these
+operator classes have been moved from the Cartesian geometry directories to
+the directory SAMRAI/source/geometry/generic_ops/constant.  The linear
+time interpolation operators have been moved to the directory 
+SAMRAI/source/geometry/generic_ops/time_interpolate.  Since these operators 
+do not depend on the specific properties of a mesh, they can be used with
+any geometry type.  Thus, there dependence on Cartesian geometry has been 
+eliminated.
+
+(2) The variable database has been enhanced to allow mapping patch data 
+indices to variables without considering variable contexts.  There are
+also additional functions to add, clone, and delete descriptor indices.
+Printing the contents of the database now indicates when data indices have
+been cloned and from which pre-existing components.  The new functions are: 
+registerClonedPatchDataIndex(), registerPatchDataIndex(),
+removePatchDataIndex(), and checkVariablePatchDataIndex().  The function
+registerClonedPatchDataIndex() will generate a new patch descriptor index 
+given a variable and a currently valid patch descriptor index.  The new
+variable-descriptor index pair will be added to the database.  The function
+registerPatchDataIndex() will add an existing variable-descriptor index pair 
+to the database.  The function removePatchDataIndex() will remove an existing
+patch descriptor index from the database and free the index in the patch
+descriptor.  The function checkVariablePatchDataIndex() will check the
+type of a variable against the type of a given patch descriptor index.  This
+function can be used regardless of whether the given variable or index are
+known to the database.
+
+(3) The index integer has been removed as an argument to the constructor 
+for the variable context class.  The variable context class now maintains 
+a static instance counter which assigns a unique integer identifier to 
+each context object.  Thus, it is no longer possible to have two contexts
+with the same index.  However, two contexts with the same name is allowed
+if they are not generated by the variable database.
+
+(4) Several minor changes have been made to the SAMRAI vector class for
+efficiency and to interact with the variable database directly when adding
+components, cloning and freeing vectors.  Specifically, all SAMRAI vector
+objects now share the objects that perform mathematical operations on the
+vector data rather than each vector maintaining its own set of operations.
+Also, vector creation, cloning, and freeing now uses the variable database 
+to maintain information about the mapping between vector component variables
+and the associated patch descriptor indices.  
+    
+(5) The plotting classes have been renamed to reflect the fact that they
+are 2D classes.  If you use any of the plotting classes you will need to
+change the class names and the include file names.
+
+ New name			Old name
+plot_HyperbolicPlot2            plot_HyperbolicPlot
+plot_PlotBase2                  plot_PlotBase
+plot_XWindow2                   plot_XWindow
+plot_MOLPlot2			plot_MOLPlot
+
+The plotting classes are now in a separate libraries libSAMRAI2d_plot.a 
+and libSAMRAI3d_plot.a.  If users use the LIBSAMRAI2D and LIBSAMRAI3D
+symbols from Makefile.config they should not need to change their makefiles, 
+otherwise you will need to add these to your link line.
+
+(6)  When using KCC as a compiler for C++ the default C compiler was changed
+to be the "cc" script in the KCC directory.  This should keep things
+more consistent and improve chances that C++ and C will link together
+correctly.  This should not impact the SAMRAI library itself since it does
+not use any C code but if you are using the SAMRAI makefiles this
+might change your compiler if you have some C code in your application.
+The previous default was to search for a compiler (gcc, cc).  You 
+can override the new behavior by using the --with-CC= option to configure,
+in which case the compiler you specify will be used.
+
+(7) The pure virtual function registerModelVariables() method in 
+TimeRefinementLevelStrategy was eliminated because its argument list did
+not support the needs of the Richardson extrapolation procedure. Since 
+the argument list had to change, we decided to also rename this pure virtual 
+method to better reflect its role.  The following are the old and new
+names and argument lists:
+
+Old:
+algs_TimeRefinementLevelStrategy::registerModelVariables(
+   const int max_levels,
+   const bool regrid_uses_time_integration) = 0;	
+
+New:
+algs_TimeRefinementLevelStrategy::initializeLevelIntegrator(
+   const algs_TimeRefinementIntegrator* tri,
+   const Pointer<mesh_GriddingAlgorithm> gridding_alg) = 0;
+
+A concrete implementation of this method is supplied in the 
+HyperbolicLevelIntegrator.  
+
+(8) In the last released SAMRAI version (v1.1.0), two new classes were
+introduced in the mesh package:  TagAndInitializeStrategy and 
+StandardTagAndInitialize.  These classes provided functionality for
+re-gridding using Richardson extrapolation as well as static refine
+box regions provided in the input file. However, the classes 
+lacked the capability to perform Richardson extrapolation with a 
+refinement ratio of 3 between levels, or the capability to mix static
+refine boxes with a cell tagging procedure like the gradient detector
+or Richardson extrapolation.  A number of changes were made to these
+classes to add these capabilities.   Existing interfaces between
+the level integrator and patch routines have not changed.  
+
+The main change the user will experience results from a change to 
+the constructor of StandardTagAndInitialize.  Previously, there were
+two constructors for this class; one supplied the tagging
+method by a string, the other provided tagging parameters through 
+input.  
+
+old:
+      Pointer<StandardTagAndInitStrategy> integrator = ...
+      StandardTagAndInitialize("object name",
+                               integrator,
+                               "GRADIENT_DETECTOR");
+      -or-
+      StandardTagAndInitialize("object name",
+                               Pointer<Database>,
+                               integrator);
+
+The new version of the class uses a single constructor, with the input
+database as an optional argument:
+
+new:
+      StandardTagAndInitialize("object name",
+                               integrator,
+                               Pointer<Database>); <-- optional
+                             
+If no input database is provided, the gradient detector is used.  
+Otherwise, tagging will be performed based on values provided in the
+input.
+
+(9) All of the operations registered with a particular coarsen or refine
+algorithm will be grouped in equivalence classes according to the data
+type and ghost cell width of the data that is to be transfered.  All 
+operations which use data of the same type and ghost cell width will be 
+grouped together, so that only one calculation of box overlaps is needed 
+for each group.  There are no changes to interfaces of classes involved.
+
+(10) The functions in the HDF5 database class to check whether a key exists
+in the database and to get all keys in the database were previously broken.
+They are now all fixed.   For more details, see item #1 in major bug fixes
+below.
+
+(11) The use of the coarsen patch strategy in the creation and usage of 
+coarsen communication schedules has changed slightly to be consistent 
+with similar recent changes in the refine communication schedules.
+Specifically, the coarsen patch strategy is passed to the coarsen algorithm
+when creating the schedule via the createSchedule() function and this 
+patch strategy will be used in any subsequent coarsenData() calls.  
+Previously, the patch strategy was passed into the coarsenData() routine.
+
+(12) A number of flags supplied to the KCC compiler through the SAMRAI
+configure had been depricated.  In addition, the "--no_exceptions" flag 
+prevented links to other libraries that were compiled with KCC without 
+the flag.  Consequently, we removed the  --for_init_diff_warning,
+--new_for_init, and --no_exceptions flags from the configure. 
+Comparison of library code compiled with and without these options
+reveal no detrimental effect on performance, and removal of --no_exceptions
+allows SAMRAI to be linked to other libraries such as babel and tau.
+
+Unfortunately, purify does not work well with exception handling and,
+consequently, it will tag a number of mismatched memory accesses
+when the --no_exceptions flag is not supplied.  These will not show up under
+g++ and also will not show up if --no_exceptions is supplied.  If you need 
+to purify using KCC, ADD the flag to the CXXFLAGS in Makefile.config: i.e.,
+
+   CXXFLAGS      = ... --no_exceptions ...
+
+and recompile.  Note that code compiled with the --no_exceptions flag will
+NOT link with code compiled without the flag, so it is necessary to 
+recompile the entire library.
+
+(13) When we have released versions of SAMRAI in the past, we put a 
+copy of the source and a compiled library (for the casc cluster)
+in /home/casc/software.  We experienced some problems with this 
+approach; we could not easily update the source with bug-fixes as
+users found them in the new release, users wanted compiled versions
+for more that just one architecture, and the compiled versions
+became out of date as compilers were upgraded over time.  To address
+these problems, we have adopted a new policy for users in CASC
+who wish to link to SAMRAI.  We will maintain at /usr/casc/samrai
+in the directory "SAMRAI-vX.X.X-fixes" (where X.X.X refers to the 
+release number) the source and installed versions of the library for
+solaris, alpha, and aix.  As bugs for the release are reported and 
+fixed, the source and compiled versions will be updated. 
+
+We will continue to put a copy of the source in /home/casc/software/samrai
+for each release but will not keep the compiled library there.
+
+(14) The correctness of hier_PatchHierarchy::getRatioToCoarser() 
+in previous versions was questionable.  The same functionality
+is available through methods in the hier_PatchLevel class:
+
+   hier_PatchLevel::getRatioToCoarserLevel()
+   hier_PatchLevel::getRatioToCoarserLevel()
+
+Consequently, we removed the method to avoid potential errors.
+
+(15) A number of changes were made to the HyperbolicLevelIntegrator
+class to support applications that require three time levels and
+Richardson extrapolation.  In addition to the change in the 
+registerModelVariables() method, described above in (7), the following
+changes were made to algs_HyperbolicLevelIntegratorX.C.sed:
+   
+   line 193-194: change to signaling NaN call
+   line 319:     maintain "old" time variables (in addn to "new" 
+                 and "current")
+   line 360-366: mod to reset "old" time data to "current"
+   line 491:     removed call to resetTimeDependentData from 
+                 the applyGradientDetector() method.  This is now
+                 taken care of by the TimeRefinementIntegrator.
+   line 637-660: replaced registerModelVariables() function with 
+                 initializeLevelIntegrator().  Some addnl code to 
+                 set the number of time data levels.
+   line 811:     removed "registerTimeRefinementIntegrator" method.
+   line 1194,1275,1324: patch strategy removed from argument list to 
+                        coarsenData() operation. 
+   line 1272,1318: patch strategy added to argument list for
+                   constructing schedule. 
+   line 1341-1400: a number of changes to resetTimeDependentData() method
+                   to handle 3 time data levels.
+   line 1606:      Further mods to handle 3 time data levels.
+
+
+(16) The tbox_IEEE::getSignalingNaN() methods were modified so that 
+instead of setting a supplied value to NaN, they instead return the
+signaling NaN value.  A new function setNaN() was added to perform
+the operation to set a supplied value to NaN.  The following summarizes
+the differences:  
+
+old:
+   tbox_IEEE::getSignalingNaN(double* d);  -- sets d = NaN 
+   tbox_IEEE::getSignalingNaN(float* f);   -- sets f = NaN
+
+new:
+   double d = tbox_IEEE::getSignalingNan();       -- returns NaN
+   float  f = tbox_IEEE::getSignalingFloatNan();  -- returns NaN
+   tbox_IEEE::setNaN(double* d);                  -- sets d = NaN
+   tbox_IEEE::setNaN(float* f);                   -- sets f = NaN
+   
+A number of new methods were also added.  See (7) in "what's new" below.
+
+(17) A boolean argument was added the pure virtual function getLevelDt()
+in the abstract base class algs_TimeRefinementLevelStrategyX to indicate
+whether this routine is called at the initial simulation time.  This flag 
+gives a bit more flexibility to the user when computing the timestep for 
+a level in the hierarchy.
+
+(18) Some changes were made to interface class algs_HyperbolicPatchStrategyX.
+New arguments appear in several pure virtual functions.  Specifically, 
+arguments indicating the level number of the patch and in some cases a 
+boolean flag indicating whether the routine is called at the initiali 
+simulation time have been added to the following routines: 
+computeStableDtOnPatch(), computeFluxesOnPatch(), 
+conservativeDifferenceOnPatch().
+
+Also, two functions have been added called preprocessAdvanceLevelState()
+and postprocessAdvanceLevelState().  These are optional user routines in
+that they are virtual and not pure virtual.  The "preprocess" routine
+allows a user to process any application-specific patch strategy data 
+BEFORE patches are advanced on the given level.  It is called after patch 
+boundary data is filled (i.e., ghosts) and before computeFluxesOnPatch(). 
+The "postprocess" routine allows a user to process any application-specific 
+patch strategy data AFTER patches are advanced on the given level.  It is 
+called after conservativeDifferenceOnPatch() is called and before 
+computeStableDtOnPatch().   One way in which these routines may be used is
+to compute timestep information (e.g., characteristic speeds) during the 
+flux computation and avoid potential recomputation of the same information in
+the computeStableDtOnPatch() routine.  For example, a user may keep an
+array of wave speed and/or dt information (one array entry for each level 
+in the computation) in his patch strategy class.  In the "preprocess" routine,
+this data can be initialized for the given level before it is advanced.  Then,
+in the computeFluxesOnPatch() or conservativeDifferenceOnPatch() functions
+this data can be updated for the local patches.  Next, in the "postprocess"
+routine, the user can perform a collective communication operation to 
+synchronize this information among all processors.  Finally, the user can
+use this information to return the proper time increment in the 
+computeStableDtOnPatch() routine without performing any extraneous operations. 
+
+These changes do not reflect any significant change to functionality of
+concrete user classes derived from this base class.  Rather, they provide
+additional flexibility for users by providing more detailed information about
+the state of the integration algorithm when the routines are called.
+
+(19) The "tag value" argument has been removed from gridding routines that
+call user code and user-supplied overloaded virtual functions.  This argument 
+indicated the integer value to which the cell-centered tag array entries were 
+to be set to produce refined cells.  Since this really isn't necessary and to 
+make the user interface simpler, the argument has been removed.  Now, users 
+are expected to set the integer tag values to "one" in cells where refinement 
+is desired and to "zero" where no refinement is to occur. 
+
+(20) "Noprefix" headers for the Array, Boolean, IEEE, List, MPI, and String
+classes have been removed.  This was done to avoid potential naming conflicts
+when linking against other libraries.  To use these classes, one must either
+include the "prefix version" of these classes (tbox_Array, tbox_Boolean,
+tbox_IEEE, tbox_List, tbox_MPI, and tbox_String), or typdef the names 
+explicitly.
+
+
+(21) X11 plotting libraries are not included by default.  To compile the plotting libraries you need to use the "--with-x" to the configure options.
+
+-----------------------------------------------------------------------------
+                    Details about what's new
+-----------------------------------------------------------------------------
+
+(1) The previous release provided support for performing Richardson
+extrapolation on a hierarchy for which the refinement ratio between
+all levels was a factor of two.  This release adds support for
+refinement ratios that are a factor of three.  Some minor changes 
+were made to the HyperbolicLevelIntegrator but the majority of changes 
+were to the StandardTagAndInitialize class.  Minor changes have been made to
+to interfaces to the level integrator for algorithmic flexibility during
+regridding operations.
+
+(2) The previous release (v1.1) added capability to perform Richardson
+extrapolation and to define static refine regions where refinement   
+is added. However, one had to use these methods exclusively.  It is
+now possible to set a combination of cell-tagging methods.  See the document 
+/docs/userdocs/RichExtrap.pdf for a summary of the various functions.
+
+(3) SAMRAI code that interfaces with the PETSc library has been updated to
+be consistent with the most current version of PETSc; i.e., 2.1.0.  In 
+particular, the SAMRAI-PETSc vector interface classes no longer work with
+any previous version of PETSc.  Thus, to build SAMRAI, either turn off
+PETSc at configuration, or use the latest version of PETSc.  If you are 
+linking to the SAMRAI libraries you will need to make sure you
+are getting version 2.1.0 of PETSc.  Users using the SAMRAI Makefile.config
+to get compile/link options do not need to worry about this.
+
+(4) Limited support for building as a shared library.  The "--enable-shared"
+option has been added to the configure script.  This should be considered
+beta and only users who like to go up creeks without paddles should try
+this option.  It currently is known to work only with KCC under Solaris.
+
+(5)  In /usr/casc/samrai/SAMRAI-vX.X.X-fixes (where X.X.X refers to the 
+release number) we will maintain installed versions of the bug-fixed 
+version of the library for solaris, alpha, and aix.
+
+(6)  The documentation distributed with SAMRAI is generated by Doc++,
+but there is new support for generating source code documentation using
+Doxygen.  To generate Doxygen documentation (after configuring), go to
+the docs directory and type "make dox".  To start using the generated
+documentation, browse the docs/doxygen/html/indec.html file.  Documentation
+generated with Doxygen is not as polished as the distributed documentation
+(this will probably be changed in the future).  However, much of the
+Doxygen documentation flaws are only cosmetic and it provides significantly
+greater cross-referencing than does the Doc++ documentation.  At minimum,
+the doxygen program (http://www.doxygen.org) and Perl must be available
+to generate the Doxygen documentation.  In addition having the "dot"
+program will allow you to generate nice dependency diagrams, but it is
+not required.  See "configure --help" for options to allow you to specify
+these programs, if they are in your PATH.
+
+(7) Signaling NaN's should now work on IBM, compaq platforms. In addition,
+the following new methods were added to the tbox_IEEE class: 
+   
+   tbox_IEEE::initializeArray(Array<double>& d);    --  d[n] = NaN
+   tbox_IEEE::initializeArray(Array<float>& f);     --  f[n] = NaN
+   bool tbox_IEEE::isNaN(double d);  -- is d = NaN?
+   bool tbox_IEEE::isNaN(float f);   -- is f = NaN?
+
+(8) Some new classes were added to make generation of Vizamrai plot files
+much easier for users.  Previously, users had to supply all routines for
+generating these files, including those that compute regions on each level to 
+plot and those that write all information to Vizamrai files.  Unfortunately,
+this resulted in each user application code including hundreds of lines of 
+code that were the same as that appearing in other applications.  Now, the
+majority of these Vizamrai data file generation operations are taken care
+of automatically, with minimal interaction with user code.  
+
+The new classes appear in the "Plotting" package and are named
+plot_CartesianVizamraiDataWriterX and plot_VizamraiDerivedDataStrategyX.
+Vizamrai supports cell-centered mesh data.  These classes support 
+cell-centered data where the underlying data type is either double, 
+float, or int.  Two kinds of data quantities are supported.  The first is 
+data that resides on an AMR patch hierarchy when a data file is generated.  
+The second is "derived" data that can be computed using data on an AMR patch 
+hierarchy.  The first data type requires no user intervention when generating 
+a plot file.  The second type, or "derived" data, requires that a user 
+implement a concrete class derived from the plot_VizamraiDerivedDataStrategyX 
+abstract interface.  In an overloaded function of that class, a user generates 
+the "derived" data quantity and writes it to a specified file stream.
+
+Before a Vizamrai data writer object can be used to generate Vizamrai
+data files, it must first be constructed and initialized.  Initialization
+involves things like setting information about the levels in the AMR
+hierarchy that will be plotted, setting the type of the data to write
+out (e.g., double or float), setting the directory into which plot
+files are written, and registering variable quantities to send
+to the plot file.  After initialization, the object can be used to
+generate a series of data files during the execution of a simulation
+code.  Some flexibility is allowed to change the parameters of the 
+visualization files while the code is executing.  For more detailed 
+information, and examples of how to use the new classes, please consult
+the document in the SAMRAI/docs directory.
+
+(9) The gradient detection routines in the Euler/LinAdv examples were 
+upgraded to allow users to specify multiple tagging options.  In addition,
+the various options can be specified to occur on different levels and 
+over different time periods of the simulation.  See the README in 
+the Euler or LinAdv examples for a description of the input.  
+
+(10) Smart pointers have been added for several algorithm classes.  
+Specifically, smart pointers now exist for the HyperbolicLevelIntegrator,
+TimeRefinementLevelStrategy, and StandardTagAndInitiStrategy classes.
+These are used in the sample applications and make memory management
+easier.
+
+(11) New user documents added.  These include a document discussing the
+regridding classes and providing a detailed description of the use of
+Richardson extrapolation, a document describing the use of the new Vizamrai
+data writer, and the first part of a detailed SAMRAI introduction and 
+tutorial series of presentations that Rich Hornung is putting together.
+These presentations include a lot of material based on questions, confusion
+that users have had.  Additional parts will be made available to users as 
+they are completed.  All these documents can be found in SAMRAI/docs/userdocs.
+
+-----------------------------------------------------------------------------
+                             Major Bug Fixes 
+-----------------------------------------------------------------------------
+
+(1) All errors in the HDF5 database class have been fixed.  Now, one can
+query a database at anytime, whether reading or writing, for all the 
+keys in the database, or whether a particular key exists.  These queries
+will be entirely consistent with the actual contents of the HDF5 database
+and are no longer dependent on internal state of the SAMRAI HDF5 database
+wrapper class.  Note that this may affect user code that relied on the 
+broken behavior of preceding versions of SAMRAI.  For example, if one
+set array sizes based on the number of keys in main HDF5 database, then
+these operations should be double-checked as the HDF5 database capabilities
+now correctly provide this information. 
+
+(2) 
+
+
+-----------------------------------------------------------------------------
+                                  Known Problems
+-----------------------------------------------------------------------------
+
+(1) Linux: We have seen repeatable but reare problems linking programs.
+The loader (ld) either core dumps or hangs.  This happens to two of the
+examples, but it does not appear to be affecting much else.  We are not
+sure what the problem is at this time.
+
+=============================================================================
+=============================================================================

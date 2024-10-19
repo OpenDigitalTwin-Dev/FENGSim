@@ -1,0 +1,61 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   input file for testing 3d periodic boundary conditions 
+ *
+ ************************************************************************/
+
+// Refer to dirichlet.2d.input for a full description of all input parameters
+// specific to this problem.
+
+GlobalInputs {
+   call_abort_in_serial_instead_of_exit = FALSE
+}
+
+Main {
+    dim = 3
+    log_file_name    = "basic3d-periodic011.log"
+    num_domain_boxes = 2 , 1 , 2
+}
+
+BoundaryDataTester {
+
+   variable_1 {
+      name            = "var1"
+      depth           = 1
+      num_ghosts      = 2 , 2 , 2
+      interior_values = 1.0
+   }
+
+   variable_2 {
+      name            = "var2"
+      depth           = 3
+      num_ghosts      = 1 , 1 , 1
+      interior_values = 2.0 , 3.0 , 4.0
+   }
+
+   Boundary_data {
+      boundary_face_xlo {
+         boundary_condition      = "DIRICHLET"
+         var1                    = 0.0
+         var2                    = 1.0, 2.0, 3.0
+      }
+      boundary_face_xhi {
+         boundary_condition      = "DIRICHLET"
+         var1                    = 4.0
+         var2                    = 5.0, 6.0, 7.0
+      }
+
+   }
+
+}
+
+CartesianGridGeometry {
+   domain_boxes = [ (0,0,0) , (7,3,7) ]
+   x_lo         = 0.e0 , 0.e0 , 0.e0   // lower end of computational domain.
+   x_up         = 1.e0 , 0.5e0 , 1.e0   // upper end of computational domain.
+   periodic_dimension = 0, 1, 1
+}

@@ -1,0 +1,178 @@
+*****************************************************************************
+  Copyright 1997-2024
+  Lawrence Livermore National Security, LLC.
+  All rights reserved.
+*****************************************************************************
+
+                     Release Notes for SAMRAI v3.10.0
+
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+
+*****************************************************************************
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report
+it to us so that we may fix it.
+
+Please send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Significant bug fixes
+----------------------------------------------------------------------------
+
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Summary of what's new
+-----------------------------------------------------------------------------
+
+1) It is now permitted to set up hierarchies with anisotropic refinement
+ratios on multiblock geometries with irregular connectivity. This is mainly
+handle through changes to IntVector described in "what's changed".
+
+2) A new feature allows user-defined gradient detector tag values to be saved
+and retrieved during or after regridding.
+
+3) A more scalable partitioner, CascadePartitioner was added, and
+TileClustering was improved.  Both of these should scale well to
+1M+ MPI tasks.
+
+-----------------------------------------------------------------------------
+                Summary of what's changed
+-----------------------------------------------------------------------------
+
+1) There have been changes to IntVector to allow it to hold different values
+on different blocks.  IntVector now holds a value for a number of
+blocks.  There should be no impact on usage in application codes that use only
+single-block meshes.
+
+2) Index is no longer a child class derived from IntVector.
+
+3) For type-safety reasons, the block number held by BlockId now is expressed
+as having type BlockId::block_t.
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                Details about what's new
+-----------------------------------------------------------------------------
+
+1)  It is now permitted to set up hierarchies with anisotropic refinement
+ratios on multiblock geometries with irregular connectivity. This is mainly
+handle through changes to IntVector described in "what's changed".
+
+Previously all multiblock meshes were required to use the same refinement ratio
+on all blocks, which made it impossible to use anistropic ratios in any case
+that had axis rotations between neighboring blocks.  Users are now allowed to
+define different refinement ratios on each block, though they must take care
+to keep the ratios consistent at block boundaries.
+
+2) A new feature allows user-defined gradient detector tag values to be saved
+and retrieved during or after regridding.
+
+Previously, when application codes set their tag values in a user-defined
+implementation of StandardTagAndInitStrategy::applyGradientDetector(), any
+possible integer value was technically valid, but the values were treated by
+SAMRAI's gridding and box generation algorithms as effectively boolean--nonzero
+values tagged the cells for refinement, and zero values meant the cells were
+untagged.  Furthermore, there was no way for application codes to see that
+data once they passed it back to SAMRAI--it was used to generate new grids and
+then deallocated.
+
+Now application codes, may, if desired, set their tag values to any nonzero
+value and they will have a way to retrieve those values for their own
+analysis.  SAMRAI will internally still treat the tag values as effectively
+boolean, but the application will be able to use distinguish different reasons
+that particular cells were tagged, which may be analyzed for reasons such
+as debugging or visualization.
+
+There are two ways provided to retrieve those values, both by implementing a
+virtual method in StandardTagAndInitStrategy to define a callback into the
+application code.
+
+ - The first, getUserTagData, provides a means to retrieve the tag data
+   on the level where the tags were originally defined.  The callback occurs
+   during regridding, before the tagged level may be regridded and destroyed.
+
+ - The second, checkNewLevelTagData, provides a representation of the tag
+   data on a new level after it is created.  The new level was created based
+   on tags on a coarser level, and those tag values are filled onto the new
+   level and can be seed during a callback that occurs after the new level
+   is fully initialized.  This callback can only be used if the boolean
+   input argument "d_save_tag_data" is set to true in the GriddingAlgorithm
+   input.  This feature adds communication overhead, so it should only be
+   turned on if it is really desired. 
+
+3) A more scalable partitioner, CascadePartitioner was added, and
+TileClustering was improved.  Both of these should scale well to
+1M+ MPI tasks.
+
+CascadePartitioner can be used wherever a LoadBalanceStrategy is
+needed.  TileClustering can be used wherever BoxGeneratorStrategy is
+needed.  They can be drop-in replacements for what you are using in
+the GriddingAlgorithm.  See the class documentation.  The algorithms
+are described in the article "Advances in Patch-Based Adaptive Mesh
+Refinement Scalability" submitted to JPDC.  Scaling benchmark results
+are also in the article.
+
+Tiling generates clusters of a predetermined tile size.  Tile size can
+be different on different levels, and mixing tiled and untiled levels
+is permitted.  However, tiling is most efficient when tile boundaries
+coincide, which is achieved by when Tc*R is divisible by Tf or vice
+versa, where Tc is the tile size on a coarser level, Tf is the tile
+size on the finer level and R is the refinement ratio between the two
+levels.  Be sure to use a compatible tile size in the partitioning
+object.
+
+
+
+-----------------------------------------------------------------------------
+                Details about what's changed
+-----------------------------------------------------------------------------
+
+1) There have been changes to IntVector to allow it to hold different values
+on different blocks.  IntVector now holds a value for a number of
+blocks.  There should be no impact on usage in application codes that use only
+single-block meshes.
+
+The purpose of this change is to allow for the IntVector to hold differing
+values on different blocks for things such as refinement ratios and connector
+widths.  This makes it possible to set up multiblock hierarchies with
+anisotropic refinement ratios.
+
+IntVectors created in a multiblock problem will have a number of blocks as
+part of their state, which can be queried with the method getNumBlocks().  The
+number of blocks will be either the number of blocks in the mesh, or one.  The
+data held by IntVector will be of length equal to the product of the number of
+blocks and the number of dimentions.
+
+The operator[] to access a single integer value from and IntVector now only
+works when the number of blocks for the IntVector is one.  To access a single
+integer value from a multiblock IntVector, use the operator() with two
+arguments, one for a block number and one for a dimensional value.
+
+
+2) Index is no longer a child class derived from IntVector.  It is now its own
+self-contained class.  There should be little to no effect on application code
+usage, unless codes were using the two classes interchangeably.  Both Index
+and IntVector have constructors allowing users to construct objects of one
+class from input of the other.
+
+
+3) For type-safety reasons, the block number held by BlockId now is expressed
+as having type BlockId::block_t.  It can be treated like an unsigned int.
+
+
+
+=============================================================================
+=============================================================================

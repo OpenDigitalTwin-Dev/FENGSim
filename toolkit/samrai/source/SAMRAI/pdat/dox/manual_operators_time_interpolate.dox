@@ -1,0 +1,48 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace pdat {
+
+/*!
+  @page package_patchdata_operators_time_interpolate Time Interpolation Operators
+
+  Standard time interpolation operators are provided here for each of the
+  SAMRAI array-based patch data types.  These operators interpolate linearly
+  in time between two patch data objects to another patch data object
+  whose data corresponds to an intermediate time between the times associated
+  with the two sources.  Typically, time interpolation is required to fill 
+  ghost cell data around patches from data on a coarser level.  During the 
+  course of integrating a time-dependent problem over an AMR mesh hierarchy, 
+  the times associated with data on successive levels may be different. 
+  Each operator defined for a data centering (e.g., cell, face, node)
+  and data type (e.g., double, float, complex) is implemented in a separate
+  class.  Each concrete operator class is derived from the abstract operator
+  base class in the <EM>transfer</EM> package.  The actual time interpolation
+  numerical routines are implemented in FORTRAN.
+
+  In the interest of brevity, we include header file documentation for
+  a single time interpolation operator.  This operator is representative of 
+  the interface for every other time interpolation operator class in the 
+  patchdata package. For reference, we note that linear time interpolation 
+  operators are provided for cell-centered, face-centered, edge-centered,
+  node-centered, side-centered, outerface, and outerside patch data types 
+  where the data may be complex, double, or float.
+  All operators have the string identifier "STD_LINEAR_TIME_INTERPOLATE".
+  The purpose of the name string is to distinguish these operators from others
+  that may be added in the future.  The string need not be specified to look
+  up time interpolation operators at this time.  It is important to note that 
+  new time interpolation operators may be added at any time without 
+  re-compilation of the patchdata package or SAMRAI library code.
+  - @ref package_patchdata_operators_time_interpolate_cell
+  - @ref package_patchdata_operators_time_interpolate_fortran
+*/
+
+}
+}

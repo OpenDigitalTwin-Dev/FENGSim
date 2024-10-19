@@ -1,0 +1,59 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   Nonlinear solver example
+##
+#########################################################################
+
+This example demonstrates use of the the nonlinear solver classes in a
+SAMRAI application.  This example is for 2D and 3D only.
+
+The files included in this directory are as follows:
+ 
+          ModifiedBratuProblem.h, ModifiedBratuProblem.cpp
+                        -  Class to set up and solve the modified Bratu
+                           problem..
+          ModifiedBratuFort.h
+                        -  Declarations of FORTRAN functions for
+                           the modified Bratu problem.
+          fortran/*     -  FORTRAN files for numerical kernels
+          main.cpp        -  example main program.
+          test_inputs/*input
+                        -  2D input files for regression testing
+          performance_inputs/*input
+                        -  3D input files for performance testing
+ 
+COMPILATION AND EXECUTION
+-------------------------
+
+   Compilation:
+      make main
+
+   Execution:
+      For one of the following input files:
+         test_inputs/kinsol.2d.input
+         test_inputs/petsc.2d.input
+      serial:
+         ./main <input file>
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main <input file>
+ 
+
+INPUTS
+------
+
+   The test_inputs directory contains:
+         kinsol.2d.input
+         petsc.2d.input
+
+   The performance_inputs directory contains:
+         kinsol.3d.input
+         petsc.3d.input
+
+Refer to kinsol.2d.input for description of the input parameters specific
+to this test directory.

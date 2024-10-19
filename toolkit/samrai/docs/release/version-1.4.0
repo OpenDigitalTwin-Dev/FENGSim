@@ -1,0 +1,483 @@
+*****************************************************************************
+  Copyright 1997-2024                                                    
+  Lawrence Livermore National Security, LLC.                            
+  All rights reserved.                                                    
+*****************************************************************************
+*****************************************************************************
+
+                     Release Notes for SAMRAI v1.4.0
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+*****************************************************************************
+
+NOTE:  These release notes are more descriptive and detailed than is usual
+       for software release notes.  The reason for this is that presently
+       complete documentation does not exist for most of the items listed.
+       Until sufficient user documentation becomes available, descriptions
+       such as those that follow will be part of SAMRAI release notes.
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+*****************************************************************************
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report it
+to us so that we may fix it.  We will make every effort to fix bugs
+in a timely manner.  Depending on the severity or the complexity of the
+bug, we will either fix the bug for a subsequent library release or send
+a code fix to users so that their work is minimally interrupted.
+
+LLNL users should report bugs using the CASC bug tracking web pages:
+
+        http://www-casc.llnl.gov/bugs/
+
+Enter the bug into the appropriate area of the SAMRAI project section.
+
+Bugs found by other users should send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                    Summary of what's changed
+-----------------------------------------------------------------------------
+
+This section contains a summary of changes to SAMRAI.  More detailed 
+descriptions of items in the following list are provided below.
+
+(1) GNU C++ 3.2 and 3.3 support was added.
+
+(2) The configure script no longer looks for the KCC compiler by default.  
+It must be explicitly specified in the configure as "--with-CXX=KCC".
+
+(3) Minor changes to case of configure options to make them consistent
+(e.g. --with-TAU is now --with-tau)
+
+(4) To accommodate the new Vizamrai vector plotting capabilities 
+(see what's new below), the registration routines in the Vizamrai data 
+writer class have changed. 
+
+(5) The implementation of hier_PatchLevelX::Iterator was changed to
+improve efficiency.
+
+(6) A floating point precision argument was added to print routines for
+all array-based patch data types.
+
+(7) A floating point precision argument was added to print routines for
+statistic and statistician.
+
+(8) All input entries supplied to the "SAMRAIManager {...}" input section 
+should now be supplied by the "GlobalInputs{...}" input entry.  The 
+SAMRAIManager::getFromInput() is no longer needed. 
+
+(9) Copy operations were filled in outerface and outerside data to copy from 
+side to outerside and face to outerface directly.
+
+(10) The interfaces of two methods in the HyperbolicLevelIntegrator class
+have changed:  getLevelDt() and initializeLevelIntegrator().
+
+(11) Additional arguments were added to the interfaces of three methods 
+of the GriddingAlgorithm: makeFinerLevel(), regridAllFinerLevels(), and 
+regridFinerLevel().   
+
+(12) Changes were made to the mesh_TagAndInitializeStrategy and 
+mesh_StandardTagAndInitialize classes to incorporate dynamic refinement
+based on user-specified boxes (see item 5 in what's new below) and to 
+fix some problems in the Richardson extrapolation algorithm. 
+
+(13) Made changes to SAMRAIVectorReal math operations to extend to ghost
+cells: the bool interior_only argument is added to many operations,
+defaulting to false (the old behavior).
+
+(14) Modified the VizamraiDerivedDataStrategy to support both
+Vizamrai and VisIt data formats.  See item 7 under what's new.
+
+(15) The constructors for the Euler, LinAdv, and ConvDiff example
+applications have been modified.  They no longer take a CartesianVizamraiDataWriter
+object as an argument.  Rather, users explicitly register either a Vizamrai
+and/or VisIt data writer so that either package, or both, may be
+used to write visualization data. 
+
+(16) Support for PETSc-2.1.6.  Interoperation with older PETSc versions
+may or may not work.
+
+
+
+----------------------------------------------------------------------------
+                         Summary of what's new
+-----------------------------------------------------------------------------
+
+This section contains a summary of additions to SAMRAI.  More detailed 
+descriptions of items in the following list are provided below.
+
+(1) Vector data can be written to visualization files.
+
+(2) Some new methods were added to the solv_PoissonHierarchySolver and 
+solv_PoissonHYPRESolver classes.
+
+(3) For consistency with the xfer_RefinePatchStrategyX class, the pure virtual
+function getCoarsenOpStencilWidth() was added to the xfer_CoarsenPatchStrategyX
+class.
+
+(4) Routines have been added to the refine algorithm/schedule classes and the
+coarsen algorithm/schedule classes that allow one to reset the data transfer
+transactions in a previously created schedule to operate on different patch
+data objects without recomputing the communication schedules.
+
+(5) The capability for the user to specify dynamic refinement with
+prescribed boxes was added. A new input format is required for this 
+added capability - see the mesh_TagAndInitializeStrategyX.h for a 
+description and example of the new format.  Although users are encouraged 
+to start using the new format, the old input format for static refine boxes 
+is also supported.
+
+(6) New cell-centered Poisson solvers are in sources/solvers/poisson.
+These use second-order, central-differences and support Robin boundary
+conditions which can be specialized to Neumann and Dirichlet bc's.
+The multi-level solver uses the FAC algorithm in sources/solvers/FAC.
+Users are encouraged to use these solvers instead of older ones in
+source/solvers/OLD.FAC.  In the next release, the solvers in OLD.FAC
+will be removed!
+
+(7) Support for the VisIt visualization package has been added 
+through the VisItDataWriter class.  Use of this class is very similar
+to the CartesianVizamraiDataWriter.
+
+(8) Basic communication functionality for multiblock domains has been added
+for 2D problems only.
+
+(9) Uniform and nonuniform load balance capabilities have been rewritten.
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+                    Details about what's changed
+-----------------------------------------------------------------------------
+
+(1) GNU C++ 3.2 and 3.3 support was added.  Some minor fixes where needed to 
+suppress warning messages and complex template functions where not being 
+instantiated.
+
+(2) 
+
+(3)
+
+(4) To accommodate the new Vizamrai vector plotting capabilities, the
+registration routines in the Vizamrai data writer class have changed.
+The current set of routines are registerPlotScalar()/registerPlotVector()
+and registerDerivedPlotScalar()/registerDerivedPlotVector() for scalar/vector
+regular and derived plot quantities, respectively.   Registration of 
+plot quantities is essentially the same as before except that the new 
+function names must be used.  
+
+The argument list for the user-supplied function writeDerivedDataToStream()
+has changed to accommodate vector data (see appu_VizamraiDerivedDataStrategyX 
+class header documentation).  Users wishing to write out their own scalar 
+quantities can proceed as before.  When writing derived vector data, 
+each vector component must be written out separately on the box region; 
+e.g., all component zero values on the box, then all component one values 
+on the box, and so on.
+
+See the document Vizamrai-writer.pdf in the SAMRAI/docs/userdocs directory
+for more details.  Also, consult the Euler sample application where total 
+momentum has been added as a plot quantity to illustrate the generation of a 
+derived vector quantity.  
+
+(5)
+
+(6) A floating point precision argument was added to print routines for
+all array-based patch data types.  If no argument is provided to the print 
+calls, the default setting is in effect.  This is 12 decimal places for
+double and complex types and 6 decimal places for float types.  The argument
+is ignored for other types.
+
+(7) A floating point precision argument was added to print routines for
+statistic and statistician.  If no argument is provided to the print
+calls, the default setting is in effect which is is 12 decimal places.
+
+(8) In versions 1.3.1 and before, users could supply certain globally
+applicable inputs to the SAMRAIManager by adding a "SAMRAIManager{...}"
+entry to their input file, and adding SAMRAIManager::getFromInput()
+to their main code.  We made some changes to eliminate the 2nd step by
+moving the functionality to the InputManager.  Since it was 
+counter-intuitive to have InputManager read SAMRAIManager input,
+we changed the lookup name to "GlobalInputs".  The only change the user 
+must should see is it will be necessary to replace any instances of 
+"SAMRAIManager{...}" input entries in input files from v1.3.1 and before
+with "GlobalInputs{...}". The names of the input entries inside the
+GlobalInputs{} database will be the same as the former SAMRAIManager{}.
+
+(9)
+
+(10) The HyperbolicLevelIntegrator::getLevelDt() method no longer takes 
+"recompute_dt" as one of its arguments.  In versions 1.3.1 and before,
+this flag could be set false and the dt would be accessed from the 
+TimeRefinementIntegrator.  We removed the pointer to the TRI from the
+HLI because it created strange dependencies.  With this change, the
+initializeLevelIntegrator() method no longer takes a 
+pointer to the time refinement integrator as one of its arguments.
+
+(11) Additional arguments were added to the interfaces of three methods 
+of the GriddingAlgorithm: makeFinerLevel(), regridAllFinerLevels(), and 
+regridFinerLevel().  The added arguments supply time information that
+is used in the Richardson extrapolation algorithm and the defaulted
+arguments can be ignored if not using this algorithm.
+
+(12) A number of changes were made to the mesh_TagAndInitializeStrategy 
+and mesh_StandardTagAndInitialize classes.  First, static refine box 
+specification was moved from StandardTagAndInitialize to the 
+TagAndInitializeStrategy.  Support for dynamic refinement with user-specified 
+boxes was added.  See item 5 in what's new above for more information.  
+Second, the interfaces to tagCellsForRefinement() and 
+preprocessErrorEstimation() were modified to add the "regrid_start_time" 
+argument.  This is used for only Richardson extrapolation and is defaulted 
+zero for cases where Richardson extrapolation is not used.  
+
+(13)
+
+(14) The VizamraiDerivedDataStrategy class was renamed to 
+"VisDerivedDataStrategy" so that it may support both Vizamrai
+and VisIt data formats.  Within this class, the method name
+"writeDerivedDataToStream()" was also changed.  Instead of 
+writing to a stream (which was not a recognized format in VisIt), 
+it now packs data to a double buffer (*dbuffer). To avoid confusion,
+the method name was changed to "packDerivedDataIntoDoubleBuffer()".
+Also, the return type was changed from void to bool; the boolean
+return value specifies whether derived data exists on the patch
+or not, providing the capability to write out data on selected
+patches.
+
+The functionality of the new method is largely the same.  Generally,
+the way this method was used in the past was 1) create a temporary 
+double or float buffer, 2) fill the buffer with data, 3) pack the 
+buffer into the stream.  The new functionality eliminates steps 1 
+and 3. It operates only on double data so the user does not have 
+to determine which type to write to. Also, it supports both
+the CartesianVizamraiDataWriter and the VisItDataWriter classes
+so the user does not have to inheret from two classes and supply 
+two different methods. See the SAMRAI/examples/Euler case for an 
+example implementation. 
+
+(15) The constructors for the Euler, LinAdv, and ConvDiff example
+applications have been modified.  They no longer take a CartesianVizamraiDataWriter
+object as an argument.  The reason for this modification is that we've
+added support for VisIt (see item 7) and we wanted to provide the
+capability for users to use either Vizamrai, VisIt, or both to the
+applications codes.  Thus, instead of passing in a writer to the
+application, we added the methods "registerVizamraiDataWriter()" 
+and "registerVisItDataWriter()" which allow the user to register
+the data writer(s) they would like to used.  The old functionality:
+
+   Euler* euler = new Euler(name, input_db, viz_writer);
+
+which passed in a CartesianVizamraiDataWriter object to the 
+constructor can be duplicated by simply registering the viz writer
+after the object is constructed:
+
+   Euler* euler = new Euler(name, input_db);
+   euler->registerVizamraiDataWriter(viz_writer);
+
+If you prefer to use VisIt, simply register a VisItDataWriter object
+instead.  You can also register both, in which case both Vizamrai
+and VisIt data will be written.  See the SAMRAI/examples/Euler 
+application for example usage. 
+
+(16) Support for PETSc-2.1.6.  Interoperation with older PETSc versions
+may or may not work.  To enable interoperation with PETSc's SNES
+class, PETSc-2.1.6 is required.  Older PETSc versions may work but
+are not guaranteed and not supported.  (The SNES class from older
+versions definitely will NOT work.)
+
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+                    Details about what's new
+-----------------------------------------------------------------------------
+
+(1) Vectors data can be written to visualization files.  The SAMRAI
+viz writer class has a new method call (registerPlotVector) which adds
+a vector quantity, it looks just like the existing method call but you
+don't specify the depth.  As an example you used to have to do this:
+
+d_viz_writer->registerPlotVariable("X Velocity",
+                                    vardb->mapVariableAndContextToIndex(
+                                    d_velocity, d_plot_context),
+                                    0);
+d_viz_writer->registerPlotVariable("Y Velocity",
+                                    vardb->mapVariableAndContextToIndex(
+                                    d_velocity, d_plot_context),
+                                    1);
+
+Now you can do this:
+
+d_viz_writer->registerPlotVector("Velocity",
+                                  vardb->mapVariableAndContextToIndex(
+                                  d_velocity, d_plot_context));
+
+This will write out all of the components of the velocity.  Vector data
+can be viewed using the Vizamrai tool in two different ways, either as 
+individual scalar components (as before) or as a vector field.  See the
+Vizamrai interface for more information.
+
+(2) The following new methods were added to the PoissonHierarchySolver 
+class:
+       double solv_PoissonHierarchySolver::getConvergenceError()
+       double solv_PoissonHierarchySolver::getConvergenceRate()
+
+to return the convergence error and rate of the solve.  The following
+new methods were added to the PoissonHYPRESolver to allow the user
+to set the number of pre and post relax steps for the HYPRE solve:
+
+       void solv_PoissonHYPRESolver::setNumPreRelaxSteps(int steps)
+       void solv_PoissonHYPRESolver::setNumPostRelaxSteps(int steps)
+       int  solv_PoissonHYPRESolver::getNumPreRelaxSteps()
+       int  solv_PoissonHYPRESolver::getNumPostRelaxSteps()
+
+If these methods are not called, one pre and post relax step is used, 
+which is the default behavior from previous SAMRAI versions. Also,
+to assist in debugging the HYPRE solves, the following method was
+added: 
+
+       void solv_PoissonHYPRESolver::setPrintSolverInfo(bool print)
+
+If "print" is true, it invokes HYPRE's print methods to dump matrix
+and right-hand-side information to file.  See the header comments
+for more information. 
+
+(3) For consistency with the xfer_RefinePatchStrategyX class, the pure virtual
+function getCoarsenOpStencilWidth() was added to the xfer_CoarsenPatchStrategyX
+class.  The returned hier_IntVectorX indicates the maximum stencil width of the 
+user-defined coarsen operations implemented by the class derived from 
+xfer_CoarsenPatchStrategyX.
+
+(4) Routines have been added to the refine algorithm/schedule classes and the
+coarsen algorithm/schedule classes that allow one to reset the data transfer
+transactions in a previously created schedule to operate on different patch
+data objects without recomputing the communication schedules.  This functionality
+is particularly useful for making multiple data communication operations much more
+efficient when similar data is moved during each communication phase since the
+data communication dependencies in the schedule do not have to be recomputed.
+
+An example of how this functionality is used with refine algorithms/schedules
+is as follows (coarsen algorithm/schedule functionality is similar):
+
+   // Create refine algorithm object
+   xfer_RefineAlgorithm my_algorithm;
+
+   // Register some data transfer operations with the algorithm
+   my_algorithm.registerRefine(my_dst0, my_src0, my_scratch0, my_refop0);
+   my_algorithm.registerRefine(my_dst1, my_src1, my_scratch1, my_refop1); 
+   // etc....
+
+   // Create communication schedule
+   tbox_Pointer<xfer_RefineSchedule> my_schedule = my_algorithm.createSchedule(...);
+
+   // Move data with the schedule
+   my_schedule->fillData(...);
+
+
+   // Standard usage of refine algorithm/schedule classes is illustrated up
+   // to this point.  Now suppose that we want to perform similar data 
+   // communication operations on a different set of patch data components
+   // where the operations have identical data communication patters as before.
+   // Instead of creating a new refine schedule that would only differ from
+   // my_schedule in the specific patch data components that are treated,
+   // we can now simply reconfigure the existing schedule with a new set of
+   // operations as follows:
+
+   // Create a new refine algorithm object
+   xfer_RefineAlgorithm my_new_algorithm;
+   
+   // Register a set of data transfer operations with the new algorithm.
+   // Note that these registrations must be performed in the same order
+   // as before and each registration call must involve patch data and
+   // refine operator objects that have identical structure as the previous
+   // sequence of registrations (i.e., same patch data type, same ghost cell
+   // widths, same operator stencil widths, etc.).
+   my_new_algorithm.registerRefine(my_new_dst0, my_new_src0, 
+                                   my_new_scratch0, my_new_refop0);
+   my_new_algorithm.registerRefine(my_new_dst1, my_new_src1, 
+                                   my_new_scratch1, my_new_refop1);
+   // etc....
+
+   // Reconfigure the existing schedule for the new operations
+   my_new_algorithm.resetSchedule(my_schedule);
+
+   // Move the new data with the schedule
+   my_schedule->fillData(...);
+
+   // To reset the schedule to its original state, simply reconfigure it again...
+   my_algorithm.resetSchedule(my_schedule);
+
+(6) There a new Poisson level solver (solv_CellPoissonHypreSolverX),
+a new Poisson multi-level solver (solv_CellPoissonFACSolverX) and a
+new class (solv_RobinBcCoefStrategyX) to support boundary conditions
+for these solvers and to help maintain consistency between the solvers
+when they work together.
+
+Both solvers solve the general equation
+     div(D * grad(u)) + C*u = f
+where u, f and C are cell-centered data, and D is side-centered data.
+In addition, C and D may also be set to constants.
+
+The level solver uses hypre to solve the linear system.
+The multi-level solver uses the FAC algorithm.  Both are documented
+in the docs/userdocs directory.
+
+These solvers superceed the solvers in OLD.FAC, whose use is now
+discouraged.
+
+(7) Support for VisIt data has been added through the 
+VisItDataWriter class.  This class supports a number of new features,
+including node-centered data, moving node (i.e. ALE) data, data
+defined only on specific patches, and parallelism in visualization
+postprocessing.  Use of the VisIt data writer is very similar to the
+CartesianVizamraiDataWriter.  See the document 
+SAMRAI/docs/userdocs/visit-writer.pdf for more information about
+the VisitDataWriter.  Also, the Euler, LinAdv, and ConvDiff applications
+codes have been modified to use the Vizamrai and/or VisIt data 
+writers.  See the source code in these applications for example
+usage.
+
+(8) 2D Multiblock communication functionality has been added in a new package
+with classes having the prefix "mblk."  This is still in a very preliminary
+stage of development and may not yet be useful for significant problems.
+
+(9) Uniform and nonuniform load balance capabilities have been rewritten.
+The changes enhance the performance of these routines and also increase 
+flexibility of use.  For example, one can now choose a different load balancing 
+scheme for each level in an AMR hierarchy.  Please see the documentation for 
+the load balance classes for more details.
+
+
+-----------------------------------------------------------------------------
+                             Major Bug Fixes 
+-----------------------------------------------------------------------------
+
+(1) Fix to communication schedule construction.  There was a bug in    
+the more efficient schedule construction algorithms, released in v1.3.1,
+which caused problems when patches of the same level were closer in 
+proximity to one another than their ghost fill width.  This should now
+be fixed.
+
+(2) Fix to synchronized time stepping.  The synchronized time-stepping 
+algorithm was not properly updating solutions on coarser grid levels, and
+could cause memory allocation problems. The algorithm was re-structured to
+avoid this problem.
+
+(3)
+
+
+-----------------------------------------------------------------------------
+                                  Known Problems
+-----------------------------------------------------------------------------
+
+(1) 
+
+=============================================================================
+=============================================================================

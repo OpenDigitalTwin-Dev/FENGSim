@@ -1,0 +1,232 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for SAMRAI LinAdv example problem 
+ *
+ ************************************************************************/
+
+// Refer to octant_3blk.3d.input for full description of all input parameters
+// specific to this problem.
+
+MblkGeometry {
+   problem_type = "WEDGE"
+
+   WedgeGeometry {
+      rmin_0 = 1.e0 
+      rmax_0 = 2.e0 
+
+      pi     = 3.14159265358979325873406851315
+      thmin  = -30 * pi/180 // should be in radians
+      thmax  = 30 * pi/180
+
+      zmin   = 0.
+      zmax   = 2.
+
+   }
+}
+
+
+MblkLinAdv {
+
+   advection_velocity = 2.0e0 , 0.1e0 , 0.1e0
+   godunov_order    = 2                // order of Goduov slopes (1, 2, or 4)
+   corner_transport = "CORNER_TRANSPORT_1"  
+
+   data_problem      = "SPHERE" 
+
+   Initial_data {
+      radius            = 0.75 
+      center            = 1.25 , -0.5 , 1.0
+
+      uval_inside       = 80.0
+      uval_outside      = 5.0
+ 
+   }
+
+   Refinement_data {
+      refine_criteria = "UVAL_GRADIENT", "UVAL_SHOCK"
+ 
+      UVAL_GRADIENT {
+         grad_tol = 10.0
+      }
+ 
+      UVAL_SHOCK {
+         shock_tol = 10.0
+         shock_onset = 0.85
+      }
+   }
+
+   // valid boundary_condition values are "FLOW", "REFLECT", "DIRICHLET"
+   Boundary_data {
+      boundary_face_xlo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_xhi {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_ylo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_yhi {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_zlo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_zhi {
+         boundary_condition      = "FLOW"
+      }
+
+
+      boundary_edge_ylo_zlo { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_yhi_zlo { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_ylo_zhi { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_yhi_zhi { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_xlo_zlo { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XFLOW"
+      }
+      boundary_edge_xlo_zhi { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XFLOW"
+      }
+      boundary_edge_xhi_zlo { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XFLOW"
+      }
+      boundary_edge_xhi_zhi { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XFLOW"
+      }
+      boundary_edge_xlo_ylo { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YFLOW"
+      }
+      boundary_edge_xhi_ylo { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YFLOW"
+      }
+      boundary_edge_xlo_yhi { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YFLOW"
+      }
+      boundary_edge_xhi_yhi { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YFLOW"
+      }
+
+      boundary_node_xlo_ylo_zlo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xhi_ylo_zlo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xlo_yhi_zlo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xhi_yhi_zlo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xlo_ylo_zhi {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xhi_ylo_zhi {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xlo_yhi_zhi {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xhi_yhi_zhi {
+         boundary_condition      = "XFLOW"
+      }
+
+   }
+
+}
+
+Main {
+   dim = 3
+// log file parameters 
+   log_file_name    = "wedge.log"
+   log_all_nodes    = TRUE
+
+// visualization dump parameters 
+   viz_dump_interval     = 1          // zero to turn off
+   viz_dump_dirname      = "viz_wedge"
+   visit_number_procs_per_file = 1
+
+
+// restart dump parameters
+   restart_interval       = 0         // zero to turn off
+   restart_write_dirname  = "restart_wedge"
+
+}
+
+TimerManager {
+   timer_list               = "apps::*::*",
+                              "algs::*::*",
+                              "mesh::*::*"
+//   print_exclusive      = TRUE
+   print_summed           = TRUE
+   print_max              = TRUE
+//   print_timer_overhead   = TRUE
+   print_threshold        = 0.0
+}
+
+
+// Geometries of the hierachy blocks
+BlockGeometry {
+   num_blocks = 1
+   domain_boxes_0 = [ (0,0,0) , (29,19,19) ]
+}
+
+PatchHierarchy {
+   max_levels = 1         // Maximum number of levels in hierarchy.
+   ratio_to_coarser {      // vector ratio to next coarser level
+      level_1 = 2 , 2 , 2
+      level_2 = 2 , 2 , 2
+      level_3 = 2 , 2 , 2
+   }
+   largest_patch_size {
+      level_0 = 40 , 40 , 40
+      // all finer levels will use same values as level_0...
+   }
+   smallest_patch_size {
+      level_0 = 9 , 9 , 9
+      // all finer levels will use same values as level_0...
+   }
+}
+
+BergerRigoutsos {
+   efficiency_tolerance    = 0.85e0   // min % of tag cells in new patch level
+   combine_efficiency      = 0.95e0   // chop box if sum of volumes of smaller
+                                      // boxes < efficiency * vol of large box
+}
+
+GriddingAlgorithm{
+   sequentialize_patch_indices = TRUE
+}
+
+StandardTagAndInitialize {
+   tagging_method = "GRADIENT_DETECTOR"
+}
+
+HyperbolicLevelIntegrator{
+   cfl                       = 0.9e0    // max cfl factor used in problem
+   cfl_init                  = 0.9e0    // initial cfl factor
+   lag_dt_computation        = TRUE
+   use_ghosts_to_compute_dt  = TRUE
+}
+
+TimeRefinementIntegrator{
+   start_time           = 0.e0     // initial simulation time
+   end_time             = 100.e0   // final simulation time
+   grow_dt              = 1.1e0    // growth factor for timesteps
+   max_integrator_steps = 25     // max number of simulation timesteps
+}
+
+TreeLoadBalancer {
+}

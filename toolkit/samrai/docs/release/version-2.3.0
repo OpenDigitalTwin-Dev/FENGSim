@@ -1,0 +1,417 @@
+*****************************************************************************
+  Copyright 1997-2024
+  Lawrence Livermore National Security, LLC.
+  All rights reserved.
+*****************************************************************************
+
+                     Release Notes for SAMRAI v2.3.0
+
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+
+*****************************************************************************
+
+NOTE:  These release notes are more descriptive and detailed than is usual
+       for software release notes.  The reason for this is that presently
+       complete documentation does not exist for most of the items listed.
+       Until sufficient user documentation becomes available, descriptions
+       such as those that follow will be part of SAMRAI release notes.
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+LLNL users can use the discussion groups on the LLNL Sourceforge site:
+
+https://sourceforge.llnl.gov/sf/discussion/do/listForums/projects.samrai/discussion
+
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report it
+to us so that we may fix it.  We will make every effort to fix bugs
+in a timely manner.  Depending on the severity or the complexity of the
+bug, we will either fix the bug for a subsequent library release or send
+a code fix to users so that their work is minimally interrupted.
+
+LLNL users may report bugs using the LLNL Sourceforge site if 
+you have a sourceforge account:
+
+https://sourceforge.llnl.gov/sf/tracker/do/listTrackers/projects.samrai/tracker
+
+Bugs found by other users should send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Summary of what's new
+-----------------------------------------------------------------------------
+
+This section contains a summary of additions to SAMRAI.  More detailed
+descriptions of items in the following list are provided below.
+
+(1) User control over SAMRAI logging via a new Logger class.
+
+(2) Round method added to MathUtilities class.
+
+(3) Query function that tells location of BoundaryBox added
+
+(4) Capability for user to manually set decomposition and load balance of
+    coarsest level in a hierarchy 
+
+(5) Additional options for writing SAMRAI restart files.
+
+(6) Configure option for deprecated features.
+
+-----------------------------------------------------------------------------
+                Summary of what's changed
+-----------------------------------------------------------------------------
+
+This section contains a summary of changes to SAMRAI.  More detailed
+descriptions of items in the following list are provided below.
+
+(1) Building with/without extra types working again.
+
+(2) Fixed bug in KINSOL wrapper when setting MaxKrylovDimension.
+
+(3) Improved template instantiation for STL classes.
+
+(4) KAI KCC compiler code removed.
+
+(5) configure and standard environment variables
+
+(6) Intel icc rpath configure improved
+
+(7) Improved MS VC++ support.
+
+(8) Compiling in source directory.
+
+(9) Calculation of timer overhead values
+
+(10) Nonlinear example code was not working with KINSOL and regridding.
+
+(11) KINSOL initialize method interface change.
+
+(12) PETSC differencing parameter strategy default set to WP
+
+(13) Array constructor interface no longer takes optional is_standard_type flag.
+
+(14) "getNumber" methods renamed to "getNumberOf"
+
+(15) Make tools is separated from library build
+
+(16) Added index operator[] to BoxArray class.
+
+(17) PatchGeometry API for getting patch boundaries changed to
+     get*Boundaries from get*Boundary.
+
+(18) Gridding algorithm ratio_to_coarser input will fill in missing 
+     values.
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                Details about what's new
+-----------------------------------------------------------------------------
+
+(1) User control over SAMRAI logging.
+
+Two new classes have been introduced to enable user control over the
+logging of SAMRAI messages.  This should allow for better integration
+to applications.
+
+The tbox::Logger is a singleton class with methods to log messages.
+All SAMRAI log messages are sent to this class (e.g. logWarning()
+method ).  tbox::Logger delegates the mechanism of logging to the
+Logger::Appender class.  Default implementations of this class are
+provided to replicate previous behavior of logging to the plog stream.
+
+The user may supply Logger::Appender implementations to direct SAMRAI
+messages to a different destination, most commonly an application
+specific logging mechanism.  See the
+source/test/logger/userloggertest.C file for a simple example and the
+Logger documentation for API information.
+
+NOTE: The logging API in tbox::Utilities was removed.  If this was
+being used the logging methods in the tbox::Logger class should be
+used instead.  If the TBOX_ABORT and TBOX_WARNING macros are being
+used, no changes are required.
+
+
+(2) Round method added to MathUtilities class.
+
+For portability a round method was added to the MathUtilities class
+since cmath does not yet have a round method.
+
+(3) Query function that tells location of BoundaryBox added
+
+BoundaryBox::getBoundaryDirection enables the querying of a BoundaryBox
+to determine whether the boundary box is above or below a patch in a given
+coordinate direction.  It returns the enumerated type 'BoundaryDirection' which
+can have the value 'LOWER', 'MIDDLE', or 'UPPER'.
+
+
+(4) Capability for user to manually set decomposition and load balance of
+coarsest level in a hierarchy
+
+TimeRefinementIntegrator::initializeHierarchy now has optional arguments with
+which a user can specify the decomposition and load balance of the coarsest
+level of the new hierarchy.  The arguments are a BoxArray that specifies the
+box decomposition of the level, and a ProcessorMapping that maps each box in
+the decomposition to a processor.
+
+(5) Additional options for writing SAMRAI restart files.
+
+API's are supplied for writing SAMRAI restart files to a SILO file and
+options have been added to enable writing SAMRAI restart information
+to a file (SILO/HDF) supplied by the application.  This will enable a
+SAMRAI application to store the SAMRAI specific restart data to the
+applications existing file rather than creating a separate one.
+
+See docs/userdocs/userguide.pdf for more information.
+
+(6) Configure option for deprecated features.
+
+The configure script option "--enable-deprecated" and
+"--disable-deprecated" may be used to include/exclude deprecated
+features from the build.  Deprecated features will be removed from
+future SAMRAI releases; the most frequent deprecation is removal of a
+method from a class.
+
+The default is to enable deprecated features for backwards compatibility.
+
+-----------------------------------------------------------------------------
+                Details about what's changed
+-----------------------------------------------------------------------------
+
+(1) Building with/without extra types working again.
+
+The SAMRAI configure script takes optional arguments to build the
+template types on bool, char, float, and dcomplex:
+
+  --enable-char           build char patch datatypes
+  --enable-float          build float patch datatypes
+  --enable-bool           build boolean patch datatypes
+  --enable-dcomplex       build double complex patch datatypes
+
+This feature was broken in previous releases and all the types were
+built regardless of what was specified on the configure line. These
+types are no longer built by default, the --enable flag for that type
+is required.
+
+The number of object files when building the default configuration was
+reduced to 1544 from 2240 and the libraries were reduced to 147MB from
+177MB (under Linux GNU 4.2.2).
+
+(2) Fixed bug in KINSOL wrapper when setting MaxKrylovDimension.
+
+Was setting setMaxIterations(d_max_krylov_dimension) when this should
+have been setMaxKrylovDimension(d_max_krylov_dimension).
+
+art7816  
+
+(3) Improved template instantiation for STL classes.
+
+Since SAMRAI is normally compiled using explicit template
+instantiation, the instantiation of the STL classes caused an
+explosion of templates that were required by STL.  To address this
+issue the toolbox/templates/special directory is now compiled with
+implicit template instantiation.  This should eliminate a number of
+problems with unresolved symbols when compiling the library.
+
+The SAMRAI team is currently evaluating the explicit template
+instantiation decision.  When this decision was originally made the
+difference in compilation times was over 30 minutes.  With faster
+machines and better compilers this is not as significant a problem.
+
+(4) KAI KCC compiler code removed.
+
+The old KAI KCC support was stripped from the configure scripts and
+other files.  KCC had not been supported for some time by SAMRAI and
+all references to it have been or will removed.
+
+(5) configure and standard environment variables
+
+Several users reported problems with configure and standard configure
+environment variables (e.g. CFLAGS etc).  The SAMRAI configure script
+was not including these in the Makefile.config.  The Makefile.config
+should now include the flags mentioned in configure --help notes and
+use them during the compilation of the library.
+
+(6) Intel icc rpath configure improved
+
+Intel compilation detection of shared library path syntax was improved
+in autoconf.  The previous configure script was not able to determine
+the syntax for including a shared library directory in the link line
+(e.g. -rpath, -R etc).  This was improved so users should not have to
+manually specify the syntax on the configure line in most cases.  This
+was specific to the Intel icc compiler.
+
+(7) Improved MS VC++ support.
+
+Minor changes to code were made to enable compiling with Microsoft
+Visual Studio 2008.  This is based on user submitted patches and is
+not tested by the SAMRAI team.
+
+(8) Compiling in source directory.
+
+Configuring and compiling in the source directory should work again.
+This is not the recommended compilation model, we suggest creating an
+object directory and configuring/compiling in it.
+
+(9) Calculation of timer overhead values.
+
+The timer overhead values were hard-coded and not correct on most
+machines; these values are now being computed at runtime.
+
+(10) Nonlinear example code was not working with KINSOL and regridding.
+
+The nonlinear example code had a problem with some smart pointer
+manipulation which was causing a bug when regridding was turned on and
+KINSOL was being used.
+
+(11) KINSOL initialize method interface change.
+
+This change only effects KINSOL users who are setting one of the
+scaling vectors.
+
+The KINSOL initialize method previously took a single argument and the
+solution and residual scaling vectors were set using additional "set"
+methods.  This was replaced with a single initialize method that has
+two optional arguments for setting the scaling vectors.
+
+So the following three methods:
+
+void initialize(SundialsAbstractVector* solution);
+
+void setSolutionScaleVector(SundialsAbstractVector* uscale);
+
+void setResidualScaleVector(SundialsAbstractVector* fscale);
+
+are replaced with a single initialize method of:
+
+void initialize(SundialsAbstractVector* solution, 
+     SundialsAbstractVector* uscale = NULL, 
+     SundialsAbstractVector* fscale = NULL); 
+
+(12) PETSc differencing parameter strategy default set to WP
+
+Previous releases used the value "default" as the default value for
+the differencing parameter strategy, this was changed to be the PETSc
+value of MATMFFD_WP to match current PETSc API.  This can be set to
+MATMFFD_DS via the setDifferencingParameterMethod method of
+SNES_SAMRAIContext.  See PETSc documentation for more information on
+these options.
+
+This should not change the behavior but should remove a warning
+message being generated by PETSc.
+
+(13) Array constructor interface no longer takes optional is_standard_type flag.
+
+The Array constructors previously had an optional flag to signal if
+the templated type was one of the standard (builtin) types.  The
+mechanism to determine if the templated type is a standard type was
+moved inside the Array class and this flag is no longer supported.
+
+art7725
+
+(14) "getNumber" methods renamed to "getNumberOf"
+
+Users reported naming differences in the methods that return the
+number of something.  Both "getNumber" and "getNumberOf" were used.
+The method names were changed to be "getNumberOf".
+
+A conversion script "convert2.3" in tools/scripts/conversion2.3 will
+do a text replacement of the names on a source code tree.  See the
+README in the conversion2.3 directory for more information.
+
+The following names were changed:
+
+getNumberBlocks
+getNumberBoundaryNodes
+getNumberEquivalenceClasses
+getNumberItems
+getNumberItemsInEquivalenceClass
+getNumberIterations
+getNumberLevels
+getNumberNearestNeighborNodes
+getNumberNeighbors
+getNumberOutsideNeighborNodes
+getNumberRegisteredPatchDataIndices
+getNumberRegisteredVariableContexts
+getNumberRegisteredVariables
+
+art8253
+
+(15) Make tools is separated from library build.
+
+The SAMRAI tools are built using 
+
+make tools
+
+instead of building automatically built with the library.  This is
+currently only used to build the restart-redistribute utility.
+
+(16) Added index operator[] to BoxArray class
+
+The BoxArray class was using getBox() and operator "()" as operator to index.  The more
+familiar "[]" operator was added.
+
+E.G.
+BoxArray<2> boxes;
+boxes[0] = box;
+
+Is more array like than the previous:
+
+boxes(0) = box;
+
+getBox() and operator() are deprecated and will be removed.
+
+
+(17) PatchGeometry API for getting patch boundaries changed to
+     get*Boundaries from get*Boundary.
+
+SAMRAI does not have a consistent naming convention for boundary
+information.  Various classes use Boundaries, Boundary, and/or
+BoundaryBoxes for the same notion of a set of BoundaryBox that
+describe a boundary.
+
+PatchGeometry's API was change from get*Boundary methods to
+get*Boundaries method to match other classes (e.g. CoarseFineBoundary)
+as a minor step towards increasing the consistency of the names.  This
+is only a partial fix for a larger naming problem.
+
+(18) Gridding algorithm ratio_to_coarser input will fill in missing 
+     values.
+
+The array of level values for ratio_to_coarser will use the finest
+value supplied for levels that are finer in the same manner as the
+other gridding algorithm input.
+
+For example:
+
+   max_levels = 3         // Maximum number of levels in hierarchy.
+
+   ratio_to_coarser {      // vector ratio to next coarser level
+      level_1 = 4 , 4
+      // all finer levels will use same values as level_0...
+   }
+
+
+Is the same as:
+
+   ratio_to_coarser {      // vector ratio to next coarser level
+      level_1 = 4 , 4
+      level_2 = 4 , 4
+   }
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                Known Problems
+-----------------------------------------------------------------------------
+
+(1) 
+
+=============================================================================
+=============================================================================

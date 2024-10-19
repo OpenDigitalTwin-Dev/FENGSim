@@ -1,0 +1,473 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2013 Lawrence Livermore National Security, LLC
+ * Description:   input file for testing communication of SAMRAI cell data. 
+ *
+ ************************************************************************/
+
+Main {
+    dim = 3
+//
+// Log file information
+//
+    log_file_name  = "cell-test.log"
+    log_all_nodes  = TRUE
+
+//
+// Testing information, including number of times to perform schedule
+// creation and communication processes, name of particular patch data
+// test
+//    
+    ntimes_run = 1  // default is 1
+
+//
+// Available tests are:
+// 
+    test_to_run = "CellMultiblockTest"
+//  test_to_run = "EdgeDataTest"
+//  test_to_run = "FaceDataTest"
+//  test_to_run = "NodeDataTest"
+//  test_to_run = "SideDataTest"
+}
+
+TimerManager {
+    timer_list = "test::main::*"
+
+// Available timers are:
+//
+//   "test::main::createRefineSchedule"
+//   "test::main::performRefineOperations"
+//   "test::main::createCoarsenSchedule"
+//   "test::main::performCoarsenOperations"
+//
+    
+}
+
+CellMultiblockTest {
+
+   //
+   // The VariableData database is read in by the PatchDataTestStrategy
+   // base class.  Each sub-database must contain variable parameter data.
+   // The name of the sub-databases for each variable is arbitrary.  But
+   // the names must be distinct.  
+   // 
+   //    Required input:  name
+   //    Optional input:  depth              (default = 1)
+   //                     src_ghosts         (default = 0,0,0)
+   //                     dst_ghosts         (default = 0,0,0)
+   //                     refine_operator    (default = "CONSTANT_REFINE")
+   //
+   VariableData {
+
+      variable_1 {
+         src_name = "src_var1"
+         dst_name = "dst_var1"
+         depth = 1
+         src_ghosts = 0,0,0
+         dst_ghosts = 1,1,1
+         refine_operator = "CONSTANT_REFINE"
+      }
+   }
+
+   RefinementData {
+   }
+
+}
+
+BlockGridGeometry {
+   num_blocks = 11
+   domain_boxes_0 = [ (0,0,0) , (14,8,14) ]
+   domain_boxes_1 = [ (0,0,0) , (14,11,14) ]
+   domain_boxes_2 = [ (0,0,0) , (10,14,14) ]
+   domain_boxes_3 = [ (0,0,0) , (14,14,7) ]
+   domain_boxes_4 = [ (0,0,0) , (14,14,14) ]
+   domain_boxes_5 = [ (0,0,0) , (14,14,14) ]
+   domain_boxes_6 = [ (0,0,0) , (14,14,14) ]
+   domain_boxes_7 = [ (0,9,0) , (14,14,14) ]
+   domain_boxes_8 = [ (0,12,0) , (14,14,14) ]
+   domain_boxes_9 = [ (11,0,0) , (14,14,14) ]
+   domain_boxes_10 = [ (0,0,8) , (14,14,14) ]
+
+   BlockNeighbors0 {
+      block_a = 7
+      block_b = 1
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0,14,0
+      point_in_b_space = 0,-1,0
+   }
+
+   BlockNeighbors1 {
+      block_a = 0
+      block_b = 2
+
+      rotation_b_to_a = "J_UP", "I_DOWN", "K_UP"
+      point_in_a_space = 14,0,0
+      point_in_b_space = 14,-1,0
+   }
+
+   BlockNeighbors28 {
+      block_a = 0
+      block_b = 9
+
+      rotation_b_to_a = "J_UP", "I_DOWN", "K_UP"
+      point_in_a_space = 14,0,0
+      point_in_b_space = 14,-1,0
+   }
+
+   BlockNeighbors2 {
+      block_a = 0
+      block_b = 3
+
+      rotation_b_to_a = "I_UP", "K_DOWN", "J_UP"
+      point_in_a_space = 14,14,14
+      point_in_b_space = 14,-1,0
+   }
+
+   BlockNeighbors32 {
+      block_a = 0
+      block_b = 10
+
+      rotation_b_to_a = "I_UP", "K_DOWN", "J_UP"
+      point_in_a_space = 14,14,14
+      point_in_b_space = 14,-1,0
+   }
+
+   BlockNeighbors3 {
+      block_a = 0
+      block_b = 4
+
+      rotation_b_to_a = "I_UP", "K_UP", "J_DOWN"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 0,-1,0
+   }
+
+   BlockNeighbors4 {
+      block_a = 0
+      block_b = 5
+
+      rotation_b_to_a = "I_UP", "J_DOWN", "K_DOWN"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 0,-1,14
+   }
+
+   BlockNeighbors19 {
+      block_a = 7
+      block_b = 2
+
+      rotation_b_to_a = "J_UP", "I_DOWN", "K_UP"
+      point_in_a_space = 14,0,0
+      point_in_b_space = 14,-1,0
+   }
+
+   BlockNeighbors20 {
+      block_a = 7
+      block_b = 3
+
+      rotation_b_to_a = "I_UP", "K_DOWN", "J_UP"
+      point_in_a_space = 14,14,14
+      point_in_b_space = 14,-1,0
+   }
+
+   BlockNeighbors21 {
+      block_a = 7
+      block_b = 4
+
+      rotation_b_to_a = "I_UP", "K_UP", "J_DOWN"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 0,-1,0
+   }
+
+   BlockNeighbors5 {
+      block_a = 1
+      block_b = 2
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 14,14,14
+      point_in_b_space = -1,14,14
+   }
+
+   BlockNeighbors6 {
+      block_a = 1
+      block_b = 3
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 14,14,14
+      point_in_b_space = 14,14,-1
+   }
+
+   BlockNeighbors7 {
+      block_a = 1
+      block_b = 4
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 0,0,15
+   }
+
+   BlockNeighbors8 {
+      block_a = 1
+      block_b = 6
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 15,0,0
+   }
+
+   BlockNeighbors24 {
+      block_a = 8
+      block_b = 2
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 14,14,14
+      point_in_b_space = -1,14,14
+   }
+
+   BlockNeighbors25 {
+      block_a = 8
+      block_b = 3
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 14,14,14
+      point_in_b_space = 14,14,-1
+   }
+
+   BlockNeighbors26 {
+      block_a = 8
+      block_b = 4
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 0,0,15
+   }
+
+   BlockNeighbors27 {
+      block_a = 8
+      block_b = 6
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 15,0,0
+   }
+
+   BlockNeighbors9 {
+      block_a = 2
+      block_b = 3
+
+      rotation_b_to_a = "K_UP", "J_UP", "I_DOWN"
+      point_in_a_space = 0,0,14
+      point_in_b_space = 15,0,0
+   }
+
+   BlockNeighbors35 {
+      block_a = 2
+      block_b = 10
+
+      rotation_b_to_a = "K_UP", "J_UP", "I_DOWN"
+      point_in_a_space = 0,0,14
+      point_in_b_space = 15,0,0
+   }
+
+   BlockNeighbors10 {
+      block_a = 2
+      block_b = 4
+
+      rotation_b_to_a = "K_DOWN", "J_UP", "I_UP"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 15,0,14
+   }
+
+   BlockNeighbors34 {
+      block_a = 9
+      block_b = 10
+
+      rotation_b_to_a = "K_UP", "J_UP", "I_DOWN"
+      point_in_a_space = 0,0,14
+      point_in_b_space = 15,0,0
+   }
+
+   BlockNeighbors30 {
+      block_a = 9
+      block_b = 4
+
+      rotation_b_to_a = "K_DOWN", "J_UP", "I_UP"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 15,0,14
+   }
+
+   BlockNeighbors29 {
+      block_a = 9
+      block_b = 5
+
+      rotation_b_to_a = "I_DOWN", "J_UP", "K_DOWN"
+      point_in_a_space = 14,0,14
+      point_in_b_space = 15,0,0
+   }
+
+   BlockNeighbors33 {
+      block_a = 10
+      block_b = 5
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 14,0,14
+      point_in_b_space = 14,0,-1
+   }
+
+   BlockNeighbors13 {
+      block_a = 3
+      block_b = 6
+
+      rotation_b_to_a = "K_UP", "J_UP", "I_DOWN"
+      point_in_a_space = 0,0,14
+      point_in_b_space = 0,0,15
+   }
+
+   BlockNeighbors31 {
+      block_a = 10
+      block_b = 6
+
+      rotation_b_to_a = "K_UP", "J_UP", "I_DOWN"
+      point_in_a_space = 0,0,14
+      point_in_b_space = 0,0,15
+   }
+
+   BlockNeighbors14 {
+      block_a = 4
+      block_b = 5
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 0,0,15
+   }
+
+   BlockNeighbors15 {
+      block_a = 4
+      block_b = 6
+
+      rotation_b_to_a = "K_DOWN", "J_UP", "I_UP"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 0,0,-1
+   }
+
+   BlockNeighbors16 {
+      block_a = 5
+      block_b = 6
+
+      rotation_b_to_a = "I_DOWN", "J_UP", "K_DOWN"
+      point_in_a_space = 0,0,0
+      point_in_b_space = -1,0,14
+   }
+
+   BlockNeighbors17 {
+      block_a = 0
+      block_b = 6
+
+      rotation_b_to_a = "J_DOWN", "I_UP", "K_UP"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 0,-1,0
+   }
+
+   BlockNeighbors18 {
+      block_a = 7
+      block_b = 6
+
+      rotation_b_to_a = "J_DOWN", "I_UP", "K_UP"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 0,-1,0
+   }
+
+   BlockNeighbors22 {
+      block_a = 0
+      block_b = 7
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 0,0,0
+   }
+
+   BlockNeighbors23 {
+      block_a = 1
+      block_b = 8
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 0,0,0
+   }
+
+   BlockNeighbors11 {
+      block_a = 2
+      block_b = 9
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 0,0,0
+   }
+
+   BlockNeighbors12 {
+      block_a = 3
+      block_b = 10
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 0,0,0
+   }
+
+
+
+}
+
+PatchHierarchy {
+   max_levels              = 2 // Maximum number of levels in hierarchy.
+   ratio_to_coarser {         // vector ratio to next coarser level
+      level_1               =  2 , 2 , 2
+      level_2               =  2 , 2 , 2
+   }
+   largest_patch_size {
+      level_0 = 40, 40, 40
+      // all finer levels will use same values as level_0...
+   }
+   smallest_patch_size {
+      level_0 = 2, 2, 2
+      // all finer levels will use same values as level_0...
+   }
+}
+
+BergerRigoutsos {
+   efficiency_tolerance     = 0.70e0   // min % of tag cells in new patch level
+   combine_efficiency       = 0.85e0   // chop box if sum of volumes of smaller
+                                       // boxes < efficiency * vol of large box
+}
+
+GriddingAlgorithm {
+}
+
+TreeLoadBalancer {
+}
+
+StandardTaggingAndInitializer {
+   tagging_method = "REFINE_BOXES"
+   level_0 {
+      block_0 {
+         boxes = [ (10,4,4) , (11,6,8) ]
+      }
+      block_1 {
+         boxes = [ (13,8,13) , (14,11,14) ]
+      }
+      block_2 {
+         boxes = [ (7,7,8) , (10,11,9) ]
+      }
+      block_3 {
+         boxes = [ (9,9,4) , (10,14,7) ]
+      }
+      block_4 {
+         boxes = [ (12,2,7) , (14,14,14) ]
+      }
+      block_8 {
+         boxes = [ (5,12,0) , (8,14,5) ]
+      }
+
+   }
+}

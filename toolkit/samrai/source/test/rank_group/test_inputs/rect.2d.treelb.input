@@ -1,0 +1,81 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Performance input file for TreeLoadBalancer 
+ *
+ ************************************************************************/
+
+Main {
+   // Dimension of the problem.
+   dim = 2
+
+   // Base name for log file.
+   base_name = "rect.treelb.2d"
+
+   // If true all processes generate log files.  Otherwise only process 0 does.
+   log_all_nodes = FALSE
+
+   // Load balancer choice.  One of TreeLoadBalancer, ChopAndPackLoadBalancer.
+   load_balancer_type = "TreeLoadBalancer"
+
+   // Specify domain as a box array in the reference index space.
+   domain_boxes = [(0,0),(999,199)]
+
+   // Specify anchor layer as a box array in the reference index space.
+   // The anchor layer will be partitioned but its partitioning is not
+   // used in the performance test.
+   anchor_boxes = [(0,0),(999,199)]
+
+   // Specify ghost-cell-width between anchor and unbalanced.
+   ghost_cell_width = 4, 4
+
+   // Specify the min patch size.  If omitted, min patch size is 8 in each
+   // dimension.
+   min_size = 4, 4
+
+   // Specify the max patch size.  If omitted, no max patch size.
+   // max_size = -1, -1
+
+   // Box generation method.  One of PrebalanceByUserBoxes,
+   // PrebalanceByUserShells.
+   // box_gen_method = "PrebalanceByUserBoxes"
+
+   PrebalanceByUserBoxes {
+      // Specify unbalanced layer as a box array in the reference index space.
+      balance_boxes = [(10,10),(989,189)]
+
+      // initial_owners are the ranks of the owners of all the initial balance
+      // boxes.
+      initial_owners = 0
+   }
+
+}
+
+// Refer to mesh::TreeLoadBalancer for input
+TreeLoadBalancer {
+  DEV_report_load_balance = TRUE // Reported in main
+  DEV_balance_penalty_wt = 1.0
+  DEV_surface_penalty_wt = 1.0
+  DEV_slender_penalty_wt = 1.0
+  DEV_precut_penalty_wt = 1.0
+
+  // Debugging options
+  DEV_check_map = FALSE
+  DEV_check_connectivity = FALSE
+  DEV_print_steps = TRUE
+  DEV_print_swap_steps = FALSE
+  DEV_print_break_steps = FALSE
+  DEV_print_edge_steps = FALSE
+}
+
+// Refer to tbox::TimerManager for input.
+TimerManager {
+//   print_exclusive      = TRUE
+   print_summed           = TRUE
+   print_max              = TRUE
+   print_threshold        = 0.
+   timer_list             = "hier::*::*", "mesh::*::*", "apps::*::*"
+}

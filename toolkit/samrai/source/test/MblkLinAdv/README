@@ -1,0 +1,59 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   MULTIBLOCK LINEAR ADVECTION EQUATION EXAMPLE
+##
+#########################################################################
+
+This README explains how to compile and run the Multiblock Linear Advection
+application.  The files in this directory are as follows:
+
+    main.cpp             -  application driver program
+    MblkLinAdv.[C,h]   -  C++ class containing routines specific to the
+                          Linear Advection example and which are called from
+                          SAMRAI AMR library routines
+    MblkGeometry.[C,h] -  Class managing the physical coordinate geometry
+                          of the problem.
+    SkeletonOutersideDoubleWeightedAverage.[C,h]
+                       -  A coarsening operator needed for this problem  
+
+This example is similar to the single-block AMR LinAdv sample application.
+This example has the following differences:
+
+   1. It works on non-cartesian mapped grids 
+   2. It works with multiblock grids
+   3. All numerical kernel operations (e.g. computeFluxesOnPatch()) are
+      c-based rather than fortran
+
+The two test cases included are:
+
+   1. wedge_1blk.3d  - single block mapped wedge grid 
+   2. octant_3blk.3d - multi block (3 blocks) mapped octant grid 
+
+Note that the numerics for this example have not been fully tested in 2D so it
+currently should only run in 3D.
+ 
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make main
+
+   Execution:
+      For one of the following input files:
+         test_inputs/octant_3blk.3d.input
+         test_inputs/wedge_1blk.3d.input
+      serial:
+         ./main <input file>
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main <input file>
+
+INPUT PARAMETERS
+----------------
+Refer to test_inputs/octant_3blk.3d.input for full description of all input
+parameters specific to this problem.
+

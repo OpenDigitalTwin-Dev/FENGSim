@@ -1,0 +1,138 @@
+#!/bin/sh -f
+# **************************************************************************
+# Tool to run valgrind to check for memory leaks
+# Loosely based on script in Tool Gear by John C. Gyllenhaal.
+# **************************************************************************
+
+BIN=`dirname $0`
+DIR=`cd $BIN && pwd`
+
+# Specify the valgrind version to use
+
+if [ "$SAMRAI_VALGRIND_EXE" == "" ];  then
+    SAMRAI_VALGRIND_EXE="valgrind"
+fi
+
+# Specify OpenMPI suppression file.
+OPENMPI_SUPPRESSION="${DIR}/openmpi-valgrind.supp" 
+
+# Specify SAMRAI suppression file (e.g. most MPI implementations generate
+# warnings that the user cannot do anything about, so filter them out)
+SAMRAI_SUPPRESSION="${DIR}/samrai.supp" 
+
+# Python uses a memory management scheme that causes scary warnings with
+# valgrind that are safe to ignore.   Always filter them out to prevent 
+# confusion.   Suppressions mainly tested with 64-bit x86. -JCG 1/12/09
+PYTHON_SUPPRESSION="${DIR}/python.supp" 
+
+# Get the valgrind version
+VALGRIND_VERSION=`${SAMRAI_VALGRIND_EXE} --version`
+
+if [ $? != 0 ]; then
+    VALGRIND_VERSION="(Unable to get valgrind version)"
+fi
+
+# Additional optional valgrind options turned on by default 
+# Some features require 3.3.0 and even 3.4.0 (beta tested for --trace-origins)
+# The LOG_FILE_OPTION changed in 3.3.0.
+case $VALGRIND_VERSION in
+    valgrind-3.5*)
+       # --read-var-info=yes caused some dwarf read errors (very noisy) so turn off for now
+       # --track-origins=yes : SGS this option caused failure
+       VALGRIND_OPTIONS="--error-limit=no --leak-check=full --show-reachable=yes --max-stackframe=16777216 --num-callers=50 --child-silent-after-fork=yes  --gen-suppressions=all"
+       LOG_FILE_OPTION="--log-file";;
+
+    *)
+       echo "Warning: Unknown valgrind version ($VALGRIND_VERSION), using 3.3.0 settings"
+       VALGRIND_OPTIONS="-v --error-limit=no --leak-check=full --show-reachable=yes --max-stackframe=16777216 --num-callers=50 --child-silent-after-fork=yes"
+       LOG_FILE_OPTION="--log-file";;
+esac   
+
+# Catch common user error, forgetting to put srun/mpirun before memcheck_all.
+# Also, get MPI environments RANK variable and put in MY_RANK so can
+# support multiple MPI runtimes
+
+# Get RANK variable for Quadrics elan3, if defined
+if [ "$RMS_RANK" != "" ];  then
+  MY_RANK="${RMS_RANK}"
+
+# Get RANK variable for MPIRUN based systems, if defined
+elif [ "${MPIRUN_RANK}" != "" ];  then
+  MY_RANK="${MPIRUN_RANK}"
+
+elif [ "${OMPI_COMM_WORLD_RANK}" != "" ]; then
+  MY_RANK="${OMPI_COMM_WORLD_RANK}"
+
+else
+   echo "Error: MPI RANK environment variable not set (RMS_RANK or MPIRUN_RANK)!"
+   echo "Usage: ${MPIRUN_SYNTAX} memcheck_all [extra-valgrind-args] command [args]";
+   echo "(Run memcheck_all with no arguments for more usage info.)"
+   exit 1;
+fi
+
+# Get a job id, may need to enhance for other systems
+if [ "$SLURM_JOBID" != "" ]; then
+    MY_JOBID="${SLURM_JOBID}"
+else
+    MY_JOBID=$$
+fi
+
+# Assume first argument that doesn't start with - is executable name
+EXE_NAME=""
+for MYARG in "$@"
+do
+    if [ "$EXE_NAME" = "" ]; then
+	case "$MYARG" in
+           -*)
+             IGNORE_OPTION=1;;
+           *)
+             # Use basename to get executable name without path
+             EXE_NAME=`basename $MYARG`
+             break;;
+        esac
+    fi
+done
+
+
+
+# Make sure we found a executable name
+if [ "$EXE_NAME" = "" ]; then
+   echo " "
+   echo "Error: Unable to find executable name in:"
+   echo "      '$@'"
+   echo "      Expect at least one argument that doesn't start with '-'"
+   echo "Usage: ${MPIRUN_SYNTAX} memcheck_all [extra-valgrind-args] command [args]";
+   echo "(Run memcheck_all with no arguments for more usage info.)"
+   exit 1;
+fi
+
+
+
+MPI_WRAPPER=/nfs/casc/samrai/valgrind/3.5.0/lib/valgrind/libmpiwrap-x86-linux.so
+#export LD_PRELOAD=${MPI_WRAPPER}
+
+export GLIBCXX_FORCE_NEW=1
+
+# Run Valgrind Memcheck on code
+# Use --log-file-exactly for 3.2.x otherwise pids get added in
+# Use --log-file instead of --log-file-exactly for 3.3.0 and later
+LOGFILE=${EXE_NAME}.${MY_JOBID}.${MY_RANK}.valgrind
+${SAMRAI_VALGRIND_EXE} --tool=memcheck \
+    ${LOG_FILE_OPTION}=${LOGFILE} \
+    --suppressions=${SAMRAI_SUPPRESSION} \
+    --suppressions=${OPENMPI_SUPPRESSION} \
+    --suppressions=${PYTHON_SUPPRESSION} \
+    ${VALGRIND_OPTIONS} \
+    "$@"
+
+RETURN_CODE=$?
+
+for STRING in "definitely lost:" "indirectly lost:" "possibly lost:" "still reachable:" "ERROR SUMMARY:"
+do
+    LOST=`grep "$STRING" ${LOGFILE} | awk '{print $4}'`
+    if [ $LOST != 0 ]; then
+	echo "FAILED : valgrind found memory leak : $STRING $LOST"
+    fi
+done
+
+exit ${RETURN_CODE}

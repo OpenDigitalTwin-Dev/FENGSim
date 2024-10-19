@@ -1,0 +1,342 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for SAMRAI Linadv example problem
+ *                (3d sinusoidal fronusoidal frontt)
+ *
+ ************************************************************************/
+
+//See test_inputs/domainexpansion.input for inputs
+
+LinAdv {
+   advection_velocity = 2.0e0 , 0.55e0, 0.55e0
+
+   godunov_order    = 4
+   corner_transport = "CORNER_TRANSPORT_1"
+
+   Refinement_data {
+      // refine_criteria = "UVAL_GRADIENT", "UVAL_SHOCK"
+      refine_criteria = "UVAL_GRADIENT"
+
+      UVAL_GRADIENT {
+         grad_tol = 20.0
+      }
+
+      UVAL_SHOCK {
+         shock_tol = 20.0
+         shock_onset = 0.85
+      }
+   }
+
+}
+
+BergerRigoutsos {
+   DEV_algo_advance_mode = "ADVANCE_SOME"
+   DEV_owner_mode = "MOST_OVERLAP"
+   DEV_inflection_cut_threshold_ar = 4
+   DEV_min_box_size_from_cutting = 1, 1, 1
+   DEV_log_node_history = FALSE
+   sort_output_nodes = TRUE
+   max_box_size = 100, 100, 100
+   combine_efficiency = 0.85
+   efficiency_tolerance = 0.85
+//   DEV_log_cluster_summary = TRUE
+   DEV_log_cluster = FALSE
+//   DEV_barrier_before = TRUE
+//   DEV_barrier_after = TRUE
+}
+
+TileClustering {
+   tile_size = 8,8,8
+//   DEV_log_cluster_summary = TRUE
+   DEV_log_cluster = FALSE
+//   DEV_barrier_and_time = TRUE
+}
+
+Main {
+   dim = 3
+   base_name    = "domexc"
+   log_all_nodes    = FALSE
+
+   // Clustering choices: BergerRigoutsos, TileClustering
+   clustering_type = "BergerRigoutsos"
+
+   // Partitioner choices: TreeLoadBalancer, ChopAndPackLoadBalancer, TilePartitioner
+   load_balancer_type = "TreeLoadBalancer"
+
+// visualization dump parameters
+   viz_dump_interval     = 0          // zero to turn off
+
+// restart dump parameters
+   restart_interval        = 0        // zero to turn off
+
+   use_scaled_input = FALSE
+   // timestepping = "SYNCHRONIZED"
+}
+
+TimerManager {
+//   print_exclusive      = TRUE
+   print_summed           = TRUE
+   print_max              = TRUE
+   print_threshold        = 0.
+   timer_list             = "hier::*::*",
+                            "apps::*::*",
+                            "algs::*::*",
+                            "mesh::*::*",
+                            "tbox::AsyncCommGroup::*",
+                            "tbox::AsyncCommStage::*",
+                            "tbox::JobRelauncher::*",
+                            "tbox::Schedule::*",
+                            "xfer::*::*",
+                            "appu::main::all"
+}
+
+PatchHierarchy {
+   max_levels = 3
+   largest_patch_size {
+      level_0 = -1,-1,-1
+      // level_0 = 20,20,20
+      // all finer levels will use same values as level_0...
+   }
+   smallest_patch_size {
+      level_0 = 6,6,6
+      // all finer levels will use same values as level_0...
+   }
+   ratio_to_coarser {
+      level_1            = 2, 2, 2
+      level_2            = 2, 2, 2
+      level_3            = 2, 2, 2
+      level_4            = 2, 2, 2
+      level_5            = 2, 2, 2
+      level_6            = 2, 2, 2
+      level_7            = 2, 2, 2
+      level_8            = 2, 2, 2
+      level_9            = 2, 2, 2
+      //  etc.
+   }
+
+   allow_patches_smaller_than_ghostwidth = FALSE
+   allow_patches_smaller_than_minimum_size_to_prevent_overlaps = TRUE
+   proper_nesting_buffer = 1, 1, 1
+}
+
+GriddingAlgorithm {
+   // DEV_load_balance = FALSE
+   sequentialize_patch_indices = TRUE
+//   DEV_barrier_and_time = TRUE
+//   DEV_log_metadata_statistics = TRUE
+//   DEV_print_steps = FALSE
+//   DEV_check_boundary_proximity_violation = "ERROR"
+}
+
+SinusoidalFrontTagger {
+   init_disp = 1.0, 1.0, 0.0
+   period = 8.0, 8.0, 8.0
+   velocity = 2.0e0 , 0.55e0, 0.55e0
+   amplitude = 1.0
+}
+
+StandardTagAndInitialize {
+   tagging_method = "GRADIENT_DETECTOR"
+}
+
+
+TimeRefinementIntegrator {
+   start_time            = 0.e0     // initial simulation time
+   end_time              = 5.0      // final simulation time
+   grow_dt               = 1.0e0    // growth factor for timesteps
+   // max_integrator_steps  = 1     // max number of simulation timesteps
+   max_integrator_steps  = 25     // max number of simulation timesteps
+   // tag_buffer            = 3, 3, 3, 3, 3, 3
+//   DEV_barrier_and_time        = TRUE
+}
+
+ChopAndPackLoadBalancer{
+   bin_pack_method = "GREEDY"
+   // bin_pack_method = "SPATIAL"
+   ignore_level_box_union_is_single_box = TRUE
+}
+
+TreeLoadBalancer {
+   flexible_load_tolerance = 0.05
+   max_spread_procs = 1000000
+
+   DEV_report_load_balance = FALSE
+//   DEV_barrier_before = TRUE
+//   DEV_barrier_after = TRUE
+   DEV_check_map = FALSE
+   DEV_check_connectivity = FALSE
+   DEV_print_steps = FALSE
+   DEV_print_swap_steps = FALSE
+   DEV_print_break_steps = FALSE
+   DEV_print_edge_steps = FALSE
+   DEV_slender_penalty_wt = 0.0
+   DEV_summarize_map = FALSE
+}
+
+TreeLoadBalancer {
+  tile_size = 16,16,16
+  flexible_load_tolerance = 0.05
+  DEV_report_load_balance = FALSE
+  DEV_allow_box_breaking = TRUE
+  // Debugging options
+  DEV_check_map = FALSE
+  DEV_check_connectivity = FALSE
+  DEV_print_steps = FALSE
+  DEV_print_swap_steps = FALSE
+  DEV_print_break_steps = FALSE
+  DEV_print_edge_steps = FALSE
+  DEV_summarize_map = TRUE
+}
+
+HyperbolicLevelIntegrator {
+   cfl                      = 0.43
+   cfl_init                 = 0.43
+   lag_dt_computation       = TRUE
+   use_ghosts_to_compute_dt = TRUE
+//   DEV_distinguish_mpi_reduction_costs = TRUE
+}
+
+RefineSchedule {
+//   DEV_barrier_and_time = TRUE
+   DEV_extra_debug = FALSE
+}
+
+PersistentOverlapConnectors {
+   DEV_check_created_connectors = FALSE
+   DEV_check_accessed_connectors = FALSE
+   implicit_connector_creation_rule = "ERROR"
+}
+
+////////////////////////////////////////////////////////////////////////
+// Specific databases for scaling tests.
+////////////////////////////////////////////////////////////////////////
+
+ScaledInput {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (63, 31, 31) ]   //   32proc
+   x_lo          =  0.e0, 0.e0, 0.e0  // lower end of computational domain.
+   x_up          = 16.e0, 8.e0, 8.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput64 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (127, 31, 31) ]   //   64proc
+   x_lo          =  0.e0, 0.e0, 0.e0  // lower end of computational domain.
+   x_up          = 32.e0, 8.e0, 8.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput128 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (127, 63, 31) ]   //   128proc
+   x_lo          =  0.e0,  0.e0, 0.e0  // lower end of computational domain.
+   x_up          = 32.e0, 16.e0, 8.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput256 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (127, 63, 63) ]   //  256proc
+   x_lo          =  0.e0,  0.e0,  0.e0  // lower end of computational domain.
+   x_up          = 32.e0, 16.e0, 16.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput512 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (255, 63, 63) ]   //  512proc
+   x_lo          =  0.e0,  0.e0,  0.e0  // lower end of computational domain.
+   x_up          = 64.e0, 16.e0, 16.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput1024 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (255, 127, 63) ]   // 1024proc
+   x_lo          =  0.e0,  0.e0,  0.e0  // lower end of computational domain.
+   x_up          = 64.e0, 32.e0, 16.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput2048 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (255, 127, 127) ]   // 2048proc
+   x_lo          =  0.e0,  0.e0,  0.e0  // lower end of computational domain.
+   x_up          = 64.e0, 32.e0, 32.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput4096 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (511, 127, 127) ]   // 4096proc
+   x_lo          =   0.e0,  0.e0,  0.e0  // lower end of computational domain.
+   x_up          = 128.e0, 32.e0, 32.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput8192 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (511, 255, 127) ]   // 8192proc
+   x_lo          =   0.e0,  0.e0,  0.e0  // lower end of computational domain.
+   x_up          = 128.e0, 64.e0, 32.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput16384 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (511, 255, 255) ]   // 16384proc
+   x_lo          =   0.e0,  0.e0,  0.e0  // lower end of computational domain.
+   x_up          = 128.e0, 64.e0, 64.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput32768 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (1023, 255, 255) ]   // 32768proc
+   x_lo          =   0.e0,  0.e0,  0.e0  // lower end of computational domain.
+   x_up          = 256.e0, 64.e0, 64.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput36864 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (1023, 287, 255) ]   // 36864proc
+   x_lo          =   0.e0,  0.e0,  0.e0  // lower end of computational domain.
+   x_up          = 256.e0, 72.e0, 64.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput65536 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (1023, 511, 255) ]   // 65536proc
+   x_lo          =   0.e0,   0.e0,  0.e0  // lower end of computational domain.
+   x_up          = 256.e0, 128.e0, 64.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput131072 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (1023, 511, 511) ]   // 131072proc
+   x_lo          =   0.e0,   0.e0,   0.e0  // lower end of computational domain.
+   x_up          = 256.e0, 128.e0, 128.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}

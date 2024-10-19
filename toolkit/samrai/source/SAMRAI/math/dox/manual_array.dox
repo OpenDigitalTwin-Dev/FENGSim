@@ -1,0 +1,30 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace math {
+
+/*! 
+  @page package_mathops_array Basic Array Data Operations
+
+  These classes provide the fundamental operation support for all patch
+  data operation classes.  They perform operations on array data objects
+  which form the basis for all array-based patch data types in SAMRAI.
+  Note that some operations are shared by all numerical types (int, double,
+  float, and dcomplex), while others are implemented in a manner specific
+  to the type.
+  - SAMRAI::math::ArrayDataBasicOps
+  - SAMRAI::math::ArrayDataNormOpsComplex
+  - SAMRAI::math::ArrayDataNormOpsReal
+  - SAMRAI::math::ArrayDataMiscellaneousOpsReal
+  - SAMRAI::math::ArrayDataNormOpsInteger
+*/
+
+}
+}

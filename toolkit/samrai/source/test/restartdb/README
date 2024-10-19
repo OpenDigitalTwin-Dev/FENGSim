@@ -1,0 +1,39 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   README file for hdf5 test.
+##
+#########################################################################
+
+This program tests the methods provided by the HDFDatabase and
+RestartManager classes.
+
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make checkcompile
+
+   Execution:
+      serial:
+         ./testHDF5
+         ./testHDF5AppFileOpen
+         ./testSilo
+         ./testSiloAppFileOpen
+         ./testMemory
+      parallel:
+         Parallel execution is platform dependent.  These examples demonstrate
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./testHDF5
+         mpirun -np <nprocs> [mpirun options] ./testHDF5AppFileOpen
+         mpirun -np <nprocs> [mpirun options] ./testSilo
+         mpirun -np <nprocs> [mpirun options] ./testSiloAppFileOpen
+         mpirun -np <nprocs> [mpirun options] ./testMemory
+
+OUTPUT
+------
+   HDF5test.log
+   Silotest.log
+   Memorytest.log

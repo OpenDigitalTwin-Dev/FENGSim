@@ -1,0 +1,83 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   README file for data operations unit tests.
+##
+#########################################################################
+
+The SAMRAI/source/test/dataops directory contains source code to test the basic
+patch data operations.  Each of these test programs creates a 2 level patch
+hierarchy with 2 patches on each level.  The "hier"-tests test the operations
+associated with the built in C/C++ types (e.g. addition, subtraction, etc.).
+The "cplx"-tests test the operations associated with data types that are
+complex numbers.  The "patch"-tests test operations that are performed on
+subsets of the patches (in contrast with previous "hier"- and "cplx"- test
+programs which test operations that affect each patch in its entirety).
+
+
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      cell_patchtest  - make cell_patchtest
+      cell_hiertest   - make cell_hiertest
+      cell_cplxtest   - make cell_cplxtest
+      face_hiertest   - make face_hiertest
+      face_cplxtest   - make face_cplx_test
+      node_hiertest   - make node_hiertest
+      node_cplxtest   - make node_cplxtest
+      edge_hiertest   - make edge_hiertest
+      edge_cplxtest   - make edge_cplxtest
+      side_hiertest   - make side_hiertest
+      side_cplxtest   - make side_cplxtest
+      indx_dataops    - make indx_dataops
+
+   Execution:
+      All tests take 1 argument which is the dimension, 2 or 3.
+
+      serial:
+         cell_patchtest  - ./cell_patchtest [2, 3]
+         cell_hiertest   - ./cell_hiertest [2, 3]
+         cell_cplxtest   - ./cell_cplxtest [2, 3]
+         face_hiertest   - ./face_hiertest [2, 3]
+         face_cplxtest   - ./face_cplxtest [2, 3]
+         node_hiertest   - ./node_hiertest [2, 3]
+         node_cplxtest   - ./node_cplxtest [2, 3]
+         edge_hiertest   - ./edge_hiertest [2, 3]
+         edge_cplxtest   - ./edge_cplxtest [2, 3]
+         side_hiertest   - ./side_hiertest [2, 3]
+         side_cplxtest   - ./side_cplxtest [2, 3]
+         indx_dataops    - ./indx_dataops [2, 3]
+      parallel:
+         Parallel execution is platform dependent.  These examples demonstrate
+         execution via mpirun.
+         cell_patchtest  - mpirun -np <nprocs> [mpirun options] cell_patchtest [2, 3]
+         cell_hiertest   - mpirun -np <nprocs> [mpirun options] cell_hiertest [2, 3]
+         cell_cplxtest   - mpirun -np <nprocs> [mpirun options] cell_cplxtest [2, 3]
+         face_hiertest   - mpirun -np <nprocs> [mpirun options] face_hiertest [2, 3]
+         face_cplxtest   - mpirun -np <nprocs> [mpirun options] face_cplxtest [2, 3]
+         node_hiertest   - mpirun -np <nprocs> [mpirun options] node_hiertest [2, 3]
+         node_cplxtest   - mpirun -np <nprocs> [mpirun options] node_cplxtest [2, 3]
+         edge_hiertest   - mpirun -np <nprocs> [mpirun options] edge_hiertest [2, 3]
+         edge_cplxtest   - mpirun -np <nprocs> [mpirun options] edge_cplxtest [2, 3]
+         side_hiertest   - mpirun -np <nprocs> [mpirun options] side_hiertest [2, 3]
+         side_cplxtest   - mpirun -np <nprocs> [mpirun options] side_cplxtest [2, 3]
+         indx_dataops    - mpirun -np <nprocs> [mpirun options] indx_dataops [2, 3]
+
+
+OUTPUT
+------
+   cell_patchtest  -  cell_patchtest.[2,3]d.log.*
+   cell_hiertest   -  cell_hiertest.[2,3]d.log.*
+   cell_cplxtest   -  cell_cplxtest.[2,3]d.log.*
+   face_hiertest   -  face_hiertest.[2,3]d.log.*
+   face_cplxtest   -  face_cplxtest.[2,3]d.log.*
+   node_hiertest   -  node_hiertest.[2,3]d.log.*
+   node_cplxtest   -  node_cplxtest.[2,3]d.log.*
+   edge_hiertest   -  edge_hiertest.[2,3]d.log.*
+   edge_cplxtest   -  edge_cplxtest.[2,3]d.log.*
+   side_hiertest   -  side_hiertest.[2,3]d.log.*
+   side_cplxtest   -  side_cplxtest.[2,3]d.log.*
+   indx_dataops    -  indx_dataops.[2,3]d.log.*

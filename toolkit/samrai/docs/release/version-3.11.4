@@ -1,0 +1,67 @@
+*****************************************************************************
+  Copyright 1997-2016
+  Lawrence Livermore National Security, LLC.
+  All rights reserved.
+*****************************************************************************
+
+                     Release Notes for SAMRAI v3.11.4
+
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+
+*****************************************************************************
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report
+it to us so that we may fix it.
+
+Please send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Significant bug fixes
+----------------------------------------------------------------------------
+1) Fix a bug from 3.11.3 where the writing of ghost values for the material
+data in VisItDataWriter was not consistent with all other data.
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Summary of what's new
+-----------------------------------------------------------------------------
+
+
+-----------------------------------------------------------------------------
+                Summary of what's changed
+-----------------------------------------------------------------------------
+
+1) 3.11.4 is a minor patch release to fix a bug in material data in
+VisItDataWriter.
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                Details about what's new
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+                Details about what's changed
+----------------------------------------------------------------------------
+
+1) The "material_number_ghosts" array, which tells visit how many ghosts to
+expect for materials, was always writing 0.  This is fixed to write the correct
+values.
+
+In some cases, the ghosts for materials were not written at all even when they
+were requested.  This is fixed.
+
+
+=============================================================================
+=============================================================================

@@ -1,0 +1,35 @@
+##
+## File:        $URL$
+## Package:     SAMRAI build scripts
+## Copyright:   (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Revision:    $LastChangedRevision$
+## Description: data file for sed substitutions to generate dim-dep. files
+##
+
+
+#
+# algorithm package
+#
+
+xfer_CoarsenCopyTransaction
+xfer_CoarsenPatchStrategy
+xfer_RefineTimeTransaction
+xfer_CoarsenAlgorithm
+xfer_CoarsenSchedule
+xfer_CoarsenClasses
+xfer_RefineCopyTransaction
+xfer_FillBoxSet
+xfer_RefinePatchStrategy
+xfer_TransactionFactory
+xfer_RefineAlgorithm
+xfer_RefineSchedule
+xfer_RefineClasses
+xfer_Geometry
+xfer_TimeInterpolateOperator
+xfer_RefineOperator
+xfer_CoarsenOperator
+
+# algorithm package timers
+
+algs::HyperbolicLevelIntegrator
+algs::TimeRefinementIntegrator

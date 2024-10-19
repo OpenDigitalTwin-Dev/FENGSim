@@ -1,0 +1,29 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace pdat {
+
+/*!
+  @page package_patchdata_multiblock Multiblock Patch Data Operations
+
+  These classes handle the copying of data between different blocks in a
+  multiblock domain.  Each block has its own index space, so patches must
+  be rotated and shifted to create a mapping from one index space to the other.
+  - SAMRAI::pdat::MultiblockCellDataTranslator 
+  - SAMRAI::pdat::MultiblockEdgeDataTranslator 
+  - SAMRAI::pdat::MultiblockFaceDataTranslator 
+  - SAMRAI::pdat::MultiblockNodeDataTranslator 
+  - SAMRAI::pdat::MultiblockSideDataTranslator 
+
+
+*/
+
+}
+}

@@ -1,0 +1,145 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+  namespace geom {
+
+/*!
+  @page package_geometry_cartesian Basic Cartesian Mesh Geometry Support
+
+  The Cartesian geometry package provides classes to manage a simple 
+  Cartesian mesh defined over an AMR mesh and to transfer data between
+  levels of different spatial resolution in the mesh hierarchy (i.e., 
+  refining and coarsening).  The Cartesian mesh is defined by the
+  NDIM-tuple (dx[0],...,dx[NDIM-1]) of mesh increments given on the 
+  coarsest hierarchy level.  The mesh increments on each finer level
+  are determined by multiplying the increments on the coarsest level by 
+  the refinement ratio relating the index spaces between the two levels.
+  More simply put, the mesh spacing on each hierarchy level is constant 
+  in each coordinate direction and that spacing is determined by 
+  refinement ratios between the level and the mesh on the coarsest level.
+
+  In the interest of brevity, we include header file documentation for
+  a single data coarsen operator and a single data refine operator here.  These
+  interlevel data transfer operators are representative of all other operator 
+  classes in the Cartesian geometry package.  The minor assertions to this 
+  are the details of the individual operators, such as stencil width, 
+  operator priority, identifier name string, etc.  For reference, we list
+  below the spatial coarsen and refine operators currently available for 
+  Cartesian geometry and the string identifiers that can be used to look them 
+  up using the xfer_GeometryX class.  It is important to note that new operators 
+  may be added at any time without re-compilation of the Cartesian geometry package 
+  or SAMRAI library code.
+
+  <ul>
+  <li> Coarsen operators:
+    <ul>
+    <li> Cell-Centered patch data:
+      <ul>
+      <li> Volume-weighted averaging for complex, double, float data.
+            String identifier is "CONSERVATIVE_COARSEN".
+      </ul>
+    <li> Edge-Centered patch data:
+      <ul>
+      <li> Area-weighted averaging for complex, double, float data.
+            String identifier is "CONSERVATIVE_COARSEN".
+      </ul>
+    <li> Face-Centered patch data:
+      <ul>
+       <li> Area-weighted averaging for complex, double, float data.
+            String identifier is "CONSERVATIVE_COARSEN".
+      </ul>
+    <li> Node-Centered patch data:
+      <ul>
+      <li> Constant averaging (i.e., injection) for complex, double, 
+            float, integer data.  String identifier is "CONSTANT_COARSEN". 
+      </ul>
+    <li> Outerface patch data:
+      <ul>
+      <li> Area-weighted averaging for complex, double, float data.
+            String identifier is "CONSERVATIVE_COARSEN".
+      </ul>
+    <li> Outerside patch data:
+      <ul>
+      <li> Area-weighted averaging for double data.
+            String identifier is "CONSERVATIVE_COARSEN".
+      </ul>
+    <li> Side-Centered patch data:
+      <ul>
+      <li> Area-weighted averaging for complex, double, float data.
+            String identifier is "CONSERVATIVE_COARSEN".
+      </ul>
+    </ul>
+  <li> Refine operators:
+    <ul>
+    <li> Cell-Centered patch data:
+      <ul>
+      <li> Constant interpolation for complex, double, float, 
+            integer data.  String identifier is "CONSTANT_REFINE".
+      <li> Conservative linear interpolation for complex, double, 
+            float data.  String identifier is "CONSERVATIVE_LINEAR_REFINE".
+      <li> Linear interpolation for complex, double, float data.
+            String identifier is "LINEAR_REFINE".
+      </ul>
+    <li> Edge-Centered patch data:
+      <ul>
+      <li> Constant interpolation for complex, double, float,
+            integer data.  String identifier is "CONSTANT_REFINE"
+      <li> Conservative linear interpolation for double and
+            float data.  String identifier is "CONSERVATIVE_LINEAR_REFINE".
+      </ul>
+    <li> Face-Centered patch data:
+      <ul>
+      <li> Constant interpolation for complex, double, float,
+           integer data.  String identifier is "CONSTANT_REFINE"
+      <li> Conservative linear interpolation for double and
+            float data.  String identifier is "CONSERVATIVE_LINEAR_REFINE".
+      </ul>
+    <li> Node-Centered patch data:
+      <ul>
+      <li> Linear interpolation for complex, double, float data.
+            String identifier is "LINEAR_REFINE".
+      </ul>
+    <li> Outerface patch data:
+      <ul>
+      <li> Constant interpolation for complex, double, float,
+            integer data.  String identifier is "CONSTANT_REFINE".
+      </ul>
+    <li> Outerside patch data:
+      <ul>
+      <li> No refine operators are currently available for this type.
+      </ul>
+    <li> Side-Centered patch data:
+      <ul>
+      <li> Constant interpolation for complex, double, float,
+            integer data.  String identifier is "CONSTANT_REFINE".
+      <li> Conservative linear interpolation for double and
+            float data.  String identifier is "CONSERVATIVE_LINEAR_REFINE".
+      </ul>
+    </ul>  
+  </ul>  
+
+  - @ref package_geometry_cartesian_grid_geom
+  - @ref package_geometry_cartesian_patch_geom
+  - @ref package_geometry_cartesian_operators_cell
+  - @ref package_geometry_cartesian_operators_fortran
+
+  For information on mesh-independent operators, including constant
+  spatial refinement operators, and linear time interpolation operators, see
+  - @ref package_patchdata_operators
+
+  For information on the options to use user-defined operators for
+  coarsening, refining, and time interpolation, or the option to use
+  no such operators, see
+  - @ref package_transfer_operators
+ 
+*/
+
+}
+}

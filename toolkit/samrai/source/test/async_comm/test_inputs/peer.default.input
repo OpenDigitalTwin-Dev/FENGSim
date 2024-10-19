@@ -1,0 +1,32 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   $Description 
+ *
+ ************************************************************************/
+
+Main {
+
+        // Base name of all generated log files.
+        base_name = "peer_test"
+
+        // Whether to log all nodes.
+        log_all_nodes = TRUE
+
+        // Number of times to perform each communication.
+        num_cycles = 20
+
+        // Maximum number of items sent in first message.
+        max_first_data_length = 6
+
+        // First and last in group.  Specify rank relative to local rank.
+        group_rel_first = -3
+        group_rel_last = 4
+
+        // If TRUE uses advanceSome, otherwise uses advanceAny.
+        use_advance_some = TRUE
+
+}

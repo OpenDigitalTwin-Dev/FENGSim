@@ -1,0 +1,104 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for SAMRAI patch boundary sum test 
+ *
+ ************************************************************************/
+
+Main {
+
+   //Dimension of the problem.  No default.
+   dim = 3
+
+   //Turn on the node sum test.  Default is false.
+   do_node_sum              = TRUE
+   //Turn on the edge sum test.  Default is false.
+   do_edge_sum              = FALSE
+
+   //Number of times the test is repeated.  Default is 1.
+   nsteps                   = 1
+
+   //Output log file.  Default is hiersumtest.log
+   log_file_name            = "2lev-3d-node.log"
+}
+
+HierSumTest {
+
+   //Ghost width for node data.  Default is 0,0,0.
+   //Ignored if do_node_sum is FALSE. 
+   node_ghosts              = 0 , 0 , 0
+
+   //Ghost width for edge data.  Default is 0,0,0.
+   //Ignored if do_edge_sum is FALSE. 
+   edge_ghosts              = 0 , 0 , 0
+
+   //Checks state of data before communication.  Since the checks are against
+   //expected post-communication values, this will cause a lot of output
+   //when set to TRUE.  Default is FALES.
+   check_data_before_communication = FALSE
+
+}
+
+//See geom::CartesianGridGeometry and its base classes for input
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (11,10,9) ]
+   x_lo          = 0.0e0 , 0.0e0 , 0.0e0 // lower end of computational domain.
+   x_up          = 1.0e0 , 1.0e0 , 1.0e0 // upper end of computational domain.
+}
+
+//See hier::PatchHierarchy for input.
+PatchHierarchy {
+   max_levels              = 2 // Maximum number of levels in hierarchy.
+
+// Note: For the following regridding information, data is required for each
+//       potential in the patch hierarchy; i.e., levels 0 thru max_levels-1.
+//       If more data values than needed are given, only the number required
+//       will be read in.  If fewer values are given, an error will result.
+//
+// Specify coarsening ratios for each level 1 through max_levels-1
+   ratio_to_coarser {         // vector ratio to next coarser level
+      level_1               = 2 , 2 , 2
+      level_2               = 2 , 2 , 2
+      level_3               = 2 , 2 , 2
+   }
+
+   largest_patch_size {
+      level_0 = 5, 4, 4
+      level_1 = 4, 6, 8
+      // all finer levels will use same values as level_0...
+   }
+
+   smallest_patch_size {
+      level_0 = 1 , 1 , 1
+      // all finer levels will use same values as level_0...
+   }
+}
+
+//See mesh::BergerRigoutsos for input.
+BergerRigoutsos {
+   efficiency_tolerance     = 0.70e0   // min % of tag cells in new patch level
+   combine_efficiency       = 0.85e0   // chop box if sum of volumes of smaller
+                                       // boxes < efficiency * vol of large box
+} 
+
+//See mesh::GriddingAlgorithm for input.
+GriddingAlgorithm {
+} 
+
+//See mesh::StandardTagAndInitialize for input.
+StandardTagAndInitialize{
+   tagging_method = "REFINE_BOXES"
+
+   level_0 {
+      boxes = [ (1,1,1) , (4,5,4) ],
+              [ (5,4,3) , (8,8,7) ]
+   }
+}
+
+//See mesh::TreeLoadBalancer for input.
+LoadBalancer {
+}
+

@@ -1,0 +1,75 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for assumed_partition tests.
+ *
+ ************************************************************************/
+
+
+Main {
+
+  // Base name for output files.
+  base_name = "single-overpartition.2d"
+
+  // Whether to log all nodes.
+  log_all_nodes = TRUE
+
+}
+
+/*
+ * Define test for AssumedPartitionBox using databases named Test##,
+ * where ## is a 2-digit integer, sequentially from 0
+ */
+
+Test00 {
+  nickname = "11x11, 4 owners, 5 parts/rank" // Nick name of test.
+  dim = 2
+  box = [(0,0),(10,10)]
+  rank_begin = 0
+  rank_end = 4
+  index_begin = 0
+  avg_parts_per_rank = 5.0
+}
+
+Test01 {
+  nickname = "long box, 3 owners, 5 parts/rank" // Nick name of test.
+  dim = 2
+  box = [(100,100),(110,180)]
+  rank_begin = 0
+  rank_end = 3
+  index_begin = 0
+  avg_parts_per_rank = 5.0
+}
+
+Test02 {
+  nickname = "long box, 10 owners, 8 parts/rank" // Nick name of test.
+  dim = 2
+  box = [(100,100),(110,180)]
+  rank_begin = 0
+  rank_end = 10
+  index_begin = 0
+  avg_parts_per_rank = 5.0
+}
+
+Test03 {
+  nickname = "more owners than cells, 3 parts/rank" // Nick name of test.
+  dim = 2
+  box = [(100,100),(105,102)]
+  rank_begin = 0
+  rank_end = 30
+  index_begin = 1000
+  avg_parts_per_rank = 3.0
+}
+
+Test04 {
+  nickname = "as many ownwers as MPI tassks, 7 parts/rank" // Nick name of test.
+  dim = 2
+  box = [(100,100),(110,180)]
+  rank_begin = 0
+  rank_end = 3
+  index_begin = 1000
+  avg_parts_per_rank = 7.0
+}

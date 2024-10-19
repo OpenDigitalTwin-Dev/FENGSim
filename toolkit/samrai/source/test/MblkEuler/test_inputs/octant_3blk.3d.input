@@ -1,0 +1,215 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   input file for the multiblock linear advector for
+ *                advecting a blob through a spherical shell
+ *
+ ************************************************************************/
+
+MblkGeometry {
+
+   //Choices are CARTESIAN, WEDGE, and SPHERICAL_SHELL.  Only SPHERICAL_SHELL
+   //sets up a multiblock problem.
+   problem_type = "SPHERICAL_SHELL"
+
+   //Define the parameters of the shell
+   ShellGeometry {
+      //Minimum and maximum sperical radii, no default
+      rmin = 1.e0 
+      rmax = 2.e0 
+
+      //Choices are SOLID and OCTANT, no default
+      shell_type = "OCTANT"
+   }
+
+}
+
+MblkEuler {
+
+   // advection velocity type, no default
+   // 0 - cartesian
+   // 1 - R translation
+   // 2 - rigid body theta rotation
+   // 4 - rigid body phi rotation
+   advection_vel_type = 1
+
+   // advection velocity vector--vector of length dim.
+   // No default
+   advection_velocity = 0.0e0 , 0.0e0 , 2.0e0
+
+   // General type of problem and its initial conditions.  Options are
+   // "SPHERE", "PIECEWISE_CONSTANT_X", "PIECEWISE_CONSTANT_"Y,
+   // "PIECEWISE_CONSTANT_Z"
+   //  Specific Initial_data inputs vary by problem type.
+   // No default.
+   data_problem      = "SPHERE"
+
+   // Position of the middle of the shell--vector of length dim
+   center            = 0.0, 0.0, 0.0 // middle of the shell
+
+   // Position of the front--vector of length dim 
+   front_position    = 0.0, 1.5, 1.e20
+
+   // List names of state data to initialize 
+   state_names = "rho"
+
+   // Initial values for rho in each region
+   state_data {
+      rho = 1.0, 2.0
+   }
+
+   // Control of how to refine.
+   Refinement_data {
+     // Can be GRADIENT or USER_DEFINED.  No default 
+     refine_criteria = "GRADIENT"
+
+     // Identify name of variable and a gradient tolerance.  Tagging will
+     // occur where the gradient is greater than the tolerance.
+     GRADIENT {
+        names = "rho"
+        rho   = 0.5  // gradient tolerance for rho
+     }
+   }
+
+}
+
+
+
+Main {
+
+   // Dimension of problem.  No default.
+   dim = 3
+
+   // Visualization dump parameters.
+
+   // Frequency at which to dump viz output--zero to turn off
+   // Default is 0.
+   viz_dump_interval     = 1          // zero to turn off
+
+   // Directory in which to place viz output.
+   // No default, error will occur if viz_dump_interval > 0 and
+   // this directory name is not specified.
+   viz_dump_dirname      = "viz_octant-3blk"
+
+   // Number of processors that write to each viz file, default is 1.
+   visit_number_procs_per_file = 1
+
+   // Frequency at which to dump restart output--zero to turn off
+   // Default is 0.
+   restart_interval       = 0         // zero to turn off
+
+   // Directory in which to place restart output.
+   // No default, error will occur if restart_interval > 0 and
+   // this directory name is not specified.
+   restart_write_dirname  = "restart_octant"
+
+}
+
+// Refer to tbox::TimerManager for input
+TimerManager {
+//   timer_list               = "apps::*::*",
+//                              "algs::*::*",
+//                              "mesh::*::*"
+//   print_exclusive      = TRUE
+//   print_summed           = TRUE
+//   print_max              = TRUE
+//   print_timer_overhead   = TRUE
+   print_threshold        = 0.0
+}
+
+// Refer to mesh::BergerRigoutsos for input
+BergerRigoutsos {
+   efficiency_tolerance    = 0.7e0   // min % of tag cells in new patch level
+   combine_efficiency      = 0.7e0   // chop box if sum of volumes of smaller
+                                     // boxes < efficiency * vol of large box
+}
+
+// Refer to mesh::GriddingAlgorithm for input
+GriddingAlgorithm{
+   sequentialize_patch_indices = TRUE
+
+}
+
+// Refer to mesh::StandardTagAndInitialize for input
+StandardTagAndInitialize {
+   tagging_method = "GRADIENT_DETECTOR"
+}
+
+// Refer to algs::HyperbolicLevelIntegrator for input
+HyperbolicLevelIntegrator{
+   cfl                       = 0.5e0    // max cfl factor used in problem
+   cfl_init                  = 0.5e0    // initial cfl factor
+   lag_dt_computation        = TRUE
+   use_ghosts_to_compute_dt  = TRUE
+   do_coarsening             = FALSE
+}
+
+// Refer to algs::TimeRefinementIntegrator for input
+TimeRefinementIntegrator{
+   tag_buffer           = 2, 2, 2 // number of zones used in the tag buffer
+   start_time           = 0.e0     // initial simulation time
+   end_time             = 1000.e0   // final simulation time
+   grow_dt              = 1.1e0    // growth factor for timesteps
+   max_integrator_steps = 10 // 2 // 100    // max number of simulation timesteps
+}
+
+// Refer to mesh::TreeLoadBalancer for input
+TreeLoadBalancer {
+}
+
+// Refer to hier::BaseGridGeometry and geom::GridGeometry for input
+BlockGeometry {
+   num_blocks = 3
+
+   domain_boxes_0 = [ (0,0,0) , (19,19,19) ]
+   domain_boxes_1 = [ (0,0,0) , (19,19,19) ]
+   domain_boxes_2 = [ (0,0,0) , (19,19,19) ]
+
+   BlockNeighbors0 {
+      block_a = 0
+      block_b = 1
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP" 
+      point_in_a_space = 0, 20, 0
+      point_in_b_space = 0, 0,    0
+   }
+
+   BlockNeighbors1 {
+      block_a = 0
+      block_b = 2
+
+      // j index in block a is k up in block b index
+      rotation_b_to_a = "I_UP", "K_UP" , "J_DOWN"
+      point_in_a_space = 0, 0, 20
+      point_in_b_space = 0, 19, 0
+   }
+
+   BlockNeighbors2 {
+      block_a = 1
+      block_b = 2
+
+      rotation_b_to_a = "I_UP", "J_DOWN" , "K_DOWN"
+      point_in_a_space = 0, 0, 20
+      point_in_b_space = 0, 19 , 19
+   }
+}
+
+// Refer to hier::PatchHierarchy for input
+PatchHierarchy {
+   max_levels = 2       // Maximum number of levels in hierarchy.
+   ratio_to_coarser {      // vector ratio to next coarser level
+      level_1 = 2 , 2 , 2
+   }
+   largest_patch_size {
+      level_0 = 40, 40, 40
+      // all finer levels will use same values as level_0...
+   }
+   smallest_patch_size {
+      level_0 = 2 , 2 , 2
+      // all finer levels will use same values as level_0...
+   }
+   sequentialize_patch_indices = TRUE
+}

@@ -1,0 +1,55 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Performance input file for tree search test.
+ *
+ ************************************************************************/
+
+
+Main {
+   // Dimension of problem.  No default.
+   dim = 3
+
+   // Base name for output files.
+   base_name = "default3d"
+
+   // Whether to log all nodes.
+   log_all_nodes = FALSE
+
+   /*
+     Number of times to scale up the number of boxes.
+     Each time, the number of boxes doubles.
+   */
+   num_scale = 7
+
+   // Amount to grow each box before searching for overlaps.
+   growth = 2, 2, 2
+
+   // Whether to randomize the box ordering.
+   randomize_order = TRUE
+
+   // Box generator parameters.
+   UniformBoxGen {
+      // Size of each box
+      boxsize = 10, 10, 10
+
+      /*
+        Repetition of the box in each index direction.
+        Will generate a dim-dimensional array of boxes.
+      */
+      boxrepeat = 15, 9, 7
+   }
+
+}
+
+// Refer to tbox::TimerManager for input.
+TimerManager {
+//   print_exclusive      = TRUE
+   print_summed           = TRUE
+   print_max              = TRUE
+   print_threshold        = 0.
+   timer_list             = "hier::*::*", "apps::*::*"
+}

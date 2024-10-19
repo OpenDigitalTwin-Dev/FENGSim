@@ -1,0 +1,39 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace xfer {
+
+/*!
+  @page package_transfer_datamovers Support for Moving Data on SAMR Meshes
+
+  These classes provide fundamental inter-patch communication functionality 
+  applicable to a wide range of AMR algorithms.   They are implemented in
+  a generic fashion with respect to the actual structure of the data 
+  involved in the communication procedures.
+  - SAMRAI::xfer::CoarsenAlgorithm
+  - SAMRAI::xfer::CoarsenClasses
+  - SAMRAI::xfer::CoarsenCopyTransaction
+  - SAMRAI::xfer::CoarsenPatchStrategy
+  - SAMRAI::xfer::CoarsenSchedule
+  - SAMRAI::xfer::CoarsenTransactionFactory
+  - SAMRAI::xfer::RefineAlgorithm
+  - SAMRAI::xfer::RefineClasses
+  - SAMRAI::xfer::RefineCopyTransaction
+  - SAMRAI::xfer::RefinePatchStrategy
+  - SAMRAI::xfer::RefineSchedule
+  - SAMRAI::xfer::RefineTimeTransaction
+  - SAMRAI::xfer::RefineTransactionFactory
+  - SAMRAI::xfer::StandardCoarsenTransactionFactory
+  - SAMRAI::xfer::StandardRefineTransactionFactory
+ 
+*/
+
+}
+}

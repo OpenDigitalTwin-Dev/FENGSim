@@ -1,0 +1,357 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for SAMRAI LinAdv example problem
+ *
+ ************************************************************************/
+
+GlobalInputs {
+   // If FALSE, when an error is encountered in serial exit(-1) will be called
+   // instead of SAMRAI_MPI::abort().
+   call_abort_in_serial_instead_of_exit = FALSE
+}
+
+AutoTester {
+   // If true, fluxes will be written out to a .dat file for inspection.
+   // Default is FALSE.
+   test_fluxes = FALSE
+
+   // iteration to carry out test.  Default is 10.
+   test_iter_num = 10
+
+   // if true will write correct patch boxes--useful for rebaselining
+   // Default is FALSE.
+   write_patch_boxes = FALSE
+
+   // if true will read correct patch boxes--set to FALSE to rebaseline
+   // Default is FALSE.
+   read_patch_boxes = TRUE
+
+   // time steps for which correctness of patch boxes will be checked
+   // Required if one of write_patch_boxes or read_patch_boxes is true.
+   // No default.
+   test_patch_boxes_at_steps = 0, 5, 10
+
+   // base name of files containing correct patch boxes
+   // Required if one of write_patch_boxes or read_patch_boxes is true.
+   // No default.
+   test_patch_boxes_filename = "test_inputs/test.2d.boxes"
+
+   // expected correct result
+   // Required if test_fluxes is FALSE.  Unread otherwise.  No default.
+   correct_result = 4.5, 0.028125, 0.028125
+
+   // if true will write corrct result--useful for rebaselining
+   // Default is FALSE.
+   output_correct = FALSE
+}
+
+LinAdv {
+   // Allow nonuniform workload.  Default is FALSE.
+   use_nonuniform_workload = FALSE
+
+   // Linear advection velocity vector--vector of length dim.
+   // No default.
+   advection_velocity = 2.0e0 , 1.0e0
+
+   // Order of Goduov slopes (1, 2, or 4).  Default is 1.
+   godunov_order    = 2
+
+   // Type of finite difference approximation for 3d transverse flux
+   // correction.  Allowed values are CORNER_TRANSPORT_1 and
+   // CORNER_TRANSPORT_2.
+   // CORNER_TRANSPORT_1 means to compute numerical approximations to flux
+   // terms using an extension to three dimensions of Collella's corner
+   // transport upwind approach.
+   // CORNER_TRANSPORT_2 means to compute numerical approximations to flux
+   // terms using John Trangenstein's interpretation of the three-dimensional
+   // version of Collella's corner transport upwind approach.
+   // Default is "CORNER_TRANSPORT_1".
+   corner_transport = "CORNER_TRANSPORT_1"
+
+   // Control of how to refine.
+   Refinement_data {
+      // Refinement criteria and, for each, the parameters controling it.
+      // Refinement criteria may be one or more of UVAL_DEVIATION,
+      // UVAL_GRADIENT, UVAL_SHOCK, or UVAL_RICHARDSON.  No default.
+      refine_criteria = "UVAL_GRADIENT", "UVAL_SHOCK"
+
+      // Criteria for UVAL_GRADIENT refinement criteria.
+      UVAL_GRADIENT {
+         // Array of variable gradient tagging tolerances, one value per level.
+         // If the number of levels is greater than the number of entries in
+         // this array then the tolerance for all finer levels is the last
+         // array entry.  Gradients greater than this tolerance result in
+         // tagged cells.  No default.
+         grad_tol = 10.0
+
+         // Array of maximum simulation times for which this criteria applies,
+         // one per level.  If the number of levels is greater than the number
+         // of entries in this array then the maximum simulation time for all
+         // finer levels is the last array entry.
+         // Default is all time (maximum double) for all levels.
+//         time_max = 1000000.0
+
+         // Array of minimum simulation times for which this criteria applies,
+         // one per level.  If the number of levels is greater than the number
+         // of entries in this array then the minimum simulation time for all
+         // finer levels is the last array entry.
+         // Default is 0.0 for all levels.
+         time_min = 0.0
+      }
+
+      // Criteria for UVAL_SHOCK refinement criteria.
+      UVAL_SHOCK {
+         // Array of shock tagging tolerances, one value per level.  If the
+         // number of levels is greater than the number of entries in this
+         // array then the tolerance for all finer levels is the last array
+         // entry.  No default.
+         shock_tol   = 0.10
+
+         // Array of shock tagging onsets, one value per level.  This value is
+         // used to prevent unintended overrefinement of large, smooth
+         // gradients resulting in smooth flow.  If the number of levels is
+         // greater than the number of entries in this array then the onset for
+         // all finer levels is the last array entry. No default.
+         shock_onset = 0.85
+
+         // Array of maximum simulation times for which this criteria applies,
+         // one per level.  If the number of levels is greater than the number
+         // of entries in this array then the maximum simulation time for all
+         // finer levels is the last array entry.
+         // Default is all time (maximum double) for all levels.
+//         time_max = 1000000.0
+
+         // Array of minimum simulation times for which this criteria applies,
+         // one per level.  If the number of levels is greater than the number
+         // of entries in this array then the minimum simulation time for all
+         // finer levels is the last array entry.
+         // Default is 0.0 for all levels.
+         time_min = 0.0
+      }
+
+      // UVAL_DEVIATION
+      // dev_tol
+      // An array of uval deviation tolerances, one value per level.  Cell
+      // is refined if (p - uval_dev) > dev_tol.  If the number of levels
+      // is greater than the number of entries in this array then the tolerance
+      // for all finer levels is the last array entry.  No default.
+      // uval_dev
+      // An array of uval deviations, one value per level.  If the number of
+      // levels is greater than the number of entries in this array then the
+      // deviation of for all finer levels is the last array entry.
+      // No default.
+      // time_max
+      // An array of maximum simulation times for which this criteria applies,
+      // one per level.  If the number of levels is greater than the number of
+      // entries in this array then the maximum simulation time for all finer
+      // levels is the last array entry.  Default is all time (maximum double)
+      // for all levels.
+      // time_min
+      // An array of minimum simulation times for which this criteria applies,
+      // one per level.  If the number of levels is greater than the number of
+      // entries in this array then the minimum simulation time for all finer
+      // levels is the last array entry.  Default is 0.0 for all levels.
+
+      // UVAL_RICHARDSON
+      // rich_tol
+      // An array of tolerances on the global error.  Cells in which the global
+      // error exceeds the tolerance are tagged.  If the number of levels is
+      // greater than the number of entries in this array then the tolerance
+      // for all finer levels is the last array entry.  No default.
+      // time_max
+      // An array of maximum simulation times for which this criteria applies,
+      // one per level.  If the number of levels is greater than the number of
+      // entries in this array then the maximum simulation time for all finer
+      // levels is the last array entry.  Default is all time (maximum double)
+      // for all levels.
+      // time_min
+      // An array of minimum simulation times for which this criteria applies,
+      // one per level.  If the number of levels is greater than the number of
+      // entries in this array then the minimum simulation time for all finer
+      // levels is the last array entry.  Default is 0.0 for all levels.
+   }
+
+   // General type of problem and its initial conditions.  Options are
+   // "SPHERE", "PIECEWISE_CONSTANT_X", "PIECEWISE_CONSTANT_"Y,
+   // "PIECEWISE_CONSTANT_Z", "SINE_CONSTANT_X", "SINE_CONSTANT_Y",
+   // "SINE_CONSTANT_Z".  Specific Initial_data inputs vary by problem type.
+   // No default.
+   data_problem      = "SPHERE"
+   Initial_data {
+      // Radius of sphere.  No default.
+      radius            = 2.9
+
+      // Center of sphere.  No default.
+      center            = 22.5 , 5.5
+
+      // uval inside of sphere.  No default.
+      uval_inside       = 80.0
+
+      // uval outside of sphere.  No default.
+      uval_outside      = 5.0
+
+   }
+
+   // Boundary condition data following the format defined in
+   // appu::CartesianBoundaryUtility[2,3].  Refer to these classes for details.
+   Boundary_data {
+      boundary_edge_xlo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_edge_xhi {
+         boundary_condition      = "FLOW"
+      }
+      boundary_edge_ylo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_edge_yhi {
+         boundary_condition      = "FLOW"
+      }
+
+      // IMPORTANT: If a *REFLECT, *DIRICHLET, or *FLOW condition is given
+      //            for a node, the condition must match that of the
+      //            appropriate adjacent edge above.  This is enforced for
+      //            consistency.  However, note when a REFLECT edge condition
+      //            is given and the other adjacent edge has either a FLOW
+      //            or REFLECT condition, the resulting node boundary values
+      //            will be the same regardless of which edge is used.
+      boundary_node_xlo_ylo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xhi_ylo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xlo_yhi {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xhi_yhi {
+         boundary_condition      = "XFLOW"
+      }
+   }
+}
+
+Main {
+   // Dimension of problem.  No default.
+   dim = 2
+
+
+   // Base name of log and viz files.  Default is "unnamed".
+   base_name = "test.2d"
+
+
+   // Explicit name of log file.  Default is base_name + ".log"
+   log_filename = "test.2d.log"
+
+
+   // If true all nodes will log to individual files
+   // If false only node 0 will log
+   // Default is FALSE.
+   log_all_nodes    = TRUE
+
+
+   // Visualization dump parameters.
+
+   // Frequency at which to dump viz output--zero to turn off
+   // Default is 0.
+   viz_dump_interval    = 1
+
+   // Directory in which to place viz output.
+   // Default is base_name + ".visit"
+   viz_dump_dirname     = "viz-test-2d"
+
+   write_blueprint      = TRUE
+
+   // Restart dump parameters.
+
+   // Frequency at which to dump restart output--zero to turn off
+   // Default is 0.
+   restart_interval     = 1  
+
+   // Directory in which to place restart output.
+   // Default is base_name + ".restart"
+   restart_write_dirname = "test.2d.restart"
+
+
+   // If anything but "SYNCHRONIZED" will use refined timestepping.
+   // Default is not "SYNCHRONIZED".
+//   use_refined_timestepping = "SYNCHRONIZED"
+
+}
+
+// Refer to geom::CartesianGridGeometry and its base classes for input
+CartesianGeometry{
+   domain_boxes	= [(0,0),(29,19)]
+
+   x_lo = 0.e0 , 0.e0   // lower end of computational domain.
+   x_up = 30.e0 , 20.e0 // upper end of computational domain.
+
+   periodic_dimension = 1,0
+}
+
+// Refer to hier::PatchHierarchy for input
+PatchHierarchy {
+   max_levels = 3        // Maximum number of levels in hierarchy.
+
+   ratio_to_coarser {             // vector ratio to next coarser level
+      level_1 = 4 , 4
+      // SGS TODO this was added for DistributedGriddingAlgorthm
+      level_2 = 4 , 4
+      // all finer levels will use same values as level_0...
+   }
+
+   largest_patch_size {
+      level_0 = 40 , 40  // largest patch allowed in hierarchy
+      // all finer levels will use same values as level_0...
+   }
+
+   smallest_patch_size {
+      level_0 = 16 , 16
+      // all finer levels will use same values as level_0...
+   }
+
+}
+
+// Refer to mesh::GriddingAlgorithm for input
+GriddingAlgorithm{
+   sequentialize_patch_indices = TRUE // Required for plotting.
+
+   print_mapped_box_level_hierarchy = 'y'
+}
+
+// Refer to mesh::BergerRigoutsos for input
+BergerRigoutsos {
+   sort_output_nodes = TRUE // Makes results repeatable.
+   efficiency_tolerance   = 0.85e0    // min % of tag cells in new patch level
+   combine_efficiency     = 0.95e0    // chop box if sum of volumes of smaller
+                                      // boxes < efficiency * vol of large box
+}
+
+// Refer to mesh::StandardTagAndInitialize for input
+StandardTagAndInitialize {
+   tagging_method = "GRADIENT_DETECTOR"
+}
+
+// Refer to algs::HyperbolicLevelIntegrator for input
+HyperbolicLevelIntegrator{
+   cfl                       = 0.9e0    // max cfl factor used in problem
+   cfl_init                  = 0.9e0    // initial cfl factor
+   lag_dt_computation        = TRUE
+   use_ghosts_to_compute_dt  = TRUE
+}
+
+// Refer to algs::TimeRefinementIntegrator for input
+TimeRefinementIntegrator{
+   start_time           = 0.e0     // initial simulation time
+   end_time             = 100.e0   // final simulation time
+   grow_dt              = 1.1e0    // growth factor for timesteps
+   max_integrator_steps = 10       // max number of simulation timesteps
+}
+
+// Refer to mesh::TreeLoadBalancer for input
+LoadBalancer {
+   // using default TreeLoadBalancer configuration
+}

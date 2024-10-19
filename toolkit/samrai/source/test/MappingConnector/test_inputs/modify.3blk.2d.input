@@ -1,0 +1,100 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   input file for testing Connector modify algorithm.
+ *
+ ************************************************************************/
+
+Main {
+
+   // Dimension of problem.  No default.
+   dim = 2
+
+   // Base name of log and viz files.  Default is "unnamed".
+   base_name  = "modify.3blk.2d"
+
+   // If true all nodes will log to individual files
+   // If false only node 0 will log
+   // Default is FALSE.
+   log_all_nodes  = TRUE
+
+   // Connector width for the MappingConnector that will be build and tested.
+   // Expressed in the resolution of the base level of the Connector.
+   // Integer vector of size dim, default is 0 in all directions
+   base_width_a = 0,0
+
+   // Refer to geom::CartesianGridGeometry and its base classes for input
+   GridGeometry {
+      num_blocks = 3
+      domain_boxes_0 = [ (0,0) , (20,13) ]
+      domain_boxes_1 = [ (0,0) , (25,13) ]
+      domain_boxes_2 = [ (0,0) , (20,25) ]
+
+      BlockNeighbors0 {
+         block_a = 0
+         block_b = 1
+
+         rotation_b_to_a = "I_UP", "J_UP"
+         point_in_a_space = 21,0
+         point_in_b_space = 0,0
+      }
+
+      BlockNeighbors1 {
+         block_a = 0
+         block_b = 2
+
+         rotation_b_to_a = "I_UP", "J_UP"
+         point_in_a_space = 0,14
+         point_in_b_space = 0,0
+
+      }
+
+      BlockNeighbors2 {
+         block_a = 1
+         block_b = 2
+
+         rotation_b_to_a = "J_UP", "I_DOWN"
+         point_in_a_space = 0,14
+         point_in_b_space = 20,0
+
+      }
+
+   }
+
+   // Parameters for BoxLevel "A", the base level for the MappingConnector that
+   // will be tested. 
+   BoxLevelA {
+      // Refinement ratio to this level from the physical domain description.
+      // Default is 1 in all directions 
+      refinement_ratio = 3,3
+
+      // Minimum box size allowed when this level is decomposed by the load
+      // balancer.  Default is 1 in all directions.
+      min_box_size = 1,1
+
+      // Maximum box size allowed when this level is decomposed by the load
+      // balance.  Default is INT_MAX in all directions.
+      max_box_size = 90,110
+   }
+
+   // Parameters for BoxLevel "B", the head level for the MappingConnector that
+   // will be tested.  Input parameters are the same as those for BoxLevelA.
+   BoxLevelB {
+      refinement_ratio = 6,6
+      min_box_size = 1,1
+      max_box_size = 80,100
+   }
+
+   // Parameters describing alterations to a BoxLevel that will be
+   // changed by the modify method.
+   Alteration {
+      // Increment all LocalIds by this value.
+      // Default is zero, which means there will be no alteration.
+      local_id_increment = 1000
+   }
+ 
+
+}

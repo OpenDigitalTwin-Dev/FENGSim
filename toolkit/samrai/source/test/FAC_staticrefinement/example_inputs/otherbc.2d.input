@@ -1,0 +1,156 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for example FAC Poisson solver 
+ *
+ ************************************************************************/
+
+// Refer to ../test/inputs/default.2d.input for full description of all input
+// parameters specific to this problem.
+
+// This is the input file for the 2D FAC example
+// demonstrating changes in boundary conditions.
+//
+// Note that you should not compare the computed
+// solution with the exact solution in the example.
+// The exact solution is only for the boundary
+// condition of 0 on all boundaries.
+
+Main {
+  // Dimension of the problem.
+  dim = 2
+
+  // Base name for output files.
+  base_name = "otherbc2"
+
+  // Whether to log all nodes in a parallel run.
+  log_all_nodes = FALSE
+}
+
+// Refer to solv::CellPoissonFACSolver for input.
+fac_solver {
+  // This is the input for the cell-centered Poisson FAC solver
+  // class in the SAMRAI library.
+  enable_logging = TRUE   // Bool flag to switch logging on/off
+}
+
+// Refer to solv::FACPreconditioner for input.
+fac_precond {
+  max_cycles = 10         // Max number of FAC cycles to use
+  residual_tol = 1e-8     // Residual tolerance to solve for
+  num_pre_sweeps = 1      // Number of presmoothing sweeps to use
+  num_post_sweeps = 3     // Number of postsmoothing sweeps to use
+}
+
+// Refer to solv::CellPoissonFACOps for input.
+fac_ops {
+  prolongation_method = "LINEAR_REFINE" // Type of refinement
+                                        // used in prolongation.
+                                        // Suggested values are
+                                        // "LINEAR_REFINE"
+                                        // "CONSTANT_REFINE"
+  enable_logging = TRUE   // Bool flag to switch logging on/off
+}
+
+// Refer to solv::CellPoissonHypreSolver for input.
+hypre_poisson {
+  use_smg = TRUE        // Whether to use HYPRE's SMG instead of PFMG.
+}
+
+// Refer to solv::LocationIndexRobinBcCoefs for input.
+bc_coefs {
+  // These are the boundary condition specifications.  The number
+  // after "boundary_" is the location index of the boundary.
+  // The inputs are arrays of strings where the first string
+  // indicates the type of values you want to set.  "slope" means
+  // boundary slope, "value" means boundary value, and "coefficients"
+  // mean the raw Robin boundary condition coefficients.
+  // The remaining strings are converted into numbers as
+  // appropriate for what boundary condition you specified with
+  // the first string.  Other boundary conditions are possible.
+  // see the solv_RobinBcCoefStrategy class.
+  // Examples:
+  // boundary_0 = "slope", "0"
+  // boundary_1 = "coefficients", "0", "0"
+  // boundary_2 = "value", "0"
+  // boundary_3 = "value", "0"
+  boundary_0 = "slope", "0"
+  boundary_1 = "coefficients", "0", "0"
+  boundary_2 = "value", "0"
+  boundary_3 = "value", "0"
+}
+
+CartesianGridGeometry {
+  //  Specify lower/upper corners of the computational domain and a
+  //  set of non-overlapping boxes defining domain interior.  If union 
+  //  of boxes is not a parallelpiped, lower/upper corner data corresponds 
+  //  to min/max corner indices over all boxes given.
+  //  x_lo  -- (double array) lower corner of computational domain [REQD]
+  //  x_up  -- (double array) upper corner of computational domain [REQD]
+  //  domain_boxes  -- (box array) set of boxes that define interior of 
+  //                   hysical domain. [REQD]
+  //  periodic_dimension -- (int array) coordinate directions in which 
+  //                        domain is periodic.  Zero indicates not
+  //                        periodic, non-zero value indicates periodicity.
+  //                        [0]
+  domain_boxes = [(0,0), (31,31)]
+  x_lo         = 0, 0
+  x_up         = 1, 1
+}
+
+StandardTagAndInitialize {
+   tagging_method = "REFINE_BOXES"
+   level_0 {
+      boxes = [(0,0),(31,15)]
+   }
+   level_1 {
+      boxes = [(0,0),(63,15)]
+   }
+   level_2 {
+      boxes = [(0,0),(16,16)]
+   }
+   //etc.
+}
+
+PatchHierarchy {
+   // Information used to create patches in AMR hierarchy.
+   // max_levels -- (int) max number of mesh levels in hierarchy [REQD]
+   // 
+   // For most of the following parameters, the number of precribed data
+   // values need not match the number of levels in the hierarchy 
+   // (determined by max_levels).  If more values are given than number 
+   // of levels, extraneous values will be ignored.  If less are give, then
+   // values that correspond to individual levels will apply to those 
+   // levels.  Missing values will be taken from those for the finest
+   // level specified.
+   //
+   // ratio_to_coarser {
+   //   level_1 -- (int array) ratio between index spaces on 
+   //              level 1 to level 0 [REQD]
+   //   level_2 -- (int array)  ratio between index spaces on 
+   //              level 2 to level 1 [REQD]
+   //   etc....
+   // }
+   // largest_patch_size {
+   //   level_0 -- (int array) largest patch allowed on level 0. 
+   //              [REQD]    
+   //   level_1 -- (int array)    "       "      "   "  level 1 
+   //              [level 0 entry]
+   //   etc....                       
+   // }
+   max_levels = 3
+   ratio_to_coarser {
+      level_1            = 2, 2
+      level_2            = 2, 2
+   }
+   largest_patch_size {
+      level_0 = 32, 32
+      // all finer levels will use same values as level_0...
+   }
+}
+
+GriddingAlgorithm {
+}

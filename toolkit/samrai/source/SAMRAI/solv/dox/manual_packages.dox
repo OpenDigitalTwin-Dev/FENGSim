@@ -1,0 +1,29 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace solv {
+
+/*!
+  @page package_solvers_packages Interfaces to Solver Libraries
+
+  The Solver package provides interfaces to independently-developed solver
+  libraries that may be useful when building applications based on SAMRAI.
+  Often, these libraries are written in C and do not provide the necessary
+  functionality to treat data on AMR patch hierarchies.  The interfaces
+  herein facilitate the process of linking C library code to SAMRAI and
+  provide wrappers that make it easier to develop C++ vector kernels for
+  use with the packages.  Currently, such interface code exists for the 
+  PETSc and Sundials libraries.
+  - @ref package_solvers_packages_sundials "Sundials"
+  - @ref package_solvers_packages_petsc "PETSc"
+*/
+
+}
+}

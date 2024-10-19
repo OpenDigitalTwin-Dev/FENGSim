@@ -1,0 +1,157 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for 2D asynchronous Berger Rigoutsos unit test. 
+ *
+ ************************************************************************/
+
+Main {
+  // Dimension of problem.
+  dim = 2
+
+  // Base part name of log and vis filenames.
+  base_name = "front.2d"
+
+  // Base name of log file(s).
+  //log_filename = "front.2d.log"
+
+  // If TRUE log all nodes otherwise only log node 0.
+  log_all = TRUE
+
+  // Base name of visualization files.
+  //vis_filename = "front.2d"
+
+  // Time step interval at which to plot.
+  plot_step = 1
+
+  // If TRUE, perform recursivePrint on patch hierarchy.
+  log_hierarchy = FALSE
+
+  // Number of time steps.
+  num_steps = 5
+}
+
+ABRTest {
+  // Input for SinusoidalFrontGenerator.  If anything other that sine_tagger is
+  // specified (or there is nothing) the SinusoidalFrontGenerator's defaults are
+  // used.  See testlib/SinusoidalFrontGenerator for input parameter details.
+  sine_tagger {
+    // Period of tagging sinusoid.
+    period = 1.0, 1.0
+
+    // Amplitude of tagging sinusoid.
+    amplitude = .3
+
+    // Front initial displacement.
+    init_disp = 0.5, 0.0
+
+    // Front velocity.
+    velocity = 0.015, 0.010
+
+    // Tagging buffer, in physical space units.
+    buffer_distance_0 = 0.2, 0.2
+    buffer_distance_1 = 0.1, 0.1
+    buffer_distance_2 = 0.05, 0.05
+    buffer_distance_3 = 0.00, 0.00
+    buffer_distance_4 = 0.00, 0.00
+  }
+}
+
+
+// Refer to mesh::BergerRigoutsos for input
+BergerRigoutsos {
+   efficiency_tolerance = 0.70
+   combine_efficiency = 0.85
+  // DEV_log_node_history = TRUE
+  DEV_log_cluster_summary = TRUE
+  // DEV_algo_advance_mode: "SYNCHRONOUS", "ADVANCE_SOME", "ROUND_ROBIN" or "ADVANCE_ANY"
+  // DEV_algo_advance_mode = "ADVANCE_ANY"
+  DEV_algo_advance_mode = "ADVANCE_SOME"
+  // DEV_algo_advance_mode = "SYNCHRONOUS"
+  // DEV_owner_mode: "SINGLE_OWNER", "MOST_OVERLAP" (default), "FEWEST_OWNED", "LEAST_ACTIVE"
+  // DEV_owner_mode = "SINGLE_OWNER"
+  DEV_owner_mode = "MOST_OVERLAP"
+  // DEV_owner_mode = "FEWEST_OWNED"
+  // DEV_owner_mode = "LEAST_ACTIVE"
+}
+
+
+// Refer to geom::CartesianGeometry and its base clases for input
+CartesianGridGeometry {
+  // domain_boxes = [(0,0), (9,3)]
+  // domain_boxes = [(0,0), (23,15)]
+  domain_boxes = [(0,0), (47,31)]
+  // domain_boxes = [(0,0), (95,63)]
+  // domain_boxes = [(0,0), (191,127)]
+  // domain_boxes = [(0,0), (383,255)]
+  // domain_boxes = [(0,0), (767,511)]
+  x_lo         = 0, 0
+  x_up         = 3, 2
+}
+
+// Refer to mesh::StandardTagAndInitialize for input
+StandardTagAndInitialize {
+  tagging_method = "GRADIENT_DETECTOR"
+}
+
+// Refer to mesh::TreeLoadBalancer for input
+TreeLoadBalancer {
+  DEV_report_load_balance = TRUE
+
+  // Debugging options
+  DEV_check_map = FALSE
+  DEV_check_connectivity = FALSE
+  DEV_print_steps = FALSE
+  DEV_print_swap_steps = FALSE
+  DEV_print_break_steps = FALSE
+  DEV_print_edge_steps = FALSE
+}
+
+// Refer to hier::PatchHierarchy for input
+PatchHierarchy {
+   max_levels = 5
+   largest_patch_size {
+      level_0 = 64, 64
+      // all finer levels will use same values as level_0...
+   }
+   smallest_patch_size {
+      level_0 = 4,4
+      // all finer levels will use same values as level_0...
+   }
+   ratio_to_coarser {
+      level_1            = 2, 2
+      level_2            = 2, 2
+      level_3            = 2, 2
+      level_4            = 2, 2
+      level_5            = 2, 2
+      level_6            = 2, 2
+      level_7            = 2, 2
+      level_8            = 2, 2
+      level_9            = 2, 2
+      //  etc.
+   }
+   proper_nesting_buffer = 0, 0, 0, 0, 0
+
+   allow_patches_smaller_than_ghostwidth = TRUE
+   allow_patches_smaller_than_minimum_size_to_prevent_overlaps = TRUE
+}
+
+// Refer to mesh::GriddingAlgorithm for input
+GriddingAlgorithm {
+   check_nonrefined_tags = "IGNORE"
+   sequentialize_patch_indices = TRUE // For VisIt
+   DEV_print_steps = TRUE
+}
+
+// Refer to tbox::TimerManager for input
+TimerManager{
+  timer_list = "hier::*::*", "mesh::*::*", "tbox::*::*", "apps::*::*"
+  print_user = TRUE
+  // print_timer_overhead = TRUE
+  print_threshold = 0
+  print_summed = TRUE
+  print_max = TRUE
+}

@@ -1,0 +1,302 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for SAMRAI Euler example problem (3d box)
+ *
+ ************************************************************************/
+
+// Refer to test2d.input for full description of all input parameters specific
+// to this problem.
+
+GlobalInputs {
+   call_abort_in_serial_instead_of_exit = FALSE
+}
+
+AutoTester {
+   // iteration to carry out test
+   test_iter_num = 10
+
+   // expected correct result
+   correct_result = 0.0463367714649 ,  0.00370820618904 ,   0.000414460472703
+
+   // if true will write corrct result--useful for rebaselining
+   output_correct = FALSE
+
+   // if true will write correct patch boxes--useful for rebaselining
+   write_patch_boxes = FALSE
+
+   // if true will read correct patch boxes--set to FALSE to rebaseline
+   read_patch_boxes = FALSE
+
+   // time steps for which correctness of patch boxes will be checked
+   test_patch_boxes_at_steps = 0, 5, 10
+
+   // base name of files containing correct patch boxes
+   test_patch_boxes_filename = "test_inputs/test.3d.boxes"
+}
+
+Euler {
+   // Ratio of specific heats
+   gamma            = 1.4
+
+   // order of Goduov slopes (1, 2, or 4)
+   godunov_order    = 4
+
+   // Riemann solver used in flux calculation
+   riemann_solve     = "APPROX_RIEM_SOLVE"
+//   riemann_solve    = "EXACT_RIEM_SOLVE"
+//   riemann_solve    = "HLLC_RIEM_SOLVE"
+
+   // type of finite difference approximation for 3d transverse flux correction
+   // Allowed values are CORNER_TRANSPORT_1 and CORNER_TRANSPORT_2.
+   // CORNER_TRANSPORT_1 means to compute numerical approximations to flux
+   // terms using an extension to three dimensions of Collella's corner
+   // transport upwind approach.
+   // CORNER_TRANSPORT_2 means to compute numerical approximations to flux
+   // terms using John Trangenstein's interpretation of the three-dimensional
+   // version of Collella's corner transport upwind approach.
+   corner_transport = "CORNER_TRANSPORT_2"
+
+   // General type of problem and its initial conditions.
+   data_problem      = "SPHERE"
+   Initial_data {
+      radius            = 0.125
+      center            = 0.5 , 0.5 , 0.5 // vector of length dim
+
+      density_inside    = 8.0
+      velocity_inside   = 0.0 , 0.0 , 0.0 // vector of length dim
+      pressure_inside   = 40.0
+
+      density_outside    = 1.0
+      velocity_outside   = 0.0 , 0.0 , 0.0 // vector of length dim
+      pressure_outside   = 1.0
+
+   }
+
+   // Refinement criteria and, for each, the parameters controling it.
+   // Refinement criteria may be one or more of DENSITY_DEVIATION,
+   // DENSITY_GRADIENT, DENSITY_SHOCK, DENSITY_RICHARDSON, PRESSURE_DEVIATION,
+   // PRESSURE_GRADIENT, PRESSURE_SHOCK, or PRESSURE_RICHARDSON.
+   Refinement_data {
+      refine_criteria = "PRESSURE_GRADIENT", "PRESSURE_SHOCK"
+
+      PRESSURE_GRADIENT {
+         grad_tol = 10.0
+      }
+
+      PRESSURE_SHOCK {
+         shock_tol   = 10.0
+         shock_onset = 0.85
+      }
+   }
+
+   // Boundary condition data following the format defined in
+   // appu::CartesianBoundaryUtility[2,3]
+   Boundary_data {
+      boundary_face_xlo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_xhi {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_ylo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_yhi {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_zlo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_zhi {
+         boundary_condition      = "FLOW"
+      }
+
+      // IMPORTANT: If a *REFLECT, *DIRICHLET, or *FLOW condition is given
+      //            for an edge, the condition must match that of the
+      //            appropriate adjacent face above.  This is enforced for
+      //            consistency.  However, note when a REFLECT face condition
+      //            is given and the other adjacent face has either a FLOW
+      //            or REFLECT condition, the resulting edge boundary values
+      //            will be the same regardless of which face is used.
+
+      boundary_edge_ylo_zlo { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_yhi_zlo { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_ylo_zhi { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_yhi_zhi { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_xlo_zlo { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XFLOW"
+      }
+      boundary_edge_xlo_zhi { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XFLOW"
+      }
+      boundary_edge_xhi_zlo { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XFLOW"
+      }
+      boundary_edge_xhi_zhi { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XFLOW"
+      }
+      boundary_edge_xlo_ylo { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YFLOW"
+      }
+      boundary_edge_xhi_ylo { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YFLOW"
+      }
+      boundary_edge_xlo_yhi { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YFLOW"
+      }
+      boundary_edge_xhi_yhi { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YFLOW"
+      }
+
+      // IMPORTANT: If a *REFLECT, *DIRICHLET, or *FLOW condition is given
+      //            for a node, the condition must match that of the
+      //            appropriate adjacent face above.  This is enforced for
+      //            consistency.  However, note when a REFLECT face condition
+      //            is given and the other adjacent faces have either FLOW
+      //            or REFLECT conditions, the resulting node boundary values
+      //            will be the same regardless of which face is used.
+
+      boundary_node_xlo_ylo_zlo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xhi_ylo_zlo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xlo_yhi_zlo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xhi_yhi_zlo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xlo_ylo_zhi {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xhi_ylo_zhi {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xlo_yhi_zhi {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xhi_yhi_zhi {
+         boundary_condition      = "XFLOW"
+      }
+
+   }
+
+}
+
+Main {
+   // dimension of problem
+   dim = 3
+
+   // base name of log file
+   base_name = "test.3d"
+
+   // if true all nodes will log to individual files
+   // if false only node 0 will log
+   log_all_nodes    = TRUE
+
+   // visualization dump parameters
+   // frequency at which to dump viz output--zero to turn off
+   viz_dump_interval    = 1
+
+   // restart dump parameters
+   // frequency at which to dump restart output--zero to turn off
+   restart_interval     = 1
+}
+
+// Refer to tbox::TimerManager for input
+TimerManager {
+   print_exclusive      = TRUE   // output exclusive time
+   timer_list               = "apps::main::*",
+                              "apps::Euler::*",
+                              "algs::GriddingAlgorithm::*",
+                              "algs::HyperbolicLevelIntegrator::*"
+}
+
+// Refer to geom::CartesianGridGeometry and its base classes for input
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (12,12,12) ]
+   x_lo          = 0.e0,0.e0,0.e0  // lower end of computational domain.
+   x_up          = 1.e0,1.e0,1.e0  // upper end of computational domain.
+}
+
+// Refer to mesh::StandardTagAndInitialize for input
+StandardTagAndInitialize{
+   tagging_method = "GRADIENT_DETECTOR"
+}
+
+// Refer to hier::PatchHierarchy for input
+PatchHierarchy {
+
+   max_levels = 3         // Maximum number of levels in hierarchy.
+
+   ratio_to_coarser {              // vector ratio to next coarser level
+      level_1            = 2 , 2 , 2
+      level_2            = 2 , 2 , 2
+   }
+
+   largest_patch_size {
+      level_0 = 19, 19, 19  // largest patch allowed in hierarchy
+      // all finer levels will use same values as level_0...
+   }
+
+   smallest_patch_size {
+      level_0 = 8, 8, 8
+      // all finer levels will use same values as level_0...
+   }
+
+}
+
+// Refer to mesh::GriddingAlgorithm for input
+GriddingAlgorithm {
+   DEV_log_metadata_statistics = TRUE
+   DEV_barrier_and_time = TRUE
+}
+
+// Refer to mesh::BergerRigoutsos for input
+BergerRigoutsos {
+   sort_output_nodes = TRUE // Makes results repeatable.
+   efficiency_tolerance   = 0.70e0    // min % of tag cells in new patch level
+   combine_efficiency     = 0.85e0    // chop box if sum of volumes of smaller
+                                      // boxes < efficiency * vol of large box
+}
+
+// Refer to algs::HyperbolicLevelIntegrator for input
+HyperbolicLevelIntegrator {
+   cfl                      = 0.9e0    // max cfl factor used in problem
+   cfl_init                 = 0.1e0    // initial cfl factor
+   lag_dt_computation       = TRUE
+   use_ghosts_to_compute_dt = TRUE
+}
+
+// Refer to algs::TimeRefinementIntegrator for input
+TimeRefinementIntegrator {
+   start_time            = 0.e0    // initial simulation time
+   end_time              = 100.e0  // final simulation time
+   grow_dt               = 1.1e0   // growth factor for timesteps
+   max_integrator_steps  = 10      // max number of simulation timesteps
+   tag_buffer            = 10,10,10,10 
+}
+
+// Refer to mesh::TreeLoadBalancer for input
+LoadBalancer {
+   // using default TreeLoadBalancer configuration
+}
+
+// Refer to xfer::RefineSchedule for input
+RefineSchedule {
+   DEV_extra_debug = FALSE
+}

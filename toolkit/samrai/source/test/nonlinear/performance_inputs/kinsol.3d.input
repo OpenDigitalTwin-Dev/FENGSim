@@ -1,0 +1,161 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for 3D nonlinear solver example using KINSOL. 
+ *
+ ************************************************************************/
+
+// Refer to test_inputs/kinsol.2d.input for description of the input parameters
+// specific to this test directory.
+
+
+// This is the input file for the 3D nonlinear solver example using KINSOL.
+
+Main{
+   dim = 3
+
+   base_name = "kinsol.3d"
+
+// visualization dump parameters 
+   viz_dump_interval     = 1          // zero to turn off
+   viz_dump_dirname      = "kinsol.3d.visit"
+   visit_number_procs_per_file = 1
+
+// regrid parameters
+   regrid_interval       = 1         // zero to turn off
+
+// Options for nonlinear solver package are:
+//     "KINSOL" (default), or "PETSc-SNES"
+   nonlinear_solver_package = "KINSOL"
+   // nonlinear_solver_package = "PETSc-SNES"
+
+}
+
+TimerManager{
+   maintain_exclusive_time = TRUE
+   maintain_concurrent_time = TRUE
+   timer_list               = "apps::main::*", "apps::usrFcns::*"
+}
+
+CartesianGeometry{
+   domain_boxes = [(0,0,0), (31,31,31)]
+   x_lo         = 0.0e0, 0.0e0, 0.0e0
+   x_up         = 1.0e0, 1.0e0, 1.0e0
+}
+
+PatchHierarchy {
+   max_levels = 2
+   largest_patch_size {
+      level_0 = 32, 32, 32
+      // all finer levels will use same values as level_0...
+   }
+
+ smallest_patch_size {
+      level_0 = 4,4,4
+      // all finer levels will use same values as level_0...
+   }
+   ratio_to_coarser {
+      level_1            = 2, 2, 2
+      level_2            = 2, 2, 2
+      level_3            = 2, 2, 2
+      level_4            = 2, 2, 2
+      level_5            = 2, 2, 2
+      level_6            = 2, 2, 2
+      level_7            = 2, 2, 2
+      level_8            = 2, 2, 2
+      level_9            = 2, 2, 2
+      level_10           = 2, 2, 2
+      //  etc.
+   }
+}
+
+BergerRigoutsos {
+   combine_efficiency = 0.75
+   efficiency_tolerance = 0.75
+}
+
+GriddingAlgorithm{
+}
+
+StandardTagAndInitialize{
+   tagging_method = "REFINE_BOXES"
+
+   level_0 {
+      boxes = [(8,8,8), (23,23,23)]
+   }
+   level_1 {
+      boxes = [(24,24,24), (39,39,39)]
+   }
+   level_2 {
+      boxes = [(56,56,56), (71,71,71)]
+   }
+//   level_3 {
+//      boxes = [(120,120,120), (135,135,135)]
+//   }
+//   level_4 {
+//      boxes = [(248,248,248), (263,263,263)]
+//   }
+//   level_5 {
+//      boxes = [(504,504,504), (519,519,519)]
+//   }
+//   level_6 {
+//      boxes = [(1016,1016,1016), (1031,1031,1031)]
+//   }
+//   level_7 {
+//      boxes = [(2040,2040,2040), (2055,2055,2055)]
+//   }
+//   level_8 {
+//      boxes = [(4088,4088,4088), (4103,4103,4103)]
+//   }
+//   level_9 {
+//      boxes = [(8184,8184,8184), (8199,8199,8199)]
+//   }
+   //etc.
+}
+
+LoadBalancer{
+}
+
+ModifiedBratuProblem{
+   timestep = 0.0625      // time increment used for all steps
+   lambda   = 6.0         // factor multiplying exponential term
+
+   max_precond_its = 35    // maximum iterations for preconditioner 
+   precond_tol = 1.0e-2    // preconditioner convergence tolerance
+}
+
+KINSOLSolver{
+    max_nonlinear_iterations = 20
+    KINSOL_log_filename      = "nkLog.32x32.8"
+    KINSOL_print_flag        = 3
+
+    uses_preconditioner      = TRUE
+    uses_jac_times_vector    = TRUE
+
+    residual_stop_tolerance  = 1.0e-10
+    nonlinear_step_tolerance = 1.0e-10
+
+    max_krylov_dimension      = 20
+    max_linear_solve_restarts = 6
+}
+
+SNESSolver{
+    uses_preconditioner            = TRUE
+    uses_explicit_jacobian         = TRUE
+    absolute_tolerance             = 1.0e-10
+    relative_tolerance             = 1.0e-4
+    step_tolerance                 = 1.0e-6
+    linear_solver_type             = "gmres"
+    maximum_gmres_krylov_dimension = 20
+    maximum_linear_iterations      = 50
+    forcing_term_strategy          = "EWCHOICE1"
+}
+
+ImplicitIntegrator{
+    initial_time = 0.0
+    final_time = 1.0
+    max_integrator_steps = 5
+}

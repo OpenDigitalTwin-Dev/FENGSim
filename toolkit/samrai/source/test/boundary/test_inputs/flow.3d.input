@@ -1,0 +1,160 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   input file for testing 3d flow boundary conditions 
+ *
+ ************************************************************************/
+
+// Refer to dirichlet.2d.input for a full description of all input parameters
+// specific to this problem.
+
+GlobalInputs {
+   call_abort_in_serial_instead_of_exit = FALSE
+}
+
+Main {
+    dim = 3
+    log_file_name    = "basic3d-flow.log"
+    num_domain_boxes = 2 , 1 , 2
+}
+
+BoundaryDataTester {
+
+   variable_1 {
+      name            = "var1"
+      depth           = 1
+      num_ghosts      = 2 , 2 , 2
+      interior_values = 1.0
+   }
+
+   variable_2 {
+      name            = "var2"
+      depth           = 3
+      num_ghosts      = 1 , 1 , 1
+      interior_values = 2.0 , 3.0 , 4.0
+   }
+
+   Boundary_data {
+
+      boundary_face_xlo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_xhi {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_ylo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_yhi {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_zlo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_zhi {
+         boundary_condition      = "FLOW"
+      }
+
+      boundary_edge_ylo_zlo {  // X*** conditions not allowed
+//       boundary_condition      = "YFLOW"
+         boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_yhi_zlo { // X*** conditions not allowed
+//       boundary_condition      = "YFLOW"
+         boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_ylo_zhi { // X*** conditions not allowed
+//       boundary_condition      = "YFLOW"
+         boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_yhi_zhi { // X*** conditions not allowed
+//       boundary_condition      = "YFLOW"
+         boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_xlo_zlo { // Y*** conditions not allowed
+         boundary_condition      = "XFLOW"
+//       boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_xlo_zhi { // Y*** conditions not allowed
+         boundary_condition      = "XFLOW"
+//       boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_xhi_zlo { // Y*** conditions not allowed
+         boundary_condition      = "XFLOW"
+//       boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_xhi_zhi { // Y*** conditions not allowed
+         boundary_condition      = "XFLOW"
+//       boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_xlo_ylo { // Z*** conditions not allowed
+//       boundary_condition      = "XFLOW"
+         boundary_condition      = "YFLOW"
+      }
+      boundary_edge_xhi_ylo { // Z*** conditions not allowed
+//       boundary_condition      = "XFLOW"
+         boundary_condition      = "YFLOW"
+      }
+      boundary_edge_xlo_yhi { // Z*** conditions not allowed
+//       boundary_condition      = "XFLOW"
+         boundary_condition      = "YFLOW"
+      }
+      boundary_edge_xhi_yhi { // Z*** conditions not allowed
+//       boundary_condition      = "XFLOW"
+         boundary_condition      = "YFLOW"
+      }
+
+      boundary_node_xlo_ylo_zlo {
+         boundary_condition      = "XFLOW"
+//       boundary_condition      = "YFLOW"
+//       boundary_condition      = "ZFLOW"
+      }
+      boundary_node_xhi_ylo_zlo {
+         boundary_condition      = "XFLOW"
+//       boundary_condition      = "YFLOW"
+//       boundary_condition      = "ZFLOW"
+      }
+      boundary_node_xlo_yhi_zlo {
+         boundary_condition      = "XFLOW"
+//       boundary_condition      = "YFLOW"
+//       boundary_condition      = "ZFLOW"
+      }
+      boundary_node_xhi_yhi_zlo {
+         boundary_condition      = "XFLOW"
+//       boundary_condition      = "YFLOW"
+//       boundary_condition      = "ZFLOW"
+      }
+      boundary_node_xlo_ylo_zhi {
+         boundary_condition      = "XFLOW"
+//       boundary_condition      = "YFLOW"
+//       boundary_condition      = "ZFLOW"
+      }
+      boundary_node_xhi_ylo_zhi {
+         boundary_condition      = "XFLOW"
+//       boundary_condition      = "YFLOW"
+//       boundary_condition      = "ZFLOW"
+      }
+      boundary_node_xlo_yhi_zhi {
+         boundary_condition      = "XFLOW"
+//       boundary_condition      = "YFLOW"
+//       boundary_condition      = "ZFLOW"
+      }
+      boundary_node_xhi_yhi_zhi {
+         boundary_condition      = "XFLOW"
+//       boundary_condition      = "YFLOW"
+//       boundary_condition      = "ZFLOW"
+      }
+
+   }
+
+}
+
+CartesianGridGeometry {
+   domain_boxes = [ (0,0,0) , (7,3,7) ]
+   x_lo         = 0.e0 , 0.e0 , 0.e0   // lower end of computational domain.
+   x_up         = 1.e0 , 0.5e0 , 1.e0   // upper end of computational domain.
+   periodic_dimension = 0, 0, 0
+}

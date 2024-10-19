@@ -1,0 +1,124 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input for testing Euler Riemann solvers in 3d code (Z direction) 
+ *
+ ************************************************************************/
+
+#include "euler_const.input"
+
+//
+// NOTE: See "euler_const.input" for Euler input parameters
+//
+
+SAMRAIManager {
+   call_abort_in_serial_instead_of_exit = FALSE
+}
+
+AutoTester {
+   test_fluxes = TRUE
+   test_iter_num = 60
+}
+
+Euler {
+   gamma            = 1.4      // gamma = Ratio of specific heats
+
+   godunov_order    = 4        // order of Goduov slopes (1, 2, or 4)
+
+   flux_method      = APPROX_RIEM_SOLVE
+// flux_method      = EXACT_RIEM_SOLVE
+
+   corner_transport = CORNER_TRANSPORT_2
+
+   data_problem     = PIECEWISE_CONSTANT_Z
+
+   Initial_data {
+// Test #6Z: slow-moving contact test
+//          NOTE: to get reasonable wave profiles, run for about 60 steps
+//
+      front_position = 0.0
+      interval_0 {
+         density          = 1.0
+         velocity         = 0.0, 0.0 , -19.59745
+         pressure         = 1000.0
+      }
+      interval_1 {
+         density          = 1.0
+         velocity         = 0.0, 0.0 , -19.59745
+         pressure         = 0.01
+      }
+   }
+
+   // Use default FLOW boundary conditions...
+
+}
+
+Main {
+   dim = 3
+   base_name = "testZ-6-3d"
+// log file parameters
+   log_all_nodes    = TRUE
+
+// visualization dump parameters
+   viz_dump_interval        = 60        // zero to turn off
+
+// 1d MATLAB plot parameters
+   matlab_plot_1d           = TRUE     // default is FALSE
+   matlab_pencil_direction  = 2        // 0 <-> x, 1 <-> y, 2 <-> z
+                                       // default is 0
+   matlab_pencil_index      = 2, 1     // default is lower domain index
+                                       // perpendicular to pencil direction
+
+// restart dump parameters
+   restart_interval         = 25        // zero to turn off
+
+   run_time_plotting = FALSE
+}
+
+TimerManager{
+   maintain_exclusive_time = TRUE
+   maintain_concurrent_time = TRUE
+   timer_list               = ""
+}
+
+CartesianGeometry {
+   domain_boxes = [ (0,0,0) , (4,4,99) ]
+   x_lo         = 0.0e0 , 0.0e0 , -0.5e0  // lower end of computational domain.
+   x_up         = 0.04e0 , 0.04e0 , 0.5e0 // upper end of computational domain.
+}
+
+PatchHierarchy {
+   max_levels               = 1       // Maximum number of levels in hierarchy.
+
+   largest_patch_size {
+      level_0 = 100,100,100
+   }
+
+   smallest_patch_size {
+      level_0 = 4,4,4
+   }
+}
+
+GriddingAlgorithm {
+}
+
+HyperbolicLevelIntegrator {
+   cfl                      = 0.9e0    // max cfl factor used in problem
+   cfl_init                 = 0.1e0    // initial cfl factor
+   lag_dt_computation       = TRUE
+   use_ghosts_to_compute_dt = TRUE
+}
+
+TimeRefinementIntegrator {
+   start_time            = 0.e0    // initial simulation time
+   end_time              = 100.e0  // final simulation time
+   grow_dt               = 1.1e0   // growth factor for timesteps
+   max_integrator_steps  = 60       // max number of simulation timesteps
+}
+
+LoadBalancer {
+// using default uniform load balance configuration (see mesh_LoadBalancerX.h.sed)
+}

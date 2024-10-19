@@ -1,0 +1,39 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:  Multiblock communication tests 
+##
+#########################################################################
+
+This test exercises Refine operations on multiblock configurations.
+The files included in this directory are as follows:
+ 
+   main.cpp                -  driver
+   *MultiblockTest.[C,h] -  Classes for patch data-specific tests
+   PatchMultiblockTestStrategy.[C,h]
+                         -  Implementaion of RefinePatchStrategy
+   test_inputs/*.input   -  Input files for a variety of data centerings
+                            and multiblock configurations
+
+ 
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make main
+
+   Execution:
+      serial:
+         ./main <input_file> 
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main <input_file>
+
+
+INPUT PARAMETERS
+----------------
+Refer to test_inputs/cell.2d.input for a full description of all
+input parameters specific to this problem.

@@ -1,0 +1,25 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace geom {
+
+/*!
+  @page package_geometry_cartesian_operators_cell Cell Data Operators
+
+  A variety of operators are provided to coarsen and refine cell-centered
+  patch data on a Cartesian mesh.  These operators are representative of 
+  the spatial coarsen and refine operators found in the library for all
+  other array-based types.
+  - SAMRAI::geom::CartesianCellComplexWeightedAverage
+  - SAMRAI::geom::CartesianCellDoubleConservativeLinearRefine
+*/
+
+}
+}

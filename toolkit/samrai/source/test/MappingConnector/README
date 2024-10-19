@@ -1,0 +1,38 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   Unit test of MappingConnector operations
+##
+#########################################################################
+
+This is a unit test of the modify method in MappingConnector.
+The files included in this directory are as follows:
+ 
+   main-modify.cpp       -  complete code for the unit test
+   test_inputs/*.input -  2d input files for 3 block and 5 block configurations
+
+ 
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make main
+
+   Execution:
+      For one of the following input files:
+         test_inputs/modify.3blk.2d.input
+         test_inputs/modify.5blk.2d.input
+      serial:
+         ./main <input_file>
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main <input_file>
+
+
+INPUT PARAMETERS
+----------------
+Refer to test_inputs/modify.3blk.2d.input for a full description of all
+input parameters specific to this problem.

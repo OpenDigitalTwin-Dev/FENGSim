@@ -1,0 +1,241 @@
+*****************************************************************************
+	           Converting from SAMRAI 1.x to 2.0
+*****************************************************************************
+
+
+*****************************************************************************
+	           Introduction to the 2.0 API changes.
+*****************************************************************************
+
+The SAMRAI API has changed dramatically in the 2.0 release.  This will
+require you to make a large number of changes to your code, but the
+changes are fairly trivial in nature so the process is relatively easy
+but time consuming.  We have provided automated scripts to ease the
+conversion process.  The script will not make all required changes,
+but should significantly reduce the time to convert codes.
+
+The change should not introduce hidden errors, since it involves class
+name changes.  If something is not correct it will not compile so any
+errors should be reasonably transparent.
+
+We made every effort to figure out a way to provide backward
+compatibility header files; however, we could not find a method to do
+this.
+
+The first significant change involves how we partition the class
+names.  In the 1.x release API we used a name prefix on the class
+names (e.g. tbox_Array) to avoid name conflicts.  The 2.0 version uses
+the C++ standardized namespace technology to partition the packages
+(e.g. SAMRAI::tbox::Array). If you are not familiar with namespaces
+you may want to look at your favorite C++ book.
+
+The second major change involves the way we handle dimensioned
+classes.  In previous releases of SAMRAI there was a different class
+for each dimension (e.g. hier_Box1, hier_Box2, and hier_Box3).  Due to
+user requests for higher dimensions we now template on the dimension
+(e.g. SAMRAI::hier::Box<int DIM>). [NOTE: Not all of SAMRAI is
+currently working for DIM>3, if you try to use a class we have not
+converted you should receive a compiler or runtime error]
+
+The third major change from In the 1.x API is a reduction in the
+number of "styles" of headers included in SAMRAI.  We had three
+distinct ways of accessing the classes in SAMRAI.  These have been
+reduced to a single include method.
+
+
+*****************************************************************************
+	           What does the new API look like?
+*****************************************************************************
+
+Here are examples of the three "styles" of headers the 1.x API
+supported and how the new 2.0 code looks:
+
+
+Style 1) Dimensioned classes with package names.
+
+----------------------------------------------------------
+#include "hier_IntVector1.h"
+#include "hier_IntVector2.h"
+#include "pdat_CellData2.h"
+
+int main()
+{
+    hier_IntVector1                 vector_a;
+    hier_IntVector2                 vector_b;
+    pdat_CellData2<double>          data;
+}
+---------------------------------------------------------- 
+
+Style 2) Dimensioned classes without package names.
+
+----------------------------------------------------------
+#include "IntVector1.h"
+#include "IntVector2.h"
+#include "CellData2.h"
+
+int main()
+{
+    IntVector1                vector_a;
+    IntVector2                vector_b
+    CellData2<double>         data;
+}
+----------------------------------------------------------
+
+Styles (1) and (2) can be written using qualified names:
+
+----------------------------------------------------------
+#include "IntVector.h"
+#include "CellData.h"
+
+
+int main()
+{
+    // Class names no longer contain the dimension, classes
+    // are templated on the dimension.
+    SAMRAI::hier::IntVector<1>              vector_a;
+    SAMRAI::hier::IntVector<2>              vector_b
+    SAMARAI::pdat::CellData<2,double>       data;
+}
+---------------------------------------------------------- 
+
+You can use the C++ "using namespace" to avoid 
+qualifying the names.
+
+----------------------------------------------------------
+#include "IntVector.h"
+#include "CellData.h"
+
+using namespace SAMRAI;
+using namespace hier;
+using namespace pdat;
+
+int main()
+{
+    // Class names no longer contain the dimension, classes
+    // are templated on the dimension.
+    IntVector<1>              vector_a;
+    IntVector<2>              vector_b
+    CellData<2,double>        data;
+}
+---------------------------------------------------------- 
+
+
+Style 3) Non-dimensioned classes without package names.
+
+Note the dimension comes from the compile time definition of NDIM in
+both cases.  To get a 2D version of the code you used -DNDIM=2 on
+the compile line.
+
+----------------------------------------------------------
+#include "IntVector.h"
+#include "CellData.h"
+
+int main()
+{
+    IntVector                vector;
+    CellData<double> data;
+}
+----------------------------------------------------------
+
+The new method is similar, but you will see the "NDIM" symbol in your
+code instead hiding it in the header files.
+
+----------------------------------------------------------
+#include "IntVector.h"
+#include "CellData.h"
+using namespace SAMRAI;
+
+int main()
+{
+    hier::IntVector<NDIM>             vector;
+    pdat::CellData<NDIM, double>      data;
+}
+----------------------------------------------------------
+
+Note here we only use a "using namespace" to bring in the SAMRAI
+namespace and retain the namespace qualifiers for each of the package
+names.
+
+*****************************************************************************
+	How do I convert my code?
+*****************************************************************************
+
+You can make the code changes manually.  This requires changing:
+
+a) Remove package prefixes (if needed) from included headers.
+   Toolbox headers are located in a subdirectory of include to 
+   help avoid name collisions (e.g. #include "tbox/Utility.h").
+
+b) Add package namespace qualifiers or "using namespace" statements 
+   to class names.
+
+c) Add templating to classes that currently end in a dimension.
+
+
+We have provided a set of scripts to help automate the conversion
+process.  The scripts are not perfect and some editing is usually
+required but they help with the drudgery.  
+
+Make sure you have a backup of your code in case the conversion
+process fails.
+
+Run the SAMRAI/tools/scripts/conversion2.0/convert2.0 at the root of
+your source directory.  This should convert #include statements and
+rename classes that are templated.
+
+If you use the non-prefix header files (and thus non-prefix class
+names) you have three options.
+
+First, you can run the "packagePrefixPrepend" script to insert the
+package namespace into each class use.  For example IntVector would be
+replace with hier::IntVector.
+
+The second option is for you to manually add "using namespace"
+statements to your code.  You can do this by determining which
+packages you use and adding a "using namespace PACKAGE" for each one.
+
+The last alternative is a variation of the second, put a using
+namespace for all packages in your code and then remove the ones that
+cause an error during compilation (you can't have a "using namespace"
+for a package you don't actually use).  This is a little crude but
+depending on how familiar you are with the packages this might be
+easier than the second option.  Here is a complete list of all
+packages in SAMRAI:
+
+using namespace SAMRAI;
+using namespace tbox;
+using namespace hier;
+using namespace xfer;
+using namespace pdat;
+using namespace math;
+using namespace mesh;
+using namespace mblk;
+using namespace geom;
+using namespace solv;
+using namespace algs;
+using namespace appu;
+
+Issues using the scripts:
+
+(0) Please backup your files!
+
+We have run the scripts on several codes without harm but you don't
+want to be the person to find a serious bug in the scripts without
+having a backup.
+
+(1) Input file naming changes.
+
+Some input parameters use class names in them, the scripts to not make
+changes in input files.  You will need to change the input files that
+have references to packages.  E.G.
+
+algs_GriddingAlgorithm becomes algs::GriddingAlgorithm
+algs_HyperbolicLevelIntegrator becomes algs::HyperbolicLevelIntegrator
+
+are the most common changes needed.
+
+
+
+
+
+

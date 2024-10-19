@@ -1,0 +1,27 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace hier {
+
+/*!
+  @page package_hierarchy_transfer Data transfer interfaces
+
+  These base classes define interfaces through which SAMRAI works with
+  arbitrary refinement, coarsening and time interpolation of data.
+  SAMRAI implementations of these interfaces are in the SAMRAI::xfer
+  package.
+
+  - SAMRAI::hier::CoarsenOperator
+  - SAMRAI::hier::RefineOperator
+  - SAMRAI::hier::TimeInterpolateOperator
+*/
+
+}
+}

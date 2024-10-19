@@ -1,0 +1,19 @@
+##
+## File:        $URL$
+## Package:     SAMRAI build scripts
+## Copyright:   (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Revision:    $LastChangedRevision$
+## Description: data file for sed substitutions to generate dim-dep. files
+##
+
+#
+# application utilities package
+#
+
+appu_CartesianVizamraiDataWriter
+appu_VizamraiItem
+appu_VisDerivedDataStrategy
+appu_VisItDataWriter
+appu_VisItItem
+appu_VisMaterialsDataStrategy
+

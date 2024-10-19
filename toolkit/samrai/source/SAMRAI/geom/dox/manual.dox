@@ -1,0 +1,30 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace geom {
+
+/*!
+  @page package_geometry The Geometry Package
+ 
+  The Geometry package supports specific coordinate systems on structured 
+  AMR patch hierarchies.  Since interlevel data transfer operators (e.g., 
+  spatial coarsening and refining) depend on the mesh description, they 
+  are included here.  Time interpolation operators and constant data transfer
+  operators are also included here although they are independent of the
+  mesh description.
+  -# @ref package_geometry_cartesian "simple Cartesian mesh (grid geometry and operators)"
+  -# @ref package_geometry_generic "generic meshes (grid geometry only)"
+ 
+  All class names in the Geometry package are in the SAMRAI::geom namespace.
+
+*/
+
+}
+}

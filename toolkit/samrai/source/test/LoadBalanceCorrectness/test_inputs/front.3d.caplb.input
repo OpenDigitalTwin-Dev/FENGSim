@@ -1,0 +1,138 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Load balance correctness test input file.
+ *
+ ************************************************************************/
+
+// Mesh configuration: Sinusoidal front
+
+Main {
+   dim = 3
+
+   base_name = "front.3d.caplb"
+   baseline_dirname = "test_inputs"
+   baseline_action = "COMPARE" // "GENERATE" or "COMPARE"
+
+   write_visit = TRUE
+
+   log_all_nodes = TRUE
+
+   // Domain definition
+   domain_boxes = [(0,0,0),(11,5,5)]
+   xlo = 0.0, 0.0, 0.0
+   xhi = 2.0, 1.0, 1.0
+
+   // Whether to enforce nesting.
+   enforce_nesting = TRUE, TRUE, TRUE
+
+   // Base nprocs for automatic scaling.
+   autoscale_base_nprocs = 1
+
+   // Box generator types: BergerRigoutsos, TileClustering
+   box_generator_type = "BergerRigoutsos"
+
+   // Balancer types: TreeLoadBalancer, ChopAndPackLoadBalancer, CascadePartitioner
+   load_balancer_type = "ChopAndPackLoadBalancer"
+
+   // Whether to load balance (one value for each level).
+   load_balance = TRUE, TRUE, TRUE
+
+   /*
+     Specify ghost-cell-width between anchor and unbalanced.
+   */
+   ghost_cell_width = 4, 4, 4
+
+   mesh_generator_name = "SinusoidalFrontGenerator"
+
+   SinusoidalFrontGenerator {
+      /*
+        Define a set of sinusoidal fronts oriented in perpendicular to the x-axis.
+      */
+      init_time = 0.0
+      init_disp = 1.0, 0.0, 0.0
+      period = 2.0, 4.0, 4.0
+      amplitude = 0.5
+
+      // Buffer distances around the walls (one for each tag level).
+      buffer_distance_0 = 0.09, 0.09, 0.09
+      buffer_distance_1 = 0.02, 0.02, 0.02
+   }
+
+}
+
+
+TileClustering {
+  tile_size = 2, 2, 2
+  DEV_log_cluster_summary = FALSE
+  DEV_log_cluster = FALSE
+  DEV_debug_checks = TRUE
+}
+
+
+BergerRigoutsos {
+  sort_output_nodes = TRUE
+  efficiency_tolerance = 0.85
+  combine_efficiency = 0.85
+  DEV_log_node_history = FALSE
+  DEV_log_cluster_summary = FALSE
+  DEV_log_cluster = FALSE
+  // DEV_owner_mode = "SINGLE_OWNER"
+  // DEV_algo_advance_mode = "SYNCHRONOUS"
+}
+
+
+TreeLoadBalancer {
+  tile_size = 6, 6, 6
+  // Debugging options
+  DEV_check_map = TRUE
+  DEV_check_connectivity = FALSE
+  DEV_print_steps = FALSE
+  DEV_print_swap_steps = FALSE
+  DEV_print_break_steps = TRUE
+  DEV_print_edge_steps = FALSE
+  DEV_summarize_map = TRUE
+}
+
+
+TimerManager {
+//   print_exclusive      = TRUE
+   print_summed           = TRUE
+   print_max              = TRUE
+   print_threshold        = 0.
+   timer_list             = "hier::*::*", "mesh::*::*", "apps::*::*"
+}
+
+
+PatchHierarchy {
+
+   /*
+     Specify number of levels (1, 2 or 3 for this test).
+   */
+   max_levels = 3
+
+   largest_patch_size {
+      level_0 = -1, -1, -1
+      // level_0 = 20, 20, 20
+      // all finer levels will use same values as level_0...
+   }
+   smallest_patch_size {
+      level_0 = 3, 3, 3
+      level_1 = 6, 6, 6
+      level_2 = 9, 9, 9
+      // all finer levels will use same values as level_0...
+   }
+   ratio_to_coarser {
+      level_1            = 3, 3, 3
+      level_2            = 3, 3, 3
+      level_3            = 3, 3, 3
+      //  etc.
+   }
+
+   allow_patches_smaller_than_ghostwidth = TRUE
+   allow_patches_smaller_than_minimum_size_to_prevent_overlaps = TRUE
+   proper_nesting_buffer = 1, 1, 1
+}

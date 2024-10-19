@@ -1,0 +1,22 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace pdat {
+/*!
+  @page package_patchdata_operators_constant_cell Cell Data Constant Operators
+
+  Constant refine operators are provided for all standard cell-centered
+  patch data types.   Here, we only describe the constant operator
+  for data of type double.  All others are similar.
+  - SAMRAI::pdat::CellDoubleConstantRefine
+*/
+
+}
+}

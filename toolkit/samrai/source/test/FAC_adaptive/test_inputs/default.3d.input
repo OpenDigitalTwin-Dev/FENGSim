@@ -1,0 +1,111 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for FAC solver tests.
+ *
+ ************************************************************************/
+
+// Refer to allneumann2d.input for full description of all input parameters
+// specific to this problem.
+
+Main {
+  dim = 3
+  base_name = "default3d"
+  do_plot = TRUE
+  max_adaptions = 4
+  target_l2norm = 1.5e-4
+}
+
+fac_precond {
+  max_cycles = 15
+  residual_tol = 1e-10
+  num_pre_sweeps = 1
+  num_post_sweeps = 3
+}
+
+fac_ops {
+  coarse_solver_tolerance = 1e-8
+  coarse_solver_max_iterations = 10
+  prolongation_method = "LINEAR_REFINE"
+}
+
+hypre_solver {
+  use_smg = FALSE
+}
+
+AdaptivePoisson {
+  problem_name = "multigauss"
+  multigaussian_solution {
+    GaussianFcnControl_0 = "{ lambda=-50 cx=0.5 cy=0.5 cz=0.0 }"
+    GaussianFcnControl_1 = "{ lambda=-20 cx=0.0 cy=0.0 cz=1.0 }"
+  }
+  adaption_threshold = .0200
+}
+
+
+CartesianGridGeometry {
+  domain_boxes = [(0,0,0), (9,9,9)]
+  x_lo         = 0, 0, 0
+  x_up         = 1, 1, 1.5
+}
+
+StandardTagAndInitialize {
+  tagging_method = "GRADIENT_DETECTOR"
+}
+
+TreeLoadBalancer {
+  DEV_report_load_balance = TRUE
+  DEV_barrier_before = FALSE
+  DEV_barrier_after = FALSE
+}
+
+PatchHierarchy {
+   max_levels = 6
+   largest_patch_size {
+      level_0 = 16,16,16
+      // all finer levels will use same values as level_0...
+   }
+   smallest_patch_size {
+      level_0 = 4,4,4
+      // all finer levels will use same values as level_0...
+   }
+   ratio_to_coarser {
+      level_1            = 2, 2, 2
+      level_2            = 2, 2, 2
+      level_3            = 2, 2, 2
+      level_4            = 2, 2, 2
+      level_5            = 2, 2, 2
+      level_6            = 2, 2, 2
+      level_7            = 2, 2, 2
+      level_8            = 2, 2, 2
+      level_9            = 2, 2, 2
+      //  etc.
+   }
+   allow_patches_smaller_than_ghostwidth = TRUE
+   allow_patches_smaller_than_minimum_size_to_prevent_overlaps = TRUE
+}
+
+GriddingAlgorithm {
+   enforce_proper_nesting = TRUE
+   DEV_extend_to_domain_boundary = TRUE
+   // DEV_load_balance = FALSE
+   check_nonrefined_tags = "IGNORE"
+   sequentialize_patch_indices = TRUE
+}
+
+BergerRigoutsos {
+   combine_efficiency = 0.75
+   efficiency_tolerance = 0.75
+   DEV_log_node_history = FALSE
+   DEV_log_cluster = FALSE
+}
+
+
+TimerManager{
+  timer_list = "solv::FACPreconditionerX::*", "solv::ScalarPoissonFacOpsX::*", "solv::CartesianRobinBcHelperX::setBoundaryValuesInCells()_setBcCoefs()"
+  print_user = TRUE
+  // print_timer_overhead = TRUE
+}

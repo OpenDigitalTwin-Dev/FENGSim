@@ -1,0 +1,25 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace algs {
+
+/*!
+  @page package_algorithm_implicit Implicit time-marching algorithms
+
+  The implicit time-marching algorithm is implemented in the
+  implicit integrator class.
+  Operations specific to a specific problem are delegated
+  to the implicit equation strategy implementation provided by the user.
+  - SAMRAI::algs::ImplicitIntegrator
+  - SAMRAI::algs::ImplicitEquationStrategy
+*/
+
+}
+}

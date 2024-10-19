@@ -1,0 +1,24 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace mesh {
+
+/*!
+  @page package_mesh_clustering Box Generation
+
+  These classes are used to generate a union of boxes covering a collection 
+  of tagged cells on a single AMR.  The procedure implemented here includes
+  some extensions to the algorithm introduced by Berger and Rigoutsos.
+  - SAMRAI::mesh::BergerRigoutsos
+  - SAMRAI::mesh::BoxGeneratorStrategy
+*/
+
+}
+}

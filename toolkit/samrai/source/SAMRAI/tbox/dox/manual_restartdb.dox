@@ -1,0 +1,29 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace tbox {
+
+/*!
+  @page package_toolbox_restartdb Restart Database
+
+  The restart database classes provide support for restart capabilities
+  within an application code built using SAMRAI.  Currently, restart
+  files are manipulated using the Hierarchical Data Format (HDF5).
+  The interface to HDF5 conforms to that defined by the abstract database
+  base class found in the toolbox package.
+  - SAMRAI::tbox::RestartManager
+  - SAMRAI::tbox::HDFDatabase
+  - SAMRAI::tbox::HDFDatabaseFactory
+  - SAMRAI::tbox::SiloDatabase
+  - SAMRAI::tbox::SiloDatabaseFactory
+ */
+
+}
+}

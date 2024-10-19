@@ -1,0 +1,45 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright
+## information, see COPYRIGHT and LICENSE.
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   Asynchronous communication unit tests
+##
+#########################################################################
+
+This is a unit test of asynchronous communication. The files included in this
+directory are as follows:
+
+   main-async_comm.cpp    -  application driver program for asynchronous
+                           communication unit test
+   main-peer_comm.cpp     -  application driver program for asynchronous peer
+                           communication unit test
+   test_inputs/*.input  -  input files
+
+
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make main
+
+   Run:
+      serial:
+         ./main-async_comm test_inputs/async.default.input
+         ./main-peer_comm test_inputs/peer.default.input
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] main-async_comm async.default.input
+         mpirun -np <nprocs> [mpirun options] main-peer_comm peer.default.input
+
+   The test input files contain comments describing the input parameters
+   specific to this problem.  Descriptions of input parameters for library
+   classes will be found in the documentation of those classes as well their
+   header files.
+
+
+INPUT PARAMETER
+---------------
+Refer to the 2 input files in test_inputs for full description of all input
+parameters specific to this problem.

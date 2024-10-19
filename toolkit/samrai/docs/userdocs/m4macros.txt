@@ -1,0 +1,312 @@
+SAMRAI's m4 macros
+
+
+Users of SAMRAI often find it useful to write the numerical kernels of their
+applications in FORTRAN subroutines.  The patch data arrays can be passed into
+the subroutines, where the user can then operate on the numerical data.
+As a convenience SAMRAI provides a set of m4 macros that can be used for
+declaring the size and dimension of patch data arrays inside of the FORTRAN
+subroutines.  It is left to the user's discretion to choose whether or not to
+use these macros, as a user can still choose to explicitly declare the size
+and dimension of arrays.
+
+Each of SAMRAI's patch data types (cell, node, edge, etc.) is mapped to AMR
+index space in a different way.  Thus the patch data arrays in the FORTRAN
+subroutines will have to be declared to the correct size for each data type.
+For example, node-centered data on a particular patch will have one more
+element in each coordinate direction than cell-centered data on the same.
+Additionally, some data might be passed into the FORTRAN subroutines with
+ghost cell data included, while other data do not require any ghost cell data.
+The m4 macros provide a convenient method to declare FORTRAN arrays that
+correspond to different patch data types and ghost cell widths.
+
+Consider the following example, adapted from the SAMRAI's linear advection
+example application.  The ifirst and ilast integers give the upper and lower
+bounds of the patch in each coordinate direction.  uval is a 3D cell-centered
+data array, while flux0, flux1, and flux2 are the three 3D face-centered data
+arrays associated with a FaceData object.  For the cell-centered array, the
+macro CELL3d is used.  The arguments are the variable names, without the
+numerical suffixes, used for the bounds of the patch, followed by the ghost
+cell width for the array.  For face-centered data, the arguments for the macros
+are the same.  Since face-centered data is stored in separate arrays that
+each store data on faces with a normal in a single coordinate direction, the
+numerical suffixes on the FACE3d macros indicate which coordinate direction
+is normal to each array.
+
+      subroutine consdiff(ifirst0,ilast0,ifirst1,ilast1,ifirst2,ilast2,
+     &  dx,
+     &  flux0,flux1,flux2,
+     &  advecspeed,uval)
+      integer ifirst0, ilast0,ifirst1, ilast1,ifirst2,ilast2
+      double precision dx(0:2)
+      double precision
+     &     flux0(FACE3d0(ifirst,ilast,0)),
+     &     flux1(FACE3d1(ifirst,ilast,0)),
+     &     flux2(FACE3d2(ifirst,ilast,0)),
+     &     advecspeed(0:2),
+     &     uval(CELL3d(ifirst,ilast,4))
+
+When the above is processed by m4, the output will be the following.  Note
+that the ghost cell width for the cell-centered data is subtracted from the
+lower array bounds and added to the upper array bounds.  Also note that 
+for the face-centered arrays, the indices are permuted as required by the
+face data type, and that the first dimension of each array is increased in
+size by 1, which is also necessary for the face type.
+
+      subroutine consdiff(ifirst0,ilast0,ifirst1,ilast1,ifirst2,ilast2,
+     &  dx,
+     &  flux0,flux1,flux2,
+     &  advecspeed,uval)
+      integer ifirst0, ilast0,ifirst1, ilast1,ifirst2,ilast2
+      double precision dx(0:2)
+      double precision
+     &     flux0(ifirst0:ilast0+1,
+     &          ifirst1:ilast1,
+     &          ifirst2:ilast2),
+     &     flux1(ifirst1:ilast1+1,
+     &          ifirst2:ilast2,
+     &          ifirst0:ilast0),
+     &     flux2(ifirst2:ilast2+1,
+     &          ifirst0:ilast0,
+     &          ifirst1:ilast1),
+     &     advecspeed(0:2),
+     &     uval(ifirst0-4:ilast0+4,
+     &          ifirst1-4:ilast1+4,
+     &          ifirst2-4:ilast2+4)
+
+If the ghost cell width is unknown or is not uniform in each direction, the
+ghost cell widths can be passed in as arguments of the FORTRAN subroutine.
+A separate argument must be passed into the subroutine for each direction.
+In the above example, if integer arguments "ughost0,ughost1,ughost2" were
+added to the argument list, the m4 macros for the "uval" array could be
+used as follows:
+
+     &     uval(CELL3d(ifirst,ilast,ughost))
+
+which expands to
+
+     &     uval(ifirst0-ughost0:ilast0+ughost0,
+     &          ifirst1-ughost1:ilast1+ughost1,
+     &          ifirst2-ughost2:ilast2+ughost2)
+
+
+If a patch data array is associated with a variable that has a depth greater
+than 1, then this also needs to be included in the declarations of arrays.
+From the above example, if uval had depth 3, then the usage of the macro would
+be
+
+      double precision
+     &     uval(CELL3d(ifirst,ilast,4),3)
+
+which would expand to
+
+      double precision
+     &     uval(ifirst0-4:ilast0+4,
+     &          ifirst1-4:ilast1+4,
+     &          ifirst2-4:ilast2+4,3)
+
+When using these macros in application code, the code should be written in
+a file with a .m4 suffix.  Other than the lines that use the macros, the
+remainder of the file can be written using regular FORTRAN code, and the file
+will have to be processed by m4 to produce a FORTRAN file.  The m4 file should
+include the file where the macros are defined (located in
+SAMRAI/source/patchdata/fortran) using m4's include syntax:
+
+include(filename)
+
+To produce the FORTRAN file, run the m4 processor and direct output to a
+FORTRAN file.  For example:
+
+m4 appcode.m4 > appcode.f
+
+Some machines might have GNU's version of the m4 processor, called gm4.
+
+
+The following lists each macro that is available, an example of its usage,
+and the FORTRAN code that results when the macro is expanded.  A ghost cell
+width of 2 is used in each of these examples.
+
+1d:
+         CELL1d
+         cellvar(CELL1d(ifirst,ilast,2))
+         cellvar(ifirst0-2:ilast0+2)
+
+         FACE1d
+         facevar(FACE1d(ifirst,ilast,2))
+         facevar(ifirst0-2:ilast0+1+2)
+
+         SIDE1d
+         sidevar(SIDE1d(ifirst,ilast,2))
+         sidevar(ifirst0-2:ilast0+1+2)
+
+         NODE1d
+         nodevar(NODE1d(ifirst,ilast,2))
+         nodevar(ifirst0-2:ilast0+1+2)
+
+         EDGE1d
+         edgevar(EDGE1d(ifirst,ilast,2))
+         edgevar(ifirst0-2:ilast0+2)
+
+         OUTERFACE1d
+         ofacevar(OUTERFACE1d(ifirst,ilast,2))
+         ofacevar(1)
+
+         OUTERSIDE1d
+         osidevar(OUTERSIDE1d(ifirst,ilast,2))
+         osidevar(1)
+
+
+2d:
+         CELL2d
+         cellvar(CELL2d(ifirst,ilast,2))
+         cellvar(ifirst0-2:ilast0+2,
+     &          ifirst1-2:ilast1+2)
+
+         FACE2d0
+         facevar0(FACE2d0(ifirst,ilast,2))
+         facevar0(ifirst0-2:ilast0+1+2,
+     &          ifirst1-2:ilast1+2)
+
+         FACE2d1
+         facevar1(FACE2d1(ifirst,ilast,2))
+         facevar1(ifirst1-2:ilast1+1+2,
+     &          ifirst0-2:ilast0+2)
+
+         SIDE2d0
+         sidevar0(SIDE2d0(ifirst,ilast,2))
+         sidevar0(ifirst0-2:ilast0+1+2,
+     &          ifirst1-2:ilast1+2)
+
+         SIDE2d1
+         sidevar1(SIDE2d1(ifirst,ilast,2))
+         sidevar1(ifirst0-2:ilast0+2,
+     &          ifirst1-2:ilast1+1+2)
+
+         NODE2d
+         nodevar(NODE2d(ifirst,ilast,2))
+         nodevar(ifirst0-2:ilast0+1+2,
+     &          ifirst1-2:ilast1+1+2)
+
+         EDGE2d0
+         edgevar0(EDGE2d0(ifirst,ilast,2))
+         edgevar0(ifirst0-2:ilast0+2,
+     &          ifirst1-2:ilast1+1+2)
+
+         EDGE2d1
+         edgevar1(EDGE2d1(ifirst,ilast,2))
+         edgevar1(ifirst0-2:ilast0+1+2,
+     &          ifirst1-2:ilast1+2)
+
+         OUTERFACE2d0
+         ofacevar0(OUTERFACE2d0(ifirst,ilast,2))
+         ofacevar0(ifirst1-2:ilast1+2)
+
+         OUTERFACE2d1
+         ofacevar1(OUTERFACE2d1(ifirst,ilast,2))
+         ofacevar1(ifirst0-2:ilast0+2)
+
+         OUTERSIDE2d0
+         osidevar0(OUTERSIDE2d0(ifirst,ilast,2))
+         osidevar0(ifirst1-2:ilast1+2)
+
+         OUTERSIDE2d1
+         osidevar1(OUTERSIDE2d1(ifirst,ilast,2))
+         osidevar1(ifirst0-2:ilast0+2)
+
+
+3d:
+         CELL3d
+         cellvar(CELL3d(ifirst,ilast,2))
+         cellvar(ifirst0-2:ilast0+2,
+     &          ifirst1-2:ilast1+2,
+     &          ifirst2-2:ilast2+2)
+
+         FACE3d0
+         facevar0(FACE3d0(ifirst,ilast,2))
+         facevar0(ifirst0-2:ilast0+1+2,
+     &          ifirst1-2:ilast1+2,
+     &          ifirst2-2:ilast2+2)
+
+         FACE3d1
+         facevar1(FACE3d1(ifirst,ilast,2))
+         facevar1(ifirst1-2:ilast1+1+2,
+     &          ifirst2-2:ilast2+2,
+     &          ifirst0-2:ilast0+2)
+
+         FACE3d2
+         facevar2(FACE3d2(ifirst,ilast,2))
+         facevar2(ifirst2-2:ilast2+1+2,
+     &          ifirst0-2:ilast0+2,
+     &          ifirst1-2:ilast1+2)
+
+         SIDE3d0
+         sidevar0(SIDE3d0(ifirst,ilast,2))
+         sidevar0(ifirst0-2:ilast0+1+2,
+     &          ifirst1-2:ilast1+2,
+     &          ifirst2-2:ilast2+2)
+
+         SIDE3d1
+         sidevar1(SIDE3d1(ifirst,ilast,2))
+         sidevar1(ifirst0-2:ilast0+2,
+     &          ifirst1-2:ilast1+1+2,
+     &          ifirst2-2:ilast2+2)
+
+         SIDE3d2
+         sidevar2(SIDE3d2(ifirst,ilast,2))
+         sidevar2(ifirst0-2:ilast0+2,
+     &          ifirst1-2:ilast1+2,
+     &          ifirst2-2:ilast2+1+2)
+
+         NODE3d
+         nodevar(NODE3d(ifirst,ilast,2))
+         nodevar(ifirst0-2:ilast0+1+2,
+     &          ifirst1-2:ilast1+1+2,
+     &          ifirst2-2:ilast2+1+2)
+
+         EDGE3d0
+         edgevar0(EDGE3d0(ifirst,ilast,2))
+         edgevar0(ifirst0-2:ilast0+2,
+     &          ifirst1-2:ilast1+1+2,
+     &          ifirst2-2:ilast2+1+2)
+
+         EDGE3d1
+         edgevar1(EDGE3d1(ifirst,ilast,2))
+         edgevar1(ifirst0-2:ilast0+1+2,
+     &          ifirst1-2:ilast1+2,
+     &          ifirst2-2:ilast2+1+2)
+
+         EDGE3d2
+         edgevar2(EDGE3d2(ifirst,ilast,2))
+         edgevar2(ifirst0-2:ilast0+1+2,
+     &          ifirst1-2:ilast1+1+2,
+     &          ifirst2-2:ilast2+2)
+
+         OUTERFACE3d0
+         ofacevar0(OUTERFACE3d0(ifirst,ilast,2))
+         ofacevar0(ifirst1-2:ilast1+2,
+     &          ifirst2-2:ilast2+2)
+
+         OUTERFACE3d1
+         ofacevar1(OUTERFACE3d1(ifirst,ilast,2))
+         ofacevar1(ifirst2-2:ilast2+2,
+     &          ifirst0-2:ilast0+2)
+
+         OUTERFACE3d2
+         ofacevar2(OUTERFACE3d2(ifirst,ilast,2))
+         ofacevar2(ifirst0-2:ilast0+2,
+     &          ifirst1-2:ilast1+2)
+
+         OUTERSIDE3d0
+         osidevar0(OUTERSIDE3d0(ifirst,ilast,2))
+         osidevar0(ifirst1-2:ilast1+2,
+     &          ifirst2-2:ilast2+2)
+
+         OUTERSIDE3d1
+         osidevar1(OUTERSIDE3d1(ifirst,ilast,2))
+         osidevar1(ifirst0-2:ilast0+2,
+     &          ifirst2-2:ilast2+2)
+
+         OUTERSIDE3d2
+         osidevar2(OUTERSIDE3d2(ifirst,ilast,2))
+         osidevar2(ifirst0-2:ilast0+2,
+     &          ifirst1-2:ilast1+2)

@@ -1,0 +1,26 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace pdat {
+
+/*!
+  @page package_patchdata_side Side Patch Data
+
+  These classes implement a side centered patch data type.  These are
+  normally used to represent flux data between patches.
+  - SAMRAI::pdat::SideDataFactory
+  - SAMRAI::pdat::SideData
+  - SAMRAI::pdat::SideIndex
+  - SAMRAI::pdat::SideIterator
+  - SAMRAI::pdat::SideVariable
+*/
+
+}
+}

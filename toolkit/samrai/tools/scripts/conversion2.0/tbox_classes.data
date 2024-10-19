@@ -1,0 +1,57 @@
+##
+## File:        $URL$
+## Package:     SAMRAI build scripts
+## Copyright:   (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Revision:    $LastChangedRevision$
+## Description: data file for sed substitutions to generate dim-dep. files
+##
+
+AbstractStream
+Arena
+ArenaManager
+Array
+Boolean
+Clock
+Complex
+ConstPointer
+ConstPointerBase
+Database
+DatabaseBox
+DescribedClass
+FileStream
+FixedArena
+Grammar
+HDFDatabase
+IEEE
+IOStream
+InputDatabase
+InputManager
+List
+MPI
+MathUtilities
+MemoryUtilities
+MessageStream
+NullDatabase
+PIO
+ParallelBuffer
+Parser
+Pointer
+PointerBase
+ReferenceCounter
+RestartManager
+SAMRAIManager
+Schedule
+ScratchArena
+Serializable
+ShutdownRegistry
+StandardArena
+StatTransaction
+Statistic
+Statistician
+String
+Timer
+TimerManager
+Tracer
+Transaction
+Utilities
+XDRStream

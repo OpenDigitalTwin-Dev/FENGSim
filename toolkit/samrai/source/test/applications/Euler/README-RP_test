@@ -1,0 +1,45 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   README file for Euler test.
+##
+#########################################################################
+
+The RP_test input files implement three different problems:
+
+1.  testX-1-2d - Sod shock tube
+       Tests Sod shock tube problem in the X direction in 2D.
+       (coupled RP-testX-2d.input with RP-test1.data in the RP_input
+       directory in the applications directory).  50 timesteps  
+
+2.  testY-3-3d - left side, Woodward Colella blast wave
+       Tests Woodward-Colella problem in the Y direction in 3D.
+       (coupled RP-testY-3d.input with RP-test3.data in the RP_input
+       directory in the applications directory).  75 timesteps.
+
+3.  testZ-6-3d - slow moving contact discontinuity 
+       Tests contact discontinuity problem in Z direction in 3D.
+       (coupled RP-testZ-3d.input with RP-test6Z.data in the RP_input
+       directory in the applications directory).  60 timesteps.
+
+An input file, a "correct" solution file, and a plot of the solution
+are included for each of these tests:
+
+    <test name>.input - input file for the test
+    <test name>_<timestep>.correct - data file with the "correct" 
+                        solution at the specified timestep.
+    <test name>_<timestep>.jpg - JPEG image file showing plots of the
+                        solution at the specified step.
+
+To run a test and compare with the correct solution, do the following:
+
+1.  Run the test case with the appropriate input file:
+       ./main RP_test/testY-3-3d.input
+
+2.  Compare the *.dat file (written to the RP_test directory) to the
+    correct solution:
+       diff testY-3-3d_0060.dat testY-3-3d_0060.correct 
+

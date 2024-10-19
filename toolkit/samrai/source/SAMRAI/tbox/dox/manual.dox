@@ -1,0 +1,31 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace tbox {
+
+/*!
+  @page package_toolbox The Toolbox Package
+
+  The Toolbox package routines provide basic support for the remainder 
+  of the SAMRAI framework.  This support is divided into these categories:
+  -# @ref package_toolbox_base "basic utilities"
+  -# @ref package_toolbox_memory "memory management"
+  -# @ref package_toolbox_parallel "MPI and communication schedules"
+  -# @ref package_toolbox_stream "message and file streams"
+  -# @ref package_toolbox_database "database interface and object serialization"
+  -# @ref package_toolbox_inputdb "input file processing"
+  -# @ref package_toolbox_restartdb "restart file management"
+  -# @ref package_toolbox_timers "timer and statistics utilities"
+ 
+  All class names in the Toolbox package are in the SAMRAI::tbox namespace.
+*/
+
+}
+}

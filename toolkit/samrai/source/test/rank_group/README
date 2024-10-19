@@ -1,0 +1,42 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   Unit test of RankGroup class.
+##
+#########################################################################
+
+This test unit tests the RankGroup class in the context of the
+TreeLoadBalancer.  The files included in this directory are as follows:
+
+   main.cpp               -  unit tester
+   test_inputs/*.input  -  2d and 3d input files
+
+
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make main
+
+   Execution:
+      For one of the following input files:
+         test_inputs/plank.3d.treelb.input
+         test_inputs/rect.2d.treelb.input
+         test_inputs/rod.2d.treelb.input
+         test_inputs/small_cube.2d.treelb.input
+         test_inputs/small_cube.3d.treelb.input
+         test_inputs/small_sphere.2d.treelb.input
+      serial:
+         ./main <input_file>
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main <input_file>
+
+
+INPUT PARAMETERS
+----------------
+Refer to test_inputs/rect.2d.treelb.input for a full description of all input
+parameters specific to this problem.

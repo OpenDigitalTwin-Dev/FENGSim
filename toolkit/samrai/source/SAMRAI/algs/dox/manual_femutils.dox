@@ -1,0 +1,36 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace algs {
+
+/*!
+  @page package_algorithm_femutils Rudimentary Support for Finite Element Operations on SAMR Meshes
+
+  The Algorithm package contains some basic functionality for summing node and edge data quantities
+  at shared points between neighboring patches.  Such operations are commonly found in finite element
+  computations.  For example, when applying finite element integration that take contributions from
+  each element to a node or edge, one can divide the problem into patches, do operations on each
+  patch, and then accumulate the neighboring patch contributions by employing a patch boundary node
+  or edge sum. These classes are partitioned into two categories:
+
+  These classes provide basic operations for summing data across patches at
+  shared grid points.
+
+  - SAMRAI::algs::PatchBoundaryNodeSum
+  - SAMRAI::algs::PatchBoundaryEdgeSum
+  - SAMRAI::algs::OuternodeSumTransaction
+  - SAMRAI::algs::OuteredgeSumTransaction
+  - SAMRAI::algs::OuternodeSumTransactionFactory
+  - SAMRAI::algs::OuteredgeSumTransactionFactory
+
+*/
+
+}
+}

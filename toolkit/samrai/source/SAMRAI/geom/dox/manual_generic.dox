@@ -1,0 +1,22 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+  namespace geom {
+
+/*!
+  @page package_geometry_generic Generic Mesh Geometry Support
+
+  The GridGeometry class maintains a simple potentially multiblock mesh
+  geometry description.
+  - SAMRAI::geom::GridGeometry
+*/
+
+}
+}

@@ -1,0 +1,691 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Main program for SAMRAI Euler gas dynamics sample application
+ *
+ ************************************************************************/
+
+#include "SAMRAI/SAMRAI_config.h"
+
+// Header for application-specific algorithm/data structure object
+
+#include "Euler.h"
+
+// Headers for major algorithm/data structure objects from SAMRAI
+
+#include "SAMRAI/geom/CartesianGridGeometry.h"
+
+#include "SAMRAI/mesh/GriddingAlgorithm.h"
+#include "SAMRAI/mesh/StandardTagAndInitialize.h"
+#include "SAMRAI/mesh/BergerRigoutsos.h"
+#include "SAMRAI/mesh/TileClustering.h"
+#include "SAMRAI/mesh/TreeLoadBalancer.h"
+#include "SAMRAI/mesh/CascadePartitioner.h"
+#include "SAMRAI/mesh/ChopAndPackLoadBalancer.h"
+
+#include "SAMRAI/algs/HyperbolicLevelIntegrator.h"
+#include "SAMRAI/hier/PatchHierarchy.h"
+#include "SAMRAI/algs/TimeRefinementIntegrator.h"
+#include "SAMRAI/algs/TimeRefinementLevelStrategy.h"
+#include "SAMRAI/appu/VisItDataWriter.h"
+
+// Headers for basic SAMRAI objects
+
+#include "SAMRAI/hier/BoxContainer.h"
+#include "SAMRAI/hier/Index.h"
+#include "SAMRAI/hier/PatchLevel.h"
+#include "SAMRAI/hier/VariableDatabase.h"
+#include "SAMRAI/tbox/BalancedDepthFirstTree.h"
+#include "SAMRAI/tbox/Database.h"
+#include "SAMRAI/tbox/SiloDatabaseFactory.h"
+#include "SAMRAI/tbox/InputDatabase.h"
+#include "SAMRAI/tbox/InputManager.h"
+#include "SAMRAI/tbox/SAMRAI_MPI.h"
+#include "SAMRAI/tbox/SAMRAIManager.h"
+#include "SAMRAI/tbox/PIO.h"
+#include "SAMRAI/tbox/RestartManager.h"
+#include "SAMRAI/tbox/Utilities.h"
+#include "SAMRAI/tbox/Timer.h"
+#include "SAMRAI/tbox/TimerManager.h"
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string>
+#include <fstream>
+#include <memory>
+
+#ifndef _MSC_VER
+#include <unistd.h>
+#endif
+
+#include <sys/stat.h>
+
+using namespace SAMRAI;
+
+/*
+ ************************************************************************
+ *
+ * This is the main program for an AMR Euler gas dynamics application
+ * built using SAMRAI.   The application program is constructed by
+ * composing a variety of algorithm objects found in SAMRAI plus some
+ * others that are specific to this application.   The following brief
+ * discussion summarizes these objects.
+ *
+ *    hier::PatchHierarchy - A container for the AMR patch hierarchy and
+ *       the data on the grid.
+ *
+ *    geom::CartesianGridGeometry - Defines and maintains the Cartesian
+ *       coordinate system on the grid.  The hier::PatchHierarchy
+ *       maintains a reference to this object.
+ *
+ * A single overarching algorithm object drives the time integration
+ * and adaptive gridding processes:
+ *
+ *    algs::TimeRefinementIntegrator - Coordinates time integration and
+ *       adaptive gridding procedures for the various levels
+ *       in the AMR patch hierarchy.  Local time refinement is
+ *       employed during hierarchy integration; i.e., finer
+ *       levels are advanced using smaller time increments than
+ *       coarser level.  Thus, this object also invokes data
+ *       synchronization procedures which couple the solution on
+ *       different patch hierarchy levels.
+ *
+ * The time refinement integrator is not specific to the numerical
+ * methods used and the problem being solved.   It maintains references
+ * to two other finer grain algorithmic objects, more specific to
+ * the problem at hand, with which it is configured when they are
+ * passed into its constructor.   They are:
+ *
+ *    algs::HyperbolicLevelIntegrator - Defines data management procedures
+ *       for level integration, data synchronization between levels,
+ *       and tagging cells for refinement.  These operations are
+ *       tailored to explicit time integration algorithms used for
+ *       hyperbolic systems of conservation laws, such as the Euler
+ *       equations.  This integrator manages data for numerical
+ *       routines that treat individual patches in the AMR patch
+ *       hierarchy.  In this particular application, it maintains a
+ *       pointer to the Euler object that defines variables and
+ *       provides numerical routines for the Euler model.
+ *
+ *       Euler - Defines variables and numerical routines for the
+ *          discrete Euler equations on each patch in the AMR
+ *          hierarchy.
+ *
+ *    mesh::GriddingAlgorithm - Drives the AMR patch hierarchy generation
+ *       and regridding procedures.  This object maintains
+ *       references to three other algorithmic objects with
+ *       which it is configured when they are passed into its
+ *       constructor.   They are:
+ *
+ *       mesh::BergerRigoutsos - Clusters cells tagged for refinement on a
+ *          patch level into a collection of logically-rectangular
+ *          box domains.
+ *
+ *       mesh::TreeLoadBalancer - Processes the boxes generated by the
+ *          mesh::BergerRigoutsos algorithm into a configuration from
+ *          which patches are contructed.  The algorithm we use in this
+ *          class assumes a spatially-uniform workload distribution;
+ *          thus, it attempts to produce a collection of boxes
+ *          each of which contains the same number of cells.  The
+ *          load balancer also assigns patches to processors.
+ *
+ *       mesh::StandardTagAndInitialize - Couples the gridding algorithm
+ *          to the HyperbolicIntegrator. Selects cells for
+ *          refinement based on either Gradient detection, Richardson
+ *          extrapolation, or pre-defined Refine box region.  The
+ *          object maintains a pointer to the algs::HyperbolicLevelIntegrator,
+ *          which is passed into its constructor, for this purpose.
+ *
+ ************************************************************************
+ */
+
+/*
+ *******************************************************************
+ *
+ * For each run, the input filename and restart information
+ * (if needed) must be given on the command line.
+ *
+ *      For non-restarted case, command line is:
+ *
+ *          executable <input file name>
+ *
+ *      For restarted run, command line is:
+ *
+ *          executable <input file name> <restart directory> \
+ *                     <restart number>
+ *
+ *******************************************************************
+ */
+
+int main(
+   int argc,
+   char* argv[])
+{
+
+   /*
+    * Initialize MPI and SAMRAI, enable logging, and process command line.
+    */
+
+   tbox::SAMRAI_MPI::init(&argc, &argv);
+   tbox::SAMRAIManager::initialize();
+   tbox::SAMRAIManager::startup();
+   const tbox::SAMRAI_MPI& mpi(tbox::SAMRAI_MPI::getSAMRAIWorld());
+
+   int num_failures = 0;
+
+   {
+      string input_filename;
+      string case_name;
+      int scale_size = mpi.getSize();
+
+      if ((argc != 2) && (argc != 3) && (argc != 4)) {
+         tbox::pout << "USAGE:\n"
+                    << argv[0] << " <input filename> "
+                    << "or\n"
+                    << argv[0] << " <input filename> <case name>"
+                    << "or\n"
+                    << argv[0] << " <input filename> <case name> <scale size> "
+                    << std::endl;
+         tbox::SAMRAI_MPI::abort();
+         return -1;
+      } else {
+         input_filename = argv[1];
+         if (argc > 2) {
+            case_name = argv[2];
+         }
+         if (argc > 3) {
+            scale_size = atoi(argv[3]);
+         }
+      }
+
+      tbox::pout << "input_filename = " << input_filename << std::endl;
+      tbox::pout << "case_name = " << case_name << std::endl;
+      tbox::pout << "scale_size = " << scale_size << std::endl;
+
+      /*
+       * Create input database and parse all data in input file.
+       */
+
+      std::shared_ptr<tbox::InputDatabase> input_db(
+         new tbox::InputDatabase("input_db"));
+      tbox::InputManager::getManager()->parseInputFile(input_filename, input_db);
+
+      /*
+       * Setup the timer manager to trace timing statistics during execution
+       * of the code.  The list of timers is given in the TimerManager
+       * section of the input file.  Timing information is stored in the
+       * restart file.  Timers will automatically be initialized to their
+       * previous state if the run is restarted, unless they are explicitly
+       * reset using the TimerManager::resetAllTimers() routine.
+       */
+
+      tbox::TimerManager::createManager(input_db->getDatabase("TimerManager"));
+      std::shared_ptr<tbox::Timer> t_all =
+         tbox::TimerManager::getManager()->getTimer("appu::main::all");
+      t_all->start();
+
+      /*
+       * Retrieve "Main" section of the input database.  First, read dump
+       * information, which is used for writing plot files.  Second, if
+       * proper restart information was given on command line, and the
+       * restart interval is non-zero, create a restart database.
+       */
+
+      std::shared_ptr<tbox::Database> main_db(input_db->getDatabase("Main"));
+
+      string base_name = main_db->getStringWithDefault("base_name", "unnamed");
+
+      const tbox::Dimension dim(static_cast<unsigned short>(main_db->getInteger("dim")));
+
+      /*
+       * Modify basename for this particular run.
+       * Add the number of processes and the case name.
+       */
+      string base_name_ext = base_name;
+      if (!case_name.empty()) {
+         base_name_ext = base_name_ext + '-' + case_name;
+      }
+      base_name_ext = base_name_ext + '-' + tbox::Utilities::nodeToString(scale_size);
+      tbox::pout << "Added case name (" << case_name << ") and nprocs ("
+                 << mpi.getSize() << ") to base name -> '"
+                 << base_name_ext << "'\n";
+
+      /*
+       * Logging.
+       */
+      string log_filename = base_name_ext + ".log";
+      log_filename =
+         main_db->getStringWithDefault("log_filename", base_name_ext + ".log");
+
+      bool log_all_nodes = false;
+      log_all_nodes =
+         main_db->getBoolWithDefault("log_all_nodes", log_all_nodes);
+      if (log_all_nodes) {
+         tbox::PIO::logAllNodes(log_filename);
+      } else {
+         tbox::PIO::logOnlyNodeZero(log_filename);
+      }
+
+      int viz_dump_interval = 0;
+      if (main_db->keyExists("viz_dump_interval")) {
+         viz_dump_interval = main_db->getInteger("viz_dump_interval");
+      }
+
+      string visit_dump_dirname = base_name_ext + ".visit";
+      bool uses_visit = false;
+      int visit_number_procs_per_file = 1;
+      if (viz_dump_interval > 0) {
+         uses_visit = true;
+         string viz_dump_dirname = base_name_ext;
+         if (main_db->keyExists("viz_dump_dirname")) {
+            viz_dump_dirname = main_db->getString("viz_dump_dirname");
+         }
+         visit_dump_dirname = viz_dump_dirname + ".visit";
+         if (viz_dump_dirname.empty()) {
+            TBOX_ERROR("main(): "
+               << "\nviz_dump_dirname is null ... "
+               << "\nThis must be specified for use with VisIt"
+               << std::endl);
+         }
+         if (main_db->keyExists("visit_number_procs_per_file")) {
+            visit_number_procs_per_file =
+               main_db->getInteger("visit_number_procs_per_file");
+         }
+      }
+
+      int restart_interval = 0;
+      if (main_db->keyExists("restart_interval")) {
+         restart_interval = main_db->getInteger("restart_interval");
+      }
+
+      string restart_write_dirname;
+      if (restart_interval > 0) {
+         if (main_db->keyExists("restart_write_dirname")) {
+            restart_write_dirname = main_db->getString("restart_write_dirname");
+         } else {
+            TBOX_ERROR(
+               "`restart_interval' > 0, but key `restart_write_dirname'"
+               << "not found in input file.");
+         }
+      }
+
+      bool use_refined_timestepping = true;
+      if (main_db->keyExists("timestepping")) {
+         string timestepping_method = main_db->getString("timestepping");
+         if (timestepping_method == "SYNCHRONIZED") {
+            use_refined_timestepping = false;
+         }
+      }
+
+      const bool write_restart = (restart_interval > 0)
+         && !(restart_write_dirname.empty());
+
+      /*
+       * Create major algorithm and data objects which comprise application.
+       * Each object is initialized either from input data or restart
+       * files, or a combination of both.  Refer to each class constructor
+       * for details.  For more information on the composition of objects
+       * and the roles they play in this application, see comments at top of file.
+       */
+
+      std::shared_ptr<geom::CartesianGridGeometry> grid_geometry(
+         new geom::CartesianGridGeometry(
+            dim,
+            "CartesianGeometry",
+            input_db->getDatabase("CartesianGeometry")));
+
+      std::shared_ptr<hier::PatchHierarchy> patch_hierarchy(
+         new hier::PatchHierarchy(
+            "PatchHierarchy",
+            grid_geometry,
+            input_db->getDatabase("PatchHierarchy")));
+
+      Euler* euler_model = new Euler("Euler",
+            dim,
+            input_db->getDatabase("Euler"),
+            grid_geometry);
+
+      std::shared_ptr<algs::HyperbolicLevelIntegrator> hyp_level_integrator(
+         new algs::HyperbolicLevelIntegrator(
+            "HyperbolicLevelIntegrator",
+            input_db->getDatabase("HyperbolicLevelIntegrator"),
+            euler_model,
+            use_refined_timestepping));
+
+      std::shared_ptr<mesh::StandardTagAndInitialize> error_detector(
+         new mesh::StandardTagAndInitialize(
+            "StandardTagAndInitialize",
+            hyp_level_integrator.get(),
+            input_db->getDatabase("StandardTagAndInitialize")));
+
+      // Set up the clustering.
+
+      const std::string clustering_type =
+         main_db->getStringWithDefault("clustering_type", "BergerRigoutsos");
+
+      std::shared_ptr<mesh::BoxGeneratorStrategy> box_generator;
+
+      if (clustering_type == "BergerRigoutsos") {
+
+         std::shared_ptr<tbox::Database> abr_db(
+            input_db->getDatabase("BergerRigoutsos"));
+         std::shared_ptr<mesh::BoxGeneratorStrategy> berger_rigoutsos(
+            new mesh::BergerRigoutsos(dim, abr_db));
+         box_generator = berger_rigoutsos;
+
+      } else if (clustering_type == "TileClustering") {
+
+         std::shared_ptr<tbox::Database> tc_db(
+            input_db->getDatabase("TileClustering"));
+         std::shared_ptr<mesh::BoxGeneratorStrategy> tile_clustering(
+            new mesh::TileClustering(dim, tc_db));
+         box_generator = tile_clustering;
+
+      }
+
+      // Set up the load balancer.
+
+      std::shared_ptr<mesh::LoadBalanceStrategy> load_balancer;
+      std::shared_ptr<mesh::LoadBalanceStrategy> load_balancer0;
+
+      const std::string partitioner_type =
+         main_db->getStringWithDefault("partitioner_type", "TreeLoadBalancer");
+
+      if (partitioner_type == "TreeLoadBalancer") {
+
+         std::shared_ptr<mesh::TreeLoadBalancer> tree_load_balancer(
+            new mesh::TreeLoadBalancer(
+               dim,
+               "mesh::TreeLoadBalancer",
+               input_db->getDatabase("TreeLoadBalancer"),
+               std::shared_ptr<tbox::RankTreeStrategy>(new tbox::BalancedDepthFirstTree)));
+         tree_load_balancer->setSAMRAI_MPI(tbox::SAMRAI_MPI::getSAMRAIWorld());
+
+         std::shared_ptr<mesh::TreeLoadBalancer> tree_load_balancer0(
+            new mesh::TreeLoadBalancer(
+               dim,
+               "mesh::TreeLoadBalancer0",
+               input_db->getDatabase("TreeLoadBalancer"),
+               std::shared_ptr<tbox::RankTreeStrategy>(new tbox::BalancedDepthFirstTree)));
+         tree_load_balancer0->setSAMRAI_MPI(tbox::SAMRAI_MPI::getSAMRAIWorld());
+
+         load_balancer = tree_load_balancer;
+         load_balancer0 = tree_load_balancer0;
+      } else if (partitioner_type == "CascadePartitioner") {
+
+         std::shared_ptr<mesh::CascadePartitioner> cascade_partitioner(
+            new mesh::CascadePartitioner(
+               dim,
+               "mesh::CascadePartitioner",
+               input_db->getDatabase("CascadePartitioner")));
+         cascade_partitioner->setSAMRAI_MPI(tbox::SAMRAI_MPI::getSAMRAIWorld());
+
+         std::shared_ptr<mesh::CascadePartitioner> cascade_partitioner0(
+            new mesh::CascadePartitioner(
+               dim,
+               "mesh::CascadePartitioner0",
+               input_db->getDatabase("CascadePartitioner")));
+         cascade_partitioner0->setSAMRAI_MPI(tbox::SAMRAI_MPI::getSAMRAIWorld());
+
+         load_balancer = cascade_partitioner;
+         load_balancer0 = cascade_partitioner0;
+      } else if (partitioner_type == "ChopAndPackLoadBalancer") {
+
+         std::shared_ptr<mesh::ChopAndPackLoadBalancer> cap_load_balancer(
+            new mesh::ChopAndPackLoadBalancer(
+               dim,
+               "mesh::ChopAndPackLoadBalancer",
+               input_db->getDatabase("ChopAndPackLoadBalancer")));
+
+         load_balancer = cap_load_balancer;
+
+         /*
+          * ChopAndPackLoadBalancer has trouble on L0 for some reason.
+          * Work around by using the CascadePartitioner for L0.
+          */
+         std::shared_ptr<mesh::CascadePartitioner> cascade_partitioner0(
+            new mesh::CascadePartitioner(
+               dim,
+               "mesh::CascadePartitioner0",
+               input_db->getDatabase("CascadePartitioner")));
+         cascade_partitioner0->setSAMRAI_MPI(tbox::SAMRAI_MPI::getSAMRAIWorld());
+         load_balancer0 = cascade_partitioner0;
+      }
+
+      std::shared_ptr<mesh::GriddingAlgorithm> gridding_algorithm(
+         new mesh::GriddingAlgorithm(
+            patch_hierarchy,
+            "GriddingAlgorithm",
+            input_db->getDatabase("GriddingAlgorithm"),
+            error_detector,
+            box_generator,
+            load_balancer,
+            load_balancer0));
+
+      std::shared_ptr<algs::TimeRefinementIntegrator> time_integrator(
+         new algs::TimeRefinementIntegrator(
+            "TimeRefinementIntegrator",
+            input_db->getDatabase("TimeRefinementIntegrator"),
+            patch_hierarchy,
+            hyp_level_integrator,
+            gridding_algorithm));
+
+      /*
+       * Set up Visualization writer.  Note that the Euler application
+       * creates some derived data quantities so we register the Euler model
+       * as a derived data writer.  If no derived data is written, this step
+       * is not necessary.
+       */
+#ifdef HAVE_HDF5
+      std::shared_ptr<appu::VisItDataWriter> visit_data_writer(
+         new appu::VisItDataWriter(
+            dim,
+            "Euler VisIt Writer",
+            visit_dump_dirname,
+            visit_number_procs_per_file));
+      if (uses_visit) {
+         euler_model->registerVisItDataWriter(visit_data_writer);
+      }
+#endif
+
+      /*
+       * Initialize hierarchy configuration and data on all patches.
+       * Then, close restart file and write initial state for visualization.
+       */
+
+      tbox::SAMRAI_MPI::getSAMRAIWorld().Barrier(); // Synchronize for the sake of accurate timings.
+      double dt_now = time_integrator->initializeHierarchy();
+
+      tbox::RestartManager::getManager()->closeRestartFile();
+
+      /*
+       * Create timers for measuring I/O.
+       */
+      std::shared_ptr<tbox::Timer> t_write_viz(
+         tbox::TimerManager::getManager()->getTimer("apps::main::write_viz"));
+      std::shared_ptr<tbox::Timer> t_write_restart(
+         tbox::TimerManager::getManager()->getTimer("apps::main::write_restart"));
+
+      t_write_viz->start();
+      if (viz_dump_interval > 0) {
+#ifdef HAVE_HDF5
+         if (uses_visit) {
+            visit_data_writer->writePlotData(
+               patch_hierarchy,
+               time_integrator->getIntegratorStep(),
+               time_integrator->getIntegratorTime());
+         }
+#endif
+      }
+      t_write_viz->stop();
+
+      tbox::plog << "Input database before time-step loop:" << std::endl;
+      input_db->printClassData(tbox::plog);
+
+      /*
+       * Time step loop.  Note that the step count and integration
+       * time are maintained by algs::TimeRefinementIntegrator.
+       */
+
+      double loop_time = time_integrator->getIntegratorTime();
+      double loop_time_end = time_integrator->getEndTime();
+
+      while ((loop_time < loop_time_end) &&
+             time_integrator->stepsRemaining()) {
+
+         int iteration_num = time_integrator->getIntegratorStep() + 1;
+
+         tbox::plog << std::endl << std::endl;
+         tbox::pout << "++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
+         tbox::pout << "At begining of timestep # " << iteration_num - 1 << std::endl;
+         tbox::pout << "Simulation time is " << loop_time << std::endl;
+         tbox::pout << "Current dt is " << dt_now << std::endl;
+         tbox::pout << "++++++++++++++++++++++++++++++++++++++++++++\n\n" << std::endl;
+         tbox::plog << std::endl << std::endl;
+
+         double dt_new = time_integrator->advanceHierarchy(dt_now);
+
+         loop_time += dt_now;
+         dt_now = dt_new;
+
+         if (0) {
+            /*
+             * Logging can be very slow on I/O limited machines (such as
+             * BlueGene).
+             */
+            tbox::plog << "Hierarchy summary:\n";
+            patch_hierarchy->recursivePrint(tbox::plog, "H-> ", 1);
+            tbox::plog << "PatchHierarchy summary:\n";
+            patch_hierarchy->recursivePrint(tbox::plog, "L->", 1);
+         }
+
+         tbox::plog << std::endl << std::endl;
+         tbox::pout << "\n\n++++++++++++++++++++++++++++++++++++++++++++" << std::endl;
+         tbox::pout << "At end of timestep # " << iteration_num - 1 << std::endl;
+         tbox::pout << "Simulation time is " << loop_time << std::endl;
+         tbox::pout << "++++++++++++++++++++++++++++++++++++++++++++\n\n" << std::endl;
+         tbox::plog << std::endl << std::endl;
+
+         /*
+          * At specified intervals, write restart files.
+          */
+         if (write_restart) {
+
+            if ((iteration_num % restart_interval) == 0) {
+               t_write_restart->start();
+               tbox::RestartManager::getManager()->
+               writeRestartFile(restart_write_dirname,
+                  iteration_num);
+               t_write_restart->stop();
+            }
+         }
+
+         /*
+          * At specified intervals, write out data files for plotting.
+          */
+         t_write_viz->start();
+         if ((viz_dump_interval > 0)
+             && (iteration_num % viz_dump_interval) == 0) {
+#ifdef HAVE_HDF5
+            if (uses_visit) {
+               visit_data_writer->writePlotData(patch_hierarchy,
+                  iteration_num,
+                  loop_time);
+            }
+#endif
+
+         }
+         t_write_viz->stop();
+
+         /*
+          * Output statistics.
+          */
+         tbox::plog << "HyperbolicLevelIntegrator statistics:" << std::endl;
+         hyp_level_integrator->printStatistics(tbox::plog);
+         tbox::plog << "\nGriddingAlgorithm statistics:" << std::endl;
+         gridding_algorithm->printStatistics(tbox::plog);
+
+      } // End time-stepping loop.
+
+      t_all->stop();
+
+      tbox::plog << "Input database after time-step loop:" << std::endl;
+      input_db->printClassData(tbox::plog);
+
+      /*
+       * Output timer results.
+       */
+      tbox::TimerManager::getManager()->print(tbox::plog);
+
+      if (partitioner_type == "TreeLoadBalancer") {
+         /*
+          * Output load balancing results for TreeLoadBalancer.
+          */
+         std::shared_ptr<mesh::TreeLoadBalancer> tree_load_balancer(
+            SAMRAI_SHARED_PTR_CAST<mesh::TreeLoadBalancer, mesh::LoadBalanceStrategy>(
+               load_balancer));
+         TBOX_ASSERT(tree_load_balancer);
+         tbox::plog << "\n\n" << partitioner_type << " partitioning results:\n";
+         tree_load_balancer->printStatistics(tbox::plog);
+      }
+      if (partitioner_type == "CascadePartitioner") {
+         /*
+          * Output load balancing results for CascadePartitioner.
+          */
+         std::shared_ptr<mesh::CascadePartitioner> cascade_partitioner(
+            SAMRAI_SHARED_PTR_CAST<mesh::CascadePartitioner, mesh::LoadBalanceStrategy>(
+               load_balancer));
+         TBOX_ASSERT(cascade_partitioner);
+         tbox::plog << "\n\n" << partitioner_type << " partitioning results:\n";
+         cascade_partitioner->printStatistics(tbox::plog);
+      }
+
+      /*
+       * Output box search results.
+       */
+      tbox::plog << "\n\nBox searching results:\n";
+      hier::BoxTree::printStatistics(dim);
+
+      int size = tbox::SAMRAI_MPI::getSAMRAIWorld().getSize();
+      if (tbox::SAMRAI_MPI::getSAMRAIWorld().getRank() == 0) {
+         string timing_file =
+            base_name + ".timing" + tbox::Utilities::intToString(size);
+         FILE* fp = fopen(timing_file.c_str(), "w");
+         fprintf(fp, "%f\n", t_all->getTotalWallclockTime());
+         fclose(fp);
+      }
+
+      /*
+       * At conclusion of simulation, deallocate objects.
+       */
+      patch_hierarchy.reset();
+      grid_geometry.reset();
+
+      box_generator.reset();
+      load_balancer.reset();
+      hyp_level_integrator.reset();
+      error_detector.reset();
+      gridding_algorithm.reset();
+      time_integrator.reset();
+
+#ifdef HAVE_HDF5
+      visit_data_writer.reset();
+#endif
+
+      if (euler_model) delete euler_model;
+
+   }
+
+   if (num_failures == 0) {
+      tbox::pout << "\nPASSED:  Euler" << std::endl;
+   }
+
+   tbox::SAMRAIManager::shutdown();
+   tbox::SAMRAIManager::finalize();
+   tbox::SAMRAI_MPI::finalize();
+
+   return num_failures;
+}

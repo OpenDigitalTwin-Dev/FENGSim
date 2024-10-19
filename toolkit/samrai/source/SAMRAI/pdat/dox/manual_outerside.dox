@@ -1,0 +1,25 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace pdat {
+
+/*!
+  @page package_patchdata_outerside Outerside Patch Data
+
+  These classes implement an side centered patch data type; however, the
+  domain is restricted to the boundary of each patch.  These are normally 
+  used to represent flux data on the boundaries of patches.
+  - SAMRAI::pdat::OutersideDataFactory
+  - SAMRAI::pdat::OutersideData
+  - SAMRAI::pdat::OutersideVariable
+*/
+
+}
+}

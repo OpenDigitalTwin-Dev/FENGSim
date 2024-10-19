@@ -1,0 +1,78 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   README file for FAC solver test
+##
+#########################################################################
+
+This is a unit test of the the FAC solver.  These tests use true mesh
+adaptivity based on the evolution of the solution.  In addition a variety of
+functionally defined boundary conditions are applied depending on the test.
+The files included in this directory are as follows:
+ 
+   main.cpp                                -  example main program
+   AdaptivePoisson.[Ch]                  -  class to set tags to solve
+                                         -  Poisson's equation
+   PoissonGaussianDiffcoefSolution.[Ch]  -  implements Gaussian-diffcoef
+                                            boundary conditions to Poisson's
+                                            equation
+   PoissonGaussianSolution.[Ch]          -  implements Gaussian boundary
+                                            conditions to Poisson's equation
+   PoissonMultigaussianSolution.[Ch]     -  implements a sum of Gaussian
+                                            boundary conditions to Poisson's
+                                            equation
+   GaussianFcn.[Ch]                      -  functor to define and ecaluate
+                                            1, 2, and 3D Gaussian functions
+   PoissonPolynomialSolution.[Ch]        -  implements quartic polynomial
+                                            boundary conditions to Poisson's
+                                            equation
+   QuarticFcn.[Ch]                       -  functor to define and evaluate 
+                                            1, 2, and 3D quartic polynomials
+   PoissonSineSolution.[Ch]              -  implements sinusoidal boundary
+                                            conditions to Poisson's equation
+   SinusoidFcn.[Ch]                      -  functor to define and evaluate
+                                            1, 2, and 3D sinusoidal functions
+   get-input-filename.[Ch]               -  utility to get input filename
+   patchFcns.[Ch]                        -  utilities to set PatchData in
+                                            various ways
+   setArrayData.[Ch]                     -  utilities to set arrays in various
+                                            ways
+
+
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make main
+
+   Execution:
+      For one of the following input files:
+         test_inputs/allneumann.2d.input
+         test_inputs/allneumann.3d.input
+         test_inputs/complex.2d.input
+         test_inputs/default.2d.input
+         test_inputs/default.3d.input
+         test_inputs/gauss.2d.input
+         test_inputs/gauss.3d.input
+         test_inputs/periodic.2d.input
+         test_inputs/periodic.3d.input
+         test_inputs/ring_gauss.2d.input
+         test_inputs/simple.2d.input
+         test_inputs/simple_gauss.2d.input
+         test_inputs/simple_gauss.3d.input
+         test_inputs/varcoef.2d.input
+         test_inputs/varcoef.3d.input
+      serial:
+         ./main <input_file>
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main <input file>
+
+
+INPUT PARAMETERS
+----------------
+Refer to test_inputs/allneumann.2d.input for a full description of all input
+parameters specific to this problem.

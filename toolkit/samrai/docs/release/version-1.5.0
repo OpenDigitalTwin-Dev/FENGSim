@@ -1,0 +1,309 @@
+*****************************************************************************
+  Copyright 1997-2024                                                    
+  Lawrence Livermore National Security, LLC.                            
+  All rights reserved.                                                    
+*****************************************************************************
+*****************************************************************************
+
+                     Release Notes for SAMRAI v1.5.0
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+*****************************************************************************
+
+NOTE:  These release notes are more descriptive and detailed than is usual
+       for software release notes.  The reason for this is that presently
+       complete documentation does not exist for most of the items listed.
+       Until sufficient user documentation becomes available, descriptions
+       such as those that follow will be part of SAMRAI release notes.
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+*****************************************************************************
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report it
+to us so that we may fix it.  We will make every effort to fix bugs
+in a timely manner.  Depending on the severity or the complexity of the
+bug, we will either fix the bug for a subsequent library release or send
+a code fix to users so that their work is minimally interrupted.
+
+LLNL users should report bugs using the CASC bug tracking web pages:
+
+        http://www-casc.llnl.gov/bugs/
+
+Enter the bug into the appropriate area of the SAMRAI project section.
+
+Bugs found by other users should send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                Summary of what's changed
+-----------------------------------------------------------------------------
+
+This section contains a summary of changes to SAMRAI.  More detailed 
+descriptions of items in the following list are provided below.
+
+(1) tbox_Boolean.h is deprecated.
+
+(2) Use of ISO/ANSI standard header files.
+
+(3) Default to homogeneous message passing.
+
+(4) Configure defaults to building only double and int patch datatypes.
+
+(5) VisItWriter went through a rewrite to fix bugs and add functionality.
+
+
+----------------------------------------------------------------------------
+                Summary of what's new
+-----------------------------------------------------------------------------
+
+This section contains a summary of additions to SAMRAI.  More detailed 
+descriptions of items in the following list are provided below.
+
+(1) Outernode data is supported.
+
+(2) New utility subpackage femutils in the solver package, handling
+some operations used in finite-element solvers.
+
+(3) Two new pure virtual methods were added to the hier_VariableX and 
+hier_PatchDataFactoryX base classes, fineBoundaryRepresentsVariable() and
+dataLivesOnPatchBorder().  
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+                Details about what's changed
+-----------------------------------------------------------------------------
+
+(1) tbox_Boolean.h is deprecated.
+
+Since SAMRAI is moving toward supporting only ISO C++ standard
+compliant compilers the tbox_Bool header file and home grown bool
+implementation have been removed.  Users should remove #includes of
+tbox_Bool.h from their code.  The bool type is a standard C++ type so
+no include is necessary.
+
+(2) Use of ISO/ANSI standard header files.
+
+We now support only the standard ISO/ANSI header files (the non ".h"
+files; <string> rather than <string.h>).
+
+If you use the older ".h" files, you may encounter problems caused by
+mixing the new and old include files in the same compile.  GNU C++ will
+warn you that you are using a deprecated header file.  To get rid of
+the warning, just use the ISO/ANSI header files (non ".h" versions).
+
+(3) Default to homogeneous message passing.
+
+In previous versions of SAMRAI we defaulted to doing data conversion
+when doing message passing on parallel machines.  Since most users are
+working on homogeneous machines this introduced a little extra overhead
+that was not necessary.  The default is changed to passing data
+without conversions.
+
+If you are using a heterogeneous machine (e.g. running a 2 processor job on a
+networked Sun Workstation and an Intel Linux PC) you must set a
+flag to convert data when passing messages:
+
+tbox_MessageStream::s_use_xdr_translation = true;
+
+If you do not do this, the values in your variables will rapidly
+become corrupted.
+
+This does not effect file output, which is always stored in a platform
+independent format.
+
+(4) Configure defaults to building only double and int patch datatypes.
+
+In previous releases SAMRAI would build patch datatypes to support
+bool, char, double, dcomplex, float and int.  Since most users deal
+with only a small subset of these types the library was larger than
+needed.  With the new configure options double and int are built by
+default.  You must configure with --enable-<typename> to add bool,
+char, dcomplex, or float to the build.
+
+E.G. configure --enable-float --enable-dcomplex <other configure options>
+
+would add float and double complex types to the build.
+
+WARNING: If you run configure twice in the same directory with
+different types enabled/disabled, you need to do a make clean.  If you
+do not do this the old types will still be included in the library.
+
+(5) VisItWriter went through a rewrite to fix bugs and add functionality.
+
+
+5.1) To reduce the size of the class and eliminate duplicate code, we replaced
+individual register methods for scalar, vector, and tensor data with a 
+single method, supplying "SCALAR", "VECTOR", and "TENSOR" as an argument.
+
+   registerPlotQuantity(...,"SCALAR",...)  replaces registerPlotScalar(...)
+   registerPlotQuantity(...,"VECTOR",...)  replaces registerPlotVector(...)
+   registerPlotQuantity(...,"TENSOR",...)  replaces registerPlotTensor(...)
+
+similarly,
+
+   registerDerivedPlotQuantity()  replaces registerDerivedPlotScalar(),
+                                           registerDerivedPlotVector(),
+                                           registerDerivedPlotTensor()
+
+and 
+
+   resetLevelPlotQuantity()  replaces resetLevelPlotScalar(),
+                                      resetLevelPlotVector(),
+                                      resetLevelPlotTensor()
+
+
+5.2) We replaced the boolean "omit_ghost_data" argument in the registration
+methods with an IntVector "plot_nghosts" argument to allow the user to supply
+the ghost cell width they would like plotted.  Also, the default behavior
+was changed;  previously, "omit_ghost_data" was defaulted false so unless
+the user specified otherwise, ghost data was always plotted for a variable 
+with ghosts.  The new default behavior is to set the "plot_nghosts" argument
+to IntVector(0) so no ghosts are plotted.  The user may of course override
+this in order to see ghosts.
+
+   example:
+      OLD:
+        int start_depth_index = 0;
+        bool omit_ghost_data = true; // do not plot ghost data
+        viz_writer->registerPlotScalar("U", patch_data_id,
+                                       start_depth_index,
+                                       omit_ghost_data);
+
+      NEW:
+        IntVector plot_nghosts = IntVector(1);  // plot one ghost cell
+        viz_writer->registerPlotQuantity("U", "SCALAR", patch_data_id,
+                                       start_depth_index,
+                                       scale_factor,
+                                       plot_nghosts);
+
+5.3) We added the capability to prescribe the preferred centering for 
+non-standard datatypes.  That is, if a user supplies a new datatype they
+can specify the centering to be either CELL or NODE based.  As long as their
+supplied copy() methods can properly convert to cell or node data, VisIt
+can plot it.
+
+   example (user-defined data located on CELLs):
+      int start_depth_index = 0;
+      double scale_factor = 1.0;
+      IntVector nghosts = IntVector(0);
+      viz_writer->registerPlotQuantity("CELL_BASED_USER_DEFINED_DATA", 
+                                       "SCALAR", patch_data_id,
+                                       start_depth_index,
+                                       scale_factor,
+                                       nghosts,
+                                       "CELL");
+
+5.4) For cases with non-cartesian (i.e. stretched, curvilinear, deformed) 
+grids we added a method that allows the user to register a single patch data
+index with depth NDIM.  Previously, the user had to make NDIM calls to the
+method "registerNodeCoordinate()".  The same functionality exists in the
+new method called "registerSingleNodeCoordinate()":
+
+
+   example:
+     OLD:
+        for (int i = 0; i < NDIM; i++) { 
+           registerNodeCoordinate(i, patch_data_id, i, scale_factor);
+        }        
+   
+     NEW:
+        registerNodeCoordinates(patch_data_id);
+      -or-
+        for (int i = 0; i < NDIM; i++) { 
+           registerSingleNodeCoordinate(i, patch_data_id, i, scale_factor);
+        }   
+ 
+5.5) The names of the return value from the appu_VisMaterialsDataStrategyX 
+class were changed to avoid conflicts with #defines in user codes.  
+
+     OLD:
+         VisMaterialsDataStrategy::ALL_ONES
+         VisMaterialsDataStrategy::ALL_ZEROS
+         VisMaterialsDataStrategy::SOME
+
+     NEW:
+         VisMaterialsDataStrategy::VISIT_ALLONE
+         VisMaterialsDataStrategy::VISIT_ALLZERO
+         VisMaterialsDataStrategy::VISIT_MIXED
+
+5.6) Because it was error prone, we got rid of the materials state variable
+and species state variable interfaces.  These will be added back in v2.0
+once they have been fully debugged.
+
+
+
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+                Details about what's new
+-----------------------------------------------------------------------------
+
+(1) Outernode patch data is supported.
+
+It refers to the nodes on the boundary of a patch.  Like outernode
+and outerside classes, it supports only zero ghost cell widths.
+Copies between outernode and node types are supported.  Data is stored
+in several rectangular arrays corresponding to the 2*NDIM sides
+of a patch.  Each node on the patch boundary is represented in
+exactly one of the rectangular arrays.
+
+(2) New utility subpackage femutils in the solver package, handling
+some operations used in finite-element solvers.
+
+The femutils subpackage currently contains classes for performing
+outernode sum operations on a single level.  In the future, it will
+probably support outernode sum operations between adjacent levels.
+At this point, the classes in this package is undergoing active
+development and may end up being redesigned.
+
+(3) Two new pure virtual methods were added to the hier_VariableX and 
+hier_PatchDataFactoryX base classes, fineBoundaryRepresentsVariable() and
+dataLivesOnPatchBorder().  
+
+Each of these functions returns a boolean value.  These functions must be 
+implemented by any concrete variable and data factory classes.  Previously, 
+the fineBoundaryRepresentsVariable() function in the variable base class 
+was only virtual and returned a default value of true.  Typical usage is to
+set the return values in the variable constructor and pass the values to return
+to the patch data factory when the variable creates the factory.   The reason
+for the addition of these functions is to eliminate the requirement that variables
+be registered with the hier_VariableDatabaseX class in order to use the SAMRAI
+communication algorithms and schedules.
+
+-----------------------------------------------------------------------------
+                Major Bug Fixes 
+-----------------------------------------------------------------------------
+
+(1) Shared library option fixed for Linux.
+
+The --enabled-shared configure option to build shared libraries was
+not working.  It should work for now work for Linux systems using G++.
+
+(2) Several fixes were made to the communication schedules and data overlap 
+computations to eliminate problems with non-cell data, such as node, face, etc.  
+Bug #552 reported by gunney@llnl.gov was fixed
+Bug #565 reported by hornung@llnl.gov was fixed
+Bug #565 reported by smith84@llnl.gov was fixed
+Bug #571 reported by anderson110@llnl.gov was fixed
+Bug #573 reported by smith84@llnl.gov was fixed
+
+
+
+-----------------------------------------------------------------------------
+                Known Problems
+-----------------------------------------------------------------------------
+
+(1) 
+
+=============================================================================
+=============================================================================

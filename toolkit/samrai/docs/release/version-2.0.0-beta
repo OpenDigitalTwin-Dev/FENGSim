@@ -1,0 +1,711 @@
+*****************************************************************************
+  Copyright 1997-2024                                                    
+  Lawrence Livermore National Security, LLC.                            
+  All rights reserved.                                                    
+*****************************************************************************
+*****************************************************************************
+
+                     Release Notes for SAMRAI v2.0.0.beta
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+*****************************************************************************
+
+NOTE:  These release notes are more descriptive and detailed than is usual
+       for software release notes.  The reason for this is that presently
+       complete documentation does not exist for most of the items listed.
+       Until sufficient user documentation becomes available, descriptions
+       such as those that follow will be part of SAMRAI release notes.
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+*****************************************************************************
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report it
+to us so that we may fix it.  We will make every effort to fix bugs
+in a timely manner.  Depending on the severity or the complexity of the
+bug, we will either fix the bug for a subsequent library release or send
+a code fix to users so that their work is minimally interrupted.
+
+LLNL users should report bugs using the CASC bug tracking web pages:
+
+        http://www-casc.llnl.gov/bugs/
+
+Enter the bug into the appropriate area of the SAMRAI project section.
+
+Bugs found by other users should send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                Summary of what's changed
+-----------------------------------------------------------------------------
+
+This section contains a summary of changes to SAMRAI.  More detailed 
+descriptions of items in the following list are provided below.
+
+(0) Major API changes, classes templated on dimension and packages
+are in namespaces.
+
+(1) Change in link symbols LIBSAMRAI and LIBSAMRAIXD in the
+makefile Makefile.config and addition of LIBSAMRAIDEPEND.
+
+(2) Remove obsolete FAC Poisson solver in SAMRAI/source/solvers/OLD.FAC solver.
+
+(3) ShutdownRegistry API changed to include a priority.
+
+(4) Memory leak fixes.
+
+(5) The name of the PatchLevel::coarsenPatchLevel() method has been changed
+to PatchLevel::setCoarsenPatchLevel() for clarity, and an related method
+PatchLevel::setRefinedPatchLevel() was added to support the refine/coarsen
+patch hierarchy operations described in item (2) in "what's new".
+
+(6) For clarity and to support new functionality, the pure virtual methods in
+the GridGeometry base class have changed.
+
+(7) String.h removed.
+
+(8) Visit data writer failure to properly close HDF files fixed.
+
+(9) Sun IEEE floating point changes.
+
+(10) Make install destination directory changed.
+
+(11) Heterogeneous computer cluster support is disabled by default.
+
+(12) Setting obscure SAMRAI internal options via input values using the "GlobalInputs" 
+input database has been disabled.
+
+(13) Residual norm in CellPoissonHypreSolver has been changed to
+relative residual norm for clarity.
+
+(14) FAC solver parameters for coarse solver adopted more consistent naming
+convention.
+
+(15) GNUMake required for build
+
+----------------------------------------------------------------------------
+                Summary of what's new
+-----------------------------------------------------------------------------
+
+This section contains a summary of additions to SAMRAI.  More detailed 
+descriptions of items in the following list are provided below.
+
+(1) BasePatchHierarchy and BasePatchLevel abstract base classes added
+to be parent classes for original PatchHierarchy and PatchLevel as well
+as multiblock hierarchy and level classes.  Similar BaseGriddingAlgorithm
+class also added
+
+(2) Methods added to create a refined or coarsened version of an existing 
+patch hierarchy.
+
+(3) The construction of BoundaryBox now uses a singleton class called
+BoundaryLookupTable which was necessary to make SAMRAI capable of handling
+spatial dimensions greater than 3.  This caused a change to the ordering
+of the location indices for 3D BoundaryBox objects of codimension 2.  Users
+are now given the option of using the old ordering for backward compatibility
+or using the new ordering.
+
+(4) STL classes are now used by the SAMRAI library.  We take explicit
+steps to instantiate them because SAMRAI compiles without implicit
+template instantation.
+
+(5)
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+                Details about what's changed
+-----------------------------------------------------------------------------
+
+(0) Major API changes, classes templated on dimension and packages
+are in namespaces.
+
+[This information is also in the tools/scripts/conversion2.0/README file.]
+
+*****************************************************************************
+	           Converting from SAMRAI 1.x to 2.0
+*****************************************************************************
+
+*****************************************************************************
+	           Introduction to the 2.0 API changes.
+*****************************************************************************
+
+The SAMRAI API has changed dramatically in the 2.0 release.  This will
+require you to make a large number of changes to your code, but the
+changes are fairly trivial in nature so the process is relatively easy
+but time consuming.  We have provided automated scripts to ease the
+conversion process.  The script will not make all required changes,
+but should significantly reduce the time to convert codes.
+
+The change should not introduce hidden errors, since it involves class
+name changes.  If something is not correct it will not compile so any
+errors should be reasonably transparent.
+
+We made every effort to figure out a way to provide backward
+compatibility header files; however, we could not find a method to do
+this.
+
+The first significant change involves how we partition the class
+names.  In the 1.x release API we used a name prefix on the class
+names (e.g. tbox_Array) to avoid name conflicts.  The 2.0 version uses
+the C++ standardized namespace technology to partition the packages
+(e.g. SAMRAI::tbox::Array). If you are not familiar with namespaces
+you may want to look at your favorite C++ book.
+
+The second major change involves the way we handle dimensioned
+classes.  In previous releases of SAMRAI there was a different class
+for each dimension (e.g. hier_Box1, hier_Box2, and hier_Box3).  Due to
+user requests for higher dimensions we now template on the dimension
+(e.g. SAMRAI::hier::Box<int DIM>). [NOTE: Not all of SAMRAI is
+currently working for DIM>3, if you try to use a class we have not
+converted you should receive a compiler or runtime error]
+
+The third major change from In the 1.x API is a reduction in the
+number of "styles" of headers included in SAMRAI.  We had three
+distinct ways of accessing the classes in SAMRAI.  These have been
+reduced to a single include method.
+
+
+*****************************************************************************
+	           What does the new API look like?
+*****************************************************************************
+
+Here are examples of the three "styles" of headers the 1.x API
+supported and how the new 2.0 code looks:
+
+
+Style 1) Dimensioned classes with package names.
+
+----------------------------------------------------------
+#include "hier_IntVector1.h"
+#include "hier_IntVector2.h"
+#include "pdat_CellData2.h"
+
+int main()
+{
+    hier_IntVector1                 vector_a;
+    hier_IntVector2                 vector_b;
+    pdat_CellData2<double>          data;
+}
+---------------------------------------------------------- 
+
+Style 2) Dimensioned classes without package names.
+
+----------------------------------------------------------
+#include "IntVector1.h"
+#include "IntVector2.h"
+#include "CellData2.h"
+
+int main()
+{
+    IntVector1                vector_a;
+    IntVector2                vector_b
+    CellData2<double>         data;
+}
+----------------------------------------------------------
+
+Styles (1) and (2) can be written using qualified names:
+
+----------------------------------------------------------
+#include "IntVector.h"
+#include "CellData.h"
+
+
+int main()
+{
+    // Class names no longer contain the dimension, classes
+    // are templated on the dimension.
+    SAMRAI::hier::IntVector<1>              vector_a;
+    SAMRAI::hier::IntVector<2>              vector_b
+    SAMARAI::pdat::CellData<2,double>       data;
+}
+---------------------------------------------------------- 
+
+You can use the C++ "using namespace" to avoid 
+qualifying the names.
+
+----------------------------------------------------------
+#include "IntVector.h"
+#include "CellData.h"
+
+using namespace SAMRAI;
+using namespace hier;
+using namespace pdat;
+
+int main()
+{
+    // Class names no longer contain the dimension, classes
+    // are templated on the dimension.
+    IntVector<1>              vector_a;
+    IntVector<2>              vector_b
+    CellData<2,double>        data;
+}
+---------------------------------------------------------- 
+
+
+Style 3) Non-dimensioned classes without package names.
+
+Note the dimension comes from the compile time definition of NDIM in
+both cases.  To get a 2D version of the code you used -DNDIM=2 on
+the compile line.
+
+----------------------------------------------------------
+#include "IntVector.h"
+#include "CellData.h"
+
+int main()
+{
+    IntVector                vector;
+    CellData<double> data;
+}
+----------------------------------------------------------
+
+The new method is similar, but you will see the "NDIM" symbol in your
+code instead hiding it in the header files.
+
+----------------------------------------------------------
+#include "IntVector.h"
+#include "CellData.h"
+using namespace SAMRAI;
+
+int main()
+{
+    hier::IntVector<NDIM>             vector;
+    pdat::CellData<NDIM, double>      data;
+}
+----------------------------------------------------------
+
+Note here we only use a "using namespace" to bring in the SAMRAI
+namespace and retain the namespace qualifiers for each of the package
+names.
+
+*****************************************************************************
+	How do I convert my code?
+*****************************************************************************
+
+You can make the code changes manually.  This requires changing:
+
+a) Remove package prefixes (if needed) from included headers.
+   Toolbox headers are located in a subdirectory of include to 
+   help avoid name collisions (e.g. #include "tbox/Utility.h").
+
+b) Add package namespace qualifiers or "using namespace" statements 
+   to class names.
+
+c) Add templating to classes that currently end in a dimension.
+
+
+We have provided a set of scripts to help automate the conversion
+process.  The scripts are not perfect and some editing is usually
+required but they help with the drudgery.  
+
+Make sure you have a backup of your code in case the conversion
+process fails.
+
+Run the SAMRAI/tools/scripts/conversion2.0/convert2.0 at the root of
+your source directory.  This should convert #include statements and
+rename classes that are templated.
+
+If you use the non-prefix header files (and thus non-prefix class
+names) you have three options.
+
+First, you can run the "packagePrefixPrepend" script to insert the
+package namespace into each class use.  For example IntVector would be
+replace with hier::IntVector.
+
+The second option is for you to manually add "using namespace"
+statements to your code.  You can do this by determining which
+packages you use and adding a "using namespace PACKAGE" for each one.
+
+The last alternative is a variation of the second, put a using
+namespace for all packages in your code and then remove the ones that
+cause an error during compilation (you can't have a "using namespace"
+for a package you don't actually use).  This is a little crude but
+depending on how familiar you are with the packages this might be
+easier than the second option.  Here is a complete list of all
+packages in SAMRAI:
+
+using namespace SAMRAI;
+using namespace tbox;
+using namespace hier;
+using namespace xfer;
+using namespace pdat;
+using namespace math;
+using namespace mesh;
+using namespace mblk;
+using namespace geom;
+using namespace solv;
+using namespace algs;
+using namespace appu;
+
+Issues using the scripts:
+
+(a) Please backup your files!
+
+We have run the scripts on several codes without harm but you don't
+want to be the person to find a serious bug in the scripts without
+having a backup.
+
+(b) Input file naming changes.
+
+Some input parameters use class names in them, the scripts do not make
+changes in input files.  You will need to change the input files that
+have references to packages.  E.G.
+
+algs_GriddingAlgorithm becomes algs::GriddingAlgorithm
+algs_HyperbolicLevelIntegrator becomes algs::HyperbolicLevelIntegrator
+
+are the most common changes needed.
+
+*****************************************************************************
+                 End Converting from SAMRAI 1.x to 2.0
+*****************************************************************************
+
+(1) Change in link symbols LIBSAMRAI and LIBSAMRAIXD in the
+makefile Makefile.config and addition of LIBSAMRAIDEPEND.
+
+If you are linking with SAMRAI using the provided Makefile.config 
+macros you will need to change the symbol used for the dependency target 
+for SAMRAI.
+
+If you are doing something similar to:
+
+main2d:	$(CXX_OBJS) $(F2D_OBJS) $(LIBSAMRAI)
+		$(CXX) $(CXXFLAGS) $(LDFLAGS) $(CXX_OBJS) $(F2D_OBJS)	\
+		$(LIBSAMRAI2D) $(LIBSAMRAI) $(LDLIBS) -o main2d
+
+you will need change the $(LIBSSAMRAI) macro to $(LIBSAMRAIDEPEND) in
+the dependency list:
+
+main2d:	$(CXX_OBJS) $(F2D_OBJS) $(LIBSAMRAIDEPEND)
+		$(CXX) $(CXXFLAGS) $(LDFLAGS) $(CXX_OBJS) $(F2D_OBJS)	\
+		$(LIBSAMRAI2D) $(LIBSAMRAI) $(LDLIBS) -o main2d
+
+Internally the library symbols for SAMRAI are now defined as -lSAMRAI and 
+-L is used to set the path to the library directory.
+
+This change was needed to improve the ability to build SAMRAI as a set 
+of shared libraries.
+
+(2) As stated in the RELEASE file of versions 1.4 and 1.5, the obsolete
+FAC Poisson solver in SAMRAI/source/solvers/OLD.FAC is now removed.
+This version tightly coupled the FAC cycling code with the
+Poisson-specific code.  The FAC code has been abstracted out, placed
+in SAMRAI/source/solvers/FAC and made more general.  Poisson-specific
+code and cell-centered Poisson solvers using HYPRE and FAC now exists
+in SAMRAI/source/solvers/poisson.
+
+(3) ShutdownRegistry API changed to include a priority.
+
+The registerShutdownRoutine now takes a priority to enable some control
+over the order of shutdowns.  Some services have dependencies between 
+them and shutting down services in an arbitrary ordering is not
+advisable.  The priority is between 0 and 254 with higher numbers
+being shutdown first.  Users are reserved priorities 254 to 127; all
+SAMRAI services will use 126-0.
+
+The old method was:
+
+   static void registerShutdownRoutine(void (*callback)());
+
+The new method is:
+
+   static void registerShutdownRoutine(void (*callback)(),
+                                       unsigned char priority);
+
+Bugzilla # 596.
+
+(4) Memory leak fixes.
+
+SAMRAI was leaking a small amount of memory (~200KB in the LinAdv example 
+problem) due to some incorrect shutdown of services.  This was a constant 
+sized leak (did not grow with problem size or length of run).
+
+Bugzilla # 598
+
+(5)
+
+(6) For clarity and to support new functionality, the pure virtual
+methods in the GridGeometry base class have changed.  The various
+versions of the previous pure virtual method setPatchGeometry() have
+been removed and their functionality has been moved from concrete grid
+geometry classes to the GridGeometry base class.  The new pure virtual
+methods in Grid Geometry are makeRefinedGridGeometry(),
+makeCoarsenedGridGeometry(), and setGeometryDataOnPatch().  The first
+two methods are required to create refined/coarsened versions of a
+concrete Grid Geometry object to support the nwe functionality to
+create refined and coarsened versions of an existing patch hierarchy
+(item (2) in "what's new").  The third method computes grid data
+specific to a coordinate system for a patch and assigns a new concrete
+patch geometry object to a patch upon creation.
+
+(7) The file String.h removed. Users should use the standard string
+header file.
+
+(8) Visit data writer failure to properly close HDF files fixed.
+
+The Visit writer was not correctly closing the HDF files.  If a SAMRAI
+application stopped prematurely (e.g. core dump), the HDF files may
+not have been written correctly to disk.
+
+(9) Sun IEEE floating point changes.
+
+A user supplied patch was applied for the IEEE floating point handling
+routines.
+
+(10) Make install destination directory changed.
+
+Previous verions of SAMRAI created intermediate directories when doing
+a "make install".  This feature was removed. For example when doing a
+configure with a prefix option "--prefix=/usr/local/SAMRAI", the
+actual install directory would be something like
+"/usr/local/SAMRAI/Linux-gcc-opt".  The new "make install" does not
+append the "Linux-gcc-opt" subdirectory.  This is more consitent with
+other packages.
+
+(11) Heterogeneous computer cluster support is disabled by default.
+
+By heterogeneous clusters we mean running SAMRAI in parallel across
+machines of different IEEE floating point representations (like big
+ended and little ended storage).  Since we not not aware of any SAMRAI
+user doing this we have made this support an optional configure flag.
+If you are using a heterogeneous cluster you need to add the
+"--enable-xdr" flag on your configure line.
+
+As a reminder, you also need to set 
+
+tbox_MessageStream::useXDR(true);
+
+in your application code (this change was introduced in release 1.5.0 see
+the release notes in docs/release/version-1.5.0)
+
+(12) Setting obscure SAMRAI internal options via input values using
+the "GlobalInputs" input database has been disabled.
+
+SAMRAI internal options can still be set by a user by calling an
+appropriate static class member function.  A user wishing to control
+an option via input must manage this on his/her own since the
+GlobalInputs input database has been removed.  SAMRAI internal options
+that may be set using the following static member function calls.
+Information about valid options and what each option does may be found
+in the appropriate class header file.
+
+o Set whether exit or abort is called when running a single processor job:
+
+tbox::SAMRAI_MPI::setCallAbortInSerialInsteadOfExit(bool);
+
+o Setting algorithm for box intersection operations in communication schedules:
+
+xfer::RefineSchedule<NDIM>::setScheduleGenerationMethod(const string& method);
+xfer::CoarsenSchedule<NDIM>::setScheduleGenerationMethod(const string& method);
+
+o Setting algorithm for reducing tags in clustering process:
+
+mesh::BergerRigoutsos<NDIM>::setClusteringOption(const string& method);
+
+(13) Residual norm in CellPoissonHypreSolver has been changed to
+relative residual norm for clarity.  You should change input parameters
+from "residual_tol" to "relative_residual_tol".  The accessor method
+getResidualNorm should be replaced with getRelativeResidualNorm.
+
+(14) All input parameters for FAC solvers' coarse level solver now start
+with 'coarse_solver...', whereas there was previously no consistency between
+the various classes that implement the FAC solver.  You may have to check
+your input files.  Change all parameters starting with "coarsest_..."
+or "coarse_level...", etc. to "coarse_solver...".
+
+(15) GNUMake required for build
+
+Standard make is no longer supported by the SAMRAI build system, GNUMake is 
+required.
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+                Details about what's new
+-----------------------------------------------------------------------------
+
+(1) BasePatchHierarchy and BasePatchLevel abstract base classes added
+to be parent classes for original PatchHierarchy and PatchLevel as well
+as multiblock hierarchy and level classes.  Similar BaseGriddingAlgorithm
+class also added.
+
+The functionalities of PatchHierarchy, PatchLevel, and GriddingAlgorithm are
+not changed, but the usage of these classes is changed in some circumstances.
+Notably, the interface for PatchHierarchy::getPatchLevel() is changed to
+conform with the BasePatchHierarchy interface, so that it now returns a
+pointer to BasePatchLevel.  Lines of code such as:
+
+   Pointer< PatchLevel<NDIM> > level_zero = hierarchy->getPatchLevel(0);
+
+do not need to be changed.  The pointer to BasePatchLevel returned by
+getPatchLevel() is cast to a pointer to PatchLevel.  However, statements such
+as:
+
+   BoxArray<NDIM> boxes = hierarchy->getPatchLevel(0)->getBoxes();
+
+will no longer compile, because BasePatchHierarchy has no getBoxes() method.
+
+Code such as this should be changed to first cast the pointer to the
+desired PatchLevel type, then call getBoxes().
+
+   Pointer< PatchLevel<NDIM> > level_zero = hierarchy->getPatchLevel(0);
+   BoxArray<NDIM> boxes = level->getBoxes();
+
+IMPORTANT:  Pure virtual function interfaces in TimeRefinementLevelStrategy,
+StandardTagAndInitStrategy, and TagAndInitializeStrategy have been changed
+to use these new abstract base classes.  Any existing user-defined classes that
+are derived from these listed strategy classes must be modified to match the
+new interfaces.
+
+When these functions are changed in the user-defined classes, it will often
+be necessary to add code to cast a passed-in pointer to a base class to the
+desired concrete version of the class.  For example, if class Foo in a user's
+code inherits from TimeRefinementLevelStrategy, then Foo must contain
+an implementation of TimeRefinementLevelStrategy::getLevelDt(), which would
+look something like
+
+double Foo::getLevelDt(const tbox::Pointer< hier::BasePatchLevel<NDIM> > level,
+                       const double dt_time,
+                       const bool initial_time)
+{
+   tbox::Pointer< hier::PatchLevel<NDIM> > patch_level = level;
+
+   . . . 
+
+   for (hier::PatchLevel<NDIM>::Iterator p(patch_level); p; p++) {
+      tbox::Pointer< hier::Patch<NDIM> > patch = patch_level->getPatch(p());
+
+      . . .
+
+   }
+
+   . . . 
+}
+
+Here the casting is done at the beginning of the function, and then the
+pointer 'patch_level' can be used as a usual pointer to PatchLevel.  The
+casting is necessary in the this example because the patch level iterator
+does not work with a pointer to BasePatchLevel, nor does BasePatchLevel
+contain a getPatch() member function.
+
+(2) Methods added to create a refined or coarsened version of an
+existing patch hierarchy.  These methods are in the PatchHierarchy
+class and are named makeRefinedPatchHierarchy() and
+makeCoarsenedPatchHierarchy(), respectively.  Each method accept an
+IntVector argument with strictly positive entries and returns a copy
+of the original patch hierarchy object with each patch level refined
+or coarsened by that ratio.  The new hierarchy will cover the same
+physical space as the original hierarchy and will have the same number
+of levels and same mapping of patches to processors on each level.
+However, the index space of each level will be refined or by the
+specified ratio.  Note that these operation do not allocate patch data
+on the new hierarchy so this must be done by the user before any data
+operations can be performed on the new hierarchy.
+
+(3) The construction of BoundaryBox now uses a singleton class called
+BoundaryLookupTable which was necessary to make SAMRAI capable of handling
+spatial dimensions greater than 3.  This caused a change to the ordering
+of the location indices for 3D BoundaryBox objects of codimension 2.  Users
+are now given the option of using the old ordering for backward compatibility
+or using the new ordering.
+
+The original ordering, existing in versions 1.4.0 and before, was
+
+    edge (codimension 2):
+    y_lo, z_lo: 0
+    y_hi, z_lo: 1
+    y_lo, z_hi: 2
+    y_hi, z_hi: 3
+    x_lo, z_lo: 4
+    x_lo, z_hi: 5
+    x_hi, z_lo: 6
+    x_hi, z_hi: 7
+    x_lo, y_lo: 8
+    x_hi, y_lo: 9
+    x_lo, y_hi: 10
+    x_hi, y_hi: 11
+
+The new ordering is
+
+    edge (codimension 2):
+    x_lo, y_lo: 0
+    x_hi, y_lo: 1
+    x_lo, y_hi: 2
+    x_hi, y_hi: 3
+    x_lo, z_lo: 4
+    x_lo, z_lo: 5
+    x_hi, z_hi: 6
+    x_hi, z_hi: 7
+    y_lo, z_lo: 8
+    y_hi, z_lo: 9
+    y_lo, z_hi: 10
+    y_hi, z_hi: 11
+
+To choose the ordering that is desired, a boolean input keyword
+'use_original_location_indices' is available in both CartesianGridGeometry
+and SkeletonGridGeometry.  If set to TRUE the original ordering will be used,
+and if FALSE, the new ordering is used.  The keyword is optional and will
+default to TRUE if not included in input.  The keyword is irrelevant in
+dimensions other than 3.
+
+Alternatively, the static function
+BoundaryLookupTable::setsetUsingOriginalLocations(bool) is available to
+choose one of the two options.  This is the method to use if the user's code
+uses neither the skeleton nor Cartesian grid geometry classes from SAMRAI.
+This function need be only called once, assuming the user does not desire to
+switch between the two ordering schemes in a single run.
+
+(4) STL classes are now used by the SAMRAI library.  We take explicit
+steps to instantiate them because SAMRAI compiles without implicit
+template instantation.  Users may need to understand how this works
+because it *MAY* affect users on systems where SAMRAI has not been ported.
+
+We use STL classes minimally, where SAMRAI does not support the same
+functionality.  To avoid long link times, SAMRAI is compiled with
+implicit template instantiations disabled.  So, templates used by the SAMRAI
+library must be explicitly instantiated.  Common templating is instantiated
+by auto-generated files under the "templates/automatic*" subdirectories
+of each package.  Special templates, including STL templates are
+instantiated by codes in the "templates/special" subdirectories.
+STL templates are instantiated in "templates/special/stl-*.C", where
+"*" refers to a class (or basic type) used as the template arguments.
+STL's of basic types are in the "toolbox/templates/special" while
+SAMRAI-defined classes go in the package of the most dependent class.
+
+Why do you need to know this?  Because explicit template instantiation
+is not recursive.  It may be necessary to instantiate templates that
+are not directly used (because they are used indirectly, by another
+template class or function).  Missing symbols (often with unfamiliar
+names) at link time may indicate this need.  Because indirectly used
+templates are implementation-dependent, there is no a priori way to
+know what they are.  If you see missing symbols that may be indirectly
+used templates, you have to add explicit template instantiation code
+to one or more "*/templates/special" subdirectories.  See the comments
+in "source/toolbox/templates/special/stl-FundamentalTypes.C" for more
+details.
+
+(5)
+
+-----------------------------------------------------------------------------
+                Major Bug Fixes 
+-----------------------------------------------------------------------------
+
+(1) Several errors were corrected in routines for coarsening non-cell-centered
+data between levels in a patch hierarchy involving periodic boundaries.
+
+-----------------------------------------------------------------------------
+                Known Problems
+-----------------------------------------------------------------------------
+
+(1) 
+
+=============================================================================
+=============================================================================

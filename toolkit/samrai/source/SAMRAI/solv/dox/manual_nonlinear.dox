@@ -1,0 +1,22 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace solv {
+
+/*!
+  @page package_solvers_nonlinear Nonlinear solver
+
+  This portion of the library defines the interface for
+  nonlinear solvers.
+  - SAMRAI::solv::NonlinearSolverStrategy
+*/
+
+}
+}

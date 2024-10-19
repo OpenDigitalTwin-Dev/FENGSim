@@ -1,0 +1,166 @@
+                     RIEMANN test examples for Euler
+
+This directory contains a set of input files (*.input) for tests of
+the numerical flux calculation routines (using different Riemann solvers)
+in the Euler sample application.  Input files specify 1D "shock-tube"
+problems applied along each coordinate direction in either two or 
+three dimensional cases. Initial conditions (density, velocity, and 
+pressure) are set on either side of the tube at time zero. The code 
+then outputs computed values of density, velocity, pressure, momentum, 
+internal and total energy along a specified "pencil" at the
+end of the calculation:
+
+         __________________
+        |\                 \
+        | \                 \
+        |  \                 \               "Pencil"
+        |   \_________________\         ___________________
+        | |\ |                |        |\__________________\
+    ----->\| |                |---->   \|__________________|
+         \   |                |             rho, p, e
+          \  |                |
+           \ |                |
+            \|________________|
+
+
+A set of MATLAB scripts are included compute and plot the exact Riemann 
+solution, providing a mechanism for the user to compare the computed 
+to the exact solution.
+
+INPUT FILES
+-----------
+
+Different input files specify the pencils of data written:
+
+    RP-testX-2d.input ................. 2D calculation with pencil in "X" dir.
+    RP-testY-2d.input ................. 2D calculation with pencil in "Y" dir.
+    RP-testX-3d.input ................. 3D calculation with pencil in "X" dir.
+    RP-testY-3d.input ................. 3D calculation with pencil in "Y" dir.
+    RP-testZ-3d.input ................. 3D calculation with pencil in "Z" dir.
+
+The input files specify a region [-0.5 , 0.5] on which the Riemann solution is 
+computed by the Euler code.
+
+DATA FILES
+----------
+
+Seven data files specify initial conditions (density, velocity, and pressure) 
+on either side of the interval.  They are invoked by including them in the 
+input files.
+ 
+    RP-test1.data .............. Sod shock tube 
+                                 left:  rho = 1.0,   v = [0,0,0],  p = 1.0
+                                 right: rho = 0.125, v = [0,0,0],  p = 0.1
+    RP-test2[XYZ].data ......... "123 problem" -- 2 rarefactions, stationary 
+                                 contact
+                                 left:  rho = 1.0,   v = [-2,0,0], p = 0.4
+                                 left:  rho = 1.0,   v = [2,0,0],  p = 0.4
+    RP-test3.data .............. left half, Woodward-Colella blast wave
+                                 left:  rho = 1.0,   v = [0,0,0],  p = 1000.
+                                 right: rho = 1.0,   v = [0,0,0],  p = 0.01 
+    RP-test4.data .............. right half, Woodward-Colella blast wave
+                                 left:  rho = 1.0,   v = [0,0,0],  p = 0.01 
+                                 right: rho = 1.0,   v = [0,0,0],  p = 100. 
+    RP-test5[XYZ].data ......... colliding shocks
+                                 left:  rho=5.99924, v=[19.5975,0,0], p=460.894
+                                 right: rho=5.99924, v=[-6.19633,0,0], p=46.0950
+    RP-test6[XYZ].data ......... slow moving contact
+                                 left:  rho = 1.0 ,  v=[-19.5975,0,0], p=1000.  
+                                 left:  rho = 1.0 ,  v=[-19.5975,0,0], p=0.01   
+    RP-test7[XYZ].data ......... contact discontinuity
+                                 left:  rho = 1.0 ,  v = [4,0,0], p = 1.  
+                                 left:  rho = 0.5 ,  v = [4,0,0], p = 1.  
+
+MATLAB validation scripts  
+-------------------------
+
+Matlab scripts compute the exact Riemann solution and provide a way to 
+compare graphically the result of the calculation.
+
+   plotRPdat.m ...... plots numerical solution computed by the Euler code
+
+   plotRPexact.m ..... plots exact analytic solution, given data on either
+                       side of the discontinuity.
+
+Example Use
+-----------
+
+1) Run the code with one of the input files:
+
+      ./main RP_input/RP-testY-3d.input
+
+2) go into the visualization dump directory. Data files (*.dat) 
+   that contain primitive and conserved variable values at different 
+   timesteps should have been output here.
+
+      cd RPtest_viz
+
+3) start Matlab
+
+      matlab
+
+4) set path to directory containing Matlab scripts
+
+      >> path(path,'../RP_input')
+
+5) plot numerical solution computed by Euler code.  First enter
+   the script name (plotRPdata) and then enter the
+   prefix of the data file for the last computed timestep.  
+
+      >> plotRPdat
+
+      1d Riemann problem plotting for SAMRAI Euler code...
+
+      Enter data file name without ".dat" extension
+      (type "quit" to stop):  RPtestY_3d_0050
+
+   The "plotRPdat" Matlab script accepts the name of a file containing
+   the numerical solution produced by the Euler code.  Specifying the
+   filename above plots the solution (density, momentum, total energy,
+   velocity, pressure, and internal energy) after 50 timesteps.
+
+   The script will prompt for more entries.  Enter another data file
+   if you choose, or "quit" to stop.
+   
+      Enter data file name without ".dat" extension
+      (type "quit" to stop):  quit
+
+6) plot the analytic solution.  Here, you must enter parameters that
+   correspond to the input file.  These can be determined from the
+   input file as follows:
+      system length  -- difference in "Y" parameters of the x_lo and 
+                        x_up entries in "CartesianGeometry" input section 
+                        of RP-testY-3d.input
+      gamma          -- set in "Euler" input section of RP-testY-3d.input
+      left density   -- interval_0 entry in RP-test1.data
+      left velocity  -- interval_0  "    "     "
+      left pressure  -- interval_0  "    "     "
+      right density  -- interval_1  "    "     "
+      right velocity -- interval_1  "    "     "
+      right pressure -- interval_1  "    "     "
+      output time    -- entries on first line of *.dat file
+                        being plotted.
+
+      >> plotRPexact
+      Riemann solver for ideal gas 
+      Enter system length: 1.0
+      Enter gamma parameter for ideal gas: 1.4
+      Enter [density, velocity, pressure] for
+      Left side:  [1., 0., 1.0]
+      Enter [density, velocity, pressure] for
+      Right side: [0.125, 0., 0.1]
+      Enter output time (type "0" to quit): 0.161861
+
+   The exact Riemann solution will be shown in solid lines on the 
+   plot window.  You may enter a different time if you choose, or 
+   quit.
+     
+        
+      Enter output time (type "0" to quit): 0
+
+
+
+
+
+
+

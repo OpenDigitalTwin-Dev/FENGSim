@@ -1,0 +1,23 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace tbox {
+/*!
+  @page package_toolbox_stream Stream Toolbox Classes
+
+  These classes provide basic support for portable message and file streams,
+  and the abstract interface for all stream-based interprocessor data 
+  communication in the SAMRAI library.
+
+  - SAMRAI::tbox::MessageStream
+*/
+
+}
+}

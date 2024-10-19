@@ -1,0 +1,28 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace mesh {
+
+/*!
+  @page package_mesh The Mesh Package
+ 
+  The Mesh package provides basic support for constructing and dynamically
+  regridding a structured AMR patch hierarchy.  This support is
+  divided into four categories:
+  -# @ref package_mesh_gridding "AMR patch hierarchy construction and dynamic regridding"
+  -# @ref package_mesh_load_balance "load balancing routines"
+  -# @ref package_mesh_clustering "clustering cells into logically-rectangular regions"
+  -# @ref package_mesh_multiblock "dynamic regridding for multiblock hierarchies"
+  
+  All class names in the Mesh package are in the namespace SAMRAI::mesh. 
+*/
+
+}
+}

@@ -1,0 +1,30 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+    namespace hier {
+
+/*!
+  @page package_hierarchy_variables AMR Patch Data and Variable Management
+
+  The variable and patch data classes are used to implement and manipulate
+  data on an AMR patch hierarchy.
+  - SAMRAI::hier::BoxGeometry
+  - SAMRAI::hier::BoxOverlap
+  - SAMRAI::hier::ComponentSelector
+  - SAMRAI::hier::PatchDataFactory
+  - SAMRAI::hier::PatchData
+  - SAMRAI::hier::PatchDescriptor
+  - SAMRAI::hier::VariableContext
+  - SAMRAI::hier::VariableDatabase
+  - SAMRAI::hier::Variable
+*/
+
+}
+}

@@ -1,0 +1,33 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace hier {
+
+/*!
+  @page package_hierarchy The Hierarchy Package
+
+  The Hierarchy package contains classes that provide basic AMR 
+  patch hierarchy definition and management capabilities.  Also,
+  base classes for patch data and variables, and variable-data 
+  management are found here.  These classes are divided into these categories:
+
+  -# @ref package_hierarchy_boxes "index space and box calculus"
+  -# @ref package_hierarchy_patches "AMR patch hierarchy structure"
+  -# @ref package_hierarchy_dlbg "Distributed mesh metadata"
+  -# @ref package_hierarchy_variables "AMR patch data and variable support"
+  -# @ref package_hierarchy_transfer "Data transfer interfaces"
+
+  All class names in the Hierarchy package are in the namespace
+  SAMRAI::hier.
+
+*/
+
+}
+}

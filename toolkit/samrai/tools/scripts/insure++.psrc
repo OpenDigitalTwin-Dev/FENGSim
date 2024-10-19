@@ -1,0 +1,298 @@
+##############################################################################
+# Change cache dirs, admins have them set to be read only
+##############################################################################
+
+insure++.GusCacheDir $HOME/guscache
+insure++.lrtCacheDir $HOME/guscache
+
+
+# Record all output to a single file
+insure++.report_file $HOME/insure.out
+#insure++.report_file stderr 
+#insure++.report_file stdout
+insure++.report_banner off
+insure++.report_overwrite false
+
+insure++.summarize leaks
+
+# Additional things to check beyond the default
+insure++.summarize bugs
+insure++.checking_uninit on
+#insure++.unsuppress COPY_WILD
+insure++.unsuppress COPY_DANGLING
+insure++.unsuppress RETURN_FAILURE
+insure++.unsuppress FREE_DANGLING
+insure++.unsuppress ALLOC_CONFLICT
+insure++.unsuppress DELETE_MISMATCH
+insure++.unsuppress DEAD_CODE
+insure++.unsuppress READ_BAD_INDEX
+insure++.unsuppress WRITE_BAD_INDEX
+insure++.unsuppress RETURN_INCONSISTENT
+insure++.unsuppress FREE_NULL
+
+
+##############################################################################
+# Suppress OS, compiler, and external library problems
+##############################################################################
+
+# GCC internal problems 
+# SGS 5/20/04
+insure++.suppress RETURN_FAILURE { getenv * __libc_start_main }
+
+
+# Strings in g++ are very badly damaged
+# SGS 5/20/04
+insure++.leaksummaryfilter -! * std::string::_Rep::_S_create *
+
+# gfortran initialization
+# SGS 10/24/07
+insure++.suppress RETURN_FAILURE { * *_gfortrani_init_variables * }
+
+# gfortran is looking envirnment variables that might not be set
+# SGS This is very general but the context is at startup and stack trace is all unknowns
+# Is there a way to make this more narrow?
+# SGS 07/06/11
+insure++.suppress RETURN_FAILURE { getenv * }
+
+# gfortran initialization is stating some file?
+# SGS This is very general but the context is at startup and stack trace is all unknowns.
+# Is there a way to make this more narrow?
+# SGS 07/06/11
+insure++.suppress RETURN_FAILURE { __fxstat *}
+
+
+# I/O was returning 0 which insure++ was warning about 0 items
+# being written.  This is not an error, bug maybe not good 
+# programming.  Is there a way to stop the stream from doing this?
+# SGS 4/8/09
+insure++.suppress RETURN_FAILURE { * SAMRAI::tbox::ParallelBuffer::outputBuffer() * }
+
+# Did not work
+# insure++.file_ignore complex
+# insure++.suppress_output complex:632
+# insure++.suppress parserwarning in complex
+
+# MPI 1.2.4 & 1.2.5
+# SGS 5/20/04
+insure++.suppress RETURN_FAILURE { * MPI_Send *  } 
+insure++.suppress RETURN_FAILURE { * PMPI_Send *  } 
+insure++.suppress RETURN_FAILURE { * MPI_Recv *  } 
+insure++.suppress RETURN_FAILURE { * PMPI_Recv *  } 
+insure++.suppress RETURN_FAILURE { * MPI_Isend *  } 
+insure++.suppress RETURN_FAILURE { * PMPI_Isend *  } 
+insure++.suppress RETURN_FAILURE { * MPI_Irecv *  } 
+insure++.suppress RETURN_FAILURE { * PMPI_Irecv *  } 
+insure++.suppress RETURN_FAILURE { * MPI_Wait *  } 
+insure++.suppress RETURN_FAILURE { * PMPI_Wait *  } 
+insure++.suppress RETURN_FAILURE { * MPI_Test *  } 
+insure++.suppress RETURN_FAILURE { * PMPI_Test *  } 
+insure++.suppress RETURN_FAILURE { * MPI_Init *  } 
+insure++.suppress RETURN_FAILURE { * PMPI_Init *  } 
+insure++.suppress RETURN_FAILURE { * PMPI_Waitall *  } 
+insure++.suppress RETURN_FAILURE { * PMPI_Waitsome *  } 
+
+insure++.leaksummaryfilter -! * MPI_Init *
+insure++.leaksummaryfilter -! * PMPI_Init *
+insure++.leaksummaryfilter -! * MPI_Barrier *
+insure++.leaksummaryfilter -! * PMPI_Barrier *
+
+# OpenMPI 1.2.8
+# SGS 10/27/2008
+insure++.suppress RETURN_FAILURE { * _dl_init *  } 
+insure++.suppress RETURN_FAILURE { * PMPI_Finalize *  } 
+insure++.suppress FREE_NULL { * _dl_init *  } 
+insure++.suppress FREE_NULL { * PMPI_Init *  } 
+insure++.suppress FREE_NULL { * PMPI_Finalize *  } 
+insure++.suppress USER_ERROR { * PMPI_Finalize *  } 
+
+insure++.leaksummaryfilter -! * PMPI_Finalize *
+insure++.leaksummaryfilter -! * PMPI_Comm_dup *
+
+#insure++.leaksummaryfilter -! * SAMRAI::tbox::SAMRAIManager::initialize * PMPI_Comm_dup * 
+
+# SGS 10/3/2010
+# Found in PF and OpenMPI
+insure++.leaksummaryfilter -! * PMPI_Send *
+insure++.leaksummaryfilter -! * PMPI_Probe *
+
+#
+# Added by ???? for ???
+#
+insure++.leaksummaryfilter -! * MPI_Irecv *
+insure++.leaksummaryfilter -! * PMPI_Irecv *
+
+# HDF
+# insure++.suppress RETURN_FAILURE { getenv H5_init_library * }
+# SGS 5/20/04
+insure++.suppress USER_ERROR { qsort H5AC_flush * }
+insure++.leaksummaryfilter -! * H5O_mtime_decode *
+# SGS 11/20/07
+# this is a little broad but HDF is leaking in fopen
+insure++.leaksummaryfilter -! * SAMRAI::tbox::HDFDatabase::open *
+insure++.leaksummaryfilter -! * SAMRAI::tbox::HDFDatabase::create *
+insure++.leaksummaryfilter -! * H5FCreate *
+insure++.leaksummaryfilter -! * H5FL_reg_malloc *
+
+#
+# HDF is opening non-existent files when it is creating them.
+# SGS 07/06/11
+insure++.suppress RETURN_FAILURE { open H5FD_sec2_open H5FD_open H5F_open * }
+
+# SGS 6/22/04
+# This does not appear in gcc 3.3.2 but is present in 3.2.2
+insure++.leaksummaryfilter -! * gmtime *
+
+# SGS 10/12/07
+# qsort has a memory leak
+insure++.leaksummaryfilter -! * qsort *
+
+
+# SGS 11/27/07
+# time method have leak
+insure++.leaksummaryfilter -! * tzset *
+
+# BTNG 10/17/08
+# This may be system dependent.  SGS could not replicate using identical configuration.
+insure++.leaksummaryfilter -! * localtime *
+
+# hypre 
+# Calling realloc with NULL pointer.  According to realloc docs this is
+# not an error.
+# SGS 5/20/04
+insure++.suppress FREE_NULL { realloc hypre_ReAlloc * }
+# Hypre is allocating boxes with malloc and then copying them.
+# SGS 4/23/09
+insure++.suppress READ_UNINIT_MEM { * hypre_BoxSetExtents * }
+
+# PETSC
+insure++.suppress RETURN_FAILURE { * PetscInitialize * }
+insure++.suppress RETURN_FAILURE { * PetscFinalize * }
+insure++.leaksummaryfilter -! * PetscDLLibraryOpen *
+insure++.leaksummaryfilter -! * PetscInitialize *
+insure++.leaksummaryfilter -! * PetscHeaderCreate_Private *
+insure++.leaksummaryfilter -! * PetscViewerASCIIGetStdout *
+insure++.leaksummaryfilter -! * VecInitializePackage *
+insure++.leaksummaryfilter -! * PETSC_VIEWER_STDOUT_ *
+insure++.leaksummaryfilter -! * PetscGetUserName *
+insure++.leaksummaryfilter -! * PetscMallocAlign *
+
+# SILO
+insure++.leaksummaryfilter -! * _lite_PD_init_chrt *
+insure++.leaksummaryfilter -! * lite_SC_date *
+insure++.suppress RETURN_FAILURE { * _PD_get_tok * }
+insure++.suppress RETURN_FAILURE { * _lite_PD_rd_symt * }
+
+#
+# Silo is invoking qsort with size 0 on new TOC construction.
+# SGS 7/6/11
+insure++.suppress USER_ERROR { qsort lite_SC_string_sort lite_PD_ls PJ_ls db_pdb_NewToc DBNewToc * }
+
+# SGS 7/7/11
+# SILO is xstating a file during creation; assume it knows what it is doing to handle file not found.
+insure++.suppress RETURN_FAILURE { __xstat64() DBCreateReal() * }
+
+#WJA 3/18/13
+#stl_bvector copies data into uninitialized memory which is OK
+insure++.suppress READ_UNINIT_MEM(read) at stl_bvector.h
+
+##############################################################################
+# Suppress warnings in SAMRAI
+# 	These should all include documentation on why it is valid to
+#	suppress the warning.
+##############################################################################
+
+# 
+# This error is signaling the end of file.
+# Reads that are smaller than maxsize are handled correctly by the parser code.
+# Insure incorrectly reports that anything smaller than the read size is 
+# is an error.  This is not true.
+#
+# SGS 5/20/04
+suppress RETURN_FAILURE at Parser.C
+
+# SGS 1/4/05
+suppress RETURN_FAILURE { fread * std::istream::sentry::sentry * }
+
+# Using stat return code to determine if path exists; this should be correct
+# SGS 10/24/07
+suppress RETURN_FAILURE { * stat SAMRAI::tbox::Utilities::recursiveMkdir * }
+
+# SGS 10/10/07
+# Problems with the code generated by grammer/parser.
+suppress READ_UNINIT_MEM(read) at Grammar.C
+suppress READ_UNINIT_MEM at Grammar.C
+
+# SGS 4/22/07
+# For performance reasons don't instrument these
+file_ignore Dimension.* IntVector.* Box.* Index.*
+
+# SGS 7/6/11
+# Some list elements are allocated in StartupShutdownManager are allocated
+# before Insure++ is aware in the run.  This confused Insure++.
+
+suppress COPY_WILD { * SAMRAI::tbox::StartupShutdownManager::initialize * }
+suppress COPY_WILD { SAMRAI::tbox::StartupShutdownManager::startup *}
+suppress COPY_WILD { * SAMRAI::tbox::StartupShutdownManager::finalize * }
+suppress COPY_WILD { SAMRAI::tbox::StartupShutdownManager::shutdown * }
+
+# SGS 7/6/11
+# Accessing NULL pointers that was initialized before Insure++ is active
+suppress COPY_WILD { yy_load_buffer_state *}
+#suppress COPY_WILD { yy_parse *}
+suppress COPY_WILD { yyparse *}
+suppress COPY_WILD { delete_list * }
+
+# SGS 7/12/11
+# Insure++ is getting confused by this code; causing bogus leaks to be detected.
+file_ignore BoxTree.C
+
+# WJA 2/27/13
+# Something in the TreeCommunication performance test is confusing Insure++.
+suppress READ_DANGLING {* testUpThenDown *}
+suppress WRITE_DANGLING {* testUpThenDown *}
+
+#=============================================================================
+# These lines should improve insure++ performance but will result in
+# less valuable information on finding the location of leaks.  By
+# default Insure++ checks at each pointer manipulation if memory is
+# leaked and will identify the line causing a problem.  This obviously
+# takes some time to do.  The leaksearch option is even more time
+# consuming; when something like a pointer assignment is done (ptr =
+# new_ptr) Insure++ will attempt to see if the old value of ptr is
+# leaked by doing a sweep through memory to make sure something else
+# still holds a reference to the old value.  Very time consuming
+# indeed! when the leaksearch option is turned on.  The option is valuable for
+# errors resulting from non-Inusre++ compiled code as Insure may not
+# know about references to memory so a brute force search is the only
+# way to determine if memory is being leaked.
+# 
+# Once a memory leak has been identified turning these lines off will 
+# help improve the messages being reported BUT will result in some BOGUS_LEAKS
+# being reported which have to be ignored.   There are so many that it makes
+# the report difficult to parse so these are disbabled by default.
+# =============================================================================
+
+#insure++.leaksearch off 
+#insure++.suppress LEAK* 
+#insure++.summarize leaks outstanding
+
+
+#=============================================================================
+# SGS These should be checked further
+#=============================================================================
+# This is not leaking very much is it an MPI issue?
+#insure++.leaksummaryfilter -! * ompi_convertor_prepare_for_recv *
+
+# This looks bad but not sure what the problem could be.
+#insure++.suppress READ_OVERFLOW { * amps_SFBCast * }
+
+# SGS Forward to hypre team
+#insure++.suppress  READ_UNINIT_MEM { hypre_PFMGSetup * }
+
+# SGS OpenMPI leak?
+#insure++.leaksummaryfilter -!  * opal_class_initialize *
+
+# WJA LIBC bug?
+insure++.suppress FREE_NULL { * vfprintf * }
+
+insure++.suppress COPY_DANGLING {* SAMRAI::solv::CellPoissonHypreSolver::copyToHypre *}

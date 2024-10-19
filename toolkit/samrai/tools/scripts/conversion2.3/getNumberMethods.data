@@ -1,0 +1,13 @@
+getNumberBlocks
+getNumberBoundaryNodes
+getNumberEquivalenceClasses
+getNumberItems
+getNumberItemsInEquivalenceClass
+getNumberIterations
+getNumberLevels
+getNumberNearestNeighborNodes
+getNumberNeighbors
+getNumberOutsideNeighborNodes
+getNumberRegisteredPatchDataIndices
+getNumberRegisteredVariableContexts
+getNumberRegisteredVariables

@@ -1,0 +1,231 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for SAMRAI Euler 2d test problem 
+ *
+ ************************************************************************/
+
+// Refer to test2d.input for full description of all input parameters specific
+// to this problem.
+
+GlobalInputs {
+   call_abort_in_serial_instead_of_exit = FALSE
+}
+
+AutoTester {
+   // iteration to carry out test
+   test_iter_num = 10
+
+   // expected correct result
+   correct_result = 0.00491625520151, 0.000664890679259, 7.29562576939e-05
+
+   // if true will write corrct result--useful for rebaselining
+   output_correct = FALSE
+
+   // if true will write correct patch boxes--useful for rebaselining
+   write_patch_boxes = FALSE
+
+   // if true will read correct patch boxes--set to FALSE to rebaseline
+   read_patch_boxes = TRUE
+
+   // time steps for which correctness of patch boxes will be checked
+   test_patch_boxes_at_steps = 0, 5, 10
+
+   // base name of files containing correct patch boxes
+   test_patch_boxes_filename = "test_inputs/test_sync.2d.boxes"
+}
+
+Euler {
+   // Ratio of specific heats
+   gamma            = 1.4
+
+   // order of Goduov slopes (1, 2, or 4)
+   godunov_order    = 4
+
+   // Riemann solver used in flux calculation
+   riemann_solve        = "APPROX_RIEM_SOLVE"
+//   riemann_solve        = "EXACT_RIEM_SOLVE"
+//   riemann_solve        = "HLLC_RIEM_SOLVE"
+
+   // General type of problem and its initial conditions.
+   data_problem         = "STEP"
+   Initial_data {
+      front_position = 0.0
+      interval_0 {
+         density         = 1.4
+         velocity        = 3.0 , 0.0
+         pressure        = 1.0
+      }
+      interval_1 {
+         density         = 1.4
+         velocity        = 3.0 , 0.0
+         pressure        = 1.0
+      }
+   }
+
+   // Refinement criteria and, for each, the parameters controling it.
+   // Refinement criteria may be one or more of DENSITY_DEVIATION,
+   // DENSITY_GRADIENT, DENSITY_SHOCK, DENSITY_RICHARDSON, PRESSURE_DEVIATION,
+   // PRESSURE_GRADIENT, PRESSURE_SHOCK, or PRESSURE_RICHARDSON.
+   Refinement_data {
+      refine_criteria = "PRESSURE_GRADIENT", "PRESSURE_SHOCK"
+
+      PRESSURE_GRADIENT {
+         grad_tol = 20.0
+      }
+
+      PRESSURE_SHOCK {
+         shock_tol   = 10.0
+         shock_onset = 0.90
+      }
+   }
+
+   // Boundary condition data following the format defined in
+   // appu::CartesianBoundaryUtility[2,3]
+   Boundary_data {
+      boundary_edge_xlo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_edge_xhi {
+         boundary_condition      = "REFLECT"
+      }
+      boundary_edge_ylo {
+         boundary_condition      = "REFLECT"
+      }
+      boundary_edge_yhi {
+         boundary_condition      = "REFLECT"
+      }
+
+      // IMPORTANT: If a *REFLECT, *DIRICHLET, or *FLOW condition is given
+      //            for a node, the condition must match that of the
+      //            appropriate adjacent edge above.  This is enforced for
+      //            consistency.  However, note when a REFLECT edge condition
+      //            is given and the other adjacent edge has either a FLOW
+      //            or REFLECT condition, the resulting node boundary values
+      //            will be the same regardless of which edge is used.
+      boundary_node_xlo_ylo {
+         boundary_condition      = "YREFLECT"
+      }
+      boundary_node_xhi_ylo {
+         boundary_condition      = "YREFLECT"
+      }
+      boundary_node_xlo_yhi {
+         boundary_condition      = "YREFLECT"
+      }
+      boundary_node_xhi_yhi {
+         boundary_condition      = "YREFLECT"
+      }
+   }
+}
+
+Main {
+   // dimension of problem
+   dim = 2
+   
+   // base name of log file
+   base_name = "test_sync.2d"
+   
+   // if true all nodes will log to individual files
+   // if false only node 0 will log
+   log_all_nodes    = TRUE
+
+   // visualization dump parameters
+   // frequency at which to dump viz output--zero to turn off
+   viz_dump_interval    = 0
+   // directory in which to place viz output
+   viz_dump_dirname     = "viz-test-2d-sync"
+
+   // restart dump parameters
+   // frequency at which to dump restart output--zero to turn off
+   restart_interval     = 1
+
+   // timestepping method--if not SYNCHRONIZED uses refined time stepping
+   timestepping = "SYNCHRONIZED"
+}
+
+// Refer to tbox::TimerManager for input
+TimerManager{
+   print_exclusive      = TRUE   // output exclusive time
+   timer_list               = "apps::main::*",
+                              "apps::Euler::*",
+                              "algs::GriddingAlgorithm::*",
+                              "algs::HyperbolicLevelIntegrator::*"
+}
+
+// Refer to geom::CartesianGridGeometry and its base classes for input
+CartesianGeometry {
+   domain_boxes = [ (0,0) , (9,19) ],
+                  [ (10,4) , (49,19) ]
+   x_lo         = 0.e0 , 0.e0   // lower end of computational domain.
+   x_up         = 2.5e0 , 1.e0  // upper end of computational domain.
+}
+
+// Refer to mesh::StandardTagAndInitialize for input
+StandardTagAndInitialize{
+   tagging_method = "GRADIENT_DETECTOR"
+}
+
+// Refer to hier::PatchHierarchy for input
+PatchHierarchy {
+   max_levels = 5         // Maximum number of levels in hierarchy.
+
+   ratio_to_coarser {              // vector ratio to next coarser level
+      level_1            = 2 , 2
+      level_2            = 2 , 2
+      level_3            = 2 , 2
+      level_4            = 2 , 2
+   }
+
+   largest_patch_size {
+      level_0 = 32 , 32  // largest patch allowed in hierarchy
+      // all finer levels will use same values as level_0...
+   }
+
+   smallest_patch_size {
+      level_0 = 8 , 8
+      level_1 = 8 , 8
+      level_2 = 8 , 8
+      level_3 = 12 , 12
+   }
+
+   allow_patches_smaller_than_ghostwidth = TRUE
+   allow_patches_smaller_than_minimum_size_to_prevent_overlaps = TRUE
+}
+
+// Refer to mesh::GriddingAlgorithm for input
+GriddingAlgorithm {
+   allow_patches_smaller_than_ghostwidth = TRUE
+   allow_patches_smaller_than_minimum_size_to_prevent_overlaps = TRUE
+}
+
+// Refer to mesh::BergerRigoutsos for input
+BergerRigoutsos {
+   sort_output_nodes = TRUE // Makes results repeatable.
+   efficiency_tolerance   = 0.75e0     // min % of tag cells in new patch level
+   combine_efficiency     = 0.85e0     // chop box if sum of volumes of smaller
+                                       // boxes < efficiency * vol of large box
+}
+
+// Refer to algs::HyperbolicLevelIntegrator for input
+HyperbolicLevelIntegrator {
+   cfl                      = 0.9e0     // max cfl factor used in problem
+   cfl_init                 = 0.1e0     // initial cfl factor
+   lag_dt_computation       = TRUE
+   use_ghosts_to_compute_dt = TRUE
+}
+
+// Refer to algs::TimeRefinementIntegrator for input
+TimeRefinementIntegrator {
+   start_time            = 0.e0    // initial simulation time
+   end_time              = 100.e0  // final simulation time
+   grow_dt               = 1.1e0   // growth factor for timesteps
+   max_integrator_steps  = 10      // max number of simulation timesteps
+   regrid_interval       = 2
+}
+
+LoadBalancer {
+   // using default TreeLoadBalancer configuration
+}

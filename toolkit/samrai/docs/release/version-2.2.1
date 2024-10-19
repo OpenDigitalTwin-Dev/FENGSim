@@ -1,0 +1,158 @@
+*****************************************************************************
+  Copyright 1997-2024
+  Lawrence Livermore National Security, LLC.
+  All rights reserved.
+*****************************************************************************
+*****************************************************************************
+
+                     Release Notes for SAMRAI v2.2.1
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+*****************************************************************************
+
+NOTE:  These release notes are more descriptive and detailed than is usual
+       for software release notes.  The reason for this is that presently
+       complete documentation does not exist for most of the items listed.
+       Until sufficient user documentation becomes available, descriptions
+       such as those that follow will be part of SAMRAI release notes.
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+LLNL users can use the discussion groups on the LLNL Sourceforge site:
+
+https://sourceforge.llnl.gov/sf/discussion/do/listForums/projects.samrai/discussion
+
+*****************************************************************************
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report it
+to us so that we may fix it.  We will make every effort to fix bugs
+in a timely manner.  Depending on the severity or the complexity of the
+bug, we will either fix the bug for a subsequent library release or send
+a code fix to users so that their work is minimally interrupted.
+
+LLNL users may report bugs using the LLNL Sourceforge site if 
+you have a sourceforge account:
+
+https://sourceforge.llnl.gov/sf/tracker/do/listTrackers/projects.samrai/tracker
+
+Bugs found by other users should send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                Summary of what's changed
+-----------------------------------------------------------------------------
+
+This section contains a summary of changes to SAMRAI.  More detailed
+descriptions of items in the following list are provided below.
+
+(1) The fill_time argument was removed from the interface for
+RobinBcCoefStrategy::setBCCoefs(). 
+ 
+(2) The VisItDataWriter was modified to allow for the writing of data in
+VisIt's sparse volume fraction format for mixed cells. 
+
+(3) Added tolerance for LoadBalancer.
+
+(4) Added LC "uP" machine to supported configurations.
+
+(5) Added limited Mac OS X support.
+
+(6) Bug fixes
+ 
+----------------------------------------------------------------------------
+                Summary of what's new
+-----------------------------------------------------------------------------
+
+This section contains a summary of additions to SAMRAI.  More detailed
+descriptions of items in the following list are provided below.
+
+(1) 
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+                Details about what's changed
+-----------------------------------------------------------------------------
+
+(1) The fill_time argument was removed from the interface for
+RobinBcCoefStrategy::setBcCoefs().  As this is a pure virtual function,
+several classes in source/solvers/poisson that inherit from
+RobinBcCoefStrategy inherited this change in their implementations of
+setBcCoefs().
+
+(2) The VisItDataWriter was modified to allow for the writing of data in
+VisIt's sparse volume fraction format for mixed cells.  This means that
+it is now possible to write data for cells that contain mixed materials
+so that the state of each material can be represented separately within
+a cell when viewed through VisIt.  VisIt versions 1.7.1 and later are
+capable of reading files that are dumped using this functionality.
+
+(3) A tolerance value was added to the LoadBalancer to allow a user
+settable tolerance in the comparisons of the computed box workload to
+computed ideal workload.  This enables addition control over when boxes
+are split.  Previously a box was split when
+
+( box_workload <= ideal_workload )
+
+which results in boxes being chopped up even when very near the ideal
+workload, the tolerance value is used to allow for some user specified
+deviation from the ideal workload:
+
+( box_workload <= ( (1. + workload_tolerance) * ideal_workload ) )
+
+a workload_tolerance of 0.0 (the default) retains the previous
+behavior.  
+
+The workload tolerance can be changed by setting the
+"workload_tolerance" in the LoadBalancer input.
+
+artf7699
+
+(4) Minor changes where made to fix compilation and linking issues
+with the IBM xlc compilers for the Livermore Computing "uP" machine.
+
+artf7701
+
+(5) Fixed problems identified by Kevin Chu when compiling on Mac OS X.
+Configure scripts should better identify OS X and fixed several small
+code issues.
+
+NOTE: The SAMRAI team has limited access to a Mac so this port has
+very limited support from our team.  We do try to encorporate user
+supplied fixes for bugs and porting issues.
+
+artf7714
+
+(6) The following additional bug fixes from sourceforge were fixed:
+
+Restart-redistribute utilty caused a compilation error when compiling without HDF.  artf7667
+
+Guards for inline control where incorrect and caused problem when users were including SAMRAI files.  artf7690
+
+Intel remark messages were showing potential problems when compiling.
+Examined and fixed or ignored serious problems.  Some remarks are
+being ignored since they are not problems. artf7680
+
+----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+                Details about what's new
+-----------------------------------------------------------------------------
+
+(1) 
+
+-----------------------------------------------------------------------------
+                Known Problems
+-----------------------------------------------------------------------------
+
+(1) 
+
+=============================================================================
+=============================================================================

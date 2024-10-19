@@ -1,0 +1,332 @@
+*****************************************************************************
+				Release Notes
+*****************************************************************************
+
+NOTE:  These release notes are more descriptive and detailed than is usual
+       for software release notes.  The reason for this is that presently
+       complete documentation does not exist for most of the items listed.
+       Until sufficient user documentation becomes available, descriptions
+       such as those that follow will be part of SAMRAI release notes.
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report it
+to us so that we may fix it.  We will make every effort to fix bugs
+in a timely manner.  Depending on the severity or the complexity of the
+bug, we will either fix the bug for a subsequent library release or send
+a code fix to users so that their work is minimally interrupted.
+
+LLNL users should report bugs using the CASC bug tracking web pages:
+
+        http://www-casc.llnl.gov/bugs/
+
+Enter the bug into the appropriate are of the SAMRAI project section.
+
+Bugs found by other users should send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+=============================================================================
+SAMRAI Release v1.0.2
+=============================================================================
+
+-----------------------------------------------------------------------------
+                             What's Changed
+-----------------------------------------------------------------------------
+
+(1) BoundaryBox class
+
+Previously the PatchGeometry stored an array of NDIM BoxArrays which
+stored boxes of width 1 immediately outside the physical domain
+boundary along the nodes (corners), edges, and faces of the domain.
+The user was required to call
+xfer_RefinePatchStrategy::reclassifyBoundaryBox on each boundary box
+to calculate two integer values associated with the box: "bdry_type"
+and "bside."  bdry_type told what type of intersection the boundary
+box had with the physical domain, that is whether it intersected the
+domain at a face, an edge, or a node.  bside indicated where the
+boundary box was located in relation to the current patch.  Each
+position above or below the patch in each coordinate direction had a
+unique integer index.  reclassifyBoundaryBox would also adjust the
+coordinates of a box if, for example, it was on the node or edge of a
+3d patch but was actually on the face of the physical domain.  The
+adjustment in this case would extend the box along the face to the
+edge of the ghost layer of the patch.
+
+Now, instead of creating an array of NDIM BoxArrays to contain the
+boundary boxes for each Patch, the GridGeometry creates objects of the
+new hier_BoundaryBox class to store boundary box information.  The
+BoundaryBox consists of a Box to store its location in index space, as
+well as two integer data members to store the BoundaryBox's boundary
+type and location index.  The location index is the new name for the
+"bside" described in the previous paragraph.  When the BoundaryBoxes
+are created, they are created to be of the correct boundary type, so
+that if, for example, they are on the face of the physical domain,
+they will be created with the face boundary type and will not need to
+be extended by a function such as reclassifyBoundaryBox.  The
+BoundaryBoxes will be stored by the PatchGeometry as an array of NDIM
+Array<BoundaryBox>'s (replacing NDIM BoxArrays).  Each
+Array<BoundaryBox> will store the BoundaryBoxes of a single boundary
+type.  The user should use PatchGeometry's getFaceBoundary,
+getEdgeBoundary, getNodeBoundary, or getCodimensionBoundary functions
+to access the Arrays of BoundaryBox.
+
+Along with the introduction of the BoundaryBox we have also introduced
+some new conventions associated with boundary boxes.  Boundary boxes
+on the corners of the domain should now be consider to be of boundary
+type "node," not "corner."  The definitions of the boundary types are
+as follows: a boundary box in any dimension that intersects the domain
+at only one point has the boundary type "node."  The integer value
+that represents the node type is equal to NDIM.  In 2D and 3d, a
+boundary box that intersects the domain along a one-dimensional edge
+has the boundary type "edge."  The edge type is represented by the
+integer value NDIM-1.  A 3D boundary box that intersects the domain
+along a two-dimensional face has the boundary type "face," represented
+by the integer value one.  The conventions for the integer values of
+the location index were already in the library, but they are now
+explicitly documented in the BoundaryBox header file.
+
+A document describing the use of BoundaryBox is located at
+docs/userdocs/boundaries.ps.
+
+(2) Minor modification to SAMRAI manager class
+
+The SAMRAI manager class which is used to control startup and shutdown
+processes by most programs that use SAMRAI has moved from the
+/source/samrai directory to the /source/toolbox/base directory.  Also,
+the class name has changed from `SAMRAI_Manager' to
+`tbox_SAMRAIManager'.  There is a noprefix header so that users can
+include the class with a statement such as `#include
+"SAMRAIManager.h"'.  The previous include file was named "SAMRAI.h".
+Thus, the only impact on library users is to replace the `#include
+"SAMRAI.h"' statement in their main program with the statement
+`#include "SAMRAIManager.h"' and refer to the class as `SAMRAIManager'
+instead of `SAMRAI_Manager'.
+
+(3) Library Breakup
+
+The library has been broken up into more library files (.a's) than in
+previous releases.  If you include the config/Makefile.config makefile
+in your makefile and use the $(LDLIBS) variable to get the SAMRAI
+libraries you need to change your Makefile.  There are now 4 library
+symbols defined to bring in the SAMRAI libraries.  You should use them
+in the following order $(LIBSAMRAI3D) $(LIBSAMRAI2D) $(LIBSAMRAI1D)
+$(LIBSAMRAI) $(LDLIBS) in your link line.
+
+  LDLIBS      - This contains the system, MPI, Fortran, C/C++ libraries 
+	that are used to build SAMRAI. 
+  LIBSAMRAI   - This contains the non-dimensional SAMRAI classes.  
+	All SAMRAI applications need these libraries. 
+  LIBSAMRAI1D - The dimensioned classes in SAMRAI.  You need to include 
+	the dimensions which you are using in your application. 
+  LIBSAMRIA2D 
+  LIBSAMRAI3D 
+
+(4) Simplification of Restart Setup  
+
+The library has been modified so that the user no longer has to be
+concerned with much fo the setup process for writing restart files.
+There are only three functions that the user need be aware of at the
+level of the main program: openRestartFile(), closeRestartFile(), and
+writeRestartFile().  (Note the change in the function name for writing
+restart files - OLD: writeToRestartFile() NEW: writeRestartFile()).
+There is no longer any need to register object with the
+RestartManager.  However, all the constructors for objects that can be
+initialized from restart have been changed.  The new arguments are
+(const string& object_name, Pointer<Database> input_database, . . .)
+instead of (Pointer<Database> input_database,
+Pointer<Database>restart_database, . . .).  The object handles the
+retrieval of its own data from the restart database and its own
+registration with the RestartManager using its object_name as a
+handle.  You will need to make the following changes to main.C: 
+
+	(1) Remove all registration of objects with the RestartManager
+	(2) change writeToRestartFile() to writeRestartFile()
+	(3) modify the constructors for all restartable objects.
+
+(5) Memory management of algorithm objects registered for restart
+
+In older versions of SAMRAI, the RestartManager handled the
+deallocation of memory used by objects registered for restart.  This
+has been changed so that the RestartManager does not deallocate any of
+the memory used by objects registered for restart. The user now has
+the responsibility of freeing this memory.  All objects that are
+allocated in the main code must be explicitly deleted (or smart point
+set to null) to avoid memory leaks.
+
+(6) Minor change to 2d plotting classes
+
+The apps_PlotLevel class has been factored into the apps_PlotBase
+class which handles all the X windows stuff and apps_HyperbolicPlot
+which handles when plotting should occur relative to the advance in
+the hyperbolic level integrator algorithm.  This was done to
+facilitate the construction of 2d plotting functionality for other
+algorithms (e.g. method of lines).  These changes require that main.C
+be changed for the LinAdv and Euler examples.  The only change is that
+apps_PlotLevel needs to be replaced by apps_HyperbolicPlot.  In the
+library, the only changes outside of the /source/application/support
+and the /include directories, is a minor modification to the
+/source/template/special directory. 
+
+(7) Use of timers in code has changed
+
+TimerDatabase has been removed and replaced with TimerManager.  This
+is to support some new features, including addition of input/restart
+functionality, and exclusive time capability.  The arusage() and
+getrusage() functions have been replaced with POSIX-compatable times()
+function to facilitate all platforms (we verified the two give almost
+identical results so this change should be transparant to users).  The
+preferred way of turning timers on/off is no longer through the
+TimerDatabase::getDatabase->addTimer(name) routine.  Instead, it is
+preferable to include timer names in the input file.  A
+TimerManager::getManager->addTimer(name) function does exist for any
+users that want to stick with the old functionality.  There are also
+some different print options now available.  For more information, see
+the discussion on timers below.
+
+-----------------------------------------------------------------------------
+                                   What's New 
+-----------------------------------------------------------------------------
+
+(1) Support for Sun's SunPRO C++ 5.0 compiler
+
+(2) 2D plotting for the Heat Equation sample application
+
+(3) Periodic Boundary Capabilities 
+
+This is input in the geometry input data file as "periodic_dimension =
+1,1,1" to specify that the domain is periodic in all 3 dimensions.
+The default is no periodicity in any of the dimensions if this field
+is ommitted from the input data file.  The following classes and
+functions have been modified to handle periodicity :
+	(1) geom_CartesianGridGeometry::getFromInput
+	(2) xfer_RefineSchedule::generateCommunicationSchedule  
+		computes source mask to properly shift unfilled boxes 
+		on the domain
+        (3) xfer_RefineSchedule::finishScheduleConstruction 
+		computes unfilled boxes based on the periodicity as
+		the function iterates through levels on the hierarchy
+	(4) hier_GridGeometry::initializePeriodicShift 
+		computes periodic shift based on the input boolean
+		(periodic_dimension) and number of cells in each dimension
+
+	(5) hier_GridGeometry::checkPeriodicValidity 
+		checks that the domain is periodic in each of the 
+		dimensions specified as periodic and write
+                error message and aborts if not valid.  
+
+There are also several simple test procedures to verify that the
+functionality is working.  These are contained in the
+test/communication directory in the form main_Xd#patch/level.
+
+(4) New Timer routines
+
+The TimerManager class replaces the old TimerDatabase class:
+
+The new class is much more powerful.  In addition to allowing entry of
+timers thru input and writing timer data to restart, the class
+coordinates tracking of nested timers so one can get statistics of
+exclusive time and a calling tree (referred to as concurrent timers).
+Use of the class is described below.
+
+Input and Restart:
+
+A TimerManager is created by calling the TimerManager::createManager()
+function. One can pass an input sub-database
+(e.g. input_db->getDatabase("TimerManager")) which contains true/false
+specifications for "maintain_exclusive_time" and
+"maintain_concurrent_time" along with a string list called
+"timer_list" which specifies the names of the timers to be used in the
+simulation.  The entries in "string_list" can be of the following
+format:
+
+	Package::*::*       - turns on all timers in Package 
+	Package::Class::*   - turns on all timers in Class 
+	*::Class::*         - '' 
+        Class::*            - '' 
+        Class               - '' 
+        Package::Class::method - turn on specific timer 
+        *::Class::method       - '' 
+        Class::method          - ''
+
+
+This allows the user to specify multiple timers to be turned on in a
+package or class thru the input file (details on how to name timers in
+the code so that the manager will properly parse the list are given in the following bullet).  When the code writes a restart file, the RestartManager will automatically write out the state of all the timers that were turned on.  When the case is restarted, timers will be initialized to their restart state, as long as they are still specified in the input file (that is, a timer is only restarted if it is entered in the input file, otherwise the restart state will be discarded).  To avoid using restarted timer values, simply call the tbox_TimerManager::getManager()->resetAllTimers() function.  
+
+Adding timers to code:  
+
+To allow the TimerManager to track timers of a certain package, or
+class, and subsequently give the option of turning on a set of timers
+via the input file, it is necessary to name the timers in the code
+with the format: package::class:method.  String entries can be lower
+or upper case, it does not matter.  The important thing is that two
+sets of "::" exist in the name to designate its package from class.
+Also, if the class is dimensional (i.e. class[1,2,3]), this should be
+specified in the timer name.  The parser will interpret an input file
+entry of "class::*" to mean either class1, class2 , or class3
+(i.e. all three will be turned on).  An input file entry of
+"class2::*" will be interpreted to only turn on timers in class2.
+Overall, use the following format to insert a timer into the code:
+
+	static tbox_Pointer<tbox_Timer> timer = 
+		TimerManager::getManager()->getTimer("pkg::classX::method"); 
+        timer->start(); 
+        ... 
+        timer->stop(); 
+                                   
+
+-----------------------------------------------------------------------------
+                                   Bug Fixes 
+-----------------------------------------------------------------------------
+
+(1) Fixed debug compiler flags on Blue Pacific to enable TotalView debugging. 
+
+(2) Added -fpermissive flag to gcc compiles to enable compling with
+latest gcc (2.95) on the Suns due to old style X11 header files
+
+(3) Fixed conservative linear refinement operator for edge data type. 
+
+(4) Modified box chopping algorithm in hier_BoxUtilities so that the
+user can exactly specify the size of the chopped boxes (i.e. by
+setting min and max box size to be equal).
+
+(5) Fixed the computation of bad cut points for 1D and at the boundaries of a box in 2/3D.  (hier_BoxUtilities) Fixed Heat Equation sample application so that it correctly runs from restart. 
+
+(6) Fixed minor bug in HDFDatabase which gave an assert error when
+reading/writing empty arrays.
+
+-----------------------------------------------------------------------------
+                                  Known Problems
+-----------------------------------------------------------------------------
+
+(1) When configuring the library build process, the Fortran compiler can be 
+    specified by using the environment variable F77 or the "--with-F77=" 
+    configuration option.  However, if the environment variable is used, 
+    it cannot contain a path due to the way configure is searching for the 
+    executable.  For example,
+
+       setenv F77 f77
+       ./configure
+
+       will work, while
+
+       setenv F77 /usr/local/bin/f77
+       ./configure
+
+       will fail.  
+
+    Until this is fixed, use 
+
+       ./configure --with-F77=/usr/local/bin/f77 
+
+    as a work-around.
+
+(2) When configuring on the local DECs (west, east), the HDF library must be
+    explicitly defined in order to pick up the most recent serial version of 
+    HDF.  The HDF parallel library cannot yet be used for AMR.  i.e.
+    
+       ./configure --with-HDF5=/usr/local/hdf5/hdf5-1.2.0/serial
+
+

@@ -1,0 +1,136 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Load balance correctness test input file.
+ *
+ ************************************************************************/
+
+// Mesh configuration: Single box
+
+// Refer to lss.3d.treelb.input for full description of all input parameters
+// specific to this problem.
+
+Main {
+
+   dim = 3
+
+   base_name = "box.3d.tilelb"
+
+   baseline_dirname = "test_inputs"
+
+   baseline_action = "COMPARE" // "GENERATE" or "COMPARE"
+
+   write_visit = TRUE
+
+   log_all_nodes = TRUE
+
+   domain_boxes = [(0,0,0),(31,31,31)]
+   xlo = 0.0, 0.0, 0.0
+   xhi = 1.0, 1.0, 1.0
+
+   enforce_nesting = TRUE, FALSE, FALSE
+
+   load_balance = TRUE, TRUE, TRUE
+
+   autoscale_base_nprocs = 4
+
+   box_generator_type = "TileClustering"
+
+   load_balancer_type = "TreeLoadBalancer"
+
+   ghost_cell_width = 4, 4, 4
+
+   mesh_generator_name = "ShrunkenLevelGenerator"
+
+   ShrunkenLevelGenerator {
+      domain_scale_method = 'r'
+      shrink_distance_0 = 0.20, 0.20, 0.20
+      shrink_distance_1 = 0.20, 0.20, 0.20
+   }
+
+}
+
+
+TileClustering {
+  tile_size = 4, 4, 4
+  allow_remote_tile_extent = TRUE
+  coalesce_boxes = TRUE
+  DEV_log_cluster_summary = FALSE
+  DEV_log_cluster = FALSE
+  DEV_debug_checks = TRUE
+}
+
+
+BergerRigoutsos {
+  sort_output_nodes = TRUE
+  efficiency_tolerance = 0.85
+  combine_efficiency = 0.85
+  DEV_log_node_history = FALSE
+  DEV_log_cluster_summary = FALSE
+  DEV_log_cluster = FALSE
+}
+
+
+TreeLoadBalancer {
+  tile_size = 8, 8, 8
+  // Debugging options
+  DEV_check_map = TRUE
+  DEV_check_connectivity = FALSE
+  DEV_print_steps = TRUE
+  DEV_print_swap_steps = FALSE
+  DEV_print_break_steps = TRUE
+  DEV_print_edge_steps = FALSE
+  DEV_summarize_map = TRUE
+}
+
+
+
+CenteredRankTree {
+  make_first_rank_the_root = FALSE
+}
+
+BalancedDepthFirstTree {
+  do_left_leaf_switch = TRUE
+}
+
+BreadthFirstRankTree {
+  tree_degree = 2
+}
+
+
+TimerManager {
+//   print_exclusive      = TRUE
+   print_summed           = TRUE
+   print_max              = TRUE
+   print_threshold        = 0.
+   timer_list             = "hier::*::*", "mesh::*::*", "apps::*::*"
+}
+
+
+PatchHierarchy {
+
+   /*
+     Specify number of levels (1, 2 or 3 for this test).
+   */
+   max_levels = 3
+
+   largest_patch_size {
+      level_0 = -1, -1, -1
+   }
+   smallest_patch_size {
+      level_0 = 6, 6, 6
+      level_1 = 6, 6, 6
+      level_2 = 6, 6, 6
+   }
+   ratio_to_coarser {
+      level_1            = 2, 2, 2
+      level_2            = 2, 2, 2
+   }
+
+   allow_patches_smaller_than_ghostwidth = TRUE
+   allow_patches_smaller_than_minimum_size_to_prevent_overlaps = TRUE
+   proper_nesting_buffer = 4, 4, 4
+}

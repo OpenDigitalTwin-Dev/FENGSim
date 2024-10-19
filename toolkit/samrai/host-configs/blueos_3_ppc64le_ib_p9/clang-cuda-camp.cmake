@@ -1,0 +1,12 @@
+set(CMAKE_CXX_COMPILER "/usr/tce/packages/clang/clang-ibm-12.0.1/bin/clang++" CACHE PATH "")
+set(CMAKE_C_COMPILER "/usr/tce/packages/clang/clang-ibm-12.0.1/bin/clang" CACHE PATH "")
+set(CMAKE_BUILD_TYPE "Release" CACHE STRING "")
+set(BLT_CXX_STD "c++14" CACHE STRING "")
+set(ENABLE_TESTS Off CACHE BOOL "")
+set(CUDA_TOOLKIT_ROOT_DIR "/usr/tce/packages/cuda/cuda-10.1.243" CACHE PATH "")
+set(CMAKE_INTERPROCEDURAL_OPTIMIZATION Off CACHE BOOL "")
+set(ENABLE_CUDA On CACHE BOOL "")
+set(CUDA_ARCHITECTURES "70" CACHE STRING "")
+set(CMAKE_CUDA_ARCHITECTURES "70" CACHE STRING "")
+set(BLT_CLANG_CUDA_ARCH "sm_70" CACHE STRING "")
+

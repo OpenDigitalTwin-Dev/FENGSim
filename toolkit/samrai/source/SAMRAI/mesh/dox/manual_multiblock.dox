@@ -1,0 +1,21 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace mesh {
+
+/*!
+  @page package_mesh_multiblock Multiblock Hierarchy Construction and Adaptive Meshing 
+
+  Special classes for constructing and adapting multiblock hierarchyies:
+  - SAMRAI::mesh::MultiblockGriddingTagger
+*/
+
+}
+}

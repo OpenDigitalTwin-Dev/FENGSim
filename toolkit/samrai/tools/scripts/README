@@ -1,0 +1,15 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   Contents of tools/scripts.
+##
+#########################################################################
+insure++.psrc
+
+Config file for Insure++ to unsuppress warnings/errors that should 
+be looked for and suppress specific problems caused by libraries and
+errors in SAMRAI code that are flagged incorrectly.
+

@@ -1,0 +1,105 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   README file for timer tests.
+##
+#########################################################################
+
+This test case tests the functionality of the timer and statistician
+classes in SAMRAI.
+
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make checkcompile
+
+   Execution:
+      serial:
+         ./statstest
+         ./timertest test_inputs/test.input
+      parallel:
+         Parallel execution is platform dependent.  These examples demonstrate
+         execution via mpirun.
+            mpirun -np <nprocs> [mpirun options] ./statstest
+            mpirun -np <nprocs> [mpirun options] ./timertest test_inputs/test.input
+
+      Restarted Run:
+
+         same format as regular run but add <restart dir> <restore num>
+         to end of command.
+            <restart dir> is directory where restart files are stored
+                          (set in input file).
+            <restore num> is the identifier of which restart file to use
+                          (generally the timestep).
+
+         example:  (to start from timestep #0)
+
+           ./timertest test_inputs/test.input restart 0
+           mpirun -np <nprocs> ./timertest [mpirun options] test_inputs/test.input restart 0
+
+         NOTE:  The ordinary use of our restart functionality requires that
+                a problem can only be restarted on on the same number of
+                processors on which the problem was originally run.  To restart
+                on a different number of processors, use the
+                restart-redistribute tool in SAMRAI/tools/restart.
+
+timertest (What it does)
+------------------------
+   This test will measure the time per call to invoke timers in your code.
+   To run, set the following two variables in the input file:
+      ntimes - number of times timer is called
+      exclusive_tree_depth - depth of exclusive timers
+
+   Run #1:                           Run #2:
+      print_exclusive  = FALSE           = TRUE
+      print_concurrent = FALSE           = TRUE
+   Output to log file will show wallclock time for the calls.  Time per call
+   is computed as follows:
+
+   unregistered timer = wall time for apps::main::timer_off/ntimes
+   registered timer =  Run #1: wall time for apps:main:timer_on/ntimes
+   exclusive timer =   Run #2: wall time for apps::main:exclusive_timer/
+                                    (ntimes*exclusive_tree_depth)
+
+   The following are results measured on some systems we support,
+   with ntimes = 1000, exclusive_timer_depth = 5.
+
+   ------------------------------------------------------------------
+   Sun Ultra 10 Workstation 
+   (debug, KCC)
+                             EXCLUSIVE OFF            EXCLUSIVE ON 
+      unregistered timer    4.30e-7 sec/call         3.80e-7 sec/call
+      registered timer      1.09e-5 sec/call         1.58e-5 sec/call
+      exclusive timer       1.10e-5 sec/call         3.54e-5 sec/call
+
+   ------------------------------------------------------------------
+   DEC Alpha (Compass cluster)
+   (optimized, KCC)
+                             EXCLUSIVE OFF            EXCLUSIVE ON 
+      unregistered timer    0       sec/call         0       sec/call
+      registered timer      2.34e-5 sec/call         4.10e-5 sec/call
+      exclusive timer       2.38e-5 sec/call         7.01e-5 sec/call
+
+   ------------------------------------------------------------------
+   IBM SP (ASCI Blue Pacific)
+   (optimized, mpKCC)
+                             EXCLUSIVE OFF            EXCLUSIVE ON 
+      unregistered timer    5.00e-7 sec/call         3.70e-7 sec/call
+      registered timer      1.40e-5 sec/call         3.90e-5 sec/call
+      exclusive timer       4.00e-5 sec/call         4.02e-5 sec/call
+
+statstest (What it does)
+------------------------
+   Mimics an actual time dependent integration loop by building a  
+   statistician object that records current simulation time and some
+   dummy integer value (e.g. could be gridpoints).  Outputs this to
+   log file at the end.                        
+ 
+
+INPUTS:
+------------
+
+See test_inputs/test.input for documentation of input options for timertest.

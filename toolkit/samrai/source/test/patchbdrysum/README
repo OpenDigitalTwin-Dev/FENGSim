@@ -1,0 +1,68 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   README file for patch boundary sum tests.
+##
+#########################################################################
+
+The HierSumTest tests patch boundary node sum operations performed in the
+PatchBoundaryNodeSum and PatchBoundaryEdgeSum class.
+
+The test works as follows:
+
+  1) Initially, set all CELL values to 1.0, except on coarser
+     regions that are covered by finer regions where the cell
+     values are set to 0.0.
+
+  2) Set node values equal to the sum of the cell values it aligns
+     At this point, nodes on patch interiors will equal 2^NDIM because
+     thats how many cells border each node.  Nodes on patch boundaries
+     be less than this because they are not getting all cell contributions.
+
+  3) Do the nodal sum operation
+
+  4) Check that all node values that do not have a finer level overlaying
+     them are equal to 2^NDIM.  Those that do have a finer level overlapping
+     will be 0.0 on the interior of the patch.  So the final value should
+     be either 2^NDIM or 0.0 - there should be no cases where the node
+     will have an alternative value.
+
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make main
+
+   Execution:
+      For one of the following input files:
+         test_inputs/1lev_edge.2d.input
+         test_inputs/1lev_edge.3d.input
+         test_inputs/2lev_edge.3d.input
+         test_inputs/2lev_node.3d.input
+         test_inputs/2lev_node_aligned_bdry.2d.input
+         test_inputs/2lev_node_aligned_bdry.3d.input
+         test_inputs/2lev_node_edge.2d.input
+         test_inputs/2lev_node_edge_perx.2d.input
+         test_inputs/2lev_node_edge_perx.3d.input
+         test_inputs/2lev_node_edge_perxy.2d.input
+         test_inputs/2lev_node_edge_perxy.3d.input
+         test_inputs/2lev_node_edge_perxyz.3d.input
+         test_inputs/2lev_node_edge_perxz.3d.input
+         test_inputs/2lev_node_edge_pery.2d.input
+         test_inputs/2lev_node_edge_pery.3d.input
+         test_inputs/2lev_node_edge_peryz.3d.input
+         test_inputs/2lev_node_edge_perz.3d.input
+      serial:
+         ./main <input file>
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main <input file>
+
+INPUT
+-----
+
+See test_inputs/2lev_node.3d.input for descriptions of the input options
+specific to this test.

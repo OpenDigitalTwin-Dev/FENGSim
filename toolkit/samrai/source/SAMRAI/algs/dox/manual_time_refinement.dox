@@ -1,0 +1,50 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace algs {
+
+/*!
+  @page package_algorithm_time_refinement Time Integration with Local Time Refinement
+
+  These classes provide algorithm support for problems that utilize local
+  time-refinement during time integration on an AMR hierarchy.  The 
+  integration algorithm uses smaller time increments to advance the
+  data on finer AMR patch hierarchy levels than those timesteps used
+  on coarser levels.  In doing so, the time stepping sequences on different
+  levels are interleaved.  The time-refinement integration class orchestrates 
+  hierarchy construction, data advancement and synchronization, and dynamic 
+  grid refinement processes for such problems.  
+
+  The basic AMR algorithm is attributed to Berger, Oliger, and Colella 
+  (see e.g., J. Comp. Phys. (82)1:64-84, 1989) and was motivated by the 
+  application of explicit time-integration methods to shock hydrodynamics 
+  problems on a structured AMR hierarchy.  The algorithm requires that 
+  integration steps on different levels are interleaved since the time 
+  increment used on each level is determined by the spatial resolution 
+  of the mesh on that level (e.g., CFL condition).  Generally, coarser 
+  levels use larger time increments than finer levels.  Thus, data must 
+  be synchronized between levels and the dynamic regridding process must 
+  be coordinated with the time stepping sequence.
+
+  We have made some enhancements to the original algorithm to make it more
+  general and we have implemented it in such a way that it may be applied to 
+  a broader class of problems.  The time refinement integration class is 
+  coupled to procedures for integrating the data and regridding hierarchy 
+  levels that may be application-specific using the Strategy object-oriented 
+  design pattern.  Regridding routines are provided by the gridding algorithm 
+  class provided elsewhere in the <EM>algorithms</EM> package.  An interface to 
+  specific solution methods for manipulating patch data is provided in the 
+  time refinement level strategy class.
+  - SAMRAI::algs::TimeRefinementIntegrator
+  - SAMRAI::algs::TimeRefinementLevelStrategy
+*/
+
+}
+}

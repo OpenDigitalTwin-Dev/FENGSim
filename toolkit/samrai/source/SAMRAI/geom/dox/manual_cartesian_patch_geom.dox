@@ -1,0 +1,22 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace geom {
+
+/*!
+  @page package_geometry_cartesian_patch_geom Cartesian Patch Geometry
+
+  The Cartesian patch geometry class provides a description of Cartesian
+  mesh defined over a single patch.
+  - SAMRAI::geom::CartesianPatchGeometry
+*/
+
+}
+}

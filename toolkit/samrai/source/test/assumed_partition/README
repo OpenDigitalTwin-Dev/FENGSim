@@ -1,0 +1,25 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright
+## information, see COPYRIGHT and LICENSE.
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   Unit test of SAMRAI tranformation class.
+##
+#########################################################################
+
+This is a unit test of SAMRAI's AssumedPartition classes.
+
+
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make checkcompile
+
+   Execution:
+      serial:
+         ./main <input file>
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main <input file>

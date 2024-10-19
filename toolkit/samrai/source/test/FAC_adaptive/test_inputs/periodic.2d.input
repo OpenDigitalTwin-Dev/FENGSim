@@ -1,0 +1,116 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for FAC solver tests.
+ *
+ ************************************************************************/
+
+// Refer to allneumann2d.input for full description of all input parameters
+// specific to this problem.
+
+Main {
+  dim = 2
+  base_name = "periodic2d"
+  do_plot = TRUE
+  max_adaptions = 3
+  target_l2norm = 2.2e-4
+}
+
+fac_precond {
+  max_cycles = 15
+  residual_tol = 3e-10
+  num_pre_sweeps = 1
+  num_post_sweeps = 3
+}
+
+fac_ops {
+  coarse_solver_tolerance = 1e-8
+  coarse_solver_max_iterations = 10
+  prolongation_method = "LINEAR_REFINE"
+}
+
+hypre_solver {
+  use_smg = FALSE
+}
+
+AdaptivePoisson {
+  fac_algo = "default"
+  problem_name = "sine"
+  adaption_threshold = 7.0e-3
+  sine_solution {
+    SinusoidFcnControl = "{ nx=2.0 px=0.40 ny=2.0 py=0.30 }"
+    linear_coef = -1.0e+00
+  }
+}
+
+
+CartesianGridGeometry {
+  domain_boxes = [(0,0), (7,7)]
+  x_lo         = 0, 0
+  x_up         = 1, 1
+  periodic_dimension = 1, 1
+}
+
+StandardTagAndInitialize {
+  tagging_method = "GRADIENT_DETECTOR"
+}
+
+BergerRigoutsos {
+  efficiency_tolerance = 0.80
+  combine_efficiency = 0.80
+  DEV_log_node_history = TRUE
+  DEV_log_cluster_summary = TRUE
+  DEV_log_cluster = TRUE
+  DEV_max_inflection_cut_from_center = 0.1
+}
+
+TreeLoadBalancer{
+}
+
+PatchHierarchy {
+   max_levels = 5
+   proper_nesting_buffer = 2, 2, 2, 2, 2, 2
+   largest_patch_size {
+      // level_0 = 8, 8
+      level_0 = -1, -1
+      // all finer levels will use same values as level_0...
+   }
+   smallest_patch_size {
+      level_0 = 4,4
+      // all finer levels will use same values as level_0...
+   }
+   ratio_to_coarser {
+      level_1            = 3, 3
+      level_2            = 3, 3
+      level_3            = 3, 3
+      level_4            = 3, 3
+      level_5            = 3, 3
+      level_6            = 3, 3
+      level_7            = 3, 3
+      //  etc.
+   }
+   allow_patches_smaller_than_ghostwidth = TRUE
+}
+
+GriddingAlgorithm {
+   enforce_proper_nesting = TRUE
+   DEV_extend_to_domain_boundary = FALSE
+   // DEV_load_balance = FALSE
+   check_nonrefined_tags = "ERROR"
+   check_overlapping_patches = "ERROR"
+   sequentialize_patch_indices = TRUE
+
+   check_overflow_nesting = FALSE
+   check_proper_nesting = FALSE
+   DEV_check_connectors = FALSE
+   DEV_print_steps = FALSE
+}
+
+
+TimerManager{
+  timer_list = "solv::FACPreconditioner::*", "solv::ScalarPoissonFacOps::*", "solv::CartesianRobinBcHelper::*"
+  print_user = TRUE
+}

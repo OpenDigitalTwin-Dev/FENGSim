@@ -1,0 +1,207 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Code and input for benchmarking and experimentation with tree-based communication.
+ *
+ ************************************************************************/
+
+/*
+ * Test tlbdown tries to simulate the down-communication part of
+ * the TreeLoadBalancer.  It uses a broadcast operation.
+ *
+ * Compare CenteredRankTree and BalancedDepthFirstTree.
+ */
+
+Main {
+
+  // Base name for output files.
+  base_name = "tlbdown"
+
+  // Whether to log all nodes.
+  log_all_nodes = FALSE
+
+}
+
+
+
+
+/*
+ * Define tests using databases named Test##,
+ * where ## is a 2-digit integer, sequentially from 0
+ */
+
+
+Test00 {
+  nickname = "Centered-10" // CenteredRankTree, 10 items.
+  tree_name = "CenteredRankTree"
+  CenteredRankTree { // Parameters for tree of same name in getTreeForTesting()
+    make_first_rank_the_root = FALSE
+  }
+  msg_length = 10 // Message length (units of integer)
+  first_data_length = 1 // See AsyncCommPeer::limitFirstDataLength().
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 4000, 0 // Simulated processing cost is [0] usec per message and [1] usec per item in message.
+  repetition = 10 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = TRUE // Whether to barrier after each rep.
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+  message_pattern = "DOWN"
+}
+Test01 {
+  nickname = "DepthFirst-10" // BalancedDepthFirstTree, 10 items.
+  tree_name = "BalancedDepthFirstTree"
+  BalancedDepthFirstTree { // Parameters for tree of same name in getTreeForTesting()
+    do_left_leaf_switch = TRUE
+  }
+  msg_length = 10 // Message length (units of integer)
+  first_data_length = 1 // See AsyncCommPeer::limitFirstDataLength().
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 4000, 0 // Simulated processing cost is [0] usec per message and [1] usec per item in message.
+  repetition = 10 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = TRUE // Whether to barrier after each rep.
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+  message_pattern = "DOWN"
+}
+
+
+Test02 {
+  nickname = "Centered-100" // CenteredRankTree, 100 items.
+  tree_name = "CenteredRankTree"
+  CenteredRankTree { // Parameters for tree of same name in getTreeForTesting()
+    make_first_rank_the_root = FALSE
+  }
+  msg_length = 100 // Message length (units of integer)
+  first_data_length = 1 // See AsyncCommPeer::limitFirstDataLength().
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 4000, 0 // Simulated processing cost is [0] usec per message and [1] usec per item in message.
+  repetition = 10 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = TRUE // Whether to barrier after each rep.
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+  message_pattern = "DOWN"
+}
+Test03 {
+  nickname = "DepthFirst-100" // BalancedDepthFirstTree, 100 items.
+  tree_name = "BalancedDepthFirstTree"
+  BalancedDepthFirstTree { // Parameters for tree of same name in getTreeForTesting()
+    do_left_leaf_switch = TRUE
+  }
+  msg_length = 100 // Message length (units of integer)
+  first_data_length = 1 // See AsyncCommPeer::limitFirstDataLength().
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 4000, 0 // Simulated processing cost is [0] usec per message and [1] usec per item in message.
+  repetition = 10 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = TRUE // Whether to barrier after each rep.
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+  message_pattern = "DOWN"
+}
+
+
+Test04 {
+  nickname = "Centered-1000" // CenteredRankTree, 1000 items.
+  tree_name = "CenteredRankTree"
+  CenteredRankTree { // Parameters for tree of same name in getTreeForTesting()
+    make_first_rank_the_root = FALSE
+  }
+  msg_length = 1000 // Message length (units of integer)
+  first_data_length = 1 // See AsyncCommPeer::limitFirstDataLength().
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 4000, 0 // Simulated processing cost is [0] usec per message and [1] usec per item in message.
+  repetition = 10 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = TRUE // Whether to barrier after each rep.
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+  message_pattern = "DOWN"
+}
+Test05 {
+  nickname = "DepthFirst-1000" // BalancedDepthFirstTree, 1000 items.
+  tree_name = "BalancedDepthFirstTree"
+  BalancedDepthFirstTree { // Parameters for tree of same name in getTreeForTesting()
+    do_left_leaf_switch = TRUE
+  }
+  msg_length = 1000 // Message length (units of integer)
+  first_data_length = 1 // See AsyncCommPeer::limitFirstDataLength().
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 4000, 0 // Simulated processing cost is [0] usec per message and [1] usec per item in message.
+  repetition = 10 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = TRUE // Whether to barrier after each rep.
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+  message_pattern = "DOWN"
+}
+
+
+Test06 {
+  nickname = "Centered-10000" // CenteredRankTree, 10000 items.
+  tree_name = "CenteredRankTree"
+  CenteredRankTree { // Parameters for tree of same name in getTreeForTesting()
+    make_first_rank_the_root = FALSE
+  }
+  msg_length = 10000 // Message length (units of integer)
+  first_data_length = 1 // See AsyncCommPeer::limitFirstDataLength().
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 4000, 0 // Simulated processing cost is [0] usec per message and [1] usec per item in message.
+  repetition = 10 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = TRUE // Whether to barrier after each rep.
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+  message_pattern = "DOWN"
+}
+Test07 {
+  nickname = "DepthFirst-10000" // BalancedDepthFirstTree, 10000 items.
+  tree_name = "BalancedDepthFirstTree"
+  BalancedDepthFirstTree { // Parameters for tree of same name in getTreeForTesting()
+    do_left_leaf_switch = TRUE
+  }
+  msg_length = 10000 // Message length (units of integer)
+  first_data_length = 1 // See AsyncCommPeer::limitFirstDataLength().
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 4000, 0 // Simulated processing cost is [0] usec per message and [1] usec per item in message.
+  repetition = 10 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = TRUE // Whether to barrier after each rep.
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+  message_pattern = "DOWN"
+}
+
+
+Test08 {
+  nickname = "Centered-100000" // CenteredRankTree, 100000 items.
+  tree_name = "CenteredRankTree"
+  CenteredRankTree { // Parameters for tree of same name in getTreeForTesting()
+    make_first_rank_the_root = FALSE
+  }
+  msg_length = 100000 // Message length (units of integer)
+  first_data_length = 1 // See AsyncCommPeer::limitFirstDataLength().
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 4000, 0 // Simulated processing cost is [0] usec per message and [1] usec per item in message.
+  repetition = 10 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = TRUE // Whether to barrier after each rep.
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+  message_pattern = "DOWN"
+}
+Test09 {
+  nickname = "DepthFirst-100000" // BalancedDepthFirstTree, 100000 items.
+  tree_name = "BalancedDepthFirstTree"
+  BalancedDepthFirstTree { // Parameters for tree of same name in getTreeForTesting()
+    do_left_leaf_switch = TRUE
+  }
+  msg_length = 100000 // Message length (units of integer)
+  first_data_length = 1 // See AsyncCommPeer::limitFirstDataLength().
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 4000, 0 // Simulated processing cost is [0] usec per message and [1] usec per item in message.
+  repetition = 10 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = TRUE // Whether to barrier after each rep.
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+  message_pattern = "DOWN"
+}
+
+
+
+
+
+// Refer to tbox::TimerManager for input.
+TimerManager {
+//   print_exclusive      = TRUE
+   print_summed           = TRUE
+   print_max              = TRUE
+   print_threshold        = 0.
+   timer_list             = "tbox::*::*", "apps::*::*"
+}

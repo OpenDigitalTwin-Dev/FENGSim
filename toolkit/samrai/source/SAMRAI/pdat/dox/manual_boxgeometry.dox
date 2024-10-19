@@ -1,0 +1,37 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace pdat {
+
+/*!
+  @page package_patchdata_boxgeometry Box Geometry Computation
+
+  These classes compute the intersections for various box geometries types,
+  such as cell, face, node, and outerface.  The results of these intersections
+  are used by the communication routines in the generation of communication
+  schedules.
+  - SAMRAI::pdat::CellGeometry
+  - SAMRAI::pdat::CellOverlap
+  - SAMRAI::pdat::EdgeGeometry
+  - SAMRAI::pdat::EdgeOverlap
+  - SAMRAI::pdat::FaceGeometry
+  - SAMRAI::pdat::FaceOverlap
+  - SAMRAI::pdat::NodeGeometry
+  - SAMRAI::pdat::NodeOverlap
+  - SAMRAI::pdat::OuteredgeGeometry
+  - SAMRAI::pdat::OuterfaceGeometry
+  - SAMRAI::pdat::OuternodeGeometry
+  - SAMRAI::pdat::OutersideGeometry
+  - SAMRAI::pdat::SideGeometry
+  - SAMRAI::pdat::SideOverlap
+*/
+
+}
+}

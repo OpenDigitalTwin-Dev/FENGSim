@@ -1,0 +1,36 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   Test of configurations of SAMRAI_MPI class
+##
+#########################################################################
+
+This directory tests the configuration options for SAMRAI_MPI, which wraps
+the interface to MPI.  The following files are contained in this directory.
+
+   main-runtime-disabled.cpp   - tests with MPI linked but not used
+   main-runtime-on.cpp         - tests with MPI linked and used 
+   main-runtime-off.cpp        - tests with MPI not linked and not used
+   mpi-interface-tests.cpp     - code that makes SAMRAI_MPI calls
+ 
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make main-runtime-disabled
+      make main-runtime-on
+      make main-runtime-off
+
+   Execution:
+      serial:
+         ./main-runtime-disabled
+         ./main-runtime-on
+         ./main-runtime-off
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main-runtime-disabled
+         mpirun -np <nprocs> [mpirun options] ./main-runtime-on
+         mpirun -np <nprocs> [mpirun options] ./main-runtime-off

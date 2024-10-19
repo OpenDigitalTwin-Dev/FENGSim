@@ -1,0 +1,26 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace pdat {
+
+/*!
+  @page package_patchdata_array Array-based Patch Data Support
+
+  All array-based patch data types are implemented using a single array 
+  data class.
+  - SAMRAI::pdat::ArrayData
+  - SAMRAI::pdat::ArrayDataIterator
+  - SAMRAI::pdat::ArrayDataOperationUtilities
+  - SAMRAI::pdat::CopyOperation
+  - SAMRAI::pdat::SumOperation
+*/
+
+}
+}

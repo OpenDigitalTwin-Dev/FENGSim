@@ -1,0 +1,36 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   README file for variables tests.
+##
+#########################################################################
+
+This program tests the methods provided by the VariableDatabase class.
+In particular, several Variables are created and registered with the 
+VariableDatabase.  Then access of Variable, Context, and Descriptor indices
+are tested using the getVariable(), getContext(), and 
+mapVariableAndContextToIndex() methods.  There are also a section of 
+code near the end of main-var_db.cpp that are errors in the usage of 
+the VariableDatabase.  These are removed by the preprocessor in the
+distribution version of the code.
+
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make main
+
+   Execution:
+      serial:
+         ./main
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main
+
+OUTPUT
+------
+   vdbtest.log.*
+

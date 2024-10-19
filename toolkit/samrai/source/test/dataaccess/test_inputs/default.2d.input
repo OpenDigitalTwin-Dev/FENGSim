@@ -1,0 +1,14 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for 2D PatchData access unit tests.
+ *
+ ************************************************************************/
+
+Main {
+   // Dimension of this problem.
+   dim = 2
+}

@@ -1,0 +1,122 @@
+*****************************************************************************
+  Copyright 1997-2024
+  Lawrence Livermore National Security, LLC.
+  All rights reserved.
+*****************************************************************************
+
+                     Release Notes for SAMRAI v3.14.1
+
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+
+Version 3.14.1 is a bug-fix patch release.  This file preserves the content
+from the release notes for version 3.14.0, with notes specific to 3.14.1
+added and marked in the "Significant bug fixes" section.  Version 3.14.1
+does not change any of the C++ API. 
+
+*****************************************************************************
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report
+it to us so that we may fix it.
+
+Please send email to samrai-bugs@llnl.gov or post an issue on github.
+https://github.com/LLNL/SAMRAI
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Significant bug fixes
+----------------------------------------------------------------------------
+
+1) (v3.14.1) The CMake build system is fixed so that the -DCONDUIT_DIR flag
+works correctly.  -DCONDUIT_DIR=[path] is now sufficient to enable building
+with Conduit, assuming that [path] is the location of a valid Conduit
+installation.
+
+2) (v3.14.1) Internal fixes have been implemented to avoid a duplicate
+definition of a #define macro that was defined by SAMRAI's build system but
+also is common in users' application codes.
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Summary of what's new
+-----------------------------------------------------------------------------
+
+1) A new CMake-based build system has been added.  The previous autoconf-based
+system still works as well.
+
+2) tbox::ConduitDatabase is a new concrete implementation of
+tbox::Database that uses the Conduit library (https://github.com/LLNL/conduit)
+to store its data.  Conduit is a new optional dependency for SAMRAI.
+
+3) A new method createBlueprintDatabase in PatchHierarchy provides a way to
+create a code-portable description of a SAMRAI hierarchy using the Conduit
+Blueprint protocols.
+
+
+-----------------------------------------------------------------------------
+                Summary of what's changed
+-----------------------------------------------------------------------------
+
+1) Classes that use PETSc and Sundials have been updated to work with
+newer versions of these libraries.
+
+2) Support for PT-Scotch as a third-party library has been removed, and
+the GraphLoadBalancer class that relied on this library has been removed.
+
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                Details about what's new
+-----------------------------------------------------------------------------
+
+1) A new CMake-based build system has been added.  The previous autoconf-based
+system still works as well.  We intend to transition fully to the CMake system
+in future releases.
+
+The new system uses CMake (https://cmake.org) supplemented with the BLT macro
+library (https://github.com/LLNL/blt).  See INSTALL-NOTES-CMAKE for more
+information.
+
+2) tbox::ConduitDatabase is a new concrete implementation of
+tbox::Database that uses the Conduit library (https://github.com/LLNL/conduit)
+to store its data.  Conduit is a new optional dependency for SAMRAI.
+
+When SAMRAI is built with Conduit, tbox::Database also has a method to write
+out its data into an instance of Conduit's native data structure,
+conduit::Node.
+
+3) A new method createBlueprintDatabase in PatchHierarchy provides a way to
+create a code-portable description of a SAMRAI hierarchy using the Conduit
+Blueprint protocols.
+
+createBlueprintDatabase creates as much of the Blueprint as possible from
+evaluating the PatchHierarchy, and then uses classes BlueprintUtils and
+BlueprintUtilsStrategy to bring in application-specific information.  See
+the Doxygen documenation for more information.
+
+-----------------------------------------------------------------------------
+                Details about what's changed
+----------------------------------------------------------------------------
+
+1) Classes that use PETSc and Sundials have been updated to work with
+newer versions of these libraries.  SAMRAI is now compatible with PETSc
+version 3.10.5 and Sundials version 4.1.0.
+
+2) Support for PT-Scotch as a third-party library has been removed, and
+the GraphLoadBalancer class that relied on this library has been removed.
+This was never more than an experimental feature, and we decided not to
+continue support.
+
+
+=============================================================================
+=============================================================================

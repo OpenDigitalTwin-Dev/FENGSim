@@ -1,0 +1,87 @@
+*****************************************************************************
+  Copyright 1997-2024
+  Lawrence Livermore National Security, LLC.
+  All rights reserved.
+*****************************************************************************
+
+                     Release Notes for SAMRAI v3.12.0
+
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+
+*****************************************************************************
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report
+it to us so that we may fix it.
+
+Please send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Significant bug fixes
+----------------------------------------------------------------------------
+
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Summary of what's new
+-----------------------------------------------------------------------------
+
+1) SAMRAI now uses C++ 11 standard features and must be compiled with
+C++ 11-compliant compilers and flags.
+
+
+-----------------------------------------------------------------------------
+                Summary of what's changed
+-----------------------------------------------------------------------------
+
+1) All usage of the Boost library has been removed.
+
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                Details about what's new
+-----------------------------------------------------------------------------
+
+1) SAMRAI now uses C++ 11 standard features and must be compiled with
+C++ 11-compliant compilers and compiler flags.  For any compiler that
+requires a flag such as "-std=c++11", the flag should be set in the configure
+line.  This can be done by adding it in quotes to the --with-CXX configure
+flag as if it were part of the compiler's name, such as
+
+% configure --with-CXX="g++ -std=c++11"
+
+Alternatively -std=c++11 could be added to the C++ flags using the
+--with-extra-cxx-flags configure flag.
+
+
+
+-----------------------------------------------------------------------------
+                Details about what's changed
+----------------------------------------------------------------------------
+
+1) All usage of the Boost library has been removed.  The main API change
+is that all instances of boost::shared_ptr have been replaced with
+std::shared_ptr.  This is exposed in the arguments of many methods throughout
+the library, so applications will need to make corresponding changes in
+their codes.  For the most part, this requires only a textual change of
+the prefix "boost::" to "std::".  When configuring, the --with-boost flag
+should no longer be used.
+
+Additionally, if any application codes used the macro BOOST_CAST from
+tbox/Utilities.h, this should be replaced with SAMRAI_SHARED_PTR_CAST. 
+The macro expands to a dynamic cast when compiling with debugging flags and
+to a static cast when compiling with optimization flags.
+
+=============================================================================
+=============================================================================

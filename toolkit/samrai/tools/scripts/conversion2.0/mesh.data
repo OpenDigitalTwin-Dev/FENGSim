@@ -1,0 +1,27 @@
+##
+## File:        $URL$
+## Package:     SAMRAI build scripts
+## Copyright:   (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Revision:    $LastChangedRevision$
+## Description: data file for sed substitutions to generate dim-dep. files
+##
+
+#
+# mesh generation package
+#
+
+mesh_BalanceUtilities
+mesh_BergerRigoutsos
+mesh_BoxGeneratorStrategy
+mesh_GriddingAlgorithm
+mesh_HistogramBox
+mesh_LoadBalancer
+mesh_LoadBalanceStrategy
+mesh_StandardTagAndInitialize
+mesh_StandardTagAndInitStrategy
+mesh_TagAndInitializeStrategy
+
+# mesh generation package timers
+
+mesh::GriddingAlgorithm
+

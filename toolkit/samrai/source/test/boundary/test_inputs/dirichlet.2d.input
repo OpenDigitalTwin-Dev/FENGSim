@@ -1,0 +1,112 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   input file for testing 2d dirichlet boundary conditions 
+ *
+ ************************************************************************/
+
+GlobalInputs {
+   // If FALSE, when an error is encountered in serial exit(-1) will be called
+   // instead of SAMRAI_MPI::abort().
+   call_abort_in_serial_instead_of_exit = FALSE
+}
+
+Main {
+    // Dimention of problem.
+    dim = 2
+
+    // Name of log file.
+    log_file_name    = "basic2d-dirichlet.log"
+
+    // Number of boxes in each direction domain should be chopped into.
+    num_domain_boxes = 2 , 1
+}
+
+BoundaryDataTester {
+
+   //
+   // Variable information is read in by the BoundaryDataTester object
+   // Each variable has its own sub-database which must contain the proper
+   // variable information.  The name of each sub-database for a variable 
+   // is arbitrary.  But the names must be distinct.  Also the names of the
+   // individual variables must be distinct.
+   //
+   //    Required input:  name
+   //                     interior_values    (# of values must = depth)
+   //    Optional input:  depth              (default = 1)
+   //                     num_ghosts         (default = 1,1)
+   //
+
+   variable_1 {
+      name            = "var1"
+      depth           = 1
+      num_ghosts      = 2 , 2
+      interior_values = 1.0
+   }
+
+   variable_2 {
+      name            = "var2"
+      depth           = 2
+      num_ghosts      = 1 , 1
+      interior_values = 2.0 , 3.0
+   }
+
+   //
+   // Boundary condition information is read in by the BoundaryDataTester
+   // object.  Each boundary condition in the Boundary_data database must
+   // follow the input format defined by appu::CartesianBoundaryUtilities[2,3]
+   // depending on the problem dimension.  Refer to these classes for details.
+   //
+   Boundary_data {
+      boundary_edge_xlo {
+         boundary_condition      = "DIRICHLET"
+         var1                    = 0.0
+         var2                    = 1.0 , 2.0
+      }
+      boundary_edge_xhi {
+         boundary_condition      = "DIRICHLET"
+         var1                    = 0.0
+         var2                    = 1.0 , 2.0
+      }
+      boundary_edge_ylo {
+         boundary_condition      = "DIRICHLET"
+         var1                    = 3.0
+         var2                    = 4.0 , 5.0
+      }
+      boundary_edge_yhi {
+         boundary_condition      = "DIRICHLET"
+         var1                    = 3.0
+         var2                    = 4.0 , 5.0
+      }
+
+      boundary_node_xlo_ylo {
+         boundary_condition      = "XDIRICHLET"
+//       boundary_condition      = "YDIRICHLET"
+      }
+      boundary_node_xhi_ylo {
+         boundary_condition      = "XDIRICHLET"
+//       boundary_condition      = "YDIRICHLET"
+      }
+      boundary_node_xlo_yhi {
+//       boundary_condition      = "XDIRICHLET"
+         boundary_condition      = "YDIRICHLET"
+      }
+      boundary_node_xhi_yhi {
+//       boundary_condition      = "XDIRICHLET"
+         boundary_condition      = "YDIRICHLET"
+      }
+
+   }
+
+}
+
+// Refer to geom::CartesianGeometry and its base clases for input
+CartesianGridGeometry {
+   domain_boxes = [ (0,0) , (7,3) ]
+   x_lo         = 0.e0 , 0.e0   // lower end of computational domain.
+   x_up         = 1.e0 , 0.5e0   // upper end of computational domain.
+   periodic_dimension = 0, 0
+}

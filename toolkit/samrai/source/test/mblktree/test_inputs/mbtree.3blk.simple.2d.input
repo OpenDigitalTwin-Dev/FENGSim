@@ -1,0 +1,80 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   input file for testing multiblock tree searches.
+ *
+ ************************************************************************/
+
+Main {
+
+   // Dimension of problem.  No default.
+   dim = 2
+
+   // Base name of log files.  Default is "unnamed".
+   base_name  = "mbtree.3blk.simple.2d"
+
+   // If true all nodes will log to individual files
+   // If false only node 0 will log
+   // Default is FALSE.
+   log_all_nodes  = TRUE
+
+   // Set generate_baseline to TRUE in order to regenerate the baseline
+   // files.  Default is FALSE
+   // generate_baseline = TRUE
+
+   // Directory where baselines exist.  No default. 
+   baseline_dirname = "test_inputs"
+
+   // Set the maximum box size for the boxes that will go into the tree.
+   // If any of the domain boxes specified in the GridGeometry are larger
+   // than this size, they will be split into boxes below this size.
+   // A large value of max_box_size will mean no boxes will be split.
+   // Default is INT_MAX.
+   max_box_size = 10000,10000
+
+   // Connector width of the Connector that will use the tree to do an
+   // overlap search.  Default is 1,1.
+   connector_width = 1,1
+
+   // Refer to hier::BaseGridGeometry and geom::GridGeometry for input
+   GridGeometry {
+      num_blocks = 3
+      domain_boxes_0 = [ (0,0) , (20,13) ]
+      domain_boxes_1 = [ (0,0) , (25,13) ]
+      domain_boxes_2 = [ (0,0) , (20,25) ]
+
+      BlockNeighbors0 {
+         block_a = 0
+         block_b = 1
+
+         rotation_b_to_a = "I_UP", "J_UP"
+         point_in_a_space = 21,0
+         point_in_b_space = 0,0
+      }
+
+      BlockNeighbors1 {
+         block_a = 0
+         block_b = 2
+
+         rotation_b_to_a = "I_UP", "J_UP"
+         point_in_a_space = 0,14
+         point_in_b_space = 0,0
+
+      }
+
+      BlockNeighbors2 {
+         block_a = 1
+         block_b = 2
+
+         rotation_b_to_a = "J_UP", "I_DOWN"
+         point_in_a_space = 0,14
+         point_in_b_space = 20,0
+
+      }
+
+   }
+
+}

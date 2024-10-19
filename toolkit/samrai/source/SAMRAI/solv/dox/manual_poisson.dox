@@ -1,0 +1,37 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace solv {
+
+/*!
+  @page package_solvers_poisson Poisson solvers on a SAMRAI hierarchy
+
+  SAMRAI provides a single-level and a hierarchy solver for the
+  cell-centered Poisson equations.  The single-level solver uses
+  the HYPRE library.  The the hierarchy solver uses an FAC formulation,
+  possibly using the single-level solver on the coarsest level.
+  A Robin boundary condition interface is defined to coordinate
+  between the solvers the boundary conditions for a scalar quantity.
+  Several library-provided implementations of this interface are
+  available, and user-defined implementations are supported.
+  
+  - SAMRAI::solv::CellPoissonHypreSolver
+  - SAMRAI::solv::CellPoissonFACOps
+  - SAMRAI::solv::CellPoissonFACSolver
+  - SAMRAI::solv::RobinBcCoefStrategy
+  - SAMRAI::solv::LocationIndexRobinBcCoefs
+  - SAMRAI::solv::GhostCellRobinBcCoefs
+  - SAMRAI::solv::SimpleCellRobinBcCoefs
+  - SAMRAI::solv::CartesianRobinBcHelper
+  - SAMRAI::solv::PoissonSpecifications
+*/
+
+}
+}

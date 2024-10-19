@@ -1,0 +1,43 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   Unit test of SAMRAI::hier::PatchHierarchy::make(Coarsened,
+##                Refined)PatchHierarchy
+##
+#########################################################################
+
+This is a unit test of 2 methods in SAMRAI::hier::PatchHierarchy,
+makeCoarsenedPatchHierarchy and makeRefinedPatchHierarchy. The files included
+in this directory are as follows:
+ 
+   main.cpp                -  driver
+   HierarchyTester.[Ch]  -  unit tester
+   test_inputs/*.input   -  2d and 3d input files
+
+ 
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make main
+
+   Execution:
+      For one of the following input files:
+         test_inputs/hierarchy_coarsen.2d.input
+         test_inputs/hierarchy_coarsen.3d.input
+         test_inputs/hierarchy_refine.2d.input
+         test_inputs/hierarchy_refine.3d.input
+      serial:
+         ./main <input_file>
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main <input_file>
+
+
+INPUT PARAMETERS
+----------------
+Refer to test_inputs/hierarchy_coarsen.2d.input for a full description of all
+input parameters specific to this problem.

@@ -1,0 +1,87 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Performance input file for TreeLoadBalancer 
+ *
+ ************************************************************************/
+
+// Refer to rect.2d.treelb.input for full description of all input parameters
+// specific to this problem.
+
+Main {
+   // Dimension of problem.
+   dim = 2
+
+   // Base name of log file.
+   base_name = "small_sphere.2d.treelb"
+
+   // If true all processes generate log files.  Otherwise only process 0 does.
+   log_all_nodes = FALSE
+
+   // Load balancer choice.  One of TreeLoadBalancer, ChopAndPackLoadBalancer.
+   load_balancer_type = "TreeLoadBalancer"
+
+   // Specify domain as a box array in the reference index space.
+   domain_boxes = [(0,0),(49,49)]
+
+   // Specify anchor layer as a box array in the reference index space.
+   // The anchor layer will be partitioned but its partitioning is not
+   // used in the performance test.
+   anchor_boxes = [(0,0),(49,49)]
+
+   // Specify ghost-cell-width between anchor and unbalanced.
+   ghost_cell_width = 4, 4
+
+   // Specify the min patch size.
+   min_size = 4, 4
+
+   // Box generation method.  One of PrebalanceByUserBoxes,
+   // PrebalanceByUserShells.
+   box_gen_method = "PrebalanceByUserShells"
+
+   PrebalanceByUserShells {
+      // Specify unbalanced layer by tagging a set of concentric shells.
+      // Starting at r0, tag cells with centroids at radii[n] < r < radii[n+1].
+      r0 = 0, 0 // 0.5, 0.5
+      radii = 0.0, 0.6, 0.75, 0.85, 0.99, 1.0
+
+      // Refer to mesh::BergerRigoutsos for input.
+      BergerRigoutsos {
+         efficiency_tol = 0.80
+         combine_tol = 0.90
+         DEV_log_node_history = FALSE
+         DEV_log_cluster_summary = TRUE
+         DEV_log_cluster = FALSE
+         // DEV_owner_mode = "SINGLE_OWNER"
+         // DEV_algo_advance_mode = "SYNCHRONOUS"
+      }
+   }
+
+}
+
+TreeLoadBalancer {
+  DEV_report_load_balance = TRUE // Reported in main
+  DEV_balance_penalty_wt = 1.0
+  DEV_surface_penalty_wt = 1.0
+  DEV_slender_penalty_wt = 1.0
+  DEV_precut_penalty_wt = 1.0
+
+  // Debugging options
+  DEV_check_map = FALSE
+  DEV_check_connectivity = FALSE
+  DEV_print_steps = TRUE
+  DEV_print_swap_steps = FALSE
+  DEV_print_break_steps = FALSE
+  DEV_print_edge_steps = FALSE
+}
+
+TimerManager {
+//   print_exclusive      = TRUE
+   print_summed           = TRUE
+   print_max              = TRUE
+   print_threshold        = 0.
+   timer_list             = "hier::*::*", "mesh::*::*", "apps::*::*"
+}

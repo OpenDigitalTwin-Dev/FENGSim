@@ -1,0 +1,35 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace appu {
+
+/*!
+  @page package_apputils_boundary Support for physical boundary conditions
+
+  These classes contain utilities for reading boundary data from
+  input files, setting boundary values during program execution,
+  and checking boundary values for correctness.  These facilities
+  are provided for 2 and 3 spatial dimensions only.
+
+  An abstract base class interface is provided for treating 
+  application-specific data.  A header file containing all valid
+  integer boundary constants is provided to make use of the boundary
+  capabilities easier.
+  - SAMRAI/appu/CartesianBoundaryDefines.h 
+
+  - SAMRAI::appu::BoundaryUtilityStrategy
+
+  Boundary utilities are provided for two and three spatial dimensions:
+  - SAMRAI::appu::CartesianBoundaryUtilities2
+  - SAMRAI::appu::CartesianBoundaryUtilities3
+*/
+
+}
+}

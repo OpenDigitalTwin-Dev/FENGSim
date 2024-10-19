@@ -1,0 +1,25 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace geom {
+
+
+/*!
+  @page package_geometry_cartesian_operators_fortran Cartesian Transfer Operator Numerical Routines
+
+  The routines that perform spatial refining/coarsening on standard patch 
+  data types in Cartesian geometry are located in the directory
+  <TT>source/SAMRAI/geom/fortran</TT>.
+  These routines are written in FORTRAN 77 and are invoked from the
+  appropriate operator classes.
+*/
+
+}
+}

@@ -1,0 +1,174 @@
+*****************************************************************************
+  Copyright 1997-2020
+  Lawrence Livermore National Security, LLC.
+  All rights reserved.
+*****************************************************************************
+
+                     Release Notes for SAMRAI v4.0.3
+
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+
+*****************************************************************************
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+*****************************************************************************
+
+VERSION 4.0.3
+
+Version 4.0.3 is a minor release update.  This file reproduces to content of
+the release notes since 4.0.0, and new content for version 4.0.3 is
+specfically labeled.
+
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report
+it to us so that we may fix it.
+
+Please send email to samrai-bugs@llnl.gov or post an issue on github.
+https://github.com/LLNL/SAMRAI
+
+
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Significant bug fixes
+----------------------------------------------------------------------------
+
+1) NEW for v. 4.0.1  Bugs in the CMake configuration that caused Conduit
+and SILO to be excluded from the build even when included in the cmake
+configuration line have been fixed.
+
+*****************************************************************************
+
+
+
+----------------------------------------------------------------------------
+                Summary of what's new
+-----------------------------------------------------------------------------
+
+1) In v4.0.0 SAMRAI is introducing new features to support running applications
+on GPU architectures, using capabilities provided by the Umpire and RAJA
+libraries.
+
+2) NEW for v. 4.0.3 AsyncCommPeer has a new method to set an Umpire
+Allocator to be used for internal buffer allocations.
+ 
+
+-----------------------------------------------------------------------------
+                Summary of what's changed
+-----------------------------------------------------------------------------
+
+1) The old autoconf-based build system has been removed.  The new system that
+uses CMake supplemented with the BLT macro library is the only supported build
+system.  (This change effective as of v. 3.15.0)
+
+2) NEW for v. 4.0.3 The number of threads launched by dimensional RAJA
+policies (Policy1D, Policy2D, Policy3D) for CUDA kernels in
+tbox::ExecutionPolicy have been set to a fixed value of 256,
+which is the product of the tile count in each dimensional direction.
+
+3) NEW for v. 4.0.3 The deprecated method isEmpty() has been removed from
+classes Box and BoxContainer.
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                Details about what's new
+-----------------------------------------------------------------------------
+
+1) In v4.0.0 SAMRAI is introducing new features to support running applications
+on GPU architectures, using capabilities provided by the Umpire and RAJA
+libraries.
+
+Umpire:  https://github.com/LLNL/Umpire
+RAJA:  https://github.com/LLNL/RAJA
+
+Umpire provides tools for memory management on multiple-memory architectures,
+such as GPU architectures that use storage in both host and device memory
+spaces.
+
+RAJA provides portable abstractions for loop execution, enabling the use of
+a single code base for multiple modes of running loop kernels on different
+architectures, ranging from ordinary serial loop execution on a CPU, to
+shared-memory multi-threading, to threaded CUDA kernel launches on a GPU.
+
+The key feature used from Umpire is the Allocator, an object that controls
+all aspects of memory allocation and will determine the location of
+the allocation in architectures with multiple memory spaces.  The patch data
+objects in the pdat directory have new overloaded constructors that take
+an umpire::Allocator as an argument.  Additionally a new singleton class
+tbox::AllocatorDatabase manages certain Allocators that are held
+by SAMRAI and used to control allocations that occur internally during
+SAMRAI operations.  Application codes can access these Allocators from the
+AllocatorDatabase and use them to ensure that application-allocated data
+and library-allocated data are allocated in the same way before they interact.
+See the AllocatorDatabase documentation for more information.
+
+RAJA is used to support a portable loop abstraction for looping over the
+index spaces defined by SAMRAI's hier::Box.  The hier::parallel_for_all
+and hier::for_all objects provide a way to write one code implementation
+that can be used to execute the loops as threaded CUDA kernels, threaded
+OpenMP kernels, or regular sequentially-incremented loops.  The execution
+mode for the loops depends on the configuration of the SAMRAI installation
+and the RAJA policy given to the looping structure.  See the RAJA
+documentation for more information on RAJA policies.
+
+To connect the RAJA loop structures with standard SAMRAI patch data types,
+a new class ArrayView has been added to provide a way to access the data
+arrays held within these types using integer (i,j,k) tuples.  The plain
+integers in the tuple are used to index the loop, and they may be threaded,
+so the ArrayView class is a convenient way to access the data for
+thread-safe operation on the arrays.
+
+Configuration with Umpire and RAJA is optional, so all previous functionality
+using MPI parallelism is still available.
+
+2) NEW for v. 4.0.3 AsyncCommPeer has a new method to set an Umpire
+Allocator to be used for internal buffer allocations.  This is not likely
+to be directly used by users, but it enables some internal library
+changes which ensure that MessageStreams which are provided to user codes
+during execution of RefineSchedule and CoarsenSchedule operations contain
+buffers that are allocated by the stream Allocator from AllocatorDatabase.  
+
+
+                Details about what's changed
+----------------------------------------------------------------------------
+
+1) The old autoconf-based build system has been removed.  The new system that
+uses CMake supplemented with the BLT macro library was introduced in version
+3.14.0 and is now the only supported build system.
+
+The new system uses CMake (https://cmake.org) supplemented with the BLT macro
+library (https://github.com/LLNL/blt).  Updated instructions for the build
+system are in the INSTALL-NOTES file.
+
+(This change effective as of v. 3.15.0)
+
+2) NEW for v. 4.0.3 The number of threads launched by dimensional RAJA 
+policies (Policy1D, Policy2D, Policy3D) for CUDA kernels in
+tbox::ExecutionPolicy have been set to a fixed value of 256,
+which is the product of the tile count in each dimensional direction.
+
+This change protects against compile errors that may occur involving
+functions inside of kernels having register counts greater than the number
+of threads.
+
+These policies are used by default in the hier::for_all looping structures
+defined in hier/ForAll.h.  hier::for_all is templated on the policy, so
+users who do not wish to used the policies from tbox::ExecutionPolicy may
+define their own policies and provide them to the hier::for_all<policy>
+template.
+
+3) NEW for v. 4.0.3 The deprecated method isEmpty() has been removed from
+classes Box and BoxContainer.  The method empty() provides this functionality.
+Also, there is no longer a DEPRECATED macro defined in SAMRAI.
+
+
+=============================================================================
+=============================================================================

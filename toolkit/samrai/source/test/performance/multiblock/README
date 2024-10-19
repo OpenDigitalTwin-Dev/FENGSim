@@ -1,0 +1,41 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright
+## information, see COPYRIGHT and LICENSE.
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   Multiblock performance tests.
+##
+#########################################################################
+
+This example is similar to the single-block AMR LinAdv sample application.
+This example has the following differences:
+
+   1. It works on non-cartesian mapped grids
+   2. It works with multiblock grids
+   3. All numerical kernel operations (e.g. computeFluxesOnPatch()) are
+      c-based rather than fortran
+
+The four test cases included are:
+
+   1. test.3d.1blk   - single block Cartesian grid
+   2. test.3d.2blk   - two block Cartesian grid
+   3. test.3d.4blk   - four block Cartesian grid
+   4. test.3d.8blk   - eight block Cartesian grid
+
+Note that the numerics for this example have not been fully tested in 2D so it
+currently should only run in 3D.
+
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make main
+
+   Execution:
+      For one of the following input files in performance_inputs:
+      serial:
+      ./main <input file>
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main <input file>

@@ -1,0 +1,43 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace algs {
+
+/*!
+  @page package_algorithm_method_of_lines Time Integration with Method of Lines
+
+  This algorithm supports time-integration of a system of ODEs defined on
+  a hierarchy using a Strong Stability Preserving Runge-Kutta scheme.  
+  Unlike the time-refinement algorithm, this method does not
+  perform different time-stepping at each level. Rather, it integrates
+  all patches in the AMR hierarchy through the same time increment.
+
+  The routine that integrates the quantities on all patches by a specified
+  timestep is @b advanceHierarchy.  It implements Runge-Kutta
+  integration with information passed between hierarchy levels at each
+  Runge-Kutta step.  The user can choose the order of time-accuracy of 
+  the Runge-Kutta integrator and can supply the necessary array of increments
+  for each sub-step.  The timestep is determined through a 
+  Courant-Friedrichs-Lewy (CFL) condition.  The patch with the minimum 
+  timestep based on this condition defines the timestep used for integration 
+  of the entire hierarchy. 
+
+  The method is implemented using the Strategy object-oriented design pattern 
+  in which the integrator provides the algorithm and the strategy provides a 
+  set of virtual functions that plug into the integrator class.  The user can 
+  interact with the class by explicitly defining the virtual functions 
+  contained in the strategy.  See the Convection Diffusion example for 
+  a demonstration on use of these classes.
+  - SAMRAI::algs::MethodOfLinesIntegrator
+  - SAMRAI::algs::MethodOfLinesPatchStrategy
+*/
+
+}
+}

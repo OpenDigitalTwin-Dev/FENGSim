@@ -1,0 +1,159 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for SAMRAI CVODE test program 
+ *
+ ************************************************************************/
+
+//See cvode_dir.2d.input for documentation of input specific to this test.
+
+Main {
+
+   dim                      = 2
+
+   init_time                = 0.0
+   init_cycle               = 0
+   print_interval           = 1.0e-2
+   num_print_intervals      = 10
+   solution_logging         = FALSE
+
+   max_internal_steps       = 100000
+   relative_tolerance       = 1e-4
+   absolute_tolerance       = 1e-4
+// 0=use default
+   max_order                = 0    
+// stepping_method          = timestepping mode for CVODE
+    NORMAL                  = 1
+    ONESTEP                 = 2
+   stepping_method          = NORMAL
+   uses_newton              = TRUE
+   uses_preconditioning     = TRUE
+
+// Used for testing only
+   correct_rhs_evals        = 920
+   correct_precond_setups   = 714
+   correct_precond_solves   = 509
+}
+
+CVODEModel {
+
+   initial_value         = 0.0
+
+   use_neumann_bcs      = TRUE 
+   print_solver_info    = FALSE
+
+   Boundary_data {
+      boundary_edge_xlo {
+         boundary_condition      = "DIRICHLET"
+         val                     = 0.
+      }
+      boundary_edge_xhi {
+         boundary_condition      = "DIRICHLET"
+         val                     = 0.
+      }
+      boundary_edge_ylo {
+         boundary_condition      = "NEUMANN"
+         val                     = 1.  
+      }
+      boundary_edge_yhi {
+         boundary_condition      = "DIRICHLET"
+         val                     = 0.
+      }
+      // IMPORTANT: If a *REFLECT, *DIRICHLET, or *FLOW condition is given
+      //            for a node, the condition must match that of the
+      //            appropriate adjacent edge above.  This is enforced for
+      //            consistency.  However, note when a REFLECT edge condition
+      //            is given and the other adjacent edge has either a FLOW
+      //            or REFLECT condition, the resulting node boundary values
+      //            will be the same regardless of which edge is used.
+      boundary_node_xlo_ylo {
+         boundary_condition      = "XDIRICHLET"
+      }
+      boundary_node_xhi_ylo {
+         boundary_condition      = "XDIRICHLET"
+      }
+      boundary_node_xlo_yhi {
+         boundary_condition      = "YDIRICHLET"
+      }
+      boundary_node_xhi_yhi {
+         boundary_condition      = "YDIRICHLET"
+      }
+   }
+
+}
+
+fac_precond {
+   max_cycles           = 1
+   residual_tol         = 1.e-40
+}
+
+hypre_solver {
+   use_smg              = FALSE
+}
+
+StandardTagAndInitialize{
+   tagging_method = "REFINE_BOXES"
+
+   level_0 {
+      boxes = [ (0,0) , (9,4) ]
+   }
+   level_1 {
+      boxes = [ (0,0) , (19,4) ]
+   }
+   level_2 {
+      boxes = [ (0,0) , (39,4) ]
+   }
+}
+
+TimerManager {
+   timer_list = "apps::main::*"
+}
+
+Geometry {
+   domain_boxes  = [ (0,0) , (9,9) ]
+   x_lo          = 0.e0 , 0.e0  // lower end of computational domain.
+   x_up          = 5.e0 , 5.e0  // upper end of computational domain.
+}
+
+PatchHierarchy {
+   max_levels              = 2 // Maximum number of levels in hierarchy.
+
+// Note: For the following regridding information, data is required for each
+//       potential in the patch hierarchy; i.e., levels 0 thru max_levels-1.
+//       If more data values than needed are given, only the number required
+//       will be read in.  If fewer values are given, an error will result.
+//
+// Specify coarsening ratios for each level 1 through max_levels-1
+   ratio_to_coarser {         // vector ratio to next coarser level
+      level_1               = 2 , 2 
+      level_2               = 2 , 2
+      level_3               = 2 , 2
+   }
+
+   largest_patch_size {
+      level_0 = 20,20
+      // all finer levels will use same values as level_0...
+   }
+
+   smallest_patch_size {
+      level_0 = 1,1
+      // all finer levels will use same values as level_0...
+   }
+
+}
+
+BergerRigoutsos {
+   efficiency_tolerance     = 0.70e0   // min % of tag cells in new patch level
+   combine_efficiency       = 0.85e0   // chop box if sum of volumes of smaller
+                                       // boxes < efficiency * vol of large box
+}
+
+GriddingAlgorithm {
+}
+
+LoadBalancer {
+}
+

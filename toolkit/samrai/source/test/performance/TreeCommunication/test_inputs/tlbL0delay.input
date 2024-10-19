@@ -1,0 +1,103 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Code and input for benchmarking and experimentation with tree-based communication.
+ *
+ ************************************************************************/
+
+/*
+ * Test tlbL0delay tries to simulate the down-communication part of
+ * the TreeLoadBalancer for the case of work originating from the root.
+ * It uses a broadcast operation.
+ *
+ * Use CenteredRankTree.
+ *
+ * Do one run with zero processing cost, one with regular processing costs
+ * and one with randomized processing cost.
+ */
+
+Main {
+
+  // Base name for output files.
+  base_name = "tlbL0delay"
+
+  // Whether to log all nodes.
+  log_all_nodes = FALSE
+
+}
+
+
+
+
+/*
+ * Define tests using databases named Test##,
+ * where ## is a 2-digit integer, sequentially from 0
+ */
+
+
+Test00 {
+  nickname = "zerocost" // CenteredRankTree, 10 items.
+  tree_name = "CenteredRankTree"
+  CenteredRankTree { // Parameters for tree of same name in getTreeForTesting()
+    make_first_rank_the_root = TRUE
+  }
+  msg_length = 100 // Message length (units of integer)
+  first_data_length = 500 // See AsyncCommPeer::limitFirstDataLength().
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 0, 0 // Simulated processing cost is [0] usec per message and [1] usec per item in message.
+  randomize_processing_cost = FALSE
+  repetition = 10 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = TRUE // Whether to barrier after each rep.
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+  message_pattern = "DOWN"
+}
+
+
+Test01 {
+  nickname = "uniformcost" // CenteredRankTree, 10 items.
+  tree_name = "CenteredRankTree"
+  CenteredRankTree { // Parameters for tree of same name in getTreeForTesting()
+    make_first_rank_the_root = TRUE
+  }
+  msg_length = 100 // Message length (units of integer)
+  first_data_length = 500 // See AsyncCommPeer::limitFirstDataLength().
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 4000, 0 // Simulated processing cost is [0] usec per message and [1] usec per item in message.
+  randomize_processing_cost = FALSE
+  repetition = 10 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = TRUE // Whether to barrier after each rep.
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+  message_pattern = "DOWN"
+}
+
+
+Test02 {
+  nickname = "randomcost" // CenteredRankTree, 10 items.
+  tree_name = "CenteredRankTree"
+  CenteredRankTree { // Parameters for tree of same name in getTreeForTesting()
+    make_first_rank_the_root = TRUE
+  }
+  msg_length = 100 // Message length (units of integer)
+  first_data_length = 500 // See AsyncCommPeer::limitFirstDataLength().
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 4000, 0 // Simulated processing cost is [0] usec per message and [1] usec per item in message.
+  randomize_processing_cost = TRUE
+  repetition = 10 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = TRUE // Whether to barrier after each rep.
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+  message_pattern = "DOWN"
+}
+
+
+
+// Refer to tbox::TimerManager for input.
+TimerManager {
+//   print_exclusive      = TRUE
+   print_summed           = TRUE
+   print_max              = TRUE
+   print_threshold        = 0.
+   timer_list             = "tbox::*::*", "apps::*::*"
+}

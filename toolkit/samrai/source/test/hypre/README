@@ -1,0 +1,47 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   Unit test of CellPoissonHypreSolver
+##
+#########################################################################
+****************************************************************************
+*                                                                          *
+*  We set up the simple problem                                            *
+*           u + div(grad(u)) = sin(x)*sin(y)                               *
+*  in the domain [0:1]x[0:1], with u=0 on the                              *
+*  boundary.                                                               *
+*                                                                          *
+****************************************************************************
+
+This test demonstrates the use of and unit tests the CellPoissonHypreSolver
+class.  The files included in this directory are as follows:
+ 
+   main.cpp               -  driver
+   HyprePoisson.[Ch]    -  Class to set up and solve the scalar Poisson
+                           equation on a single level.  Also supplies required
+                           implementations to interfaces for building grid and
+                           plotting.
+   test_inputs/*.input  -  2d and 3d input files
+
+
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make main
+
+   Execution:
+      serial:
+         ./main test_inputs/default.[2,3]d.input
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main test_inputs/default.[2,3]d.input
+ 
+
+INPUT PARAMETERS
+----------------
+Refer to test_inputs/default.2d.input for a full description of all input
+parameters specific to this problem.

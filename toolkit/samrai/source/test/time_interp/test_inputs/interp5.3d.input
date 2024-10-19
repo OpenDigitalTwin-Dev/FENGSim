@@ -1,0 +1,20 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2019 Lawrence Livermore National Security, LLC
+ * Description:   input file for testing 3d time interpolation
+ *
+ ************************************************************************/
+
+
+Main {
+    dim = 3
+    log_file_name    = "interp2.3d.log"
+    depth = 3
+    ghosts = 2
+    interp_fraction = 0.71
+    box = [ (0,0,0) , (108,87,72) ]
+    bdry_only = TRUE
+}

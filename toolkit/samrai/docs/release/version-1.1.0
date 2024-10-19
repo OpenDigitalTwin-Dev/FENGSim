@@ -1,0 +1,551 @@
+*****************************************************************************
+                     Release Notes for SAMRAI v1.1
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+*****************************************************************************
+
+NOTE:  These release notes are more descriptive and detailed than is usual
+       for software release notes.  The reason for this is that presently
+       complete documentation does not exist for most of the items listed.
+       Until sufficient user documentation becomes available, descriptions
+       such as those that follow will be part of SAMRAI release notes.
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+*****************************************************************************
+*****************************************************************************
+NOTE that there are a few new user documents in the SAMRAI/docs directory.
+*****************************************************************************
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report it
+to us so that we may fix it.  We will make every effort to fix bugs
+in a timely manner.  Depending on the severity or the complexity of the
+bug, we will either fix the bug for a subsequent library release or send
+a code fix to users so that their work is minimally interrupted.
+
+LLNL users should report bugs using the CASC bug tracking web pages:
+
+        http://www-casc.llnl.gov/bugs/
+
+Enter the bug into the appropriate are of the SAMRAI project section.
+
+Bugs found by other users should send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                    Summary of what's changed
+-----------------------------------------------------------------------------
+
+This section contains a summary of changes to SAMRAI.  More detailed 
+descriptions of items in the following list are provided below.
+
+(0) Several optimizations have been attempted in the creation of refine 
+    schedules that should improve performance on large numbers of 
+    processors.  While we have not yet done a detailed analysis of the
+    impact of these changes on performance, we would appreciate any users
+    reporting any changes to execution timings that they observe.
+
+(1) Several class names and class implementations in the "Mesh" package
+    have changed to enable the addition of Richardson extrapolation 
+    error estimation.  See "what's new" also.
+
+(2) The "const" qualifier has been removed from the declaration of pure
+    virtual functions that define interfaces for user-routines used in
+    data transfer and intergation operations.
+
+(3) Changes have been made to the interface for user-supplied physical 
+    boundary conditions to make implementation more flexible and easier for
+    users.
+
+(4) A function has been added to the interface for user-supplied refinement
+    operations that allows one to specify the stencil width of the operation.
+
+(5) Routines have been added to the patch, patch level, and grid geometry
+    classes to get more information about the relationship between a patch
+    and the physical domain boundary.
+
+(6) Functions for setting/getting patch level number information have been
+    added to the patch class.
+
+(7) Print routines have been added to box list and box array container classes. 
+
+(8) Higher-level "restartable" SAMRAI objects are now more flexible as the
+    user can explicitly control which objects will write information to
+    restart files.
+
+(9) The patch hierarchy class been improved to allow users to explicitly
+    specify which patch data objects will be read in from restart.
+
+(10) The restart manager class no longer allows multiple objects with the 
+     same object name to be registered for restart.  
+
+(11) The interface to the timer manager has been simplified.  Changes 
+     affect the "main timer" concept and the print routines.
+
+(12) Timers in some of the main algorithm classes have been regorganized.
+
+(13) More complete and descriptive documentation is included in the various
+     patch data classes.
+    
+(14) Side-centered patch data classes have been enhanced so that one can 
+     now use them to manage data for cell sides associated with a single
+     coordinate direction only.  
+
+(15) The (admittedly) clumsy sharing of "variable-context" information
+     between the hyperbolic level integration class and the user-defined 
+     concrete patch strategy class that supplies numerical kernels on patches
+     has been removed.
+
+(16) The conservativeDifferenceOnPatch(...) function in the hyperbolic
+     patch strategy interface has an extra argument to distinguish more
+     clearly between conservative differencing during regular integration
+     steps and during level synchronization.
+
+(17) The directory structure for the KINSOL interface code has been changed
+     to accomodate the addition of PVODE interface code and the fact that the
+     vector kernel used for these two solver packages is the same. 
+
+(18) The classes supporting the HYPRE poisson solver have been reorganized to
+     decouple distinct parts of the algorithm.
+
+(19) The geom_CartesianUserDefinedCoarsenOperatorX class has been moved to
+     the transfer package and renamed to xfer_UserDefinedCoarsenOperatorX 
+     since it is independent of the coordinate system geometry.
+
+(20) SAMRAI now supports HDF5 1.4.1.  Note that releases of HDF5 beyond 
+     version 1.2.1 have different behavior when writing out zero length 
+     arrays.  
+
+(21) The "index" patch data iterator has been simplified.
+
+(22) The configure script will invoke the Compaq version of MPI by default
+     on the LLNL Compass and Tera clusters (including tc2k).
+
+
+-----------------------------------------------------------------------------
+                         Summary of what's new
+-----------------------------------------------------------------------------
+
+This section contains a summary of additions to SAMRAI.  More detailed 
+descriptions of items in the following list are provided below.
+
+(1) Richardson extrapolation error estimation has been added for time- 
+    dependent problems. 
+
+(2) A new class called hier_BoundingBoxListX has been added to provide
+    a small set of "smart" boxlist operations for computing information
+    about the location of a set of boxes with respect to another collection
+    of boxes.
+
+(3) A PVODE solver interface has been added to the solvers package.
+
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+                    Details about what's changed
+-----------------------------------------------------------------------------
+
+(1) Several class names and class implementations in the "Mesh" package
+    have changed to enable the addition of Richardson extrapolation
+    error estimation.  
+
+    The class mesh_LevelGriddingStrategyX, which used to serve as the 
+    interface between the gridding algorithm and user-supplied operations,
+    was replaced by the class mesh_TagAndInitializeStrategyX.  This name 
+    change better reflects its role as an interface for tagging cells to
+    refine and data initialization operations.  
+
+    The class mesh_GradientDetectorAlgorithmX, which provided a basic 
+    gradient detector implementation, was replaced with the class
+    mesh_StandardTagAndInitializeX.  This new class provides the Richardson
+    extrapolation procedures and routines for refining regions specified by
+    collections of boxes, in addition to the basic gradient detector 
+    implementation.  The associated class that interfaces with user routines
+    is called mesh_StandardTagAndInitStrategyX.  The class 
+    mesh_GradientDetectorStrategyX has been removed.
+
+    See the "what's new" section for more information.  Also, the document 
+    SAMRAI/docs/RichExtrap.pdf provides more information on these changes and 
+    how to use the new Richardson extrapolation routines.  Also, included is 
+    a description of the steps needed to quickly change your code to use 
+    the gradient detector functionality prior to this release.
+
+(2) The "const" qualifier has been removed from the declaration of pure
+    virtual functions that define interfaces for user-routines used in
+    data transfer and intergation operations.
+
+    The user routines affected are those related to the interfaces 
+    xfer_RefinePatchStrategyX, xfer_CoarsenPatchStrategyX, and
+    algs_HyperbolicPatchStrategyX.  This change eliminates limitations
+    in these interfaces that prevent users from changing the state of
+    their derived classes in their routines.  To update your code for
+    this change, simply remove the "const" from the porper member functions
+    in the header files and source files of the classes that your derive 
+    from these interfaces.
+   
+(3) Changes have been made to the interface for user-supplied physical
+    boundary conditions for flexibility and to make such boundary conditions
+    easier to implement in user code.
+
+    Specifically, the virtual function setPhysicalBoundaryConditions() in the
+    xfer_RefineStrategyX interface class now has the ghost cell width to 
+    fill as an argument.  The addition of this argument is motivated by the
+    need for increased flexibility in boundary condition implementation and
+    to avoid unecessary data movement during interlevel data transfers. 
+
+    When writing boundary routines the user should use the same "scratch"
+    data components as specified when registered with the refine algorithm 
+    (as before).  However, now the user knows the ghost cell width to fill 
+    (less than or equal to the scratch ghost width).  In many cases, users 
+    may ignore this argument and make no changes to their current boundary 
+    routines.  That is, filling the full ghost cell width will have no 
+    detrimental effect; however, some of the boundary values may be ignored
+    during interlevel data transfers.   The new ghost width argument must 
+    be obeyed when boundary values depend on data on the domain interior,
+    such as during extrapolation.  If the ghost width is ignored in this case,
+    arithmetic exceptions may result as valid interior data is only guaranteed 
+    for the ghost width coming through the argument list.
+
+    Also, a function has been added to the patch geometry class to compute
+    the physical boundary box region to fill.   For example, to fill all
+    face boundary regions for a patch, one would loop over the face boundary 
+    boxes and for each obtain the boundary region to fill:
+
+       Box fill_box = patch_geom->
+                      getBoundaryFillBox(<BoundaryBox face_bdry>,
+                                         <Box patch_interior>,
+                                         <IntVector ghost_width_to_fill>);
+
+    Then, "fill_box" describes the corresponding boundary region to fill.
+    This new function eliminates the need for the user to perform box
+    manipulation to determine the correct boundary region to fill given
+    a boundary box and a patch in the domain.  See the Euler, LinAdv 
+    example applications for more details on how this is used.
+
+(4) A function has been added to the interface for user-supplied refinement
+    operations that allows one to specify the stencil width of the operation.
+ 
+    The function getRefineOpStencilWidth() has been added to the interface
+    defined by the base class xfer_RefinePatchStrategyX.  Users who provide
+    their own data refinement operations using that interface should 
+    provide the maximum stsncil width of their operations via that function.
+    There was no way to communicate this to the refine schedule in previous
+    SAMRAI versions and this is needed for correctness.
+    
+(5) Routines have been added to the patch, patch level, and grid geometry
+    classes to get more information about the relationship between a patch
+    and the physical domain boundary.
+
+    The functions getTouchesRegularBoundary() and getTouchesPeriodicBoundary() 
+    have been added to the hier_PatchX class, and 
+    patchTouchesRegularBoundary(int) and patchTouchesPeriodicBoundary(int) 
+    have been added to the hier_PatchLevelX class.  Each function returns a 
+    boolean value indicating whether the patch touches a "regular" (i.e., 
+    non-periodic) or a periodic boundary, respectively.  The patch level 
+    functions accept an integer argument for the number of the particular 
+    patch on the level for which such information is desired.
+
+(6) Functions for setting/getting patch level number information have been
+    added to the patch class.  
+
+    The level number of the patch level on which a patch resides is now 
+    directly accessible from the patch and can be manipulated.  For most
+    cases, this is set automatically when a new level is created.
+
+(7) Print routines have been added to box list and box array container classes.  
+    Use them to print a box collection rather than iterating though the 
+    collection manually.
+
+(8) Higher-level "restartable" SAMRAI objects are now more flexible as the
+    user can explicitly control which objects will write information to
+    restart files.
+
+    A boolean argument has been added to the constructor of classes, such as
+    those that provide high-level integration and gridding operations, to 
+    determines whether the object will write its state to restart files 
+    during program execution.  The argument is given a default value (true) 
+    that tells the constructor to register the object for restart using the 
+    object name passed to the constructor.  This is the behavior previously 
+    provided by the library.  Now, by passing in a boolean value of false as 
+    the last constructor argument, users can turn off restart functionality 
+    for the object.   To use restart capabilities as in previous versions of 
+    SAMRAI, no changes need to be made to user code.
+
+(9) The patch hierarchy class been improved to allow users to explicitly
+    specify which patch data objects will be read in from restart.
+
+    To read in a set of patch data objects from a database, pass a "component
+    selector" to the getFromDatabase() method in the hier_PatchHierarchyX
+    class.   Then, those patch data entries corresponding to bits that are
+    set in the component selector will be read from the database.  Also,
+    an integer argument can be used to limit the number of patch levels
+    that are read in.  It has a default value of -1 which indicates that all
+    levels in the database should be read in.  Note that a warning message 
+    will be generated in the log file if some desired patch data components 
+    do not exist in the database.
+
+(10) The restart manager class no longer allows multiple objects with the 
+     same object name to be registered for restart.  
+
+    The fact that multiple objects with the name could be registered 
+    previously caused problems when trying to retrieve the proper restart
+    data.  Now, If one attempts to register to objects with the same object 
+    name for restart, the restart manager will abort with an error message.
+    Note that users have full control over the names of objects used in 
+    the restart files by passing in a name string to the class constructor.
+
+(11) The interface to the timer manager has been simplified.  Changes
+     affect the "main timer" concept and the print routines.
+
+    The registerMainTimer() function has been removed from the timer
+    manager.  It has been replaced with a more automated approach where 
+    the "main" timer is started when the timer manager is created and 
+    stopped when the timer state is output.  
+
+    The various print options printTimerInformation(), 
+    printProcessorTimerInformation(), and printSummedTimerInformation() 
+    have been replaced with a single function print(), with different
+    print request options supplied through the input file.  Print options
+    include total time, exclusive time, wall time, user time, system time, 
+    including the processor with maximum time and time summed across all
+    processors.  See the discussion under the "TimerManager" input section in
+    /SAMRAI/source/applications/Euler/README for details on how to invoke
+    the various print options.  See the main.C file in the same directory
+    for an example of how to output timer results.
+
+(12) Timers in some of the main algorithm classes have been regorganized.
+
+     A document in the SAMRAI/docs/userdocs/timers directory describes
+     the timers that may be invoked by users and how to use them.
+
+(13) More complete and descriptive documentation is included in the various
+     patch data classes.
+
+     Each patch data, patch data factory, and variable class header file
+     now contain more descriptive documentation detailing the storage and
+     indexing conventions of data type.  Hopefully, this will eliminate
+     confusion and make the different data types easier to use. 
+    
+(14) Side-centered patch data classes have been enhanced so that one can
+     now use them to manage data for cell sides associated with a single
+     coordinate direction only.
+
+    Previously, side data was allocated over each box region using NDIM arrays, 
+    each of which holds values for sides having the same normal vector.  
+    Now, in addition to this standard case, one can create a side variable 
+    or a side patch data object that allocates and manages only one array 
+    holding values for cell sides with normal vector in only one direction.
+
+    For example, to create a three-dimensional side variable with double
+    values allocated for sides in the 1 (or y) coordinate direction:
+
+       SideVariable3<double> side_var(<name string>, <int depth>,
+                                      <bool fine_values_represent boundary>,
+                                      <int direction = 1>);
+
+    To create a similar side variable for all directions, one only needs to
+    specify the name and the depth as before:
+
+       SideVariable3<double> side_var(<name string>, <int depth>);
+
+    One can also create a side patch data object directly to manage side
+    values for a single direction.  For
+
+       SideData3<double> side_data(<Box box>, <int depth>, <IntVector ghosts>,
+                                   <IntVector directions = (0,1,0));
+
+    To create a similar side patch data object for all directions, one only
+    needs to specify the box, depth, and ghost cell width as before:
+
+       SideData3<double> side_data(<Box box>, <int depth>, <IntVector ghosts>);
+
+    SideVariable, SideData, and SideDataFactory classes are all equipped with
+    a member function
+
+       const IntVector& getDirectionVector() const
+
+    that returns a const reference to the integer vector describing which
+    coordinate directions have data associated with the particular
+    side variable/data/factory object.
+
+    To reiterate: these changes are transparent for users accustomed to the
+    original implementation in which side data was managed for all cell side.
+    That is, no user code changes are necessary when using side data in the
+    the standard fashion.
+
+(15) The (admittedly) clumsy sharing of "variable-context" information
+     between the hyperbolic level integration class and the user-defined
+     concrete patch strategy class that supplies numerical kernels on patches
+     has been removed.
+
+    Recall that the hyperbolic integrator manipulates variable storage for 
+    the user code, which simply needs to pull the proper data off the patches.  
+    It is cleaner and less confusing (hopefully) to have the integrator set 
+    the variable context for the user routines.  As a result, variable contexts 
+    are no longer passed through the function calls declared in the 
+    algs_HyperbolicPatchStrategyX interface.  Also, the hyperbolic example 
+    codes (Euler and LinAdv) no longer contain VariableContext data members.  
+    For example, to retrieve the proper "density" data in an Euler class member 
+    function, one will see that this is now done as follows:
+
+       Pointer< CellData<double> > density  =
+          patch.getPatchData(d_density, getDataContext());
+
+    The "getDataContext()" function implemented in the patch strategy base 
+    class simply returns the context set by the integrator.  Then, all 
+    concrete concrete subclass routines access each patch data object 
+    in a uniform manner and no hidden assumptions are made about the 
+    proper variable context to use in a given situation.  Further, we note
+    that users still have full access to all variable and context information
+    via the variable database singleton object.
+
+(16) The conservativeDifferenceOnPatch(...) function in the hyperbolic
+     patch strategy interface has an extra argument to distinguish more
+     clearly between conservative differencing during regular integration
+     steps and during level synchronization.
+
+    A boolean argument has been added to the virtual function 
+    conservativeDifferenceOnPatch(...) in the algs_HyperbolicPatchStrategyX
+    interface.  The argument is "true" when the routine is called during 
+    level synchronization, and is "false" otherwise (i.e., during a 
+    regular advance of the solution).  This was added so that user code
+    could treat these two cases differently when necessary.
+
+(17) The directory structure for the KINSOL interface code has been changed
+     to accomodate the addition of PVODE interface code and the fact that the
+     vector kernel used for these two solver packages is the same.
+
+    The old KINSOL directory was:
+
+       SAMRAI/source/solvers/packages/kinsol
+
+    The new KINSOL directory is:
+
+       SAMRAI/source/solvers/packages/pvode_trio/kinsol
+
+    Also, the KINSOL vectors have all been renamed to PVodeTrio vectors
+    as follows:
+
+       KINSOLAbstractVector  -->  PVodeTrioAbstractVector
+       KINSOL_SAMRAIVector   -->  PVodeTrio_SAMRAIVector
+       KINSOL_SAMRAIVector1  -->  PVodeTrio_SAMRAIVector1
+       KINSOL_SAMRAIVector2  -->  PVodeTrio_SAMRAIVector2
+       KINSOL_SAMRAIVector3  -->  PVodeTrio_SAMRAIVector3
+
+(18) The classes supporting the HYPRE poisson solver have been reorganized to
+     decouple distinct parts of the algorithm.
+
+    The constructor of Poisson hierarchy solver now requires a Poisson level
+    solver object derived from the solv_PoissonLevelStrategyX abstract base
+    class.  The level solver object provides the level-solver algorithm in 
+    use.  Currently, the only concrete implementation available is 
+    solv_PoissonHYPRESolverX.  For example, to use hier_PoissonHierarchySolverX,
+    a solv_PoissonHYPRESolverX object should be created and passed into the 
+    constructor of the hierarchy solver.
+
+(19) The geom_CartesianUserDefinedCoarsenOperatorX class has been moved to
+     the transfer package and renamed to xfer_UserDefinedCoarsenOperatorX
+     since it is independent of the coordinate system geometry.
+
+    This class serves as a place holder to distinguish between the case of a 
+    "NO_REFINE" operation and a user-supplied coarsen operation.  This 
+    operator class is necessary to produce the correct behavior for coarsen 
+    operations in some rare circumstances (probably unknown to most users!).  
+    Typical users need not concern themselves with these details and so this 
+    change should have no impact on their use of SAMRAI.
+
+(20) SAMRAI now supports HDF5 1.4.1.  Note that releases of HDF5 beyond
+     version 1.2.1 have different behavior when writing out zero length
+     arrays.  The new version of HDF on the casc cluster may be set by
+     using --with-HDF5=/home/casc/HDF5/hdf5-1.4.1 during the configure. We
+     have observed at least one degenerate case with the new version which
+     has not been completely resolved so the configured default is still
+     v 1.2.0 on the CASC cluster and LC machines.  
+
+    Also, HDF5 versions prior to 1.2.1 would create an empty HDF database
+    entry when passing an aray of length zero.  Subsequent versions do 
+    not write anything.  Developers should be aware of this when writing 
+    code to save/restore restart files and avoid saving empty arrays to
+    maintain portability.
+
+(21) The "index" patch data iterator has been simplified.
+
+    To reduce confusion regarding the use of the index patch data type,
+    the iterator has been changed.  Now, the pdat_IndexIteratorX iterates
+    through the list that contains the irregular index set.  To step through
+    the index set of a box region containing index data one whould use the
+    hier_BoxX::Iterator.  This change eliminates a rdundant class. 
+
+
+-----------------------------------------------------------------------------
+                    Details about what's new
+-----------------------------------------------------------------------------
+
+(1) Richardson extrapolation error estimation has been added for time- 
+    dependent problems. 
+
+    Class name changes are described in item number (1) above.  The 
+    document /SAMRAI/docs/RichExtrap.pdf describes in detail how to 
+    use the new Richardson extrapolation functionality and how to modify
+    existing code to use a gradient detector.
+
+(2) A new class called hier_BoundingBoxListX has been added to provide
+    a small set of "smart" boxlist operations for computing information
+    about the location of a set of boxes with respect to another collection
+    of boxes.
+
+    For example, this class can be used to avoid excessive box intersection 
+    and set subtraction operations by limiting those operations in cases 
+    when the bounding box of the box list is limited to a small portion 
+    of the domain.  This class was built to facilitate some optimizations
+    in the communication schedule construction operations, but users may find
+    it helpful in other circumstances as well.
+
+(3) A PVODE solver interface has been added to the solvers package.
+
+    The PVODE solver code is located in the directoty
+    SAMRAI/source/solvers/packages/pvode_trio/pvode.  Its use is 
+    analogous to the use of the KINSOL interface.  See the comments in
+    the PVODESolver.h header file for more details.   Like KINSOL, the 
+    PVODE interface uses the PVodeTrio vectors: PVodeTrioAbstractVector, 
+    PVodeTrio_SAMRAIVector, PVodeTrio_SAMRAIVector1, PVodeTrio_SAMRAIVector2,
+    and PVodeTrio_SAMRAIVector3.
+
+-----------------------------------------------------------------------------
+                             Major Bug Fixes 
+-----------------------------------------------------------------------------
+
+(1) The installation process for the SAMRAI library has been fixed and 
+improved.  It used to be necessary to keep a copy of the source tree
+around to make the header files available.  The header files are now
+copied over to the installation directory.  In addition, an application 
+developer no longer needs to define SAMRAI or OBJECT in his/her Makefile
+when linking to the installed version of the SAMRAI library because these
+are appropriately defined in the Makefile.config file which must be
+included in the user Makefile to define compiler options, library archive
+names, etc. 
+
+(2) Several bugs have been fixed in the communication schedules that 
+caused problems for complicated and periodic domains.  
+
+-----------------------------------------------------------------------------
+                                  Known Problems
+-----------------------------------------------------------------------------
+
+1) RedHat 7.0
+
+	This release has a couple of problems with some system header
+	files.  Depending on what patches and GCC you are using, SAMRAI
+	may not compile.  We may be able to provide workarounds if you
+	you need them.  We have not tried RedHat 7.1.
+
+=============================================================================
+=============================================================================

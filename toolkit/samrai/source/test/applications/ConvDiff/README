@@ -1,0 +1,103 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright
+## information, see COPYRIGHT and LICENSE.
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   CONVECTION DIFFUSION EQUATION EXAMPLE
+##
+#########################################################################
+
+This README explains how to compile and run the Convection Diffusion example
+which uses an adaptive Runge-Kutta time integration. The files included in
+this directory are as follows:
+
+          main.cpp                 -  application driver program
+          MainRestartData.[C,h]  -  just a holder for general run control
+                                    parameters such as start and end time and
+                                    number of time steps
+          ConvDiff.[C,h]         -  C++ class containing routines specific to
+                                    the ConvDiff example and which are called
+                                    from SAMRAI AMR library routines
+          ConvDiffFort.h         -  header file defining external fortran
+                                    routines
+          fortran/2d,3d          -  Fortran numerical routines for 2d,3d
+                                    problems.
+
+To understand the construction of this application code from pieces
+specific to the ConvDiff model and more generic pieces in the SAMRAI
+library consider the object construction pattern in the main.cpp file.
+For more details on library classes and the ConvDiff class consult
+the comments in the header files for the library classes and the
+ConvDiff.h class header file.
+
+
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make main
+
+   Run:
+      serial:
+         ./main test_inputs/test.[2,3]d.input
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] main test_inputs/test.[2,3]d.input
+
+   There are also example input files in the subdirectory example_inputs.
+      sphere.2d.input - advecting sphere in a box with fixed boundaries
+      sphere.3d.input - advecting sphere in a cube with fixed boundaries
+      heated_floor.2d.input  - mimics a heated floor, demonstrating diffusion.
+
+   The test and example input files contain comments describing the input
+   parameters specific to this problem.  Descriptions of input parameters for
+   library classes will be found in the documentation of those classes as well
+   their header files.
+
+
+INPUT PARAMETER
+---------------
+Refer to test_inputs/test2d.input for full description of all input parameters
+specific to this problem.
+
+
+RESETTING BASELINES
+-------------------
+The tests that are run from this directory include comparisons of the results
+to baseline data that represent expected results.  The tests compare the
+box configuration of the hierarchy, and certain timestep floating point values,
+as specified in the AutoTester input described above.  The baseline boxes
+are stored in HDF data files, and the expected timestep values are listed
+in the AutoTester input.
+
+If a SAMRAI developer makes changes to the library that can legitimately change
+the box configuration of a hierarchy, then the baselines here need to be reset,
+according to the following steps
+
+1. Change the AutoTester input block in each input file to include these
+   two entries:
+
+     write_patch_boxes = TRUE
+     read_patch_boxes = FALSE
+
+2. Comment out all of the lines that read restart files in the
+   Makefile's check2d and check3d rules.
+
+3. make check.  The baseline HDF files will be regenerated here.
+
+4. If you get floating-point-difference errors when the "correct_result"
+   values are compared, do the following
+
+   a. set output_correct = TRUE in the AutoTester input
+
+   b. make check
+
+   c. Find the new values of the three floating-point outputs in the log
+      file, and put them on the line "correct_result = ..."
+      (make sure they don't differ too much).
+
+5. Undo all makefile and input file changes (except for changes to
+   correct_results).
+
+6. make checktest (there should be no more errors).

@@ -1,0 +1,65 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:  Multiblock tree search tests
+##
+#########################################################################
+
+This test exercises tree-based box searches multiblock configurations.
+The files included in this directory are as follows:
+ 
+   main-mblktree.cpp       -  Entire code for the test
+   test_inputs/*.input   -  Input files for a variety of 2D and 3D
+                            multiblock configurations
+
+ 
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make main
+
+   Execution:
+      serial:
+         ./main <input_file> 
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main <input_file>
+
+
+INPUT PARAMETERS
+----------------
+Refer to test_inputs/mbtree.3blk.simple.2d.input for a full description of all
+input parameters specific to this problem.
+
+The provided input files test a variety of 2D and 3D multiblock configurations.
+The files with "simple" in their names test the box searches on levels that
+have a relatively small number of boxes.  The files with "subdivided" in their
+names use levels with the number of boxes increased by subdividing all boxes
+to enforce a given maximum box size.
+
+RESETTING BASELINES
+-------------------
+The tests that are run from this directory include comparisons of the results
+to baseline data that represent expected results.  The tests compare a
+Connector that is built using the multiblock tree search functionality to
+baseline data that contains the expected contents of that Connector.
+The baseline data are stored in HDF data files in the test_inputs directory,
+one HDF file for each input file.
+
+If a SAMRAI developer makes changes to the library that can legitimately change
+the box configuration of a level, then the baselines here need to be reset,
+according to the following steps:
+
+1. Set the flag "generate_baseline" in each input file to TRUE.
+
+2. make check.  The baseline HDF files will be regenerated here.
+
+3. Remove the flag "generate_baseline" from the input files, or set it to
+   FALSE.
+
+4. make checktest (there should be no more errors).
+

@@ -1,0 +1,80 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   input file for testing multiblock tree searches.
+ *
+ ************************************************************************/
+
+// Refer to mbtree.3blk.simple.2d.input for full description of all input
+// parameters specific to this problem.
+
+Main {
+    dim = 2
+//
+// Log file information
+//
+    base_name  = "mbtree.3blk.subdivided.2d"
+    log_all_nodes  = TRUE
+
+// generate_baseline = TRUE // Default is FALSE
+   baseline_dirname = "test_inputs"
+
+// For breaking up user-specified boxes.
+max_box_size = 12,12
+
+connector_width = 1,1
+
+GridGeometry {
+   num_blocks = 3
+   domain_boxes_0 = [ (0,0) , (20,13) ]
+   domain_boxes_1 = [ (0,0) , (25,13) ]
+   domain_boxes_2 = [ (0,0) , (20,25) ]
+
+   BlockNeighbors0 {
+      block_a = 0
+      block_b = 1
+
+      rotation_b_to_a = "I_UP", "J_UP"
+      point_in_a_space = 21,0
+      point_in_b_space = 0,0
+   }
+
+   BlockNeighbors1 {
+      block_a = 0
+      block_b = 2
+
+      rotation_b_to_a = "I_UP", "J_UP"
+      point_in_a_space = 0,14
+      point_in_b_space = 0,0
+
+   }
+
+   BlockNeighbors2 {
+      block_a = 1
+      block_b = 2
+
+      rotation_b_to_a = "J_UP", "I_DOWN"
+      point_in_a_space = 0,14
+      point_in_b_space = 20,0
+
+   }
+
+}
+
+}
+
+TimerManager {
+    timer_list = "test::main::*"
+
+// Available timers are:
+//
+//   "test::main::createRefineSchedule"
+//   "test::main::performRefineOperations"
+//   "test::main::createCoarsenSchedule"
+//   "test::main::performCoarsenOperations"
+//
+
+}

@@ -1,0 +1,108 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for OverlapConnectorAlgorithm tests.
+ *
+ ************************************************************************/
+
+
+Main {
+
+  // Base name for output files.
+  base_name = "default.2d"
+
+  // Whether to log all nodes.
+  log_all_nodes = TRUE
+
+  dim = 2
+}
+
+
+BlockGeometry {
+   num_blocks = 3
+   domain_boxes_0 = [ (0,0) , (20,13) ]
+   domain_boxes_1 = [ (0,0) , (25,13) ]
+   domain_boxes_2 = [ (0,0) , (20,25) ]
+
+   BlockNeighbors0 {
+      block_a = 0
+      block_b = 1
+
+      rotation_b_to_a = "I_UP", "J_UP"
+      point_in_a_space = 21,0
+      point_in_b_space = 0,0
+   }
+
+   BlockNeighbors1 {
+      block_a = 0
+      block_b = 2
+
+      rotation_b_to_a = "I_UP", "J_UP"
+      point_in_a_space = 0,14
+      point_in_b_space = 0,0
+
+   }
+
+   BlockNeighbors2 {
+      block_a = 1
+      block_b = 2
+
+      rotation_b_to_a = "J_UP", "I_DOWN"
+      point_in_a_space = 0,14
+      point_in_b_space = 20,0
+
+   }
+
+}
+
+
+Test00 {
+  nickname = "full l1 and l2"
+  PrimitiveBoxGen1 {
+    index_filter = "ALL"
+    num_keep = 2
+    num_discard = 1
+    parts_per_rank = 10
+  }
+  PrimitiveBoxGen2 {
+    index_filter = "ALL"
+    num_keep = 2
+    num_discard = 2
+    parts_per_rank = 20
+  }
+}
+
+Test01 {
+  nickname = "sparse l1, full l2"
+  PrimitiveBoxGen1 {
+    index_filter = "INTERVAL"
+    num_keep = 2
+    num_discard = 1
+    parts_per_rank = 10
+  }
+  PrimitiveBoxGen2 {
+    index_filter = "ALL"
+    num_keep = 2
+    num_discard = 2
+    parts_per_rank = 20
+  }
+}
+
+Test02 {
+  nickname = "full l1, sparse l2"
+  PrimitiveBoxGen1 {
+    index_filter = "ALL"
+    num_keep = 2
+    num_discard = 1
+    parts_per_rank = 10
+  }
+  PrimitiveBoxGen2 {
+    index_filter = "INTERVAL"
+    num_keep = 2
+    num_discard = 2
+    parts_per_rank = 20
+  }
+}

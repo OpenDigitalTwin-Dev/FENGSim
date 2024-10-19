@@ -1,0 +1,298 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for assumed_partition tests.
+ *
+ ************************************************************************/
+
+
+Main {
+
+  // Base name for output files.
+  base_name = "multi-overpartition.2d"
+
+  // Whether to log all nodes.
+  log_all_nodes = TRUE
+
+}
+
+/*
+ * Define test for AssumedPartitionBox using databases named Test##,
+ * where ## is a 2-digit integer, sequentially from 0
+ */
+
+Test00 {
+  nickname = "3 blocks, 4 owners, 3 parts/rank" // Nick name of test.
+  dim = 2
+  BlockGeometry {
+     num_blocks = 3
+     domain_boxes_0 = [ (0,0) , (20,13) ]
+     domain_boxes_1 = [ (0,0) , (25,13) ]
+     domain_boxes_2 = [ (0,0) , (20,25) ]
+
+     BlockNeighbors0 {
+        block_a = 0
+        block_b = 1
+
+        rotation_b_to_a = "I_UP", "J_UP"
+        point_in_a_space = 21,0
+        point_in_b_space = 0,0
+     }
+
+     BlockNeighbors1 {
+        block_a = 0
+        block_b = 2
+
+        rotation_b_to_a = "I_UP", "J_UP"
+        point_in_a_space = 0,14
+        point_in_b_space = 0,0
+
+     }
+
+     BlockNeighbors2 {
+        block_a = 1
+        block_b = 2
+
+        rotation_b_to_a = "J_UP", "I_DOWN"
+        point_in_a_space = 0,14
+        point_in_b_space = 20,0
+
+     }
+
+  }
+  rank_begin = 0
+  rank_end = 4
+  index_begin = 0
+  avg_parts_per_rank = 4
+}
+
+
+Test01 {
+  nickname = "3 blocks, 8 owners, 3 parts/rank" // Nick name of test.
+  dim = 2
+  BlockGeometry {
+     num_blocks = 3
+     domain_boxes_0 = [ (0,0) , (20,13) ]
+     domain_boxes_1 = [ (0,0) , (25,13) ]
+     domain_boxes_2 = [ (0,0) , (20,25) ]
+
+     BlockNeighbors0 {
+        block_a = 0
+        block_b = 1
+
+        rotation_b_to_a = "I_UP", "J_UP"
+        point_in_a_space = 21,0
+        point_in_b_space = 0,0
+     }
+
+     BlockNeighbors1 {
+        block_a = 0
+        block_b = 2
+
+        rotation_b_to_a = "I_UP", "J_UP"
+        point_in_a_space = 0,14
+        point_in_b_space = 0,0
+
+     }
+
+     BlockNeighbors2 {
+        block_a = 1
+        block_b = 2
+
+        rotation_b_to_a = "J_UP", "I_DOWN"
+        point_in_a_space = 0,14
+        point_in_b_space = 20,0
+
+     }
+
+  }
+  rank_begin = 10
+  rank_end = 18
+  index_begin = 100
+  avg_parts_per_rank = 4
+}
+
+
+Test02 {
+  nickname = "3 blocks, 100 owners, 3 parts/rank" // Nick name of test.
+  dim = 2
+  BlockGeometry {
+     num_blocks = 3
+     domain_boxes_0 = [ (0,0) , (20,13) ]
+     domain_boxes_1 = [ (0,0) , (25,13) ]
+     domain_boxes_2 = [ (0,0) , (20,25) ]
+
+     BlockNeighbors0 {
+        block_a = 0
+        block_b = 1
+
+        rotation_b_to_a = "I_UP", "J_UP"
+        point_in_a_space = 21,0
+        point_in_b_space = 0,0
+     }
+
+     BlockNeighbors1 {
+        block_a = 0
+        block_b = 2
+
+        rotation_b_to_a = "I_UP", "J_UP"
+        point_in_a_space = 0,14
+        point_in_b_space = 0,0
+
+     }
+
+     BlockNeighbors2 {
+        block_a = 1
+        block_b = 2
+
+        rotation_b_to_a = "J_UP", "I_DOWN"
+        point_in_a_space = 0,14
+        point_in_b_space = 20,0
+
+     }
+
+  }
+  rank_begin = 10
+  rank_end = 110
+  index_begin = 100
+  avg_parts_per_rank = 4
+}
+
+
+Test03 {
+  nickname = "3 blocks, more owners than cells, 3 parts/rank" // Nick name of test.
+  dim = 2
+  BlockGeometry {
+     num_blocks = 3
+     domain_boxes_0 = [ (0,0) , (2,1) ]
+     domain_boxes_1 = [ (0,0) , (3,1) ]
+     domain_boxes_2 = [ (0,0) , (2,3) ]
+
+     BlockNeighbors0 {
+        block_a = 0
+        block_b = 1
+
+        rotation_b_to_a = "I_UP", "J_UP"
+        point_in_a_space = 4,0
+        point_in_b_space = 0,0
+     }
+
+     BlockNeighbors1 {
+        block_a = 0
+        block_b = 2
+
+        rotation_b_to_a = "I_UP", "J_UP"
+        point_in_a_space = 0,3
+        point_in_b_space = 0,0
+
+     }
+
+     BlockNeighbors2 {
+        block_a = 1
+        block_b = 2
+
+        rotation_b_to_a = "J_UP", "I_DOWN"
+        point_in_a_space = 0,3
+        point_in_b_space = 4,0
+
+     }
+
+  }
+  rank_begin = 10
+  rank_end = 60
+  index_begin = 100
+  avg_parts_per_rank = 4
+}
+
+
+Test04 {
+  nickname = "3 blocks, as many ownwers as MPI tasks, 4 parts/rank" // Nick name of test.
+  dim = 2
+  BlockGeometry {
+     num_blocks = 3
+     domain_boxes_0 = [ (0,0) , (20,13) ]
+     domain_boxes_1 = [ (0,0) , (25,13) ]
+     domain_boxes_2 = [ (0,0) , (20,25) ]
+
+     BlockNeighbors0 {
+        block_a = 0
+        block_b = 1
+
+        rotation_b_to_a = "I_UP", "J_UP"
+        point_in_a_space = 21,0
+        point_in_b_space = 0,0
+     }
+
+     BlockNeighbors1 {
+        block_a = 0
+        block_b = 2
+
+        rotation_b_to_a = "I_UP", "J_UP"
+        point_in_a_space = 0,14
+        point_in_b_space = 0,0
+
+     }
+
+     BlockNeighbors2 {
+        block_a = 1
+        block_b = 2
+
+        rotation_b_to_a = "J_UP", "I_DOWN"
+        point_in_a_space = 0,14
+        point_in_b_space = 20,0
+
+     }
+
+  }
+  index_begin = 0
+  avg_parts_per_rank = 4
+}
+
+
+Test05 {
+  nickname = "3 blocks, 6 tasks, 4 parts/rank" // Nick name of test.
+  dim = 2
+  BlockGeometry {
+     num_blocks = 3
+     domain_boxes_0 = [ (0,0) , (20,13) ]
+     domain_boxes_1 = [ (0,0) , (25,13) ]
+     domain_boxes_2 = [ (0,0) , (20,25) ]
+
+     BlockNeighbors0 {
+        block_a = 0
+        block_b = 1
+
+        rotation_b_to_a = "I_UP", "J_UP"
+        point_in_a_space = 21,0
+        point_in_b_space = 0,0
+     }
+
+     BlockNeighbors1 {
+        block_a = 0
+        block_b = 2
+
+        rotation_b_to_a = "I_UP", "J_UP"
+        point_in_a_space = 0,14
+        point_in_b_space = 0,0
+
+     }
+
+     BlockNeighbors2 {
+        block_a = 1
+        block_b = 2
+
+        rotation_b_to_a = "J_UP", "I_DOWN"
+        point_in_a_space = 0,14
+        point_in_b_space = 20,0
+
+     }
+
+  }
+  rank_begin = 0
+  rank_end = 6
+  index_begin = 0
+  avg_parts_per_rank = 4
+}

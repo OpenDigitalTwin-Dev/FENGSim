@@ -1,0 +1,287 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for SAMRAI Euler example problem (3d sphere)
+ *
+ ************************************************************************/
+Euler {
+   gamma            = 1.4      // gamma = Ratio of specific heats
+
+   godunov_order    = 4
+
+
+   riemann_solve        = "APPROX_RIEM_SOLVE"
+//   riemann_solve        = "EXACT_RIEM_SOLVE"
+//   riemann_solve        = "HLLC_RIEM_SOLVE"
+
+   corner_transport     = "CORNER_TRANSPORT_2"
+
+   data_problem         = "SPHERE"
+
+   Initial_data {
+      radius            = 0.3
+      center            = 2.0, 0.0, 0.0
+
+      density_inside    = 1.0
+      velocity_inside   = 0.0 , 0.0, 0.0
+      pressure_inside   = 1140.35
+
+      density_outside    = 1.0
+      velocity_outside   = 0.0 , 0.0, 0.0
+      pressure_outside   = 0.00001
+
+   }
+
+   Refinement_data {
+      refine_criteria = "PRESSURE_GRADIENT"
+
+      PRESSURE_GRADIENT {
+         grad_tol = 100.0
+      }
+
+      PRESSURE_SHOCK {
+         shock_tol = 10.0
+         shock_onset = 0.85
+      }
+
+      PRESSURE_DEVIATION {
+         dev_tol = 0.01
+         pressure_dev = 0.01
+      }
+   }
+
+   // valid boundary_condition values are "FLOW", "REFLECT", "DIRICHLET"
+   // valid boundary_condition values are "FLOW", "REFLECT", "DIRICHLET"
+   Boundary_data {
+      boundary_face_xlo {
+         boundary_condition      = "REFLECT"
+      }
+      boundary_face_xhi {
+         boundary_condition      = "REFLECT"
+      }
+      boundary_face_ylo {
+         boundary_condition      = "REFLECT"
+      }
+      boundary_face_yhi {
+         boundary_condition      = "REFLECT"
+      }
+      boundary_face_zlo {
+         boundary_condition      = "REFLECT"
+      }
+      boundary_face_zhi {
+         boundary_condition      = "REFLECT"
+      }
+
+      boundary_edge_ylo_zlo { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZREFLECT"
+      }
+      boundary_edge_yhi_zlo { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZREFLECT"
+      }
+      boundary_edge_ylo_zhi { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZREFLECT"
+      }
+      boundary_edge_yhi_zhi { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZREFLECT"
+      }
+      boundary_edge_xlo_zlo { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XREFLECT"
+      }
+      boundary_edge_xlo_zhi { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XREFLECT"
+      }
+      boundary_edge_xhi_zlo { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XREFLECT"
+      }
+      boundary_edge_xhi_zhi { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XREFLECT"
+      }
+      boundary_edge_xlo_ylo { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YREFLECT"
+      }
+      boundary_edge_xhi_ylo { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YREFLECT"
+      }
+      boundary_edge_xlo_yhi { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YREFLECT"
+      }
+      boundary_edge_xhi_yhi { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YREFLECT"
+      }
+
+      boundary_node_xlo_ylo_zlo {
+         boundary_condition      = "XREFLECT"
+      }
+      boundary_node_xhi_ylo_zlo {
+         boundary_condition      = "XREFLECT"
+      }
+      boundary_node_xlo_yhi_zlo {
+         boundary_condition      = "XREFLECT"
+      }
+      boundary_node_xhi_yhi_zlo {
+         boundary_condition      = "XREFLECT"
+      }
+      boundary_node_xlo_ylo_zhi {
+         boundary_condition      = "XREFLECT"
+      }
+      boundary_node_xhi_ylo_zhi {
+         boundary_condition      = "XREFLECT"
+      }
+      boundary_node_xlo_yhi_zhi {
+         boundary_condition      = "XREFLECT"
+      }
+      boundary_node_xhi_yhi_zhi {
+         boundary_condition      = "XREFLECT"
+      }
+
+   }
+
+}
+
+
+BergerRigoutsos {
+   sort_output_nodes = TRUE
+   max_box_size = 100, 100, 100
+   combine_efficiency = 0.90
+   efficiency_tolerance = 0.90
+   DEV_algo_advance_mode = "ADVANCE_SOME"
+   DEV_owner_mode = "MOST_OVERLAP"
+   DEV_inflection_cut_threshold_ar = 4
+   DEV_log_node_history = FALSE
+   DEV_log_cluster_summary = TRUE
+   DEV_log_cluster = FALSE
+   DEV_barrier_before = TRUE
+   DEV_barrier_after = TRUE
+}
+
+TileClustering {
+   tile_size = 3,3,3
+   DEV_log_cluster_summary = TRUE
+   DEV_log_cluster = FALSE
+   DEV_barrier_and_time = TRUE
+}
+
+ChopAndPackLoadBalancer{
+  // bin_pack_method = "GREEDY"
+  bin_pack_method = "SPATIAL"
+  ignore_level_box_union_is_single_box = TRUE
+}
+
+CascadePartitioner {
+  tile_size = 12,12,12
+  flexible_load_tolerance = 0.05
+  max_spread_procs = 500
+  DEV_reset_obligations = TRUE
+  // Debugging options
+  DEV_check_map = FALSE
+  DEV_check_connectivity = FALSE
+  DEV_print_steps = FALSE
+  DEV_print_child_steps = FALSE
+  DEV_summarize_map = FALSE
+}
+
+TreeLoadBalancer {
+  tile_size = 12,12,12
+  flexible_load_tolerance = 0.05
+  max_cycle_spread_procs = 1000
+  DEV_voucher_mode = FALSE
+  DEV_report_load_balance = TRUE
+  DEV_allow_box_breaking = TRUE
+  // Debugging options
+  DEV_check_map = FALSE
+  DEV_check_connectivity = FALSE
+  DEV_print_steps = FALSE
+  DEV_print_swap_steps = FALSE
+  DEV_print_break_steps = FALSE
+  DEV_print_edge_steps = FALSE
+  DEV_summarize_map = FALSE
+}
+
+
+// Main is used only by the new code.
+Main {
+   dim = 3
+   base_name = "sphere-3l2x"
+   log_all_nodes = TRUE
+
+   clustering_type = "TileClustering" // TileClustering || BergerRigoutsos
+   partitioner_type = "CascadePartitioner" // CascadePartitioner || TreeLoadBalancer || ChopAndPackLoadBalancer
+
+// visualization dump parameters
+   viz_dump_interval     = 1          // zero to turn off
+   visit_number_procs_per_file = 1
+
+// restart dump parameters
+   restart_interval        = 0        // zero to turn off
+   restart_write_dirname   = "restart_sphere3d"
+}
+
+
+TimerManager{
+   // timer_list = "*::*::*"
+   // timer_list = "hier::*::*", "mesh::*::*", "xfer::*::*", "algs::*::*", "apps::*::*"
+   timer_list = "appu::main::all"
+   print_user = TRUE
+   // print_timer_overhead = TRUE
+   print_threshold = 0
+   print_summed = TRUE
+   print_max = TRUE
+}
+
+CartesianGeometry {
+   domain_boxes  = [ (0, 0, 0) , (35, 35, 35) ]
+   x_lo          = 0.e0, 0.e0, 0.e0     // lower end of computational domain.
+   x_up          = 4.e0, 4.e0, 4.e0  // upper end of computational domain.
+}
+
+StandardTagAndInitialize {
+   tagging_method = "GRADIENT_DETECTOR"
+}
+
+PatchHierarchy {
+   max_levels             = 3        // Maximum number of levels in hierarchy.
+   ratio_to_coarser {            // vector ratio to next coarser level
+      level_1             = 4 , 4 , 4
+      level_2             = 4 , 4 , 4
+      level_3             = 4 , 4 , 4
+   }
+
+   largest_patch_size {
+      // level_0 =  32, 32, 32  // largest patch allowed in hierarchy
+      level_0 =  -1, -1, -1  // No limit on largest patch.
+           // all finer levels will use same values as level_0...
+   }
+
+   smallest_patch_size {
+      level_0 =  8, 8, 8
+      level_1 =  8, 8, 8
+      level_2 =  8, 8, 8
+      // all finer levels will use same values as level_0...
+   }
+
+   allow_patches_smaller_than_ghostwidth = TRUE
+}
+
+GriddingAlgorithm {
+   sequentialize_patch_indices = TRUE
+   check_nonrefined_tags = "IGNORE"
+}
+
+HyperbolicLevelIntegrator {
+   cfl                      = 0.9e0    // max cfl factor used in problem
+   cfl_init                 = 0.1e0    // initial cfl factor
+   lag_dt_computation       = TRUE
+   use_ghosts_to_compute_dt = TRUE
+   // DEV_distinguish_mpi_reduction_costs = TRUE
+}
+
+TimeRefinementIntegrator {
+   start_time            = 0.e0     // initial simulation time
+   end_time              = 0.1000   // final simulation time
+   grow_dt               = 1.1e0    // growth factor for timesteps
+   max_integrator_steps  = 37     // max number of simulation timesteps
+   // max_integrator_steps  = 1     // max number of simulation timesteps
+}

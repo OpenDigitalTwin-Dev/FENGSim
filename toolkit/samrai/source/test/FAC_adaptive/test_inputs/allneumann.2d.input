@@ -1,0 +1,153 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for FAC solver tests using true adaptivity.
+ *
+ ************************************************************************/
+
+Main {
+  // Dimension of the problem.
+  dim = 2
+
+  // Base name of problem.
+  base_name = "allneumann2d"
+
+  // Name of log file name.  If not specified, determined by base_name.
+  log_filename = "allneumann2d.log"
+
+  // If TRUE all nodes log, otherwise only node 0 logs.
+  log_all = FALSE
+
+  // Visualization filename.  If not specified, determined by base_name.
+  // vis_filename = "allneumann2d"
+
+  // If TRUE write plot file on each adaption.
+  do_plot = TRUE
+
+  // Maximum number of adaptions to perform.
+  max_adaptions = 3
+
+  // Upper limit on L2 Norm for solution to have converged.
+  target_l2norm = 1e-4
+
+  // Initial quess for u on first adaption.
+  initial_u = "0.0"
+}
+
+AdaptivePoisson {
+  // FACPreconditioner algorithm.  Either "default", "mccormick-s4.3", or
+  // "pernice".
+  fac_algo = "default"
+
+  // Type of boundary conditions.  One of "sine", "gauss", "multigauss",
+  // "poly", or "gauss-coef".
+  problem_name = "sine"
+
+  // Tag cells for adaption if error estimator exceeds this threshold.
+  adaption_threshold = 5.0e-3
+
+  // Input for PoissonSineSolution.
+  sine_solution {
+    // Wave numbers in half-cycles and phase shifts in half-cycles in each
+    // dimension.
+    SinusoidFcnControl = "{ nx=1.0 px=0.40 ny=1.0 py=0.75 }"
+
+    // For each direction in each dimension, whether the boundary condition
+    // at that location is a Neumann boundary condition.
+    neumann_locations = TRUE, TRUE, TRUE, TRUE
+
+    // Linear coefficient.
+    linear_coef = -1.0e+00
+  }
+}
+
+// Refer to solv::FACPreconditioner for input.
+fac_precond {
+  max_cycles = 15
+  residual_tol = 3e-10
+  num_pre_sweeps = 1
+  num_post_sweeps = 3
+}
+
+// Refer to solv::CellPoissonFACOps for input.
+fac_ops {
+  coarse_solver_tolerance = 1e-8
+  coarse_solver_max_iterations = 10
+  prolongation_method = "LINEAR_REFINE"
+}
+
+// Refer to solv::CellPoissonHypreSolver for input.
+hypre_solver {
+  use_smg = FALSE
+}
+
+
+// Refer to mesh::CartesianGridGeometry and its base classes for input.
+CartesianGridGeometry {
+  domain_boxes = [(0,0), (31,31)]
+  x_lo         = 0, 0
+  x_up         = 1, 1
+}
+
+// Refer to mesh::StandardTagAndInitialize for input.
+StandardTagAndInitialize {
+  tagging_method = "GRADIENT_DETECTOR"
+}
+
+// Refer to mesh::BergerRigoutsos for input.
+BergerRigoutsos {
+  efficiency_tolerance = 0.99
+  combine_efficiency = 0.99
+  DEV_log_node_history = TRUE
+  DEV_log_cluster_summary = TRUE
+  DEV_log_cluster = TRUE
+}
+
+// Refer to mesh::TreeLoadBalancer for input.
+TreeLoadBalancer{
+}
+
+// Refer to hier::PatchHierarchy for input.
+PatchHierarchy {
+   max_levels = 5
+   proper_nesting_buffer = 2, 2, 2, 2, 2, 2
+   largest_patch_size {
+      // level_0 = 8, 8
+      level_0 = -1, -1
+      // all finer levels will use same values as level_0...
+   }
+   smallest_patch_size {
+      level_0 = 1,1
+      // all finer levels will use same values as level_0...
+   }
+   ratio_to_coarser {
+      level_1            = 3, 3
+      level_2            = 3, 3
+      level_3            = 3, 3
+      level_4            = 3, 3
+      level_5            = 3, 3
+      level_6            = 3, 3
+      level_7            = 3, 3
+      //  etc.
+   }
+   allow_patches_smaller_than_ghostwidth = TRUE
+}
+
+// Refer to mesh::GriddingAlgorithm for input.
+GriddingAlgorithm {
+   enforce_proper_nesting = TRUE
+   DEV_extend_to_domain_boundary = FALSE
+   // DEV_load_balance = FALSE
+   check_nonrefined_tags = "ERROR"
+   check_overlapping_patches = "ERROR"
+   sequentialize_patch_indices = TRUE
+}
+
+// Refer to tbox::TimerManager for input.
+TimerManager{
+  timer_list = "solv::FACPreconditionerX::*", "solv::ScalarPoissonFacOpsX::*", "solv::CartesianRobinBcHelperX::*"
+  print_user = TRUE
+}

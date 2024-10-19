@@ -1,0 +1,156 @@
+*****************************************************************************
+  Copyright 1997-2024                                                    
+  Lawrence Livermore National Security, LLC.                            
+  All rights reserved.                                                    
+*****************************************************************************
+*****************************************************************************
+
+                     Release Notes for SAMRAI v2.1.0
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+*****************************************************************************
+
+NOTE:  These release notes are more descriptive and detailed than is usual
+       for software release notes.  The reason for this is that presently
+       complete documentation does not exist for most of the items listed.
+       Until sufficient user documentation becomes available, descriptions
+       such as those that follow will be part of SAMRAI release notes.
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+*****************************************************************************
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report it
+to us so that we may fix it.  We will make every effort to fix bugs
+in a timely manner.  Depending on the severity or the complexity of the
+bug, we will either fix the bug for a subsequent library release or send
+a code fix to users so that their work is minimally interrupted.
+
+LLNL users should report bugs using the CASC bug tracking web pages:
+
+        http://www-casc.llnl.gov/bugs/
+
+Enter the bug into the appropriate area of the SAMRAI project section.
+
+Bugs found by other users should send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                Summary of what's changed
+-----------------------------------------------------------------------------
+
+This section contains a summary of changes to SAMRAI.  More detailed 
+descriptions of items in the following list are provided below.
+
+(1) The hypre library has changed slightly, affecting SAMRAI's cell-centered
+Poisson solver codes.  Our solvers require hypre-1.9.0b or later.
+
+(2) The "femutils"  directory was moved from the solvers package to the
+algorithms package.  Any instances of patch boundary sum objects
+must be declared in the algs namespace.
+
+(3) Support for time interpolation in communication schedules that treat 
+locally-active patch data has been added.  As a result the interfaces and
+usage of the locally-active patch data communication algorithms and schedules
+is essentially the same as in the standard case, where patch data lives on
+all patches in an AMR patch hierarchy.
+
+----------------------------------------------------------------------------
+                Summary of what's new
+-----------------------------------------------------------------------------
+
+This section contains a summary of additions to SAMRAI.  More detailed 
+descriptions of items in the following list are provided below.
+
+(1) New classes added to the multiblock package
+
+(2) Added support for embedded and immersed boundary applications.
+
+(3) Added option to set summary filename in VisItDataWriter.
+
+(4) restart-redistribute tool added to allow for restart on arbirtrary
+    numbers of processors.
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+                Details about what's changed
+-----------------------------------------------------------------------------
+
+(1) Older versions of hypre required that we specify periodic boundary
+conditions using boolean flags.  This interface has been changed, now
+requiring the periodic shifts instead.  The cell-centered Poisson solver
+in SAMRAI has been changed to conform to this new interface.  Unfortunately,
+it makes our solver incompatible with older versions of hypre.  We have
+tested with hypre-1.9.0b and we recommend that you upgrade to this version
+if you wish to use hypre.
+
+(2) The "femutils"  directory was moved from the solvers package to the
+algorithms package.  Any instances of patch boundary sum objects
+must be declared in the algs namespace. For example, the reference for
+PatchBoundaryNodeSum is now in the "algs" rather than "solv" namespace:
+   OLD:  solv::PatchBoundaryNodeSum<NDIM>
+   NEW:  algs::PatchBoundaryNodeSum<NDIM>
+
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+                Details about what's new
+-----------------------------------------------------------------------------
+
+(1) Some new classes were added to the multiblock package, including 
+MultiblockRefinePatchStrategy and  MultiblockCoarsenPatchStrategy. A number
+of other design changes were also made to more easily support multiblock
+applications.
+
+(2) Support for embedded and immersed boundary applications was added 
+to the apputils package, in the directory apputils/embedded_boundary.
+The class EmbeddedBoundaryGeometry manages construction and data manipulation
+of embedded boundaries on a Cartesian mesh. See header comments for details
+of the ways in which these classes may be used.  We also added links
+to outside packages - Cart3D and Eleven/Overture - for complex geometry
+grid generation.  These classes are currently empty due to licensing issues,
+but feel free to send a message to samrai@llnl.gov if you are interested
+in using them and we may be able to work around the license restrictions.
+
+(3) By default the summary file written by the VisItDataWriter was 
+hardwired to be called "summary.samrai".  Some users expressed the desire
+to change its name so we added a new method VisItDataWriter::setSummaryFilename()
+that allows the user to change the name of the file. To identify the 
+samrai file to VisIt, the filename must still end in ".samrai" (so the
+actual filename will be <filename>.samrai, where <filename> is what
+you supply).
+
+(4) The restart-redistribute tool has been created to allow for restarted
+runs on an arbitrary number of processors.  Ordinarily, SAMRAI's restart
+files require all restarted runs use the same number of processors as the run
+that created the restart dump.  This tool processes a restart directory and
+creates a new set of restart files for use on a different number of processors.
+See the README in the tools/restart directory for instructions on the
+building and usage of this tool.
+
+
+-----------------------------------------------------------------------------
+                Major Bug Fixes 
+-----------------------------------------------------------------------------
+
+(1) Problems with communication of "edge" patch data on a periodic domain
+have been fixed.  In particular, this fixes a problem with the patch boundary
+node sum utilities. 
+
+-----------------------------------------------------------------------------
+                Known Problems
+-----------------------------------------------------------------------------
+
+(1) 
+
+=============================================================================
+=============================================================================

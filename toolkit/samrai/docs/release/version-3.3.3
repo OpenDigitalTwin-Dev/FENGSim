@@ -1,0 +1,222 @@
+*****************************************************************************
+  Copyright 1997-2011
+  Lawrence Livermore National Security, LLC.
+  All rights reserved.
+*****************************************************************************
+
+                     Release Notes for SAMRAI v3.3.3
+
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+
+*****************************************************************************
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+LLNL users can use the discussion groups on the LLNL Sourceforge site:
+
+https://sourceforge.llnl.gov/sf/discussion/do/listForums/projects.samrai/discussion
+
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report
+it to us so that we may fix it.  LLNL users may report bugs using the
+LLNL Sourceforge site if you have a sourceforge account:
+
+https://sourceforge.llnl.gov/sf/tracker/do/listTrackers/projects.samrai/tracker
+
+Bugs found by other users should send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Summary of what's new
+-----------------------------------------------------------------------------
+
+This section contains a summary of additions to SAMRAI.  More detailed
+descriptions of items in the following list are provided below.
+
+(1) Reduced memory usage.
+
+(2) Better execution times.
+
+(3) The bridge algorithm is now multi-block aware.
+
+(4) CoarsenSchedule is multi-block aware.
+
+
+-----------------------------------------------------------------------------
+                Summary of what's changed
+-----------------------------------------------------------------------------
+
+This section contains a summary of changes to SAMRAI.  More detailed
+descriptions of items in the following list are provided below.
+
+(1) MappedBox has been merged into Box.
+
+(2) BoxSet and BoxList have been merged into BoxContainer.
+
+(3) Internal representation of Connector is now encapsulated behind an abstract
+    API.
+
+(4) The ceiling methods in IntVector have been renamed ceilingDivide.
+
+(5) Operations to remove periodic image boxes now work on this.
+
+(6) Constructing SAMRAI_MPI with MPI_COMM_NULL sets rank and size
+    to invalid values.
+
+(7) Boost is no longer required.
+
+(8) Fixed bug causing excessive call-backs in RefineSchedule::fillData.
+
+(9) RefineSchedule construction performance has been improved.
+
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                Details about what's new
+-----------------------------------------------------------------------------
+
+(1) Reduced memory usage.
+
+Algorithmic improvements and the use of BoxContainer in lieu of BoxSet and/or
+BoxList have drastically reduced the number of Box creations and assignments
+especially for multi-block.  In addition the number of Boxes in existence at
+any time has also been drastically reduced especially for multi-block.
+
+Several test problems run on an in-house application using SAMRAI show that the
+maximum number of Boxes in existence at any given time is as much as 16x lower
+than in version 3.2.  Additionally, the number of constructed Boxes is as
+much as 28x lower than in version 3.2.
+
+(2) Better execution times.
+
+Larely due to the reduction in object creation/copying execution time has
+improved slightly.
+
+(3) The bridge algorithm is now multi-block aware.
+
+No interface change, but multi-block now runs faster.
+
+(4) CoarsenAlgorithm and CoarsenSchedule are multi-block aware.
+
+MultiblockCoarsenAlgorithm and MultiblockCoarsenSchedule have been removed from
+the library, and CoarsenAlgorithm and CoarsenSchedule are now capable of
+handling coarsening operations for multi-block configurations.
+
+-----------------------------------------------------------------------------
+                Details about what's changed
+-----------------------------------------------------------------------------
+
+(1) MappedBox has been merged into Box.
+
+There is no longer a class called MappedBox.
+
+All Boxes now have a BoxId.
+
+"Unmapped" Boxes have an invalid BoxId.
+
+Names of classes have changed to reflect the fact that MappedBox is no longer
+a class.  For example MappedBoxTree is now just BoxTree.  "Mapped box"
+terminology still exists in variable and function argument names as no complete
+attempt was made to eliminate this.
+
+(2)  BoxSet and BoxList have been merged into BoxContainer.
+
+The single container, BoxContainer, can act like a set or as a list depending
+on the algorithmic needs.
+
+Internally only one instance of each Box exists.
+
+Merging these containers eliminates much of the need to copy from one
+container representation to another in order to access different container
+operations or to pass them in to different interfaces.
+
+BoxTree and MultiblockBoxTree will be merged into BoxContainer in a future
+release.
+
+BoxContainer maintains an internal state that is "ordered" or "unordered".
+An unordered BoxContainer is meant for usage similar to that of the old BoxList
+where iterations through the container are sequenced according to how the
+container was filled with its members, while an ordered BoxContainer is meant
+to have usage similar to the old BoxSet, where there is an internal ordering
+of the members according to their BoxId values.
+
+A BoxContainer may be switched in either direction between ordered or unordered
+state using the order() or unorder() methods, though there are restrictions on
+switching from unordered to ordered.  To switch a BoxContainer from unordered
+to ordered, all of its members must have valid BoxIds, and each Box's BoxId
+must be unique within the container.
+
+Some methods of BoxContainer may only be called on ordered containers, other
+methods may only be called on unordered containers, and some may be called
+on any container.  These restrictions are detailed in the class documentation.
+
+With BoxContainer there are two new associated iterators,
+BoxContainer::Iterator and BoxContainer::ConstIterator.  These work regardless
+of ordered/unordered state, though the sequence of iteration will depend on
+that state.  The syntax to use these iterators is designed to be more
+closely (though not perfectly) aligned with STL iterator syntax than older
+SAMRAI iterators have been.
+
+Iteration should look like:
+
+   for (BoxContainer::Iterator itr = boxes.begin(); itr != boxes.end(); ++itr) {
+      // Useful code goes here.
+   } 
+
+(3) Internal representation of Connector is now encapsulated behind an abstract
+    API.
+
+Previously, the fact that Connector used a NeighborhoodSet as its internal
+representation was implicitly exported.  Client code would request the
+NeighborhoodSet and explicitly manipulate it.  It is no longer possible to
+obtain the NeighborhoodSet.  Instead, there is an API which allows clients to
+abstractly request information from or to perform modifications on a Connector.
+There are also typedefs for the different Connector iterators which should
+now be used.
+
+(4) The ceiling methods in IntVector have been renamed ceilingDivide.
+
+Renaming was meant to show the divide part of the operation.
+
+(5) Operations to remove periodic image boxes now work on this.
+
+Old behavior: Take an output box container copy the non-periodic image
+there.  The method is const.
+
+New behavior: Remove periodic images from this.  The method is non-const.
+
+(6) Constructing SAMRAI_MPI with MPI_COMM_NULL sets rank and size
+    to invalid values.
+
+This change prevents unexpectedly valid rank and group sizes when
+SAMRAI_MPI is built with MPI_COMM_NULL.
+
+(7) Boost is no longer required.
+
+The compiled Boost libraries are no longer required.  Boost headers
+are needed for some classes but are not required.  Use configure
+switch "--without-boost" to remove Boost dependency.  Note that, as
+warned by the configure script, the SparseData class is not supported
+without Boost.
+
+(8) Fixed bug causing excessive call-backs in RefineSchedule::fillData.
+
+As a side effect, the method PatchLevel::patchTouchesPeriodicBoundary,
+has been removed because it is obsolete.
+
+(9) RefineSchedule construction performance has been improved.
+
+Some non-scalable multiblock-related operations were replaced with scalable
+operations.
+
+
+
+=============================================================================
+=============================================================================

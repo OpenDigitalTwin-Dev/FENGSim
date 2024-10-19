@@ -1,0 +1,149 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   input file for testing multiblock tree searches.
+ *
+ ************************************************************************/
+
+Main {
+    dim = 2
+//
+// Log file information
+//
+    base_name  = "mblcu.6blk.2d"
+    log_all_nodes  = TRUE
+
+// For breaking up user-specified boxes.
+    max_box_size = 7,7
+
+// Refinement ratio of big MappedBoxLevel.
+   big_refinement_ratio = 2, 2
+
+// Refinement ratio of small MappedBoxLevel.
+   small_refinement_ratio = 6, 6
+
+}
+
+GridGeometry {
+   num_blocks = 6
+   domain_boxes_0 = [ (0,0) , ( 9, 9) ]
+   domain_boxes_1 = [ (0,0) , ( 9,14) ]
+   domain_boxes_2 = [ (0,0) , (14, 9) ]
+   domain_boxes_3 = [ (0,0) , ( 9, 9) ]
+   domain_boxes_4 = [ (0,0) , ( 9, 9) ]
+   domain_boxes_5 = [ (0,0) , ( 9,14) ]
+
+
+   BlockNeighbors0 {
+      block_a = 0
+      block_b = 1
+
+      rotation_b_to_a = "I_UP", "J_UP"
+      point_in_a_space = 0,10
+      point_in_b_space = 0,0
+   }
+
+   BlockNeighbors1 {
+      block_a = 0
+      block_b = 2
+
+      rotation_b_to_a = "I_UP", "J_UP"
+      point_in_a_space = -1,0
+      point_in_b_space = 14,0
+   }
+
+   BlockNeighbors2 {
+      block_a = 1
+      block_b = 2
+
+      rotation_b_to_a = "J_UP", "I_DOWN"
+      point_in_a_space = -1,0
+      point_in_b_space = 14,9
+   }
+
+   BlockNeighbors3 {
+      block_a = 0
+      block_b = 3
+
+      rotation_b_to_a = "I_UP", "J_UP"
+      point_in_a_space = 10,0
+      point_in_b_space = 0,0
+   }
+
+   BlockNeighbors4 {
+      block_a = 3
+      block_b = 4
+
+      rotation_b_to_a = "I_UP", "J_UP"
+      point_in_a_space = 0,10
+      point_in_b_space = 0,0
+
+   }
+
+   BlockNeighbors5 {
+      block_a = 4
+      block_b = 5
+
+      rotation_b_to_a = "J_DOWN", "I_UP"
+      point_in_a_space = 0,0
+      point_in_b_space = 0,-1
+   }
+
+   BlockNeighbors6 {
+      block_a = 5
+      block_b = 1
+
+      rotation_b_to_a = "I_UP", "J_UP"
+      point_in_a_space = -1,0
+      point_in_b_space = 9,0
+   }
+
+   BlockNeighbors7 {
+      block_a = 0
+      block_b = 4
+
+      rotation_b_to_a = "I_UP", "J_UP"
+      point_in_a_space = 9,9
+      point_in_b_space = -1,-1
+   }
+
+   BlockNeighbors8 {
+      block_a = 0
+      block_b = 5
+
+      rotation_b_to_a = "I_UP", "J_UP"
+      point_in_a_space = 9,9
+      point_in_b_space = -1,-1
+   }
+
+   BlockNeighbors9 {
+      block_a = 3
+      block_b = 5
+
+      rotation_b_to_a = "J_DOWN", "I_UP"
+      point_in_a_space = 0,9
+      point_in_b_space = -1,-1
+   }
+
+   BlockNeighbors10 {
+      block_a = 3
+      block_b = 1
+
+      rotation_b_to_a = "I_UP", "J_UP"
+      point_in_a_space = 0,9
+      point_in_b_space = 10,-1
+   }
+
+   BlockNeighbors11 {
+      block_a = 4
+      block_b = 1
+
+      rotation_b_to_a = "J_DOWN", "I_UP"
+      point_in_a_space = -1,-1
+      point_in_b_space = 9,0
+   }
+
+}

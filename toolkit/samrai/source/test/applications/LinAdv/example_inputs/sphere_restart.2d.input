@@ -1,0 +1,217 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for SAMRAI LinAdv example problem
+ *
+ ************************************************************************/
+
+// Refer to ../test_inputs/test2d.input for full description of all input
+// parameters specific to this problem.
+
+AutoTester {
+   // No input--this is an example and does not test results.
+}
+
+LinAdv {
+   // Linear advection velocity vector--vector of length dim
+   advection_velocity = 2.0e0 , 1.0e0
+
+   // order of Goduov slopes (1, 2, or 4)
+   godunov_order    = 4
+
+   // type of finite difference approximation for 3d transverse flux correction
+   // Allowed values are CORNER_TRANSPORT_1 and CORNER_TRANSPORT_2.
+   // CORNER_TRANSPORT_1 means to compute numerical approximations to flux
+   // terms using an extension to three dimensions of Collella's corner
+   // transport upwind approach.
+   // CORNER_TRANSPORT_2 means to compute numerical approximations to flux
+   // terms using John Trangenstein's interpretation of the three-dimensional
+   // version of Collella's corner transport upwind approach.
+   corner_transport = "CORNER_TRANSPORT_1"
+
+   // General type of problem and its initial conditions.
+   data_problem      = "SPHERE"
+   Initial_data {
+      radius            = 2.9
+      center            = 22.5 , 5.5
+
+      uval_inside       = 80.0
+      uval_outside      = 5.0
+
+   }
+
+   // Refinement criteria and, for each, the parameters controling it.
+   // Refinement criteria may be one or more of UVAL_DEVIATION, UVAL_GRADIENT,
+   // UVAL_SHOCK, or UVAL_RICHARDSON.
+   Refinement_data {
+      // UVAL_GRADIENT AND UVAL_SHOCK criteria are applied only if the gradient
+      // detector is turned on in the StandardTagAndInitialize input below...
+      refine_criteria = "UVAL_RICHARDSON", "UVAL_GRADIENT", "UVAL_SHOCK"
+
+      UVAL_RICHARDSON {
+         rich_tol = 0.1, 0.1, 0.001
+      }
+
+      UVAL_GRADIENT {
+         grad_tol = 10.0
+      }
+ 
+      UVAL_SHOCK {
+         shock_tol   = 10.0
+         shock_onset = 0.85
+      }
+   }
+
+   // Boundary condition data following the format defined in
+   // appu::CartesianBoundaryUtility[2,3]
+   Boundary_data {
+      boundary_edge_xlo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_edge_xhi {
+         boundary_condition      = "FLOW"
+      }
+      boundary_edge_ylo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_edge_yhi {
+         boundary_condition      = "FLOW"
+      }
+
+      // IMPORTANT: If a *REFLECT, *DIRICHLET, or *FLOW condition is given
+      //            for a node, the condition must match that of the
+      //            appropriate adjacent edge above.  This is enforced for
+      //            consistency.  However, note when a REFLECT edge condition
+      //            is given and the other adjacent edge has either a FLOW
+      //            or REFLECT condition, the resulting node boundary values
+      //            will be the same regardless of which edge is used.
+      boundary_node_xlo_ylo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xhi_ylo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xlo_yhi {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xhi_yhi {
+         boundary_condition      = "XFLOW"
+      }
+   }
+
+}
+
+Main {
+   // dimension of problem
+   dim = 2
+
+   // base name of log file
+   base_name = "sphere_restart.2d"
+
+   // if true all nodes will log to individual files
+   // if false only node 0 will log
+   log_all_nodes    = TRUE
+
+   // visualization dump parameters
+   // frequency at which to dump viz output--zero to turn off
+   viz_dump_interval    = 1
+   // directory in which to place viz output
+   viz_dump_dirname     = "viz_sphere2d_restart"
+   // number of processors which write to each viz file
+   visit_number_procs_per_file = 1
+
+   // restart dump parameters
+   // frequency at which to dump restart output--zero to turn off
+   restart_interval     = 0
+}
+
+// Refer to geom::CartesianGridGeometry and its base classes for input
+CartesianGeometry{
+   domain_boxes	= [(0,0),(29,19)]
+
+   x_lo = 0.e0 , 0.e0   // lower end of computational domain.
+   x_up = 30.e0 , 20.e0 // upper end of computational domain.
+
+   periodic_dimension = 1,0
+}
+
+// Refer to hier::PatchHierarchy for input
+PatchHierarchy {
+   max_levels = 4        // Maximum number of levels in hierarchy.
+
+// Note: For the following regridding information, data is required for each
+//       potential in the patch hierarchy; i.e., levels 0 thru max_levels-1.
+//       If more data values than needed are given, only the number required
+//       will be read in.  If fewer values are given, an error will result.
+//
+// Specify coarsening ratios for each level 1 through max_levels-1
+
+   ratio_to_coarser {             // vector ratio to next coarser level
+      level_1 = 4 , 4
+      level_2 = 2 , 2
+      level_3 = 2 , 2
+      level_4 = 2 , 2
+   }
+
+   largest_patch_size {
+      level_0 = 40 , 40  // largest patch allowed in hierarchy
+      // all finer levels will use same values as level_0...
+   }
+
+   smallest_patch_size {
+      level_0 = 16 , 16
+      // all finer levels will use same values as level_0...
+   }
+
+}
+
+// Refer to mesh::BergerRigoutsos for input
+BergerRigoutsos {
+   efficiency_tolerance   = 0.85e0    // min % of tag cells in new patch level
+   combine_efficiency     = 0.95e0    // chop box if sum of volumes of smaller
+                                      // boxes < efficiency * vol of large box
+}
+
+// Refer to mesh::GriddingAlgorithm for input
+GriddingAlgorithm{
+}
+
+// Refer to mesh::StandardTagAndInitialize for input
+StandardTagAndInitialize {
+//   tagging_method = "GRADIENT_DETECTOR"
+   tagging_method = "RICHARDSON_EXTRAPOLATION"
+//   tagging_method = "RICHARDSON_EXTRAPOLATION", "GRADIENT_DETECTOR"
+//   tagging_method = "REFINE_BOXES"
+//   level_0 {
+//      boxes = [(15,0),(29,14)]
+//   }
+//   level_1 {
+//      boxes = [(65,10),(114,40)]
+//   }
+}
+
+// Refer to algs::HyperbolicLevelIntegrator for input
+HyperbolicLevelIntegrator{
+   cfl                       = 0.9e0    // max cfl factor used in problem
+   cfl_init                  = 0.9e0    // initial cfl factor
+   lag_dt_computation        = TRUE
+   use_ghosts_to_compute_dt  = TRUE
+}
+
+// Refer to algs::TimeRefinementIntegrator for input
+TimeRefinementIntegrator{
+   start_time           = 0.e0     // initial simulation time
+   end_time             = 100.e0   // final simulation time
+   grow_dt              = 1.1e0    // growth factor for timesteps
+   max_integrator_steps = 25       // max number of simulation timesteps
+
+   tag_buffer = 2,2,2
+}
+
+// Refer to mesh::TreeLoadBalancer for input
+LoadBalancer {
+   // using default TreeLoadBalancer configuration
+}

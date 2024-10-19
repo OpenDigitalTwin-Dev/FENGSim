@@ -1,0 +1,429 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Code and input for benchmarking and experimentation with tree-based communication.
+ *
+ ************************************************************************/
+
+/*
+Benchmark for various combinations of rank trees and collective
+communication operations.
+*/
+
+Main {
+
+  // Base name for output files.
+  base_name = "multiple"
+
+  // Whether to log all nodes.
+  log_all_nodes = FALSE
+
+}
+
+
+
+
+/*
+ * Define tests using databases named Test##,
+ * where ## is a 2-digit integer, sequentially from 0
+ */
+
+
+Test00 {
+
+  nickname = "DFT-Reduce" // Nick name of test.
+
+  tree_name = "BalancedDepthFirstTree" // BalancedDepthFirstTree || CenteredRankTree || ...
+
+  BalancedDepthFirstTree { // Parameters for tree of same name in getTreeForTesting()
+    do_left_leaf_switch = TRUE
+  }
+
+  msg_length = 1024 // Message length (units of integer)
+  first_data_length = 1 // See AsyncCommPeer::limitFirstDataLength().
+
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 400, 0 // Simulated processing cost is 400 usec per message and 0 usec per item in message.
+
+  repetition = 100 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = TRUE // Whether to barrier after each rep.
+
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+
+  // Pattern of message travel:
+  // "UP", "DOWN": Up or down the tree
+  // "UP_THEN_DOWN", "DOWN_THEN_UP": Self-explanatory
+  // "TreeLB": Simulation communication of TreeLoadBalancer
+  message_pattern = "UP"
+}
+
+
+Test01 {
+
+  nickname = "DFT-Broadcast" // Nick name of test.
+
+  tree_name = "BalancedDepthFirstTree" // BalancedDepthFirstTree || CenteredRankTree || ...
+
+  BalancedDepthFirstTree { // Parameters for tree of same name in getTreeForTesting()
+    do_left_leaf_switch = TRUE
+  }
+
+  msg_length = 1024 // Message length (units of integer)
+  first_data_length = 1 // See AsyncCommPeer::limitFirstDataLength().
+
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 400, 0 // Simulated processing cost is 400 usec per message and 0 usec per item in message.
+
+  repetition = 100 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = TRUE // Whether to barrier after each rep.
+
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+
+  // Pattern of message travel:
+  // "UP", "DOWN": Up or down the tree
+  // "UP_THEN_DOWN", "DOWN_THEN_UP": Self-explanatory
+  // "TreeLB": Simulation communication of TreeLoadBalancer
+  message_pattern = "DOWN"
+}
+
+
+Test02 {
+
+  nickname = "DFT-Allreduce" // Nick name of test.
+
+  tree_name = "BalancedDepthFirstTree" // BalancedDepthFirstTree || CenteredRankTree || ...
+
+  BalancedDepthFirstTree { // Parameters for tree of same name in getTreeForTesting()
+    do_left_leaf_switch = TRUE
+  }
+
+  msg_length = 1024 // Message length (units of integer)
+  first_data_length = 1 // See AsyncCommPeer::limitFirstDataLength().
+
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 400, 0 // Simulated processing cost is 400 usec per message and 0 usec per item in message.
+
+  repetition = 100 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = FALSE // Whether to barrier after each rep.
+
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+
+  // Pattern of message travel:
+  // "UP", "DOWN": Up or down the tree
+  // "UP_THEN_DOWN", "DOWN_THEN_UP": Self-explanatory
+  // "TreeLB": Simulation communication of TreeLoadBalancer
+  message_pattern = "UP_THEN_DOWN"
+}
+
+
+Test03 {
+
+  nickname = "DFT-TreeLB" // Nick name of test.
+  // This is an extension of the Allreduce test, simulating the communication
+  // patern of the TreeLoadBalancer.
+
+  tree_name = "BalancedDepthFirstTree" // BalancedDepthFirstTree || CenteredRankTree || ...
+
+  BalancedDepthFirstTree { // Parameters for tree of same name in getTreeForTesting()
+    do_left_leaf_switch = TRUE
+  }
+
+  msg_length = 1024 // Message length (units of integer)
+  first_data_length = 1 // See AsyncCommPeer::limitFirstDataLength().
+
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 400, 0 // Simulated processing cost is 400 usec per message and 0 usec per item in message.
+
+  repetition = 100 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = TRUE // Whether to barrier after each rep.
+
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+
+  // Pattern of message travel:
+  // "UP", "DOWN": Up or down the tree
+  // "UP_THEN_DOWN", "DOWN_THEN_UP": Self-explanatory
+  // "TreeLB": Simulation communication of TreeLoadBalancer
+  message_pattern = "TreeLB"
+
+  // Specify the dependency for the down-message, as a funcion of MPI rank:
+  // 1: down message depends only on parent
+  // 2: down message depends on grandparent
+  // 0: there is no down message
+  // First value is for rank 0, second is for rank 1, and so on.
+  // The array is repeated for ranks higher than specifed.
+  // (Rank r has dependency according to index r%L, where L is
+  // the length of down_message_dependency.)
+  down_message_dependency = 1, 2, 0, 1, 2, 0
+}
+
+
+Test04 {
+
+  nickname = "CT-Reduce" // Nick name of test.
+
+  tree_name = "CenteredRankTree" // BalancedDepthFirstTree || CenteredRankTree || ...
+
+  CenteredRankTree { // Parameters for tree of same name in getTreeForTesting()
+    make_first_rank_the_root = TRUE
+  }
+
+  msg_length = 1024 // Message length (units of integer)
+  first_data_length = 1 // See AsyncCommPeer::limitFirstDataLength().
+
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 400, 0 // Simulated processing cost is 400 usec per message and 0 usec per item in message.
+
+  repetition = 100 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = TRUE // Whether to barrier after each rep.
+
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+
+  // Pattern of message travel:
+  // "UP", "DOWN": Up or down the tree
+  // "UP_THEN_DOWN", "DOWN_THEN_UP": Self-explanatory
+  // "TreeLB": Simulation communication of TreeLoadBalancer
+  message_pattern = "UP"
+}
+
+
+Test05 {
+
+  nickname = "CT-Broadcast" // Nick name of test.
+
+  tree_name = "CenteredRankTree" // BalancedDepthFirstTree || CenteredRankTree || ...
+
+  CenteredRankTree { // Parameters for tree of same name in getTreeForTesting()
+    make_first_rank_the_root = TRUE
+  }
+
+  msg_length = 1024 // Message length (units of integer)
+  first_data_length = 1 // See AsyncCommPeer::limitFirstDataLength().
+
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 400, 0 // Simulated processing cost is 400 usec per message and 0 usec per item in message.
+
+  repetition = 100 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = TRUE // Whether to barrier after each rep.
+
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+
+  // Pattern of message travel:
+  // "UP", "DOWN": Up or down the tree
+  // "UP_THEN_DOWN", "DOWN_THEN_UP": Self-explanatory
+  // "TreeLB": Simulation communication of TreeLoadBalancer
+  message_pattern = "DOWN"
+}
+
+
+Test06 {
+
+  nickname = "CT-Allreduce" // Nick name of test.
+
+  tree_name = "CenteredRankTree" // BalancedDepthFirstTree || CenteredRankTree || ...
+
+  CenteredRankTree { // Parameters for tree of same name in getTreeForTesting()
+    make_first_rank_the_root = TRUE
+  }
+
+  msg_length = 1024 // Message length (units of integer)
+  first_data_length = 1 // See AsyncCommPeer::limitFirstDataLength().
+
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 400, 0 // Simulated processing cost is 400 usec per message and 0 usec per item in message.
+
+  repetition = 100 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = FALSE // Whether to barrier after each rep.
+
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+
+  // Pattern of message travel:
+  // "UP", "DOWN": Up or down the tree
+  // "UP_THEN_DOWN", "DOWN_THEN_UP": Self-explanatory
+  // "TreeLB": Simulation communication of TreeLoadBalancer
+  message_pattern = "UP_THEN_DOWN"
+}
+
+
+Test07 {
+
+  nickname = "CT-TreeLB" // Nick name of test.
+  // This is an extension of the Allreduce test, simulating the communication
+  // patern of the TreeLoadBalancer.
+
+  tree_name = "CenteredRankTree" // BalancedDepthFirstTree || CenteredRankTree || ...
+
+  CenteredRankTree { // Parameters for tree of same name in getTreeForTesting()
+    make_first_rank_the_root = TRUE
+  }
+
+  msg_length = 1024 // Message length (units of integer)
+  first_data_length = 1 // See AsyncCommPeer::limitFirstDataLength().
+
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 400, 0 // Simulated processing cost is 400 usec per message and 0 usec per item in message.
+
+  repetition = 100 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = TRUE // Whether to barrier after each rep.
+
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+
+  // Pattern of message travel:
+  // "UP", "DOWN": Up or down the tree
+  // "UP_THEN_DOWN", "DOWN_THEN_UP": Self-explanatory
+  // "TreeLB": Simulation communication of TreeLoadBalancer
+  message_pattern = "TreeLB"
+
+  // Specify the dependency for the down-message, as a funcion of MPI rank:
+  // 1: down message depends only on parent
+  // 2: down message depends on grandparent
+  // 0: there is no down message
+  // First value is for rank 0, second is for rank 1, and so on.
+  // The array is repeated for ranks higher than specifed.
+  // (Rank r has dependency according to index r%L, where L is
+  // the length of down_message_dependency.)
+  down_message_dependency = 1, 2, 0, 1, 2, 0
+}
+
+
+Test08 {
+
+  nickname = "BFT-Reduce" // Nick name of test.
+
+  tree_name = "BreadthFirstRankTree" // BalancedDepthFirstTree || CenteredRankTree || ...
+
+  BreadthFirstRankTree { // Parameters for tree of same name in getTreeForTesting()
+    tree_degree = 2
+  }
+
+  msg_length = 1024 // Message length (units of integer)
+  first_data_length = 1 // See AsyncCommPeer::limitFirstDataLength().
+
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 400, 0 // Simulated processing cost is 400 usec per message and 0 usec per item in message.
+
+  repetition = 100 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = TRUE // Whether to barrier after each rep.
+
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+
+  // Pattern of message travel:
+  // "UP", "DOWN": Up or down the tree
+  // "UP_THEN_DOWN", "DOWN_THEN_UP": Self-explanatory
+  // "TreeLB": Simulation communication of TreeLoadBalancer
+  message_pattern = "UP"
+}
+
+
+Test09 {
+
+  nickname = "BFT-Broadcast" // Nick name of test.
+
+  tree_name = "BreadthFirstRankTree" // BalancedDepthFirstTree || CenteredRankTree || ...
+
+  BreadthFirstRankTree { // Parameters for tree of same name in getTreeForTesting()
+    tree_degree = 2
+  }
+
+  msg_length = 1024 // Message length (units of integer)
+  first_data_length = 1 // See AsyncCommPeer::limitFirstDataLength().
+
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 400, 0 // Simulated processing cost is 400 usec per message and 0 usec per item in message.
+
+  repetition = 100 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = TRUE // Whether to barrier after each rep.
+
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+
+  // Pattern of message travel:
+  // "UP", "DOWN": Up or down the tree
+  // "UP_THEN_DOWN", "DOWN_THEN_UP": Self-explanatory
+  // "TreeLB": Simulation communication of TreeLoadBalancer
+  message_pattern = "DOWN"
+}
+
+
+Test10 {
+
+  nickname = "BFT-Allreduce" // Nick name of test.
+
+  tree_name = "BreadthFirstRankTree" // BalancedDepthFirstTree || CenteredRankTree || ...
+
+  BreadthFirstRankTree { // Parameters for tree of same name in getTreeForTesting()
+    tree_degree = 2
+  }
+
+  msg_length = 1024 // Message length (units of integer)
+  first_data_length = 1 // See AsyncCommPeer::limitFirstDataLength().
+
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 400, 0 // Simulated processing cost is 400 usec per message and 0 usec per item in message.
+
+  repetition = 100 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = FALSE // Whether to barrier after each rep.
+
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+
+  // Pattern of message travel:
+  // "UP", "DOWN": Up or down the tree
+  // "UP_THEN_DOWN", "DOWN_THEN_UP": Self-explanatory
+  // "TreeLB": Simulation communication of TreeLoadBalancer
+  message_pattern = "UP_THEN_DOWN"
+}
+
+
+Test11 {
+
+  nickname = "BFT-TreeLB" // Nick name of test.
+  // This is an extension of the Allreduce test, simulating the communication
+  // patern of the TreeLoadBalancer.
+
+  tree_name = "BreadthFirstRankTree" // BalancedDepthFirstTree || CenteredRankTree || ...
+
+  BreadthFirstRankTree { // Parameters for tree of same name in getTreeForTesting()
+    tree_degree = 2
+  }
+
+  msg_length = 1024 // Message length (units of integer)
+  first_data_length = 1 // See AsyncCommPeer::limitFirstDataLength().
+
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 400, 0 // Simulated processing cost is 400 usec per message and 0 usec per item in message.
+
+  repetition = 100 // Repetitions of communication and processing steps.
+  barrier_after_each_repetition = TRUE // Whether to barrier after each rep.
+
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+
+  // Pattern of message travel:
+  // "UP", "DOWN": Up or down the tree
+  // "UP_THEN_DOWN", "DOWN_THEN_UP": Self-explanatory
+  // "TreeLB": Simulation communication of TreeLoadBalancer
+  message_pattern = "TreeLB"
+
+  // Specify the dependency for the down-message, as a funcion of MPI rank:
+  // 1: down message depends only on parent
+  // 2: down message depends on grandparent
+  // 0: there is no down message
+  // First value is for rank 0, second is for rank 1, and so on.
+  // The array is repeated for ranks higher than specifed.
+  // (Rank r has dependency according to index r%L, where L is
+  // the length of down_message_dependency.)
+  down_message_dependency = 1, 2, 0, 1, 2, 0
+}
+
+
+
+
+
+// Refer to tbox::TimerManager for input.
+TimerManager {
+//   print_exclusive      = TRUE
+   print_summed           = TRUE
+   print_max              = TRUE
+   print_threshold        = 0.
+   timer_list             = "tbox::*::*", "apps::*::*"
+}

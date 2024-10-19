@@ -1,0 +1,21 @@
+##
+## File:        $URL$
+## Package:     SAMRAI build scripts
+## Copyright:   (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Revision:    $LastChangedRevision$
+## Description: data file for sed substitutions to generate dim-dep. files
+##
+
+
+#
+# multiblock package
+#
+
+mblk_MBDataUtilities
+mblk_MBUtilities
+mblk_Multiblock
+mblk_MultiblockLevel
+mblk_MultiblockPatchStrategy
+mblk_MultiblockRefineAlgorithm
+mblk_MultiblockRefineSchedule
+

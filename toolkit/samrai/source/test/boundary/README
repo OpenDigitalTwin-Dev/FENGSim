@@ -1,0 +1,55 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   Boundary Utilities unit test
+##
+#########################################################################
+
+This test demonstrates use of simple boundary utilities to implement and unit
+test basic boundary conditions in a SAMRAI application.  The files included in
+this directory are as follows:
+ 
+   main.cpp                   -  unit tester
+   BoundaryDataTester.[Ch]  -  example user routines for boundary data
+   test_inputs/*.input      -  various 2d and 3d input files
+ 
+
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make main
+   Execution:
+      For one of the following input files:
+         test_inputs/dirichlet.2d.input
+         test_inputs/dirichlet.3d.input
+         test_inputs/flow.2d.input
+         test_inputs/flow.3d.input
+         test_inputs/neumann.2d.input
+         test_inputs/neumann.3d.input
+         test_inputs/periodic010.3d.input
+         test_inputs/periodic011.3d.input
+         test_inputs/periodic01.2d.input
+         test_inputs/periodic111.3d.input
+         test_inputs/periodic11.2d.input
+         test_inputs/reflect.2d.input
+         test_inputs/reflect.3d.input
+      serial:
+         ./main <input file>
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main <input file>
+
+
+Results will be reported in a log file whose name is related to the 
+given input file; i.e., ./main test_inputs/dirichlet.2d.input produces a log
+file named basic2d-dirichlet.log.
+
+
+INPUT PARAMETERS
+----------------
+Refer to test_inputs/dirichlet.2d.input for a full description of all input
+parameters specific to this problem.

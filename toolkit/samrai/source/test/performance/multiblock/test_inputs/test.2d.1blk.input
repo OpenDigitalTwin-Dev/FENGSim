@@ -1,0 +1,212 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2019 Lawrence Livermore National Security, LLC
+ * Description:   Input file for multiblock performance tests
+ *
+ ************************************************************************/
+
+// Input file for multiblock performance test with linear advection problem.
+
+
+Main {
+   // Dimension of problem.  Vectors in this problem should have compatible length.
+   dim = 2
+
+   base_name = "test.2d.1blk"
+
+   // log file name
+   log_file_name    = "newtest.log"
+
+   // Whether to write a log file for each process.
+   log_all_nodes    = TRUE
+
+   // visualization dump parameters
+   viz_dump_interval     = 0          // zero to turn off
+   viz_dump_dirname      = "viz_newtest" // See parameter in appu::VisItDataWriter.
+   visit_number_procs_per_file = 1 // See parameter in appu::VisItDataWriter.
+
+
+   // restart dump parameters
+   restart_interval       = 0         // zero to turn off
+   restart_write_dirname  = "restart_newtest" // See RestartManager::writeRestartFile().
+
+   // Optional time stepping scheme: SYNCHRONIZED means no time refinement.
+   timestepping = "SYNCHRONIZED"
+
+}
+
+
+// Input for mapped grid.  See MblkGeometry class.
+MblkGeometry {
+   // Geometry: CARTESIAN, WEDGE or SPHERICAL_SHELL.
+   problem_type = "CARTESIAN"
+
+   // Definition of Cartesian geometry box.
+   CartesianGeometry {
+      domain_xlo_0 = 0.0, 0.0
+      domain_xhi_0 = 30.0, 20.0
+   }
+}
+
+
+// Input database for setting up the multiblock linear advection problem.
+// See MblkLinAdv class.
+MblkLinAdv {
+
+   advection_velocity = 2.0e0 , 0.5e0
+
+   // order of Goduov slopes (1, 2, or 4)
+   godunov_order    = 2
+
+   // Corner transport scheme: CORNER_TRANSPORT_1 or CORNER_TRANSPORT_2
+   corner_transport = "CORNER_TRANSPORT_1"
+
+   // Initial condition: SPHERE, PIECEWISE_CONSTANT_{X,Y,Z}, or SINE_CONSTANT_{X,Y,Z}
+   data_problem      = "SPHERE"
+
+   // Initial condition parameters for data_problem.
+   Initial_data {
+      radius            = 0.75
+      center            = 11.00 , 8.5
+
+      uval_inside       = 80.0
+      uval_outside      = 5.0
+
+   }
+
+   // Controls for refinement.  See similar inputs for applications/LinAdv/test_inputs/test.2d.input.
+   Refinement_data {
+      refine_criteria = "UVAL_GRADIENT", "UVAL_SHOCK"
+
+      UVAL_GRADIENT {
+         grad_tol = 10.0
+      }
+
+      UVAL_SHOCK {
+         shock_tol = 10.0
+         shock_onset = 0.85
+      }
+   }
+
+   // Controls for refinement.  See similar inputs for applications/LinAdv/test_inputs/test.2d.input.
+   Boundary_data {
+      boundary_edge_xlo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_edge_xhi {
+         boundary_condition      = "FLOW"
+      }
+      boundary_edge_ylo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_edge_yhi {
+         boundary_condition      = "FLOW"
+      }
+      boundary_edge_zlo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_edge_zhi {
+         boundary_condition      = "FLOW"
+      }
+
+
+      boundary_node_xlo_ylo { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YFLOW"
+      }
+      boundary_node_xhi_ylo { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YFLOW"
+      }
+      boundary_node_xlo_yhi { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YFLOW"
+      }
+      boundary_node_xhi_yhi { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YFLOW"
+      }
+
+
+   }
+
+}
+
+
+// Refer to input documentation for tbox::TimerManager class.
+TimerManager {
+   timer_list               = "apps::*::*",
+                              "algs::*::*",
+                              "mesh::*::*",
+                              "appu::main::all"
+//   print_exclusive      = TRUE
+   print_summed           = TRUE
+   print_max              = TRUE
+//   print_timer_overhead   = TRUE
+   print_threshold        = 0.0
+}
+
+
+// Refer to input documentation for mesh::BergerRigoutsos class.
+BergerRigoutsos {
+   efficiency_tolerance    = 0.85e0   // min % of tag cells in new patch level
+   combine_efficiency      = 0.95e0   // chop box if sum of volumes of smaller
+                                      // boxes < efficiency * vol of large box
+}
+
+
+// Refer to input documentation for hier:GridGeometry class.
+GridGeometry {
+   num_blocks = 1
+
+   domain_boxes_0 = [ (0,0) , (29,19) ]
+}
+
+
+// Refer to input documentation for hier:PatchHierarchy class.
+PatchHierarchy {
+   max_levels = 4         // Maximum number of levels in hierarchy.
+   ratio_to_coarser {      // vector ratio to next coarser level
+      level_1 = 4 , 4
+      level_2 = 4 , 4
+      level_3 = 4 , 4
+   }
+   largest_patch_size {
+      level_0 = 200 , 200
+      // all finer levels will use same values as level_0...
+   }
+   smallest_patch_size {
+      level_0 = 10 , 10
+      // all finer levels will use same values as level_0...
+   }
+}
+
+
+// Refer to input documentation for mesh::GriddingAlgorithm class.
+GriddingAlgorithm{
+   sequentialize_patch_indices = TRUE
+}
+
+
+// Refer to input documentation for mesh::StandardTagAndInitialize class.
+StandardTagAndInitialize {
+   tagging_method = "GRADIENT_DETECTOR"
+}
+
+
+// Refer to input documentation for algs::HyperbolicLevelIntegrator class.
+HyperbolicLevelIntegrator{
+   cfl                       = 0.9e0    // max cfl factor used in problem
+   cfl_init                  = 0.9e0    // initial cfl factor
+   lag_dt_computation        = TRUE
+   use_ghosts_to_compute_dt  = TRUE
+}
+
+
+// Refer to input documentation for algs::timeRefinementIntegrator class.
+TimeRefinementIntegrator{
+   start_time           = 0.e0     // initial simulation time
+   end_time             = 100.e0   // final simulation time
+   grow_dt              = 1.1e0    // growth factor for timesteps
+   max_integrator_steps = 100     // max number of simulation timesteps
+   regrid_interval      = 10
+}

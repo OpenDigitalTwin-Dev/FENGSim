@@ -1,0 +1,16 @@
+#!/bin/sh
+##
+## File:        $URL$
+## Package:     SAMRAI scripts
+## Copyright:   (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Revision:    $LastChangedRevision$
+## Description: shell script to convert 1.x codes to 2.0
+##
+
+BIN=`dirname $0`
+
+$BIN/findHeaderFiles
+
+perl $BIN/replaceIncludeGuards.pl 
+
+exit

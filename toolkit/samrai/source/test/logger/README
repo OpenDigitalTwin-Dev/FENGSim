@@ -1,0 +1,33 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright
+## information, see COPYRIGHT and LICENSE.
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   Test of Logger operations
+##
+#########################################################################
+
+This is a test of the Logger class, a singleton for logging error,
+debug and warning messages.
+
+The files included in this directory are as follows:
+
+   defaultloggertest.cpp       -  code for the test of Logger
+   userloggertest.cpp          -  code for the test of a subclass 
+                                of Logger::Appender
+
+
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make defaultloggertest
+      make userloggertest
+
+   Execution:
+      make check
+
+INPUT PARAMETERS
+----------------
+There are no input parameters for these tests.
+

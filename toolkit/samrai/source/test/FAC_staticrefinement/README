@@ -1,0 +1,53 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   Unit test of the FAC solver
+##
+#########################################################################
+
+This is a unit test of the  FAC solver. The tests use pre-set, user defined
+refined boxes so the adaptivity is not connected to the evolution of the
+solution.  Hence the "nonadaptive" in the test name.  The files included in
+this directory are as follows:
+ 
+   FACPoisson.[Ch]  -      Class to set up and solve the scalar Poisson
+                           equation.
+   main.cpp               -  example main program
+   test_inputs/*.input  -  2d and 3d input files
+   example_inputs       -  2d and 3d example problems
+
+Class FACPoisson uses the solver defined in CellPoissonFACSolver.
+This class assembles the the FAC algorithm in FACPreconditioner,
+and the level operations in CellPoissonFACOps.  It uses the
+Robin boundary condition, which is accessed through the virtual
+interface defined by RobinBcCoefStrategy class.
+
+This example uses the library-implemented LocationIndexRobinBcCoefs
+version of the Robin boundary condition.  Other versions of Robin
+boundary conditions may be used, including user-defined.  See the
+RobinBcCoefStrategy class.  The boundary conditions specified
+in the input files are parsed by that the LocationIndexRobinBcCoefs
+class.
+ 
+
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make main
+
+   Execution:
+      serial:
+         ./main default.[2,3]d.input
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main test_inputs/default.[2,3]d.input
+ 
+
+INPUT PARAMETERS
+----------------
+Refer to test_inputs/default.2d.input for a full description of all input
+parameters specific to this problem.

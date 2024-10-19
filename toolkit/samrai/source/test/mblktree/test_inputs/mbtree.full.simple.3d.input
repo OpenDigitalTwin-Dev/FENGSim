@@ -1,0 +1,206 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   input file for testing communication of SAMRAI cell data.
+ *
+ ************************************************************************/
+
+// Refer to mbtree.3blk.simple.2d.input for full description of all input
+// parameters specific to this problem.
+
+Main {
+    dim = 3
+//
+// Log file information
+//
+    base_name  = "mbtree.full.simple.3d"
+    log_all_nodes  = TRUE
+
+// generate_baseline = TRUE // Default is FALSE
+   baseline_dirname = "test_inputs"
+
+// For breaking up user-specified boxes.
+max_box_size = 10000,10000,10000 // Do not break up.  Keep config simple.
+
+connector_width = 1,1,1
+
+
+GridGeometry {
+   num_blocks = 7
+   domain_boxes_0 = [ (0,0,0) , (14,14,14) ]
+   domain_boxes_1 = [ (0,0,0) , (14,14,14) ]
+   domain_boxes_2 = [ (0,0,0) , (14,14,14) ]
+   domain_boxes_3 = [ (0,0,0) , (14,14,14) ]
+   domain_boxes_4 = [ (0,0,0) , (14,14,14) ]
+   domain_boxes_5 = [ (0,0,0) , (14,14,14) ]
+   domain_boxes_6 = [ (0,0,0) , (14,14,14) ]
+
+   BlockNeighbors0 {
+      block_a = 0
+      block_b = 1
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0,14,0
+      point_in_b_space = 0,-1,0
+   }
+
+   BlockNeighbors1 {
+      block_a = 0
+      block_b = 2
+
+      rotation_b_to_a = "J_UP", "I_DOWN", "K_UP"
+      point_in_a_space = 14,0,0
+      point_in_b_space = 14,-1,0
+
+   }
+
+   BlockNeighbors2 {
+      block_a = 0
+      block_b = 3
+
+      rotation_b_to_a = "I_UP", "K_DOWN", "J_UP"
+      point_in_a_space = 14,14,14
+      point_in_b_space = 14,-1,0
+   }
+
+   BlockNeighbors3 {
+      block_a = 0
+      block_b = 4
+
+      rotation_b_to_a = "I_UP", "K_UP", "J_DOWN"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 0,-1,0
+   }
+
+   BlockNeighbors4 {
+      block_a = 0
+      block_b = 5
+
+      rotation_b_to_a = "I_UP", "J_DOWN", "K_DOWN"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 0,-1,14
+   }
+
+   BlockNeighbors5 {
+      block_a = 1
+      block_b = 2
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 14,14,14
+      point_in_b_space = -1,14,14
+   }
+
+   BlockNeighbors6 {
+      block_a = 1
+      block_b = 3
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 14,14,14
+      point_in_b_space = 14,14,-1
+   }
+
+   BlockNeighbors7 {
+      block_a = 1
+      block_b = 4
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 0,0,15
+   }
+
+   BlockNeighbors8 {
+      block_a = 1
+      block_b = 6
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 15,0,0
+   }
+
+   BlockNeighbors9 {
+      block_a = 2
+      block_b = 3
+
+      rotation_b_to_a = "K_UP", "J_UP", "I_DOWN"
+      point_in_a_space = 0,0,14
+      point_in_b_space = 15,0,0
+   }
+
+   BlockNeighbors10 {
+      block_a = 2
+      block_b = 4
+
+      rotation_b_to_a = "K_DOWN", "J_UP", "I_UP"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 15,0,14
+   }
+
+   BlockNeighbors11 {
+      block_a = 2
+      block_b = 5
+
+      rotation_b_to_a = "I_DOWN", "J_UP", "K_DOWN"
+      point_in_a_space = 14,0,14
+      point_in_b_space = 15,0,0
+   }
+
+   BlockNeighbors12 {
+      block_a = 3
+      block_b = 5
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 14,0,14
+      point_in_b_space = 14,0,-1
+   }
+
+   BlockNeighbors13 {
+      block_a = 3
+      block_b = 6
+
+      rotation_b_to_a = "K_UP", "J_UP", "I_DOWN"
+      point_in_a_space = 0,0,14
+      point_in_b_space = 0,0,15
+   }
+
+   BlockNeighbors14 {
+      block_a = 4
+      block_b = 5
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 0,0,15
+   }
+
+   BlockNeighbors15 {
+      block_a = 4
+      block_b = 6
+
+      rotation_b_to_a = "K_DOWN", "J_UP", "I_UP"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 0,0,-1
+   }
+
+   BlockNeighbors16 {
+      block_a = 5
+      block_b = 6
+
+      rotation_b_to_a = "I_DOWN", "J_UP", "K_DOWN"
+      point_in_a_space = 0,0,0
+      point_in_b_space = -1,0,14
+   }
+
+   BlockNeighbors17 {
+      block_a = 0
+      block_b = 6
+
+      rotation_b_to_a = "J_DOWN", "I_UP", "K_UP"
+      point_in_a_space = 0,0,0
+      point_in_b_space = 0,-1,0
+   }
+
+}
+
+}

@@ -1,0 +1,47 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   Euler Equation Example
+##
+#########################################################################
+
+This README explains how to use the AMR Euler sample application
+code in the SAMRAI library.  The files included in this directory
+are as follows:  
+
+          main.cpp      -  application driver program
+          Euler.[C,h] -  C++ class containing routines specific to the 
+                         Euler example and which are called 
+                         from SAMRAI AMR library routines
+          EulerFort.h -  header file defining external fortran routines
+          fortran     - Fortran numerical routines for 2d and 3d problems
+
+To understand the construction of this application code from pieces 
+specific to the Euler model and more generic pieces in the SAMRAI
+library consider the object construction pattern in the main.cpp file.
+For more details on these files and the Euler class consult the comments
+in those files and the Euler.h class header file.
+
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make main
+
+   Execution:
+      For the input files in the performance_inputs/mEuler directory
+      serial:
+         ./main <input file>
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main <input file>
+
+
+INPUT FILES:
+------------
+
+See test/applications/Euler/test_inputs/test.2d.input for descriptions of the
+input files

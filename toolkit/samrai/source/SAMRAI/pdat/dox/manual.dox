@@ -1,0 +1,45 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace pdat {
+
+/*!
+  @page package_patchdata The Patchdata Package
+
+  The Patchdata package defines concrete patch data types used in 
+  structured AMR applications.  The data type support is divided into
+  eleven subdirectories containing:
+  -# @ref package_patchdata_array "fundamental array-based data type support"
+  -# @ref package_patchdata_boxgeometry "routines to compute box geometry information for data intersections"
+  -# @ref package_patchdata_cell "cell-centered data"
+  -# @ref package_patchdata_edge "edge-centered data"
+  -# @ref package_patchdata_face "face-centered data"
+  -# @ref package_patchdata_node "node-centered data"
+  -# @ref package_patchdata_outeredge "outeredge data"
+  -# @ref package_patchdata_outerface "outerface data"
+  -# @ref package_patchdata_outernode "outernode data"
+  -# @ref package_patchdata_outerside "outerside data"
+  -# @ref package_patchdata_side "side-centered data"
+  -# @ref package_patchdata_index "index data"
+  -# @ref package_patchdata_fortran "macros for indexing arrays in FORTRAN rotuines"
+ 
+  The package also defines a set of coarsen and refine operators that 
+  are independent of the mesh configuration:
+  -# @ref package_patchdata_operators mesh independent operators
+
+  Additionally there is a set of classes that handle data copying of various
+  patch data types between different blocks within a multiblock domain.
+  -# @ref package_patchdata_multiblock multiblock data translators
+
+  All class names in the Patchdata package are in the namespace SAMRAI::pdat.
+*/
+
+}
+}

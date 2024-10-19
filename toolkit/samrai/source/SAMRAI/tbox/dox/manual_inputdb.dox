@@ -1,0 +1,25 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace tbox {
+/*!
+  @page package_toolbox_inputdb Input Database
+
+  The input database routines provide support for a simple input capability.
+  User input files consist of a hierarchical collection of (keyword,value)
+  pairs, where the value may be either arrays or a single value of int,
+  double, complex, string, or box.
+  - SAMRAI::tbox::InputDatabase
+  - SAMRAI::tbox::InputManager
+  - SAMRAI::tbox::Parser
+ */
+
+}
+}

@@ -1,0 +1,142 @@
+*****************************************************************************
+  Copyright 1997-2024
+  Lawrence Livermore National Security, LLC.
+  All rights reserved.
+*****************************************************************************
+
+                     Release Notes for SAMRAI v3.8.0
+
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+
+*****************************************************************************
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+LLNL users can use the discussion groups on the LLNL Sourceforge site:
+
+https://sourceforge.llnl.gov/sf/discussion/do/listForums/projects.samrai/discussion
+
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report
+it to us so that we may fix it.  LLNL users may report bugs using the
+LLNL Sourceforge site if you have a sourceforge account:
+
+https://sourceforge.llnl.gov/sf/tracker/do/listTrackers/projects.samrai/tracker
+
+Bugs found by other users should send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Significant bug fixes
+----------------------------------------------------------------------------
+
+1) Bugs that were preventing ChopAndPackLoadBalancer from being used on
+   multiblock meshes have been fixed.
+
+2) Fixed errors in StandardTagAndInitialize::turnOffRefineBoxes,
+   StandardTagAndInitialize::turnOffGradientDetector, and
+   StandardTagAndInitialize::turnOffRichardsonExtrapolation that prevented all
+   of the requested refinement criteria from being turned off.
+     
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Summary of what's new
+-----------------------------------------------------------------------------
+
+This section contains a summary of additions to SAMRAI.  More detailed
+descriptions of items in the following list are provided below.
+
+1) OuterfaceData and OutersideData can now copy to themselves
+   rather than just to FaceData or SideData.
+
+2) It is now possible to save PatchData to restart with having to use the
+   VariableDatabase via the new PatchDataRestartManager class.
+
+-----------------------------------------------------------------------------
+                Summary of what's changed
+-----------------------------------------------------------------------------
+
+This section contains a summary of changes to SAMRAI.  More detailed
+descriptions of items in the following list are provided below.
+
+1) Rename test directory FAC_nonadaptive to FAC_staticrefinement.
+
+2) Bugs that were preventing ChopAndPackLoadBalancer from being used on
+   multiblock meshes have been fixed.
+
+3) Input requirements for setting up Multiblock meshes have been simplified.
+   It is no longer necessary to provide Singularity information in the
+   input files.
+
+4) The Neighbor objects in BaseGridGeometry, which provide information
+   about neighboring blocks in multiblock meshes, are now stored in
+   STL maps.
+
+5) We have new options for mesh generation using "tiles".  This should help
+   if you are scaling above 100K processor runs.  For smaller runs, the
+   older algorithms should be sufficient.
+
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                Details about what's new
+-----------------------------------------------------------------------------
+
+1) OuterfaceData and OutersideData can now copy to themselves
+   rather than just to FaceData or SideData.  Previously copy methods
+   were only implement for copies of OuterfaceData -> FaceData and
+   OutersideData -> SideData.
+
+2) We have always advertised that the VariableDatabase is completely optional.
+   The one case where that was not true was if one wished to save PatchData to
+   restart.  A new class, PatchdataRestartManager, has been introduced to
+   provide the ability to register PatchData for restart in a manner analogous
+   to how other SAMRAI entities are registered for restart.  To see how to use
+   this new way of putting PatchData to restart see the performance Euler and
+   LinAdv tests, the Euler and LinAdv application tests, and the sparsedata
+   test.   It is also used in several places in the libaray.
+
+
+
+
+-----------------------------------------------------------------------------
+                Details about what's changed
+-----------------------------------------------------------------------------
+
+1) Rename test directory FAC_nonadaptive to FAC_staticrefinement.
+   The old name led some to believe it didn't use AMR.
+
+2) Bugs that were preventing ChopAndPackLoadBalancer from being used on
+   multiblock meshes have been fixed.  ChopAndPackLoadBalancer can be used
+   for spatially-based load-balancing and non-uniform load balancing, though
+   it is not recommended for problems running at very large parallel
+   processor counts.
+
+3) Input requirements for setting up Multiblock meshes have been simplified.
+   It is no longer necessary to provide Singularity information in the
+   input files.  Singularities are now found computationally by the code.
+
+4) The Neighbor objects in BaseGridGeometry, which provide information
+   about neighboring blocks in multiblock meshes, are now stored in
+   STL maps instead of lists.  Some interfaces and usage patterns have changed
+   to reflect this.
+
+5) If you set up your code properly, SAMRAI's mesh management and dynamic
+   remeshing algorithms should scale well to 100K processors.  Approaching
+   1M processors, the older clustering algorithm (BergerRigoutsos) and
+   partitioner (TreeLoadBalancer) will start to slow down.  If your runs
+   are in this range, try using the TileClustering alternative.  You have
+   to specify a tile size in the TileClustering input and a corresponding
+   tile size (in the refined resolution) in the TreeLoadBalancer input.
+
+
+=============================================================================
+=============================================================================

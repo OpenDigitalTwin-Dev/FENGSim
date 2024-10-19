@@ -1,0 +1,28 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   Unit test of SAMRAI box container iterators
+##
+#########################################################################
+
+This is a unit test of SAMRAI's BoxContainer iterators. The files included in
+this directory are as follows:
+ 
+   main-iterators.cpp  -  unit tester
+
+ 
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make main
+
+   Execution:
+      serial:
+         ./main
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main

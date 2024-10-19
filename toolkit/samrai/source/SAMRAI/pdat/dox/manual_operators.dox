@@ -1,0 +1,121 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace pdat {
+
+/*!
+   @page package_patchdata_operators Mesh-Independent operators
+
+   Constant spatial refinement and time interpolation operators typically 
+   depend only on the datatype and not the mesh coordinate system.
+   The operators described here are for cell-centered data only (for brevity) 
+   but the descriptions apply to edge, face, node, side, outerface, and outerside
+   datatype operators as well.  The string identifiers can be used with the operator
+   look up mechanism provided by the xfer_GeometryX class.
+
+   <ul>
+   <li> Time refinement operators:
+      <ul>
+      <li> Cell-Centered patch data:
+        <ul>
+        <li> Time interpolated linear coarsen op for complex, double,
+             and float data.
+             String identifier is "STD_LINEAR_TIME_INTERPOLATE".
+        </ul>
+      <li> Edge-Centered patch data:
+        <ul>
+        <li> Time interpolated linear coarsen op for complex, double,
+             and float data.
+             String identifier is "STD_LINEAR_TIME_INTERPOLATE".
+        </ul>
+      <li> Face-Centered patch data:
+        <ul>
+        <li> Time interpolated linear coarsen op for complex, double,
+             and float data.
+             String identifier is "STD_LINEAR_TIME_INTERPOLATE".
+        </ul>
+      <li> Node-Centered patch data:
+        <ul>
+        <li> Constant averaging (i.e., injection) for complex, double,
+             float, integer data.
+             String identifier is "CONSTANT_COARSEN".
+        <li> Time interpolated linear coarsen op for complex, double,
+             and float data.
+             String identifier is "STD_LINEAR_TIME_INTERPOLATE".
+        </ul>
+      <li> Outerface patch data:
+        <ul>
+        <li> Time interpolated linear coarsen op for complex, double,
+             and float data.
+             String identifier is "STD_LINEAR_TIME_INTERPOLATE".
+        </ul>
+      <li> Outernode-Centered patch data:
+        <ul>
+        <li> Constant averaging (i.e., injection) for complex, double,
+             float, integer data.
+             String identifier is "CONSTANT_COARSEN".
+        </ul>
+      <li> Outerside patch data:
+        <ul>
+        <li> Time interpolated linear coarsen op for complex, double,
+             and float data.
+             String identifier is "STD_LINEAR_TIME_INTERPOLATE".
+        </ul>
+      <li> Side-centered patch data:
+        <ul>
+        <li> Time interpolated linear coarsen op for complex, double,
+             and float data.
+             String identifier is "STD_LINEAR_TIME_INTERPOLATE".
+        </ul>
+      </ul>
+   <li> Refine operators:
+      <ul>
+      <li> Cell-Centered patch data:
+        <ul>
+        <li> Constant refine op for complex, double, float, and int data.
+             String identifier is "CONSTANT_REFINE".
+        </ul>
+      <li> Edge-Centered patch data:
+        <ul>
+        <li> Constant refine op for complex, double, float, and int data.
+             String identifier is "CONSTANT_REFINE".
+        </ul>
+      <li> Face-Centered patch data:
+        <ul>
+        <li> Constant refine op for complex, double, float, and int data.
+             String identifier is "CONSTANT_REFINE".
+        </ul>
+      <li> Outerface patch data:
+        <ul>
+        <li> Constant refine op for complex, double, float, and int data.
+             String identifier is "CONSTANT_REFINE".
+        </ul>
+      <li> Side-Centered patch data:
+        <ul>
+        <li> Constant refine op for complex, double, float, and int data.
+             String identifier is "CONSTANT_REFINE".
+        </ul>
+      </ul>
+   </ul>
+
+   - @ref package_patchdata_operators_constant_cell
+   - @ref package_patchdata_operators_time_interpolate_cell
+   - @ref package_patchdata_operators_constant_outernode
+
+   For information on the options to use user-defined operators for
+   coarsening, refining, and time interpolation, or the option to use
+   no such operators, see @ref package_transfer_operators.
+
+   For information on use of Cartesian mesh dependent operators, see
+   @ref package_geometry_cartesian.
+*/
+
+}
+}

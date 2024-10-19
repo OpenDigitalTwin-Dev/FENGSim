@@ -1,0 +1,39 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace math {
+
+/*!
+  @page package_mathops_cell Cell Patch Data Operations 
+
+  These classes provide the pieces which comprise the cell-centered patch 
+  data operation functionality.  Recall that two types of operation classes  
+  are available, those that treat data on a single patch and those that 
+  perform operations on a set of hierarchy levels.  Also recall that some 
+  operations are shared by all numerical types (int, double, float, and 
+  dcomplex), while others are implemented in a manner specific to the type.
+  Thus, the interface to operations for each data type is unique.
+
+  Important note: The classes for edge, face, node and side patch data are 
+                  similar and are omitted in the documentation for brevity. 
+  - SAMRAI::math::PatchCellDataOpsReal
+  - SAMRAI::math::PatchCellDataOpsComplex
+  - SAMRAI::math::PatchCellDataOpsInteger
+  - SAMRAI::math::PatchCellDataBasicOps
+  - SAMRAI::math::PatchCellDataNormOpsReal
+  - SAMRAI::math::PatchCellDataNormOpsComplex
+  - SAMRAI::math::PatchCellDataMiscellaneousOpsReal
+  - SAMRAI::math::HierarchyCellDataOpsReal
+  - SAMRAI::math::HierarchyCellDataOpsComplex
+  - SAMRAI::math::HierarchyCellDataOpsInteger
+*/
+
+}
+}

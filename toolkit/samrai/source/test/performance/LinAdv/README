@@ -1,0 +1,360 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   Linear Advection Equation Example
+##
+#########################################################################
+
+This README explains how to use the AMR LinAdv performance test
+code in the SAMRAI library.  The files included in this directory
+are as follows:  
+
+          main.cpp       -  application driver program
+          LinAdv.[C,h] -  C++ class containing routines specific to the 
+                          LinAdv example and which are called 
+                          from SAMRAI AMR library routines
+          LinAdvFort.h -  header file defining external fortran routines
+          fortran/2d,3d - Fortran numerical routines for 2d,3d problems, resp.
+
+To understand the construction of this application code from pieces 
+specific to the LinAdv model and more generic pieces in the SAMRAI
+library consider the object construction pattern in the main.cpp file.
+For more details on these files and the LinAdv class consult the comments
+in those files and the LinAdv.h class header file.
+
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make main
+
+   Execution:
+      For one the following input files:
+         test_inputs/domainexpansion.input
+         test_inputs/domainexpansionb.input
+         test_inputs/domainexpansiont.input
+         performance_inputs/domainexpansionc.input
+      serial:
+         ./main   <input file>
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main <input file>
+
+INPUT FILES:
+------------
+
+   The LinAdv application code is composed of various classes that implement
+   the algorithmic and numerical routines in the AMR solution process (see 
+   comments in the main.cpp code for more discussion of the various objects 
+   used to build the application).  User-specified inputs control the 
+   behavior of the objects.  Those objects expecting input are:
+
+   Main program .... creates objects used in the simulation - controls output
+                     of viz and restart information.
+
+   LinAdv .......... defines variables and provides numerical kernels for
+                     linear advection problem, including data initialization, 
+                     time integration, boundary routines, etc.
+
+   CartesianGeometry ..... manages Cartesian grid coordinate system
+                           on AMR patch hierarchy.
+
+   GriddingAlgorithm ..... constructs AMR patch hierarchy and
+                           regrids levels during simulation.
+
+   StandardTagAndInitialize .... manages tagging and initialization during
+                                 regridding operation. 
+
+   HyperbolicLevelIntegrator ... manages time integration and data management
+                                 on levels in AMR patch hierarchy.
+
+   TimeRefinementIntegrator .... orchestrates time integration and
+                                 regridding on levels in AMR patch hierarchy.
+
+   LoadBalancer .... manages mapping of patches to processors.
+
+   DataWriter .... specifies variables to write for visualization.
+
+   TimerManager ..... controls timers used that measure performance of
+                      sections of code.
+
+   The input options for these objects are discussed below.  The TYPE is 
+   shown in (parenthesis) and the DEFAULT setting (value set if no input
+   is given) for the option is shown in [brackets].  Required inputs are 
+   designated by [REQD].
+
+   "Main" input section
+   --------------------
+   Main {
+      // Log file where output is directed  
+      // log_file_name -- (char string) name of log file ["linadv.log"]
+      // log_all_nodes -- (bool) option to specify whether output from different
+      //                  processors should be directed to multiple log files
+      //                  (named "log_file_name.<processor id>") or to the 
+      //                  single file. [FALSE]
+      log_file_name    = "sphere-2d.log"
+      log_all_nodes    = TRUE
+
+      // Visualization dump parameters.
+      // viz_dump_interval -- (int) the interval in timesteps over coarsest 
+      //                      level between writing of consecutive 
+      //                      visualization dumps.  Setting it to zero turns off 
+      //                      writing of visualization files.
+      // viz_dump_dirname  -- (char string) directory where viz files are 
+      //                      writen (may include a path).  VisIt requires a
+      //                      non-empty string.
+      // visit_number_procs_per_file
+      //                   -- (int >= 1) for parallel runs, number of processors 
+      //                      that share a single common dump file. If this parameter
+      //                      > number processors being used, all processors share 
+      //                      single dump file.
+      //
+      //                      For example, the following inputs:
+      viz_dump_interval     = 1
+      viz_dump_dirname      = "viz_sphere-2d"
+      //                       would result in the following dump structure:
+      //                         main
+      //                         viz_sphere-2d
+      //                           visit_dump.00000/
+      //                           visit_dump.00001/
+      //                           ...
+      //                           dumps.visit
+
+      // Restart dump parameters.
+      // restart_interval -- (int) the interval in timesteps over coarsest
+      //                      level between writing of consecutive restart
+      //                      files. Setting it to zero turns off writing
+      //                      of restart files.  [0]
+      // restart_write_dirname  -- (char string) directory where restart files
+      //                           are written [empty string]
+      //                           (assertion thrown if not specified
+      //                           and restart_interval > 0)
+      //
+      restart_interval      = 1
+      restart_write_dirname = "restart_sphere2d"
+
+      // Run-time plotting arguments (only apply in 2d):
+      //
+      // X-windows plotting specification for each primitive variable.
+      // Options:  NO_PLOTTING, BOXES_ONLY, CONTOURS_ONLY, SHADE_ONLY, 
+      //           CONTOUR_WITH_SHADE, BOTH_CONTOUR_AND_SHADE
+      // (see "linadv_const.input" below for discussion of these options).
+      // plotting_interval  -- (int) interval for which values are 
+      //                       plotted in X window during run [1]
+      // plot2d_uval  -- (above options) specification of plotting for 
+      //                 uval [NO_PLOTTING]
+      plotting_interval = 5   
+      plot2d_uval = SHADE_ONLY
+   }
+
+
+   "LinAdv" input section
+   ---------------------
+   LinAdv {
+      //  Problem specification parameters
+      //  advection_velocity -- (double array) velocity by which 
+      //                        initial profile of uval is 
+      //                        advected through the domain [0.0]
+      //  godunov_order -- (int) order of Godunov slopes (1, 2, or 4) [1]
+      //  corner transport scheme -- ("CORNER_TRANS_1" -or- "CORNER_TRANS_2"
+      //                   ["CORNER_TRANS_1"]
+      //  Flux corner transport options
+      //  CORNER_TRANS_1 is based on an extension of Colella's formulation.
+      //  CORNER_TRANS_2 is a formulation constructed by Trangenstein
+      //  A writeup on these two methods is available from R. Hornung or
+      //  A. Wissink.
+      //  data_problem  -- ("SPHERE_PROB", "PIECEWISE_CONST_[X,Y,Z]", or
+      //                   "SINE_CONST_[X,Y,Z]") specification of the
+      //                   problem to be solved [REQD] 
+      //
+      advection_velocity = 2.0e0 , 1.0e0
+      godunov_order    = 2
+      corner_transport = "CORNER_TRANS_1"
+      grad_onset        = 0.85
+      grad_tol          = 0.1
+      data_problem      = "SPHERE_PROB"
+
+      //  Initial data  for "SPHERE_PROB" problem
+      //     radius -- (double) radius of sphere [REQD] 
+      //     center -- (double array) location of sphere center [REQD] 
+      //     uval_inside   -- (double) uval inside sphere [REQD]  
+      //     uval_outside  -- (double) uval outside sphere [REQD]  
+         data_problem      = "SPHERE_PROB"
+         Initial_data {
+            radius            = 2.9
+            center            = 5.5 , 5.5
+ 
+            uval_inside       = 80.0
+            uval_outside      = 5.0
+         }
+
+      //  Initial data for PIECEWISE_CONST_[X,Y,Z]
+      //     front_position -- (double array) points between intervals [REQD]
+      //     interval_n {
+      //        uval        -- (double) uval on interval n [REQD]
+      //     }
+      //
+      //    interval 0      interval 1                         interval n
+      //  |------------|------------------|--------...-------|------------|
+      //        front_position[0]  front_position[1]  front_position[n-1]
+      //
+         data_problem      = "PIECEWISE_CONST_X"
+         Initial_data {
+           front_position = 0.0
+           interval_0 {
+              uval        = 0.0
+           }
+           interval_1 {
+              uval        = 1.0
+           }
+         }
+
+      //  Initial data for SINE_CONST_[X,Y,Z]
+      //     front_position -- (double array) points between intervals [REQD]
+      //     interval_n {
+      //        uval        -- (double) uval on interval n [REQD]
+      //     }
+      //     amplitude -- (double) amplitude of sine wave
+      //     frequency -- (double array) frequency of sine wave
+      //
+         data_problem      = "SINE_CONST_X"
+         Initial_data {
+            front_position    = 0.0
+            interval_0 {
+               uval      = 40.0
+            }
+            interval_1 {
+               uval      = 1.0
+            }
+            amplitude = 0.25
+            frequency = 2.0, 2.0
+         }
+
+      //  Refinement criteria
+      //  Data for tagging cells to refine for gradient detection and
+      //  Richardson extrapolation.  Options:
+      //     UVAL_DEVIATION, UVAL_GRADIENT, UVAL_SHOCK, UVAL_RICHARDSON
+      //     and combinations thereof...
+      //
+      //     UVAL_DEVIATION   -- tag around deviations in a specified uval
+      //     UVAL_GRADIENT    -- tag around gradients 
+      //     UVAL_SHOCK       -- tag around discontinuous regions 
+      //     UVAL_RICHARDSON  -- use Richardson extrapolation to tag
+      //                         around solution errors
+      //
+      // Refinement_data {
+      //   refine_criteria    -- (string array) contains one or more of the
+      //                         tagging options, specified above [REQD]
+      //   UVAL_DEVIATION {
+      //      uval_dev -- (double array) freestream uval, i.e. tag cells where   
+      //                  |uval - uval_dev] > dev_tol [REQD]
+      //      dev_tol  -- (double array) deviation tolerance [REQD]
+      //      time_min -- (double array) time on each level at which
+      //                  tagging using this criteria is started [0.]
+      //      time_max -- (double array) time on each level at which
+      //                  tagging is stopped [DBL_MAX]
+      //      NOTE:  For each of the above entries, if a level is NOT specified,
+      //             the value from the next coarser level is used.  The time_min
+      //             and time_max options may be used to control whether tagging
+      //             on a level is active (i.e. setting time_max=0 makes it
+      //             inactive).
+      //   }
+      //   UVAL_GRADIENT {
+      //      grad_tol -- (double array) gradient tolerance for each level [REQD]
+      //      time_min -- (double array) time on each level at which
+      //                  tagging using this criteria is started [0.]
+      //      time_max -- (double array) time on each level at which
+      //                  tagging is stopped [DBL_MAX]
+      //      (see NOTE under UVAL_DEVIATION above)
+      //   }
+      //   UVAL_SHOCK {
+      //      shock_onset -- (double array) onset tolerance for each level [REQD]
+      //      shock_tol -- (double array) gradient tolerance for each level [REQD]
+      //      time_min -- (double array) time on each level at which
+      //                  tagging using this criteria is started [0.]
+      //      time_max -- (double array) time on each level at which
+      //                  tagging is stopped [DBL_MAX]
+      //      (see NOTE under UVAL_DEVIATION above)
+      //   }
+      //   UVAL_RICHARDSON {
+      //      rich_tol -- (double array) Richardson extrapolation tolerance 
+      //                  for each level [REQD]
+      //      time_min -- (double array) time on each level at which
+      //                  tagging using this criteria is started [0.]
+      //      time_max -- (double array) time on each level at which
+      //                  tagging is stopped [DBL_MAX]
+      //      (see NOTE under UVAL_DEVIATION above)
+      //   }
+      //
+      Refinement_data {
+         refine_criteria = "UVAL_GRADIENT", "UVAL_SHOCK"
+ 
+         UVAL_GRADIENT {
+            grad_tol = 10.0, 9.0, 9.5
+            time_min = 0., 0.5, 0.8
+            time_max = 10.0, 10.0, 8.0
+         }
+ 
+         UVAL_SHOCK {
+            shock_tol = 5.0, 8.0, 12.0
+            shock_onset = 0.85, 0.80
+            time_min = 0., 0.5, 0.8
+            time_max = 10.0, 10.0, 8.0
+         }
+      }
+
+      //  Boundary conditions  
+      //  Options:  BDRY_FLOW, BDRY_LINEAR, BDRY_SYMMETRIC, BDRY_FIXED
+      //  "BDRY_FLOW" indicates flow-thru conditions
+      //  "BDRY_LINEAR" indicates a linear profile at the boundary
+      //  "BDRY_SYMMETRIC" will apply a plane of symmetry
+      //  "BDRY_FIXED" designates a solid boundary.
+      // Boundary_data {
+      //   boundary_node_x0y0 -- (above options) lower left corner [FLOW]
+      //   boundary_node_x1y0 -- (above options) lower right corner [FLOW]
+      //   boundary_node_x0y1 -- (above options) upper left corner [FLOW]
+      //   boundary_node_x1y1 -- (above options) upper right corner [FLOW]
+      //   boundary_edge_x0 { -- left edge
+      //   boundary_edge_x1 { -- right edge
+      //   boundary_edge_y0 { -- bottom edge
+      //   boundary_edge_y1 { -- top edge
+      //      boundary_type   -- (above options) type at prescribed edge [FLOW]
+      //      uval            -- (double) uval at prescribed edge [0]
+      //   }
+      //
+      //                       edge_y1
+      //         node_x0y1 o--------------o node_x1y1
+      //                   |              |
+      //                   |              |
+      //          edge_x0  |              | edge_x1
+      //                   |              |
+      //                   |              |
+      //         node_x0y0 o--------------o node_x1y0
+      //                       edge_y0
+      //
+      //  NOTE: 3D case specifies data at faces as well.  See
+      //        /SAMRAI/docs/userdocs/boundaries.ps for further discussion.
+      Boundary_data {
+         boundary_node_x0y0 = "BDRY_FLOW"
+         boundary_node_x1y0 = "BDRY_FLOW"
+         boundary_node_x0y1 = "BDRY_FLOW"
+         boundary_node_x1y1 = "BDRY_FLOW"
+         boundary_edge_x0 {
+           boundary_type    = "BDRY_FLOW"
+         }
+         boundary_edge_x1 {
+            boundary_type   = "BDRY_FLOW"
+         }
+         boundary_edge_y0 {
+            boundary_type   = "BDRY_FLOW"
+         }
+         boundary_edge_y1 {
+            boundary_type   = "BDRY_FLOW"
+         }
+      }
+
+   }
+

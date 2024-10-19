@@ -1,0 +1,105 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for assumed_partition tests.
+ *
+ ************************************************************************/
+
+
+Main {
+
+  // Base name for output files.
+  base_name = "single.2d"
+
+  // Whether to log all nodes.
+  log_all_nodes = TRUE
+
+}
+
+/*
+ * Define test for AssumedPartitionBox using databases named Test##,
+ * where ## is a 2-digit integer, sequentially from 0
+ */
+
+Test00 {
+  nickname = "11x11, 4 owners" // Nick name of test.
+  dim = 2
+  box = [(0,0),(10,10)]
+  rank_begin = 0
+  rank_end = 4
+  index_begin = 0
+  avg_parts_per_rank = 1.0
+}
+
+Test01 {
+  nickname = "11x11, 4 owners, starting not at (0,0)" // Nick name of test.
+  dim = 2
+  box = [(150,250),(160,260)]
+  rank_begin = 0
+  rank_end = 4
+  index_begin = 0
+  avg_parts_per_rank = 1.0
+}
+
+Test02 {
+  nickname = "11x11, 2 owners" // Nick name of test.
+  dim = 2
+  box = [(10,10),(20,20)]
+  rank_begin = 0
+  rank_end = 2
+  index_begin = 0
+  avg_parts_per_rank = 1.0
+}
+
+Test03 {
+  nickname = "11x11, 13 owners" // Nick name of test.
+  dim = 2
+  box = [(10,10),(20,20)]
+  rank_begin = 0
+  rank_end = 13
+  index_begin = 0
+  avg_parts_per_rank = 1.0
+}
+
+Test04 {
+  nickname = "long box, 3 owners" // Nick name of test.
+  dim = 2
+  box = [(100,100),(110,180)]
+  rank_begin = 0
+  rank_end = 3
+  index_begin = 0
+  avg_parts_per_rank = 1.0
+}
+
+Test05 {
+  nickname = "long box, more owners" // Nick name of test.
+  dim = 2
+  box = [(100,100),(110,180)]
+  rank_begin = 0
+  rank_end = 10
+  index_begin = 0
+  avg_parts_per_rank = 1.0
+}
+
+Test06 {
+  nickname = "more owners than cells" // Nick name of test.
+  dim = 2
+  box = [(100,100),(105,102)]
+  rank_begin = 0
+  rank_end = 30
+  index_begin = 1000
+  avg_parts_per_rank = 1.0
+}
+
+Test07 {
+  nickname = "as many ownwers as MPI tassks" // Nick name of test.
+  dim = 2
+  box = [(100,100),(105,102)]
+  rank_begin = 0
+  rank_end = 3
+  index_begin = 1000
+  avg_parts_per_rank = 1.0
+}

@@ -1,0 +1,31 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace appu {
+/*!
+  @page package_apputils_plotting Visualization Data File Generation
+
+  These classes provide basic support to generate data files that may
+  be post-processed using the VisIt visualization tool.  Two kinds
+  of data quantities are supported, those that reside on an AMR patch
+  hierarchy when a data file is created, and those that are "derived" from 
+  data living on an AMR patch hierarchy.
+
+  The VisIt writer supports cell, node, and logically-mapped (e.g. ALE)
+  data.    In addition, the VisIt writer supports material-related data
+  and ghost zone data.
+  
+  - SAMRAI::appu::VisItDataWriter
+  - SAMRAI::appu::VisDerivedDataStrategy
+  - SAMRAI::appu::VisMaterialsDataStrategy
+*/
+
+}
+}

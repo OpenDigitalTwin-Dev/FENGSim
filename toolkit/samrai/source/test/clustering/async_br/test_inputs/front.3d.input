@@ -1,0 +1,106 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for 3D asynchronous Berger Rigoutsos unit test. 
+ *
+ ************************************************************************/
+
+// Refer to front2d.input for full description of all input parameters specific
+// to this problem.
+
+Main {
+  dim = 3
+  base_name = "front3d"
+  log_all = TRUE
+  plot_step = 1
+  log_hierarchy = FALSE
+  num_steps = 3
+}
+
+ABRTest {
+  sine_tagger {
+    period = 1, 1, 1
+    amplitude = .15
+    init_disp = 0.5, 0.0, 0.0
+    velocity = 0.015, 0.010, 0.004
+
+    buffer_distance_0 = 0.0, 0.0, 0.0
+    buffer_distance_1 = 0.0, 0.0, 0.0
+    buffer_distance_2 = 0.0, 0.0, 0.0
+  }
+}
+
+
+BergerRigoutsos {
+   combine_efficiency = 0.88
+   efficiency_tolerance = 0.88
+  // DEV_log_node_history = TRUE
+  DEV_log_cluster_summary = TRUE
+  // DEV_algo_advance_mode = "SYNCHRONOUS", "ADVANCE_SOME", "ROUND_ROBIN" or "ADVANCE_ANY"
+  // DEV_algo_advance_mode = "ADVANCE_ANY"
+  DEV_algo_advance_mode = "ADVANCE_SOME"
+  // DEV_algo_advance_mode = "SYNCHRONOUS"
+  // DEV_owner_mode: "SINGLE_OWNER", "MOST_OVERLAP" (default), "FEWEST_OWNED", "LEAST_ACTIVE"
+  // DEV_owner_mode = "SINGLE_OWNER"
+  DEV_owner_mode = "MOST_OVERLAP"
+  // DEV_owner_mode = "FEWEST_OWNED"
+  // DEV_owner_mode = "LEAST_ACTIVE"
+}
+
+
+CartesianGridGeometry {
+  domain_boxes = [(0,0,0), (23,15,15)]
+  // domain_boxes = [(0,0,0), (9,3,3)]
+  x_lo         = 0, 0, 0
+  x_up         = 3, 2, 2
+}
+
+StandardTagAndInitialize {
+  tagging_method = "GRADIENT_DETECTOR"
+}
+
+TreeLoadBalancer {
+  DEV_report_load_balance = TRUE
+}
+
+PatchHierarchy {
+   max_levels = 3
+   largest_patch_size {
+      level_0 = 32,32,32
+      // all finer levels will use same values as level_0...
+   }
+   smallest_patch_size {
+      level_0 = 4,4,4
+      // all finer levels will use same values as level_0...
+   }
+   ratio_to_coarser {
+      level_1            = 2, 2, 2
+      level_2            = 2, 2, 2
+      level_3            = 2, 2, 2
+      level_4            = 2, 2, 2
+      level_5            = 2, 2, 2
+      level_6            = 2, 2, 2
+      level_7            = 2, 2, 2
+      level_8            = 2, 2, 2
+      level_9            = 2, 2, 2
+      //  etc.
+   }
+   allow_patches_smaller_than_ghostwidth = TRUE
+
+   allow_patches_smaller_than_minimum_size_to_prevent_overlaps = TRUE
+}
+
+GriddingAlgorithm {
+}
+
+TimerManager{
+  timer_list = "hier::*::*", "mesh::*::*", "tbox::*::*", "apps::*::*"
+  print_user = TRUE
+  // print_timer_overhead = TRUE
+  print_threshold = 0
+  print_summed = TRUE
+  print_max = TRUE
+}

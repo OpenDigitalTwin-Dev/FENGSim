@@ -1,0 +1,27 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+	namespace hier {
+
+/*!
+  @page package_hierarchy_boxes Box Calculus
+
+  The box calculus routines implement the functionality to manipulate the
+  AMR index space.  A box consists of an upper and lower index and represents
+  a rectangular region of index space.
+  - SAMRAI::hier::Box
+  - SAMRAI::hier::BoxContainer
+  - SAMRAI::hier::BoxUtilities
+  - SAMRAI::hier::Index
+  - SAMRAI::hier::IntVector
+*/
+
+}
+}

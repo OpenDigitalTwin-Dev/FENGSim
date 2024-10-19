@@ -1,0 +1,25 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace solv {
+
+/*!
+  @page package_solvers_FAC FAC preconditioner on a SAMRAI hierarchy
+
+  The FAC preconditioner implemented in the preconditioner class
+  uses a V-cycle.  Operations specific to a specific problem
+  are delegated to the FAC operator strategy implementation
+  provided by the user.
+  - SAMRAI::solv::FACPreconditioner
+  - SAMRAI::solv::FACOperatorStrategy
+*/
+
+}
+}

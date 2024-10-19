@@ -1,0 +1,131 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for MeshGeneration tests.
+ *
+ ************************************************************************/
+
+// Mesh configuration: Single sphere
+
+// Refer to lss.3d.treelb.input for full description of all input parameters
+// specific to this problem.
+
+Main {
+   dim = 3
+
+   base_name = "single_sphere.3d.caplb"
+   log_all_nodes = FALSE
+   write_visit = FALSE
+   enforce_nesting = FALSE
+   load_balance = TRUE
+
+   load_balancer_type = "ChopAndPackLoadBalancer"
+
+   rank_tree_type = "CenteredRankTree"
+
+   write_comm_graph = FALSE
+
+   domain_boxes = [(0,0,0),(9,9,9)]
+   xlo = 0.0, 0.0, 0.0
+   xhi = 1.0, 1.0, 1.0
+
+   autoscale_base_nprocs = 2
+
+   mesh_generator_name = "SphericalShellGenerator"
+
+   SphericalShellGenerator {
+      radii = 0.0, 0.50
+
+      buffer_distance_0 = 0.05, 0.05, 0.05
+      buffer_distance_1 = 0.00, 0.00, 0.00
+   }
+
+}
+
+BergerRigoutsos {
+   DEV_inflection_cut_threshold_ar = 4
+   sort_output_nodes = TRUE
+   efficiency_tolerance = 0.88
+   combine_efficiency = 0.88
+   DEV_build_zero_width_connector = TRUE
+   DEV_log_node_history = FALSE
+   DEV_log_cluster_summary = FALSE
+   DEV_log_cluster = FALSE
+   // DEV_owner_mode = "SINGLE_OWNER"
+   // DEV_algo_advance_mode = "SYNCHRONOUS"
+}
+
+TreeLoadBalancer {
+  DEV_report_load_balance = FALSE // Reported in main
+  max_spread_procs = 1000000
+  flexible_load_tolerance = 0.05
+
+  // Debugging options
+  DEV_check_map = FALSE
+  DEV_check_connectivity = FALSE
+  DEV_print_steps = FALSE
+  DEV_print_swap_steps = FALSE
+  DEV_print_break_steps = FALSE
+  DEV_print_edge_steps = FALSE
+}
+
+CenteredRankTree { // Parameters for BalancedDepthFirstTree in getRankTree()
+  make_first_rank_the_root = TRUE
+}
+
+BalancedDepthFirstTree { // Parameters for BalancedDepthFirstTree in getRankTree()
+  do_left_leaf_switch = TRUE
+}
+
+BreadthFirstRankTree { // Parameters for CenteredRankTree in getRankTree()
+  tree_degree = 2
+}
+
+ChopAndPackLoadBalancer {
+  // processor_layout = 10, 10, 10
+  bin_pack_method = "SPATIAL"
+  max_workload_factor = 0.3333333333
+  workload_tolerance = 0.0
+}
+
+TimerManager {
+//   print_exclusive      = TRUE
+   print_summed           = TRUE
+   print_max              = TRUE
+   print_threshold        = 0.
+   timer_list             = "hier::*::*", "mesh::*::*", "apps::*::*", "appu::main::all"
+}
+
+
+PatchHierarchy {
+
+   /*
+     Specify number of levels (1, 2 or 3 for this test).
+   */
+   max_levels = 3
+
+   largest_patch_size {
+      level_0 = -1,-1,-1
+      // level_0 = 20,20,20
+      // all finer levels will use same values as level_0...
+   }
+   smallest_patch_size {
+      level_0 = 3, 3, 3
+      level_1 = 6, 6, 6
+      level_2 = 9, 9, 9
+      // all finer levels will use same values as level_0...
+   }
+   ratio_to_coarser {
+      level_1            = 3, 3, 3
+      level_2            = 3, 3, 3
+      level_3            = 2, 2, 2
+      //  etc.
+   }
+
+   allow_patches_smaller_than_ghostwidth = TRUE
+   allow_patches_smaller_than_minimum_size_to_prevent_overlaps = TRUE
+   proper_nesting_buffer = 1, 1, 1
+}

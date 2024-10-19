@@ -1,0 +1,29 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright
+## information, see COPYRIGHT and LICENSE.
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   Code and input for benchmarking and experimentation with tree-based communication.
+##
+#########################################################################
+
+Code and input for evaluating performance of tree communication classes.
+
+We test various combinations of tree arangements, message size and
+communication patterns.  See the individual input files for details.
+
+COMPILATION AND EXECUTION
+-------------------------
+
+   Compilation:
+      make main
+
+   Execution:
+      For one the following input files in test_inputs:
+      serial:
+         ./main <input file>
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main <input file>

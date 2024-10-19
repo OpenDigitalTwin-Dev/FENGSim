@@ -1,0 +1,27 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace math {
+
+/*!
+  @page package_mathops_hierarchy Hierarchy Data Operation Base Classes
+
+  These classes serve as abstract base classes for concrete patch data 
+  hierarchy operations classes.  A base class is provided for each numerical 
+  type since the collection of operations which applies to each type is
+  unique.  A hierarchy data operation manager class is also provided here.
+  - SAMRAI::math::HierarchyDataOpsComplex
+  - SAMRAI::math::HierarchyDataOpsInteger
+  - SAMRAI::math::HierarchyDataOpsReal
+  - SAMRAI::math::HierarchyDataOpsManager
+*/
+
+}
+}

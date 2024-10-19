@@ -1,0 +1,49 @@
+#!/bin/sh
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   bash script to update copyright dates in SAMRAI files
+##
+#########################################################################
+
+# Note: this may work with sh but I have not tested it. sh probably
+# won't be able to handle a large number of files in the "for"
+# statement.
+
+#=============================================================================
+# Change the copyright statement in all files which have the date.
+#=============================================================================
+#
+# These are the commands you can use to replace the copyright date
+# in all files.
+#
+# You may want to run each of these commands from the command line to
+# make sure things are doing what you think they should be doing.
+# (The author does this which is why they are seperated into the 
+#  steps, you could make this more efficient).
+# 
+
+#=============================================================================
+# First find all the files with old copyright dates
+#=============================================================================
+find . -type f ! -name \*.svn\* -exec grep -l "1997-2024" {} \; > files
+
+#=============================================================================
+# Replace the old copyright dates with new dates
+#=============================================================================
+for i in `cat files`
+do
+    echo $i
+    cp $i $i.sed.bak
+    sed "s/1997-2024/1997-2024/" $i.sed.bak > $i
+done
+
+#=============================================================================
+# Remove the temporary files
+#=============================================================================
+find . -name \*.sed.bak -exec rm {} \;
+rm files
+	

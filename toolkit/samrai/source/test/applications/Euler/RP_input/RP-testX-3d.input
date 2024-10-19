@@ -1,0 +1,195 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input for testing Euler Riemann solvers in 3d code (X direction) 
+ *
+ ************************************************************************/
+
+Euler {
+   gamma            = 1.4      // gamma = Ratio of specific heats
+
+   godunov_order    = 4        // order of Goduov slopes (1, 2, or 4)
+
+   riemann_solve        = "APPROX_RIEM_SOLVE"
+//   riemann_solve        = "EXACT_RIEM_SOLVE"
+//   riemann_solve        = "HLLC_RIEM_SOLVE"
+
+   corner_transport = "CORNER_TRANSPORT_2"
+
+   data_problem     = "PIECEWISE_CONSTANT_X"
+
+   Initial_data {
+//    Run test 1 for 50 steps
+  #include "RP-test1.data"
+//    Run test 2 for 50 steps
+//#include "RP-test2X.data"
+//    Run test 3 for 75 steps
+//#include "RP-test3.data"
+//    Run test 4 for 75 steps
+//#include "RP-test4.data"
+//    Run test 5 for 125 steps
+//#include "RP-test5X.data"
+//    Run test 6 for 60 steps
+//#include "RP-test6X.data"
+//    Run test 7 for 75 steps
+//#include "RP-test7X.data"
+   }
+
+   Boundary_data {
+      boundary_face_xlo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_xhi {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_ylo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_yhi {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_zlo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_zhi {
+         boundary_condition      = "FLOW"
+      }
+
+      boundary_edge_ylo_zlo { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_yhi_zlo { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_ylo_zhi { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_yhi_zhi { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_xlo_zlo { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XFLOW"
+      }
+      boundary_edge_xlo_zhi { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XFLOW"
+      }
+      boundary_edge_xhi_zlo { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XFLOW"
+      }
+      boundary_edge_xhi_zhi { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XFLOW"
+      }
+      boundary_edge_xlo_ylo { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "XFLOW"
+      }
+      boundary_edge_xhi_ylo { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "XFLOW"
+      }
+      boundary_edge_xlo_yhi { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "XFLOW"
+      }
+      boundary_edge_xhi_yhi { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "XFLOW"
+      }
+
+     boundary_node_xlo_ylo_zlo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xhi_ylo_zlo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xlo_yhi_zlo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xhi_yhi_zlo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xlo_ylo_zhi {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xhi_ylo_zhi {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xlo_yhi_zhi {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xhi_yhi_zhi {
+         boundary_condition      = "XFLOW"
+      }
+   }
+}
+
+Main {
+   dim = 3
+   base_name = "RP-testX-3d"
+// log file parameters
+   log_all_nodes    = TRUE
+
+// Vizamrai visualization file dump parameters
+   viz_dump_interval        = 5         // zero to turn off
+   viz_dump_dirname         = "RPtest_viz"
+
+// MATLAB 1d plot file dump parameters
+   matlab_dump_interval        = 0         // zero to turn off
+   matlab_dump_dirname         = "RPtest_matlab"
+   matlab_dump_filename        = "RPtestX_3d"
+   matlab_pencil_direction  = 0        // 0 <-> x, 1 <-> y, 2 <-> z
+                                       // default is 0
+   matlab_pencil_index      = 0, 0     // default is lower domain index
+                                       // perpendicular to pencil direction
+
+// restart dump parameters
+   restart_interval         = 0         // zero to turn off
+}
+
+TimerManager{
+   maintain_exclusive_time = TRUE
+   maintain_concurrent_time = TRUE
+   timer_list               = ""
+}
+
+CartesianGeometry {
+   domain_boxes = [ (0,0,0) , (99,4,4) ]
+   x_lo         = -0.5e0, 0.0e0, 0.0e0   // lower end of computational domain.
+   x_up         = 0.5e0 , 0.04e0, 0.04e0 // upper end of computational domain.
+}
+
+PatchHierarchy {
+   max_levels               = 1       // Maximum number of levels in hierarchy.
+
+   largest_patch_size {
+      level_0 = 100,100,100
+   }
+
+   smallest_patch_size {
+      level_0 = 4,4,4
+   }
+}
+
+GriddingAlgorithm {
+}
+
+StandardTagAndInitialize {
+   tagging_method = "GRADIENT_DETECTOR"
+}
+
+HyperbolicLevelIntegrator {
+   cfl                      = 0.9e0    // max cfl factor used in problem
+   cfl_init                 = 0.1e0    // initial cfl factor
+   lag_dt_computation       = TRUE
+   use_ghosts_to_compute_dt = TRUE
+}
+
+TimeRefinementIntegrator {
+   start_time            = 0.e0    // initial simulation time
+   end_time              = 100.e0  // final simulation time
+   grow_dt               = 1.1e0   // growth factor for timesteps
+   max_integrator_steps  = 50      // max number of simulation timesteps
+}
+
+LoadBalancer {
+// using default uniform load balance configuration (see mesh_LoadBalancerX.h.sed)
+}

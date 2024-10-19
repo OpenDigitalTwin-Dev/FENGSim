@@ -1,0 +1,51 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace solv {
+
+/*!
+  @page package_solvers_packages_sundials_cvode CVODE ODE solver interface
+
+  The abstract CVODE interface contains wrapper classes that make it 
+  easier to use the CVODE ODE solver package with C++ 
+  code in general, and SAMRAI in particular.  There exist wrappers for
+  Sundials vectors as well as the complete CVODE ODE solver.
+  Apart from some minor preprocessor features, these interfaces are 
+  completely independent of the SAMRAI.  The code which maps the vector 
+  interface included here to the SAMRAI framework can be found in the 
+  SAMRAI "Solvers" package.
+
+  These classes provide a C++ interface to the CVODE package, 
+  which is written in C.  They are sufficiently generic that they
+  may be used independently of the SAMRAI framework.  The solver class
+  wraps the CVODE data structures and function calls so that these items
+  may be more easily used within a C++ program.  Static member 
+  functions for the right hand side function evaluation, preconditioner setup 
+  and preconditioner solve are provided to link user-defined 
+  versions of these routines with CVODE and CVSpgmr.  The "abstract 
+  function" class serves as the interface between the solver class 
+  and user-defined implementations of these routines.
+
+  CVODE/CVODE was developed in the Center for Applied Scientific Computing 
+  (CASC) at Lawrence Livermore National Laboratory (LLNL).  For more 
+  information about CVODE and a complete description of the operations 
+  and data structures used by this class, see S.D. Cohen and A.C. 
+  Hindmarsh, "CVODE User Guide", UCRL-MA-118618, Lawrence Livermore National
+  Laboratory, 1994.
+
+  Note: These classes assume that vectors based on the 
+        SundialsAbstractVector class are used.
+  - CVODESolver
+  - CVODEAbstractFunctions
+
+*/
+
+}
+}

@@ -1,0 +1,167 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for MeshGeneration tests.
+ *
+ ************************************************************************/
+
+// Mesh configuration: Lump with 2 shells.
+
+Main {
+   // Dimension of problem.  No default.
+   dim = 3
+
+   // Base name for output files.
+   base_name = "lss.3d.treelb"
+
+   // Whether to dump the hierarchy in a visit file.
+   write_visit = TRUE
+
+   // Whether to log all nodes.
+   log_all_nodes = FALSE
+
+   // Domain definition: box, lower and upper corners.
+   domain_boxes = [(0,0,0),(10,10,10)]
+   xlo = 0.0, 0.0, 0.0
+   xhi = 1.5, 1.5, 1.5
+
+   // Whether to enforce nesting (one value for each level, but first value is ignored).
+   enforce_nesting = TRUE, TRUE, TRUE
+
+   // Scale the domain size by number of processes divided by this value.
+   autoscale_base_nprocs = 4
+
+   // Box generator types: BergerRigoutsos or TileClustering
+   box_generator_type = "BergerRigoutsos"
+
+   // Balancer types: TreeLoadBalancer, ChopAndPackLoadBalancer or CascadePartitioner
+   load_balancer_type = "TreeLoadBalancer"
+
+   // Tree type for TreeLoadBalancer: CenteredRankTree, BalancedDepthFirstTree, or BreadthFirstTree.
+   rank_tree_type = "CenteredRankTree"
+
+   // Whether to load balance (one value for each level).
+   load_balance = TRUE, TRUE, TRUE
+
+   write_comm_graph = FALSE
+
+   // Mesh generator: SphericalShellGenerator, SinusoidalFrontGenerator, or ShrunkenLevelGenerator.
+   mesh_generator_name = "SphericalShellGenerator"
+
+   // Refer to SphericalShellGenerator for input.
+   SphericalShellGenerator {
+
+      radii = 0.0, 0.35,    0.70, 0.75,    1.15, 1.17
+
+      buffer_distance_0 = 0.04, 0.04, 0.04
+      buffer_distance_1 = 0.00, 0.00, 0.00
+   }
+
+}
+
+
+// Used if box_generator_type is TileClustering.  Refer to mesh::TileClustering for input.
+TileClustering {
+  tile_size = 4, 4, 4
+  allow_remote_tile_extent = TRUE
+  coalesce_boxes = TRUE
+  DEV_log_cluster_summary = FALSE
+  DEV_log_cluster = FALSE
+  DEV_print_steps = FALSE
+  DEV_debug_checks = TRUE
+}
+
+
+// Used if box_generator_type is BergerRigoutsos.  Refer to mesh::BergerRigoutsos for input.
+BergerRigoutsos {
+  sort_output_nodes = TRUE
+  efficiency_tolerance = 0.75
+  combine_efficiency = 0.75
+  DEV_min_box_size_from_cutting = 4, 4, 4
+  DEV_build_zero_width_connector = TRUE
+  DEV_cluster_locally = FALSE
+  DEV_cluster_tiles = FALSE
+  DEV_tag_coarsen_ratio = 1, 1, 1
+  DEV_inflection_cut_threshold_ar = 4.0
+  DEV_log_node_history = FALSE
+  DEV_log_cluster_summary = FALSE
+  DEV_log_cluster = FALSE
+  // DEV_owner_mode = "SINGLE_OWNER"
+  // DEV_algo_advance_mode = "SYNCHRONOUS"
+}
+
+
+// Used if load_balancer_type is TreeLoadBalancer.  Refer to mesh::TreeLoadBalancer for input.
+TreeLoadBalancer {
+  flexible_load_tolerance = 0.03
+  DEV_voucher_mode = FALSE
+  DEV_report_load_balance = TRUE // Reported in main
+  DEV_balance_penalty_wt = 1.0
+  DEV_surface_penalty_wt = 1.0
+  DEV_slender_penalty_wt = 1.0
+  DEV_precut_penalty_wt = 1.0
+
+  // Debugging options
+  DEV_check_map = TRUE
+  DEV_check_connectivity = TRUE
+  DEV_print_steps = FALSE
+  DEV_print_swap_steps = FALSE
+  DEV_print_break_steps = FALSE
+  DEV_print_edge_steps = FALSE
+  DEV_summarize_map = TRUE
+}
+
+// Used if rank_tree_type is CenteredRankTree.  Refer to tbox::CenteredRankTree for input.
+CenteredRankTree { // Parameters for BalancedDepthFirstTree in getRankTree()
+  make_first_rank_the_root = TRUE
+}
+
+// Used if rank_tree_type is BalancedDepthFirstTree.  Refer to tbox::CenteredRankTree for input.
+BalancedDepthFirstTree { // Parameters for BalancedDepthFirstTree in getRankTree()
+  do_left_leaf_switch = TRUE
+}
+
+// Used if rank_tree_type is BreadthFirstRankTree.  Refer to tbox::CenteredRankTree for input.
+BreadthFirstRankTree { // Parameters for CenteredRankTree in getRankTree()
+  tree_degree = 2
+}
+
+
+// Refer to tbox::TimerManager for input.
+TimerManager {
+//   print_exclusive      = TRUE
+   print_summed           = TRUE
+   print_max              = TRUE
+   print_threshold        = 0.
+   timer_list             = "hier::*::*", "mesh::*::*", "apps::*::*"
+}
+
+
+// Refer to hier::PatchHierarchy for input.
+PatchHierarchy {
+
+   // Specify number of levels (1, 2 or 3 for this test).
+   max_levels = 3
+
+   largest_patch_size {
+      level_0 = -1,-1,-1
+   }
+   smallest_patch_size {
+      level_0 = 4, 4, 4
+      level_1 = 6, 6, 6
+      level_2 = 6, 6, 6
+   }
+   ratio_to_coarser {
+      level_1            = 3, 3, 3
+      level_2            = 3, 3, 3
+      level_3            = 3, 3, 3
+      //  etc.
+   }
+
+   allow_patches_smaller_than_ghostwidth = TRUE
+   allow_patches_smaller_than_minimum_size_to_prevent_overlaps = TRUE
+   proper_nesting_buffer = 1, 1, 1
+}

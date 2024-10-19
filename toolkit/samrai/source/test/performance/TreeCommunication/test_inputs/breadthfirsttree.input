@@ -1,0 +1,97 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Code and input for benchmarking and experimentation with tree-based communication.
+ *
+ ************************************************************************/
+
+/*
+Benchmark for BreadthFirstRankTree communication.
+*/
+
+Main {
+
+  // Base name for output files.
+  base_name = "bft"
+
+  // Whether to log all nodes.
+  log_all_nodes = TRUE
+
+}
+
+/*
+ * Define tests using databases named Test##,
+ * where ## is a 2-digit integer, sequentially from 0
+ */
+
+Test00 {
+
+  nickname = "binarytree" // Nick name of test.
+  // Test the binary tree mode.
+
+  tree_name = "BreadthFirstRankTree" // BalancedDepthFirstTree || CenteredRankTree || ...
+
+  BreadthFirstRankTree { // Parameters for tree of same name in getTreeForTesting()
+    tree_degree = 2
+  }
+
+  msg_length = 1024 // Message length (units of integer)
+  first_data_length = 1 // See AsyncCommPeer::limitFirstDataLength().
+
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 400, 0 // Simulated processing cost is 400 usec per message and 0 usec per item in message.
+
+  repetition = 100 // Repetitions of communication and processing steps.
+
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+
+  // Pattern of message travel:
+  // "UP", "DOWN": Up or down the tree
+  // "UP_THEN_DOWN", "DOWN_THEN_UP": Self-explanatory
+  // "TreeLB": Simulation communication of TreeLoadBalancer
+  message_pattern = "UP_THEN_DOWN"
+}
+
+Test01 {
+
+  nickname = "trinarytree" // Nick name of test.
+  // Test the binary tree mode.
+
+  tree_name = "BreadthFirstRankTree" // BalancedDepthFirstTree || CenteredRankTree || ...
+
+  BreadthFirstRankTree { // Parameters for tree of same name in getTreeForTesting()
+    tree_degree = 3
+  }
+
+  msg_length = 1024 // Message length (units of integer)
+  first_data_length = 1 // See AsyncCommPeer::limitFirstDataLength().
+
+  verify_data = TRUE // Verify correctness of received data.
+  processing_cost = 400, 0 // Simulated processing cost is 400 usec per message and 0 usec per item in message.
+
+  repetition = 100 // Repetitions of communication and processing steps.
+
+  mpi_tags = 1, 2 // Array of 2 ints, see AsyncCommPeer::setMPITag().
+
+  // Pattern of message travel:
+  // "UP", "DOWN": Up or down the tree
+  // "UP_THEN_DOWN", "DOWN_THEN_UP": Self-explanatory
+  // "TreeLB": Simulation communication of TreeLoadBalancer
+  message_pattern = "UP_THEN_DOWN"
+}
+
+
+
+
+
+// Refer to tbox::TimerManager for input.
+TimerManager {
+//   print_exclusive      = TRUE
+   print_summed           = TRUE
+   print_max              = TRUE
+   print_threshold        = 0.
+   timer_list             = "tbox::*::*", "apps::*::*"
+}

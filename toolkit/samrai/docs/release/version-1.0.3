@@ -1,0 +1,355 @@
+*****************************************************************************
+				Release Notes
+*****************************************************************************
+
+NOTE:  These release notes are more descriptive and detailed than is usual
+       for software release notes.  The reason for this is that presently
+       complete documentation does not exist for most of the items listed.
+       Until sufficient user documentation becomes available, descriptions
+       such as those that follow will be part of SAMRAI release notes.
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report it
+to us so that we may fix it.  We will make every effort to fix bugs
+in a timely manner.  Depending on the severity or the complexity of the
+bug, we will either fix the bug for a subsequent library release or send
+a code fix to users so that their work is minimally interrupted.
+
+LLNL users should report bugs using the CASC bug tracking web pages:
+
+        http://www-casc.llnl.gov/bugs/
+
+Enter the bug into the appropriate are of the SAMRAI project section.
+
+Bugs found by other users should send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+=============================================================================
+SAMRAI Release v1.0.3
+=============================================================================
+
+-----------------------------------------------------------------------------
+                             What's Changed
+-----------------------------------------------------------------------------
+
+(0) Parts of the SAMRAI library have been reorganized and two new "packages"
+have been created.  The changes were made to place certain classes in 
+locations that are more intuitive and to create a better balance among the
+different SAMRAI packages in terms of size.  The changes do not affect 
+the functionality of any of the classes involved.  For application developers 
+using the "noprefix" versions of class names, the noticeable changes are
+minimal.  Users employing full class names, including package prefixes, in 
+their development may be affected.  A summary of changes to the library 
+organization follows.  Please refer the SAMRAI source code documentation 
+for more details.
+
+   (0.1)   The AMR patch hierarchy construction and dynamic gridding classes
+           have been moved from source/algorithm/adaptive_meshing to
+           the directory source/mesh/gridding.  These classes are now part
+           of the "Mesh" package; thus they now have package prefix "mesh_".
+
+   (0.2)   A new "Solvers" package was created; the prefix is "solv_".  
+           This package contains support for linear and nonlinear solvers
+           on a structured AMR patch hierarchy.  
+
+   (0.3)  The PETSc abstract vector interface class is now part of the
+          "Solvers" package and have been moved from source/petsc to the 
+          directory source/solvers/packages/petsc.  Its name has changed 
+          from "petc_AbstractVectorReal" to "solv_PETScAbstractVectorReal". 
+
+   (0.4)  The KINSOL abstract vector interface classes and C++ wrappers are 
+          now part of the "Solvers" package package and have been moved from 
+          source/kinsol to the directory source/solvers/packages/kinsol.  
+          Some names have changed for organizational purposes.  Specifically, 
+          "kins_NonlinearSolver" and "kins_AbstractFunctions" are now 
+          "solv_KINSOLSolver" and "solv_KINSOLAbstractFunctions", 
+          respectively.  "kins_AbstractVector" is now 
+          "solv_KINSOLAbstractVector".
+
+   (0.5)  The SAMRAI vector classes are now part of the "Solvers" package.  
+          They have been moved from the directory source/algorithm/vectors/ 
+          to source/solvers/vectors and now have the package prefix "solv_".
+
+   (0.6)  The Poisson hierarchy solver based on the FAC algorithm and which 
+          uses hypre multigrid solvers as level solvers has been moved to 
+          the "Solvers" package from the "Algorithm" package.  Specifically, 
+          the contents of the directory source/algorithm/poisson_solver have 
+          been moved to source/solvers/FAC.  (Important note: These classes, 
+          while functional, are still under construction and should be used 
+          carefully).
+
+   (0.7)   A new "Mathematical Operations" package was created; the prefix 
+           is "math_".   The mathematical operations classes (arithmetic, 
+           dot products, norms, etc.) needed by the SAMRAI vector support 
+           and which can be applied to patch data on an AMR hierarchy 
+           comprise the contents of this package.   Formerly, these classes
+           were located in the directory source/algorithm/data_operations.
+           Now, they can be found in source/mathops.
+ 
+
+(1) Some functionality added to the Index patch data type.  The IndexData
+class stores and irregular index set in a List.  A method to check if a
+particular index is on the List was added.  There are now two iterators
+associated with IndexData.  IndexListIterator interates of the List that
+stores the irregular index set, and the IndexIterator iterates over the
+index space associated with the PatchData object.
+
+(2) Previous versions of SAMRAI used a home-grown runtime type checking
+system.  This has been replaced with the ISO standard RTTI system.
+You need to remove uses of the tbox_RTTI* macros from classes and change
+casts to use the dynamic_cast operator.  For example:
+
+	template <class TYPE>
+	int pdat_OutersideDataX<TYPE>::getDataStreamSize(
+	const hier_BoxOverlapX& overlap) const
+	{
+		tbox_ConstRef<pdat_SideOverlapX> t_overlap(overlap);
+
+		....
+
+becomes
+
+
+	template <class TYPE>
+	int pdat_OutersideDataX<TYPE>::getDataStreamSize(
+	   const hier_BoxOverlapX& overlap) const
+	{
+
+		const pdat_SideOverlapX *t_overlap = 
+		    dynamic_cast<const pdat_SideOverlapX *>(&overlap);
+
+	        ...
+
+The result of the dynamic_cast is NULL if the dynamic cast fails.
+
+(3) The ordering of the indices for the edge data type have been changed 
+so that they are unpermuted.  For example, given a box 
+[l0:u0,l1:u1,l2:u2] in 3d, the edge indices will run:
+
+edge_X [l0:u0,l1:u1+1,l2:u2+1]
+edge_Y [l0:u0+1,l1:u1,l2:u2+1]
+edge_Z [l0:u0+1,l1:u1+1,l2:u2]
+
+Previous versions of SAMRAI had the indices for the edge data type 
+permuted so that the edge indices for the same box would have been:
+
+edge_X [l0:u0,l1:u1+1,l2:u2+1]
+edge_Y [l1:u1,l2:u2+1:l0,u0+1]
+edge_Z [l2:u2,l0:u0+1,l1:u1+1]
+
+(4) The management of which patchdata in the PatchHierarchy are written
+out for restart purposes has been moved from the tbox_RestartManager
+to the hier_VariableDatabase class.  The changes in the methods used
+to register/unregister/etc. patchdata for restart are given by:
+
+hier_ComponentSelector hier_VariableDatabaseX::getPatchDataRestartTable()
+bool hier_VariableDatabaseX::isPatchDataRegisteredForRestart(int index)
+void hier_VariableDatabaseX::registerPatchDataForRestart(int index)
+void hier_VariableDatabaseX::unregisterPatchDataForRestart(int index)
+
+The old methods were
+
+tbox_BitVector tbox_RestartManager::getPatchDataRestartTable()
+bool tbox_RestartManager::getPatchDataRestartBit(int index)
+void tbox_RestartManager::setPatchDatRestartBit(int index)
+void tbox_RestartManager::clrPatchDataRestartBit(int index)
+
+(5) The ghost cell width argument for the concrete variable types has been 
+removed because it no longer needs ghost cell information (the specification
+of ghost cell width for patchdata was moved to the hier_VariableDatabase
+class long ago).  The old constructors look like:
+
+pdat_CellVariable(string name, int depth, hier_IntVector ghosts);
+pdat_NodeVariable(string name, int depth, hier_IntVector ghosts);
+
+The new constructors look like:
+
+pdat_CellVariable(string name, int depth);
+pdat_NodeVariable(string name, int depth, bool fine_boundary_represents_var);
+
+For more information about the new "fine_boundary_represents_var" 
+argument, see item (4) in the "What's New" section.
+
+(6) TimerManager's printTimerInformation() function, which prints the state
+of the timers at the end of a run, has been renamed 
+printProcessorTimerInformation().  The arguments are the same.
+
+Why the changed name?  It was not always clear to the users what information
+was being provided by this routine.  The original function printed timing 
+results from individual processors.  If a case was run on multiple processors 
+and the TimerManager->printTimerInformation() function was called,
+passing in plog as the output stream, timing information on each processor
+was written to the processor's log file. If pout was passed as the output 
+stream, it printed the results for processor 0 only.  It was confusing to
+some users exactly what information was being printed, so the name was 
+made more explicit.  The new name also differentiates the function from the
+new printSummedProcessorTimerInformation() and
+printMaxProcessorTimerInformation() functions, discussed under label (5)
+in the "What's new" section below.
+
+(7) To gain a minor increase in algorithmic flexibility an argument has 
+been added to the "advanceLevel()" routine declared in the abstract base
+class algs_TimeRefinementLevelIntegrator.  Specifically, a boolean called
+"last_step" was added to indicate when the advance is the last in the 
+current sequence on the given level before synchronization with the next
+coarser level will occur.  Users deriving from this class will need to 
+update their code to reflect this change.  This argument is ignored in the 
+algs_HyperbolicLevelIntegrator class, which requires no special treatment 
+in this case.
+
+(8) The class tbox_ThrowError has been removed.  Previously this class was
+used in some older parts of the library to report a message when an error
+occurred.  With the introduction of the "TBOX_ERROR/WARNING" macros available
+via the tbox_Utilities class, the old class was somewhat redundant.  Users 
+will not be affected by this change unless classes in their application 
+code inherited from the ThrowError class.  Similar functionality is retained
+by using the TBOX_ERROR macro.
+
+(9) All restartable objects in the SAMRAI library automatically remove
+themselves from the list of restart items when they are destroyed.  This
+takes care of the bug that arises when a restart file is written after
+a restartable object is destroyed. See item #6 in "What's New" for the 
+new tbox_RestartManager method that is used to remove objects from the 
+list of restart items.
+
+-----------------------------------------------------------------------------
+                               What's New 
+-----------------------------------------------------------------------------
+
+(1)  VAMPIR links enabled.  It is now possible to utilize the VAMPIR 
+     performance analysis toolkit for SAMRAI applications on blue pacific.
+     The VAMPIR tool provides a breakdown of the time taken in different
+     parts of the application, and provides details of communication
+     and load imbalance for parallel runs.  VAMPIR tracing is linked
+     with the timing utility in SAMRAI so existing timers will yeild
+     the information necessary for VAMPIR.  See the tutorial provided
+     in the "/docs" directory for information about using the tool.
+
+     To compile SAMRAI with VAMPIR on blue pacific, add "--with-VAMPIR" 
+     to the list of configure options.  VAMPIR can be used in either 
+     debug or optimized mode.
+   
+(2) The PatchHierarchy has been improved to allow the user to specify
+arbitrary patchdata to be written out to a database.  To write an 
+arbitrary set of patchdata to a database, use the 
+
+void hier_PatchHierarchy::putToDatabase( 
+   tbox_Pointer<tbox_Database> db, 
+   hier_ComponentSelector desired_patchdata_components)
+
+method, where the bits in the desired_patchdata_components argument are
+set to 1.  NOTE: This capability is independent of writing restart files.  
+To write specific patchdata for restart purposes, the desired patchdata 
+MUST be registered for restart with the hier_VariableDatabase.  This
+method is intended to be used for extracting data from a PatchHierarchy for
+purposes other than restart (e.g. visualization, error computations, etc.).
+
+(3) A few coarsening/refinement operators on cartesian grids have been 
+implemented for the side data type.  They are:
+
+    Complex - constant refine, weighted average coarsening
+    Double  - constant refine, conservative linear refine, 
+              weighted average coarsening
+    Float   - constant refine, conservative linear refine, 
+              weighted average coarsening
+    Integer - constant refine
+
+(4) We have added the capability for the user to specify whether coarse 
+or fine data should be the "true" representation of a variable at 
+coarse-fine interfaces (if any data points lie on the coarse-fine interface).
+The user specifies this property of the variable through a boolean passed into
+the constructor for the concrete Varible types.  For example,
+
+NodeVariable(string name,
+             int depth,
+             bool fine_boundary_represents_var);
+
+NOTES:  
+   (a) When fine_boundary_represents_var is true, fine data represents 
+the coarse-fine boundary; when fine_boundary_represents_var is false, 
+coarse data represents the coarse-fine boundary.  By default, the 
+fine_boundary_represents_var is true for all standard SAMRAI patchdata
+types.
+   (b) For those concrete data types that do not have any grid points
+on coarse-fine boundaries, specifying whether coarse or fine
+data should represent the variable at coarse-fine boundaries does not
+make sense.  For these data types (e.g. cell-centered and index data type), 
+the constructor does not have the fine_boundary_represents_var argument.
+
+(5) For each timer, the summed times on all processors can be printed by
+calling the TimerManager's printSummedProcessorTimerInformation() function.
+The maximum wallclock time, and the processor that it occurred on, is output
+by calling TimerManager's printMaxProcessorTimerInformation() function.
+
+Timer information can now be printed in format: time (percentage total%) thru
+the function registerMainTimer() added to TimerManager.  The function
+works as follows:  
+
+   1.  Create a timer, with whatever name you choose, to be the so-called 
+       "main" timer.  Typically, this will be the first timer started and
+       the last timer stopped.  Register this timer with the TimerManager
+       class via TimerManager->registerMainTimer(timer_pointer).
+   2.  When the print routine is called, TimerManager checks to see if a
+       main timer has been registered.  If not, it outputs timer data in the
+       same format as earlier versions.  If so, it will output timer data
+       in the following format:
+
+          main       user: 80.0 (100%)  sys: 2.8 (100%)  wall: 80.3 (100%)
+          mytimer    user: 56.0 (70%)  sys: 0.56 (20%)  wall: 57.8 (72%)
+
+       where the times for "mytimer" are compared to the registered main 
+       timer ("main" in this case) to determine the percentages.  
+
+(5) The SkeletonGridGeometry and SkeletonPatchGeometry are classes which
+provide the bare minimum concrete implementation of the geometry virtual base
+classes.  They provide no information about how the index space represents
+physical space.  These classes were added because of the need of a particular
+application to manage its own mapping between index space and physical space. 
+
+(6) The tbox_RestartManager class has been augmented with a new method to
+remove objects from the list of items to be written to the restart file.
+The name of the method is unregisterRestartItem(const &string name).  It 
+removes the item with the specified name from the restart list.  This 
+functionality is added so that users can destroy restartable objects 
+without worrying that the RestartManager will need the object at some 
+later point in time.  Typically, the unregisterRestartItem() method
+is invoked in the destructor of a serializable object.
+
+-----------------------------------------------------------------------------
+                               Bug Fixes 
+-----------------------------------------------------------------------------
+
+(1) In the algs_HyperbolicLevelIntegrator class, the synchronizeNewLevels()
+method has been fixed so that it produces a hierarchy that is initialized 
+with a consistent representation of conserved quantities.
+
+(2) In the algs_TimeRefinementIntegrator class, the initializeHierarchy()
+method has been fixes so that the hierarchy data is synchronized after
+the data has been initialized.
+
+(3) Specifying "NO_COARSEN" for the coarsen operation no longer results
+in copying of bogus data to the destination.  It now correctly does 
+nothing to the existing data.
+
+(4) The postprocessRefine routine in Euler is no longer commented out.  
+Some indexing problems in the conservative interpolation routines for 
+velocity and pressure were fixed so that they are functioning properly.
+
+(5) The GriddingAlgorithm class now requires all patches on the coarsest
+level to be larger than the maximum of the maximum ghost cell width and the
+user-provided minimum patch size.  Previously this was only enforced on the
+finer levels.
+
+(6) A bug found in the classes which implement the Berger-Rigoutsos clustering
+algorithm was fixed.  The potential for a segmentation fault in applying the
+Laplacian test to the one-dimensional tag histogram data if a box is too
+short along one side has been removed.
+
+
+-----------------------------------------------------------------------------
+                             Known Problems
+-----------------------------------------------------------------------------
+

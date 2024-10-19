@@ -1,0 +1,39 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual
+ *
+ ************************************************************************/
+namespace SAMRAI {
+    namespace hier {
+
+/*!
+  @page package_hierarchy_dlbg Distributed Mesh Metadata
+
+  These classes support the notion of distributed metadata (the description
+  of the mesh configuration), including including box ownership,
+  box identification, neighbor information.
+  - SAMRAI::hier::BlockId
+  - SAMRAI::hier::Connector
+  - SAMRAI::hier::GlobalId
+  - SAMRAI::hier::LocalId
+  - SAMRAI::hier::Box
+  - SAMRAI::hier::BoxContainerUtils
+  - SAMRAI::hier::BoxId
+  - SAMRAI::hier::BoxLevel
+  - SAMRAI::hier::BoxLevelHandle
+  - SAMRAI::hier::BoxLevelConnectorUtils
+  - SAMRAI::hier::BoxNeighborhoodCollection
+  - SAMRAI::hier::BoxTree
+  - SAMRAI::hier::MappingConnectorAlgorithm
+  - SAMRAI::hier::MultiblockBoxTree
+  - SAMRAI::hier::OverlapConnectorAlgorithm
+  - SAMRAI::hier::PersistentOverlapConnectors
+  - SAMRAI::hier::PeriodicId
+*/
+
+}
+}

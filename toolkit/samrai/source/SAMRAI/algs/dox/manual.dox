@@ -1,0 +1,29 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace algs {
+
+/*!
+  @page package_algorithm The Algorithm Package
+ 
+  The Algorithm package contains classes that are useful for composing 
+  structured AMR solution algorithms at a high-level.  Algorithm support
+  is divided into these categories:
+  -# @ref package_algorithm_time_refinement "time integration over AMR patch hierarchy using local time refinement"
+  -# @ref package_algorithm_method_of_lines "time integration over AMR patch hierarchy using method of lines"
+  -# @ref package_algorithm_hyperbolic "explicit hydrodynamics over levels in AMR patch hierarchy (i.e., hyperbolic conservation laws)"
+  -# @ref package_algorithm_implicit "implicit time-integration over AMR patch hierarchy"
+  -# @ref package_algorithm_femutils "utilities useful for finite element computations on an AMR patch hierarchy"
+ 
+  All class names in the Algorithm package are in the namespace SAMRAI::algs.
+*/
+
+}
+}

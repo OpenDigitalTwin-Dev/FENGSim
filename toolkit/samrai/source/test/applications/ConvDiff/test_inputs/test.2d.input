@@ -1,0 +1,259 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Advecting sphere input for SAMRAI ConvDiff example problem 
+ *
+ ************************************************************************/
+
+GlobalInputs {
+   // If FALSE, when an error is encountered in serial exit(-1) will be called
+   // instead of SAMRAI_MPI::abort().
+   call_abort_in_serial_instead_of_exit = FALSE
+}
+
+AutoTester {
+   // If true, fluxes will be written out to a .dat file for inspection.
+   // Default is FALSE.
+   test_fluxes = FALSE
+
+   // iteration to carry out test.  Default is 10.
+   test_iter_num = 10
+
+   // if true will write correct patch boxes--used for rebaselining
+   // Default is FALSE.
+   write_patch_boxes = FALSE
+
+   // if true will read correct patch boxes--set to FALSE to rebaseline
+   // Default is FALSE.
+   read_patch_boxes = TRUE
+
+   // time steps for which correctness of patch boxes will be checked
+   // Required if one of write_patch_boxes or read_patch_boxes is true.
+   // No default.
+   test_patch_boxes_at_steps = 0, 5, 10
+
+   // base name of files containing correct patch boxes
+   // Required if one of write_patch_boxes or read_patch_boxes is true.
+   // No default.
+   test_patch_boxes_filename = "test_inputs/test.2d.boxes"
+
+   // expected correct result
+   // Required if test_fluxes is FALSE.  Unread otherwise.  No default.
+   correct_result = 0.0048828125,  0.00048828125
+
+   // if true will write corrct result--used for rebaselining
+   // Default is FALSE.
+   output_correct = FALSE
+}
+
+ConvDiff {
+   // convection-diffusion equation coefficients
+   // Vector of length dim.  Required input.  No default.
+   convection_coeff  = 40.0, 20.0
+
+   // Scalar.  Required input.  No default.
+   diffusion_coeff   = 0.1
+
+   // Scalar.  Required input.  No default.
+   source_coeff      = 0.0
+
+
+   // CFL condition for timestepping.
+   // Default is 0.9.
+   cfl               = 0.5
+
+
+   // Tolerance used for tagging cells.
+   // Vector of length NEQU defined in ConvDiff.h.
+   // Required input.  No default.
+   cell_tagging_tolerance = 20.0
+
+
+   // General type of problem and its initial conditions.
+   // May only be "SPHERE".  Required input.  No default.
+   data_problem      = "SPHERE"
+
+   // Problem initial data.  Required inputs.  No default.
+   Initial_data {
+      // Radius of sphere.  Required input.  No default.
+      radius            = 2.9
+
+      // Center of sphere.  Vector of length dim.
+      // Required input.  No default.
+      center            = 5.5, 5.5
+
+      // Initial value of "u" inside sphere.
+      // Vector of length NEQU defined in ConDiff.h.
+      // Required input.  No default.
+      val_inside     = 80.0
+
+      // Initial value of "u" outside sphere.
+      // Vector of length NEQU defined in ConDiff.h.
+      // Required input.  No default.
+      val_outside    = 10.
+   }
+
+
+   // Boundary condition data following the format defined in
+   // appu::CartesianBoundaryUtility[2,3].  Refer to these classes for details.
+   Boundary_data {
+      boundary_edge_xlo {
+         boundary_condition      = "DIRICHLET"
+         val                     = 10.
+      }
+      boundary_edge_xhi {
+         boundary_condition      = "FLOW"
+      }
+      boundary_edge_ylo {
+         boundary_condition      = "DIRICHLET"
+         val                     = 100.
+      }
+      boundary_edge_yhi {
+         boundary_condition      = "DIRICHLET"
+         val                     = 10.
+      }
+      // IMPORTANT: If a *REFLECT, *DIRICHLET, or *FLOW condition is given
+      //            for a node, the condition must match that of the
+      //            appropriate adjacent edge above.  This is enforced for
+      //            consistency.  However, note when a REFLECT edge condition
+      //            is given and the other adjacent edge has either a FLOW
+      //            or REFLECT condition, the resulting node boundary values
+      //            will be the same regardless of which edge is used.
+      boundary_node_xlo_ylo {
+         boundary_condition      = "XDIRICHLET"
+      }
+      boundary_node_xhi_ylo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xlo_yhi {
+         boundary_condition      = "YDIRICHLET"
+      }
+      boundary_node_xhi_yhi {
+         boundary_condition      = "YDIRICHLET"
+      }
+   }
+
+}
+
+Main {
+   // Dimension of problem.  Required input.  No default.
+   dim = 2
+
+
+   // Base name of log file.  Default is "unnamed".
+   base_name = "test.2d"
+
+
+   // Explicit name of log file.  Default is base_name + ".log"
+   log_filname = "test.2d.log"
+
+
+   // If true all nodes will log to individual files.
+   // If false only node 0 will log.
+   // Default is false.
+   log_all_nodes    = TRUE
+
+
+   // visualization dump parameters
+   // Frequency at which to dump viz output--zero to turn off.
+   // Default is 0.
+   viz_dump_interval    = 0
+
+   // Directory in which to place viz output.
+   // Default is base_name + ".visit"
+   viz_dump_dirname     = "viz_test-2d"
+
+   // Number of processors which write to each viz file.
+   // Default is 1.
+   visit_number_procs_per_file = 1
+
+
+   // restart dump parameters
+   // Frequency at which to dump restart output--zero to turn off
+   // Default is 0.
+   restart_interval     = 5
+
+   // Directory in which to place restart output.
+   // Default is base_name + ".restart"
+   restart_write_dirname = "test.2d.restart"
+}
+
+MainRestartData{
+   // Maximum number of timesteps to take.
+   // Required if not run from restart.
+   max_timesteps       = 10
+
+   // Simulation time of first timestep.
+   // Default is 0.0.
+   start_time          = 0.
+
+   // Simulation time of last timestep.
+   // Default is 100000.
+   end_time            = 100.
+
+   // Number of timesteps between regrids.
+   // Default is 2.
+   regrid_step         = 3
+
+   // Tag buffer for each finer level.
+   // Default is regrid_step.
+   tag_buffer          = 2
+}
+
+// Refer to geom::CartesianGeometry and its base clases for input
+CartesianGeometry{
+   domain_boxes	= [(0,0),(59,39)]
+   x_lo = 0.e0 , 0.e0     // lower end of computational domain.
+   x_up = 30.e0 , 20.e0   // upper end of computational domain.
+}
+
+// Refer to hier::PatchHierarchy for input
+PatchHierarchy {
+   max_levels = 3          // Maximum number of levels in hierarchy.
+
+   ratio_to_coarser {      // vector ratio to next coarser level
+      level_1 = 4 , 4
+      level_2 = 4 , 4
+      level_3 = 4 , 4
+   }
+
+   largest_patch_size {
+      level_0 = 48 , 48
+      // all finer levels will use same values as level_0...
+   }
+
+   smallest_patch_size {
+      level_0 = 8 , 8
+      // all finer levels will use same values as level_0...
+   }
+                                      // boxes < efficiency * vol of large box
+}
+
+// Refer to mesh::GriddingAlgorithm for input
+GriddingAlgorithm{
+}
+
+// Refer to mesh::BergerRigoutsos for input
+BergerRigoutsos {
+   sort_output_nodes = TRUE // Makes results repeatable.
+   efficiency_tolerance    = 0.70e0   // min % of tag cells in new patch level
+   combine_efficiency      = 0.85e0   // chop box if sum of volumes of smaller
+                                      // boxes < efficiency * vol of large box
+}
+
+// Refer to mesh::StandardTagAndInitialize for input
+StandardTagAndInitialize {
+   tagging_method = "GRADIENT_DETECTOR"
+}
+
+// Refer to algs::MethodOfLinesIntegrator for input
+MethodOfLinesIntegrator{
+}
+
+// Refer to mesh::TreeLoadBalancer for input
+LoadBalancer {
+   // using default TreeLoadBalancer configuration
+}

@@ -1,0 +1,27 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace tbox {
+/*!
+  @page package_toolbox_database Generic Database Support
+
+  The classes in this directory provide the abstract base classes for the
+  input, restart, and visualization databases.
+  - SAMRAI::tbox::DatabaseBox
+  - SAMRAI::tbox::Database
+  - SAMRAI::tbox::DatabaseFactory
+  - SAMRAI::tbox::Serializable
+  - SAMRAI::tbox::MemoryDatabase
+  - SAMRAI::tbox::MemoryDatabaseFactory
+  - SAMRAI::tbox::NullDatabase
+ */
+
+}
+}

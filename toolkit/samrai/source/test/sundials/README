@@ -1,0 +1,72 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   CVODE example
+##
+#########################################################################
+
+This example demonstrates use of CVODE vectors to solve the heat eqn. in
+SAMRAI.  The files included in this directory are as follows:
+ 
+          main.cpp               -  example main program
+          CVODEModel.[Ch]      -  example user routines that supply interface
+                                  methods to CVODE operations in the library 
+          cvode-dir.[2d,3d].input  -  2d and 3d Dirichlet input files
+          cvode-neu.[2d,3d].input  -  2d and 3d Neumann input files
+ 
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make main
+
+   Execution:
+      For one of the following input files:
+         "dir" indicates Dirichlet BCs, while "neu" indicates Neumann BCs.
+         test_inputs/cvode_dir.2d.input
+         test_inputs/cvode_neu.2d.input
+         test_inputs/cvode_dir.3d.input
+         test_inputs/cvode_neu.3d.input
+      serial:
+         ./main <input file>
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main <input file>
+ 
+
+INPUTS:
+------------
+
+Each input file contains 4 sections to initialize the various objects 
+involved inthe test.
+
+The "Main" section includes the number of steps, the initial and final
+time, relative and absolute tolerance, the stepping method type, and
+specification of whether or not the case uses newton sub-iterations.
+An example input might look like:
+
+Main {
+   max_internal_steps = 500
+   init_time = 0.0
+   final_time = 1
+   relative_tolerance = 1e-15
+   absolute_tolerance = 1e-15
+   stepping_method = 0
+   uses_newton = TRUE
+}
+
+The "CVODEModel" section sets up the problem to be solved. It specifies 
+the problem type, the initial value and its type, the diffusion
+coefficient, and values of dirichlet boundary conditions.
+An example input might look like:
+
+CVODEModel {
+   Problem_type= 2
+   Initial_value_type = 0
+   Initial_value = 1.0
+   Diffusion_Coefficient = .1
+   Boundary_value = 0.0
+}

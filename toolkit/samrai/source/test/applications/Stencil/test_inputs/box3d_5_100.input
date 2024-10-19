@@ -1,0 +1,106 @@
+Stencil {
+  num_variables=5
+}
+
+Main {
+   // dimension of problem
+   dim = 3
+
+   // base name of log file
+   base_name = "adv.3d"
+
+   // if true all nodes will log to individual files
+   // if false only node 0 will log
+   log_all_nodes    = TRUE
+
+   // visualization dump parameters
+   // frequency at which to dump viz output--zero to turn off
+   viz_dump_interval    = 0
+   // directory in which to place viz output
+   viz_dump_dirname     = "viz_step3d"
+   // number of processors which write to each viz file
+   visit_number_procs_per_file = 1
+
+   // restart dump parameters
+   // frequency at which to dump restart output--zero to turn off
+   restart_interval     = 0
+
+//   norm_baseline = 6.404702970297e-02
+}
+
+// Refer to tbox::TimerManager for input
+TimerManager{
+   print_exclusive      = TRUE   // output exclusive time
+   timer_list               = "*::*::*",
+                              "algs::TimeRefinementIntegrator::*",
+                              "algs::GriddingAlgorithm::*",
+                              "algs::HyperbolicLevelIntegrator::*"
+}
+
+// Refer to geom::CartesianGridGeometry and its base classes for input
+CartesianGeometry {
+   domain_boxes = [ (0,0,0) , (100,100,100) ]
+   x_lo         = 0.e0, 0.e0, 0.e0 // lower end of computational domain.
+   x_up         = 1e0, 1e0, 1e0   // upper end of computational domain.
+}
+
+// Refer to mesh::StandardTagAndInitialize for input
+StandardTagAndInitialize{
+   tagging_method = "GRADIENT_DETECTOR"
+}
+
+// Refer to hier::PatchHierarchy for input
+PatchHierarchy {
+   max_levels = 3         // Maximum number of levels in hierarchy.
+
+   ratio_to_coarser {              // vector ratio to next coarser level
+      level_1            = 4, 4, 4
+      level_2            = 4, 4, 4
+   }
+
+   largest_patch_size {
+      level_0 = -1, -1, -1 // largest patch allowed in hierarchy
+      // all finer levels will use same values as level_0...
+   }
+
+   smallest_patch_size {
+      level_0 = 20, 20, 20
+      level_1 = 40, 40, 40
+      level_2 = 50, 50, 50
+      // all finer levels will use same values as level_0...
+   }
+
+}
+
+// Refer to mesh::BergerRigoutsos for input
+BergerRigoutsos {
+   efficiency_tolerance   = 0.75e0    // min % of tag cells in new patch level
+   combine_efficiency     = 0.85e0    // chop box if sum of volumes of smaller
+                                      // boxes < efficiency * vol of large box
+}
+
+// Refer to mesh::GriddingAlgorithm for input
+GriddingAlgorithm {
+}
+
+// Refer to algs::HyperbolicLevelIntegrator for input
+HyperbolicLevelIntegrator {
+   cfl                      = 0.9e0    // max cfl factor used in problem
+   cfl_init                 = 0.1e0    // initial cfl factor
+   lag_dt_computation       = TRUE
+   use_ghosts_to_compute_dt = TRUE
+}
+
+// Refer to algs::TimeRefinementIntegrator for input
+TimeRefinementIntegrator {
+   start_time            = 0.e0    // initial simulation time
+   end_time              = 1.5e0    // final simulation time
+   grow_dt               = 2e0     // growth factor for timesteps
+   max_integrator_steps  = 12     // max number of simulation timesteps
+   regrid_interval       = 3
+}
+
+// Refer to mesh::TreeLoadBalancer for input
+LoadBalancer {
+   // using default TreeLoadBalancer configuration
+}

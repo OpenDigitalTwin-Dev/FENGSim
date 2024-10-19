@@ -1,0 +1,130 @@
+*****************************************************************************
+				Release Notes
+*****************************************************************************
+
+NOTE:  These release notes are more descriptive and detailed than is usual
+       for software release notes.  The reason for this is that presently
+       complete documentation does not exist for most of the items listed.
+       Until sufficient user documentation becomes available, descriptions
+       such as those that follow will be part of SAMRAI release notes.
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report it
+to us so that we may fix it.  We will make every effort to fix bugs
+in a timely manner.  Depending on the severity or the complexity of the
+bug, we will either fix the bug for a subsequent library release or send
+a code fix to users so that their work is minimally interrupted.
+
+LLNL users should report bugs using the CASC bug tracking web pages:
+
+        http://www-casc.llnl.gov/bugs/
+
+Enter the bug into the appropriate are of the SAMRAI project section.
+
+Bugs found by other users should send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+=============================================================================
+SAMRAI Release v1.0.1
+=============================================================================
+
+What's Changed
+--------------
+
+(1) PETSc Update
+
+SAMRAI-PETSc vector interface updated to PETSc version 2.0.24
+
+The abstract PETSc vector interface classes in SAMRAI are now
+consistent with version 2.0.24 of the PETSc library.  In the future,
+interface code in the SAMRAI library will be kept current with the
+most recent release of the PETSc library.  For users of PETSc on ASCI
+Blue Pacific, please see the example configuration commands in the
+"INSTALL" file.
+
+You will need to get PETSc version 2.0.24 if you wish to compile 
+with PETSc.
+
+(2) API for Database classes changed
+
+The names for the get<TYPE>(key, default) methods that allow the user
+to specify a default value to be returned have been changed to
+getTYPEWithDefault(key, default) to avoid confusion in usage.  We no
+longer overload the get<TYPE> method name.  If you use the old methods
+you will need to change the name of the method which you are invoking.
+
+
+For example
+	bool amr_flag = inputdb -> getBool("UseAMR", TRUE);
+	
+would be replaced by 
+
+	bool amr_flag = inputdb -> getBoolWithDefault("UseAMR", TRUE);
+
+(3) Input Database Errors
+	
+Errors in the input database are now printed to the screen and show
+the line in which the parsing error occurred.  The full input database
+is sent to the plog file as well so you can see exactly what was being
+read in.  Previously the errors were a bit cryptic and the entire
+input database was sent to the screen which quickly caused errors to
+scroll by.
+
+
+What's New
+----------
+
+
+(1) New concrete PatchData types added:
+
+    Side-centered data
+    
+    The SideData type represents data on an AMR grid at the same physical
+    locations as the existing Face Data type.  Namely, side-centered data
+    on a patch is stored using NDIM arrays, each of which holds data for
+    cell faces whose normal lies in a single coordinate direction.  SideData
+    is different than FaceData in ordering of indices in the individual 
+    arrays.  Whereas, FaceData permuted the x,y, and z indices in each 
+    array, SideData does not.  So SideData can be accessed in terms of
+    an (x,y,z) triple (in 3d, 2d is similar) in each of the individual
+    arrays.  Consult the code documentation for usage and operators 
+    (e.g., coarsen, refine, and time interpolation) that are available
+    for SideData.
+
+    Edge-centered data
+    
+    The EdgeData type represents data on an AMR grid along the edges of
+    cells.  Like FaceData and SideData types, NDIM arrays are used for 
+    storage. In 1d, the storage is identical to FaceData and the values are
+    accessed in the same way.  In 2d, the data locations are identical
+    to the FaceData type.  However, the arrays are stored and accessed 
+    differently.  The first array holds the data corresponding to cell
+    edges with tangents in the x-direction, and the second array holds
+    the data corresponding to cell edges with tangents in the y-direction.
+    In 3d, the EdgeData type type defines values at the center of each edge
+    of a cell.  The first array holds values for edges tangent to the 
+    x-direction, the second array holds values for edges tangent to the 
+    y-direction, and the third array holds values for edges tangent to the 
+    z-direction.  Similar to FaceData, access to EdgeData uses permuted 
+    indexing so that the fastest direction in the array corresponds to the 
+    direction of edges for that array.  Consult the code documentation for 
+    usage and operators (e.g., coarsen, refine, and time interpolation) 
+    that are available for EdgeData.
+
+(2) Load balancing enhancements
+
+Additional methods have been added to the mesh_BalanceUtilities class.
+Most notably, a spatial bin packing routine that assigns boxes to
+processors in a way that exploits spatial locality has been added.
+This method creates a linear ordering of the boxes in space with the
+property that boxes spatially near each other are likely to be near
+each other in the linear ordering.  This capability can be used for
+either uniform or non-uniform load balancing via an input file key.
+Please consult the class documentation for usage.
+
+
+*****************************************************************************
+

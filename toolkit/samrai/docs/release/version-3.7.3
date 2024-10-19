@@ -1,0 +1,207 @@
+*****************************************************************************
+  Copyright 1997-2013
+  Lawrence Livermore National Security, LLC.
+  All rights reserved.
+*****************************************************************************
+
+                     Release Notes for SAMRAI v3.7.3
+
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+
+*****************************************************************************
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+LLNL users can use the discussion groups on the LLNL Sourceforge site:
+
+https://sourceforge.llnl.gov/sf/discussion/do/listForums/projects.samrai/discussion
+
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report
+it to us so that we may fix it.  LLNL users may report bugs using the
+LLNL Sourceforge site if you have a sourceforge account:
+
+https://sourceforge.llnl.gov/sf/tracker/do/listTrackers/projects.samrai/tracker
+
+Bugs found by other users should send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Significant bug fixes
+----------------------------------------------------------------------------
+
+1) The MappingConnector assignment operator now returns a non-const
+   MappingConnector as it should.
+
+2) A bug in some VariableFillPatterns that caused interpolated data to
+   overwrite communicated data has been fixed.  See "what's changed" for
+   more info.
+     
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Summary of what's new
+-----------------------------------------------------------------------------
+
+This section contains a summary of additions to SAMRAI.  More detailed
+descriptions of items in the following list are provided below.
+
+1) There is now a new configure option, --enable-threading, which will add
+   the appropriate compiler directive to enable the parallelizer to generate
+   multi-threaded code based on the OpenMP directives.  The construction of
+   messages sent to other processors by the various bridge() and modify()
+   methods in the OverlapConnectorAlgorithm and MappingConnectorAlgorithm
+   respectively is now threaded.
+
+2) It is now possible to run on problems with a global cell count in excess
+   of 2G.
+
+3) Side-centered patch data classes have new constructors that provide
+   a simpler way to allocate data in all normal directions.
+
+4) New interfaces in TagAndInitializeStrategy and
+   StandardTagAndInitStrategy allow for callbacks to user code before 
+   a PatchLevel is removed from a PatchHierarchy or replaced by a new
+   PatchLevel during regridding.
+   
+
+-----------------------------------------------------------------------------
+                Summary of what's changed
+-----------------------------------------------------------------------------
+
+This section contains a summary of changes to SAMRAI.  More detailed
+descriptions of items in the following list are provided below.
+
+1) The efficiency_tolerance and combine_efficiency input parameters have
+   been removed from GriddingAlgorithm and moved to BergerRigoutsos.  The
+   corresponding args have been removed from findBoxesContainingTags().
+
+2) Begining with Boost 1.53, the static_cast_tag and dynamic_cast_tag and
+   the constructors using them have been removed from shared_ptr.  We have
+   therefore eliminated our use of them and the macro, BOOST_CAST_TAG from
+   the library.
+
+3) The input format for identifying multiblock singularities has
+   been simplified.
+
+4) A bug fix for certain VariableFillPattern classes has added an
+   argument to pure virtual method
+   VariableFillPattern::computeFillBoxesOverlap.
+
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                Details about what's new
+-----------------------------------------------------------------------------
+
+1) The --enable-threading configuration option should be used with caution.
+   If used one should first ensure that their application is thread safe.
+   Also, one should ensure that threading will provide a performance
+   advantage on the target platform.  On some platforms we have seen
+   significant performance degradation simply from enabling threading.
+
+2) The global number of cells held by BoxLevel is now a long.
+
+3) SideData and associated classes for side-centered data now have constructors
+   that take no "directions" vector.  This provides a default case where
+   data is allocated in all normal directions.
+
+4) New interfaces in TagAndInitializeStrategy and
+   StandardTagAndInitStrategy allow for callbacks to user code before
+   a PatchLevel is removed from a PatchHierarchy or replaced by a new
+   PatchLevel during regridding.
+
+   processLevelBeforeRemoval is called before the finest PatchLevel in 
+   a hierarchy is to be removed--that is the total number of levels is being
+   reduced.  This interface provides user code an opportunity to extract
+   any needed data from the PatchLevel before it is destroyed.
+
+   processHierarchyBeforeAddingNewLevel is called both before adding an
+   entirely new PatchLevel at a new level of resolution to the hierarchy,
+   as well as before swapping an old PatchLevel for a new PatchLevel during
+   regridding.  This allows user code an opportunity to do any needed
+   processing of the hierarchy while the old level still exists and the new
+   level is known.
+
+   The most common use case for these interfaces is in user classes that
+   derive from StandardTagAndInitStrategy.  These interfaces are provided
+   as virtual methods with default no-op implementations in
+   StandardTagAndInitStrategy.
+
+
+
+
+
+-----------------------------------------------------------------------------
+                Details about what's changed
+-----------------------------------------------------------------------------
+
+1) The notions of efficiency_tolerance and combine_efficiency do not apply
+   to box generators in general.  In SAMRAI the only box generator to which
+   they apply is BergerRigoutsos.  Therefore the signature of the abstract
+   box generator method, findBoxesContainingTags, has been changed to
+   eliminate these args.  This method is called from GriddingAlgorithm which
+   held these parameters so it no longer makes sense for the parameters to be
+   associated with GriddingAlgorithm.  Instead they are associated with
+   BergerRigoutsos and this class' findBoxesContainingTags simply uses them
+   as needed.
+
+2) If you have used the BOOST_CAST_TAG you will need to use the equivalent
+   but less compact construct.  For example if you had:
+
+   boost::shared_ptr<BaseClass> base = ...;
+   ...
+   boost::shared_ptr<DerivedClass> derived(base, BOOST_CAST_TAG);
+
+   it will need to be replaced with:
+
+   boost::shared_ptr<BaseClass> base = ...;
+   ...
+   boost::shared_ptr<DerivedClass> derived(
+      BOOST_CAST<DerivedClass, BaseClass>(base));
+
+3) The input format for identifying multiblock singularities has
+   been simplified.  All that is now required for each singularity in
+   a multiblock mesh is the "blocks" entry within each SingularityN
+   input section, taking a list of integers representing the block numbers
+   of the blocks that touch that singularity, whether it be a point or a
+   line.
+
+   Singularity0 {
+      blocks = 0,1,2,4,6
+   }
+
+   Additionally, the BlockNeighbors input sections no longer require an
+   "is_singularity" input option for neighboring blocks that touch across
+   an enhanced connectivity singularity.  The library now determines this
+   information internally.
+
+4) A bug fix for certain VariableFillPattern classes has added an
+   argument to pure virtual method
+   VariableFillPattern::computeFillBoxesOverlap.
+
+   The bug was that computeFillBoxesOverlap provided only a cell-centered
+   fill_boxes BoxContainer, which gave no way for concrete fill pattern
+   implementation for node-centered data or other data with centerings on
+   the boundary of a cell to distinguish data points that need filling
+   by interpolation from data points that can be filled from the source level.
+   A new argument, node_fill_boxes, has been added to computeFillBoxesOverlap
+   consisting of a BoxContainer of node-centered fill boxes.  These boxes are
+   made by transforming the cell-centered fill boxes to a node centering and
+   then removing any nodes that can be filled from the source level.
+
+   Only certain specialized implementations of VariableFillPattern need this
+   new argument.  When not needed, it should be ignored.
+
+
+
+
+=============================================================================
+=============================================================================

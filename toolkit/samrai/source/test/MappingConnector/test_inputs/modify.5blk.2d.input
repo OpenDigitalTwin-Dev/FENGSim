@@ -1,0 +1,144 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   input file for testing Connector modify algorithm.
+ *
+ ************************************************************************/
+
+// See modify.3blk.2d.input for description of the input parameters specific
+// to this test.
+
+Main {
+    dim = 2
+//
+// Log file information
+//
+    base_name  = "modify.5blk.2d"
+    log_all_nodes  = TRUE
+
+base_width_a = 0,0 // Connector width in index space of A
+
+GridGeometry {
+   num_blocks = 5
+   domain_boxes_0 = [ (0,0) , (19,19) ]
+   domain_boxes_1 = [ (0,0) , (19,19) ]
+   domain_boxes_2 = [ (0,0) , (19,19) ]
+   domain_boxes_3 = [ (0,0) , (19,19) ]
+   domain_boxes_4 = [ (0,0) , (19,19) ]
+
+   BlockNeighbors0 {
+      block_a = 0
+      block_b = 1
+
+      rotation_b_to_a = "J_DOWN", "I_UP"
+      point_in_a_space = 20,0
+      point_in_b_space = 0,19
+   }
+
+   BlockNeighbors1 {
+      block_a = 0
+      block_b = 2
+
+      rotation_b_to_a = "J_UP", "I_DOWN"
+      point_in_a_space = 19,19
+      point_in_b_space = 20,-1
+   }
+
+   BlockNeighbors2 {
+      block_a = 0
+      block_b = 3
+
+      rotation_b_to_a = "I_UP", "J_UP"
+      point_in_a_space = 19,19
+      point_in_b_space = -1,-1
+   }
+
+   BlockNeighbors3 {
+      block_a = 0
+      block_b = 4
+
+      rotation_b_to_a = "I_DOWN", "J_DOWN"
+      point_in_a_space = 0,19
+      point_in_b_space = 19,20
+
+   }
+
+   BlockNeighbors4 {
+      block_a = 1
+      block_b = 2
+
+      rotation_b_to_a = "I_DOWN", "J_DOWN"
+      point_in_a_space = 19,0
+      point_in_b_space = 20,19
+
+   }
+
+   BlockNeighbors5 {
+      block_a = 1
+      block_b = 3
+
+      rotation_b_to_a = "I_UP", "J_UP"
+      point_in_a_space = 19,19
+      point_in_b_space = -1,-1
+   }
+
+   BlockNeighbors6 {
+      block_a = 1
+      block_b = 4
+
+      rotation_b_to_a = "J_DOWN", "I_UP"
+      point_in_a_space = 19,19
+      point_in_b_space = -1,20
+   }
+
+   BlockNeighbors7 {
+      block_a = 2
+      block_b = 3
+
+      rotation_b_to_a = "I_DOWN", "J_DOWN"
+      point_in_a_space = 0,0
+      point_in_b_space = 19,-1
+
+   }
+
+   BlockNeighbors8 {
+      block_a = 2
+      block_b = 4
+
+      rotation_b_to_a = "I_UP", "J_UP"
+      point_in_a_space = 19,0
+      point_in_b_space = -1,20
+   }
+
+   BlockNeighbors9 {
+      block_a = 3
+      block_b = 4
+
+      rotation_b_to_a = "I_DOWN", "J_DOWN"
+      point_in_a_space = 0,19
+      point_in_b_space = -1,0
+
+   }
+
+}
+
+BoxLevelA {
+  refinement_ratio = 3,3 // Refinement of the domain description to get this level.
+  min_box_size = 1,1
+  max_box_size = 90,110
+}
+
+BoxLevelB {
+  refinement_ratio = 9,9 // Refinement of the domain description to get this level.
+  min_box_size = 1,1
+  max_box_size = 80,100
+}
+
+Alteration {
+  local_id_increment = 1000 // Increase all LocalIds by this amount.
+}
+
+}

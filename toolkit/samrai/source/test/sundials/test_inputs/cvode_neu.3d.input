@@ -1,0 +1,229 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for SAMRAI CVODE test program 
+ *
+ ************************************************************************/
+
+//See cvode_dir.2d.input for documentation of input specific to this test.
+
+
+Main {
+
+   dim                      = 3
+
+   init_time                = 0.0
+   init_cycle               = 0
+   print_interval           = 1.0e-2
+   num_print_intervals      = 10
+   solution_logging         = FALSE
+
+   max_internal_steps       = 1500
+   relative_tolerance       = 1e-6
+   absolute_tolerance       = 1e-6
+// 0=use default
+   max_order                = 0
+// stepping_method          = timestepping mode for CVODE
+    NORMAL                  = 1
+    ONESTEP                 = 2
+   stepping_method          = NORMAL
+   uses_newton              = TRUE
+   uses_preconditioning     = TRUE
+
+// Used for testing only
+   correct_rhs_evals        = 262
+   correct_precond_setups   = 195
+   correct_precond_solves   = 128
+
+}
+
+CVODEModel {
+   initial_value         = 0.0
+
+   use_neumann_bcs      = TRUE
+   print_solver_info    = FALSE
+
+   // valid boundary_condition values are "FLOW", "REFLECT", "DIRICHLET"
+   // and "NEUMANN"
+   Boundary_data {
+      boundary_face_xlo {
+         boundary_condition      = "DIRICHLET"
+         val                     = 0.
+      }
+      boundary_face_xhi {
+         boundary_condition      = "DIRICHLET"
+         val                     = 0.
+      }
+      boundary_face_ylo {
+         boundary_condition      = "NEUMANN"
+         val                     = 1.
+      }
+      boundary_face_yhi {
+         boundary_condition      = "DIRICHLET"
+         val                     = 0.
+      }
+      boundary_face_zlo {
+         boundary_condition      = "DIRICHLET"
+         val                     = 0.
+      }
+      boundary_face_zhi {
+         boundary_condition      = "DIRICHLET"
+         val                     = 0.
+      }
+
+      // IMPORTANT: If a *REFLECT, *DIRICHLET, or *FLOW condition is given
+      //            for an edge, the condition must match that of the
+      //            appropriate adjacent face above.  This is enforced for
+      //            consistency.  However, note when a REFLECT face condition
+      //            is given and the other adjacent face has either a FLOW
+      //            or REFLECT condition, the resulting edge boundary values
+      //            will be the same regardless of which face is used.
+
+      boundary_edge_ylo_zlo { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZDIRICHLET"
+      }
+      boundary_edge_yhi_zlo { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZDIRICHLET"
+      }
+      boundary_edge_ylo_zhi { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZDIRICHLET"
+      }
+      boundary_edge_yhi_zhi { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZDIRICHLET"
+      }
+      boundary_edge_xlo_zlo { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XDIRICHLET"
+      }
+      boundary_edge_xlo_zhi { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XDIRICHLET"
+      }
+      boundary_edge_xhi_zlo { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XDIRICHLET"
+      }
+      boundary_edge_xhi_zhi { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XDIRICHLET"
+      }
+      boundary_edge_xlo_ylo { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YNEUMANN"
+      }
+      boundary_edge_xhi_ylo { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YNEUMANN"
+      }
+      boundary_edge_xlo_yhi { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YDIRICHLET"
+      }
+      boundary_edge_xhi_yhi { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YDIRICHLET"
+      }
+
+      // IMPORTANT: If a *REFLECT, *DIRICHLET, or *FLOW condition is given
+      //            for a node, the condition must match that of the
+      //            appropriate adjacent face above.  This is enforced for
+      //            consistency.  However, note when a REFLECT face condition
+      //            is given and the other adjacent faces have either FLOW
+      //            or REFLECT conditions, the resulting node boundary values
+      //            will be the same regardless of which face is used.
+
+      boundary_node_xlo_ylo_zlo {
+         boundary_condition      = "XDIRICHLET"
+      }
+      boundary_node_xhi_ylo_zlo {
+         boundary_condition      = "XDIRICHLET"
+      }
+      boundary_node_xlo_yhi_zlo {
+         boundary_condition      = "XDIRICHLET"
+      }
+      boundary_node_xhi_yhi_zlo {
+         boundary_condition      = "XDIRICHLET"
+      }
+      boundary_node_xlo_ylo_zhi {
+         boundary_condition      = "XDIRICHLET"
+      }
+      boundary_node_xhi_ylo_zhi {
+         boundary_condition      = "XDIRICHLET"
+      }
+      boundary_node_xlo_yhi_zhi {
+         boundary_condition      = "XDIRICHLET"
+      }
+      boundary_node_xhi_yhi_zhi {
+         boundary_condition      = "XDIRICHLET"
+      }
+
+   }
+}
+
+fac_precond {
+   max_cycles           = 1
+   residual_tol         = 1.e-40
+}
+
+hypre_solver {
+   use_smg              = FALSE
+}
+
+StandardTagAndInitialize{
+   tagging_method = "REFINE_BOXES"
+
+   level_0 {
+      boxes = [ (0,0,0) , (9,4,9) ]
+   }
+   level_1 {
+      boxes = [ (0,0,0) , (19,4,19) ]
+   }
+   level_2 {
+      boxes = [ (0,0,0) , (39,4,39) ]
+   }
+}
+
+TimerManager {
+   timer_list = "apps::main::*"
+}
+
+Geometry {
+   domain_boxes  = [ (0,0,0) , (9,9,9) ]
+   x_lo          = 0.e0 , 0.e0 , 0.e0 // lower end of computational domain.
+   x_up          = 10. , 10. , 10. // upper end of computational domain.
+}
+
+PatchHierarchy {
+   max_levels              = 2 // Maximum number of levels in hierarchy.
+
+// Note: For the following regridding information, data is required for each
+//       potential in the patch hierarchy; i.e., levels 0 thru max_levels-1.
+//       If more data values than needed are given, only the number required
+//       will be read in.  If fewer values are given, an error will result.
+//
+// Specify coarsening ratios for each level 1 through max_levels-1
+   ratio_to_coarser {         // vector ratio to next coarser level
+      level_1               = 2 , 2 , 2
+      level_2               = 2 , 2 , 2
+      level_3               = 2 , 2 , 2
+   }
+
+   largest_patch_size {
+      level_0 = 8 , 8 , 8
+      // all finer levels will use same values as level_0...
+   }
+
+   smallest_patch_size {
+      level_0 = 1 , 1 , 1
+      // all finer levels will use same values as level_0...
+   }
+
+}
+
+BergerRigoutsos {
+   efficiency_tolerance     = 0.70e0   // min % of tag cells in new patch level
+   combine_efficiency       = 0.85e0   // chop box if sum of volumes of smaller
+                                       // boxes < efficiency * vol of large box
+}
+
+GriddingAlgorithm {
+}
+
+LoadBalancer {
+}
+

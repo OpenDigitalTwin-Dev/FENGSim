@@ -1,0 +1,155 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for Connector tests.
+ *
+ ************************************************************************/
+
+
+Main {
+
+  // Base name for output files.
+  base_name = "default.2d"
+
+  // Whether to log all nodes.
+  log_all_nodes = TRUE
+
+  dim = 2
+
+  connector_width = 2,2
+}
+
+
+BlockGeometry {
+   num_blocks = 3
+   domain_boxes_0 = [ (0,0) , (20,13) ]
+   domain_boxes_1 = [ (0,0) , (25,13) ]
+   domain_boxes_2 = [ (0,0) , (20,25) ]
+
+   BlockNeighbors0 {
+      block_a = 0
+      block_b = 1
+
+      rotation_b_to_a = "I_UP", "J_UP"
+      point_in_a_space = 21,0
+      point_in_b_space = 0,0
+   }
+
+   BlockNeighbors1 {
+      block_a = 0
+      block_b = 2
+
+      rotation_b_to_a = "I_UP", "J_UP"
+      point_in_a_space = 0,14
+      point_in_b_space = 0,0
+
+   }
+
+   BlockNeighbors2 {
+      block_a = 1
+      block_b = 2
+
+      rotation_b_to_a = "J_UP", "I_DOWN"
+      point_in_a_space = 0,14
+      point_in_b_space = 20,0
+
+   }
+
+}
+
+
+
+PrimitiveBoxGen0 {
+  nickname = "Full domain"
+  avg_parts_per_rank = 5
+  index_filter = "ALL"
+}
+
+PrimitiveBoxGen1 {
+  nickname = "25% sparse domain"
+  avg_parts_per_rank = 5
+  index_filter = "INTERVAL"
+  num_keep = 1
+  num_discard = 3
+}
+
+PrimitiveBoxGen2 {
+  nickname = "lower .60"
+  avg_parts_per_rank = 5
+  index_filter = "LOWER"
+  frac = 0.60
+}
+
+PrimitiveBoxGen3 {
+  nickname = "upper .60"
+  avg_parts_per_rank = 5
+  index_filter = "UPPER"
+  frac = 0.40
+}
+
+PrimitiveBoxGen4 {
+  nickname = "lower .10"
+  avg_parts_per_rank = 5
+  index_filter = "LOWER"
+  frac = 0.10
+}
+
+
+
+Test00 {
+  nickname = "full levels, full connectivity"
+  levels = 0, 0
+  method = "mod"
+  denom = 1
+}
+
+Test01 {
+  nickname = "full levels, sparse connectivity"
+  levels = 0, 0
+  method = "bracket"
+  begin_shift = -2
+  end_shift = 4
+  inc = 1
+}
+
+Test02 {
+  nickname = "full levels, also sparse connectivity"
+  levels = 0, 0
+  method = "bracket"
+  begin_shift = -2
+  end_shift = 8
+  inc = 2
+}
+
+Test03 {
+  nickname = "full levels, overlap connectivity"
+  levels = 0, 0
+  method = "overlap"
+}
+
+Test04 {
+  nickname = "sparse-to-lower, overlap connectivity"
+  levels = 1, 2
+  method = "overlap"
+}
+
+Test05 {
+  nickname = "sparse-to-upper, overlap connectivity"
+  levels = 1, 3
+  method = "overlap"
+}
+
+Test06 {
+  nickname = "full-to-tiny, overlap connectivity"
+  levels = 0, 4
+  method = "overlap"
+}
+
+Test07 {
+  nickname = "tiny-to-full, overlap connectivity"
+  levels = 4, 0
+  method = "overlap"
+}

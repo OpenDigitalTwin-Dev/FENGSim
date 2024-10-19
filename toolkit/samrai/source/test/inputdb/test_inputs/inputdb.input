@@ -1,0 +1,185 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for inputdb unit test.
+ *
+ ************************************************************************/
+
+GlobalInputs {
+   // If FALSE, when an error is encountered in serial exit(-1) will be called
+   // instead of SAMRAI_MPI::abort().
+   call_abort_in_serial_instead_of_exit = FALSE
+}
+
+PrimitiveTypes {
+   // Value to test reading of single integer.
+   i0  = 1
+
+   // Value to test reading of single float.
+   f0  = 1.0
+
+   // Value to test reading of single double.
+   d0  = 1.0
+
+   // Value to test reading of single bool.
+   b0  = TRUE
+
+   // Value to test reading of single dcomplex.
+   c0  = (1.0,1.0)
+
+   // Value to test reading of single string.
+   s0  = "a string"
+
+   // Value to test reading of single DatabaseBox.
+   box0 = [(0,0),(9,9)]
+}
+
+SmartArrays {
+   // Value to test reading of a vector of integers.
+   i1  = 1, 1, 1, 1, 1
+
+   // Value to test reading of a vector of floats.
+   f1  = 1.0, 1.0, 1.0, 1.0, 1.0
+
+   // Value to test reading of a vector of doubles.
+   d1  = 1.0, 1.0, 1.0, 1.0, 1.0
+
+   // Value to test reading of a vector of bools.
+   b1  = TRUE, TRUE, TRUE, TRUE, TRUE
+
+   // Value to test reading of a vector of dcomplexes.
+   c1  = (1.0,1.0), (1.0,1.0), (1.0,1.0), (1.0,1.0), (1.0,1.0)
+
+   // Value to test reading of a vector of strings.
+   s1  = "a string", "a string", "a string", "a string", "a string"
+
+   // Value to test reading of a vector of DatabaseBoxes.
+   box1 = [(0,0),(9,9)],
+          [(0,0),(9,9)],
+          [(0,0),(9,9)],
+          [(0,0),(9,9)],
+          [(0,0),(9,9)]
+}
+
+BasicArrays {
+   // Value to test reading of an int*.
+   i2  = 1, 1, 1, 1, 1
+
+   // Value to test reading of a float*.
+   f2  = 1.0, 1.0, 1.0, 1.0, 1.0
+
+   // Value to test reading of a double*.
+   d2  = 1.0, 1.0, 1.0, 1.0, 1.0
+
+   // Value to test reading of a bool*.
+   b2  = TRUE, TRUE, TRUE, TRUE, TRUE
+
+   // Value to test reading of a dcomplex*.
+   c2  = (1.0,1.0), (1.0,1.0), (1.0,1.0), (1.0,1.0), (1.0,1.0)
+
+   // Value to test reading of a string*.
+   s2  = "a string", "a string", "a string", "a string", "a string"
+
+   // Value to test reading of a DatabaseBox*.
+   box2 = [(0,0),(9,9)],
+          [(0,0),(9,9)],
+          [(0,0),(9,9)],
+          [(0,0),(9,9)],
+          [(0,0),(9,9)]
+}
+
+WithDefaultTypes {
+   // Keep empty to test reading single values of different types with a
+   // default value.
+}
+
+/*
+ * The following are not used by the test application but demonstrate 
+ * other capabilities of the SAMRAI input database parser.  The parser 
+ * supports a simple expression grammar.  All arithmetic operations work 
+ * on integer, double, and complex numbers.  Numbers will be promoted if 
+ * necessary.
+ */
+
+ExpressionGrammar {
+   bool  = TRUE
+   arg1  = 1.1
+   arg2  = 2.2
+   array = arg1, arg2
+
+   a = arg1			// lookup variable
+   b = array[1]			// array access
+   c = (arg1)			// grouping of expressions
+   d = (bool ? arg1 : arg2)	// C-style ?: if-then-else expressions
+   e = !bool			// logical not for booleans
+   f = e || bool		// logical or for booleans
+   g = e && bool		// logical and for booleans
+   h = e == bool		// equality comparison for all types
+   i = "hello" != "world"	// equality comparison for all types
+   j = 1 <  arg1		// less than comparison for numbers
+   k = 1 >  arg1		// greater than comparison for numbers
+   l = 1 <= arg1		// less equal comparison for numbers
+   m = 1 >= arg1		// greater equal comparison for numbers
+   n = arg1 + arg2		// addition for ints, doubles, complex
+   o = arg1 - arg2		// subtraction for ints, doubles, complex
+   p = arg1 * arg2		// multiplication for ints, doubles, complex
+   q = arg1 / arg2		// division for ints, doubles, complex
+   r = arg1 ^ arg2		// exponentiation for ints, doubles, complex
+   s = -arg1			// negation for ints, doubles, complex
+}
+
+/*
+ * The standard posix functions for doubles are supported, as well as the
+ * standard ANSI/ISO functions for complex numbers.  Doubles may also be
+ * cast to integers via int().
+ */
+
+Functions {
+   double  = 0.7
+   complex = (double, 1.0)
+
+   ii = int(double)
+
+   a = abs(double)
+   b = abs(complex)
+   c = acos(double)
+   d = asin(double)
+   e = atan(double)
+   f = ceil(double)
+   g = conj(complex)
+   h = cos(double)
+   i = cos(complex)
+   j = cosh(double)
+   k = cosh(complex)
+   l = exp(double)
+   m = exp(complex)
+   n = fabs(double)
+   o = floor(double)
+   p = imag(complex)
+   q = log10(double)
+   r = log(double)
+   s = log(complex)
+   t = real(complex)
+   u = sin(double)
+   v = sin(complex)
+   w = sinh(double)
+   x = sinh(complex)
+   y = sqrt(double)
+   z = sqrt(complex)
+
+   aa = tan(double)
+}
+
+/*
+ * Just for fun, let's try some complex expressions.
+ */
+
+ComplexExpressions {
+   PI    = 4*atan(1.0)
+   PROCS = 10000
+   box   = [(0,0),(PROCS*20,PROCS*20)]
+   asci  = (PROCS >= 5000 ? "happy" : "sad")
+}

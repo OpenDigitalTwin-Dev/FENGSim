@@ -1,0 +1,54 @@
+##
+## File:        $URL$
+## Package:     SAMRAI build scripts
+## Copyright:   (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Revision:    $LastChangedRevision$
+## Description: data file for sed substitutions to generate dim-dep. files
+##
+
+
+#
+# hierarchy package
+#
+
+hier_BasePatchLevel
+hier_BasePatchHierarchy
+hier_BinaryTree
+hier_BoundaryBox
+hier_BoundaryLookupTable
+hier_Box
+hier_BoxArray
+hier_BoxComm
+hier_BoxGraph
+hier_BoxGraphUtilities
+hier_BoxIOUtility
+hier_BoxList
+hier_BoxGeometry
+hier_BoxIOUtility
+hier_BoxIterator
+hier_BoxOverlap
+hier_BoxTop
+hier_BoxTree
+hier_BoxTreeNode
+hier_BoxUtilities
+hier_GridGeometry
+hier_Index
+hier_IntVector
+hier_Patch
+hier_PatchData
+hier_PatchDataFactory
+hier_PatchDescriptor
+hier_PatchGeometry
+hier_PatchHierarchy
+hier_PatchLevel
+hier_PatchFactory
+hier_PatchLevelFactory
+hier_PatchLevelIterator
+hier_VariableDatabase
+hier_Variable
+hier_CoarseFineBoundary
+
+# hierarchy package timers
+
+hier::BoxGraph
+

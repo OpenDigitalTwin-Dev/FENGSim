@@ -1,0 +1,71 @@
+*****************************************************************************
+  Copyright 1997-2017
+  Lawrence Livermore National Security, LLC.
+  All rights reserved.
+*****************************************************************************
+
+                     Release Notes for SAMRAI v3.11.5
+
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+
+*****************************************************************************
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report
+it to us so that we may fix it.
+
+Please send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Significant bug fixes
+----------------------------------------------------------------------------
+1) Fix a bug in GriddingAlgorithm regarding interaction between the tag buffer
+value and the maximum ghost width in the PatchDescriptor.
+
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Summary of what's new
+-----------------------------------------------------------------------------
+
+
+-----------------------------------------------------------------------------
+                Summary of what's changed
+-----------------------------------------------------------------------------
+
+1) 3.11.5 is a minor patch release to fix a bug in GriddingAlgorithm.
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                Details about what's new
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+                Details about what's changed
+----------------------------------------------------------------------------
+
+1) Inside GriddingAlgorithm there is some logic that invokes special handling
+of the tag data when the tag buffer value is greater than the maximum ghost
+width of all the data that have been registered with the PatchDescriptor.
+This logic compared the value of the tag buffer to the maximum value
+of the ghost width IntVector, when it really needed to compare it to every
+every entry in the IntVector.  So if the tag buffer is 3 and the ghost width
+is (4,4,2) the special handling should be invoked, and this bug fix makes sure
+that it is.
+
+
+
+
+=============================================================================
+=============================================================================

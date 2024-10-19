@@ -1,0 +1,345 @@
+{
+   <OpenMPI issue>
+   Memcheck:Param
+   semctl(arg)
+   fun:semctl@@GLIBC_2.2
+   fun:nss_vas3_semctl
+   fun:get_sem_id
+   fun:get_tsd
+   fun:_nss_vas3_getXXent_get_tsd
+   fun:internal_nss_vas_getpwuid_r
+   fun:_nss_vas3_getpwuid_r
+   fun:getpwuid_r@@GLIBC_2.1.2
+   fun:getpwuid
+   fun:orte_session_dir_get_name
+   fun:orte_session_dir
+   fun:orte_ess_base_app_setup
+   fun:rte_init
+   fun:orte_init
+   fun:ompi_mpi_init
+   fun:PMPI_Init
+   ...
+}
+
+{
+   <OpenMPI issue>
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:ompi_mpi_init
+   fun:PMPI_Init
+   ...
+}
+
+{
+   <OpenMPI issue>
+   Memcheck:Leak
+   fun:calloc
+   ...
+   fun:PMPI_Init
+   ...
+}
+
+{
+   <OpenMPI issue>
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:PMPI_Finalize
+   ...
+}
+
+{
+   <OpenMPI issue>
+   Memcheck:Leak
+   fun:realloc
+   ...
+   fun:PMPI_Init
+   ...
+}
+
+
+
+{
+   <OpenMPI issue>
+   Memcheck:Leak
+   fun:calloc
+   ...
+   fun:PMPI_Init
+   ...
+}
+
+{
+   <OpenMPI issue>
+   Memcheck:Leak
+   fun:realloc
+   ...
+   fun:PMPI_Init
+   ...	
+}
+
+{
+   <OpenMPI issue>
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:PMPI_Bcast
+   ...
+}
+
+{
+   <OpenMPI issue>
+   Memcheck:Leak
+   fun:realloc
+   ...
+   fun:PMPI_Bcast
+   ...
+}
+
+{
+   <OpenMPI issue>
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:PMPI_Barrier
+   ...	
+}
+
+{
+   <OpenMPI was causing this>
+   Memcheck:Leak
+   fun:realloc
+   ...
+   fun:PMPI_Barrier	
+   ...
+}
+
+{
+   <OpenMPI was causing this>
+   Memcheck:Leak
+   fun:malloc
+   fun:opal_class_initialize
+   fun:opal_obj_new
+   fun:opal_obj_new_debug
+   fun:ompi_comm_register_cid
+   fun:ompi_comm_nextcid
+   fun:ompi_comm_dup
+   fun:PMPI_Comm_dup
+   ...
+}
+
+{
+   OpenMPI was causing this
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:PMPI_Comm_dup
+   fun:_ZN6SAMRAI4tbox10SAMRAI_MPI4initEPiPPPc
+   ...
+}
+
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:realloc
+   fun:expand_array
+   fun:save_class
+   fun:opal_class_initialize
+   fun:opal_obj_new
+   fun:opal_obj_new_debug
+   fun:ompi_comm_register_cid
+   fun:ompi_comm_nextcid
+   fun:ompi_comm_dup
+   fun:PMPI_Comm_dup
+   ...
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:ompi_comm_allreduce_intra
+   fun:ompi_comm_nextcid
+   fun:ompi_comm_dup
+   fun:PMPI_Comm_dup
+   fun:_ZN6SAMRAI4hier25OverlapConnectorAlgorithmC1Ev
+   ...
+}
+
+
+{
+   <OpenMPI was causing this>
+   Memcheck:Param
+   sched_setaffinity(mask)
+   fun:syscall
+}
+
+{
+   <OpenMPI issue with internal buffer>
+   Memcheck:Leak
+   fun:malloc
+   fun:opal_class_initialize
+   fun:ompi_free_list_grow
+   ...
+   fun:PMPI_Isend
+   ...
+}
+
+{
+   <OpenMPI issue with internal buffer>
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:PMPI_Comm_dup
+   ...
+   fun:_ZN6SAMRAI4tbox13SAMRAIManager10initializeEP19ompi_communicator_tb
+   ...
+}
+
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Param
+   writev(vector[...])
+   fun:writev
+   ...
+   fun:PMPI_Irecv
+   ...
+}
+
+
+{
+   <OpenMPI>
+   Memcheck:Param
+   writev(vector[...])
+   fun:writev
+   ...
+   fun:PMPI_Isend
+   ...
+}
+
+{
+   <OpenMPI>
+   Memcheck:Param
+   writev(vector[...])
+   fun:writev
+   ...
+   fun:PMPI_Test
+   ...
+}
+
+
+{
+   <OpenMPI>
+   Memcheck:Param
+   readv(vector[...])
+   ...
+   fun:PMPI_Waitsome
+   ...
+}
+
+{
+   <OpenMPI>
+   Memcheck:Param
+   writev(vector[...])
+   fun:writev
+   ...
+   fun:PMPI_Waitsome
+   ...
+}
+
+{
+   <OpenMPI>
+   Memcheck:Addr1
+   fun:memcpy
+   ...
+   fun:PMPI_Waitsome
+   ...
+}
+
+{
+   <OpenMPI>
+   Memcheck:Param
+   writev(vector[...])
+   fun:writev
+   ...
+   fun:PMPI_Isend
+   ...
+}
+
+{
+   <OpenMPI>
+   Memcheck:Param
+   writev(vector[...])
+   fun:writev
+   ...
+   fun:PMPI_Waitall
+   ...
+}
+
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_gfortrani_get_mem
+   fun:_gfortrani_init_units
+   ...
+}
+
+
+{
+   <SGS This should be fixed?  What is hypre doing?>
+   Memcheck:Cond
+   fun:hypre_StructCoarsen
+   ...
+}
+
+{
+   <SGS PetSC issues Is this a real leak?>
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:PMPI_Keyval_create
+   fun:PetscCommDuplicate
+   fun:PetscHeaderCreate_Private
+   fun:VecCreate
+}
+
+{
+   <SGS PetSC issues Is this a real leak?>
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:PMPI_Keyval_create
+   fun:PetscViewerASCIIGetStdout
+   fun:VecView
+   ...
+}
+
+{
+   <SGS PetSC issues Is this a real leak?>
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:PMPI_Keyval_create
+   fun:PetscViewerASCIIOpen
+   fun:PetscViewerASCIIGetStdout
+   fun:VecView
+   ...
+}
+
+{
+   <SGS PetSC issues Is this a real leak?>
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:VecInitializePackage
+   fun:VecCreate
+   ...	
+}
+
+
+

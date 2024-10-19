@@ -1,0 +1,38 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace solv {
+
+/*!
+  @page package_solvers_vectors SAMRAI Vector Facilities
+
+  The SAMRAI vector class wraps a collection of patch data components 
+  defined over multiple levels in an AMR hierarchy so that the data may 
+  be manipulated as though it is a single vector.  Also, included are
+  classes which provide vector kernels to the PETSc and Sundials solver 
+  packages.  Currently, vector interfaces are provided for real-valued
+  vectors only (i.e., where the data is either type <TT>double</TT> or 
+  <TT>float</TT>).  If the need for complex-valued vectors arises (e.g., 
+  PETSc supports complex vectors), they can be easily added.  Presently, 
+  the Sundials vector interface supports only <TT>double</TT>-valued vectors.
+  The abstract classes that define the interfaces to the PETSc and Sundials
+  packages are includes in the SAMRAI source subdirectories "petsc" and
+  "cvode::trio/vector", respectively.  The classes which perform the 
+  actual numerical operations used in the vector kernels are found in 
+  the "Mathematical Operations" package.
+
+  - SAMRAI::solv::SAMRAIVectorReal
+  - SAMRAI::solv::PETSc_SAMRAIVectorReal
+  - SAMRAI::solv::Sundials_SAMRAIVector
+
+*/
+
+}
+}

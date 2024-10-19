@@ -1,0 +1,114 @@
+*****************************************************************************
+  Copyright 1997-2024
+  Lawrence Livermore National Security, LLC.
+  All rights reserved.
+*****************************************************************************
+
+                     Release Notes for SAMRAI v3.15.0
+
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+
+*****************************************************************************
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report
+it to us so that we may fix it.
+
+Please send email to samrai-bugs@llnl.gov or post an issue on github.
+https://github.com/LLNL/SAMRAI
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Significant bug fixes
+----------------------------------------------------------------------------
+
+1) A bug has been fixed in the time interpolation operators for the SAMRAI-
+provided patch data types that have their data located on patch boundaries.
+These are the Edge, Face, Node, and Side patch data types.  The operators
+were not properly using the computed BoxOverlap objects in instances where
+source and destination patches overlapped only on patch boundaries.
+
+The bug fix required a public API change to the abstract base class
+TimeInterpolateOperator in the method timeInterpolate() with a BoxOverlap
+argument added to the signature.  All of the derived child classes provided in
+the library have been likewise modified to add the new argument.  If any
+user codes have implemented their own classes derived from
+TimeInterpolateOperator, they must add this new argument to their
+implementations.  In some cases the new argument may be safely ignored,
+particulary if they operate on cell-centered data.
+
+Applications that use the SAMRAI-provided operators may see changed
+numerical results that should reflect better accuracy due to the bug fix.
+
+2)
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Summary of what's new
+-----------------------------------------------------------------------------
+
+1) A optional input parameter "minimum_cell_request" has been added to
+PatchHierarchy as a new way to control the minimum sizes of patches.  This
+parameter can be used to set a desired minimum size of the total cell count
+rather than by placing constraints on the extents in each dimensional
+direction.
+
+
+-----------------------------------------------------------------------------
+                Summary of what's changed
+-----------------------------------------------------------------------------
+
+1) The old autoconf-based build system has been removed.  The new system that
+uses CMake supplemented with the BLT macro library is the only supported build
+system.
+
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                Details about what's new
+-----------------------------------------------------------------------------
+
+1) A optional input parameter "minimum_cell_request" has been added to
+PatchHierarchy as a new way to control the minimum sizes of patches.   This
+parameter can be used to set a desired minimum size of the total cell count
+rather than by placing constraints on the extents in each dimensional
+direction.
+
+Previously the only way to place a run-time restriction on the minimum size
+of a patch was to use the "smallest_patch_size" parameter to set a minimum
+width in each dimensional direction.  That parameter remains, but users who
+have more concern about the total size of the patches rather than the shape
+or aspect ratio can use this new parameter as a size control.  The new
+parameter and "smallest_patch_size" can also be used in tandem to place
+minimum controls both on single dimensions and on the full patch size.
+
+Note that strict enforcement of the value in "minimum_cell_request" is not
+guaranteed, as other parameters and certain internal algorithmic
+restrictions may n certain cases cause some patches to end up with a size
+smaller than this value.
+
+-----------------------------------------------------------------------------
+                Details about what's changed
+----------------------------------------------------------------------------
+
+1) The old autoconf-based build system has been removed.  The new system that
+uses CMake supplemented with the BLT macro library was introduced in version
+3.14.0 and is now the only supported build system.
+
+The new system uses CMake (https://cmake.org) supplemented with the BLT macro
+library (https://github.com/LLNL/blt).  Updated instructions for the build
+system are in the INSTALL-NOTES file.
+
+
+=============================================================================
+=============================================================================

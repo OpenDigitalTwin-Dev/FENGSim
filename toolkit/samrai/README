@@ -1,0 +1,13 @@
+Building SAMRAI using CMake:
+
+    mkdir build && cd build
+    cmake ../
+    make
+
+Third-party libraries will be detected by CMake based on what is in your path.
+On LC systems, the `use` command should set the right environment variables.
+Alternatively, you can use `CMAKE_PREFIX_PATH` to point CMake at the locations
+of the libraries. The only required library is boost. HDF5 is enabled by
+default but can be turned off by passing the argument `-DENABLE_HDF5=Off` to
+CMake.  More extensive instructions on building and installing SAMRAI using
+CMake are available in the INSTALL-NOTES file.

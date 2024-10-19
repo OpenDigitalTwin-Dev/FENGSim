@@ -1,0 +1,59 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   Multiblock Euler Example
+##
+#########################################################################
+
+This README explains how to compile and run the Multiblock Euler 
+application.  The files in this directory are as follows:
+
+    main.cpp               -  application driver program
+    MblkEuler.[C,h]      -  C++ class containing routines specific to the
+                            Euler example and which are called from
+                            SAMRAI AMR library routines
+    MblkGeometry.[C,h]   -  Class managing the physical coordinate geometry
+                            of the problem.
+    boundaryconditions.f -  Fortran implementation of some boundary
+                            conditions code
+    bccommon.f           -  Defines some fortran constants used in
+                            boundarycondistions.f
+    MblkEulerFort.h      -  Header file defining external fortran routines 
+
+This example is similar to the single-block Euler sample application.
+This example has the following differences:
+
+   1. It works on non-cartesian mapped grids 
+   2. It works with multiblock grids
+   3. All numerical kernel operations (e.g. computeFluxesOnPatch()) are
+      c-based rather than fortran
+
+The included test case is:
+
+   1. octant_3blk - multi block (3 blocks) mapped octant grid 
+
+Note that the numerics for this example have not been fully tested in 2D so it
+currently should only run in 3D.
+ 
+COMPILATION AND EXECUTION
+-------------------------
+
+   Compilation:
+      make main
+
+   Execution:
+      serial:
+         ./main test_inputs/octant_3blk.3d.input
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main test_inputs/octant_3blk.3d.input
+
+INPUT PARAMETERS
+----------------
+Refer to test_inputs/octant_3blk.3d.input for full description of all input
+parameters specific to this problem.
+

@@ -1,0 +1,25 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input for testing Euler Riemann solvers 
+ *
+ ************************************************************************/
+
+//
+// Test #5X: two shocks colliding 
+//          NOTE: to get reasonable wave profiles, run for about 125 steps
+//
+      front_position = 0.0
+      interval_0 {
+         density      = 5.99924
+         velocity     = 19.5975 , 0.0 , 0.0
+         pressure     = 460.894
+      }
+      interval_1 {
+         density      = 5.99242
+         velocity     = -6.19633 , 0.0 , 0.0
+         pressure     = 46.0950
+      }

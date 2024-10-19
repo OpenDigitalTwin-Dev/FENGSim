@@ -1,0 +1,26 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace pdat {
+
+/*!
+  @page package_patchdata_cell Cell Patch Data
+
+  These classes implement a cell centered patch data type.  These are
+  normally used to represent AMR conserved quantities.
+  - SAMRAI::pdat::CellDataFactory
+  - SAMRAI::pdat::CellData
+  - SAMRAI::pdat::CellIndex
+  - SAMRAI::pdat::CellIterator
+  - SAMRAI::pdat::CellVariable
+*/
+
+}
+}

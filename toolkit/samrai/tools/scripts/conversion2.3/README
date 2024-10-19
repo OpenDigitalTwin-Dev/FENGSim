@@ -1,0 +1,23 @@
+Utilities to aid in converting code to work with SAMRAI 2.3 name
+changes.
+
+To use simply run the "convert2.3" script in the root directory of the
+source code to convert. The script will search for all .C, .I and .h
+files and perform several method renames.
+
+The methods to rename are listed in the *.data files in this
+directory; if you use these method names in non-SAMRAI related code
+this script is not recommended since it is performing a simple text
+replacement.  [If anyone can recommend a good refactoring tool for C++
+please email samrai@llnl.gov.  We would really prefer to have a
+language aware replace capability].
+
+IMPORTANT: As with all automatic source modifications, make sure you
+have a backup of the code before using the script.
+
+
+
+
+
+
+

@@ -1,0 +1,35 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for timer tests. 
+ *
+ ************************************************************************/
+
+Main {
+   // Number of times the timer will be started and stop
+   ntimes = 10000
+
+   // Depth of the tree of nested exclusive timers
+   exclusive_tree_depth = 5
+}
+
+// See tbox::TimerManager for input
+TimerManager{
+   // List of timers to invoke
+   timer_list               = "apps::main::*",
+                              "apps::Foo::*"
+
+   // 
+   print_exclusive          = TRUE
+   print_user               = TRUE
+   print_sys                = TRUE
+//   print_percentage         = FALSE
+   print_max                = TRUE
+   print_summed             = TRUE
+   print_concurrent         = TRUE
+   print_timer_overhead     = TRUE
+   print_threshold          = 0.0
+}

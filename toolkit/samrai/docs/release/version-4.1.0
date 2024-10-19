@@ -1,0 +1,99 @@
+*****************************************************************************
+  Copyright 1997-2024
+  Lawrence Livermore National Security, LLC.
+  All rights reserved.
+*****************************************************************************
+
+                     Release Notes for SAMRAI v4.1.0
+
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+
+*****************************************************************************
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+*****************************************************************************
+
+
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report
+it to us so that we may fix it.
+
+Please send email to samrai-bugs@llnl.gov or post an issue on github.
+https://github.com/LLNL/SAMRAI
+
+
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Significant bug fixes
+----------------------------------------------------------------------------
+
+1) A missing MPI AllReduce call has been added to the vector length
+computations in the math::Hierarchy*DataOpsReal classes.
+
+2) In algs::MethodOfLinesIntegrator, the logic of the Runge-Kutta loop
+was reorganized in order to place the communication of data between
+AMR levels in the correct sequence.
+
+*****************************************************************************
+
+
+
+----------------------------------------------------------------------------
+                Summary of what's new
+-----------------------------------------------------------------------------
+
+1) A new alias tbox::ResourceAllocator is provided to clean up the API for
+usage of Umpire allocators in pdat classes.
+ 
+
+-----------------------------------------------------------------------------
+                Summary of what's changed
+-----------------------------------------------------------------------------
+
+1) The default Umpire allocator for the buffers in tbox::MessageStream
+has been changed to a host allocator.
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                Details about what's new
+-----------------------------------------------------------------------------
+
+1) A new alias tbox::ResourceAllocator is provided to clean up the API for
+usage of Umpire allocators in pdat classes.
+
+Many of the pdat classes (CellData, NodeData, etc.) that use Umpire allocators
+used '#define HAVE_UMPIRE' guards inside their method signatures around those
+allocators, which effectively meant that those classes had different APIs
+depending on whether SAMRAI was configured with or without Umpire.  This
+required user codes that needed to work with both kinds of SAMRAI
+configurations to add similar guards when calling thesed classes.
+
+tbox::ResourceAllocator is provided to deal with this--when configured with
+Umpire, it is aliased to umpire::Allocator, and otherwise it is an empty
+struct.  As an empty struct, it will do nothing, but it provides a valid type
+name that can be used and passed through the pdat classes' APIs regardless of
+thes status of the configuration.
+
+----------------------------------------------------------------------------
+                Details about what's changed
+----------------------------------------------------------------------------
+
+1) The default Umpire allocator for the buffers in tbox::MessageStream
+has been changed to a host allocator.
+
+For GPU-enabled builds that use Umpire, a host allocator is used by default
+instead of the previous pinned memory allocator.  A new overloaded constructor
+is also now provided to allow the calling code to pass its own choice of
+allocator to the MessageStream.
+
+=============================================================================
+============================================================================

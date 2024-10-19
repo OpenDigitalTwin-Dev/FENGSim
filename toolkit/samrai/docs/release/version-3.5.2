@@ -1,0 +1,168 @@
+*****************************************************************************
+  Copyright 1997-2024
+  Lawrence Livermore National Security, LLC.
+  All rights reserved.
+*****************************************************************************
+
+                     Release Notes for SAMRAI v3.5.2
+
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+
+*****************************************************************************
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+LLNL users can use the discussion groups on the LLNL Sourceforge site:
+
+https://sourceforge.llnl.gov/sf/discussion/do/listForums/projects.samrai/discussion
+
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report
+it to us so that we may fix it.  LLNL users may report bugs using the
+LLNL Sourceforge site if you have a sourceforge account:
+
+https://sourceforge.llnl.gov/sf/tracker/do/listTrackers/projects.samrai/tracker
+
+Bugs found by other users should send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Significant bug fixes
+----------------------------------------------------------------------------
+
+     
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Summary of what's new
+-----------------------------------------------------------------------------
+
+This section contains a summary of additions to SAMRAI.  More detailed
+descriptions of items in the following list are provided below.
+
+1) The BoxOverlap classes provided by SAMRAI (CellOverlap, NodeOverlap, etc.)
+   now have "getSourceBoxContainer" methods to get a representation of the
+   overlap boxes in the index space of the source box of a transaction.
+
+2) FirstLayerEdgeFillPattern and FirstLayerSideFillPattern added.
+
+-----------------------------------------------------------------------------
+                Summary of what's changed
+-----------------------------------------------------------------------------
+
+This section contains a summary of changes to SAMRAI.  More detailed
+descriptions of items in the following list are provided below.
+
+1) Input for StandardTagAndInitialize has changed to allow for more flexible
+   tagging criteria.
+
+2) fillSingularityBoundaryConditions moved from RefinePatchStrategy
+   to new SingularityPatchStrategy class.
+
+3) Input parameters are more completely and accurately documented.
+
+4) A more self consistent model for the handling of input parameters has been
+   implemented particularly how input and restart databases interact.  In
+   addition, more error and sanity checking has been added to the parsing of
+   input databases for all classes.
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                Details about what's new
+-----------------------------------------------------------------------------
+
+1) The BoxOverlap classes provided by SAMRAI (CellOverlap, NodeOverlap, etc.)
+   now have "getSourceBoxContainer" methods to get a representation of the
+   overlap boxes in the index space of the source box of a transaction.
+
+   The overlap classes hold a container of Boxes and a Transformation object
+   representing a transformation between source and destination index spaces
+   for a transaction.  The Boxes are represented in the destination index
+   space, that is they exist where they are after the Transformation has been
+   invoked.  getSourceBoxContainer() provides a way to obtain a representation
+   of these Boxes in the source index space before the Boxes are transformed.
+
+   These are mainly useful for overlaps that are used for data transactions
+   at block boundaries of multiblock meshes.  The overlap object stores the
+   Boxes in terms of the destination block, while getSourceBoxContainer allows
+   a user to obtain a represenation of the same Boxes in terms of the source
+   block.
+
+2) FirstLayerEdgeFillPattern and FirstLayerSideFillPattern added.
+
+   These implementations of VariableFillPattern allow transactions to be
+   constructed to communicate EdgeData or SideData only at positions along
+   the boundary of a Patch.
+
+-----------------------------------------------------------------------------
+                Details about what's changed
+-----------------------------------------------------------------------------
+
+1) In earlier versions of SAMRAI it was only possible to specify that the
+   Richardson extrapolation or gradient detector tagging criteria would take
+   effect at a particular time or cycle and remain in effect for all later
+   times/cycles.  One could also specify specific boxes to refine by level at
+   at specific times or cycles.  It is now possible to apply any combination
+   of these criteria at any time or cycle.  In particular, Richardson
+   extrapolation and gradient detector criteria may be turned on and off at
+   will in conjunction with tagging of specific boxes on specific levels.
+   To support this the input syntax for the StandardTagAndInitialize class
+   has changed.  The general form of this class' input is now:
+   at_0 {
+      cycle | time = int | double
+      tag_0 {
+         tagging_method = RICHARDSON_EXTRAPOLATION | GRADIENT_DETECTOR |
+                          REFINE_BOXES
+         level_0 {
+            // Needed if tagging_method is REFINE_BOXES
+            level = int
+            boxes = array of boxes
+         }
+         ...
+         level_k {
+         }
+      }
+      ...
+      tag_j {
+      }
+   }
+   ...
+   at_i {
+   }
+
+   A simple shortcut syntax exists for the simplest cases of GRADIENT_DETECTOR
+   or RICHARDSON_EXTRAPOLATION applied at cycle 0 onward.  The syntax of this
+   shortcut is unchanged from earlier version of SAMRAI and has the form:
+   tagging_method = RICHARDSON_EXTRAPOLATION | GRADIENT_DETECTOR
+
+   See the header for StandardTagAndInitialize for more details.
+
+2) fillSingularityBoundaryConditions moved from RefinePatchStrategy
+   to new SingularityPatchStrategy class.
+
+   The fillSingularityBoundaryConditions method is only used for multiblock
+   configurations with at least one singularity.  If you have such a
+   configuration, you must inherit SingularityPatchStrategy in the class
+   where you inheritted RefinePatchStrategy.  See the SingularityPatchStrategy
+   and RefinePatchStrategy class documentations.  If you don't have block
+   singularities, you need not change anything.
+
+3) Each class which accepts input parameters now documents those input
+   parameters via the code's doxygen source code documentation.  This
+   documentation is downloadable or may be generated from the source code
+   distribution.  Included in the documentation of each parameter is:
+   definition, data type, default value (if any), legal range, whether the
+   parameter is optional or required, and how the parameter behaves on restart.
+
+4) For a complete description of SAMRAI's input paramters handling refer to
+   a new user document, docs/userdocs/InputParametersAndRestart.pdf.
+
+=============================================================================
+=============================================================================

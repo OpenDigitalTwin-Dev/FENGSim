@@ -1,0 +1,55 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace solv {
+
+/*!
+  @page package_solvers_packages_sundials_kinsol KINSOL Vector and Nonlinear Solver Interface
+
+  The abstract KINSOL interface contains wrapper classes that make it 
+  easier to use the KINSOL nonlinear solver package with <TT>C++</TT> 
+  code in general, and SAMRAI in particular.  There exist wrappers for
+  vectors as well as the complete KINSOL nonlinear algebraic equation solver.
+  Apart from some minor preprocessor features, these interfaces are 
+  completely independent of the SAMRAI.  The code which maps the vector 
+  interface included here to the SAMRAI framework can be found in the 
+  SAMRAI "Solvers" package.
+
+  These classes provide a C++ interface to the KINSOL package, 
+  which is written in C.  They are sufficiently generic that they
+  may be used independently of the SAMRAI framework.  The solver class
+  wraps the KINSOL data structures and function calls so that these items
+  may be more easily used within a C++ program.  Static member 
+  functions for the nonlinear residual calculation, preconditioner setup 
+  and solve, and Jacobian-vector product are provided to link user-defined 
+  versions of these routines with KINSOL.  The "abstract function" class
+  serves as the interface between the solver class and user-defined 
+  implementations of these routines.
+
+  Working example codes will be provided in the near future to demonstrate
+  SAMRAI-KINSOL interoperability.
+
+  KINSOL is developed in the Center for Applied Scientific Computing (CASC)
+  at Lawrence Livermore National Laboratory (LLNL).  For more information 
+  about KINSOL, see A.G. Taylor, and A.C. Hindmarsh, "User Documentation for
+  KINSOL, A Nonlinear Solver for Sequential and Parallel Computers",  
+  UCRL-ID-13185, July 1998.
+
+  Note: These classes assume that vectors based on the 
+        SAMRAI::solv::SundialsAbstractVector class are used.
+  - SAMRAI::solv::KINSOLSolver
+  - SAMRAI::solv::KINSOLAbstractFunctions
+  - SAMRAI::solv::KINSOL_SAMRAIContext
+
+
+*/
+
+}
+}

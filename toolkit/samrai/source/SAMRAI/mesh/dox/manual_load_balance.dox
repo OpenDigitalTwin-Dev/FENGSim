@@ -1,0 +1,40 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace mesh {
+
+/*!
+  @page package_mesh_load_balance Load Balancing
+
+  These classes are used to determine a how the set of patches on each
+  patch level in an AMR hierarchy is built and how those patches will
+  be distributed across processors on a parallel machine.  Given a collection
+  of boxes whose union represents the domain of a level, these routines 
+  construct another set of boxes and a mapping of each box to a processor.
+  The new hierarchy level will be constructed using this information.
+  In other words, the load balance routines attempt to distribute work
+  across processors according to a set of prescribed parameters.  Currently 
+  available routines use spatially-uniform and non-uniform workload 
+  distributions.  For a spatially-uniform work distribution, the workload 
+  estimate for each box is proportional to the number of cells in the box.  
+  For the non-uniform work distribution routines, the workload is determined
+  by the user who specifies a numerical value for each cell (e.g., the 
+  amount of work needed to update the solution in the cell).  In addition, 
+  load balancing routines attempt to assign patches near each other in 
+  space to the same processor when possible.
+  - SAMRAI::mesh::ChopAndPackLoadBalancer
+  - SAMRAI::mesh::LoadBalanceStrategy
+  - SAMRAI::mesh::TreeLoadBalancer
+  - SAMRAI::mesh::BalanceUtilities
+  - SAMRAI::mesh::SpatialKey
+*/
+
+}
+}

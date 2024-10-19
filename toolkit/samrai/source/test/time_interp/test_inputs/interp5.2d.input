@@ -1,0 +1,20 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2019 Lawrence Livermore National Security, LLC
+ * Description:   input file for testing 2d time interpolation
+ *
+ ************************************************************************/
+
+
+Main {
+    dim = 2
+    log_file_name    = "interp4.2d.log"
+    depth = 2
+    ghosts = 4
+    interp_fraction = 0.42
+    box = [ (0,0) , (79,72) ]
+    bdry_only = TRUE
+}

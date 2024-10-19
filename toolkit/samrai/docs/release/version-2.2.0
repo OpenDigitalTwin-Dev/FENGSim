@@ -1,0 +1,327 @@
+*****************************************************************************
+  Copyright 1997-2024
+  Lawrence Livermore National Security, LLC.
+  All rights reserved.
+*****************************************************************************
+*****************************************************************************
+
+                     Release Notes for SAMRAI v2.2.0
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+*****************************************************************************
+
+NOTE:  These release notes are more descriptive and detailed than is usual
+       for software release notes.  The reason for this is that presently
+       complete documentation does not exist for most of the items listed.
+       Until sufficient user documentation becomes available, descriptions
+       such as those that follow will be part of SAMRAI release notes.
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+LLNL users can use the discussion groups on the LLNL Sourceforge site:
+
+https://sourceforge.llnl.gov/sf/discussion/do/listForums/projects.samrai/discussion
+
+*****************************************************************************
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report it
+to us so that we may fix it.  We will make every effort to fix bugs
+in a timely manner.  Depending on the severity or the complexity of the
+bug, we will either fix the bug for a subsequent library release or send
+a code fix to users so that their work is minimally interrupted.
+
+LLNL users may report bugs using the LLNL Sourceforge site if 
+you have a sourceforge account:
+
+https://sourceforge.llnl.gov/sf/tracker/do/listTrackers/projects.samrai/tracker
+
+Bugs found by other users should send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                Summary of what's changed
+-----------------------------------------------------------------------------
+
+This section contains a summary of changes to SAMRAI.  More detailed
+descriptions of items in the following list are provided below.
+
+(1) Change interface for Robin boundary condition of Poisson equation solvers.
+
+(2) Patch boundary sum algorithm performance improved.
+
+(3) Outeredge patch data type has been rebuilt.
+
+(4) Header file documentation for all standard SAMRAI patch data types
+has been improved.
+
+(5) Redundant operations in the tbox::Utilities class for accessing
+    POSIX constants that were also provided by tbox::MathUtilities class
+    have been removed from tbox::utilities.  However, signaling NaN's may
+    still be accessed using either the tbox::MathUtilities or tbox::IEEE class.
+
+(6) Assertion handling has changed for more graceful exit in parallel.
+
+(7) The name of the SAMRAI MPI utility class has been changed from
+tbox::MPI to tbox::SAMRAI_MPI.
+
+(8) Added warning about using older versions of doxygen.
+
+(9) Added support for GNU 4.2.1 compiler suite.
+
+(10) Tested against hypre release 2.2.0b.
+
+(11) SAMRAI team is using Insure++ release 7.1.0.  SAMRAI will not
+     compile correctly with Insure++ 7.0.X releases due to bug in support
+     of C++ complex datatypes.
+
+(12) Removed "using namespace" statements from SAMRAI library code.
+     Users may need to include this now, primarily "using namespace std".
+
+
+(13) Building of restart-redistribute utility is part of standard build.
+
+(14) SAMRAI was updated to use the version 2.3.3 of PETSC.  Earlier 
+     versions are no longer supported.
+
+(15) SAMRAI was updated to use the version 2.3.0 of Sundials.  Earlier 
+     versions are no longer supported.
+
+(16) Changes to PatchDataFactory API to allow for multiple inheritance.
+
+(17) Removed "undefined" type from MathUtilities and replaced uses with
+	SignalingNaN.
+
+(18) PatchDataFactory::allocate() is now overloaded with a version that accepts
+     a patch as an argument instead of a box.
+
+(19) All multiblock-related classes have been moved out of the multiblock
+     package and into other packages according to their functionality.
+     
+----------------------------------------------------------------------------
+                Summary of what's new
+-----------------------------------------------------------------------------
+
+This section contains a summary of additions to SAMRAI.  More detailed
+descriptions of items in the following list are provided below.
+
+(1) Functionality has been added to manually set the number of
+timer objects used in the code.
+
+(2) Functionality has been added to manually set the number of
+statistic objects used in the code.
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+                Details about what's changed
+-----------------------------------------------------------------------------
+
+(1) Change interface for Robin boundary condition of Poisson equations.
+We need to specify 3 coefficients instead of 2 (2 coefficient interface)
+has too many limitations.  The old interface assumed that the Robin BC
+was governed by the equation  a*u + (1-a)du/dn = g, where a is in [0,1].
+The new interface assumes the equation a*u + b*du/dn = g.  You must supply
+the additional coefficient b.  The new interface also makes it clear that
+the units of the coefficient a and b are different.
+
+(2) Patch boundary sum algorithm performance improved by eliminating
+excessive temporary data storage and extra data copy operations.
+
+(3) Outeredge patch data type has been rebuilt to accommodate fixes to
+patch boundary sum performance issues and so that data layout is
+consistent across all spatial dimensions.  See outeredge data header
+files for details.
+
+(4) Header file documentation for all standard SAMRAI patch data types
+has been improved.  Documentation for variable, patch data, box geometry
+classes has been clearer (with details filled in as appropriate) and
+has been made consistent across all data types.  Most of these changes
+address questions raised by various users.
+
+(5) Redundant operations in the tbox::Utilities class for accessing POSIX
+constants that were also provided by tbox::MathUtilities class have been
+removed from tbox::Utilities.  This is largely for consistency and to remove
+(potentially) conflicting redundant implementations.  However, signaling
+NaN's may still be accessed using either the tbox::MathUtilities or
+tbox::IEEE class.  Operations in tbox::MathUtilities are templated on the
+data type whereas operations in tbox::IEEE use operator overloading to
+resolve type information.
+
+(6) Assertion handling has changed for more graceful exit in parallel.
+All instances of calls to the standard library "assert()" function have
+been removed from the code. They have been replaced with a macro
+"TBOX_ASSERT" which issues a similar error message to the assert()
+function and calls the SAMRAI_MPI::abort() routine for proper program
+shutdown in parallel.  The TBOX_ASSERT macro may be called by user
+code just like other SAMRAI macros TBOX_ERROR, TBOX_WARNING, etc.
+
+(7) The name of the SAMRAI MPI utility class has been changed from
+tbox::MPI to tbox::SAMRAI_MPI.  This prevents naming conflicts with
+file systems that are case insensitive.
+
+(8) Using older versions of doxygen is generally not advised.
+We have seen older versions doxygen hang.  Try to use the latest
+version available.  If doxygen generation takes more than 2 hours
+with reasonable disk access speed, it is likely to be hung.
+
+(9) Minor changes to fix problems encountered when compiling with GNU
+4.2.1 compiler suite.  The most significant changes are due to the
+compiler being more sensitive to const methods and properly declaring
+them to be const in derived classes.  This was a problem with classes
+inheriting from VisMaterialsDataStrategy and VisDerivedDataStrategy.
+
+(10) SAMRAI is being tested with hypre release 2.2.0b.
+
+(11) Config.suggest script modified to use Insure++ release 7.1.0.
+Previous releases of Insure++ had problems with C++ Complex datatypes.
+Removed several minor memory leaks.  Updated included psrc file to
+suppress warnings and memory leaks that occur in libraries SAMRAI
+uses.
+
+(12) The "using namespace" statements where removed from SAMRAI
+library code.  This was causing problems for some users and is poor
+library design.  If users were relying on these statements (primarily
+"using namespace std;") compiling errors may occur for standard C++
+classes like "string" "ostream" etc.  To fix these errors simply
+include a "using namespace std;" in the users code.
+
+(13) The "restart-redistribute" utility is now part of the standard
+SAMRAI build process.  This utility allows restart files to be
+redistributed to a different number of processors.  Use this utility
+if you wish to take a run done on say 16 processors and restart it on
+32 processors.  The utility is located in the bin directory.
+Documentation for running the utility is found in:
+docs/userdocs/RestartRedistribute.txt.
+
+(14) SAMRAI was updated to use the version 2.3.3 of PETSc.  Earlier 
+     versions are no longer supported.  Several interfaces where
+     updated to match the PETCc interface changes:
+	
+	SNES_SAMRAIContext
+
+		Input file options for gmres_orthogonalization_algorithm have
+		changed, see header file for more information.
+			
+		getSLESSolver method was removed since SLES was
+		removed from PETSc interfaces, use KSP solver object
+                instead.
+
+	PETSc_SAMRAIVectorReal
+
+		constructor takes an MPI Communicator.
+
+	PETScAbstractVectorReal
+
+		constructor takes an MPI Communicator.
+
+		private methods changed to match PETSc vector
+		interface, should not impact user code.
+
+(15) SAMRAI was updated to use the version 2.3.0 of Sundials.  Earlier 
+     versions are no longer supported.
+   
+This release of SAMRAI replaces the KINSOL and PVODE solver libraries
+with the Sundials library.  The old PVODE package has been
+reintegrated with CVODE and both packages are now both part of a
+larger solver package called Sundials.
+
+The SAMRAI configure options have been changed to assume that the
+entire Sundials package is installed (not just individual KINSOL or
+CVODE packages).  Use the "--with-sundials=PATH" option to specify the
+path to the Sundials package when configuring SAMRAI to enable both
+KINSOL and CVODE.
+
+User code using the old KINSOL and PVODE packages will require some
+classname changes and argument list changes.  The interfaces to KINSOL
+and CVODE have been updated to reflect changes in the Sundials API.
+The PVODE classes have been renamed to use the CVODE prefix.  See the
+solvers package documentation for more information on the API.
+
+(16) Changes to PatchDataFactory API to allow for multiple inheritance.
+
+To enable better support for runtime determination of data dimension
+the PatchDataFactory API was modified to allow for multiple inheritance
+from 2 or more dimensions.
+
+Users implementing a PatchData will need to change the Factory
+implementations.  The ghost cell width variable is was moved from the
+derived classes to the PatchDataFactory class.  The
+setDefaultGhostCellWidth method was removed and setting functionality
+was moved into the constructor and cloneFactory methods.  The
+PatchDataFactory constructor and cloneFactory method now have an
+additional argument of type "const IntVector<DIM>" to specify the
+ghost cell width of objects built by the factory.  The
+getDefaultGhostCellWidth method was renamed to be getGhostCellWidth.
+
+(17) Removed "undefined" type from MathUtilities and replaced uses with
+	SignalingNaN.
+
+There were two nearly identical values in MathUtilities, SignalingNaN
+and Undefined.  There was no clear purpose to having both so Undefined
+was removed from the library.
+
+(18) PatchDataFactory::allocate() is now overloaded with a version that accepts
+     a patch as an argument instead of a box.
+
+This change will allow users who create their own derived patch data types to
+access information stored in the Patch class during the allocation of
+PatchData.  For example, one could retrieve the pointer to the PatchGeometry
+object associated with the patch, in order to get information on physical
+boundary conditions.
+
+The previous allocate() interface, with a Box as an argument, remains, but all 
+user-created derived patch data types will require an implementation of this
+pure virtual interface.
+
+(19) All multiblock-related classes have been moved out of the multiblock
+     package and into other packages according to their functionality.
+
+For example, class MultiblockPatchHierarchy is now in the hierarchy package,
+so that it is in the same package as its counterpart class PatchHierarchy.
+Similarly, MultiblockGriddingAlgorithm is now in the mesh package.
+
+This means that the namespace 'mblk' no longer exists, as all multiblock
+classes now are contained in the namespace of the package where they are
+located.
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+                Details about what's new
+-----------------------------------------------------------------------------
+
+(1) Functionality has been added to manually increase the number of
+timer objects used in the code.  This can be done by calling the appropriate
+function in the SAMRAIManager class.  See header file for more information.
+
+(2) Functionality has been added to manually set the number of
+statistic objects used in the code.  This can be done by calling the appropriate
+function in the SAMRAIManager class.  See header file for more information.
+
+-----------------------------------------------------------------------------
+                Major Bug Fixes
+-----------------------------------------------------------------------------
+
+(1) Fixed interface declarations for printClassData methods.  They should
+all be declared virtual and most were not.
+
+(2) Visit datawriter was not correctly computing min/max values.
+
+(3) Fixed bugs in restart-redistribute tool related to path and filename
+    handling.
+
+-----------------------------------------------------------------------------
+                Known Problems
+-----------------------------------------------------------------------------
+
+(1) 
+
+=============================================================================
+=============================================================================

@@ -1,0 +1,21 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright
+## information, see COPYRIGHT and LICENSE.
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   Performance tests for tree searches.
+##
+#########################################################################
+
+Code and input for evaluating performance of tree searches.
+
+Generate a set of boxes, perform intersection searches and write out
+timing data.
+
+This test does the same thing on all processes.  There is no need to
+run it in parallel.
+
+Execution:
+  ./main test_inputs/default.2d.input
+  ./main test_inputs/default.3d.input

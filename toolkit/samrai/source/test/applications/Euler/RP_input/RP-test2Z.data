@@ -1,0 +1,25 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input for testing Euler Riemann solvers 
+ *
+ ************************************************************************/
+
+//
+// Test #2Z: "123 problem" -- 2 rarefactions and stationary contact
+//          NOTE: to get reasonable wave profiles, run for about 50 steps100
+//
+      front_position = 0.0
+      interval_0 {
+         density      = 1.0
+         velocity     = 0.0, 0.0, -2.0
+         pressure     = 0.4
+      }
+      interval_1 {
+         density      = 1.0
+         velocity     = 0.0, 0.0 , -2.0
+         pressure     = 0.4
+      }

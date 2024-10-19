@@ -1,0 +1,134 @@
+*****************************************************************************
+  Copyright 1997-2024
+  Lawrence Livermore National Security, LLC.
+  All rights reserved.
+*****************************************************************************
+
+                     Release Notes for SAMRAI v3.9.0
+
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+
+*****************************************************************************
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+LLNL users can use the discussion groups on the LLNL Sourceforge site:
+
+https://sourceforge.llnl.gov/sf/discussion/do/listForums/projects.samrai/discussion
+
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report
+it to us so that we may fix it.  LLNL users may report bugs using the
+LLNL Sourceforge site if you have a sourceforge account:
+
+https://sourceforge.llnl.gov/sf/tracker/do/listTrackers/projects.samrai/tracker
+
+Bugs found by other users should send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Significant bug fixes
+----------------------------------------------------------------------------
+
+1) Fixed bug in making a refined/coarsened hierarchy when there are periodic
+   directions.  The bug led to wrong periodic shifts in the created hierarchy.
+
+2) Fixed bug that led to non-nesting or bad levels.  The occurance of this
+   symptom is extremely rare but can happen during GriddingAlgorithm's
+   box manipulations.
+
+3) Error checking has been added to ensure that transpose pairs of Connectors
+   have consistent Connector widths.  If both levels connected by the
+   Connectors are at the level of mesh resolution, the transpose
+   Connectors must have identical Connector widths.  If the levels are at
+   different levels of resolution, the Connector widths must be consistent
+   such that refining the width associated with the coarser level will
+   yield the width associated with the finer level.
+
+Bug fix in v. 3.9.1:
+
+4) A bug has been fixed that caused incorrect computations of periodic shifts
+   when different grid geometries of different sizes were used in the same
+   application.  Now periodic shifts are computed using a PeriodicShiftCatalog
+   object that is unique to each grid geometry and can be retrieved using
+   BaseGridGeometry::getPeriodicShiftCatalog().  This bug fix required a change
+   to the interfaces of one constructor of class Box and one overloaded
+   version of Box::initialize().
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Summary of what's new
+-----------------------------------------------------------------------------
+
+This section contains a summary of additions to SAMRAI.  More detailed
+descriptions of items in the following list are provided below.
+
+1) Formalized the value type of tbox::Dimension with a typedef.
+
+2) VisItDataWriter::packRegularAndDerivedData now takes a simulation time.
+   This is useful when the derived data is a function of time.
+
+-----------------------------------------------------------------------------
+                Summary of what's changed
+-----------------------------------------------------------------------------
+
+This section contains a summary of changes to SAMRAI.  More detailed
+descriptions of items in the following list are provided below.
+
+1) Type returned for cell counts changed from int to size_t.
+
+2) BalanceUtilities::gatherAndReportLoadBalance changed to
+   BalanceUtilities::reduceAndReportLoadBalance.
+
+3) BaseGridGeometry::getNeighbors() has been replaced by iterators over the
+   neighbors accessed by begin(), end(), and find().
+
+4) The non-const versions of Box::upper() and Box::lower() have been replaced
+   by Box::setUpper() and Box::setLower().
+
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                Details about what's new
+-----------------------------------------------------------------------------
+
+1) Dimension::getValue has been returning an unsigned short.  This type has
+   been formalized with the typedef Dimension::dir_t.
+
+
+
+-----------------------------------------------------------------------------
+                Details about what's changed
+-----------------------------------------------------------------------------
+
+1) Cell counts, as returned by methods such as Box::size, Box::offset, etc.
+   changed from int to size_t.  This was done in order to prevent integer
+   overflows for huge boxes.
+
+2) BalanceUtilities::gatherAndReportLoadBalance changed to
+   BalanceUtilities::reduceAndReportLoadBalance and uses a reduce instead of
+   a gather for faster completion.  The gathered data wasn't useful anyway.
+
+3) BaseGridGeometry::getNeighbors() exposed the implementation of the storage
+   of each block's neighbors.  It has been replaced by NeighborIterator and
+   ConstNeighborIterator which iterate over the neighbors of a block.  The
+   method begin(const BlockId&) returns an iterator pointing to the first
+   Neighbor of the block with the supplied BlockId.  Similarly,
+   end(const BlockId&) returns an iterator pointing one past the last neighbor
+   of the block with the supplied BlockId.  find(const BlockId&, const BlockId&)
+   returns an iterator pointing to the Neighbor with the 2nd BlockId of the the
+   block with the 1st BlockId or end() if there is no such Neighbor.
+
+4) Makes the places where Boxes are being modified explicit.
+
+
+=============================================================================
+=============================================================================

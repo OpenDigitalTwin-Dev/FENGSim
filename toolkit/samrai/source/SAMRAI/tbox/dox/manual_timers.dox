@@ -1,0 +1,31 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace tbox {
+/*!
+  @page package_toolbox_timers Timer Classes
+
+  The timer classes provide instrumentation utilities to report 
+  execution timing and other statistics in SAMRAI routines.  User, system, 
+  and wallclock time spent in a routine can be generated.  The classes will
+  report exclusive time and a list of nested routine calls as well as
+  parallel timing information such as the maximum and summed times
+  across all processors.  Support is alos provided for generating other 
+  sorts of execution statistics in parallel.
+ 
+  - SAMRAI::tbox::Statistic
+  - SAMRAI::tbox::Statistician
+  - SAMRAI::tbox::Timer
+  - SAMRAI::tbox::TimerManager
+  - SAMRAI::tbox::Clock
+*/
+
+}
+}

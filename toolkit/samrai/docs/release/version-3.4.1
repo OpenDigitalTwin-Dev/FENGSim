@@ -1,0 +1,200 @@
+*****************************************************************************
+  Copyright 1997-2024
+  Lawrence Livermore National Security, LLC.
+  All rights reserved.
+*****************************************************************************
+
+                     Release Notes for SAMRAI v3.4.1
+
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+
+*****************************************************************************
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+LLNL users can use the discussion groups on the LLNL Sourceforge site:
+
+https://sourceforge.llnl.gov/sf/discussion/do/listForums/projects.samrai/discussion
+
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report
+it to us so that we may fix it.  LLNL users may report bugs using the
+LLNL Sourceforge site if you have a sourceforge account:
+
+https://sourceforge.llnl.gov/sf/tracker/do/listTrackers/projects.samrai/tracker
+
+Bugs found by other users should send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Significant bug fixes
+----------------------------------------------------------------------------
+
+(1) Random operations in the math component passed the improper reduction
+    to Allreduce (e.g. MPI_MAX instead of MPI_SUM).  In addition there were
+    a couple of operations which took the max of a min rather than the max of
+    a max.  All of the operations in this component have been carefully
+    examined and all errors of this type have been fixed.
+
+(2) Bugs that were causing incorrect Connectors and fill patterns to be used
+    for filling ghost data at multiblock enhanced connectivity coarse-fine
+    boundaries have been fixed.
+
+(3) GriddingAlgorithm forces patches on new levels that lie very near to a
+    physical or block boundary to be extended to touch that boundary.  In
+    multiblock configurations, this requirement was not being enforced
+    correctly on blocks other than block 0.  This has now been fixed.
+
+     
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Summary of what's new
+-----------------------------------------------------------------------------
+
+This section contains a summary of additions to SAMRAI.  More detailed
+descriptions of items in the following list are provided below.
+
+(1) BoxContainer can create and hold its own internal tree representation
+    for effiencent search operations.
+
+
+-----------------------------------------------------------------------------
+                Summary of what's changed
+-----------------------------------------------------------------------------
+
+This section contains a summary of changes to SAMRAI.  More detailed
+descriptions of items in the following list are provided below.
+
+(1) SAMRAI's Pointer class has been replaced by the boost shared_ptr.
+    SAMRAI's ConstPointer has also been eliminated.
+
+    THIS NOW MAKES BOOST HEADERS REQUIRED.
+
+(2) Starting/stopping a Timer that is already started/stopped is an
+    error in both optimize and debug modes.
+
+(3) BlockId is now part of Box's state rather than part of BoxId.
+
+(4) SAMRAI's iterator classes have been modified to use a consistent syntax
+    which matches the accepted conventions of the STL.
+
+(5) SAMRAI's tbox containers which effectively replicated equivalent STL
+    containers have been removed.
+
+(6) The GridGeometry class hierarchy has been changed.
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                Details about what's new
+-----------------------------------------------------------------------------
+
+(1) BoxContainer can create and hold its own internal tree representation
+    for effiencent search operations.
+
+    The method makeTree() can be used to create an internal spatially-based
+    tree representation of the BoxContainer, which can increase efficiency
+    when the container is used as a constant argument to search-based
+    methods such as intersectBoxes() or findOverlapBoxes().  The cost of
+    building a tree is O(N log(N)), while it reduces the cost of the search
+    methods from O(N) to O(log(N)), so users should only use the tree
+    representation when it is expected that the same BoxContainer will be
+    used repeatedly as an argument to search operations, such that the
+    gain in efficiency outweighs the cost of building the tree.
+
+    With this functionality added to BoxContainer, most of the public
+    interfaces of the BoxTree and MultiblockBoxTree classes have been
+    removed, as theses classes are intended to only be used internally by
+    BoxContainer.
+
+-----------------------------------------------------------------------------
+                Details about what's changed
+-----------------------------------------------------------------------------
+
+(1) SAMRAI's Pointer class was written long before standard smart or reference
+    counted pointer classes were available.  It's implementation relied heavily
+    on dynamic_casts and as such there was unncecssary overhead associated with
+    its use.  We have removed Pointer from the library and replaced its usage
+    with boost's shared_ptr.  This class provides a more efficient
+    implementation and an API which uses common idioms.  We have also removed
+    ConstPointer which was redundant as ConstPointer<X> was equivalent to
+    Pointer<const X>.
+
+(2) Starting/stopping a Timer that is already started/stopped is an
+    error in both optimize and debug modes.
+
+    Previous behavior: This caused a failed assert in debug mode but not
+    in optimized mode.
+
+(3) BlockId is now part of Box's state rather than part of BoxId.  This means
+    that every Box should have a valid BlockId that identifies which block it
+    lies on within a multiblock mesh configuration.  For single-block
+    configurations, the value of every Box's BlockId is zero.
+
+    Transformations of a Box from the coordinate system of one block to,
+    another, using methods in the Transformation or grid geometry classes,
+    will automatically change the BlockId as appropriate.
+
+    There is now no BlockId held inside BoxId, and thus BoxId's ordering,
+    scheme, which is used in some containers such as BoxContainer, no longer
+    takes into account BlockId.
+
+(4) The syntax of SAMRAI's iterator classes have, for some time, not been self
+    consistent.  In addition they have not been particularly consistent with
+    accepted iterator syntax found in the STL.  We have modified all of the
+    libraries iterator so that they have the following methods/operators:
+    a)  Both pre and post increment operators.  The pre-increment operator
+        returns a reference to the incremented iterator.  The post-increment
+        operator returns the iterator as it existed prior to being incremented.
+    b)  Both == and != operators.
+    c)  The conventional dereference operator, *.
+    d)  The conventional member access operator, ->, which is equivalent to
+        (*itr)..
+    e)  An assignment operator.
+    f)  For bidirectional iterator, both pre and post decrement operators.
+
+    In addition, there are now the usual iterator/const_iterator typedefs for
+    the iterators defined in the classes on which the iterators operate.  An
+    example is BoxContainer::iterator.
+
+    Since the iterators now have syntax consistent with the STL it is possible
+    to use ths STL's algorithms with SAMRAI's iterators.
+
+    Modifications to client code will be necessary but we believe that the
+    future ease of use resulting from a consistent API along with the potential
+    for use of STL algorithms makes this an acceptable cost.
+
+(5) When SAMRAI was first developed, the STL was not a widely used and accepted
+    library.  As a result the SAMRAI library included its own container classes
+    which were effectively identical to those in the STL.  We have removed them
+    from the library as of 3.4.  These classes are vector and List.
+    Applications should now use vector and list from the STL.
+
+(6) hier::GridGeometry has been renamed hier::BaseGridGeometry and is now an
+    abstract class.  A new class, geom::GridGeometry, provides the concrete
+    equivalent of hier::GridGeometry.  The class, geom::CartesianGridGeometry
+    is derived from geom::GridGeometry.  The class, geom::SkeletonGridGeometry
+    has been removed as it is essentially equivalent to geom::GridGeometry.
+
+    If your application uses hier::GridGeometry you should just need to change
+    "hier" to "geom".
+
+    These changes were necessary because knowledge of how refine, coarsen, and
+    time interpolations operators are bound to different variables must be
+    bound to the GridGeometry.  Only a specific, concrete GridGeometry can
+    know which, if any, operator is valid for a given variable.  Thus, a pure
+    virtual method, buildOperators() has been introduced to
+    hier::BaseGridGeometry.  It is defined by geom::GridGeometry to build the
+    proper operators for that grid geometry context.  Class
+    geom::CartesianGridGeometry overrides the method to add the Cartesian
+    operators.
+
+=============================================================================
+=============================================================================

@@ -1,0 +1,467 @@
+*****************************************************************************
+  Copyright 1997-2003                                                    
+  Lawrence Livermore National Security, LLC.                            
+  All rights reserved.                                                    
+*****************************************************************************
+*****************************************************************************
+
+                     Release Notes for SAMRAI v1.3.0
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+*****************************************************************************
+
+NOTE:  These release notes are more descriptive and detailed than is usual
+       for software release notes.  The reason for this is that presently
+       complete documentation does not exist for most of the items listed.
+       Until sufficient user documentation becomes available, descriptions
+       such as those that follow will be part of SAMRAI release notes.
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+*****************************************************************************
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report it
+to us so that we may fix it.  We will make every effort to fix bugs
+in a timely manner.  Depending on the severity or the complexity of the
+bug, we will either fix the bug for a subsequent library release or send
+a code fix to users so that their work is minimally interrupted.
+
+LLNL users should report bugs using the CASC bug tracking web pages:
+
+        http://www-casc.llnl.gov/bugs/
+
+Enter the bug into the appropriate are of the SAMRAI project section.
+
+Bugs found by other users should send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                    Summary of what's changed
+-----------------------------------------------------------------------------
+
+This section contains a summary of changes to SAMRAI.  More detailed 
+descriptions of items in the following list are provided below.
+
+(1) Minor changes to HyperbolicLevelIntegrator class for added flexibility.
+
+(2) The Vizamrai plot file data write class has been enhanced to allow 
+a plot quantitiy to live at different patch data indices on different levels.
+
+(3) Minor changes to method names in IEEE class.
+
+(4) Some basic parallel support classes for communication schedules and
+message streams have been moved around and renamed.
+
+(5) Operators in the geometry package (geom_*ConstantRefineOp*
+and geom_*LinearTimeInterpolateOp*) were moved to the patchdata package
+to avoid dependencies that arose in the library link.  
+
+(6) Synchronized time integration has been added to the
+TimeRefinementIntegrator.
+
+(7) Templated data types used in the index patch data now require an
+additional copy function, and function to write and and retrive data to
+and from the restart database.
+
+(8) The level number information in the Patch and PatchLevel classes has 
+changed so that know about their relationship to other levels in a hierarchy.
+
+(9) As a result of (8), the level number argument has been removed from
+several interfaces to user patch routines.
+
+(10) The default behavior of StandardTagAndInitialize has been modified
+to apply NO tagging if no input file entry is supplied (formerly, it 
+applied gradient detector if no input was provided).
+
+(11) The "Plotting" package has been removed and its contents have 
+been added to the new "Application Utilities" package.
+
+(12) Doc++ is no longer the official documentation generator for SAMRAI.
+Doxygen is.  The code documentation is now in a separate tarball.
+
+(13) The set of applications in SAMRAI/source/applications has moved to 
+a new examples directory in SAMRAI/examples. 
+
+----------------------------------------------------------------------------
+                         Summary of what's new
+-----------------------------------------------------------------------------
+
+This section contains a summary of additions to SAMRAI.  More detailed 
+descriptions of items in the following list are provided below.
+
+(1) Example implementation of C boundary conditions in the ConvDiff example 
+    application.
+
+(2) Performance visualization using the Tau package from the University
+    of Oregon.
+
+(3) New support for generating run-time statistics in parallel has been added. 
+
+(4) New iterator associated with pdat_ArrayData class.
+
+(5) Some enhancements to Uniform and NonUniform load balance classes.  
+
+(6) A new package "Application Utilities" has been added. 
+
+(7) New support for solving linear systems using FAC.
+
+(8) A new "examples" directory has been added.
+
+(9) A more efficient implementation of generating communication 
+    schedules has been added to the xfer_RefineSchedule class.
+
+(10) A more efficient implementation of the Berger-Rigoutsos clustering
+     algorithm has been added to the mesh_BergerRigoutsos class.
+
+-----------------------------------------------------------------------------
+-----------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------
+                    Details about what's changed
+-----------------------------------------------------------------------------
+
+(1) Minor changes to HyperbolicLevelIntegrator class for added flexibility.
+In particular, all private data members have been changed to protected to 
+facilitate specialization of the member functions via inheritance.  Also,
+utility functions have been added that return variable context objects used
+by the integrator.  Thus, the plot context argument was removed from the
+registerModelVariables() function in the hyperbolic patch strategy class.
+See the Euler example application code for more details.
+
+(2) The Vizamrai plot file data write class has been enhanced to allow  
+a plot quantitiy to live at different patch data indices on different levels.
+Calling the member function resetLevelPlotVariable() in the Cartesian
+Vizamrai data write class redefines the patch data index for a given 
+variable on a given level.  Before this function is called, the variable 
+must be registered using the registerPlotVariable() function as before.
+For more information, see the plot_CartesianVizamraiDataWriterX class 
+header file or the Vizamrai-writer.pdf document in the SAMRAI/docs/userdocs
+directory.
+
+(3) The method tbox_IEEE::initializeArray() has been changed to 
+tbox_IEEE::initializeArrayToSignalingNaN() in order to be more explicit about
+its function.
+
+(4) Some basic parallel support classes for communication schedules and
+message streams have been moved around and renamed.  Two new subdirectories
+"parallel" and "stream" have been created in the toolbox package.  The 
+schedule and transaction classes that were previously in the transfer package
+have been moved to the parallel subdirectory.  The tbox_MPI class has also
+been moved there from the toolbox/base directory.  The AbstractStream class
+that previously existed in the hierarchy package and the file, message, and
+XDR stream classes that previously existed in the transfer package are now
+located in the stream subdirectory.  This new organization does not violate
+any of the package dependencies and increases the flexibility of using these
+classes in the SAMRAI library.  Most users need not concern themselves
+with these changes.
+
+(5) Mesh-independent operators have been moved from the geometry package
+to the patch data package, resulting in changes to the class and file names.  
+These operators, which were formerly in a directory "generic_ops" in the
+geometry package, are distinct in that they do not depend on the mesh 
+configuration and may therefore be used inside various algorithms used 
+for meshing that apply independent of the type of mesh used.  By being 
+included with the geometry package, a dependency was introduced between 
+the mesh package and the geometry package.  This broke the package 
+dependency framework used in SAMRAI and caused problems at link time.  We 
+moved the two mesh-independent operators - constant refine and linear time 
+interpolation - out of the "generic_ops" directory in the geometry package 
+and into the "operators" directory in patchdata.  Class names have changed 
+to reflect the new package.  Specifically, all files named 
+"geom_<type>ConstantRefineOp*d" and "geom_<type>LinearTimeInterpolateOp*d" 
+(where <type> indicates a combination of centering and data type e.g. 
+CellDouble) have been prepended with "pdat_*" in place of "geom_*".
+
+(6) Synchronized time integration has been added to
+algs_TimeRefinementIntegrator.  With this mode of time integration, each
+level of the hierarchy is advanced by the same timestep, which is the
+smallest timestep calculated on all of levels.  The regular time refinement
+mode, with subcycling on finer levels remains.  The mode that
+algs_TimeRefinementIntegrator will use is determined by the level_integrator
+argument in the constructor.  level_integrator is of type
+algs_TimeRefinementLevelStrategy, which now has the pure virtual boolean
+method usingRefinedTimestepping(), which now must be defined in the integrator
+classes that are derived from this strategy.  algs_HyperbolicLevelIntegrator
+is an instantiation of algs_TimeRefinementLevelStrategy, and has been
+modified to work with either mode of time refinement, determined by an
+optional boolean argument in the constructor, which will determine the
+return value of usingRefinedTimestepping().  It defaults to the already-
+existing form of time refinement.  User-defined level integrators
+derived from algs_TimeRefinementLevelStrategy will need to have
+usingRefinedTimestepping() added, but will not need to work with both
+modes of time refinement, unless desired by the user.
+
+(7) The templated type used in index patch data already must have several
+functions, described in SAMRAI/source/patchdata/index/README, and now
+must add the function copySourceItem.  This function takes a source item of
+the templated type, the Index where the item is located, and an offset
+IntVector that describes a periodic shift.  In the new function the source
+item will be copied to a new destination item, but if the templated type
+contains data that depends on the location of the item, and the offset is
+nonzero, then the new function should adjust the data to the location of the
+destination item, which is the location of the source item plus the offset.
+The Database functions take an index argument and a database argument.  The
+put function should write the data contained in the templated item at the
+index location to the database, and the get function should retrieve the
+data from the database and append it to the IndexData object.  The put and
+get functions can be made blank placeholders if there is no need to save
+the IndexData in restart files.
+
+(8) The level number information in the Patch and PatchLevel classes has 
+changed so that know about their relationship to other levels in a hierarchy.
+The level class now has three pieces of information that provide users
+with information in this regard, the level number, the next coarser hierarchy
+level number, and a boolean value indicating whether the level is in a 
+hierarchy.  
+
+The level number returned by the Level::getLevelNumber() function (and set by 
+Level::setLevelNumber()) is the number of the level in a hierarchy, or the 
+number of a hierarchy level matching the index space of the level.  If the 
+level does not align with the index space of a level in the hierarchy, 
+then the value is -1.  When the level is in a hierarchy, the return value 
+is the number of the level in the hierarchy. 
+
+The level number returned by the Level::getNextCoarserHierarchyLevelNumber() 
+function (and set by Level::setNextCoarserHierarchyLevelNumber()) is the 
+number of the the next coarser level in a hierarchy for the purposes of data 
+interpolation from coarser levels.  If the level is in a hierarchy, then 
+this value is Level::getLevelNumber() - 1.   
+
+The function Level::inHierarchy() returns true when the level resides in 
+a hierarchy and false otherwise.
+
+Similarly, the Patch class has methods inHierarchy() and getPatchLevelNumber()
+that return the value for the associated function of the level that owns
+the patch.
+
+These functions are helpful to users who need to understand how a level 
+relates to the rest of the hierarchy, especially when the level is some
+temporary level used to communicate data on the hierarchy.
+
+(9) As a result of (8), the level number argument has been removed from
+several interfaces to user patch routines.  
+
+The level number argument has been removed from the following 
+HyperbolicPatchStrategy functions:
+
+   initializeDataOnPatch()
+   computeStableDtOnPatch()
+   computeFluxesOnPatch()
+   conservativeDifferenceOnPatch()
+   tagGradientDetectorCells()
+
+The level can be obtained using patch.getPatchLevelNumber() for user
+implementations of these routines.  The level number has been preserved
+for the routine tagRichardsonExtrapolationCells().  See the linear 
+advection and Euler example problems for details.
+
+The level number argument has been replaced with a pointer to the level
+for  the following HyperbolicPatchStrategy functions:
+
+   preprocessAdvanceLevelData()
+   postprocessAdvanceLevelData()
+
+See (8) above for more information about how to see how the level to
+be advanced relates to others in the hierarchy.
+
+The level number argument has been removed from the function 
+VizamraiDerivedDataStrategy::writeDerivedDataToStream().
+
+(10) In previous versions of SAMRAI, the StandardTagAndInitialize class
+automatically applied gradient detector as the default cell tagging criteria 
+if users did not supply an input file entry.  This was done primarily
+to preserve the functionality of the former GradientDetector class, which
+StandardTagAndInitialize replaced and which did not require an input file
+entry.  As users have adopted StandardTagAndInitialize, cases have arisen
+where a user wishes to turn off all tagging.  Rather than supplying a way
+for the user to turn off the default tagging criteria, we decided a better 
+solution is to make no tagging the default case and allow users to 
+turn on whatever criteria they wish through input.  Hence, if no 
+"tagging_method" input entry is supplied to the StandardTagAndInitialize 
+class, no tagging will be performed.  A warning is output to the log file 
+in this case.
+
+(11) The "Plotting" package has been removed and its contents have 
+been added to the new "Application Utilities" package.  The X windows
+utilities and Vizamrai file writer classes can now be found in that new
+package.
+
+(12) SAMRAI source code documentation is now done using Doxygen instead of
+Doc++.  Doxygen has many features not supported by Doc++, such as better
+cross referencing, provision for application documentation to link to
+library documentation and greater flexibility.  The generated documentation
+is so big that it is no longer shipped with the SAMRAI source code.
+It has been taken out and placed in its own package which can be found
+where the SAMRAI source code is placed.  If you prefer,
+you can regenerate the documentation any time by making "dox" in the docs
+subdirectory.  Regenerating the documentation requires that you have
+Doxygen (http://www.doxygen.org/) installed.  See configure's help message
+for optional flags affecting the generation of Doxygen documentation.
+
+(13) The location of some example applications problems in 
+SAMRAI/source/applications was somewhat confusing because users had
+to go into the SAMRAI source directory to locate them.  Also, the
+source code and executable were in different locations;  the
+applications were compiled in an "objects" directory while the
+source code was located in the SAMRAI source. We decided to add a new
+directory called "examples" (i.e. SAMRAI/examples) where we put
+all example applications and any new examples as they are developed.
+The three applications formerly in SAMRAI/source/applications - Euler, 
+LinAdv, and ConvDiff - are now located in SAMRAI/examples.  
+-----------------------------------------------------------------------------
+                    Details about what's new
+-----------------------------------------------------------------------------
+
+(1) An example implementation of boundary conditions implemented in C is  
+provided in the ConvDiff example application.  Fortran implementations of  
+the BCs still exist and are the default.  Functionality of the C and Fortran
+methods is identical.  The C implementation is provided as an example for 
+users who wish to use C instead of Fortran. To enable C boundary conditions,
+set -DCBOUNDARIES in the CPPFLAGS_EXTRA in the Makefile for the application.
+
+(2) The Tuning and Analysis Utilities (TAU) package out of the University
+of Oregon (http://www.acl.lanl.gov/tau/) provides the capability   
+to visualize application performance.  This is particularly useful for
+parallel runs because it can clearly indicate areas of load imbalance
+or high communication overhead.  It has been integrated with the
+SAMRAI timers. Thus, an application that already uses timers requires
+only two steps to utilize Tau; 1) add the "--with-TAU=.." argument to the 
+SAMRAI configure line, and 2) add two lines to your main().  A full description 
+of the use of Tau and the type of information it provides is included in 
+the document SAMRAI/docs/userdocs/Timing-Instrumentation.pdf.  Please 
+direct any questions or comments to samrai@llnl.gov.
+
+(3) New support for generating run-time statistics in parallel has been added. 
+The support for statistics is complementary to the timers in the library.
+While timers can be used to record execution timing information for portions
+of code, the statistics can be used to record information about the problem
+being run, such as the number of mesh cells on a hierarchy level, the number 
+of particles on a patch or processor, the total mass on a processor, etc.
+The statistic classes can be used to record any information on a processor-by-
+processor or patch-by-patch basis in parallel.  Then, a statistician tool
+is provided to gather the distributed information to processor zero where
+it can be queried, written to a file, etc.  See the tbox_Statistic and
+tbox_Statistician classes in the toolbox package for more information.
+
+
+(4) Class pdat_ArrayDataIterator has been added to provide a C++ iterator to
+move through pdat_ArrayData objects.  Like other iterators in SAMRAI,
+a typedef has been created so that it can be referred to by the name
+pdat_ArrayDataX<TYPE>::Iterator rather than the explicit class name.
+
+(5) A more efficient scheme has been added to the UniformLoadBalance class
+for the case where the domain can be represented as a single box. The 
+class used to automatically assign the number of processors in each direction 
+to be the sqare root (cube root in 3D) of the total number of processors if 
+no processor decomposition was specified in the input.  This caused 
+inefficiencies on skewed domains.  The new algorithm breaks up the domain 
+according to the dimensions of the box. For example, with a domain of 10x40 
+on 4 processors, the old algorithm divided the domain into 2x2 processors 
+generating 4 patches of size 5x20.  The new algorithm divides the domain 
+into 1x4 processors, generating 4 patches of size 10x10.  The 
+NonUniformLoadBalance class was modified to enforce the same constraints as
+the UniformLoadBalance class and allow one to set a "weight" value as a 
+data member on the hierarchy.  Hence, it is now capable of running non-uniform
+problems.
+ 
+(6) A new package "Application Utilities" has been added. This package
+contains the X window plotting tools and the Vizamrai data file 
+generation support, which were previously housed in the "Plotting"
+package.  The "Plotting" package has been removed.  The new 
+Application Utilities package also contains some facilities for
+implementing physical boundary conditions.  The classes make it much 
+easier to process input and implement simple boundary conditions like 
+FLOW, REFLECT, DIRICHLET, and NEUMANN.   An example program illustrating
+the use of the boundary utilities is located in the new SAMRAI/examples
+directory.  The example application codes also provide illustrations of
+how these new capabilities can be used. 
+
+(7) New support for linear solves using the FAC algorithm.  See the classes
+solv_FACPreconditionerX and solv_FACOperatorStrategyX for details.
+
+(8) We have added a new directory SAMRAI/examples which contains example
+applications.  Unlike the the former applications directory (i.e. 
+SAMRAI/source/applications) the examples directory contains source code
+and Makefiles in the same location.  Currently, the examples directory 
+contains various cases that were formerly in SAMRAI/source/applications
+and SAMRAI/source/test.  New examples will be added to this directory
+as they are developed, in future releases.
+
+(9) A new more efficient implementation of generating communication 
+schedules has been added to the xfer_RefineSchedule class.  The new
+algorithm uses a graph that is constructed between the boxes of 
+the two levels in which a schedule is being constructed. We have tested
+this on our example problems and on benchmark cases up to 512 processors.
+However, as with any new algorithm, user cases may expose bugs that we
+did not catch.  If at any point during a run the following error message 
+is printed:
+
+   SAMRAI internal error ...
+   in xfer_RefineScheduleX::finishScheduleConstruction() -- 
+   No coarser levels...could not fill from coarser.
+
+it could be due to a problem with the new RefineSchedule formulation.  It
+is possible to revert to the old communication schedules by doing the 
+following:
+
+   1.  Add this entry to your input file:
+       SAMRAIManager {
+          use_new_comm_sched = FALSE
+       }
+
+   2.  In your main program, add the line 
+          SAMRAIManager::getFromInput(input_db); 
+       where "input_db" is the main input file that contains the 
+       SAMRAIManager entry.
+
+If you find this error, please report it to samrai@llnl.gov so we can
+address the problem.
+
+(10) A more efficient implementation of the Berger-Rigoutsos clustering
+     algorithm has been added to the mesh_BergerRigoutsos class.  
+     We have tested this on our example problems and on benchmark cases 
+     up to 512 processors.  However, as with any new algorithm, user cases 
+     may expose bugs that we did not catch.  If a bug is suspected, 
+     we recommend you restart the problem after reverting to the 
+     old implementation.  It is possible to revert to the old clustering 
+     algorithm by doing the following:
+
+   1.  Add this entry to your input file:
+       SAMRAIManager {
+          use_old_method_for_clustering = TRUE
+       }
+
+   2.  In your main program, add the line
+          SAMRAIManager::getFromInput(input_db);
+       where "input_db" is the main input file that contains the
+       SAMRAIManager entry.
+
+If your symptoms change after making this reversion, please report the
+details to samrai@llnl.gov so we can address the problem.
+Please note that the old clustering algorithm is always used when 
+programs are executed with a single MPI process.
+
+-----------------------------------------------------------------------------
+                             Major Bug Fixes 
+-----------------------------------------------------------------------------
+
+(1) 
+
+(2) 
+
+(3)
+
+
+-----------------------------------------------------------------------------
+                                  Known Problems
+-----------------------------------------------------------------------------
+
+(1) 
+
+=============================================================================
+=============================================================================

@@ -1,0 +1,35 @@
+##
+## File:        $URL$
+## Package:     SAMRAI build scripts
+## Copyright:   (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Revision:    $LastChangedRevision$
+## Description: data file for sed substitutions to generate dim-dep. files
+##
+
+##
+## The following files/classes are dimension-dependent and must be converted
+## from the dimension-independent form ClassX to the dimension-dependent form
+## Class[123] using the updateXd.pl script in this directory.  Make sure to
+## re-run updateXd.pl after making any changes to this file in order to
+## update the compilable sources.
+##
+
+#
+# algorithm package
+#
+
+algs_HyperbolicLevelIntegrator
+algs_HyperbolicPatchStrategy
+algs_MethodOfLinesIntegrator
+algs_MethodOfLinesPatchStrategy
+algs_TimeRefinementLevelStrategy
+algs_TimeRefinementIntegrator
+algs_TimeSynchronizedLevelStrategy
+algs_ImplicitEquationStrategy
+algs_ImplicitIntegrator
+
+# algorithm package timers
+
+algs::HyperbolicLevelIntegrator
+algs::TimeRefinementIntegrator
+

@@ -1,0 +1,46 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright
+## information, see COPYRIGHT and LICENSE.
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:  Communication tests
+##
+#########################################################################
+
+This test exercises refining and coarsening operations.  The files
+included in this directory are as follows:
+
+   main.cpp                -  driver
+   CommTester.[Ch]       - Implementation of RefinePatchStrategy,
+                           CoarsenPatchStrategy, and StandardTagAndInitStrategy
+   PatchDataTestStrategy.[Ch]
+                         -  Base class for patch data specific tests
+   *DataTest.[Ch]        -  Classes for patch data specific tests
+   test_inputs/*.input   -  Input files for a variety of data centerings
+                            and multiblock configurations
+
+
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make main
+
+   Execution:
+      For one of the following input files:
+         test_inputs/*.input
+
+      serial:
+         ./main <input_file>
+
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main <input_file>
+
+
+INPUT PARAMETERS
+----------------
+Refer to test_inputs/cell_refine_a.2d.input for a full description of
+all input parameters specific to this problem.  The remainder of the
+input files are small variations on this model input file.

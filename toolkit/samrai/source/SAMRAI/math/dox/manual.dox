@@ -1,0 +1,65 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace math {
+
+/*!
+  @page package_mathematical_operations Mathematical Operations Package
+ 
+  The Mathematical Operations Package contains classes that provide basic
+  numerical operations for array-based (i.e., cell-centered, face-centered, 
+  side-centered, node-centered, and edge-centered quantities) data on an 
+  AMR patch hierarchy.  Routines include arithmetic as well as other 
+  operations, such as dot products and norms.   Operations may be applied 
+  on individual patches or collections of patch levels in an AMR hierarchy.
+  For each patch data type, two sets of classes are provided.  One provides 
+  operations for a single patch.  The other performs operations on hierarchy 
+  levels.  The hierarchy operation classes are implemented using the patch 
+  operation classes.  The patch operation classes are implemented using 
+  the array data operation classes.  The array operation classes apply to all 
+  array-based patch data types.
+ 
+  The operations are used mostly in the vector kernel classes provided 
+  in the "Solvers" package.  However, they are just as easily used 
+  independent of the vectors.  Many of the operations allow one to define 
+  control volume elements that weight the contribution of each data entry 
+  in the particular operation and geometry of the variable involved.  This 
+  is particularly useful for computing quantities such as norms on a 
+  locally-refined AMR hierarchy where it may be necessary to mask out regions 
+  on coarser levels that are covered by refined cells.
+ 
+  For ease of use, a simple operation manager is provided so that one may 
+  obtain a pointer to an appropriate operator object by querying the manager 
+  object with the variable of interest.  At this time, the manager deals
+  with hierarchy operation objects only.  It is assumed that routines 
+  that treat individual patches will be aware of the form of the data and
+  so these routines can generate the proper operation objects directly.
+  Additional operation manager capabilities may be provided in the future.
+ 
+  Support for mathematical operations is divided into seven categories:
+  -# @ref package_mathops_array "operations for array data (all others depend on these)"
+  -# @ref package_mathops_cell "cell-centered data operations"
+  -# edge-centered data operations
+  -# face-centered data operations
+  -# node-centered data operations
+  -# side-centered data operations
+  -# @ref package_mathops_hierarchy "hierarchy operations independent of centering (used in vectors)"
+ 
+  All class names in the Mathematical Operations package are in the
+  namespace SAMRAI::math.
+ 
+  In the interest of brevity, we include documentation for the array 
+  operation classes and those that treat cell-centered patch data only.   
+  The operation classes for the other array-based patch data types are
+  similar.
+*/
+
+}
+}

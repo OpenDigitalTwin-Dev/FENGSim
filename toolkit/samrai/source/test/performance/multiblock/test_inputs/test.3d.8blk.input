@@ -1,0 +1,515 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2019 Lawrence Livermore National Security, LLC
+ * Description:   Input file for multiblock performance tests
+ *
+ ************************************************************************/
+
+// Input file for multiblock performance test with linear advection problem.
+
+// Refer to test.2d.1blk.input for full description of all input parameters
+// specific to this problem.
+
+Main {
+   dim = 3
+
+   base_name = "test.3d.8blk"
+
+   log_file_name    = "newtest.log"
+   log_all_nodes    = TRUE
+
+   viz_dump_interval     = 0          // zero to turn off
+   viz_dump_dirname      = "viz_newtest"
+   visit_number_procs_per_file = 1
+
+   restart_interval       = 0         // zero to turn off
+   restart_write_dirname  = "restart_newtest"
+
+   timestepping = "SYNCHRONIZED"
+}
+
+
+// Input for mapped grid.  See MblkGeometry class.
+MblkGeometry {
+   // Geometry: CARTESIAN, WEDGE or SPHERICAL_SHELL.
+   problem_type = "CARTESIAN"
+
+   // Definition of Cartesian geometry box.
+   CartesianGeometry {
+      domain_xlo_0 = 0.0, 0.0, 0.0
+      domain_xhi_0 = 15.0, 10.0, 10.0
+      domain_xlo_1 = 0.0, 10.0, 0.0
+      domain_xhi_1 = 15.0, 20.0, 10.0
+      domain_xlo_2 = 15.0, 0.0, 0.0
+      domain_xhi_2 = 30.0, 10.0, 10.0
+      domain_xlo_3 = 15.0, 10.0, 0.0
+      domain_xhi_3 = 30.0, 20.0, 10.0
+      domain_xlo_4 = 0.0, 0.0, 10.0
+      domain_xhi_4 = 15.0, 10.0, 20.0
+      domain_xlo_5 = 0.0, 10.0, 10.0
+      domain_xhi_5 = 15.0, 20.0, 20.0
+      domain_xlo_6 = 15.0, 0.0, 10.0
+      domain_xhi_6 = 30.0, 10.0, 20.0
+      domain_xlo_7 = 15.0, 10.0, 10.0
+      domain_xhi_7 = 30.0, 20.0, 20.0
+   }
+}
+
+
+MblkLinAdv {
+
+   advection_velocity = 2.0e0 , 0.5e0, 1.0
+
+   // order of Goduov slopes (1, 2, or 4)
+   godunov_order    = 2
+
+   // Corner transport scheme: CORNER_TRANSPORT_1 or CORNER_TRANSPORT_2
+   corner_transport = "CORNER_TRANSPORT_1"
+
+   data_problem      = "SPHERE"
+
+   // Initial condition parameters for data_problem.
+   Initial_data {
+      radius            = 0.75
+      center            = 10.00 , 7.5, 4.0
+
+      uval_inside       = 80.0
+      uval_outside      = 5.0
+
+   }
+
+   Refinement_data {
+      refine_criteria = "UVAL_GRADIENT", "UVAL_SHOCK"
+
+      UVAL_GRADIENT {
+         grad_tol = 10.0
+      }
+
+      UVAL_SHOCK {
+         shock_tol = 10.0
+         shock_onset = 0.85
+      }
+   }
+
+   // valid boundary_condition values are "FLOW", "REFLECT", "DIRICHLET"
+   Boundary_data {
+      boundary_face_xlo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_xhi {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_ylo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_yhi {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_zlo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_zhi {
+         boundary_condition      = "FLOW"
+      }
+
+      boundary_edge_ylo_zlo { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_yhi_zlo { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_ylo_zhi { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_yhi_zhi { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_xlo_zlo { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XFLOW"
+      }
+      boundary_edge_xlo_zhi { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XFLOW"
+      }
+      boundary_edge_xhi_zlo { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XFLOW"
+      }
+      boundary_edge_xhi_zhi { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XFLOW"
+      }
+      boundary_edge_xlo_ylo { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YFLOW"
+      }
+      boundary_edge_xhi_ylo { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YFLOW"
+      }
+      boundary_edge_xlo_yhi { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YFLOW"
+      }
+      boundary_edge_xhi_yhi { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YFLOW"
+      }
+
+
+      boundary_node_xlo_ylo_zlo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xhi_ylo_zlo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xlo_yhi_zlo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xhi_yhi_zlo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xlo_ylo_zhi {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xhi_ylo_zhi {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xlo_yhi_zhi {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xhi_yhi_zhi {
+         boundary_condition      = "XFLOW"
+      }
+
+
+   }
+
+}
+
+
+TimerManager {
+   timer_list               = "apps::*::*",
+                              "algs::*::*",
+                              "mesh::*::*",
+                              "appu::main::all"
+//   print_exclusive      = TRUE
+   print_summed           = TRUE
+   print_max              = TRUE
+//   print_timer_overhead   = TRUE
+   print_threshold        = 0.0
+}
+
+
+// Refer to input documentation for hier:GridGeometry class.
+GridGeometry {
+   num_blocks = 8
+   domain_boxes_0 = [ (0,0,0) , (14,9,9) ]
+   domain_boxes_1 = [ (0,0,0) , (14,9,9) ]
+   domain_boxes_2 = [ (0,0,0) , (14,9,9) ]
+   domain_boxes_3 = [ (0,0,0) , (14,9,9) ]
+   domain_boxes_4 = [ (0,0,0) , (14,9,9) ]
+   domain_boxes_5 = [ (0,0,0) , (14,9,9) ]
+   domain_boxes_6 = [ (0,0,0) , (14,9,9) ]
+   domain_boxes_7 = [ (0,0,0) , (14,9,9) ]
+
+   BlockNeighbors0 {
+      block_a = 0
+      block_b = 1
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0, 10, 0
+      point_in_b_space = 0, 0, 0
+   }
+
+   BlockNeighbors1 {
+      block_a = 0
+      block_b = 2
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 15, 0, 0
+      point_in_b_space = 0, 0, 0
+   }
+
+   BlockNeighbors2 {
+      block_a = 0
+      block_b = 3
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 15, 10, 0
+      point_in_b_space = 0, 0, 0
+   }
+
+   BlockNeighbors3 {
+      block_a = 0
+      block_b = 4
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0, 0, 10
+      point_in_b_space = 0, 0, 0
+   }
+
+   BlockNeighbors4 {
+      block_a = 0
+      block_b = 5
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0, 10, 10
+      point_in_b_space = 0, 0, 0
+   }
+
+   BlockNeighbors5 {
+      block_a = 0
+      block_b = 6
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 15, 0, 10
+      point_in_b_space = 0, 0, 0
+   }
+
+   BlockNeighbors6 {
+      block_a = 0
+      block_b = 7
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 15, 10, 10
+      point_in_b_space = 0, 0, 0
+   }
+
+   BlockNeighbors7 {
+      block_a = 1
+      block_b = 2
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 15, -1, 0
+      point_in_b_space = 0, 9, 0
+   }
+
+   BlockNeighbors8 {
+      block_a = 1
+      block_b = 3
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 15, 0, 0
+      point_in_b_space = 0, 0, 0
+   }
+
+   BlockNeighbors9 {
+      block_a = 1
+      block_b = 4
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0, -1, 10
+      point_in_b_space = 0, 9, 0
+   }
+
+   BlockNeighbors10 {
+      block_a = 1
+      block_b = 5
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0, 0, 10
+      point_in_b_space = 0, 0, 0
+   }
+
+   BlockNeighbors11 {
+      block_a = 1
+      block_b = 6
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 15, -1, 10
+      point_in_b_space = 0, 9, 0
+   }
+
+   BlockNeighbors12 {
+      block_a = 1
+      block_b = 7
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 15, 0, 10
+      point_in_b_space = 0, 0, 0
+   }
+
+   BlockNeighbors13 {
+      block_a = 2
+      block_b = 3
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0, 10, 0
+      point_in_b_space = 0, 0, 0
+   }
+
+   BlockNeighbors14 {
+      block_a = 2
+      block_b = 4
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = -1, 0, 10
+      point_in_b_space = 14, 0, 0
+   }
+
+   BlockNeighbors15 {
+      block_a = 2
+      block_b = 5
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = -1, 10, 10
+      point_in_b_space = 14, 0, 0
+   }
+
+   BlockNeighbors16 {
+      block_a = 2
+      block_b = 6
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0, 0, 10
+      point_in_b_space = 0, 0, 0
+   }
+
+   BlockNeighbors17 {
+      block_a = 2
+      block_b = 7
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0, 10, 10
+      point_in_b_space = 0, 0, 0
+   }
+
+   BlockNeighbors18 {
+      block_a = 3
+      block_b = 4
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = -1, -1, 10
+      point_in_b_space = 14, 9, 0
+   }
+
+   BlockNeighbors19 {
+      block_a = 3
+      block_b = 5
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = -1, 0, 10
+      point_in_b_space = 14, 0, 0
+   }
+
+   BlockNeighbors20 {
+      block_a = 3
+      block_b = 6
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0, -1, 10
+      point_in_b_space = 0, 9, 0
+   }
+
+   BlockNeighbors21 {
+      block_a = 3
+      block_b = 7
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0, 0, 10
+      point_in_b_space = 0, 0, 0
+   }
+
+   BlockNeighbors22 {
+      block_a = 4
+      block_b = 5
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0, 10, 0
+      point_in_b_space = 0, 0, 0
+   }
+
+   BlockNeighbors23 {
+      block_a = 4
+      block_b = 6
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 15, 0, 0
+      point_in_b_space = 0, 0, 0
+   }
+
+   BlockNeighbors24 {
+      block_a = 4
+      block_b = 7
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 15, 10, 0
+      point_in_b_space = 0, 0, 0
+   }
+
+   BlockNeighbors25 {
+      block_a = 5
+      block_b = 6
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 15, -1, 0
+      point_in_b_space = 0, 9, 0
+   }
+
+   BlockNeighbors26 {
+      block_a = 5
+      block_b = 7
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 15, 0, 0
+      point_in_b_space = 0, 0, 0
+   }
+
+   BlockNeighbors27 {
+      block_a = 6
+      block_b = 7
+
+      rotation_b_to_a = "I_UP", "J_UP", "K_UP"
+      point_in_a_space = 0, 10, 0
+      point_in_b_space = 0, 0, 0
+   }
+}
+
+
+PatchHierarchy {
+   max_levels = 3         // Maximum number of levels in hierarchy.
+   ratio_to_coarser {      // vector ratio to next coarser level
+      level_1 = 4 , 4, 4
+      level_2 = 4 , 4, 4
+      level_3 = 4 , 4, 4
+   }
+   largest_patch_size {
+      level_0 = 200 , 200, 200
+      // all finer levels will use same values as level_0...
+   }
+   smallest_patch_size {
+      level_0 = 10 , 10, 10
+      // all finer levels will use same values as level_0...
+   }
+}
+
+
+BergerRigoutsos {
+   efficiency_tolerance    = 0.85e0   // min % of tag cells in new patch level
+   combine_efficiency      = 0.95e0   // chop box if sum of volumes of smaller
+                                      // boxes < efficiency * vol of large box
+}
+
+
+GriddingAlgorithm{
+   sequentialize_patch_indices = TRUE
+}
+
+
+StandardTagAndInitialize {
+   tagging_method = "GRADIENT_DETECTOR"
+}
+
+
+HyperbolicLevelIntegrator{
+   cfl                       = 0.9e0    // max cfl factor used in problem
+   cfl_init                  = 0.9e0    // initial cfl factor
+   lag_dt_computation        = TRUE
+   use_ghosts_to_compute_dt  = TRUE
+}
+
+
+TimeRefinementIntegrator{
+   start_time           = 0.e0     // initial simulation time
+   end_time             = 100.e0   // final simulation time
+   grow_dt              = 1.1e0    // growth factor for timesteps
+   max_integrator_steps = 10       // max number of simulation timesteps
+   regrid_interval      = 2
+}

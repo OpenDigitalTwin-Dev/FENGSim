@@ -1,0 +1,219 @@
+*****************************************************************************
+  Copyright 1997-2024
+  Lawrence Livermore National Security, LLC.
+  All rights reserved.
+*****************************************************************************
+
+                     Release Notes for SAMRAI v3.2.1 (alpha)
+
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+
+*****************************************************************************
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+LLNL users can use the discussion groups on the LLNL Sourceforge site:
+
+https://sourceforge.llnl.gov/sf/discussion/do/listForums/projects.samrai/discussion
+
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report
+it to us so that we may fix it.  LLNL users may report bugs using the
+LLNL Sourceforge site if you have a sourceforge account:
+
+https://sourceforge.llnl.gov/sf/tracker/do/listTrackers/projects.samrai/tracker
+
+Bugs found by other users should send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Summary of what's new
+-----------------------------------------------------------------------------
+
+(1) Boost is now required for building SAMRAI.
+
+(2) BlockId, identifying a block within a multiblock mesh, is now part of the 
+MappedBoxId.
+
+(3) Transformation class added, to handle transformation between
+coordinate systems of different blocks.
+
+This section contains a summary of additions to SAMRAI.  More detailed
+descriptions of items in the following list are provided below.
+
+
+-----------------------------------------------------------------------------
+                Summary of what's changed
+-----------------------------------------------------------------------------
+
+(1) Many interfaces specifying components of a MappedBoxId have been
+extended to include the new BlockId component of the MappedBoxId.
+
+(2) MultiblockPatchHierarchy and MultiblockPatchLevel have been removed,
+with PatchHierarchy and PatchLevel now able to represent multiblock meshes.
+
+(3) GridGeometry is no longer an abstract base class.  It can be constructed
+directly for applications that manage their own grid locations and need only
+to have a GridGeometry object manage SAMRAI's coordinate systems.
+
+(4) GridGeometry holds the multiblock metadata that previously had been
+held in MutliblockPatchHierarchy.
+
+(5) MultiblockRefineAlgorithm, MultiblockRefineSchedule and
+MultiblockRefinePatchStrategy have been removed, and RefineSchedule and
+RefineAlgorithm can handle the multiblock communication functionality
+formerly done by those classes.
+
+(6) GriddingAlgorithm's check_overlapping_patches flag now defaults to
+"WARN".
+
+(7) GriddingAlgorithm::makeCoarsestLevel taking a user-defined
+box configuration is removed.
+
+(8) MultiblockGriddingAlgorithm is removed.
+
+(9) MappedBox and MappedBoxId ordering has changed.
+
+(10) Neighbor look-ups in Connectors now uses MappedBoxId.
+
+(11) BaseGriddingAlgorithm is renamed to GriddingAlgorithmStrategy.
+
+
+This section contains a summary of changes to SAMRAI.  More detailed
+descriptions of items in the following list are provided below.
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                Details about what's new
+-----------------------------------------------------------------------------
+
+(1) Boost is now required for building SAMRAI.
+
+Boost is required to build SAMRAI.   We have tested against boost/1.45.0.
+
+Boost is available at www.boost.org.
+
+Use the --with-boost=<directory> configure option to specify the path to 
+the boost install.
+
+
+(2) BlockId, identifying a block within a multiblock mesh, is now part of the
+MappedBoxId.
+
+The BlockId is used to specify a block for a MappedBoxId, a MappedBox, or
+a Patch.
+
+(3) Transformation class added, to handle transformations between
+coordinate systems of different blocks.
+
+The Transformation class uses a RotationIdentifier and an offset IntVector
+to describe the transformation between blocks.  The BoxOverlap child classes
+in the pdat package now hold a Transformation, which allows transactions
+(copy, packStream, unpackStream) to be constructed between patches on
+different blocks.  The Transformation is also used to hold the offset
+for transactions across periodic boundaries, in which case the rotation is
+always null and the offset is the shift from one side of the periodic domain
+to the other.
+
+-----------------------------------------------------------------------------
+                Details about what's changed
+-----------------------------------------------------------------------------
+
+(1) Many interfaces specifying components of a MappedBoxId have been
+extended to include the new BlockId component of the MappedBoxId.
+
+Among changed interfaces are the MappedBoxId and MappedBox constructors.
+NeighborhoodSets now key on the MappedBoxId instead of the GlobalId.
+MappedBoxLevel interfaces for adding, removing and finding MappedBoxes
+now include the BlockId.
+
+(2) MultiblockPatchHierarchy and MultiblockPatchLevel have been removed,
+with PatchHierarchy and PatchLevel now able to represent multiblock meshes.
+
+PatchLevel now contains Patches that can exist on any block in the multiblock
+configuration.  Given a Patch, the block where it exists can be queries by
+calling the getMappedBox method and checking the BlockId of the returned
+MappedBox.
+
+The full multiblock AMR hierarchy is now represented by a single PatchHierarchy
+which holds an array of multiblock-aware PatchLevels.
+
+(3) GridGeometry is no longer an abstract base class.  It can be constructed
+directly for applications that manage their own grid locations and need only
+to have a GridGeometry object manage SAMRAI's coordinate systems.              
+
+Direct construction of GridGeometry is recommended for multiblock problems,
+and can also be used for single-block applications that keep track of grid
+locations inside of user code.  
+
+CartesianGridGeometry remains as a derived class of GridGeometry for use
+by applications that require Cartesian grids.
+
+(4) GridGeometry holds the multiblock metadata that previously had been
+held in MutliblockPatchHierarchy.
+
+The metadata for multiblock grids, describing the relationships between
+coordinate systems of neighboring blocks, and describing the locations of
+reduced and enhanced connectivity, now exists in GridGeometry.  The input
+format for setting up this metadata remains the same, and GridGeometry
+also has a number of methods for accessing information about this metadata.
+
+(5) MultiblockRefineAlgorithm, MultiblockRefineSchedule and
+MultiblockRefinePatchStrategy have been removed, and RefineSchedule and
+RefineAlgorithm can handle the multiblock communication functionality
+formerly done by those classes.
+
+Additionally, fillSingularityBoundaryConditions, which was a pure virtual
+method in MultiblockRefinePatchStrategy providing a user interface for
+filling ghost data at reduced or enhanced connectivity locations, has now
+been moved to RefinePatchStrategy as a virtual method.  It has a default
+no-op implementation, so that single-block user code need not add an
+implementation, but it should be overridden in multiblock user code to 
+handle ghost data at such singularities.  Some of the arguments have also
+changed from the version that was in MultiblockRefinePatchStrategy.
+
+(6) GriddingAlgorithm's check_overlapping_patches flag now defaults to
+"WARN".
+
+This change is meant to spare applications that can tolerate overlapping
+patches from an unneeded error while giving a fair warning to users of
+applications that cannot tolerate overlapping patches.
+
+(7) GriddingAlgorithm::makeCoarsestLevel taking a user-defined
+box configuration is removed.
+
+The capability for users to build the coarsest level with a given
+configuration can be done on other ways.  Users can specify a specific
+partitioner for level 0 that generates the desired configuration or
+build the coarsest level manually using PatchHierarchy::removePatchLevel
+and makeNewPatchLevel.
+
+(8) MultiblockGriddingAlgorithm is removed.
+
+GriddingAlgorithm now supports multiblock hierarchies.
+
+(9) MappedBox and MappedBoxId ordering has changed.
+
+MappedBoxes and MappedBoxIds used to be ordered so that objects with
+the same BlockId are grouped together.  They are now ordered so that
+those with owner ranks are grouped together.  Within a group with
+the same owner ranks, those with the same BlockIds are grouped together.
+
+(10) Neighbor look-ups in Connectors now uses MappedBoxId.
+
+These look-ups used to take GlobalIds.  That does not work for multiblock
+because GlobalIds lack the BlockId data.
+
+(11) BaseGriddingAlgorithm is renamed to GriddingAlgorithmStrategy.
+
+This conforms better to SAMRAI naming standards.
+
+=============================================================================
+=============================================================================

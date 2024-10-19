@@ -1,0 +1,856 @@
+*****************************************************************************
+  Copyright 1997-2024
+  Lawrence Livermore National Security, LLC.
+  All rights reserved.
+*****************************************************************************
+
+                     Release Notes for SAMRAI v3.1.0-beta
+
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+
+*****************************************************************************
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+LLNL users can use the discussion groups on the LLNL Sourceforge site:
+
+https://sourceforge.llnl.gov/sf/discussion/do/listForums/projects.samrai/discussion
+
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report
+it to us so that we may fix it.  LLNL users may report bugs using the
+LLNL Sourceforge site if you have a sourceforge account:
+
+https://sourceforge.llnl.gov/sf/tracker/do/listTrackers/projects.samrai/tracker
+
+Bugs found by other users should send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Summary of what's new
+-----------------------------------------------------------------------------
+
+This section contains a summary of additions to SAMRAI.  More detailed
+descriptions of items in the following list are provided below.
+
+(1) Enhanced scalability.
+
+(2) Added PatchLevelFillPattern class
+
+(3) Added VariableFillPattern class
+
+(4) New configure options added for inlining and assertions checking
+
+(5) New configure options added for the zlib compression library.
+
+(6) Environment variable for forcing abort to be called on exit.
+
+(7) PatchHierarchy and MultiblockPatchHierarchy take input databases.
+
+(8) New configure option to disable SAMRAI timers (--disable-timers).
+-----------------------------------------------------------------------------
+                Summary of what's changed
+-----------------------------------------------------------------------------
+
+This section contains a summary of changes to SAMRAI.  More detailed
+descriptions of items in the following list are provided below.
+
+(1) Include file location changes and SAMRAI source directory restructuring.
+
+(2) Removed templating on Dimension.
+
+(3) Compiler support and library support.
+
+(4) Removed Vizamrai utility and writer.
+
+(5) LoadBalancer renamed to ChopAndPackLoadBalancer.
+
+(6) AsyncCommStage interface names changed for clarity.
+
+(7) set/getDefaultDepth method name changes in DataFactories.
+
+(8) Arena memory allocation classes removed.
+
+(9) Using parallel HDF5.
+
+(9) RefineOperator::refine() interface changed.
+
+(10) RefineOperator::refine() interface changed
+
+(11) Increased number of digits for processor, patch based names.
+
+(12) Template instantiation model changed to implicit and explicit
+     option removed.
+
+(13) Renamed getOneIntVector and getZeroIntVector.
+
+(14) XLF function names changed to no-underscore.
+
+(15) Inline control macros changed.
+
+(16) Implicit tbox::Pointer conversion not allowed.
+
+(17) Connectors and MappedBoxLevels initialization uses references.
+
+(18) Changes to data and accessors in MappedBoxLevel and Connector.
+
+(19) Changing neighbor set in Connectors must use specific methods.
+
+(20) Changed allocate interface to PatchDataFactory.
+
+(21) Changed names of overlap and mapping Connector utilty classes.
+
+(22) PatchLevel::Iterator now returns a Pointer<Patch> instead of
+     the patch number.
+
+(23) IntVector implicit conversion to raw int[] array removed.
+
+(24) SAMRAI timers now enforce ordering of start/stop methods.
+
+(25) AbstractStream and FileStream clases were removed, MessageStream 
+     interface changed.
+
+(26) SAMRAIManager initialize and finalize methods added.
+
+(27) tbox::ShutdownManager renamed to tbox::StartupShutdownManager.
+
+(28) Type names in SAMRAI_MPI have been capitalized.
+
+(28) SAMRAI now uses an exclusive MPI communicator by default.
+
+(29) SAMRAI_MPI interfaces have been expanded.
+
+(30) SAMRAI_MPI interfaces changed to avoid using static communicator.
+
+(31) Optional types no longer optional.
+
+(32) Dimension class no longer supports implicit conversion to an unsigned short.
+
+(33) Major changes in SAMRAI_MPI class, requiring users to change some
+     code.
+
+(34) Configuration changes for running on BG platform.
+
+(35) Each gridding algorithm is now tied to a specific hierarchy,
+     affecting public interfaces.
+
+(36) Some parameters and accessors in GriddingAlgorithm and
+     MultiblockGriddingAlgorithm input databases have been relocated
+     to the new PatchHierarchy and MultiblockPatchHierarchy input
+     databases, respectively.
+
+(37) VariableDatabase now has an added method to remove Variables from the
+     database.
+
+(38) Triple-option parameters in GriddingAlgorithm and MultiblockGriddingAlgorithm
+     have been changed from char to string.
+
+(39) Nested enum type BoundaryDirection in BoundaryBox changed to
+     BoundaryOrientation 
+
+(40) Old, backward-compatible numbering scheme for the location index values
+of 3D edge (codimension 2) BoundaryBox objects has been removed.
+
+(41) Patch number (and various ways to identify a local patch) has
+been changed from an int to a LocalId.
+
+(42) Patch::getPatchNumber() has been renamed to Patch::getLocalId().
+
+(43) setCreateGhostOverlaps() has been removed from RefineAlgorithm.
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                Details about what's new
+-----------------------------------------------------------------------------
+
+(1) Enhanced scalability.
+
+Previous versions of SAMRAI stored a complete map of patches to owning
+processor in every MPI task.  This was not a scalable data
+representation.  This simple scheme was replaced with a distributed
+storage scheme where each MPI task only stores information needed for
+neighboring patches and processors.  Algorithms that previously
+unscalable (order number of MPI tasks) were restructured to scale more
+efficiently.
+
+(2 & 3) PatchLevelFillPattern and VariableFillPattern are new abstract base
+classes that allows users greater control of where data will be filled
+by RefineSchedule and CoarsenSchedle.
+
+ - PatchLevelFillPattern replaces string fill_pattern arguments that were
+available in some of the RefineAlgorithm::createSchedule() interfaces.
+Instead of those strings, users should pass in a pointer to a
+PatchLevelFillPattern object.  The current options are:
+
+PatchLevelFullFillPattern -- Fill all destination regions that can be filled.
+                             Equivalent to old "DEFAULT_FILL" option.
+PatchLevelInteriorFillPattern -- Fill interiors of destination level patches.
+                                 Equivalent to "FILL_INTERIORS_ONLY" option.
+PatchLevelBorderFillPattern -- Fill ghost regions outside of patch interiors--
+                               that is at physical and coarse-fine boundaries.
+                               Equivalent to "FILL_LEVEL_BORDERS_ONLY"
+PatchLevelBorderAndInteriorFillPattern -- Fill patch interiors as well as
+                                          ghost regions at physical and
+                                          coarse-fine boundaries.  Equivalent
+                                          to "FILL_LEVEL_BORDERS_AND_INTERIORS".
+
+There remain versions of RefineAlgorithm::createSchedule() which have no
+PatchLevelFillPattern argument.  These will invoke PatchLevelFullFillPattern
+by default.
+
+ - VariableFillPattern provides an interface that can be used to control
+where data will be filled on an item-by-item basis in a refine or coarsen
+schedule.  The object is given to the RefineAlgorithm or CoarsenAlgorithm
+as an argument to registerRefine or registerCoarsen.  If no argument is
+given, then BoxGeometryFillPattern is used by default.  BoxGeometryFillPattern
+preserves the existing behavior of computing full overlaps between source
+and destination levels.
+
+
+(4) New configure options added for inlining and assertions checking
+
+The configure script has options to control the use of inlining and
+assertion checking:
+
+--enable-inline
+--enable-check-assertions
+
+The default is to use inlining and no assertion checking.  Note that
+--enable-debug will turn off inlining and enable assertion checking to
+match previous debug behavior.
+
+(5) New configure options added for the zlib compression library.
+
+--with-zlib=DIR
+
+enables including building with the zlib compression library for when 
+HDF and SILO are built with it.  Default paths are /usr/local/ and /usr.
+The default is to build without zlib.
+
+(6) Environment variable for forcing abort to be called on exit.
+
+If the environment variable SAMRAI_ABORT_ON_ERROR is set a SAMRAI
+error will call "abort" rather than exit or MPI_Abort.  "abort" causes
+a core dump and is thus useful for debugging the location of an error. 
+
+NOTE: For MPI jobs this flag may cause the job to not cleanup correctly and
+leave processes running etc.
+
+(7) PatchHierarchy and MultiblockPatchHierarchy take input databases.
+
+PatchHierarchy's database should be used to set a number of parameters
+that used to be set in the GriddingAlgorithm.  In general, parameters
+describing the characteristics of the hierarchy (such as the max number
+of levels allowed, the refinement ratios, etc.) are now owned by the
+hierarchy.  Parameters describing how the mesh should be generated
+(such as the clustering efficiency and whether to skip certain
+steps in the standard mesh generation) remain in the GriddingAlgorithm.
+
+See source code docs in PatchHierarchy.h and GriddingAlgorithm.h
+for the current set of input parameters.
+
+MultiblockPatchHierarchy takes the number of block and a PatchHierarchy
+database that is used to build the PatchHierarchies.  These parameters
+have been removed from MultiblockGriddingAlgorithm.
+
+(8) New configure option to disable SAMRAI timers (--disable-timers).
+
+Timers will be overhauled in the future, but in the meantime, they can be
+disabled by using the "--disable-timers" option on the configure line.  In
+tests, this provides approximately a 2.5x speedup in raw timer execution.
+-----------------------------------------------------------------------------
+                Details about what's changed
+-----------------------------------------------------------------------------
+
+(1) Include file location changes and SAMRAI source directory restructuring.
+
+In order to avoid naming collisions with other packages, SAMRAI now
+uses a longer #include names for header files.  The names of the
+header files are now prefixed with a directory structure mirroring the
+namespace in which the classes appear.  This involves a bit more
+typing but should make conflicts very unlikely.  Several SAMRAI
+includes were very likely to cause conflicts (e.g. Grid, Box,
+Hierarchy, ProcessID etc).
+
+For example, previously you would use:
+
+#include "Variable.h"
+
+this is now replaced with a path prefix:
+
+#include "SAMRAI/hier/Variable.h"
+
+A perl script is provided which will search for #includes and replace
+the 2.x include with the new namespace include.
+
+It is a very good idea to make sure you have a backup of files before
+running the script in case something goes very wrong.  This script was
+used to convert the SAMRAI code base and some user applications but
+being a little paranoid is a good thing when it comes to automatic
+source code manipulation.
+
+IMPORTANT WARNING: This script looks for patterns of "#include
+<SAMRAI_header>" and replaces them.  If you have classes with the same
+name as SAMRAI classes this script will replace those includes as
+well.
+
+To invoke the script run with the directory to convert:
+
+<SAMRAI_INSTALL_DIR>/tools/scripts/conversion3.0/convertIncludePaths <directory to convert>
+
+The script will search the directory (and subdirectories) for C++
+source files and replace existing #includes with the path prefixed
+version.  Note that the script is NOT smart enough to distinguish
+SAMRAI header includes from other packages.  So if you are using
+another package that has .h file naming conflicts (uses the header
+file name as SAMRAI).  files the script will blindly think they are
+all SAMRAI headers.  For example if you are using a package that has a
+"Box.h" header file, the script will change the include to be
+"SAMRAI/hier/Box.h" since it assumes all "Box.h" includes refer to
+SAMRAI.
+
+For developers who frequently look at the SAMRIA source directory, you
+will also see some significant changes.  The includes directory that was
+in created in the compilation directory is no longer needed.  This
+removes the confusion of the links/copies that were being created.
+The source directory was also greatly simplified.  The subdirectory
+structure in each of the packages was removed so files for each
+package sit in the package directory in source/SAMRAI/<package>.  To
+find a class you only need to know it's package.
+
+(2) Removed templating on Dimension.
+
+Previous versions of SAMRAI used a template parameter to specify the
+problem dimension.  This presented serious limitations for codes that
+specify problem dimension in as an input parameter.  In order to
+better accommodate this usage pattern the templating on dimension was
+removed and replaced (when needed) with an additional dimension
+argument to the constructor.  Classes that do not require or could
+determine dimension from another constructor argument do not need a
+dimension.
+
+The dimension is represented as a Dimension object.  This is
+essentially just an integer but a class was used to enhance type
+safety.  The Dimension class will make it harder to accidentally use an
+integer when a dimension is required.
+
+This change also facilitates creating higher level SAMRAI classes that
+have two or more dimensions used within them.  Several LLNL codes plan
+to use this new flexibility.
+
+This change will frankly be painful.  A perl script is provided to
+help remove the templating on dimension.  This script will help but
+does not complete the process.  It replaces class names with the
+untemplated names but does not add the Dimension objects to the
+constructors as we don't know what the Dimension is.  You will need to
+supply a Dimension object to the constructors.  The compiler will
+issue an error if you forget to include one so it should be extremely
+hard to mess this conversion up (albeit extraordinarily boring).  In
+conversion done by the SAMRAI team IntVector was the most frequently
+constructed object needing a Dimension.
+
+Always make sure you have a backup before invoking this script.
+
+To invoke the script run with the directory to convert, as :
+
+<SAMRAI_INSTALL_DIR>/tools/scripts/conversion3.0/removeTemplateOnDim <directory to convert>
+
+(3) Compiler support and library support
+
+The compiler versions used in our regression testing have been
+updated. We no longer test with some older versions.  See INSTALL
+notes for a complete list of compilers tested.
+
+For Linux workstations we have moved to OpenMPI from MPICH.  OpenMPI
+seems to be in wider use in the various Linux distributions.
+
+(4) Removed Vizamrai utilty and writer.
+
+The Vizamrai visualization utility and data writer are no longer supported.  
+Use Visit as a replacement.
+
+
+(5) LoadBalancer renamed to ChopAndPackLoadBalancer.
+
+We now offer two native load balancers.  (The other is TreeLoadBalancer.)
+
+(6) AsyncCommStage interface names changed for clarity.
+
+We changed AsyncCommStage non-blocking communications requests from
+"outstanding" requests to "pending" requests to emphasize that these
+requests not merely allocated on the stage--they are actually in the
+middle of a non-blocking communication.  The AsyncCommStage is not likely
+to directly affect users.
+
+(7) set/getDefaultDepth method name changes in DataFactories.
+
+The DefaultDepth methods were changed for DataFactories.  The
+setDefaultDepth method was removed as setting the depth after factory
+construction is not supported.
+
+getDefaultDepth method was renamed to simply getDepth.
+
+(8) Arena memory allocation classes removed.
+
+The Arena and ArenaManager classes where removed since SAMRAI was not
+using these to do anything useful.  This changes several allocation
+interfaces in the code.  This effects PatchDataFactory, PatchData,
+Patch, PatchLevel, ArrayData, RefineTransactionFactory,
+CoarsentTransactionFactory and derived classes.
+
+To fix existing code simply remove any references to the Arena
+classes in the allocation interfaces.
+
+(9) Using parallel HDf5.
+
+We have begun using parallel HDf5 in some of our environments.  If you
+have an application that requires specifically either serial or parallel
+HDf5, keep in mind that SAMRAI should be able to work with both.  It is
+probably required that you configure SAMRAI with the version required
+by your application.
+
+(10) RefineOperator::refine() interface changed
+
+The Box argument "fine_box" in the refine() interfice has been changed to a
+BoxOverlap argument.  Whereas the old Box argument always was a cell-centered
+box, the BoxOverlap argument will contain boxes in the centering of the data
+to be refined.  In implementations of RefineOperator, the BoxOverlap argument
+should be cast to the appropriate concrete overlap class, and then the
+boxes contained in that overlap object will define the regions onto which data
+should be interpolated.
+
+(11) Increased number of digits for processor, patch based names.
+
+The restart filenames and other names using processor and patch
+numbers where changed to allow for more digits as soon to exist machines are
+larger that they would overflow the previous 5 digits being used.
+
+This means that some input and all old restarts will not be compatible
+between version 2.x and 3.x.
+
+(12) Template instantiation model changed to implicit and explicit
+     option removed.
+
+Previous versions of SAMRAI used the explicit template instantiation
+model.  This was changed due to the removal of the templating on
+dimension which significantly reduced the number of template classes in
+SAMRAI.  Also SAMRAI is increasingly using the STL and the explicit
+template instantiation was problematic on several compilers.
+
+The implicit template instantiation model is now required for SAMRAI.
+
+(13) Renamed getOneIntVector and getZeroIntVector.
+
+The methods to obtain a prebuilt vector of ones or zeros were renamed
+to getOne and getZero due to popular demand.
+
+(14) XLF function names changed to no-underscore.
+
+The name mangling for Fortran names under XLF have been changed to the
+XLF default with no trailing underscore.  This should make the SAMRAI
+compile more in line with normal XLF compiles.
+
+(15) Inline control macros changed.
+
+The macros used to control inline methods have changed to clean up the
+code a bit.  The old DEBUG_NO_INLINE macro was removed and replaced
+with SAMRAI_INLINE (to avoid double negatives) and the old method of
+doing a replacement of the "inline" reserved word was replaced with
+SAMRAI_INLINE_KEYWORD which is null or "inline" if inlining is
+requested.
+
+(16) Implicit tbox::Pointer conversion not allowed.
+
+Previous versions of the SAMRAI tbox::Pointer class allowed implicit
+conversions of raw C++ pointers to the reference counting
+tbox::Pointer.  This allows several uses that can (and did!) lead to
+bugs being introduced.  This "feature" is commonly considered a bad
+thing for smart pointers was removed.
+
+This change will frequently effect Pointer code like:
+
+tbox::Pointer<Foo> foo_ptr = new Foo();
+
+which now needs to be written:
+
+tbox::Pointer<Foo> foo_pt(new Foo());
+
+Which is better as it avoids a temporary construction.
+
+Also passing a raw pointer to a method that takes a tbox::Pointer will
+no longer work, a tbox::Pointer will have to provided.
+
+(17) Connectors and MappedBoxLevels initialization uses references.
+
+MappedBoxLevel and Connector initializations use references to receive
+MappedBoxSet and EdgeSet (respectively) instead of pointers to them.
+In GLOBALIZED mode, all MappedBoxes and EdgeSets are placed in a
+single container instead of one container for each process.  This
+removes the inherent unscalability of GLOBALIZED mode, though
+GLOBALIZED mode is still unscalable if the globalized data is
+unscalable.
+
+(18) Changes to data and accessors in MappedBoxLevel and Connector.
+
+Methods getMapedBoxes() and getEdges() now always return local data.
+To get global data in GLOBALIZED mode, use getGlobalMappedBoxes and
+getGlobalEdges.  To get data for a given process in GLOBALIZED mode,
+specify the process rank using getMappedBoxes(rank) and getEdges(rank).
+These versions return an iterator range instead of a separate
+container for the given rank.  Separate containers are no longer
+available but you can always initialize your own from the range.
+
+Accessors with default specified rank now only work to access local
+data.  Accessing remote data must use the GlobalId, which includes
+the processor rank.
+
+(19) Changing neighbor set in Connectors must use specific methods.
+
+You can no longer directly change the container of neighbors for a
+given MappedBox due to the potential for putting Connectors in an
+inconsistent state.  Instead, use insertNeighbors, eraseNeighbor,
+swapNeighbors and clearNeighbors.
+
+(20) Changed allocate interface to PatchDataFactory.
+
+PatchDataFactory previously defined two virtual allocate methods for
+allocating a PatchData.  The method taking a hier::Box was removed in
+favor of always using the allocate method taking a hier::Patch.  This
+may impact users who are creating their own PatchData types.  Simply
+remove the unneeded allocate(hier::Box &box) method from the factory.
+
+(21) Changed names of overlap and mapping Connector utilty classes.
+
+OverlapConnectorUtility is now OverlapConnectorAlgorithm.
+MappingConnectorUtility is now MappingConnectorAlgorithm.
+
+(21) PatchLevel::Iterator now returns a Pointer<Patch> instead of
+     the patch number.
+
+This change was motivated to allow for the design of a multiblock
+level iterator that can use the same kind of syntax.  We have almost
+complete backward compatibility (see below), although you should
+change your codes from
+  Pointer<Patch> patch = level->getPatch(patch_iterator());
+to
+  Pointer<Patch> patch = *patch_iterator;
+
+One possible failure mode caused by this change is if you have
+  int patch_number = patch_iterator();
+This will implicitly convert the Pointer<Patch> object to an int.
+You should make sure this is no longer done!
+
+To get the patch number from the iterator, use
+  int patch_number = patch_iterator->getPatchNumber();
+
+(23) IntVector implicit conversion to raw int[] array removed.
+
+Previous versions of IntVector had an implicit conversion to a raw
+int[] arrary.  This was dangerous and introduced several bugs.  In
+addition to being at odds with the STL library design.
+
+To get the address of the first element use the STL vector approach of
+taking the address of the first element:
+
+IntVector int_vector;
+int *ptr = &int_vector[0];
+
+Note that this should be done with caution due to dangling referencing
+issues may occur if the IntVector goes out of scope etc.
+
+(24) SAMRAI timers now enforce ordering of start/stop methods.
+
+The tbox::Timer class now enforces that stop must follow a start.
+This was to prevent errors from multiple calls to start followed by a
+stop.   Stop must also follow a start.
+
+Asserts will occur if the correct ordering is not done.
+
+(25) AbstractStream and FileStream clases were removed, MessageStream 
+     interface changed.
+
+The AbstractStream class was removed, replace this with the MessageSteam class.
+
+The FileStream class was removed, use standard C++ classes for I/O.
+
+The interface for MessageStream was changed to use template methods
+for each type rather than the explicitly named method for each type.
+
+For example :
+
+AbstractStream::sizeofBool becomes MessageStream::getSizeof<bool>
+
+(26) SAMRAIManager initialize and finalize methods added.
+
+In order to allow for SAMRAI to be exectued in a mode where multiple SAMRAI
+problems are solved per process the management of startup/shutdown was
+extended from two steps to three.   You need to add
+
+tbox::SAMRAIManager::initialize();
+
+before the tbox::SAMRAIManager::startup() call. and
+
+tbox::SAMRAIManager::finalize();
+
+after the tbox::SAMRAIManager::shutdown() call.
+
+The following method of running is now supported:
+
+tbox::SAMRAIManager::initialize();
+for(some number of times)
+{
+	tbox::SAMRAIManager::startup();
+	tbox::SAMRAIManager::shutdown();
+}
+tbox::SAMRAIManager::finalize();
+
+(27) tbox::ShutdownManager renamed to tbox::StartupShutdownManager.
+
+To support a more complete lifecycle for SAMRAI objects the shutdown
+manager was renamed to StartupShutdownManger.  The new lifecycle
+supports 4 phases, initialize, startup, shutdown, and finalize.
+Startup and shutdown may be called multiple times per run.
+Initialize/finalize are invoked only once per run.
+
+Registration with the StartupShutdownManger takes a
+AbstractHandler class which defines the callback API.  
+
+For convience a Handler class is supplied which provides an
+implementation of AbstractHandler.  Simply provide the callback
+methods to the constructor for Handler and the Handler class registers
+itself with the Manager during construction and calls the methods
+provided.  The priority of the handler must be provided to support
+correct ordering in the case of dependencies between handlers.
+
+Below is an example of creating a handler for the InputManager class:
+
+StartupShutdownManager::Handler InputManager::s_shutdown_handler(
+   0,
+   0,
+   InputManager::shutdownCallback,
+   0,
+   StartupShutdownManager::priorityInputManager);
+
+The handler is static so it is created at the start of the run (before
+main is invoked) and registers itself with the StartupShutdownManager.
+The shutdownCallback in InputManager is invoked as part of the
+SAMRAIManger::shutdown() method.  In this case only one callback is
+needed so the other callbacks are null (0).
+
+(28) Typenames in SAMRAI_MPI have been capitalized.
+
+To maintain uniformity with SAMRAI and similarity with MPI names,
+we made these textual changes changes:
+
+comm --> Comm
+request --> Request
+status --> Status
+
+(29) SAMRAI now uses an exclusive MPI communicator by default.
+
+SAMRAIManager::startup() takes an MPI communicator.  By default,
+SAMRAI makes a duplicate of this communicator for internal use.  This
+can be overridden using the startup() argument list.  The main SAMRAI
+communicator is accessible using
+tbox::SAMRAIManager::getSAMRAIWorldComm().  Various parts of SAMRAI
+may duplicate the main communicator for further isolation.
+
+(30) SAMRAI_MPI interfaces have been expanded.
+
+Previous versions of SAMRAI_MPI did not and could not support
+non-blocking calls.  SAMRAI_MPI now supports non-blocking calls, but
+this requires that high-level functionalities be reduced.  We added
+new SAMRAI_MPI methods that actually look a lot like native C MPI
+interfaces.  The primary difference is that the communicator is now a
+data member in the SAMRAI_MPI object.
+
+The old static SAMRAI_MPI methods are still available, but we discourage
+their use.
+
+(31) SAMRAI_MPI interfaces changed to avoid using static communicator.
+
+To prepare for increasing use of non-blocking calls,
+communication/computation overlap, future use of multiple
+communicators and multithread environments, SAMRAI_MPI's new wrappers
+methods do not use a single static communicator.  The prefered usage
+is to instantiate a SAMRAI_MPI objects, constructing it with the
+communicator you want to use.  Methods bound to the object will use
+the object's communicator.  If you omit the communicator, the object
+uses tbox::SAMRAIManager::getSAMRAIWorldComm(), the main SAMRAI
+communicator.  MPI Methods not associated with specific communicators
+are wrapped in SAMRAI_MPI's static methods (as before).
+
+The intention is to start using communicators closely associated with
+the context of the communication.  For example, communicating data on
+a level should use the communicator taken from the MappedBoxLevel
+associated with the data.  The main communicator should only be used
+in very general contexts, such as finalizing SAMRAI statistics and
+timers.
+
+Note that the SAMRAI_MPI objects are just wrappers, intended to absorb
+some repetitive code that tends to clutter things up.  They do not
+manage communicators.  Nor do they manage non-blocking calls.  You
+still need to know how do this yourself.
+
+(31) Optional types no longer optional.
+
+Previous versions of SAMRAI could be configured with support for bool,
+char, float, and dcomplex datatypes.  Due to the change in compilation
+model the optional types no longer signicantly impact library size or
+compile time so everything is compiled by default now.  This means the
+
+--enable-bool, --enable-char, --enable-float, and --enable-dcomplex 
+
+configure flags are no longer required or supported.  Simply remove
+them from your configure if you are using them.
+
+(32) Dimension class no longer supports implicit conversion to an unsigned short.
+
+At the request of users the Dimension class no longer supports
+implicit conversion to unsigned short value.  This improves type
+saftey.  The "getValue()" method returns the dimension as an unsigned
+short value and can be used in place of the implicit conversion.
+
+(33) Major changes in SAMRAI_MPI class, requiring users to change some
+     code.
+
+We changed the MPI communication wrappers in SAMRAI_MPI to extend its
+functionality.  The previous model of high-level methods did not was
+not easily extendable.  The new model is to use interfaces that
+resemble those defined by MPI.
+
+The static communication methods have been removed as have the static
+methods to set the static communicator.  You must now declare a
+SAMRAI_MPI object, constructing it with an MPI communicator.
+Communication methods associated with a communicator uses the one you
+passed in to the constructor.  Some MPI methods not associated with a
+communicator are implemented as SAMRAI_MPI static methods.
+
+By necessity, we did implement high-level versions of Allreduce,
+mainly to remove the cumbersome code required when max/min reductions
+also return the rank of the process owning the max/min value.
+
+There are 3 methods to choose from when initializing SAMRAI_MPI.  The
+first one also starts up MPI and cause MPI to be shut down when
+SAMRAI_MPI is finalized.  The second expects you to start up MPI and
+pass in a communicator (which SAMRAI will duplicate for exclusive
+internal use).  The third disables MPI (even when you configure with
+MPI) and runs SAMRAI in sequential mode.  Choose the initialization
+method that suits your application.
+
+(34) Configuration changes for running on BG platform. 
+
+The new mpxlC compiler (v9.0) has some issues as of this release, 
+producing ICE (internal compiler errors) when building certain features
+of SAMRAI.  Removing pragmas related to the xlC compiler provided a
+temporary work-around while IBM is addressing the problem.  The interim
+solution is to include the 
+
+--enable-bgl 
+
+option during configuration when
+configuring and building on the Blue Gene platforms.  This option is
+not expected to be a long-term available solution, as the compiler update
+from IBM is expected to solve the problem.
+
+(35) Each gridding algorithm is now tied to a specific hierarchy,
+     affecting public interfaces.
+
+Gridding algorithms have always typically worked on just one hierarchy,
+although the hierarchy is passed into the public interfaces.  With this
+change, the hierarchy is passed into the constructor and removed from
+the rest of the interfaces.
+
+This change applies to both single-block and multi-block versions of
+the hierarchy and gridding algorithm.
+
+(36) Some parameters and accessors in GriddingAlgorithm and
+     MultiblockGriddingAlgorithm input databases have been relocated
+     to the new PatchHierarchy and MultiblockPatchHierarchy input
+     databases, respectively.
+
+This is related to "what's new" item (7).  See that item for the
+explanation.  The input files in SAMRAI have been updated to relocate
+some GriddingAlgorithm/MultiblockGriddingAlgorithm parameters to the
+new PatchHierarchy/MultiblockPatchHierarchy input database.  Where
+applicacable, you should make similar changes to your input databases.
+
+(37) VariableDatabase now has an added method to remove Variables from the
+     database.
+
+The new method "removeVariable" allows a user to arbitrarily remove a Variable
+from the VariableDatabase at any time given the name of the variable.  The
+Variable name can be reused at any time afterwards without fear of name a
+name clash.  It should be noted that adding and removing Variables a lot will
+result in a fragmented variable array.  
+
+(38) Triple-option parameters in GriddingAlgorithm and MultiblockGriddingAlgorithm
+     have been changed from char to string.
+
+You need to change input databases so that parameters set to 'i', 'w' or 'e'
+are now set to strings "IGNORE", "WARN", and "ERROR", respectively.
+
+(39) Nested enum type BoundaryDirection in BoundaryBox changed to
+     BoundaryOrientation
+
+Name changed to reduce confusion with other uses of the term "direction".
+
+(40) Old, backward-compatible numbering scheme for the location index values
+of 3D edge (codimension 2) BoundaryBox objects has been removed.
+
+All location index values are now based on the values computed by
+BoundaryLookupTable.  The only valid numbering scheme is described below:
+
+               Location Index    Obsolete value
+               ==============    ==============
+x_lo, y_lo           0                  8
+x_hi, y_lo           1                  9
+x_lo, y_hi           2                 10
+x_hi, y_hi           3                 11
+x_lo, z_lo           4                  4
+x_hi, z_lo           5                  6
+x_lo, z_hi           6                  5
+x_hi, z_hi           7                  7
+y_lo, z_lo           8                  0
+y_hi, z_lo           9                  1
+y_lo, z_hi          10                  2
+y_hi, z_hi          11                  3 
+
+Any code that used 3d edge boundary boxes on physical or coarse-fine
+boundaries with the old numbering scheme will need to be adjusted to use
+the values in the left column.
+
+
+(41) Patch number (and various ways to identify a local patch) has
+changed from an int to a LocalId.
+
+Each Patch is now identified by a GlobalId and a LocalId that are the
+same as the MappedBox from which the Patch is built.  The LocalId is
+similar to the patch number in SAMRAI-2, and it is required to be
+locally unique but not globally unique.  Locally, the patch can be
+identified by the LocalId alone.  Globally, the patch can be
+identified by its GlobalId, which is a combination of the LocalId and
+the owner rank.
+
+PatchLevel::getPatch() has been changed from taking an int to taking a
+GlobalId or LocalId.
+
+(42) Patch::getPatchNumber() has been renamed to Patch::getLocalId().
+
+This is related to number 41.
+
+(43) setCreateGhostOverlaps() has been removed from RefineAlgorithm.
+
+The option to allow for overlaps for refinement to be created on physical
+boundary ghost regions has been removed.
+
+
+=============================================================================
+=============================================================================

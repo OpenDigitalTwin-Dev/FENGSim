@@ -1,0 +1,40 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace tbox {
+
+/*!
+  @page package_toolbox_base Base Toolbox Classes
+
+  These classes provide miscellaneous low-level functionality for
+  the SAMRAI framework.  These include complex, boolean,
+  a simple list class, IEEE floating point operation management, and 
+  parallel I/O support for generating log files and error reporting.
+
+  Historical Note: Some of these classes unnecessarily duplicate STL
+  classes.  These were created before STL was widely available.  It is
+  a goal of SAMRAI to eventually remove the unneeded classes to improve
+  interoperability with other packages.
+
+  - @ref toolbox_complex "dcomplex"
+  - SAMRAI::tbox::Dimension
+  - SAMRAI::tbox::IEEE
+  - SAMRAI::tbox::MathUtilities
+  - SAMRAI::tbox::PIO
+  - SAMRAI::tbox::ParallelBuffer
+  - SAMRAI::tbox::SAMRAIManager
+  - SAMRAI::tbox::Tracer
+  - SAMRAI::tbox::Utilities
+  - SAMRAI::tbox::Logger
+  - SAMRAI::tbox::BalancedDepthFirstTree
+*/
+
+}
+}

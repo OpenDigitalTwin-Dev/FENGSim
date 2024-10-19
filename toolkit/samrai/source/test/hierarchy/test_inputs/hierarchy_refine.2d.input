@@ -1,0 +1,113 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   input file for testing patch hierarchy refining 
+ *
+ ************************************************************************/
+
+// Refer to hierarchy_coarsen2d.input for full description of all input
+// parameters specific to this problem.
+
+GlobalInputs {
+   call_abort_in_serial_instead_of_exit = FALSE
+}
+
+Main {
+    dim = 2
+//
+// Log file information
+//
+    log_file_name  = "hierarchy-refine2d-test.log"
+    log_all_nodes  = TRUE
+}
+
+HierarchyTest {
+
+  do_refine_test  = TRUE
+  do_coarsen_test = FALSE
+
+  ratio = 2,2
+
+}
+
+CartesianGridGeometry {
+   domain_boxes = [ (0,0) , (41,29) ],
+                  [ (42,0) , (53,29) ],
+                  [ (0,30) , (31,45) ],
+                  [ (6,46) , (42,61) ]
+   x_lo         = 0.e0 , 0.e0    // lower end of computational domain.
+   x_up         = 1.e0 , 1.e0    // upper end of computational domain.
+}
+
+PatchHierarchy {
+   max_levels              = 3 // Maximum number of levels in hierarchy.
+
+// Note: For the following regridding information, data is required for each
+//       potential in the patch hierarchy; i.e., levels 0 thru max_levels-1.
+//       If more data values than needed are given, only the number required
+//       will be read in.  If fewer values are given, an error will result.
+//
+// Specify coarsening ratios for each level 1 through max_levels-1
+   ratio_to_coarser {         // vector ratio to next coarser level
+      level_1               =  2 , 2
+      level_2               =  2 , 2
+   }
+
+   largest_patch_size {
+      level_0 = 40, 40
+      // all finer levels will use same values as level_0...
+   }
+
+   smallest_patch_size {
+      level_0 = 2, 2
+      // all finer levels will use same values as level_0...
+   }
+
+}
+
+BergerRigoutsos {
+   efficiency_tolerance     = 0.70e0   // min % of tag cells in new patch level
+   combine_efficiency       = 0.85e0   // chop box if sum of volumes of smaller
+                                       // boxes < efficiency * vol of large box
+}
+
+GriddingAlgorithm {
+   sequentialize_patch_indices = TRUE
+}
+
+TreeLoadBalancer {
+  DEV_report_load_balance = TRUE
+  DEV_barrier_before = FALSE
+  DEV_barrier_after = FALSE
+  DEV_balance_penalty_wt = 1.0
+  DEV_surface_penalty_wt = 1.0
+
+  // Debugging options
+  DEV_check_map = FALSE
+  DEV_check_connectivity = FALSE
+  DEV_print_steps = FALSE
+  DEV_print_swap_steps = FALSE
+  DEV_print_break_steps = FALSE
+  DEV_print_edge_steps = FALSE
+}
+
+StandardTagAndInitialize {
+   tagging_method = "REFINE_BOXES"
+
+   level_0 {
+      boxes = [ (0,16) , (11,19) ],
+              [ (12,0) , (31,19) ],
+              [ (32,4) , (43,5) ],
+              [ (16,20) , (21,27) ],
+              [ (8,28) , (27,41) ],
+              [ (20,42) , (27,55) ]
+   }
+   level_1 {
+      boxes = [ (36,16) , (51,27) ],
+              [ (24,64) , (31,75) ],
+              [ (32,64) , (43,71) ]
+   }
+}

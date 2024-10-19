@@ -1,0 +1,568 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for SAMRAI Linadv example problem
+ *                (3d sinusoidal fronusoidal frontt) 
+ *
+ ************************************************************************/
+
+
+LinAdv {
+
+   //  Problem specification parameters
+   //  advection_velocity -- (double array) velocity by which
+   //                        initial profile of uval is
+   //                        advected through the domain [0.0]
+   //  godunov_order -- (int) order of Godunov slopes (1, 2, or 4) [1]
+   //  corner transport scheme -- ("CORNER_TRANS_1" -or- "CORNER_TRANS_2"
+   //                   ["CORNER_TRANS_1"]
+   //  Flux corner transport options
+   //  CORNER_TRANS_1 is based on an extension of Colella's formulation.
+   //  CORNER_TRANS_2 is a formulation constructed by Trangenstein
+   //  data_problem  -- ("SPHERE_PROB", "PIECEWISE_CONST_[X,Y,Z]", or
+   //                   "SINE_CONST_[X,Y,Z]") specification of the
+   //                   problem to be solved [REQD]
+   //
+   advection_velocity = 2.0e0 , 0.01e0, 0.01e0
+   godunov_order    = 4
+   corner_transport = "CORNER_TRANSPORT_1"
+   data_problem      = "SINE_CONSTANT_X"
+
+   //  Initial data  for "SPHERE_PROB" problem
+   //     radius -- (double) radius of sphere [REQD]
+   //     center -- (double array) location of sphere center [REQD]
+   //     uval_inside   -- (double) uval inside sphere [REQD]
+   //     uval_outside  -- (double) uval outside sphere [REQD]
+   Initial_data {
+      front_position    = 1.0
+      interval_0 {
+         uval      = 40.0
+      }
+      interval_1 {
+         uval      = 1.0
+      }
+      amplitude = 0.5
+      period = 8.0, 4.0, 4.0
+
+   }
+
+   //  Refinement criteria
+   //  Data for tagging cells to refine for gradient detection and
+   //  Richardson extrapolation.  Options:
+   //     UVAL_DEVIATION, UVAL_GRADIENT, UVAL_SHOCK, UVAL_RICHARDSON
+   //     and combinations thereof...
+   //
+   //     UVAL_DEVIATION   -- tag around deviations in a specified uval
+   //     UVAL_GRADIENT    -- tag around gradients
+   //     UVAL_SHOCK       -- tag around discontinuous regions
+   //     UVAL_RICHARDSON  -- use Richardson extrapolation to tag
+   //                         around solution errors
+   //
+   // Refinement_data {
+   //   refine_criteria    -- (string array) contains one or more of the
+   //                         tagging options, specified above [REQD]
+   //   UVAL_DEVIATION {
+   //      uval_dev -- (double array) freestream uval, i.e. tag cells where   
+   //                  |uval - uval_dev] > dev_tol [REQD]
+   //      dev_tol  -- (double array) deviation tolerance [REQD]
+   //      time_min -- (double array) time on each level at which
+   //                  tagging using this criteria is started [0.]
+   //      time_max -- (double array) time on each level at which
+   //                  tagging is stopped [DBL_MAX]
+   //      NOTE:  For each of the above entries, if a level is NOT specified,
+   //             the value from the next coarser level is used.  The time_min
+   //             and time_max options may be used to control whether tagging
+   //             on a level is active (i.e. setting time_max=0 makes it
+   //             inactive).
+   //   }
+   //   UVAL_GRADIENT {
+   //      grad_tol -- (double array) gradient tolerance for each level [REQD]
+   //      time_min -- (double array) time on each level at which
+   //                  tagging using this criteria is started [0.]
+   //      time_max -- (double array) time on each level at which
+   //                  tagging is stopped [DBL_MAX]
+   //      (see NOTE under UVAL_DEVIATION above)
+   //   }
+   //   UVAL_SHOCK {
+   //      shock_onset -- (double array) onset tolerance for each level [REQD]
+   //      shock_tol -- (double array) gradient tolerance for each level [REQD]
+   //      time_min -- (double array) time on each level at which
+   //                  tagging using this criteria is started [0.]
+   //      time_max -- (double array) time on each level at which
+   //                  tagging is stopped [DBL_MAX]
+   //      (see NOTE under UVAL_DEVIATION above)
+   //   }
+   //   UVAL_RICHARDSON {
+   //      rich_tol -- (double array) Richardson extrapolation tolerance
+   //                  for each level [REQD]
+   //      time_min -- (double array) time on each level at which
+   //                  tagging using this criteria is started [0.]
+   //      time_max -- (double array) time on each level at which
+   //                  tagging is stopped [DBL_MAX]
+   //      (see NOTE under UVAL_DEVIATION above)
+   //   }
+   //
+   Refinement_data {
+      // refine_criteria = "UVAL_GRADIENT", "UVAL_SHOCK"
+      refine_criteria = "UVAL_GRADIENT"
+
+      UVAL_GRADIENT {
+         grad_tol = 20.0
+      }
+
+      UVAL_SHOCK {
+         shock_tol = 20.0
+         shock_onset = 0.85
+      }
+   }
+
+   // Boundary condition data following the format defined in
+   // appu::CartesianBoundaryUtility[2,3].  Refer to these classes for details.
+   // valid boundary_condition values are "FLOW", "REFLECT", "DIRICHLET"
+   Boundary_data {
+      boundary_face_xlo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_xhi {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_ylo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_yhi {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_zlo {
+         boundary_condition      = "FLOW"
+      }
+      boundary_face_zhi {
+         boundary_condition      = "FLOW"
+      }
+
+      boundary_edge_ylo_zlo { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_yhi_zlo { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_ylo_zhi { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_yhi_zhi { // XFLOW, XREFLECT, XDIRICHLET not allowed
+         boundary_condition      = "ZFLOW"
+      }
+      boundary_edge_xlo_zlo { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XFLOW"
+      }
+      boundary_edge_xlo_zhi { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XFLOW"
+      }
+      boundary_edge_xhi_zlo { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XFLOW"
+      }
+      boundary_edge_xhi_zhi { // YFLOW, YREFLECT, YDIRICHLET not allowed
+         boundary_condition      = "XFLOW"
+      }
+      boundary_edge_xlo_ylo { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YFLOW"
+      }
+      boundary_edge_xhi_ylo { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YFLOW"
+      }
+      boundary_edge_xlo_yhi { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YFLOW"
+      }
+      boundary_edge_xhi_yhi { // ZFLOW, ZREFLECT, ZDIRICHLET not allowed
+         boundary_condition      = "YFLOW"
+      }
+
+      boundary_node_xlo_ylo_zlo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xhi_ylo_zlo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xlo_yhi_zlo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xhi_yhi_zlo {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xlo_ylo_zhi {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xhi_ylo_zhi {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xlo_yhi_zhi {
+         boundary_condition      = "XFLOW"
+      }
+      boundary_node_xhi_yhi_zhi {
+         boundary_condition      = "XFLOW"
+      }
+
+   }
+
+}
+
+//See mesh::BergerRigoutsos for input.
+BergerRigoutsos {
+   DEV_algo_advance_mode = "ADVANCE_SOME"
+   DEV_owner_mode = "MOST_OVERLAP"
+   DEV_inflection_cut_threshold_ar = 4
+   DEV_log_node_history = FALSE
+   sort_output_nodes = TRUE
+   max_box_size = 100, 100, 100
+   combine_efficiency = 0.80
+   efficiency_tolerance = 0.80
+   DEV_log_cluster_summary = TRUE
+   DEV_log_cluster = FALSE
+   DEV_barrier_before = TRUE
+   DEV_barrier_after = TRUE
+}
+
+Main {
+   //Dimension for the problem.  No default
+   dim = 3
+
+   //Base name for loga and viz files. default is "unnamed"
+   base_name    = "domex"
+
+   //TRUE to produce a log file on all nodes, FALSE to log only node 0.
+   //Default is FALSE
+   log_all_nodes    = FALSE
+
+   //Choose the type of LoadBalancer.  Default is "TreeLoadBalancer"
+   // load_balancer_type = "ChopAndPackLoadBalancer"
+
+   //Timestep interval to dump viz files.  No viz files will be produced
+   //when this value is 0.  Default is 0.
+   viz_dump_interval     = 0
+
+   //Name of directory for viz dumps.  Default is base_name + ".visit"
+   //viz_dump_dirname = "dump.visit"
+
+   //Timestep interval to dump restart files.  No restart files will be
+   //produced when this value is 0.  Default is 0.
+   restart_interval        = 0
+
+   //Name of directory for restart dumps.  No default, this entry is required
+   //when restart_interval is nonzero. 
+   //restart_write_dirname = "dump.restart"
+
+   //When TRUE, used ScaledInput entries from this file to scale up the
+   //size of the problem based on processor count.  Default is TRUE
+   use_scaled_input = TRUE
+
+   //Turn on syncronized timestepping.  Only valid entry is "SYNCHRONIZED"
+   //If used, the TimeRefinementIntegrator will operation with synchronized
+   //timestepping on all levels.  Otherwise, time refinement will be used.
+   // timestepping = "SYNCHRONIZED"
+}
+
+//See tbox::TimerManager for input
+TimerManager {
+//   print_exclusive      = TRUE
+   print_summed           = TRUE
+   print_max              = TRUE
+   print_threshold        = 0.
+   timer_list             = "hier::*::*",
+                            "apps::*::*",
+                            "algs::*::*",
+                            "mesh::*::*",
+                            "tbox::AsyncCommGroup::*",
+                            "tbox::AsyncCommStage::*",
+                            "tbox::JobRelauncher::*",
+                            "tbox::Schedule::*",
+                            "xfer::*::*",
+                            "appu::main::all"
+}
+
+//See hier::PatchHierarchy for input
+PatchHierarchy {
+   max_levels = 3
+   largest_patch_size {
+      level_0 = -1,-1,-1
+      // level_0 = 20,20,20
+      // all finer levels will use same values as level_0...
+   }
+   smallest_patch_size {
+      level_0 = 5,5,5
+      // all finer levels will use same values as level_0...
+   }
+   ratio_to_coarser {
+      level_1            = 2, 2, 2
+      level_2            = 2, 2, 2
+      level_3            = 2, 2, 2
+      level_4            = 2, 2, 2
+      level_5            = 2, 2, 2
+      level_6            = 2, 2, 2
+      level_7            = 2, 2, 2
+      level_8            = 2, 2, 2
+      level_9            = 2, 2, 2
+      //  etc.
+   }
+
+   allow_patches_smaller_than_ghostwidth = FALSE
+   allow_patches_smaller_than_minimum_size_to_prevent_overlaps = TRUE
+   proper_nesting_buffer = 1, 1, 1
+}
+
+//See mesh::GriddingAlgorithm for input
+GriddingAlgorithm {
+   sequentialize_patch_indices = FALSE
+   DEV_barrier_and_time = TRUE
+   DEV_log_metadata_statistics = TRUE
+   DEV_print_steps = FALSE
+}
+
+//See SinusoidalFrontGenerator for input
+SinusoidalFrontGenerator {
+   init_disp = 1.0, 1.0, 1.0
+   period = 8.0, 4.0, 4.0
+   velocity = 2.0e0 , 0.01e0, 0.01e0
+   amplitude = 0.5
+
+   buffer_distance_0 = 0.07, 0.07, 0.07
+   buffer_distance_1 = 0.02, 0.02, 0.02
+   buffer_distance_2 = 0.00, 0.00, 0.00
+}
+
+//See mesh::StandardTagAndInitialize for input
+StandardTagAndInitialize {
+   tagging_method = "GRADIENT_DETECTOR"
+}
+
+//See algs::TimeRefinementIntegrator for input
+TimeRefinementIntegrator {
+   start_time            = 0.e0     // initial simulation time
+   end_time              = 2.0      // final simulation time
+   grow_dt               = 1.0e0    // growth factor for timesteps
+   // max_integrator_steps  = 1     // max number of simulation timesteps
+   max_integrator_steps  = 30     // max number of simulation timesteps
+   // tag_buffer            = 3, 3, 3, 3, 3, 3
+   DEV_barrier_and_time        = TRUE
+}
+
+//See mesh::ChopAndPackLoadBalancer for input
+ChopAndPackLoadBalancer{
+   bin_pack_method = "GREEDY"
+   // bin_pack_method = "SPATIAL"
+   ignore_level_box_union_is_single_box = TRUE
+}
+
+//See mesh::TreeLoadBalancer for input
+TreeLoadBalancer {
+   DEV_report_load_balance = FALSE
+   DEV_barrier_before = TRUE
+   DEV_barrier_after = TRUE
+   DEV_check_map = FALSE
+   DEV_check_connectivity = FALSE
+   DEV_print_steps = FALSE
+   DEV_print_swap_steps = FALSE
+   DEV_print_break_steps = FALSE
+   DEV_print_edge_steps = FALSE
+   DEV_slender_penalty_wt = 0.0
+   DEV_summarize_map = TRUE
+}
+
+//See algs::HyperbolicLevelIntegrator for input
+HyperbolicLevelIntegrator {
+   cfl                      = 0.43
+   cfl_init                 = 0.43
+   lag_dt_computation       = TRUE
+   use_ghosts_to_compute_dt = TRUE
+   DEV_distinguish_mpi_reduction_costs = TRUE
+}
+
+//See xfer::RefineSchedule for input
+RefineSchedule {
+   DEV_barrier_and_time = TRUE
+   DEV_extra_debug = FALSE
+}
+
+//See hier::PersistentOverlapConnectors for input
+PersistentOverlapConnectors {
+   DEV_check_created_connectors = FALSE
+   DEV_check_accessed_connectors = FALSE
+   implicit_connector_creation_rule = "ERROR"
+}
+
+////////////////////////////////////////////////////////////////////////
+// Specific databases for scaling tests.
+// See geom::CartesianGridGeometry and its base classes for input
+////////////////////////////////////////////////////////////////////////
+
+ScaledInput1 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , ( 31, 7, 7) ]   //    1proc
+   x_lo          = 0.e0, 0.e0, 0.e0  // lower end of computational domain.
+   x_up          = 8.e0, 2.e0, 2.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput2 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , ( 31, 15, 7) ]   //    2proc
+   x_lo          = 0.e0, 0.e0, 0.e0  // lower end of computational domain.
+   x_up          = 8.e0, 4.e0, 2.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput4 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (31, 15, 15) ]   //    4proc
+   x_lo          = 0.e0, 0.e0, 0.e0  // lower end of computational domain.
+   x_up          = 8.e0, 4.e0, 4.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput8 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (63, 15, 15) ]   //    8proc
+   x_lo          =  0.e0, 0.e0, 0.e0  // lower end of computational domain.
+   x_up          = 16.e0, 4.e0, 4.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput16 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (63, 31, 15) ]   //   16proc
+   x_lo          =  0.e0, 0.e0, 0.e0  // lower end of computational domain.
+   x_up          = 16.e0, 8.e0, 4.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput32 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (63, 31, 31) ]   //   32proc
+   x_lo          =  0.e0, 0.e0, 0.e0  // lower end of computational domain.
+   x_up          = 16.e0, 8.e0, 8.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput64 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (127, 31, 31) ]   //   64proc
+   x_lo          =  0.e0, 0.e0, 0.e0  // lower end of computational domain.
+   x_up          = 32.e0, 8.e0, 8.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput128 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (127, 63, 31) ]   //   128proc
+   x_lo          =  0.e0,  0.e0, 0.e0  // lower end of computational domain.
+   x_up          = 32.e0, 16.e0, 8.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput256 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (127, 63, 63) ]   //  256proc
+   x_lo          =  0.e0,  0.e0,  0.e0  // lower end of computational domain.
+   x_up          = 32.e0, 16.e0, 16.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput512 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (255, 63, 63) ]   //  512proc
+   x_lo          =  0.e0,  0.e0,  0.e0  // lower end of computational domain.
+   x_up          = 64.e0, 16.e0, 16.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput1024 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (255, 127, 63) ]   // 1024proc
+   x_lo          =  0.e0,  0.e0,  0.e0  // lower end of computational domain.
+   x_up          = 64.e0, 32.e0, 16.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput2048 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (255, 127, 127) ]   // 2048proc
+   x_lo          =  0.e0,  0.e0,  0.e0  // lower end of computational domain.
+   x_up          = 64.e0, 32.e0, 32.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput4096 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (511, 127, 127) ]   // 4096proc
+   x_lo          =   0.e0,  0.e0,  0.e0  // lower end of computational domain.
+   x_up          = 128.e0, 32.e0, 32.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput8192 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (511, 255, 127) ]   // 8192proc
+   x_lo          =   0.e0,  0.e0,  0.e0  // lower end of computational domain.
+   x_up          = 128.e0, 64.e0, 32.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput16384 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (511, 255, 255) ]   // 16384proc
+   x_lo          =   0.e0,  0.e0,  0.e0  // lower end of computational domain.
+   x_up          = 128.e0, 64.e0, 64.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput32768 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (1023, 255, 255) ]   // 32768proc
+   x_lo          =   0.e0,  0.e0,  0.e0  // lower end of computational domain.
+   x_up          = 256.e0, 64.e0, 64.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput36864 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (1023, 287, 255) ]   // 36864proc
+   x_lo          =   0.e0,  0.e0,  0.e0  // lower end of computational domain.
+   x_up          = 256.e0, 72.e0, 64.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput65536 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (1023, 511, 255) ]   // 65536proc
+   x_lo          =   0.e0,   0.e0,  0.e0  // lower end of computational domain.
+   x_up          = 256.e0, 128.e0, 64.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}
+
+ScaledInput131072 {
+CartesianGeometry {
+   domain_boxes  = [ (0,0,0) , (1023, 511, 511) ]   // 131072proc
+   x_lo          =   0.e0,   0.e0,   0.e0  // lower end of computational domain.
+   x_up          = 256.e0, 128.e0, 128.e0  // upper end of computational domain.
+   periodic_dimension = 0,0,0
+}
+}

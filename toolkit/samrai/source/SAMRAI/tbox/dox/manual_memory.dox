@@ -1,0 +1,24 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace tbox {
+/*!
+ @page package_toolbox_memory Memory Support
+
+  These classes provide basic memory management support. Capabilities
+  include smart pointers and memory arenas for fast memory allocation
+  and deallocation.
+  - SAMRAI::tbox::Array
+  - SAMRAI::tbox::MemoryUtilities
+  - SAMRAI::tbox::ReferenceCounter
+*/
+
+}
+}

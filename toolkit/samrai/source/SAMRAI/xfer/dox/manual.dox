@@ -1,0 +1,26 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace xfer {
+
+/*!
+  @page package_transfer The Transfer Package
+
+  The Transfer package provides generic data communication capabilities 
+  for moving data on a structured AMR patch hierarchy.  This support is
+  divided into these categories: 
+  -# @ref package_transfer_operators "spatial coarsen/refine and time interpolation operator interfaces"
+  -# @ref package_transfer_datamovers "classes for moving data between patch levels on an AMR patch hierarchy"
+
+  All class names in the Transfer package are in the SAMRAI::xfer namespace.
+*/
+
+}
+}

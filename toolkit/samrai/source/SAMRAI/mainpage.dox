@@ -1,0 +1,121 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+/*!
+  @mainpage SAMRAI Source Code Documentation
+
+  SAMRAI (Structured Adaptive Mesh Refinement Applications Infrastructure)
+  is a research-oriented software development effort in the Center
+  for Applied Scientific Computing (CASC) at Lawrence Livermore National
+  Laboratory (LLNL).  The project has two main objectives.  First, SAMRAI enables 
+  the application of SAMR (Structured Adaptive Mesh Refinement) technology to 
+  computational physics problems important to the DOE and the ASCI program.
+  Seecond, SAMRAI supports algorithm research for adaptive methods in
+  high-performance massively-parallel computing environments.  
+ 
+  Questions about this document or the SAMRAI library code should be addressed 
+  to samrai@llnl.gov.
+
+  The SAMRAI framework source code is partitioned into a number of software 
+  "packages".  Each package contains a collection of classes that are 
+  logically-related with respect to the role they play in structured 
+  AMR applications.  Organizing the SAMRAI library in this fashion aids in 
+  understanding the overall software design and helps to maintain the integrity 
+  of the software architecture.  The packages are listed here in order of their 
+  library compilation dependencies.  This provides insight into the relative 
+  complexity of the classes and indicates which packages are needed when using 
+  parts of the library.  Links to package contents follow the list of 
+  package descriptions.
+
+  - @ref package_toolbox "Toolbox":
+    The "Toolbox" package provides basic utility classes that are used 
+    throughout the library and in application development.  These include:
+    MPI wrappers and utilities; stream classes for interprocess communication;
+    tools for managing input and restart files; and event logging, tracing, 
+    and timing.
+
+  - @ref package_hierarchy "Hierarchy":
+    The "Hierarchy" package supports abstract index spaces and box calculus 
+    on which most operations on a structured AMR patch hierarchy depend.
+    Structural classes such as patch, patch level, and patch hierarchy, 
+    and base class interfaces for variables and data living on the hierarchy
+    also reside here.
+
+  - @ref package_transfer "Transfer":
+    The "Transfer" package contains classes that provide routines for 
+    data communication on an structured AMR hierarchy.  This includes 
+    communication algorithms and schedules of transactions for moving data 
+    between patches on the same level as well as coarsening and refining 
+    data between different levels.  The package also contains 
+    base classes for operators that refine and coarsen data spatially, 
+    interpolate data in time, and implement physical boundary conditions.
+
+  - @ref package_patchdata "Patchdata":
+    The "Patchdata" package provides support for various patch
+    data types on an structured AMR patch hierarchy.  The
+    data types found here include a variety of array-based quantities
+    (cell-centered, node-centered, face-centered, etc.) as well as 
+    an "index" type for managing data associated with an arbitrary 
+    collection of cell indices (e.g., irregular structures like embedded 
+    boundaries or lists of particles).  Other types may be added in the
+    future to meet the application needs.
+
+  - @ref package_mathematical_operations "Mathematical Operations":
+    The "Math Operations" package provides basic arithmetic and other operations 
+    that are required for vector kernels, such as dot products and norms.  
+    These operations apply to patch data living on a single patch, a single level, 
+    or an entire AMR patch hierarchy.  This support is provided for all array-based 
+    data types in SAMRAI.
+
+  - @ref package_mesh "Mesh":
+    The "Mesh" package contains classes for creating patches during construction 
+    and adaptive regridding of a structured AMR patch hierarchy.  Routines
+    include clustering of tagged cells into box regions (algorithm due to 
+    Berger and Rigoutsos) and load balancing based on on either 
+    spatially-uniform or nonuniform workload estimates.
+
+  - @ref package_geometry "Geometry":
+    The "Geometry" package provides support for specific coordinate
+    systems on structured AMR patch hierarchies.  This includes mesh
+    spacing, locations of patches in space, as well as a variety of spatial
+    refine/coarsen operators and time interpolation operators for
+    array-based patch data types.
+
+  - @ref package_solvers "Solvers":
+    The "Solvers" package contains support for applying linear and nonlinear
+    solver method to problems defined on an AMR patch hierarchy.  Vectors
+    for treating data defined on a structured AMR patch hierarchy are 
+    provided here.  SAMRAI also provides interfaces and wrapper classes for 
+    employing the PETSc and KINSOL nonlinear solver libraries, the CVODE
+    ODE solver library, and the hypre preconditioner library.  An FAC algorithm
+    for solving Poisson problems on an AMR hierarchy is also included.
+
+  - @ref package_algorithm "Algorithm":
+    The "Algorithm" package houses classes that are useful for constructing
+    solution algorithms for certain classes of PDE problems on a structured
+    AMR patch hierarchy.  For example, this package contains time integration
+    routines, including local time cycling on hierarchy levels, method of lines, 
+    and methods for hyperbolic conservation laws.  Additional algorithmic
+    support may be introduced to meet application needs as they arise.
+
+  - @ref package_apputils "Application Utilities":
+    The ``Application Utilities'' package contains utilities that
+    are useful when construction applications with SAMRAI, such as 
+    routines for setting physical boundary conditions and tools for 
+    generating VisIt data files.
+
+
+
+  @section using_samrai_dox Using SAMRAI Doxygen-generated Documentation with your Doxygen-generated Documentation 
+
+  If your project uses doxygen and you would like to have your
+  documentation link with SAMRAI's documentation, you will need
+  the <a href="samrai.tag">tag file</a> generated by SAMRAI's doxygen run.
+
+*/

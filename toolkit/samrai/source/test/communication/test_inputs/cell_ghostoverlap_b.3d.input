@@ -1,0 +1,203 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   input file for testing communication of SAMRAI cell data. 
+ *
+ ************************************************************************/
+
+GlobalInputs {
+   call_abort_in_serial_instead_of_exit = FALSE
+}
+
+Main {
+   dim = 3
+//
+// Log file information
+//
+    base_name  = "cell_ghostoverlap_b.3d"
+    log_all_nodes  = TRUE
+    plot = TRUE
+
+//
+// Testing information, including number of times to perform schedule
+// creation and communication processes, name of particular patch data
+// test, and refine and coarsen test information
+//
+    ntimes_run = 1  // default is 1
+
+//
+// Available tests are:
+//
+    test_to_run = "CellDataTest"
+//  test_to_run = "EdgeDataTest"
+//  test_to_run = "FaceDataTest"
+//  test_to_run = "NodeDataTest"
+//  test_to_run = "SideDataTest"
+//  test_to_run = "MultiVariableDataTest"
+
+//
+// Either refine test or coarsen test can be run, but not both.  This
+// ensures proper validation of communicated data.  Default test is
+// to refine refine data with interior patch data filled from same level.
+// If `do_refine' is true, then refine test will occur and coarsen test
+// will not.  Refine test also allows option of filling patch interiors
+// from coarser levels.  Coarsen test has no options as coarse patch
+// interiors will always be filled with coarsened data from finer level.
+//
+    do_refine = TRUE
+    refine_option = "INTERIOR_FROM_COARSER_LEVEL"
+
+    do_coarsen = FALSE
+
+}
+
+TimerManager {
+    timer_list = "test::main::*", "xfer::RefineSchedule::*"
+
+// Available timers are:
+//
+//   "test::main::createRefineSchedule"
+//   "test::main::performRefineOperations"
+//   "test::main::createCoarsenSchedule"
+//   "test::main::performCoarsenOperations"
+//
+
+}
+
+CellPatchDataTest {
+
+   //
+   // Anything specific to the test goes here...
+   //
+   // e.g., coefficients for linear function to interpolate
+   //          Ax + By + Cz + D = f(x,y,z)
+   //          (NOTE: f(x,y,z) is the value assigned to each
+   //                 array value at initialization and
+   //                 against which interpolation is tested)
+   //
+   Acoef = 2.1
+   Bcoef = 3.2
+   Ccoef = 4.3
+   Dcoef = 5.4
+
+   //
+   // The VariableData database is read in by the PatchDataTestStrategy
+   // base class.  Each sub-database must contain variable parameter data.
+   // The name of the sub-databases for each variable is arbitrary.  But
+   // the names must be distinct.
+   //
+   //    Required input:  source name
+   //    Required input:  destination name
+   //    Optional input:  depth              (default = 1)
+   //                     src_ghosts         (default = 0,0,0)
+   //                     dst_ghosts         (default = 0,0,0)
+   //                     coarsen_operator   (default = "NO_COARSEN")
+   //                     refine_operator    (default = "NO_REFINE")
+   //
+   VariableData {
+
+      variable_1 {
+         src_name = "src_var1"
+         dst_name = "dst_var1"
+         depth = 1
+         src_ghosts = 1,1,1
+         dst_ghosts = 1,1,1
+         coarsen_operator = "CONSERVATIVE_COARSEN"
+         refine_operator = "LINEAR_REFINE"
+      }
+
+      variable_2 {
+         src_name = "src_var2"
+         dst_name = "dst_var2"
+         depth = 2
+         src_ghosts = 0,0,0
+         dst_ghosts = 0,0,0
+         coarsen_operator = "CONSERVATIVE_COARSEN"
+         refine_operator = "LINEAR_REFINE"
+      }
+
+      variable_3 {
+         src_name = "src_var3"
+         dst_name = "dst_var3"
+         depth = 2
+         src_ghosts = 1,2,3
+         dst_ghosts = 3,5,4
+         coarsen_operator = "CONSERVATIVE_COARSEN"
+         refine_operator = "LINEAR_REFINE"
+      }
+
+   }
+
+}
+
+CartesianGridGeometry {
+   domain_boxes = [ (0,0,0) , (41,29,36) ],
+                  [ (42,0,4) , (53,29,32) ],
+                  [ (0,30,0) , (31,45,36) ],
+                  [ (6,46,19) , (42,61,36) ]
+   x_lo         = 0.e0 , 0.e0 , 0.e0   // lower end of computational domain.
+   x_up         = 54.e0 , 62.e0 , 37.e0   // upper end of computational domain.
+}
+
+PatchHierarchy {
+   max_levels = 2
+   largest_patch_size {
+      level_0 = 40, 40, 40
+      // all finer levels will use same values as level_0...
+   }
+   smallest_patch_size {
+      level_0 = 2,2,2
+      // all finer levels will use same values as level_0...
+   }
+   ratio_to_coarser {
+      level_1            = 2, 2, 2
+      level_2            = 2, 2, 2
+   }
+   allow_patches_smaller_than_ghostwidth = FALSE
+}
+
+BergerRigoutsos {
+   efficiency_tolerance = 0.70
+   combine_efficiency = 0.85
+}
+
+GriddingAlgorithm {
+   enforce_proper_nesting = TRUE
+   DEV_extend_to_domain_boundary = TRUE
+   // DEV_load_balance = FALSE
+   check_nonrefined_tags = "IGNORE"
+   check_nonnesting_user_boxes = "WARN"
+}
+
+
+TreeLoadBalancer {
+}
+
+StandardTaggingAndInitializer {
+   tagging_method = "REFINE_BOXES"
+
+   level_0 {
+      boxes = [ (0,16,16) , (11,19,21) ],
+              [ (12,0,0) , (31,19,21) ],
+              [ (32,5,14) , (43,6,17) ],
+              [ (16,20,4) , (21,27,11) ],
+              [ (8,28,4) , (27,41,17) ]
+   }
+   level_1 {
+      boxes = [ (36,16,14) , (51,27,17) ],
+              [ (24,64,20) , (31,75,29) ],
+              [ (32,64,20) , (43,71,25) ]
+   }
+}
+
+RefineSchedule {
+   DEV_extra_debug = FALSE
+}
+
+PersistentOverlapConnectors {
+   DEV_check_created_connectors = TRUE
+   DEV_check_accessed_connectors = TRUE
+}

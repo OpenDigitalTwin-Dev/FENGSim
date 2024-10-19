@@ -1,0 +1,159 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for MeshGeneration tests.
+ *
+ ************************************************************************/
+
+/*
+From Luitjens and Berzins, Scalable parallel regridding algorithms
+for block-structured adaptive mesh refinement, Concurrency
+andComputation: Practice and Experience, 2011, 23:1522-1537.  The
+problem description is at the beginning of section 3.
+
+This is Luitjens's weak-scaling set-up.
+He probably used a min box size of 1x1x1.  He didn't say.
+That's unrealistic.  I'm using 3x3x3 (coarse resolution) min box size
+with 4x4x4 min box size for inflection cut.
+
+This set-up uses tiling with size 16^3, similar to Luitjens, but we
+then coalesce our tiles.  */
+
+// Refer to lss.3d.treelb.input for full description of all input parameters
+// specific to this problem.
+
+
+Main {
+   dim = 3
+
+   base_name = "lsphere_weak.3d.localtile"
+
+   write_visit = FALSE
+
+   log_all_nodes = FALSE
+
+   domain_boxes = [(0,0,0),(31,31,15)]
+   xlo = -0.5, -0.5, -0.0
+   xhi =  0.5,  0.5,  0.5
+
+   enforce_nesting = FALSE, FALSE
+
+   autoscale_base_nprocs = 1
+
+   box_generator_type = "TileClustering"
+
+   load_balancer_type = "TreeLoadBalancer"
+
+   load_balance = TRUE, TRUE
+
+   write_comm_graph = FALSE
+
+   mesh_generator_name = "SphericalShellGenerator"
+
+   SphericalShellGenerator {
+
+      init_center = 0.0, 0.0, 0.0
+      radii = 0.3, 0.4
+
+      buffer_distance_0 = 0.00, 0.00, 0.00
+      buffer_distance_1 = 0.00, 0.00, 0.00
+   }
+
+   // Tree type for TreeLoadBalancer: CenteredRankTree, BalancedDepthFirstTree, BreadthFirstTree
+   rank_tree_type = "CenteredRankTree"
+
+}
+
+// Used if box_generator_type is BergerRigoutsos.  Refer to mesh::BergerRigoutsos for input.
+BergerRigoutsos {
+   DEV_inflection_cut_threshold_ar = 4
+   DEV_min_box_size_from_cutting = 5, 5, 5
+   sort_output_nodes = TRUE
+   efficiency_tolerance = 0.85
+   combine_efficiency = 0.85
+   DEV_build_zero_width_connector = TRUE
+   DEV_log_node_history = FALSE
+   DEV_log_cluster_summary = TRUE
+   DEV_log_cluster = FALSE
+   // DEV_owner_mode = "SINGLE_OWNER"
+   // DEV_algo_advance_mode = "SYNCHRONOUS"
+}
+
+CenteredRankTree { // Parameters for BalancedDepthFirstTree in getRankTree()
+  make_first_rank_the_root = TRUE
+}
+
+BalancedDepthFirstTree { // Parameters for BalancedDepthFirstTree in getRankTree()
+  do_left_leaf_switch = TRUE
+}
+
+BreadthFirstRankTree { // Parameters for CenteredRankTree in getRankTree()
+  tree_degree = 2
+}
+
+// Used if load_balancer_type is ChopAndPackLoadBalancer.  Refer to mesh::ChopAndPackLoadBalancer for input.
+ChopAndPackLoadBalancer {
+  // processor_layout = 10, 10, 10
+  bin_pack_method = "SPATIAL"
+  max_workload_factor = 0.3333333333
+  workload_tolerance = 0.0
+}
+
+// Used if box_generator_type is TileClustering.  Refer to mesh::TileClustering for input.
+TileClustering {
+  tile_size = 8, 8, 8
+  coalesce_boxes = TRUE
+  allow_remote_tile_extent = FALSE
+  DEV_barrier_and_time = TRUE
+  DEV_log_cluster_summary = FALSE
+  DEV_log_cluster = FALSE
+}
+
+
+// Used if load_balancer_type is TreeLoadBalancer.  Refer to mesh::TreeLoadBalancer for input.
+TreeLoadBalancer {
+  tile_size = 16, 16, 16
+  DEV_report_load_balance = FALSE // Reported in main
+  DEV_allow_box_breaking = TRUE
+  // Debugging options
+  DEV_check_map = FALSE
+  DEV_check_connectivity = FALSE
+  DEV_print_steps = FALSE
+  DEV_print_swap_steps = FALSE
+  DEV_print_break_steps = FALSE
+  DEV_print_edge_steps = FALSE
+  DEV_summarize_map = TRUE
+}
+
+// Refer to tbox::TimerManager for input.
+TimerManager {
+//   print_exclusive      = TRUE
+   print_summed           = TRUE
+   print_max              = TRUE
+   print_threshold        = 0.
+   timer_list             = "hier::*::*", "mesh::*::*", "apps::*::*", "appu::main::all"
+}
+
+
+// Refer to hier::PatchHierarchy for input.
+PatchHierarchy {
+
+   max_levels = 2
+
+   largest_patch_size {
+      level_0 = -1,-1,-1
+   }
+   smallest_patch_size {
+      level_0 = 16, 16, 16
+   }
+   ratio_to_coarser {
+      level_1            = 2, 2, 2
+   }
+
+   allow_patches_smaller_than_ghostwidth = TRUE
+   allow_patches_smaller_than_minimum_size_to_prevent_overlaps = TRUE
+   proper_nesting_buffer = 16, 16, 16
+}

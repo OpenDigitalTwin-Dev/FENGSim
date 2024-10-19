@@ -1,0 +1,22 @@
+#!/bin/sh
+##
+## File:        $URL$
+## Package:     SAMRAI scripts
+## Copyright:   (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Revision:    $LastChangedRevision$
+## Description: shell script to convert 1.x codes to 2.0
+##
+
+BIN=`dirname $0`
+
+# Rename the packages from underscore to package naming scheme 
+# and add templating on DIM.
+for PREFIX in tbox hier xfer pdat math mesh mblk geom solv algs appu
+do
+  perl $BIN/renameXd.pl ${PREFIX}
+done 
+
+# Renames includes for tbox (e.g. "tbox/Utilities.h")
+perl $BIN/rename_tbox.pl tbox_classes
+
+exit

@@ -1,0 +1,7 @@
+add_subdirectory(ConvDiff)
+add_subdirectory(Euler)
+add_subdirectory(LinAdv)
+add_subdirectory(Simple)
+if (ENABLE_RAJA)
+  add_subdirectory(Stencil)
+endif()

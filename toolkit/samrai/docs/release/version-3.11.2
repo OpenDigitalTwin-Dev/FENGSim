@@ -1,0 +1,113 @@
+*****************************************************************************
+  Copyright 1997-2016
+  Lawrence Livermore National Security, LLC.
+  All rights reserved.
+*****************************************************************************
+
+                     Release Notes for SAMRAI v3.11.2
+
+     (notes for previous releases may be found in /SAMRAI/docs/release)
+
+*****************************************************************************
+
+Please direct any questions related to these notes to the SAMRAI development
+team by sending email to samrai@llnl.gov.
+
+*****************************************************************************
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report
+it to us so that we may fix it.
+
+Please send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Significant bug fixes
+----------------------------------------------------------------------------
+
+1) A major bug that was incorrectly setting up the transactions for time
+interpolation during runs with TimeRefinementIntegrator using refined
+timestepping has been fixed.  Codes that use refined timestepping may see
+changes in results due to more accurate time-interpolated values used to fill
+ghost data.
+
+2) An integer overrun that was seen in runs using a high number of levels
+(16 or more) has been eliminated.
+
+3) A bug that was causing unmatched MPI sends and receives in RefineSchedule
+for certain configurations of 3D multiblock problems was fixed.
+
+
+*****************************************************************************
+
+----------------------------------------------------------------------------
+                Summary of what's new
+-----------------------------------------------------------------------------
+
+1) (v. 3.10.0) Non-uniform load balancing capabilities have been added to
+CascadePartitioner.
+
+2) CompositeBoundaryAlgorithm and CompositeBoundarySchedule provide new
+functionality for representations of PatchData at boundaries between coarse
+and fine levels.
+
+-----------------------------------------------------------------------------
+                Summary of what's changed
+-----------------------------------------------------------------------------
+
+1) The maximum number of patch data items that managesd by SAMRAIManager
+is no longer a hard limit.
+
+*****************************************************************************
+
+-----------------------------------------------------------------------------
+                Details about what's new
+-----------------------------------------------------------------------------
+
+1) (v. 3.11.0) Non-uniform load balancing capabilities have been added to
+CascadePartitioner.
+
+The CascadePartitioner now has the ability to balance based on user-provided
+workload values for each cell instead of balancing based on a simple cell
+count.  The non-uniform capability is enabled by passing in a patch data id
+to the method setWorkloadPatchDataIndex.  The patch data id should identify
+cell-centered data that has already been set on the hierarchy prior to invoking
+the CascadePartitioner.
+
+CascadePartitioner continues to work as a uniform load balancer by default.
+
+2) CompositeBoundaryAlgorithm and CompositeBoundarySchedule provide new
+functionality for representations of PatchData at boundaries between coarse
+and fine levels.
+
+These classes are intended to support applications that may need to operate on
+data on both sides of a coarse-fine boundary, treating them as an irregular
+stencil that incorporates different mesh resolutions.
+
+-----------------------------------------------------------------------------
+                Details about what's changed
+----------------------------------------------------------------------------
+
+1) The maximum number of patch data items that managesd by SAMRAIManager
+is no longer a hard limit.
+
+Previously if an application tried to create more patch data items than the
+limit held by SAMRAIManager (default value of 256, or can be set using
+SAMRAIManager::setMaxNumberPatchDataEntries()), it would cause a fatal error.
+Now SAMRAIManager will adjust the maximum value on the fly and the application
+will need not do anything to adjust.
+
+It still is recommended that application codes set a value at the beginning of
+the run that is higher than they expect to ever reach, as the adjustment of the
+maximum value has some overhead, but for some applications it is unpredictable
+how many patch data items will be created, and this change allows them to
+run without worry of a hard limit causing an error.
+
+
+
+=============================================================================
+=============================================================================

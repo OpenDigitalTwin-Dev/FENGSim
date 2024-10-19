@@ -1,0 +1,450 @@
+*****************************************************************************
+				Release Notes
+*****************************************************************************
+
+NOTE:  These release notes are more descriptive and detailed than is usual
+       for software release notes.  The reason for this is that presently
+       complete documentation does not exist for most of the items listed.
+       Until sufficient user documentation becomes available, descriptions
+       such as those that follow will be part of SAMRAI release notes.
+
+Where to report Bugs
+--------------------
+
+If a bug is found in the SAMRAI library, we ask that you kindly report it
+to us so that we may fix it.  We will make every effort to fix bugs
+in a timely manner.  Depending on the severity or the complexity of the
+bug, we will either fix the bug for a subsequent library release or send
+a code fix to users so that their work is minimally interrupted.
+
+LLNL users should report bugs using the CASC bug tracking web pages:
+
+        http://apollo.llnl.gov:8080/bugs/
+
+Enter the bug into the appropriate are of the SAMRAI project section.
+
+Bugs found by other users should send email to samrai-bugs@llnl.gov.
+
+*****************************************************************************
+
+=============================================================================
+SAMRAI Release v1.0.0 
+=============================================================================
+
+What's New
+----------
+
+(0) Bug reporting
+
+Bugs found in SAMRAI should now be sent via email to samrai-bugs@llnl.gov.
+
+(1) Improved source code documentation
+
+SAMRAI documentation included with this release has been updated and 
+improved.  The portions of the source code documentation describing the
+organization and contents of SAMRAI "packages" has been rewritten.  Postscript
+and HTML forms of this documentation can been found in the directory 
+SAMRAI/source/docs/manual.  Also, all example programs found in 
+SAMRAI/source/applications and SAMRAI/source/test now include more 
+descriptive code documentation and README files describing compilation,
+use (input files, etc.), and output.
+
+
+(2) Input file database and parser capabilities
+
+SAMRAI now uses a hierarchical database keyword-value input file mechanism.  
+This replaces the old character string matching mechanism that was confusing 
+and difficult-to-use.  The new input file capabilities are used by all SAMRAI 
+library classes whose initialization depends on values that may be specified 
+in an input file.  The input file format is easily incorporated into 
+user-developed classes.  Also, the contents of an input database may be 
+printed along with a note about each key indicating whether the key came 
+from the input file and was used during the program execution, came from the 
+input file but was not used, or came from a default key value.
+
+The input mechanism supports input data of the following types:
+ 
+   bool: TRUE,FALSE
+   box: [(lower coord),(upper coord)]
+   char: '<character>'
+   complex: ( real , imag )
+   double, float:  standard representation for double/float.  A period
+                   may not start the double/float( use 0.8 instead of .8 ).
+   integer: standard integer representation
+   string: "<string>"
+   vectors, arrays, lists: other types separated by commas
+
+The input database mechanism also supports: 
+
+   - nesting of databases
+   - simple expression grammar for keyword assignment (e.g., standard algebraic
+     and logical expressions found in C, standard posix functions, etc.)
+   - inclusion of other input files using the standard C/C++ #include grammar
+   - use of standard C/C++ comments
+
+The basic form of an input file may look like:
+
+#include "another_input_file"
+
+Database_name {
+
+   keyword1 = value1
+   keyword2 = value2
+   sub_database1 {
+      keyword3 = value3
+      keyword4 = value4  
+   }
+}
+
+User documentation describing the use of the input database mechanism is
+forthcoming.  In the meantime, consult the input files provided for the 
+example application programs in the SAMRAI/source/applications subdirectories,
+or the input database test program in the SAMRAI/source/test/inputdb directory.
+
+
+(3) Parallel restart capabilities (using HDF5)
+
+SAMRAI now provides restart capabilities based on the HDF5 (Hierarchical 
+Data Format) data format.  The restart capability is used in all SAMRAI 
+library classes whose state must be saved in order to begin the program
+again at some point beyond initialization after it has been halted.  The 
+restart capabilities are easily incorporated into user-developed classes.
+
+Information for each restart point is typically organized into a collection
+of HDF5 restart files, one for each processor involved in the program run.
+Data is stored in a hierarchical fashion within each HDF5 file using the
+HDF5 data format.  This data can be viewed as standard text using the "h5dump"
+command that is provided as part of the HDF5 installation.
+
+The writing of restart files for an application is coordinated by a restart
+manager class.  The manager class orchestrates opening and closing the 
+database, stores data to be written out for restart, and writes out restart 
+data to the database.  Each object that writes data during restart must 
+be derived from the base class "tbox_Serializable". 
+
+User documentation describing the use of the restart database mechanism is
+forthcoming.  In the meantime, the example application programs in the
+SAMRAI/source/applications subdirectories provide a reasonably commented
+view of basic usage.  A particularly concise example can be seen by looking at
+the "mainRestartData" class in the SAMRAI/source/applications/HeatEqn directory.
+Also, a test program that illustrates basic use of the HDF5 database routines
+is located in the SAMRAI/source/test/HDF5 directory.
+
+
+**IMPORTANT NOTES REGARDING RESTART AND INPUT CAPABILITIES**
+
+   (a) Both the input database and restart database routines use the same 
+       interface, which is defined by the abstract base class "tbox_Database".  
+
+   (b) The HDF5 library must be installed in order to use the restart 
+       capabilities.  For more information about HDF5, please consult
+       http://hdf.ncsa.uiuc.edu/HDF5/.
+
+   (c) Each class that reads data from an input database and/or writes/reads 
+       from a restart database has been changed as follows:
+
+       (i) The constructor now takes arguments of one of the following forms:
+   
+           ClassName::ClassName(Pointer<Database> input_db,
+                                Pointer<Database> restart_db,
+                                other args...)
+
+           ClassName::ClassName(Pointer<Database> input_db,
+                                other args...)
+
+           ClassName::ClassName(Pointer<Database> restart_db,
+                                other args...)
+
+       (ii) The pointers for the input and restart databases must never be
+            null.  The user must pass in the appropriate input database
+            for initializing the object.  To ensure that the restart database
+            pointer is non-null, the restart_db argument should always be set 
+            similar to 
+
+               Pointer<Database> restart_db =
+                  RestartManager::getManager()->getRootDatabase()
+                                              ->getDatabase("restart_name");
+
+            where "restart_name" is the string registered with restart manager
+            for the ClassName object.  This will return the proper restart
+            database for the ClassName object if a restart file is specified
+            (and HDF5 is compiled with SAMRAI).  Otherwise, a pointer to a 
+            "tbox_NullDatabase" object that responds to all database methods, 
+            but does nothing, will be returned.  This organization avoids
+            the need for any tests within the library code for whether restart
+            files are to be written.  Everything is controlled from the main
+            program. 
+
+       (iii) Each constructor follows the same sequence of steps (note some 
+             steps may be absent depending on the class):
+
+                ClassName::ClassName( ... )
+                {
+                   // Step 1: initialize default values, if necessary  
+                   // Step 2: if (starting from restart) {
+                   //            read data from restart database
+                   //         }
+                   // Step 3: read values from input database, if necessary
+                   // Step 4: if (!starting from restart) {
+                   //            set values based on input data, if necessary
+                   //         }
+                }
+
+     (d) Each class that writes/reads data to/from a restart database is
+         derived from the base class "tbox_Serializable" so that the database
+         functions can be invoked from the restart manager.
+
+     (e) Files written in HDF5 format should be architecture independent.
+         However, we have experienced some problems with this functionality.  
+         At this point, restart files are NOT portable across machines of
+         different architecture. 
+
+
+(4) Basic timing capabilities 
+
+To provide diagnostic information of where execution time is spent, a timer 
+class has been added to SAMRAI.  The timers measure user, system, and 
+wallclock time.  A simple timer database manager class is also provided so
+that timers can be turned on or off from a main program and there is no need
+to place guards or conditionals around timers placed within the code.  
+Eventually, more functionality will be included within the timer classes
+to gather additional diagnostic information about performance.  Also, packages
+within the SAMRAI library (e.g., communication schedules) will be instrumented
+with the timers so that these routines may be analyzed more easily by users. 
+
+User documentation describing the use of the timers is forthcoming.  Meanwhile,
+see the example in SAMRAI/source/test/timers or the Euler and HeatEqn examples 
+in SAMRAI/source/applications. 
+
+
+(5) Non-uniform load balancing for patches
+
+SAMRAI now provides basic support for load balancing patches on a level where
+the workload distribution is non-uniform across the cells on the mesh.  
+The non-uniform load balancing routines are invoked through the same interface
+as the previously available uniform load balance routines.  The workload
+estimator uses values stored as arrays of cell-centered double values on the
+patch hierarchy.  These values are set based on workload estimates
+(e.g., time to update a cell) determined by a specific application.
+
+The non-uniform load balance routines were developed as part of a summer
+project by Scott Morris, a University of Utah undergraduate student, based
+on the needs of the C-SAFE project (i.e., the Univ. of Utah ASCI Alliance
+Project).  The routines should considered proto-type code as they are not yet
+in their final form.  They will be documented and made available in a more
+general form in a future release.  In addition, enhancements will be made
+to the algorithm, for example, to produce patches configured to better
+achieve spatial locality in their assignment to processors.
+
+
+(6) Redesign of variable database class
+
+The variable database class used for managing variables and data storage 
+within applications has been redesigned.  The new organization makes
+several of the function calls more clear and makes the treatment of 
+variables and variable "contexts" more uniform.  As a result of these
+changes, the manner in which application codes interact with the database
+has been simplified.  Also, the patch class now can access the variable
+database directly so that one may obtain a particular patch data object
+from any patch by making a call of the form:
+
+   patch->getPatchData(variable, context);
+
+User documentation describing the use of the variable database is forthcoming.
+Meanwhile, consult the documentation in the header file for the class 
+"hier_VariableDatabaseX".  The class header provides a concise description
+of usage of the database class.  An example program illustrating the use of all
+member functions of this class can be found in the SAMRAI/source/test/variables
+directory.  Also, see the examples in the SAMRAI/source/applications 
+subdirectories to see how usage at the application code level has changed.
+
+
+(7) Redesign of time integration and regridding classes
+
+The time refinement integrator, hyperbolic level integrator, and gridding
+algorithm and associated classes have been reworked.  This reorganization
+has made the class interfaces cleaner, so they should be easier to use and
+understand.  Also, the gridding algorithm and time refinement integrator are 
+completely decoupled now.  Thus, the gridding class can be used in a variety 
+of different algorithms (see item 10 in this list).  
+
+The code documentation for these classes has been updated to reflect the 
+changes.  Please consult the header file comments, or source code manual for 
+for more information.  User documentation describing the use of the algorithm 
+classes is forthcoming.  In the meantime, please see the main programs in 
+each of the sample applications in SAMRAI/source/applications.  These files
+contain descriptions of object creation and composition related to the use
+of the major SAMRAI algorithm classes used.
+
+
+(8) Abstract "Strategy" classes renamed
+
+The names of all SAMRAI classes that serve as abstract base classes for the
+strategy design pattern have been changed to include the word "Strategy"
+in the class name.  The intent of the name changes is to clearly identify
+the use of the strategy pattern within the library code.  All relevant class 
+header file documentation has been updated to include a description of the
+Client-Strategy-Concrete Strategy elements in use.  Thus, it is now easier 
+to understand the intended composition and use of such classes.  For more
+information about the Strategy design pattern, consult the book, "Design
+Patterns: Elements of Reusable Object-Oriented Software", Gamma, et al., 
+Addison-Wesley 1995.
+
+
+(9) Addition of method of lines integration classes
+
+A method of lines integration algorithm was added to facilitate solution of a
+system of ODEs of the form du/dt = F(u) on an adaptive mesh hierarchy.  The
+method implements an explicit time-stepping Runge-Kutta integration scheme. Like
+other algorithm classes in SAMRAI, the MethodOfLinesIntegrator class references
+a corresponding MethodOfLinesPatchStrategy class which defines the numerical 
+methods to be carried out on the patches.  Specifically, the patch strategy 
+class contains pure virtual methods which are defined by a patch strategy 
+implemented by the user.
+
+For further information on the MOLIntegrator and MOLPatchStrategy classes, see
+the DOC++ documentation or visit the files themselves in
+SAMRAI/source/algorithms/time_integration/method_of_lines.
+
+
+(10) New example codes
+
+Several new example codes have been introduced which demonstrate the use
+of various aspects of the SAMRAI library.  In the SAMRAI/source/test
+directory, examples have been added to demonstrate the following:
+
+   - HDF5 file reading and writing
+   - input database file usage
+   - basic usage of the AMR Poisson solver classes 
+   - usage of the timer classes
+   - usage of the variable database
+
+In the SAMRAI/source/applications, a heat equation sample application has been
+added to demonstrate use of the method of lines integration classes (item 10).
+
+The HeatEqn example is somewhat different from the Euler and Linear Advection 
+cases in that no time refinement is performed.  In both Euler and Linear 
+Advection, time advancement (and also re-gridding) is coordinated by the 
+TimeRefinementIntegrator class.  In the HeatEqn case, time-advancement and 
+re-gridding is coordinated from within the main program (i.e. the main.C file).
+The HeatEqn.C code is the user-defined patch strategy class in this example.
+
+For further information of the HeatEqn example, see the README in the 
+applications/HeatEqn directory.  
+
+
+(11) Euler gas dynamics numerical routines rewritten
+
+The flux calculation routines in the Euler example were rewritten so that they
+use less memory and increase performance.  A document describing in detail the
+organization of the flux routines is in preparation.  A preliminary version
+of the document is available upon request.
+
+
+(12) Execution on 1024 processors on all three ASCI platforms
+
+Prototype problems have now ben run on 1024 processors on each of the three 
+ASCI platforms (ASCI Red, ASCI Blue Pacific, ASCI Blue Mountain).  The 
+problems include the Euler and heat equation sample problems, and the 
+Poisson solver test problem on a locally refined patch hierarchy.  Some 
+scaling results have been produced on ASCI Blue Pacific for the Euler and
+heat equantion problems which demonstrate basic scaling of the SAMRAI
+library.  More studies will be done in the near future and the results will
+be made public.
+
+
+(13) Improved portability  
+
+Many enhancements have been made to make the automatic configuration process
+more "automatic" for library builds on various platforms.  See the accompanying
+installation notes for details.
+
+In addition the "m4" macros used in dimensioning arrays in Fortran numerical
+routines have been changed to eliminate the problem that some SGI Fortran
+compilers have with zero ghost cell widths.  Specifically, if zero ghost
+cell width is specified, "+0" and "-0" no longer appears in the array
+dimensioning of the compiled Fortran code.   Those of you who have seen
+this problem in the past know what this means.  Those of you who haven't
+don't need to worry about it.
+
+
+(14) MPI guards no longer needed in application code
+
+It is no longer necessary to guard MPI_Init and MPI_Finalize calls in
+application main programs.  These functions have been included in the 
+tbox_MPI class, which groups common MPI routines into one globally-accessible
+location.  Consult any of the sample applications (SAMRAI/source/applications)
+or test programs (SAMRAI/source/test) for usage.
+
+
+(15) Vizamrai visualization tool
+
+The data post-processing and animation tool "Vizamrai" is now part of the
+SAMRAI software library.  The tool provides basic visualization capabilities
+for two- and three-dimensional data sets defined on a structured AMR patch
+hierarchy such as that used in SAMRAI.  Vizamrai is based on the VTK library
+and provides a graphical user interface for manipulating images.  
+
+Vizamrai is located in the SAMRAI/tools directory.  The current release of 
+Vizamrai should be considered an alpha version of the software.  Please 
+direct questions about Vizamrai to Steve Smith at smith84@llnl.gov. 
+
+-------------------------
+
+The description of the parallel I/O routines is included here for reference
+until more complete user documentation is available....
+
+Header file tbox_PIO.h (or PIO.h without the prefix) defines a parallel I/O
+controller class and three new I/O streams: pout, perr, and plog.  These three
+streams are of type ostream and are drop-in replacements for cout and cerr.
+
+Output to pout is redirected to cout on processor zero only and is also
+mirrored to the log file if logging is enabled (see below).  That is,
+
+		pout << "Hello, world!\n";
+
+will print "Hello, world!" on processor zero but nothing on the other
+processors.  Stream pout provides a convenient way to print output from
+processor zero without guarding every output statement.
+
+Output to perr is redirected to cerr from every processor.  A processor
+identifier is prepended to the output stream.  For example,
+
+		pout << "You messed up, you dufus!\n";
+
+on five processors would yield:
+
+P=00000: You messed up, you dufus!
+P=00001: You messed up, you dufus!
+P=00002: You messed up, you dufus!
+P=00003: You messed up, you dufus!
+P=00004: You messed up, you dufus!
+
+Stream plog writes output to a specified log file.  By default, logging is
+disabled.  To enable logging from node zero only, execute the following at
+the beginning of the application:
+
+int main(int argc, char** argv)
+{
+   MPI_Init(&argc, &argv);
+
+   SAMRAI_Manager::startup();
+   PIO::logOnlyNodeZero("logfile.log");
+   ...
+}
+
+All output from node zero to pout, perr, and plog will be mirrored to the
+specified log file.  To enable logging from every node, execute the following:
+
+int main(int argc, char** argv)
+{
+   MPI_Init(&argc, &argv);
+
+   SAMRAI_Manager::startup();
+   PIO::logAllNodes("logfile.log");
+   ...
+}
+
+Output to plog on every node will be redirected to log file logfile.log.XXXXX,
+where XXXXX is the processor number.
+

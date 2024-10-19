@@ -1,0 +1,108 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for hypre unit test.
+ *
+ ************************************************************************/
+
+// Refer to default.2d.input for full description of all input parameters
+// specific to this problem.
+
+Main {
+  dim = 3
+  base_name = "default3"
+  log_all_nodes = FALSE
+}
+
+hypre_solver {
+  print_solver_info = TRUE
+  max_iterations = 20             // Max iterations used by Hypre
+  relative_residual_tol = 1.0e-8  // Residual tolerance used by Hypre
+}
+
+bc_coefs {
+  // These are the boundary condition specifications.  The number
+  // after "boundary_" is the location index of the boundary.
+  // The inputs are arrays of strings where the first string
+  // indicates the type of values you want to set.  "slope" means
+  // boundary slope, "value" means boundary value, and "coefficients"
+  // mean the raw Robin boundary condition coefficients.
+  // The remaining strings are converted into numbers as
+  // appropriate for what boundary condition you specified with
+  // the first string.  Other boundary conditions are possible.
+  // see the solv_RobinBcCoefStrategy class.
+  // Examples:
+  boundary_0 = "value", "0"
+  boundary_1 = "coefficients", "1", "0"
+  boundary_2 = "value", "0"
+  boundary_3 = "value", "0"
+  boundary_4 = "value", "0"
+  boundary_5 = "value", "0"
+}
+
+CartesianGeometry {
+  domain_boxes = [(0,0,0), (16,16,16)]
+  x_lo         = 0, 0, 0
+  x_up         = 1, 1, 1
+}
+
+StandardTagAndInitialize {
+  // Use default settings for this example.
+}
+
+BergerRigoutsos {
+  DEV_log_node_history = FALSE
+  DEV_log_cluster_summary = TRUE
+  DEV_log_cluster = FALSE
+    // DEV_algo_advance_mode: "SYNCHRONOUS", "ADVANCE_SOME", "ROUND_ROBIN" or "ADVANCE_ANY"
+  DEV_algo_advance_mode = "ADVANCE_SOME"
+  // DEV_algo_advance_mode = "SYNCHRONOUS"
+  // DEV_owner_mode: "SINGLE_OWNER", "MOST_OVERLAP" (default), "FEWEST_OWNED", "LEAST_ACTIVE"
+  DEV_owner_mode = "MOST_OVERLAP"
+  // DEV_owner_mode = "SINGLE_OWNER"
+  efficiency_tolerance = 0.88
+  combine_efficiency = 0.88
+}
+
+TreeLoadBalancer {
+  DEV_report_load_balance = TRUE
+  DEV_barrier_before = FALSE
+  DEV_barrier_after = FALSE
+}
+
+PatchHierarchy {
+   max_levels = 5
+   largest_patch_size {
+      level_0 = 16,16,16
+      // all finer levels will use same values as level_0...
+   }
+   smallest_patch_size {
+      level_0 = 4,4,4
+      // all finer levels will use same values as level_0...
+   }
+   ratio_to_coarser {
+      level_1            = 2, 2, 2
+      level_2            = 2, 2, 2
+      level_3            = 2, 2, 2
+      level_4            = 2, 2, 2
+      level_5            = 2, 2, 2
+      level_6            = 2, 2, 2
+      level_7            = 2, 2, 2
+      level_8            = 2, 2, 2
+      level_9            = 2, 2, 2
+      //  etc.
+   }
+   allow_patches_smaller_than_ghostwidth = TRUE
+}
+
+GriddingAlgorithm {
+   enforce_proper_nesting = TRUE
+   DEV_extend_to_domain_boundary = TRUE
+   // DEV_load_balance = FALSE
+   check_nonrefined_tags = "IGNORE"
+   sequentialize_patch_indices = TRUE
+}
+

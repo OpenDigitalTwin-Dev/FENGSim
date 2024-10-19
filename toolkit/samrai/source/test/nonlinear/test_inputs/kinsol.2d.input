@@ -1,0 +1,189 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for 2D nonlinear solver example using KINSOL. 
+ *
+ ************************************************************************/
+ // This is the input file for the 2D nonlinear solver example using KINSOL.
+
+Main{
+
+   // Dimension of problem.  No default.
+   dim = 2
+
+   // Base name of log and viz files.  Default is "default".
+   base_name = "2d.kinsol"
+
+   // Frequency at which to dump viz output--zero to turn off
+   // Default is 0.
+   viz_dump_interval     = 1
+
+   // Directory in which to place viz output.
+   // No default, this must be specified here if dump interval is non-zero.
+   viz_dump_dirname      = "2d.kinsol.visit"
+
+   // Number of processors that dump to one viz file.
+   // Default is 1.
+   visit_number_procs_per_file = 1
+
+   // Timestep interval for regridding.  If zero, there will be no regridding.
+   // Default is 0.
+   regrid_interval       = 1         // zero to turn off
+
+   // Options for nonlinear solver package are:
+   //    "KINSOL" (default), or "PETSc-SNES"
+   nonlinear_solver_package = "KINSOL"
+
+}
+
+// Refer to xfer::TimerManager for input
+TimerManager{
+   maintain_exclusive_time = TRUE
+   maintain_concurrent_time = TRUE
+   timer_list               = "apps::main::*", "apps::usrFcns::*"
+}
+
+// Refer to geom::CartesianGridGeometry and its base classes for input
+CartesianGeometry{
+   domain_boxes = [(0,0), (31,31)]
+   x_lo         = 0.0e0, 0.0e0   
+   x_up         = 1.0e0, 1.0e0
+}
+
+// Refer to hier::PatchHierarchy for input
+PatchHierarchy {
+   max_levels = 8
+   largest_patch_size {
+      level_0 = 32, 32
+      // all finer levels will use same values as level_0...
+   }
+
+ smallest_patch_size {
+      level_0 = 4,4
+      // all finer levels will use same values as level_0...
+   }
+   ratio_to_coarser {
+      level_1            = 2, 2
+      level_2            = 2, 2
+      level_3            = 2, 2
+      level_4            = 2, 2
+      level_5            = 2, 2
+      level_6            = 2, 2
+      level_7            = 2, 2
+      level_8            = 2, 2
+      level_9            = 2, 2
+      level_10           = 2, 2
+      //  etc.
+   }
+
+   // TODO this should be removed when visit writer is updated
+   sequentialize_patch_indices = TRUE
+}
+
+// Refer to mesh::BergerRigoutsos for input
+BergerRigoutsos {
+   combine_efficiency = 0.75
+   efficiency_tolerance = 0.75
+}
+
+// Refer to mesh::GriddingAlgorithm for input
+GriddingAlgorithm{
+}
+
+// Refer to mesh::StandardTagAndInitialize for input
+StandardTagAndInitialize{
+   tagging_method = "REFINE_BOXES"
+
+   level_0 {
+      boxes = [(8,8), (23,23)]
+   }
+   level_1 {
+      boxes = [(24,24), (39,39)]
+   }
+   level_2 {
+      boxes = [(56,56), (71,71)]
+   }
+   level_3 {
+      boxes = [(120,120), (135,135)]
+   }
+   level_4 {
+      boxes = [(248,248), (263,263)]
+   }
+   level_5 {
+      boxes = [(504,504), (519,519)]
+   }
+   level_6 {
+      boxes = [(1016,1016), (1031,1031)]
+   }
+   level_7 {
+      boxes = [(2040,2040), (2055,2055)]
+   }
+   level_8 {
+      boxes = [(4088,4088), (4103,4103)]
+   }
+//   level_9 {
+//      boxes = [(8184,8184), (8199,8199)]
+//   }
+   //etc.
+}
+
+// Refer to mesh::TreeLoadBalancer for input
+LoadBalancer{
+}
+
+// The ModifiedBratuProblem class is the "user class" in this example.
+// It owns the solver and contains the code to set up the solver.
+// The inputs for ModifiedBratuProblem is simply the inputs for the
+// individual parts owned by the FACPoisson class.
+ModifiedBratuProblem{
+   // Time increment used for all steps. No default.
+   timestep = 0.0625
+
+   // Factor multiplying exponential term.  No default.
+   lambda   = 6.0         // factor multiplying exponential term
+
+   // Maximum iteration for preconditioner.  No default.
+   max_precond_its = 35
+
+   // Preconditioner convergence tolerance.  No default.
+   precond_tol = 1.0e-2    // preconditioner convergence tolerance
+}
+
+// Refer to solv::KINSOL_SAMRAIContext for input
+KINSOLSolver{
+    max_nonlinear_iterations = 20
+    KINSOL_log_filename      = "nkLog.32x32.8"
+    KINSOL_print_flag        = 3
+
+    uses_preconditioner      = TRUE
+    uses_jac_times_vector    = TRUE
+
+    residual_stop_tolerance  = 1.0e-10
+    nonlinear_step_tolerance = 1.0e-10
+
+    max_krylov_dimension      = 20
+    max_linear_solve_restarts = 6
+}
+
+// Refer to solv::SNES_SAMRAIContext for input
+SNESSolver{
+    uses_preconditioner            = TRUE
+    uses_explicit_jacobian         = TRUE
+    absolute_tolerance             = 1.0e-10
+    relative_tolerance             = 1.0e-4
+    step_tolerance                 = 1.0e-6
+    linear_solver_type             = "gmres"
+    maximum_gmres_krylov_dimension = 20
+    maximum_linear_iterations      = 50
+    forcing_term_strategy          = "EWCHOICE1"
+}
+
+// Refer to algs::ImplicitIntegrator for input
+ImplicitIntegrator{
+    initial_time = 0.0
+    final_time = 1.0
+    max_integrator_steps = 5
+}

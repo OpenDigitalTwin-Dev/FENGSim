@@ -1,0 +1,74 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Performance input file for TreeLoadBalancer 
+ *
+ ************************************************************************/
+
+// Refer to rect.2d.treelb.input for full description of all input parameters
+// specific to this problem.
+
+Main {
+   // Dimension of problem.
+   dim = 3
+
+   // Base name of log file.
+   base_name = "small_cube.3d.treelb"
+
+   // If true all processes generate log files.  Otherwise only process 0 does.
+   log_all_nodes = FALSE
+
+   // Load balancer choice.  One of TreeLoadBalancer, ChopAndPackLoadBalancer.
+   load_balancer_type = "TreeLoadBalancer"
+
+   // Specify domain as a box array in the reference index space.
+   domain_boxes = [(0,0,0),(99,99,99)]
+
+   // Specify anchor layer as a box array in the reference index space.
+   // The anchor layer will be partitioned but its partitioning is not
+   // used in the performance test.
+   anchor_boxes = [(0,0,0),(99,99,99)]
+
+   // Specify ghost-cell-width between anchor and unbalanced.
+   ghost_cell_width = 4, 4, 4
+
+   // Specify the min patch size.
+   min_size = 4, 4, 4
+
+   PrebalanceByUserBoxes {
+      // Specify unbalanced layer as a box array in the reference index space.
+      balance_boxes = [(10,10,10),(89,89,89)]
+
+      // initial_owners are the ranks of the owners of all the initial balance
+      // boxes.
+      initial_owners = 0
+   }
+
+}
+
+TreeLoadBalancer {
+  DEV_report_load_balance = TRUE // Reported in main
+  DEV_balance_penalty_wt = 1.0
+  DEV_surface_penalty_wt = 1.0
+  DEV_slender_penalty_wt = 1.0
+  DEV_precut_penalty_wt = 1.0
+
+  // Debugging options
+  DEV_check_map = FALSE
+  DEV_check_connectivity = FALSE
+  DEV_print_steps = TRUE
+  DEV_print_swap_steps = FALSE
+  DEV_print_break_steps = TRUE
+  DEV_print_edge_steps = FALSE
+}
+
+TimerManager {
+//   print_exclusive      = TRUE
+   print_summed           = TRUE
+   print_max              = TRUE
+   print_threshold        = 0.
+   timer_list             = "hier::*::*", "mesh::*::*", "apps::*::*"
+}

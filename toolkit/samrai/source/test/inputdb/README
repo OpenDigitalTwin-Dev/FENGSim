@@ -1,0 +1,40 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   Unit test of InputDatabase class.
+##
+#########################################################################
+
+This is a unit test of SAMRAI's InputDatabase class.  The files included in
+this directory are as follows:
+
+   inputdb.cpp                  -  unit tester
+   test_inputs/inputdb.input  -  test input file
+
+
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make main
+
+   Execution:
+      serial:
+         ./main test_inputs/inputdb.input
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main inputdb.input
+
+
+OUTPUT
+------
+   Input Database is dumped to inputdb.log.
+
+
+INPUT PARAMETERS
+----------------
+Refer to test_inputs/inputdb.input for a full description of all input
+parameters specific to this problem.

@@ -1,0 +1,29 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace solv {
+
+/*!
+  @page package_solvers The Solver Package
+ 
+  The Solver package provides support for applying linear, nonlinear,
+  and ODE solvers on a structured AMR patch hierarchy.
+  The classes are divided into four categories:
+  -# @ref package_solvers_packages "C++ interfaces to specific solver libraries (e.g., PETSc)"
+  -# @ref package_solvers_vectors "vector kernel support for data on an AMR composite grid"
+  -# @ref package_solvers_FAC "Implementation of a FAC solver"
+  -# @ref package_solvers_poisson "Poisson solvers"
+  -# @ref package_solvers_nonlinear "Nonlinear solver interface"
+
+  All class names in the Mesh package are in the namespace SAMRAI::solv.
+*/
+
+}
+}

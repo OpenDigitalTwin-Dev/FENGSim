@@ -1,0 +1,29 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace solv {
+
+/*!
+  @page package_solvers_packages_sundials_vector Sundials Vector Interface
+
+  The abstract Sundials vector class provides an interface through which a 
+  vector kernel and operations may be supplied to the KINSOL nonlinear 
+  algebraic equation and CVODE ODE system solver packages.  Apart from 
+  some minor preprocessor stuff, this interface is completeley 
+  independent of the SAMRAI package.  A vector kernel derived from 
+  this interface that may be used with the SAMRAI framework is provided 
+  elsewhere in this SAMRAI "solvers" package.
+
+  Note: These vector interface routines assume <TT>double</TT>-valued vectors.
+  - SundialsAbstractVector
+*/
+
+}
+}

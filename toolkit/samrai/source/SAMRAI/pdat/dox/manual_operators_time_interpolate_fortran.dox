@@ -1,0 +1,24 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright
+ * information, see COPYRIGHT and LICENSE.
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace pdat {
+
+/*!
+  @page package_patchdata_operators_time_interpolate_fortran Time Interpolation Numerical Routines
+
+  The routines that perform time interpolation on standard patch data types
+  are located in the directory
+  @c source/SAMRAI/pdat/fortran.
+  The numerical routines are written in FORTRAN and are called from the
+  appropriate operator classes.
+*/
+
+}
+}

@@ -1,0 +1,32 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace algs {
+
+/*!
+  @page package_algorithm_hyperbolic Hyperbolic Conservation Law Integration
+
+  These classes provide algorithmic components that apply to a system of 
+  hyperbolic conservation laws that is integrated using explicit 
+  time-stepping.  In particular, these classes provide specific operations 
+  invoked from within the time-dependent hierarchy integration and 
+  adaptive gridding classes which are also part of the Algorithm package.
+  The hyperbolic integrator class is coupled to the hierarchy time 
+  integration and adaptive gridding routines via the Strategy design pattern.  
+  An abstract base class that defines the interface to application-specific 
+  numerical routines for single patches is also provided here.  The 
+  hyperbolic integrator and the application routines are also coupled 
+  using the Strategy pattern.
+  - SAMRAI::algs::HyperbolicLevelIntegrator
+  - SAMRAI::algs::HyperbolicPatchStrategy
+*/
+
+}
+}

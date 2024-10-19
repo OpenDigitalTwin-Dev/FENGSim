@@ -1,0 +1,32 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   Unit test of SAMRAI SparseData
+##
+#########################################################################
+
+This contains unit tests for SAMRAI's SparseData patch data type. The files
+included in this directory are as follows:
+ 
+   main.cpp                 - driver for testing high-level functionality
+   sparse_dataops.cpp       - driver for testing data manipulation of SparseData
+   SparseDataTester.[C,h] - Class implementing unit tests
+ 
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make main      - builds executable from main.cpp
+      make sparse    - builds executable from sparse_dataops.cpp
+
+   Execution:
+      serial:
+         ./main
+         ./sparse
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main
+         mpirun -np <nprocs> [mpirun options] ./sparse

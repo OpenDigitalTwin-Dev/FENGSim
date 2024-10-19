@@ -1,0 +1,37 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright
+## information, see COPYRIGHT and LICENSE.
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   Test for performance and quality of mesh generation.
+##
+#########################################################################
+
+Performance tests for mesh generation.
+
+The two bottle-neck steps (clustering and partitioning) are tested here for:
+
+* run-time performance
+
+* quality of generated metadata
+
+We don't test all steps in mesh generation or remeshing here, just the
+most expensive steps.  These steps have the same characteristics
+whether generating the mesh or remeshing, so we omit remesh-specific
+steps.
+
+COMPILATION AND EXECUTION
+-------------------------
+
+   Compilation:
+      make main
+
+   Execution:
+      For one the following input files in test_inputs:
+      serial:
+         ./main <input file>
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main <input file>

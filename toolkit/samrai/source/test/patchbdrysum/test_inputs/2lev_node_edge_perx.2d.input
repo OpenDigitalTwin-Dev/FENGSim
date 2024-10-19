@@ -1,0 +1,90 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Input file for SAMRAI patch boundary sum test 
+ *
+ ************************************************************************/
+
+//See test_inputs/2lev_node.3d.input for descriptions of the input options
+//specific to this test.
+
+
+
+Main {
+   dim = 2
+
+   do_node_sum              = TRUE
+   do_edge_sum              = TRUE
+
+   nsteps                   = 1
+
+   log_file_name            = "2lev-2d-node-edge-perx.log"
+}
+
+HierSumTest {
+
+   node_ghosts              = 0 , 0
+   edge_ghosts              = 0 , 0
+
+   check_data_before_communication = FALSE
+}
+
+CartesianGeometry {
+   domain_boxes  = [ (0,0) , (39,49) ]   
+   x_lo          = 0.0e0 , 0.0e0  // lower end of computational domain.
+   x_up          = 1.0e0 , 1.0e0  // upper end of computational domain.
+
+   periodic_dimension = 1, 0
+}
+
+PatchHierarchy {
+   max_levels              = 2 // Maximum number of levels in hierarchy.
+
+// Note: For the following regridding information, data is required for each
+//       potential in the patch hierarchy; i.e., levels 0 thru max_levels-1.
+//       If more data values than needed are given, only the number required
+//       will be read in.  If fewer values are given, an error will result.
+//
+// Specify coarsening ratios for each level 1 through max_levels-1
+   ratio_to_coarser {         // vector ratio to next coarser level
+      level_1               = 2 , 2 
+      level_2               = 2 , 2 
+      level_3               = 2 , 2 
+   }
+
+   largest_patch_size {
+      level_0 = 5 , 4
+      level_1 = 4 , 6
+      // all finer levels will use same values as level_0...
+   }
+
+   smallest_patch_size {
+      level_0 = 1 , 1 
+      // all finer levels will use same values as level_0...
+   }
+}
+
+BergerRigoutsos {
+   efficiency_tolerance     = 0.70e0   // min % of tag cells in new patch level
+   combine_efficiency       = 0.85e0   // chop box if sum of volumes of smaller
+                                       // boxes < efficiency * vol of large box
+}
+
+GriddingAlgorithm {
+}
+
+StandardTagAndInitialize{
+   tagging_method = "REFINE_BOXES"
+
+   level_0 {
+      boxes = [ (1,1) , (4,5) ],
+              [ (5,4) , (8,6) ]
+   }
+}
+
+LoadBalancer {  // for SAMRAI v1.3.2
+}
+

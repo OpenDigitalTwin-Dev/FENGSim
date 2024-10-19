@@ -1,0 +1,38 @@
+#########################################################################
+##
+## This file is part of the SAMRAI distribution.  For full copyright 
+## information, see COPYRIGHT and LICENSE. 
+##
+## Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Description:   Unit test of SAMRAI PatchData access via PatchData iterators
+##                and Indexes.
+##
+#########################################################################
+
+This is a unit test of SAMRAI PatchData access via PatchData iterators and
+Indexes.  The files included in this directory are as follows:
+ 
+   main.cpp                  -  unit tester
+   test_inputs/*.input     -  2d and 3d input files
+ 
+
+COMPILATION AND EXECUTION
+-------------------------
+   Compilation:
+      make main
+   Execution:
+      For one of the following input files:
+         test_inputs/default.2d.input
+         test_inputs/default.3d.input
+      serial:
+         ./main <input file>
+      parallel:
+         Parallel execution is platform dependent.  This example demonstrates
+         execution via mpirun.
+         mpirun -np <nprocs> [mpirun options] ./main <input file>
+
+
+INPUT PARAMETERS
+----------------
+Refer to test_inputs/default.2d.input for a full description of all input
+parameters specific to this problem.

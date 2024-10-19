@@ -1,0 +1,17 @@
+#!/bin/sh
+##
+## File:        $URL$
+## Package:     SAMRAI scripts
+## Copyright:   (c) 1997-2024 Lawrence Livermore National Security, LLC
+## Revision:    $LastChangedRevision$
+## Description: Find all header files
+##
+
+BIN=`dirname $0`
+cd `dirname $0`/../../../source || exit 1;
+echo `pwd`
+test -d "hierarchy/patches" || exit 1
+
+perl scripts/source_manipulation/findHeaderFiles.pl > scripts/source_manipulation/headers.data
+
+exit

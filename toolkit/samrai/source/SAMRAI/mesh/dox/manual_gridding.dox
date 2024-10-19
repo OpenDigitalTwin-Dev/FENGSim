@@ -1,0 +1,37 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace mesh {
+
+/*!
+  @page package_mesh_gridding Patch Hierarchy Construction and Adaptive Meshing 
+
+  The gridding algorithm classes provid patch hierarchy generation and 
+  regridding routines that apply to a variety of structured adaptive 
+  mesh refinement problems.  Specifically, the gridding class can be used
+  to generate individual levels in an AMR patch hierarchy at the beginning 
+  of a simulation and to regrid collections of levels during an adaptive 
+  calculation.  Other classes are provided to apply different methods for
+  selecting cells for refinement on the patch hierarchy.   These include
+  basic gradient detection and Richardson extrapolation.
+
+  The gridding class is coupled to application-specific routines that 
+  initialize data on new levels and identify cells for refinement on each 
+  level via the Strategy object-oriented design pattern.  The gridding 
+  class is coupled to particular load balancing and cell clustering routines 
+  using this pattern as well.  
+  - SAMRAI::mesh::GriddingAlgorithm
+  - SAMRAI::mesh::TagAndInitializeStrategy
+  - SAMRAI::mesh::StandardTagAndInitialize
+  - SAMRAI::mesh::StandardTagAndInitStrategy
+*/
+
+}
+}

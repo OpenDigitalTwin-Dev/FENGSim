@@ -1,0 +1,32 @@
+/*************************************************************************
+ *
+ * This file is part of the SAMRAI distribution.  For full copyright 
+ * information, see COPYRIGHT and LICENSE. 
+ *
+ * Copyright:     (c) 1997-2024 Lawrence Livermore National Security, LLC
+ * Description:   Generation of SAMRAI Doxygen source code manual 
+ *
+ ************************************************************************/
+namespace SAMRAI {
+   namespace tbox {
+
+/*!
+  @page package_toolbox_parallel Parallel Toolbox Classes
+
+  These classes localize MPI support and provide a basic 
+  schedule/executor mechanism for parallel data communication
+  within SAMRAI.  They include a globally-accessible class for all
+  low-level MPI calls, the basic communication schedule implementation,
+  and the communication transaction abstract interface.
+
+  - SAMRAI::tbox::SAMRAI_MPI
+  - SAMRAI::tbox::Schedule
+  - SAMRAI::tbox::Transaction
+  - SAMRAI::tbox::AsyncCommGroup
+  - SAMRAI::tbox::AsyncCommStage
+  - SAMRAI::tbox::AsyncCommPeer
+
+*/
+
+}
+}
