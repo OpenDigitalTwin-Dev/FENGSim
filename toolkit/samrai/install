@@ -1,4 +1,6 @@
-sudo apt -y install gcc g++ cmake make gfortran libmpich-dev m4
+sudo apt -y install gcc g++ cmake make gfortran libmpich-dev m4 p7zip-full
+
+7za x ./blt/thirdparty_builtin/googletest.7z -o/$PWD/blt/thirdparty_builtin/
 
 mkdir build
 cd build

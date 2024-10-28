@@ -1,2 +1,3 @@
-rm -rf build
 rm -rf ../install/samrai_install
+rm -rf ./blt/thirdparty_builtin/googletest
+rm -rf build
