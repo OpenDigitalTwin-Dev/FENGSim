@@ -1,4 +1,4 @@
-apt -y install cmake make gcc g++
+sudo apt -y install cmake make gcc g++
 
 mkdir build
 cd build
