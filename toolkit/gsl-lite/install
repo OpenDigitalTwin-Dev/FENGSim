@@ -1,0 +1,7 @@
+apt -y install cmake make gcc g++
+
+mkdir build
+cd build
+cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../install/gsllite_install
+make -j4
+make install
