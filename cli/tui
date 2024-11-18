@@ -1,0 +1,2 @@
+dialog --clear --checklist "FENGSim: " 20 50 20 1 FENGSim on 2 NSM off 3 CFD off 4 CEM off 5 DAE off 6 NLA off 7 Particles off 8 PS off
+clear
