@@ -1,0 +1,89 @@
+TODO list and scratch pad for Structure Synth. /Mikael
+
+- Update website
+
+Structure Synth 1.5.0 ("Hinxton") Released
+------------------------------------------
+Structure Synth is a tool for generating 3D structures from recursive rules. The structures are often complex and surprising.
+Structure Synth integrates with third-party renderers (such as Sunflow and POV-Ray) using a flexible template based export system.
+
+Binaries for Windows (XP and Vista).
+Mac binaries available soon.
+Linux is source only.
+
+Download instructions at:
+http://structuresynth.sourceforge.net/download.php
+
+New major features (since 1.0.0):
+- Integrated raytracer
+- JavaScript integration (for building animations).
+- OBJ exporter (supporting all primitives and tagging)
+
+Minor features:
+- Added 'random[-2,3]' for preprocessor generated random numbers (uniform distributed).
+- Added 'show coordinate system'.
+- Added option to Template Export Dialog to Autosave Eisenscript. The Autosave includes the random seed and camera settings. 
+- Context menu with command help in editor window.
+- Proper sorting of transparent OpenGL objects.
+- Added a patch by François Beaune to support Appleseed.
+- GUI Refactoring.
+
+For more information see:
+http://structuresynth.sourceforge.net/
+
+
+- Website: 
+    - add section links.
+    - tutorials: 'EisenScript Kata'
+
+- JanJacobSV has some interesting 3D experiments with CFDG and Virtools. http://www.youtube.com/watch?v=KWgQ8XIPAio
+
+
+
+
+
+
+EisenScript
+-----------
+
+Structures are specified in EisenScript (named after the russian film director Sergei Eisenstein). 
+
+EisenScript is processed by the Eisenstein Engine by the following steps:
+1) Preprocessor (strips comments imports '#include' statements).
+2) Tokenizer (divides string input into symbols. The string input is split at any white space (except if it occurs inside quotes).)  
+3) Parser (standard recursive descent parser). The parser creates a 'ruleset' from the text input. 
+4) Name resolving. Rules contain symbolic references to other rules. These symbols must be resolved.
+
+The EBNF notation for EisenScript looks like this:
+
+program = { set | rule } ;
+rule = 'RULE' ,  rule_name , [ weight ] , '{' , { set | action } , '}' ;
+action = { transformationloop } [transformationlist] rule_ref ;
+transformationloop = number , '*' , transformationlist ;
+transformationlist = '{' , { transformation } , '}';
+transformation = 'X' , number |                      // translations
+                 'Y' , number |
+                 'Z' , number |
+                 'RX', number |						 // rotation about axis
+                 'RY', number |
+                 'RZ', number |
+                 'S', number |						 // resizing (all axis equal)
+                 'S', number number number, 		 // resizing for x,y,z individually
+                 
+set = 'SET' , var_name , string ;
+
+'rule_ref', 'var_name', and 'string' are text strings with a reasonable set of allowed characters.
+Though not strictly a part of the syntax, a few rules are provided as predefined primitives in Structure Synth:
+
+Primitives: 
+-----------
+box      - solid box
+grid	 - wireframe box
+sphere   - 
+line     - along x axis, centered in y,z plane.
+point    - centered in coordinate system.
+cylinder - the symmetry axis will be the current x axis.
+pbox     - continues box (will be drawn smoothly as the coordinate system transforms).
+pcylinder- polygonal cylinder (will be drawn smoothly as the coordinate system transforms).
+tube     - (With number of division)
+

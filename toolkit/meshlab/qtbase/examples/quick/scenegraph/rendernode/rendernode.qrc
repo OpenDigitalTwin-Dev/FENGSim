@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/scenegraph/rendernode">
+        <file>main.qml</file>
+        <file>shader_vert.cso</file>
+        <file>shader_frag.cso</file>
+        <file>metalshader.vert</file>
+        <file>metalshader.frag</file>
+    </qresource>
+</RCC>

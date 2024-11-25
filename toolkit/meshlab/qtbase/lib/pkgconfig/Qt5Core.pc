@@ -1,0 +1,14 @@
+prefix=/home/jiping/Downloads/qtbase
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+host_bins=${prefix}/bin
+qt_config=shared shared rpath release c++11 c++14 c++17 c++1z concurrent dbus reduce_exports reduce_relocations stl alsa pulseaudio assimp properties animation textcodec big_codecs clock-monotonic codecs itemmodel proxymodel concatenatetablesproxymodel textdate datestring doubleconversion eventfd filesystemiterator filesystemwatcher gestures glib identityproxymodel inotify library mimetype process statemachine regularexpression settings sharedmemory sortfilterproxymodel stringlistmodel systemsemaphore temporaryfile threadsafe-cloexec translation transposeproxymodel xmlstream xmlstreamreader xmlstreamwriter accessibility action clipboard colornames cssparser cursor desktopservices imageformat_xpm draganddrop opengl egl kms gbm freetype fontconfig imageformatplugin harfbuzz highdpiscaling ico im image_heuristic_mask image_text imageformat_bmp imageformat_jpeg imageformat_png imageformat_ppm imageformat_xbm movie pdf picture sessionmanager shortcut standarditemmodel systemtrayicon tabletevent texthtmlparser textodfwriter validator whatsthis wheelevent networkinterface bearermanagement openssl udpsocket ftp getifaddrs gssapi http ipv6ifname localserver networkdiskcache networkproxy socks5 ssl printer printdialog printpreviewwidget printpreviewdialog groupbox buttongroup menu lineedit spinbox slider scrollbar scrollarea itemviews tableview toolbutton calendarwidget colordialog listview columnview combobox completer contextmenu datawidgetmapper datetimeedit dial filesystemmodel dirmodel resizehandler mainwindow dockwidget textedit errormessage splitter stackedwidget treeview filedialog fontcombobox fontdialog fscompleter graphicsview graphicseffect inputdialog keysequenceedit lcdnumber listwidget mdiarea menubar messagebox progressbar progressdialog rubberband sizegrip splashscreen statusbar statustip style-stylesheet syntaxhighlighter tabbar tablewidget tabwidget textbrowser toolbar toolbox tooltip treewidget undocommand undostack undogroup undoview wizard dom properties animation textcodec big_codecs clock-monotonic codecs itemmodel proxymodel concatenatetablesproxymodel textdate datestring doubleconversion eventfd filesystemiterator filesystemwatcher gestures glib identityproxymodel inotify library mimetype process statemachine regularexpression settings sharedmemory sortfilterproxymodel stringlistmodel systemsemaphore temporaryfile threadsafe-cloexec translation transposeproxymodel xmlstream xmlstreamreader xmlstreamwriter
+
+Name: Qt5 Core
+Description: Qt Core module
+Version: 5.15.16
+Libs: -L${libdir} -lQt5Core 
+Cflags: -DQT_CORE_LIB -I${includedir}/QtCore -I${includedir}
+

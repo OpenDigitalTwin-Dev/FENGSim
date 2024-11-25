@@ -1,0 +1,128 @@
+ROADMAP
+-------
+
+Version 0.5: 'Graf Zeppelin' [DONE]
+----------------------------
++ Rotations are not around the proper unit cube axis.
++ Add global 'set' command
++ 'set maxobjects'
++ Preprocessor Comments
++ Auto load examples to menu item entry.
++ Coloring 
++ GUI: Rotate about z axis
++ Solid Box object
++ Rule retirement:
+  + (1) with substitution:  [ RULE r1 maxdepth 400 > r2 weigth 100 { ... } ]
+  + (3) plain retirement [ RULE r1 maxdepth 400 weigth 100 { ... } ]
++ Version object
++ Iterated Rules
++ Scale with 3 parameters.
++ Progress dialog w/ cancel.
++ Fix multiple windows problems
++ 'Color' keyword (for absolute color)
++ 'Background' set command 
++ 'set seed'
++ Add 'Reset button' (for OpenGL view)
++ Create a build (resolve dependencies)
+
+Version 0.7: 'Nostromo' [DONE]
+-----------------------
++ Full Screen
++ Tabbed interface
++ Custom Transformation matrix operator.
++ Syntax Highlighter
++ Parser should take {,} as delimiters
++ Screenshot
++ Context Menu in 3D GUI: 'Reset View', 'Save Screenshot', 'Full screen'.
++ Linux testing (should compile with minimum of error on Linux)
+
+Version 0.8: 'Exonautica' [DONE]
+-----------------------------------
+Main Focus: Template rendering
++ reproducibility -> control of random seed, 
++ GUI Seed
++ Add Template Renderer (user customizable text templats)
++ Splash screen.
+
+Version 0.8.5: 'Exonautica Reloaded' [DONE]
+------------------------------------
++ Bug Fixes 
+ 
+Version 0.9: 'Glasnost' [DONE]
+----------------------------------------------
++ '#define varname value' (preprocessor constant definitions)
++ save view as eisenscript code.
++ Set initial viewport (create expression by right clicking mouse canvas)
++ Add new Polygon/Triangle Primitive
++ Export view settings to Template Renderers 
+
+
+Version 0.9.5: 'Haiku' [DONE]
+-------------------------------
++ Drag'n'Drop of EisenScript files.
++ Fix PovRay template system (Almost!)
++ Template bg color. 
+? GUI for '#define consts' for exploring variations. (In progress)
+
+Version 1.0.0: 'Totem' or 'Potemkin'
+-------------------------------
++ Template Export Dialog
++ Template Cleanup
++ Depth-First Recursion
+- Packaging: Icons, Eula, file associations.
+
+
+
+Version 1.5: '?'
+----------------
++ Raytracer
+- Installers (for Windows at least - using InnoSetup)
+- VRML/OBJ Template (many requests)
+? 'Zoom to fit'
+- Mesh?
+Instead of EisenScript it should be possible to script the object generation using JavaScript - for creating animations.
+(Qt has a builtin JavaScript interpreter which should make this somewhat easy).
+
+Version 2.0: '?' (These are tentative ideas)
+----------------
+- Ellipsoid object. (as of now spheres are always isotropic]
+? Version object with check for updates on internet.
+- 9-Up interface.
+Polygon Grammars (a la CGA Shape Grammar)
+
+Emphasizing the 'Synth' of 'Structure Synth (Live Coding / Drawing)
+I want to be able to somehow 'play' and 'compose' structures interactively.
+I'm thinking about implementing this by making rules dependent on some kind of controller:
+where the controller is able to change the states or logic. The controller should be implemented as an abstract interface,
+making it easy to provide multiple implementations: for instance, a mouse controller, an OSC controller (which also would 
+make structure synth 'playable' by the OSC emitter for the iPod Touch, or by the Wii->OSC app), or a controller which reads 
+and parses text into controls (this would make it possible to for instance control the sculpting by providing historical documents, 
+spam or other sources of entropy).
+
+
+
+Possible Version 1.x extensions:
+_-------------------------------
+- More complex primitives (tube, mesh, ...)
+? Tagging (e.g. [sphereresolution 3 25])
+       - OpenGL settings (as tags): Perspective, Fog, Coloring, Res, 
+? Real transperancy (req. sorting) [Easier now we have defined bounding boxes]
+? Preprocessor '#include' statement
+? Check for infinite retirement substitution cycles.
+? Better Progress Bar (include updates for transformations loop, pause button?)
+
+
+Possible version 2.x extensions:
+--------------------------------
+- Realtime Screen Space Ambient Occlusion.
+- Textures w. alpha
+- 2D Mode
+- Parameterized rendering (movies)
+  - Random parameters in rule definition
+- Option for Synchronize random seed per generation. (Each expanded rule starts at the same seed).
+? 4D geometry, creating animations by slicing through the 4th dimension.
+? Geometry Distortion plugins (a la fish eye view)
+? Meta-programming via the [Tag Renderer]
+
+
+

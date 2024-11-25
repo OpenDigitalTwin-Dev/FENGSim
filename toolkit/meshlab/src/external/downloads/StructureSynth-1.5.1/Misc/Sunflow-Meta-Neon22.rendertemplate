@@ -1,0 +1,594 @@
+
+
+<template name="Sunflow Neon 22" defaultExtension="Sunflow scene file (*.sc)" >
+<description>
+This is an example of a render template, using one shader for each object.
+Based on a template by Tom Beddard ('subblue')
+Modified for typed substitutions by Neon22
+   
+Includes substitutions for:
+    - box, box::color, box::color_occ,
+	- box::color_glass, box::copper,
+	- box::sphere, box::sphere_occ  (transformable/deformable spheres)
+	- box::torus, box:torus_occ
+	- box::teapot - recommend {s 0.01}
+	- box::gumbo - recommend {s 0.1}  elephant
+	- sphere, sphere::color, sphere::color_occ
+	- sphere::color_glass
+	- sphere::light
+Also has:
+	- choice of GI algorithms
+	- pinhole and thinlens (depth of field) cameras
+	- skylight, HDR IBL, and meshlight(for photons)
+	- optional manual floor
+And predefined shaders for:
+    - glass_lblue, diff_white, diff_brick, mirror_copper, phong_bronze,
+	- ward_brushed_gold, constant_white, occ_white
+( more samples here: http:%%www.crai.archi.fr/RubyLibraryDepot/Ruby/Sunflow/thumb.html )
+</description>
+	<primitive name="begin">
+	    <![CDATA[
+%%----------------------------------------
+%%   Common settings
+image {
+   resolution {width} {height}
+   %% for aa use: 0 2 for speed, 3 2 for quality
+   aa 3 2
+}
+
+%% scene background - comment out if not needed
+background {
+   color  { "sRGB nonlinear" {BR} {BG} {BB} }
+}
+
+
+%%----------------------------------------
+%%   Global Illumination
+%% two different nethods for GI (there are more - see docs)
+/*
+gi {  
+   type ambocc
+   bright { "sRGB nonlinear" 1 1 1 } 
+   dark { "sRGB nonlinear" 0 0 0 }
+   samples 64 
+   maxdist 3.0 
+}
+*/
+gi {
+  type irr-cache
+  samples 512
+  tolerance 0.01
+  spacing 0.05 5.0
+  %global   1000000 grid 100 0.75
+  global   10000 grid 100 0.75    %% 10K is quick approx, 1million is better
+}
+
+%%   Caustics
+%% - Add this if you have glass (must have gi on)
+%photons {
+%  caustics 10000000 kd 64 0.5
+%}
+trace-depths {
+  diff 3
+  refl 4 %glass use > 4
+  refr 4 %glass use > 4
+}
+accel bih
+filter mitchell   %% some sharpening - else choose gaussian
+bucket 64 spiral
+
+
+%%----------------------------------------
+%%   Camera
+%%  - manually change to thinlens if you want depth of field
+camera {
+   type pinhole
+   %type thinlens
+   eye    {CamPosX} {CamPosY} {CamPosZ}
+   target {CamTargetX} {CamTargetY} {CamTargetZ}
+   up     {CamUpX} {CamUpY} {CamUpZ}
+   fov    {fov}
+   aspect {aspect}
+   %fdist 12
+   %lensr 0.1   %%smaller number = less blur
+}
+
+
+%%----------------------------------------
+%%   Light sources
+%% - use one or more
+%% meshlight generates photons for gi solutions
+light {
+   type meshlight
+   name "meshlight"
+   emit 1 1 1
+   radiance 16
+   samples 32
+   points 4
+      -1.79750967026 -6.22097349167 5.70054674149
+      -2.28231739998 -7.26064729691 4.06224298477
+      -4.09493303299 -6.41541051865 4.06224298477
+      -3.61012482643 -5.37573671341 5.70054721832
+   triangles 2
+      0 1 2
+      0 2 3
+}
+
+%% Image Based Lighting (IBL) using lightmap
+light {
+  type ibl
+  image sky_small.hdr  %%put it in same directory as sc file
+  center 0 -1 0
+  up 0 1 0
+  lock true
+  samples 200
+}
+
+/*
+%% fake sky if no IBL and want outside scene
+light {
+  type sunsky
+  up 0 1 0
+  east 0 0 1
+  sundir 1 1 1
+  turbidity 4
+  samples 64
+}
+*/
+%%----------------------------------------
+%%   Custom Floor Object
+%% - uncomment floor if required
+shader {
+	name "floor"
+	type diffuse
+	diff 1 1 1
+	%type amb-occ
+	%bright   1 1 1
+	%dark     0 0 0
+	%samples  4
+	%dist     6
+}
+%object {
+%   shader "floor"
+%   type plane
+%   p 0 -1 0
+%   n 0 1 0
+%}
+
+%%----------------------------------------
+%%  SHADERS
+%% - a set of starter shaders
+%% - either refer to them in the substitution rules below,
+%%   or use them as patterns and make new substitution rules
+
+shader {
+   name "glass_lblue"
+   type glass
+   eta 1.332986   %% water 1.33, flint 1.62, diamond 2.41
+   color 0.94 0.97 1
+}
+shader {
+   name "diff_white"
+   type diffuse
+   diff { "sRGB nonlinear" 1 1 1 }
+}
+shader {
+   name "diff_brick"
+   type diffuse
+   diff { "sRGB nonlinear" 0.56 0.14 0.14 }
+}
+shader {
+   name "mirror_copper"
+   type mirror
+   refl 0.494 0.227 0.082
+}
+shader {
+   name "phong_bronze"
+   type phong
+   diff 0.247 0.129 0.035
+   spec 0.247 0.129 0.035 5
+}
+shader {
+  name "ward_brushed_gold"
+   type ward
+   diff 0.34 0.19 0.03
+   spec 0.44 0.29 0.04
+   rough 0.2 0.5
+}
+shader {
+   name "constant_white"
+   type constant
+   color { "sRGB nonlinear" 1 1 1 }
+}
+
+shader {
+  name "occ_white"
+  type amb-occ
+  bright   1 1 1
+  dark     0 0 0
+  samples  64
+  dist     6
+}
+
+
+%%----------------------------------------
+%%  OBJECTS
+
+%% sphere
+object {
+	shader none
+	transform col 0.001 0 0 0  0 0.001 0 0  0 0 0.001 0  0 0 0 1
+	type sphere
+	name "Sphere1"
+	c 0 0 0
+	r 0.5  	}
+	
+%% torus (not centered so will appear off-center)
+object {
+  shader none
+  transform col 0.001 0 0 0  0 0.001 0 0  0 0 0.001 0  0 0 0 1
+  type torus
+  name "Torus1"
+  r 0.05 0.5  }
+  
+%% elephant (not centered so will appear off-center)
+object {
+	shader none
+	transform col 0.001 0 0 0  0 0.001 0 0  0 0 0.001 0  0 0 0 1
+	type gumbo
+	name "Gumbo1"
+	subdivs 7   }
+	
+%% teapot (not centered so will appear off-center)
+object {
+	shader none
+	transform col 0.001 0 0 0  0 0.001 0 0  0 0 0.001 0  0 0 0 1
+	type teapot
+	name "Teapot1"
+	subdivs 7   }
+
+%% box ( not a primitive in 0.07.2 so define mesh here)
+object {
+   shader none
+   transform col 0.001 0 0 0  0 0.001 0 0  0 0 0.001 0  0 0 0 1
+   type generic-mesh
+   name "Box"
+   points 8
+       1  1  1
+       1  0  1
+       0  0  1
+       0  1  1
+       0  1  0
+       0  0  0
+       1  0  0
+       1  1  0
+
+   triangles 12
+      0 3 2
+      0 2 1
+      2 3 4
+      2 4 5
+      3 0 7
+      3 7 4
+      0 1 6
+      0 6 7
+      1 2 5
+      1 5 6
+      5 4 7
+      5 7 6
+   normals none
+   uvs vertex
+	 1 1
+	 1 0
+	 0 0
+	 0 1
+	 0 1
+	 0 0
+	 1 0
+	 1 1
+}
+		]]>
+	</primitive>
+
+%%----------------------------------------
+%% For adding to end of file (not required for Sunflow renderer)
+	<primitive name="end">
+	    <![CDATA[
+
+		]]>
+	</primitive>
+
+	
+%%------------------------------
+%%--------- box ----------------	
+<primitive name="box">
+		<![CDATA[
+instance {
+	name "{uid}"
+	geometry "Box"
+	transform col {matrix}
+	shader "occ_white"
+}
+		]]>
+	</primitive>
+
+%%-----------------------------------------
+%%--------- box:copper --------------------	
+
+<primitive name="box" type="copper">
+		<![CDATA[
+instance {
+   name "{uid}"
+   geometry "Box"
+   transform col {matrix}
+   shader "copper"
+}
+		]]>
+</primitive>
+
+%%-----------------------------------------
+%%--------- box::color --------------------	
+<primitive name="box" type="color">
+		<![CDATA[
+shader {
+	name "shader{uid}"
+	type diffuse
+	diff { "sRGB nonlinear" {r} {g} {b} }
+}
+instance {
+	name "{uid}"
+	geometry "Box"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]>
+	</primitive>	
+	
+%%-----------------------------------------
+%%--------- box::color_occ ----------------	
+<primitive name="box" type="color_occ">
+		<![CDATA[
+shader {
+	name "shader{uid}"
+	type amb-occ
+	bright   { "sRGB nonlinear" {r} {g} {b} }
+	dark     0 0 0
+	samples  16
+	dist     6
+}
+instance {
+	name "{uid}"
+	geometry "Box"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]>
+	</primitive>
+	
+%%-----------------------------------------
+%%--------- box:color_glass ---------------
+
+<primitive name="box" type="color_glass">
+		<![CDATA[
+shader {
+	name "shader{uid}"
+	type glass
+    eta 1.62
+    color { "sRGB nonlinear" {r} {g} {b} }
+}
+instance {
+   name "{uid}"
+   geometry "Box"
+   transform col {matrix}
+   shader "shader{uid}"
+}
+		]]>
+</primitive>
+   
+%%----------------------------------------
+%%--------- box::sphere ------------------		
+<primitive name="box" type="sphere">
+		<![CDATA[
+shader {
+	name "shader{uid}"
+	type diffuse
+	diff { "sRGB nonlinear" {r} {g} {b} }
+}
+instance {
+	name "{uid}"
+	geometry "Sphere1"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]>
+	</primitive>
+	
+%%----------------------------------------
+%%--------- box::sphere_occ --------------		
+<primitive name="box" type="sphere_occ">
+		<![CDATA[
+shader {
+	name "shader{uid}"
+	type amb-occ
+	bright   { "sRGB nonlinear" {r} {g} {b} }
+	dark     0 0 0
+	samples  16
+	dist     6
+}
+instance {
+	name "{uid}"
+	geometry "Sphere1"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]>
+	</primitive>
+	
+%%----------------------------------------
+%%--------- box::torus -------------------		
+<primitive name="box" type="torus">
+		<![CDATA[
+shader {
+	name "shader{uid}"
+	type diffuse
+	diff { "sRGB nonlinear" {r} {g} {b} }
+}
+instance {
+	name "{uid}"
+	geometry "Torus1"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]>
+	</primitive>
+	
+%%----------------------------------------
+%%--------- box::torus_occ ---------------		
+<primitive name="box" type="torus_occ">
+		<![CDATA[
+shader {
+	name "shader{uid}"
+	type amb-occ
+	bright   { "sRGB nonlinear" {r} {g} {b} }
+	dark     0 0 0
+	samples  16
+	dist     6
+}
+instance {
+	name "{uid}"
+	geometry "Torus1"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]>
+	</primitive>
+	
+%%----------------------------------------
+%%--------- box::teapot -------------------		
+<primitive name="box" type="teapot">
+		<![CDATA[
+shader {
+	name "shader{uid}"
+	type amb-occ
+	bright   { "sRGB nonlinear" {r} {g} {b} }
+	dark     0 0 0
+	samples  16
+	dist     6
+}
+instance {
+	name "{uid}"
+	geometry "Teapot1"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]>
+	</primitive>
+
+%%----------------------------------------
+%%--------- box::gumbo -------------------		
+<primitive name="box" type="gumbo">
+		<![CDATA[
+shader {
+	name "shader{uid}"
+	type amb-occ
+	bright   { "sRGB nonlinear" {r} {g} {b} }
+	dark     0 0 0
+	samples  16
+	dist     6
+}
+instance {
+	name "{uid}"
+	geometry "Gumbo1"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]>
+	</primitive>
+
+%%----------------------------------------
+%%--------- sphere -----------------------		
+<primitive name="sphere">
+		<![CDATA[
+object {
+	shader "occ_white"
+	type sphere
+	c {cx} {cy} {cz}
+	r {rad}
+}
+		]]>
+	</primitive>
+	
+%%----------------------------------------
+%%--------- sphere::color ----------------		
+<primitive name="sphere" type="color">
+		<![CDATA[
+shader {
+	name "shader{uid}"
+	type diffuse
+	diff { "sRGB nonlinear" {r} {g} {b} }
+}
+object {
+	shader "shader{uid}"
+	type sphere
+	c {cx} {cy} {cz}
+	r {rad}
+}
+		]]>
+	</primitive>
+	
+%%----------------------------------------
+%%--------- sphere::color_occ ------------		
+<primitive name="sphere" type="color_occ">
+		<![CDATA[
+shader {
+	name "shader{uid}"
+	type amb-occ
+	bright   { "sRGB nonlinear" {r} {g} {b} }
+	dark     0 0 0
+	samples  16
+	dist     6
+}
+object {
+	shader "shader{uid}"
+	type sphere
+	c {cx} {cy} {cz}
+	r {rad}
+}
+		]]>
+	</primitive>	
+	
+%%----------------------------------------
+%%--------- sphere::color_glass ----------		
+<primitive name="sphere" type="color_glass">
+		<![CDATA[
+shader {
+	name "shader{uid}"
+	type glass
+    eta 1.62
+    color { "sRGB nonlinear" {r} {g} {b} }
+}
+object {
+	shader "shader{uid}"
+	type sphere
+	c {cx} {cy} {cz}
+	r {rad}
+}
+		]]>
+	</primitive>	
+
+%%----------------------------------------
+%%--------- sphere::light ----------------		
+<primitive name="sphere" type="light">
+		<![CDATA[
+light {
+	type spherical
+	color { "sRGB nonlinear" {r} {g} {b} }
+	radiance 8.0
+	center {cx} {cy} {cz}
+	radius {rad}
+	samples 16
+}
+		]]>
+	</primitive>
+
+</template>

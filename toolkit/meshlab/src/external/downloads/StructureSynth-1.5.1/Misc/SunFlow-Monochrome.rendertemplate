@@ -1,0 +1,134 @@
+<!--
+   This is an example of a render template. 
+-->
+<template name="SunFlow Monochrome" defaultExtension="Sunflow scene file (*.sc)">
+<description>
+This is a simple monochrome export template for Sunflow.
+All objects colors will be white, except the background color, which may be changed.
+
+Template by Syntopia.
+</description>
+	<primitive name="begin">
+	    <![CDATA[
+%photons {
+%  caustics 10000000 kd 64 0.5
+%}
+
+shader {
+  name "shader05"
+  type amb-occ
+  bright   1 1 1
+  dark     0 0 0
+  samples  16
+  dist     6
+}
+
+%% common settings
+
+image {
+   resolution {width} {height}
+   aa 1 2
+}
+
+gi {
+   type ambocc
+   bright { "sRGB nonlinear" 1 1 1 } 
+   dark { "sRGB nonlinear" 0 0 0 }
+   samples 64 
+   maxdist 3.0 
+}
+
+accel bih
+filter mitchell
+bucket 32 row
+
+
+
+%% scene background - comment out if not needed
+background {
+   color  { "sRGB nonlinear" {BR} {BG} {BB} }
+}
+
+
+
+%% camera
+
+camera {
+   type pinhole
+   eye    {CamPosX} {CamPosY} {CamPosZ}
+   target {CamTargetX} {CamTargetY} {CamTargetZ}
+   up     {CamUpX} {CamUpY} {CamUpZ}
+   fov    {fov}
+   aspect {aspect}
+}
+
+
+
+
+
+%% geometry
+
+object {
+   shader none
+   transform col 0.001 0 0 0  0 0.001 0 0  0 0 0.001 0  0 0 0 1
+   type generic-mesh
+   name "Box"
+   points 8
+       1  1  1
+       1  0  1
+       0  0  1
+       0  1  1
+       0  1  0
+       0  0  0
+       1  0  0
+       1  1  0
+
+   triangles 12
+      0 3 2
+      0 2 1
+      2 3 4
+      2 4 5
+      3 0 7
+      3 7 4
+      0 1 6
+      0 6 7
+      1 2 5
+      1 5 6
+      5 4 7
+      5 7 6
+   normals none
+   uvs none
+}
+
+
+		]]>
+	</primitive>
+	
+	<primitive name="end">
+	    <![CDATA[
+
+		]]>
+	</primitive>
+
+	<primitive name="box">
+		<![CDATA[
+instance {
+   name "{uid}"
+   geometry "Box"
+   transform col {matrix}
+   shader "shader05"
+}
+		]]>
+	</primitive>
+	
+	<primitive name="sphere">
+		<![CDATA[
+object {
+  shader "shader05"
+  type sphere
+  c {cx} {cy} {cz}
+  r {rad}
+}
+		]]>
+	</primitive>
+</template>

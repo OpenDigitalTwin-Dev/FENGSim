@@ -1,0 +1,238 @@
+<!--
+
+ -->
+<template name="Textured Sun Flow Template" defaultExtension="Sunflow scene file (*.sc)">
+	<description>
+This is an example of a render template, defining three textured types:
+box::texture1 -> uses texture "texture1.png"
+box::texture2 -> uses texture "texture2.png"
+box::texture3 -> uses texture "texture3.png"
+
+Template by Syntopia.
+	</description>
+	<primitive name="begin">
+	    <![CDATA[
+%photons {
+%  caustics 10000000 kd 64 0.5
+%}
+
+%% common settings
+image {
+   resolution {width} {height}
+	aa 0 2
+}
+
+gi {
+   type ambocc
+   bright { "sRGB nonlinear" 1 1 1 } 
+   dark { "sRGB nonlinear" 0 0 0 }
+   samples 64 
+   maxdist 3.0 
+}
+
+accel bih
+filter mitchell
+bucket 32 spiral
+
+%% camera
+camera {
+   type pinhole
+   eye    {CamPosX} {CamPosY} {CamPosZ}
+   target {CamTargetX} {CamTargetY} {CamTargetZ}
+   up     {CamUpX} {CamUpY} {CamUpZ}
+   fov    {fov}
+   aspect {aspect}
+}
+
+
+%% common shaders
+shader {
+	name "floor"
+	type amb-occ
+	bright   1 1 1
+	dark     0 0 0
+	samples  4
+	dist     6
+}
+
+shader {
+	name "textureshader1"
+	type amb-occ
+   texture "texture1.png"
+   dark { "sRGB nonlinear" 1.0 1.0 1.0 }
+   samples 32
+   dist 3.0
+}
+
+shader {
+	name "plain"
+	type amb-occ
+	bright { "sRGB nonlinear" 1.0 1.0 1.0 }
+	dark { "sRGB nonlinear"   0 0 0 }
+	samples  32
+	dist     6
+}
+
+shader {
+	name "textureshader2"
+	type amb-occ
+   texture "texture2.png"
+   dark { "sRGB nonlinear" 1.0 1.0 1.0 }
+   samples 32
+   dist 3.0
+}
+
+shader {
+	name "textureshader3"
+	type amb-occ
+   texture "texture3.png"
+   dark { "sRGB nonlinear" 1.0 1.0 1.0 }
+   samples 32
+   dist 3.0
+}
+
+%% scene background - comment out if not needed
+background {
+   color  { "sRGB nonlinear" {BR} {BG} {BB} }
+}
+
+
+
+object {
+   shader none
+   transform col 0.001 0 0 0  0 0.001 0 0  0 0 0.001 0  0 0 0 1
+   type generic-mesh
+   name "Box"
+   points 8
+       1  1  1
+       1  0  1
+       0  0  1
+       0  1  1
+       0  1  0
+       0  0  0
+       1  0  0
+       1  1  0
+   triangles 12
+      0 3 2
+      0 2 1
+      2 3 4
+      2 4 5
+      3 0 7
+      3 7 4
+      0 1 6
+      0 6 7
+      1 2 5
+      1 5 6
+      5 4 7
+      5 7 6
+   normals none
+   uvs facevarying
+	  1 1 0 1 0 0 
+	  1 1 0 0 1 0 
+	  0 0 1 0 1 1
+	  0 0 1 1 0 1 
+	  0 0 1 0 1 1 
+	  0 0 1 1 0 1 
+	  1 0 0 0 0 1 
+	  1 0 0 1 1 1 
+	  1 0 0 0 0 1 
+	  1 0 0 1 1 1
+	  0 0 0 1 1 1
+	  0 0 1 1 1 0
+}
+		]]>
+	</primitive>
+	
+	<primitive name="end">
+	    <![CDATA[
+
+		]]>
+	</primitive>
+
+	<primitive name="box" type="texture1">
+		<![CDATA[
+
+instance {
+	name "{uid}"
+	geometry "Box"
+	transform col {matrix}
+	shader "textureshader1"
+}
+		]]>
+	</primitive>
+	
+	<primitive name="box" type="texture2">
+		<![CDATA[
+
+instance {
+	name "{uid}"
+	geometry "Box"
+	transform col {matrix}
+	shader "textureshader2"
+}
+		]]>
+	</primitive>
+	
+	<primitive name="box" type="texture3">
+		<![CDATA[
+
+
+instance {
+	name "{uid}"
+	geometry "Box"
+	transform col {matrix}
+	shader "textureshader3"
+}
+		]]>
+	</primitive>
+	
+	<primitive name="box">
+		<![CDATA[
+
+
+instance {
+	name "{uid}"
+	geometry "Box"
+	transform col {matrix}
+	shader "plain"
+}
+		]]>
+	</primitive>
+	
+	
+	<primitive name="sphere">
+		<![CDATA[
+shader {
+	name "shader{uid}"
+	%type amb-occ
+	%bright   {r} {g} {b}
+	%dark     0 0 0
+	%samples  16
+	%dist     6
+	type diffuse
+	diff { "sRGB nonlinear" {r} {g} {b} }
+}
+
+object {
+	shader "shader{uid}"
+	type sphere
+	c {cx} {cy} {cz}
+	r {rad}
+}
+
+
+		]]>
+	</primitive>
+		<primitive name="sphere" type="light">
+		<![CDATA[
+light {
+	type spherical
+	color { "sRGB nonlinear" {r} {g} {b} }
+	radiance 20.0
+	center {cx} {cy} {cz}
+	radius {rad}
+	samples 16
+}
+		]]>
+	</primitive>
+</template>

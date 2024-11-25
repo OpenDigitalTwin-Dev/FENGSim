@@ -1,0 +1,128 @@
+<template defaultExtension="Sunflow scene file (*.sc)" name="Sunflow" runAfter="&quot;%SUNFLOW%\sunflow2.bat&quot; &quot;$FILE&quot; -o &quot;$FILE.png&quot;">
+ <description>
+A simple Sunflow render template, using one shader for each object. 
+The template uses ambient occlusion lightning, which means there is no need to worry about setting up light sources. 
+
+This template is a good choice for trying out Sunflow.  
+   
+Original template by Syntopia.   
+The Sunflow coloring was added by Tom Beddard ('subblue')
+</description>
+ <primitive name="begin"><![CDATA[
+%photons {
+%  caustics 10000000 kd 64 0.5
+%}
+
+%% common settings
+image {
+   resolution {width} {height}
+	aa 0 2
+}
+
+gi {
+   type ambocc
+   bright { "sRGB nonlinear" 1 1 1 } 
+   dark { "sRGB nonlinear" 0 0 0 }
+   samples 64 
+   maxdist 3.0 
+}
+
+accel bih
+filter mitchell
+bucket 32 spiral
+
+%% camera
+camera {
+   type pinhole
+   eye    {CamPosX} {CamPosY} {CamPosZ}
+   target {CamTargetX} {CamTargetY} {CamTargetZ}
+   up     {CamUpX} {CamUpY} {CamUpZ}
+   fov    {fov}
+   aspect {aspect}
+}
+
+
+%% common shaders
+shader {
+	name "floor"
+	type amb-occ
+	bright   1 1 1
+	dark     0 0 0
+	samples  4
+	dist     6
+}
+
+%% scene background - comment out if not needed
+background {
+   color  { "sRGB nonlinear" {BR} {BG} {BB} }
+}
+
+
+%% geometry
+object {
+   shader none
+   transform col 0.001 0 0 0  0 0.001 0 0  0 0 0.001 0  0 0 0 1
+   type generic-mesh
+   name "Box"
+   points 8
+       1  1  1
+       1  0  1
+       0  0  1
+       0  1  1
+       0  1  0
+       0  0  0
+       1  0  0
+       1  1  0
+
+   triangles 12
+      0 3 2
+      0 2 1
+      2 3 4
+      2 4 5
+      3 0 7
+      3 7 4
+      0 1 6
+      0 6 7
+      1 2 5
+      1 5 6
+      5 4 7
+      5 7 6
+   normals none
+   uvs none
+}
+		]]></primitive>
+ <primitive name="end"><![CDATA[
+
+		]]></primitive>
+ <primitive name="box"><![CDATA[
+shader {
+	name "shader{uid}"
+	type amb-occ
+	bright  { "sRGB nonlinear"   {r} {g} {b} }
+	dark     0 0 0
+	samples  16
+	dist     6
+}
+
+instance {
+	name "{uid}"
+	geometry "Box"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]></primitive>
+ <primitive name="sphere"><![CDATA[
+shader {
+	name "shader{uid}"
+	type diffuse
+	diff { "sRGB nonlinear" {r} {g} {b} }
+}
+
+object {
+	shader "shader{uid}"
+	type sphere
+	c {cx} {cy} {cz}
+	r {rad}
+}
+		]]></primitive>
+</template>

@@ -1,0 +1,11 @@
+
+add_library(Qt5::VulkanServerBufferIntegrationPlugin MODULE IMPORTED)
+
+
+_populate_WaylandCompositor_plugin_properties(VulkanServerBufferIntegrationPlugin RELEASE "wayland-graphics-integration-server/libqt-wayland-compositor-vulkan-server.so" FALSE)
+
+list(APPEND Qt5WaylandCompositor_PLUGINS Qt5::VulkanServerBufferIntegrationPlugin)
+set_property(TARGET Qt5::WaylandCompositor APPEND PROPERTY QT_ALL_PLUGINS_wayland_graphics_integration_server Qt5::VulkanServerBufferIntegrationPlugin)
+set_property(TARGET Qt5::VulkanServerBufferIntegrationPlugin PROPERTY QT_PLUGIN_TYPE "wayland-graphics-integration-server")
+set_property(TARGET Qt5::VulkanServerBufferIntegrationPlugin PROPERTY QT_PLUGIN_EXTENDS "")
+set_property(TARGET Qt5::VulkanServerBufferIntegrationPlugin PROPERTY QT_PLUGIN_CLASS_NAME "VulkanServerBufferIntegrationPlugin")

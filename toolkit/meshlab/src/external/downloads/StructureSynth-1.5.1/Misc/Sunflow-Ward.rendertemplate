@@ -1,0 +1,155 @@
+<!--
+   
+-->
+<template name="SunFlow Ward" defaultExtension="Sunflow scene file (*.sc)">
+<description>
+This is an example of a render template, using one Ward shader for each object. 
+
+Template by Syntopia. 
+</description>
+	<primitive name="begin">
+	    <![CDATA[
+
+%% common settings
+image {
+   resolution {width} {height}
+	aa 0 2
+}
+
+accel bih
+filter mitchell
+bucket 32 spiral
+
+%% camera
+camera {
+   type pinhole
+   eye    {CamPosX} {CamPosY} {CamPosZ}
+   target {CamTargetX} {CamTargetY} {CamTargetZ}
+   up     {CamUpX} {CamUpY} {CamUpZ}
+   fov    {fov}
+   aspect {aspect}
+}
+
+%% light sources
+light {
+   type meshlight
+   name "meshlight"
+   emit 1 1 1
+   radiance 16
+   samples 32
+   points 4
+      -1.79750967026 -6.22097349167 5.70054674149
+      -2.28231739998 -7.26064729691 4.06224298477
+      -4.09493303299 -6.41541051865 4.06224298477
+      -3.61012482643 -5.37573671341 5.70054721832
+   triangles 2
+      0 1 2
+      0 2 3
+}
+
+light {
+   type meshlight
+   name "meshlight.001"
+   emit 1 1 1
+   radiance 15
+   samples 32
+   points 4
+      -4.25819396973 -4.8784570694 5.70054674149
+      -5.13696432114 -5.61583280563 4.06224298477
+      -6.422539711 -4.08374404907 4.06224298477
+      -5.54376888275 -3.34636831284 5.70054721832
+   triangles 2
+      0 1 2
+      0 2 3
+}
+
+
+
+%% scene background - comment out if not needed
+background {
+   color  { "sRGB nonlinear" {BR} {BG} {BB} }
+}
+
+
+
+%% geometry
+object {
+   shader none
+   transform col 0.001 0 0 0  0 0.001 0 0  0 0 0.001 0  0 0 0 1
+   type generic-mesh
+   name "Box"
+   points 8
+       1  1  1
+       1  0  1
+       0  0  1
+       0  1  1
+       0  1  0
+       0  0  0
+       1  0  0
+       1  1  0
+
+   triangles 12
+      0 3 2
+      0 2 1
+      2 3 4
+      2 4 5
+      3 0 7
+      3 7 4
+      0 1 6
+      0 6 7
+      1 2 5
+      1 5 6
+      5 4 7
+      5 7 6
+   normals none
+   uvs none
+}
+		]]>
+	</primitive>
+	
+	<primitive name="end">
+	    <![CDATA[
+
+		]]>
+	</primitive>
+
+	<primitive name="box">
+		<![CDATA[
+shader {
+   name "shader{uid}"
+   type ward
+   diff { "sRGB nonlinear" {r} {g} {b} }
+   spec { "sRGB nonlinear" 1 1 1 }
+   rough .4 .01
+}	
+
+instance {
+	name "{uid}"
+	geometry "Box"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]>
+	</primitive>
+	
+	<primitive name="sphere">
+		<![CDATA[
+
+shader {
+   name "shader{uid}"
+   type ward
+   diff { "sRGB nonlinear" {r} {g} {b} }
+   spec { "sRGB nonlinear" 1 1 1 }
+   rough .4 .01
+}	
+	
+
+object {
+	shader "shader{uid}"
+	type sphere
+	c {cx} {cy} {cz}
+	r {rad}
+}
+		]]>
+	</primitive>
+</template>

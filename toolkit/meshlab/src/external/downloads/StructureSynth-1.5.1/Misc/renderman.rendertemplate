@@ -1,0 +1,86 @@
+
+<template name="Renderman Template" defaultExtension="Renderman file (*.RENDERMAN)" >
+<description>
+Structure Synth export template for Renderman compliant renderers.  
+   
+This template is created by Tom Beddard ('subblue')
+   
+# Open-source renderman solutions
+# Aqsis: http://www.aqsis.org/
+# Pixie: http://www.renderpixie.com/
+# Lots more info from the Renderman Repository:
+# http://www.renderman.org/RMR/
+</description>
+<primitive name="begin">
+<![CDATA[
+# Open-source renderman solutions
+# Aqsis: http://www.aqsis.org/
+# Pixie: http://www.renderpixie.com/
+# Lots more info from the Renderman Repository:
+# http://www.renderman.org/RMR/
+
+Display "structuresynth.tif" "tiff" "rgb" 
+Display "+structuresynth.tif" "framebuffer" "rgb"
+
+Format 640 480 1
+
+Projection "perspective" "fov" [30]
+WorldBegin 
+Sides 1
+Translate 0 0 50
+Rotate 180 0 1 0
+
+LightSource "ambientlight" 1 "intensity" [0.5]
+LightSource "distantlight" 2 "intensity" [1] "from" [0 0 6] "to" [0 0 -6]
+
+ObjectBegin "box"
+    Polygon "P" [-0.5 -0.5 0.5 -0.5 -0.5 -0.5 0.5 -0.5 -0.5 0.5 -0.5 0.5]
+    Polygon "P" [-0.5 -0.5 0.5 -0.5 0.5 0.5 -0.5 0.5 -0.5 -0.5 -0.5 -0.5]
+    Polygon "P" [0.5 0.5 -0.5 -0.5 0.5 -0.5 -0.5 0.5 0.5 0.5 0.5 0.5]
+    Polygon "P" [0.5 0.5 -0.5 0.5 0.5 0.5 0.5 -0.5 0.5 0.5 -0.5 -0.5]
+    Polygon "P" [0.5 -0.5 0.5 0.5 0.5 0.5 -0.5 0.5 0.5 -0.5 -0.5 0.5]
+    Polygon "P" [-0.5 0.5 -0.5 0.5 0.5 -0.5 0.5 -0.5 -0.5 -0.5 -0.5 -0.5]
+ObjectEnd
+
+]]>
+</primitive>
+
+<primitive name="end">
+<![CDATA[
+WorldEnd
+]]>
+</primitive>
+
+<primitive name="box">
+<![CDATA[
+Color [{r} {g} {b}]
+Surface "plastic"
+TransformBegin 
+    Translate {matrix}
+    ObjectInstance "box"
+TransformEnd
+]]>
+</primitive>
+
+<primitive name="sphere">
+<![CDATA[
+Color [{r} {g} {b}]
+Surface "plastic"
+TransformBegin 
+    Translate {cx} {cy} {cz}
+    Sphere {rad} -{rad} {rad} 360
+TransformEnd
+]]>
+</primitive>
+
+<primitive name="grid">
+<![CDATA[
+Color [{r} {g} {b}]
+Surface "plastic"
+TransformBegin 
+    Translate {matrix}
+    ObjectInstance "box"
+TransformEnd
+]]>
+</primitive>
+</template>

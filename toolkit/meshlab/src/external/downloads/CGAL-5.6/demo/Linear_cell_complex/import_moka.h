@@ -1,0 +1,184 @@
+// Copyright (c) 2011 CNRS and LIRIS' Establishments (France).
+// All rights reserved.
+//
+// This file is part of CGAL (www.cgal.org)
+//
+// $URL: https://github.com/CGAL/cgal/blob/v5.6/Linear_cell_complex/demo/Linear_cell_complex/import_moka.h $
+// $Id: import_moka.h 999a813 2022-05-05T13:34:19+02:00 Guillaume Damiand
+// SPDX-License-Identifier: LGPL-3.0-or-later OR LicenseRef-Commercial
+//
+// Author(s)     : Guillaume Damiand <guillaume.damiand@liris.cnrs.fr>
+//
+#ifndef IMPORT_MOKA_H
+#define IMPORT_MOKA_H
+
+namespace CGAL
+{
+struct GDart
+{
+  unsigned int alpha[4];
+  Dart_descriptor dh;
+  LCC::Vertex_attribute_descriptor vh;
+
+  GDart() : dh(LCC::null_descriptor), vh(LCC::null_descriptor)
+  {}
+
+  GDart(const GDart& adart) : dh(adart.dh),
+    vh(adart.vh)
+  {
+    for (unsigned int i=0; i<4; ++i)
+      alpha[i]=adart.alpha[i];
+  }
+};
+
+template<typename LCC>
+bool import_from_moka(LCC& lcc, const char* filename)
+{
+  typedef typename LCC::Point Point;
+
+  std::ifstream ifile(filename);
+  if (!ifile)
+  {
+    std::cout<<"Error opening file "<<filename<<"."<<std::endl;
+    return false;
+  }
+
+  std::string line;
+  std::getline(ifile, line);
+
+  if ( line == "Moka file [binary]" )
+  {
+    std::cout<<"Binary file not (yet) considered.\n";
+    return false;
+  }
+  else if ( line != "Moka file [ascii]" )
+  {
+    std::cout<<"File "<<filename<<" is not a moka file.\n";
+    std::cout<< line;
+    return false;
+  }
+
+  // To skip the masks mark (TODO read the marks ?)
+  std::getline(ifile, line);
+
+  std::vector<GDart> gdarts;
+  unsigned int nbLoaded = 0;
+  unsigned int number;
+  double x,y,z;
+
+  // First load all the gdarts, and create vertex attributes
+  while(ifile)
+  {
+    GDart agdart;
+    ifile>>agdart.alpha[0]>>agdart.alpha[1]
+        >>agdart.alpha[2]>>agdart.alpha[3]; // the 4 alpha
+    ifile>>number>>number>>number>>number; // to skip the 4*8 marks
+    if ( agdart.alpha[0]==nbLoaded )
+    {
+      std::cout<<"Impossible to load a moka file with 0-free darts.\n";
+      return false;
+    }
+    if ( ifile )
+    {
+      ifile>>number; // bool to know if dart has a vertex of not.
+      if (number)
+      {
+        ifile>>x>>y>>z;
+        agdart.vh = lcc.create_vertex_attribute(Point(x, y, z));
+      }
+
+      gdarts.push_back(agdart);
+      ++nbLoaded;
+    }
+  }
+  ifile.close();
+
+  // Second orient the gmap, and create oriented darts.
+  std::stack<unsigned int> totreat;
+  for (unsigned int startingdart = 0; startingdart<nbLoaded; ++startingdart)
+  {
+    bool orient=(gdarts[startingdart].dh==LCC::null_descriptor);
+    for (unsigned int dim=0; orient && dim<4; ++dim)
+      if (gdarts[gdarts[startingdart].alpha[dim]].dh!=LCC::null_descriptor) orient=false;
+
+    if ( orient )
+    {
+      totreat.push(startingdart);
+      gdarts[startingdart].dh=lcc.create_dart();
+
+      while ( !totreat.empty() )
+      {
+        unsigned int i=totreat.top();
+        totreat.pop();
+
+        assert(gdarts[i].dh!=LCC::null_descriptor);
+
+        for (unsigned int dim=1; dim<4; ++dim)
+        {
+          if (gdarts[i].alpha[dim]!=i &&
+              gdarts[gdarts[i].alpha[dim]].vh!=LCC::null_descriptor)
+          {
+            gdarts[i].vh = gdarts[gdarts[i].alpha[dim]].vh;
+            gdarts[gdarts[i].alpha[dim]].vh = LCC::null_descriptor;
+          }
+
+          unsigned int alpha0 = gdarts[i].alpha[0];
+          assert( alpha0!=i );
+
+          if (gdarts[alpha0].alpha[dim]!=alpha0)
+          {
+            if ( gdarts[gdarts[alpha0].alpha[dim]].dh==LCC::null_descriptor )
+            {
+              totreat.push(gdarts[alpha0].alpha[dim]);
+              gdarts[gdarts[alpha0].alpha[dim]].dh = lcc.create_dart();
+              lcc.basic_link_beta(gdarts[i].dh,
+                                  gdarts[gdarts[alpha0].alpha[dim]].dh,
+                  dim);
+            }
+            else if (lcc.is_free(gdarts[i].dh, dim))
+            {
+              lcc.basic_link_beta(gdarts[i].dh,
+                                  gdarts[gdarts[alpha0].alpha[dim]].dh,
+                  dim);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Test that the gmap was orientable.
+  bool orientable = true;
+  for (unsigned int i = 0; i<nbLoaded; ++i)
+  {
+    if (gdarts[i].dh!=LCC::null_descriptor)
+    {
+      for (unsigned int dim=0; dim<4; ++dim)
+      {
+        if (orientable &&
+            gdarts[i].alpha[dim]!=i &&
+            gdarts[gdarts[i].alpha[dim]].dh!=LCC::null_descriptor)
+        {
+          std::cout<<"Pb, the gmap is NOT orientable."<<std::endl;
+          orientable=false;
+          // lcc.clear();
+        }
+      }
+
+      if ( lcc.template attribute<3>(gdarts[i].dh) == LCC::null_descriptor )
+      {
+        lcc.template set_attribute<3>(gdarts[i].dh, lcc.template create_attribute<3>());
+      }
+    }
+    if (gdarts[i].vh!=LCC::null_descriptor)
+    {
+      lcc.set_vertex_attribute(gdarts[i].dh, gdarts[i].vh);
+    }
+  }
+
+  return true;
+}
+
+}
+
+#endif

@@ -1,0 +1,582 @@
+<template defaultExtension="Sunflow scene file (*.sc)" name="SunFlow Ultimate Groovelock" >
+ <description>
+This is an example of a render template, using one shader for each object.	 
+Based on a template by Tom Beddard ('subblue')
+	
+2009-02-21
+- Support for 'Distorted' spheres courtesy of Neon23
+- Extended to support multiple shaders by Erik Wrenholt ('groovelock')
+</description>
+ <primitive name="begin" ><![CDATA[
+%photons {
+%	caustics 10000000 kd 64 0.5
+%}
+
+%% common settings
+image {
+	resolution {width} {height}
+	aa 0 2
+	filter blackman-harris
+}
+
+accel bih
+bucket 32 spiral
+
+%% camera
+camera {
+	type	pinhole
+% 	type	thinlens	
+	eye		{CamPosX} {CamPosY} {CamPosZ}
+	target	{CamTargetX} {CamTargetY} {CamTargetZ}
+	up		{CamUpX} {CamUpY} {CamUpZ}
+	fov		{fov}
+	aspect	{aspect}
+%	fdist	{CamPosZ}
+%	lensr	0.5	
+}
+
+
+%% light sources
+light {
+	type meshlight
+	name "meshlight"
+	emit 1 1 1
+	radiance 24
+	samples 32
+	points 4
+	3 12 3
+	3 12 -3
+	-3 12 3
+	-3 12 -3
+	triangles 2
+	 2 1 0
+	 1 2 3
+}
+
+%% light sources
+light {
+	type meshlight
+	name "meshlight.2"
+	emit 1 1 1
+	radiance 4
+	samples 32
+	points 4
+	4 4 12
+	4 -4 12
+	-4 4 12
+	-4 -4 12
+	triangles 2
+	 0 1 2
+	 3 2 1
+}
+
+%% scene background - comment out if not needed
+background {
+   color  { "sRGB nonlinear" {BR} {BG} {BB} }
+}
+
+
+%% Geometry
+
+%% Geometry for box::sphere
+object {
+	shader none
+	transform col 0.001 0 0 0	0 0.001 0 0 0 0 0.001 0	 0 0 0 1
+	type sphere
+	name "Sphere_1"
+}
+
+%% Geometry for box
+object {
+	shader none
+	transform col 0.001 0 0 0	0 0.001 0 0	 0 0 0.001 0	0 0 0 1
+	type generic-mesh
+	name "Box"
+	points 8
+		1	1	 1
+		1	0	 1
+		0	0	 1
+		0	1	 1
+		0	1	 0
+		0	0	 0
+		1	0	 0
+		1	1	 0
+
+	triangles 12
+	  0 3 2
+	  0 2 1
+	  2 3 4
+	  2 4 5
+	  3 0 7
+	  3 7 4
+	  0 1 6
+	  0 6 7
+	  1 2 5
+	  1 5 6
+	  5 4 7
+	  5 7 6
+	normals none
+	uvs none
+}
+		]]></primitive>
+ <primitive name="end" ><![CDATA[
+
+		]]></primitive>
+ <!-- ===========================================================================
+Normal 'box'.  Use diffuse shader
+-->
+ <!-- box::shiny -->
+ <primitive type="shiny" name="box" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type shiny
+	diff { "sRGB nonlinear" {r} {g} {b} }
+	refl 0.5
+}
+
+instance {
+	name "{uid}"
+	geometry "Box"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]></primitive>
+ <!-- box::diffuse -->
+ <primitive type="diffuse" name="box" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type diffuse
+	diff { "sRGB nonlinear" {r} {g} {b} }
+}
+
+instance {
+	name "{uid}"
+	geometry "Box"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]></primitive>
+ <!-- box::AO -->
+ <primitive type="ao" name="box" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type amb-occ
+	bright { "sRGB nonlinear" {r} {g} {b} }
+	dark { "sRGB nonlinear"   0 0 0 }
+	samples  32
+	dist     6
+}
+
+instance {
+	name "{uid}"
+	geometry "Box"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]></primitive>
+ <!-- box::mirror -->
+ <primitive type="mirror" name="box" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type mirror
+	refl { "sRGB nonlinear" {r} {g} {b} }
+}
+
+instance {
+	name "{uid}"
+	geometry "Box"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]></primitive>
+ <!-- box::constant -->
+ <primitive type="constant" name="box" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type constant
+	color { "sRGB nonlinear" {r} {g} {b} }
+}
+
+instance {
+	name "{uid}"
+	geometry "Box"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]></primitive>
+ <!-- box::ward -->
+ <primitive type="ward" name="box" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type ward
+	diff { "sRGB nonlinear" {r} {g} {b} }
+	spec { "sRGB nonlinear" 1 1 1 }
+	rough 0.07 0.1
+	samples 8
+}
+
+instance {
+	name "{uid}"
+	geometry "Box"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]></primitive>
+ <!-- box::glass -->
+ <primitive type="glass" name="box" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type glass
+	eta 1.6
+	color { "sRGB nonlinear" {r} {g} {b} }
+	absorbtion.distance 5.0
+	absorbtion.color { "sRGB nonlinear" 1.0 1.0 1.0 }
+}
+
+instance {
+	name "{uid}"
+	geometry "Box"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]></primitive>
+ <!-- box::phong -->
+ <primitive type="phong" name="box" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type phong
+	diff { "sRGB nonlinear" {r} {g} {b} }
+	spec { "sRGB nonlinear" 1 1 1 } 100
+	samples 4
+}
+
+instance {
+	name "{uid}"
+	geometry "Box"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]></primitive>
+ <primitive name="box" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type diffuse
+	diff { "sRGB nonlinear" {r} {g} {b} }
+}
+
+instance {
+	name "{uid}"
+	geometry "Box"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]></primitive>
+ <!-- ===========================================================================
+Normal 'box::sphere'.  Use diffuse shader
+-->
+ <!-- box::sphereShiny -->
+ <primitive type="sphereshiny" name="box" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type shiny
+	diff { "sRGB nonlinear" {r} {g} {b} }
+	refl 0.5
+}
+
+instance {
+	name "{uid}"
+	geometry "Sphere_1"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]></primitive>
+ <!-- box::sphereDiffuse -->
+ <primitive type="spherediffuse" name="box" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type diffuse
+	diff { "sRGB nonlinear" {r} {g} {b} }
+}
+
+instance {
+	name "{uid}"
+	geometry "Sphere_1"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]></primitive>
+ <!-- box::sphereAO -->
+ <primitive type="sphereao" name="box" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type amb-occ
+	bright { "sRGB nonlinear" {r} {g} {b} }
+	dark { "sRGB nonlinear"   0 0 0 }
+	samples  32
+	dist     6
+}
+
+instance {
+	name "{uid}"
+	geometry "Sphere_1"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]></primitive>
+ <!-- box::sphereMirror -->
+ <primitive type="spheremirror" name="box" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type mirror
+	refl { "sRGB nonlinear" {r} {g} {b} }
+}
+
+instance {
+	name "{uid}"
+	geometry "Sphere_1"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]></primitive>
+ <!-- box::sphereConstant -->
+ <primitive type="sphereconstant" name="box" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type constant
+	color { "sRGB nonlinear" {r} {g} {b} }
+}
+
+instance {
+	name "{uid}"
+	geometry "Sphere_1"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]></primitive>
+ <!-- box::sphereWard -->
+ <primitive type="sphereward" name="box" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type ward
+	diff { "sRGB nonlinear" {r} {g} {b} }
+	spec { "sRGB nonlinear" 1 1 1 }
+	rough 0.07 0.1
+	samples 8
+}
+
+instance {
+	name "{uid}"
+	geometry "Sphere_1"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]></primitive>
+ <!-- box::sphereGlass -->
+ <primitive type="sphereglass" name="box" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type glass
+	eta 1.6
+	color { "sRGB nonlinear" {r} {g} {b} }
+	absorbtion.distance 5.0
+	absorbtion.color { "sRGB nonlinear" 1.0 1.0 1.0 }
+}
+
+instance {
+	name "{uid}"
+	geometry "Sphere_1"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]></primitive>
+ <!-- box::spherePhong -->
+ <primitive type="spherephong" name="box" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type phong
+	diff { "sRGB nonlinear" {r} {g} {b} }
+	spec { "sRGB nonlinear" 1 1 1 } 100
+	samples 4
+}
+
+instance {
+	name "{uid}"
+	geometry "Sphere_1"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]></primitive>
+ <primitive type="sphere" name="box" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type diffuse
+	diff { "sRGB nonlinear" {r} {g} {b} }
+}
+
+instance {
+	name "{uid}"
+	geometry "Sphere_1"
+	transform col {matrix}
+	shader "shader{uid}"
+}
+		]]></primitive>
+ <!-- ===========================================================================
+Normal 'sphere'.  Use diffuse shader
+-->
+ <!-- box::shiny -->
+ <primitive type="shiny" name="sphere" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type shiny
+	diff { "sRGB nonlinear" {r} {g} {b} }
+	refl 0.5
+}
+
+object {
+	shader "shader{uid}"
+	type sphere
+	c {cx} {cy} {cz}
+	r {rad}
+}
+		]]></primitive>
+ <!-- box::diffuse -->
+ <primitive type="diffuse" name="sphere" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type diffuse
+	diff { "sRGB nonlinear" {r} {g} {b} }
+}
+
+object {
+	shader "shader{uid}"
+	type sphere
+	c {cx} {cy} {cz}
+	r {rad}
+}
+		]]></primitive>
+ <!-- box::AO -->
+ <primitive type="ao" name="sphere" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type amb-occ
+	bright { "sRGB nonlinear" {r} {g} {b} }
+	dark { "sRGB nonlinear"   0 0 0 }
+	samples  32
+	dist     6
+}
+
+object {
+	shader "shader{uid}"
+	type sphere
+	c {cx} {cy} {cz}
+	r {rad}
+}
+		]]></primitive>
+ <!-- box::mirror -->
+ <primitive type="mirror" name="sphere" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type mirror
+	refl { "sRGB nonlinear" {r} {g} {b} }
+}
+
+object {
+	shader "shader{uid}"
+	type sphere
+	c {cx} {cy} {cz}
+	r {rad}
+}
+		]]></primitive>
+ <!-- box::constant -->
+ <primitive type="constant" name="sphere" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type constant
+	color { "sRGB nonlinear" {r} {g} {b} }
+}
+
+object {
+	shader "shader{uid}"
+	type sphere
+	c {cx} {cy} {cz}
+	r {rad}
+}
+		]]></primitive>
+ <!-- box::ward -->
+ <primitive type="ward" name="sphere" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type ward
+	diff { "sRGB nonlinear" {r} {g} {b} }
+	spec { "sRGB nonlinear" 1 1 1 }
+	rough 0.07 0.1
+	samples 8
+}
+
+object {
+	shader "shader{uid}"
+	type sphere
+	c {cx} {cy} {cz}
+	r {rad}
+}
+		]]></primitive>
+ <!-- box::glass -->
+ <primitive type="glass" name="sphere" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type glass
+	eta 1.6
+	color { "sRGB nonlinear" {r} {g} {b} }
+	absorbtion.distance 5.0
+	absorbtion.color { "sRGB nonlinear" 1.0 1.0 1.0 }
+}
+
+object {
+	shader "shader{uid}"
+	type sphere
+	c {cx} {cy} {cz}
+	r {rad}
+}
+		]]></primitive>
+ <!-- box::phong -->
+ <primitive type="phong" name="sphere" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type phong
+	diff { "sRGB nonlinear" {r} {g} {b} }
+	spec { "sRGB nonlinear" 1 1 1 } 100
+	samples 4
+}
+
+object {
+	shader "shader{uid}"
+	type sphere
+	c {cx} {cy} {cz}
+	r {rad}
+}
+		]]></primitive>
+ <primitive type="light" name="sphere" ><![CDATA[
+light {
+	type spherical
+	color { "sRGB nonlinear" {r} {g} {b} }
+	radiance 20.0
+	center {cx} {cy} {cz}
+	radius {rad}
+	samples 16
+}
+		]]></primitive>
+ <primitive name="sphere" ><![CDATA[
+shader {
+	name "shader{uid}"
+	type diffuse
+	diff { "sRGB nonlinear" {r} {g} {b} }
+}
+
+object {
+	shader "shader{uid}"
+	type sphere
+	c {cx} {cy} {cz}
+	r {rad}
+}
+		]]></primitive>
+</template>

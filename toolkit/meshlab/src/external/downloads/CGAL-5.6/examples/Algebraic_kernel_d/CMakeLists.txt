@@ -1,0 +1,16 @@
+cmake_minimum_required(VERSION 3.1...3.23)
+project(Algebraic_kernel_d_Examples)
+
+find_package(CGAL REQUIRED COMPONENTS Core)
+
+find_package(MPFI QUIET)
+if(MPFI_FOUND AND NOT CGAL_DISABLE_GMP)
+  include(${MPFI_USE_FILE})
+  create_single_source_cgal_program("Compare_1.cpp")
+  create_single_source_cgal_program("Construct_algebraic_real_1.cpp")
+  create_single_source_cgal_program("Isolate_1.cpp")
+  create_single_source_cgal_program("Sign_at_1.cpp")
+  create_single_source_cgal_program("Solve_1.cpp")
+else()
+  message("NOTICE: This project requires the MPFI library and GMP support, and will not be compiled.")
+endif()

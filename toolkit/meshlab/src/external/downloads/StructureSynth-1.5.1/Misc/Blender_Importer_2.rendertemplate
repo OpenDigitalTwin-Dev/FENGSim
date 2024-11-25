@@ -1,0 +1,36 @@
+<!--
+
+-->
+<template name="BuxrenderTemplate2" defaultExtension="Structure Synth Object (*.gss)">
+<description>
+This is an exporter that can be used together with the Blender_Importer_2.py script.
+Author: David Bucciarelli, modded by SourceZuka.
+(I added the above info, please correct me if I'm wrong - Mikael/Syntopia)
+</description>
+	<primitive name="begin">
+	    <![CDATA[]]>
+	</primitive>
+
+
+	<primitive name="end">
+	    <![CDATA[]]>
+	</primitive>
+
+	<primitive name="mesh">
+
+      <![CDATA[m {matrix} {r} {g} {b}
+]]>
+
+   </primitive>
+
+	<primitive name="box">
+		<![CDATA[b {matrix} {r} {g} {b}
+]]>
+	</primitive>
+
+
+	<primitive name="sphere">
+		<![CDATA[s {cx} {cy} {cz} {rad} {r} {g} {b}
+]]>
+	</primitive>
+</template>

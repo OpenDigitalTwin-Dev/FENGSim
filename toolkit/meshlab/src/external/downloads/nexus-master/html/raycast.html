@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Nexus threejs</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+<style> body { margin:0; width:100vw; height:100vh; } #container { width:100vw; height:100vh; } </style>
+<script src="js/three.min.js"></script>
+<script src="js/nexus.js"></script>
+<script src="js/nexus_three.js"></script>
+<script src="js/trackball_three.js"></script>
+<script src="js/lil-gui.js"></script>
+</head>
+
+<body>
+	<div id="container"></div>
+</body>
+
+<script>
+const gui = new lil.GUI();
+
+const guiConfig =
+{
+	visualizePointFromRaycasting: true,
+};
+
+gui.add(guiConfig, "visualizePointFromRaycasting")
+.name("Visualize point returned from raycasting")
+.onChange(shouldVisualize => {
+	raycastingIntersectionSphere.visible = shouldVisualize;
+});
+
+
+var camera = new THREE.PerspectiveCamera( 30, window.innerWidth / window.innerHeight, 0.1, 100 );
+camera.position.z = 4.0;
+
+var controls = new THREE.TrackballControls( camera );
+controls.target.set( 0, 0, 0 );
+controls.rotateSpeed = 10.0;
+controls.zoomSpeed = 1.5;
+controls.panSpeed = 0.8;
+controls.noZoom = false;
+controls.noPan = false;
+controls.staticMoving = true;
+controls.dynamicDampingFactor = 0.3;
+controls.keys = [ 65, 83, 68 ];
+controls.addEventListener( 'change', function() { redraw = true; } );
+
+var scene = new THREE.Scene();
+scene.background = new THREE.Color( 0x000000 );
+scene.fog = new THREE.Fog( 0x050505, 2000, 3500 );
+scene.add( new THREE.AmbientLight( 0x444444 ) );
+
+var light1 = new THREE.DirectionalLight( 0xffffff, 1.0 );
+light1.position.set( 1, 1, -1 );
+scene.add( light1 );
+
+var light2 = new THREE.DirectionalLight( 0xffffff, 1.0 );
+light2.position.set( -1, -1, 1 );
+scene.add( light2 );
+
+const raycastingIntersectionSphere = new THREE.Mesh (
+  new THREE.SphereGeometry(0.05, 32, 16), 
+  new THREE.MeshBasicMaterial({color: 0xff0000})
+);
+raycastingIntersectionSphere.visible = false;
+scene.add( raycastingIntersectionSphere );
+
+var mouse = new THREE.Vector2();
+var raycaster = new THREE.Raycaster();
+
+function onDocumentMouseMove( event ) {
+	event.preventDefault();
+	mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+	mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+	raycaster.setFromCamera(mouse, camera);
+
+	var intersections = raycaster.intersectObjects([nexus_obj]);
+	if (nexus_obj.material.vertexColors != null) {
+		if (intersections.length)
+			nexus_obj.material.vertexColors = THREE.NoColors;
+		else 
+			nexus_obj.material.vertexColors = THREE.VertexColors;
+		nexus_obj.material.needsUpdate = true;
+		redraw = true;
+	} 
+
+	if (guiConfig.visualizePointFromRaycasting) {
+		if (intersections.length) {
+			let hit = intersections[0];
+			raycastingIntersectionSphere.visible = true;
+			raycastingIntersectionSphere.position.copy(hit.point);
+			if(hit.face) {
+				console.log("Face: ", hit.face.a, hit.face.b, hit.face.c);
+				console.log("Normal: ", hit.face.normal);
+				//TODO read also UV
+			}
+		} else {
+			raycastingIntersectionSphere.visible = false;
+		}
+	}
+}
+
+var renderer = new THREE.WebGLRenderer( { antialias: false } );
+renderer.setClearColor( scene.fog.color );
+renderer.setPixelRatio( window.devicePixelRatio );
+renderer.setSize( window.innerWidth, window.innerHeight );
+
+renderer.domElement.addEventListener( 'mousemove', onDocumentMouseMove, false );
+
+var container = document.getElementById( 'container');
+container.appendChild( renderer.domElement );
+
+function onNexusLoad() {
+	var s   = 1/nexus_obj.geometry.boundingSphere.radius;
+	var target = new THREE.Vector3();
+	var p = nexus_obj.geometry.boundingBox.getCenter(target).negate();
+
+	nexus_obj.position.set(p.x*s, p.y*s, p.z*s);
+	nexus_obj.scale.set(s, s, s);
+//	nexus_obj.material = new THREE.PointsMaterial( {  size:3, color: 0x00ff00, transparent: false, opacity:0.25 } );
+	redraw = true;
+}
+
+function getURLParameter(name) {
+	return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+}
+
+var model = getURLParameter('model') || "models/gargo.nxz";
+
+/* An appropriate material can be used as optional fifth arg for the NexusObject constructor */
+let material = false;
+/* Material customizations examples: */
+//let material = new THREE.PointsMaterial( {  size:3, color: 0x00ff00, transparent: false, opacity:0.25 } );
+//let material = new THREE.MeshLambertMaterial( { color: 0xff0000 }); //, vertexColors: THREE.VertexColors } );
+//let material = new THREE.MeshNormalMaterial({});
+
+var nexus_obj = new NexusObject(model, onNexusLoad, function() { redraw = true; }, renderer, material);
+scene.add(nexus_obj);
+
+window.addEventListener( 'resize', onWindowResize, false );
+
+function onWindowResize() {
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+
+	renderer.setSize( window.innerWidth, window.innerHeight );
+
+//	controls.handleResize();
+	controls.update();
+	redraw = true;
+}
+
+var redraw = true;
+function animate() {
+	requestAnimationFrame(animate);
+
+	controls.update();
+
+	if(redraw) {
+		renderer.render(scene, camera);
+		redraw = false;
+	}
+}
+
+animate();
+</script>
+
+</html>

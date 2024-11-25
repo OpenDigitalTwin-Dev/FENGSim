@@ -1,0 +1,222 @@
+set(libIDTF_Dirs
+	${U3D_DIR}/RTL/Component/Include
+	${U3D_DIR}/RTL/Kernel/Include
+	${U3D_DIR}/RTL/Platform/Include
+	${U3D_DIR}/RTL/Dependencies/WildCards
+	${U3D_DIR}/RTL/Component/Base
+	${U3D_DIR}/IDTF
+	${U3D_DIR}/IDTF/Include
+	${U3D_DIR}/IDTF/Common
+	${U3D_DIR}/libIDTF
+)
+
+SET(libIDTF_SRCS
+	#${U3D_DIR}/libIDTF/SceneConverterLib.cpp
+	${U3D_DIR}/libIDTF/Writer.cpp
+	${U3D_DIR}/libIDTF/IFXOSLoader.cpp
+	${U3D_DIR}/libIDTF/IFXOSUtilities.cpp
+	${U3D_DIR}/IDTF/Converter.cpp
+	${U3D_DIR}/IDTF/FileParser.cpp
+	${U3D_DIR}/IDTF/SceneConverter.cpp
+	${U3D_DIR}/IDTF/PointSetResourceParser.cpp
+	${U3D_DIR}/IDTF/UrlListParser.cpp
+	${U3D_DIR}/IDTF/NodeParser.cpp
+	${U3D_DIR}/IDTF/ModifierParser.cpp
+	${U3D_DIR}/IDTF/PointSetConverter.cpp
+	${U3D_DIR}/IDTF/MaterialParser.cpp
+	${U3D_DIR}/IDTF/MetaDataConverter.cpp
+	${U3D_DIR}/IDTF/MeshResourceParser.cpp
+	${U3D_DIR}/IDTF/ResourceConverter.cpp
+	${U3D_DIR}/IDTF/TextureConverter.cpp
+	${U3D_DIR}/IDTF/ResourceListParser.cpp
+	${U3D_DIR}/IDTF/File.cpp
+	${U3D_DIR}/IDTF/LineSetConverter.cpp
+	${U3D_DIR}/IDTF/ModelConverter.cpp
+	${U3D_DIR}/IDTF/TextureParser.cpp
+	${U3D_DIR}/IDTF/NodeConverter.cpp
+	${U3D_DIR}/IDTF/MeshConverter.cpp
+	${U3D_DIR}/IDTF/BlockParser.cpp
+	${U3D_DIR}/IDTF/ModelResourceParser.cpp
+	${U3D_DIR}/IDTF/FileReferenceConverter.cpp
+	${U3D_DIR}/IDTF/ShaderParser.cpp
+	${U3D_DIR}/IDTF/FileScanner.cpp
+	${U3D_DIR}/IDTF/FileReferenceParser.cpp
+	${U3D_DIR}/IDTF/ModifierConverter.cpp
+	${U3D_DIR}/IDTF/MetaDataParser.cpp
+	${U3D_DIR}/IDTF/LineSetResourceParser.cpp
+	${U3D_DIR}/IDTF/Helpers/ConverterHelpers.cpp
+	${U3D_DIR}/IDTF/Helpers/MiscUtilities.cpp
+	${U3D_DIR}/IDTF/Helpers/TGAImage.cpp
+	${U3D_DIR}/IDTF/Helpers/ModifierUtilities.cpp
+	${U3D_DIR}/IDTF/Helpers/SceneUtilities.cpp
+	${U3D_DIR}/IDTF/Helpers/DebugInfo.cpp
+	${U3D_DIR}/IDTF/Helpers/Guids.cpp
+	${U3D_DIR}/IDTF/Common/GlyphModifier.cpp
+	${U3D_DIR}/IDTF/Common/ModelResource.cpp
+	${U3D_DIR}/IDTF/Common/ModifierList.cpp
+	${U3D_DIR}/IDTF/Common/NodeList.cpp
+	${U3D_DIR}/IDTF/Common/FileReference.cpp
+	${U3D_DIR}/IDTF/Common/ResourceList.cpp
+	${U3D_DIR}/IDTF/Common/SceneResources.cpp
+	${U3D_DIR}/IDTF/Common/ModelResourceList.cpp
+	${U3D_DIR}/IDTF/Common/MetaDataList.cpp
+	${U3D_DIR}/IDTF/Common/ParentList.cpp
+	${U3D_DIR}/IDTF/Common/GlyphCommandList.cpp
+	${U3D_DIR}/RTL/Dependencies/WildCards/wcmatch.cpp
+	${U3D_DIR}/RTL/Component/Base/IFXCoincidentVertexMap.cpp
+	${U3D_DIR}/RTL/Component/Base/IFXFatCornerIter.cpp
+	${U3D_DIR}/RTL/Component/Base/IFXCornerIter.cpp
+	${U3D_DIR}/RTL/Component/Base/IFXTransform.cpp
+	${U3D_DIR}/RTL/Component/Base/IFXVertexMap.cpp
+	${U3D_DIR}/RTL/Component/Base/IFXEuler.cpp
+	${U3D_DIR}/RTL/Component/Base/IFXVectorHasher.cpp
+	${U3D_DIR}/RTL/Component/Base/IFXVertexMapGroup.cpp
+	${U3D_DIR}/RTL/Kernel/DataTypes/IFXCoreArray.cpp
+	${U3D_DIR}/RTL/Kernel/DataTypes/IFXFastAllocator.cpp
+	${U3D_DIR}/RTL/Kernel/DataTypes/IFXMatrix4x4.cpp
+	${U3D_DIR}/RTL/Kernel/DataTypes/IFXString.cpp
+	${U3D_DIR}/RTL/Kernel/DataTypes/IFXVector3.cpp
+	${U3D_DIR}/RTL/Kernel/DataTypes/IFXCoreList.cpp
+	${U3D_DIR}/RTL/Kernel/DataTypes/IFXListNode.cpp
+	${U3D_DIR}/RTL/Kernel/DataTypes/IFXQuaternion.cpp
+	${U3D_DIR}/RTL/Kernel/DataTypes/IFXUnitAllocator.cpp
+	${U3D_DIR}/RTL/Kernel/DataTypes/IFXVector4.cpp
+	${U3D_DIR}/RTL/Component/Common/IFXDids.cpp
+	${U3D_DIR}/RTL/Kernel/Common/IFXDebug.cpp
+	${U3D_DIR}/RTL/IFXCoreStatic/IFXCoreStatic.cpp
+)
+
+SET(libIDTF_HDRS
+	${Component_HDRS}
+	${Kernel_HDRS}
+	${Platform_HDRS}
+	#${U3D_DIR}/libIDTF/SceneConverterLib.h
+	${U3D_DIR}/libIDTF/Writer.h
+	${U3D_DIR}/IDTF/Converter.h
+	${U3D_DIR}/IDTF/BlockParser.h
+	${U3D_DIR}/IDTF/DefaultSettings.h
+	${U3D_DIR}/IDTF/File.h
+	${U3D_DIR}/IDTF/FileParser.h
+	${U3D_DIR}/IDTF/FileReferenceConverter.h
+	${U3D_DIR}/IDTF/FileReferenceParser.h
+	${U3D_DIR}/IDTF/FileScanner.h
+	${U3D_DIR}/IDTF/IConverter.h
+	${U3D_DIR}/IDTF/LineSetConverter.h
+	${U3D_DIR}/IDTF/LineSetResourceParser.h
+	${U3D_DIR}/IDTF/MaterialParser.h
+	${U3D_DIR}/IDTF/MeshConverter.h
+	${U3D_DIR}/IDTF/MeshResourceParser.h
+	${U3D_DIR}/IDTF/MetaDataConverter.h
+	${U3D_DIR}/IDTF/MetaDataParser.h
+	${U3D_DIR}/IDTF/ModelConverter.h
+	${U3D_DIR}/IDTF/ModelResourceParser.h
+	${U3D_DIR}/IDTF/ModifierConverter.h
+	${U3D_DIR}/IDTF/ModifierParser.h
+	${U3D_DIR}/IDTF/NodeConverter.h
+	${U3D_DIR}/IDTF/NodeParser.h
+	${U3D_DIR}/IDTF/PointSetConverter.h
+	${U3D_DIR}/IDTF/PointSetResourceParser.h
+	${U3D_DIR}/IDTF/ResourceConverter.h
+	${U3D_DIR}/IDTF/ResourceListParser.h
+	${U3D_DIR}/IDTF/SceneConverter.h
+	${U3D_DIR}/IDTF/ShaderParser.h
+	${U3D_DIR}/IDTF/TextureConverter.h
+	${U3D_DIR}/IDTF/TextureParser.h
+	${U3D_DIR}/IDTF/UrlListParser.h
+	${U3D_DIR}/IDTF/Include/ConverterHelpers.h
+	${U3D_DIR}/IDTF/Include/ConverterOptions.h
+	${U3D_DIR}/IDTF/Include/ConverterResult.h
+	${U3D_DIR}/IDTF/Include/DebugInfo.h
+	${U3D_DIR}/IDTF/Include/SceneUtilities.h
+	${U3D_DIR}/IDTF/Include/TGAImage.h
+	${U3D_DIR}/IDTF/Include/U3DHeaders.h
+	${U3D_DIR}/IDTF/Common/AnimationModifier.h
+	${U3D_DIR}/IDTF/Common/BoneWeightModifier.h
+	${U3D_DIR}/IDTF/Common/CLODModifier.h
+	${U3D_DIR}/IDTF/Common/Color.h
+	${U3D_DIR}/IDTF/Common/FileReference.h
+	${U3D_DIR}/IDTF/Common/GlyphCommandList.h
+	${U3D_DIR}/IDTF/Common/GlyphCommands.h
+	${U3D_DIR}/IDTF/Common/GlyphModifier.h
+	${U3D_DIR}/IDTF/Common/INode.h
+	${U3D_DIR}/IDTF/Common/Int2.h
+	${U3D_DIR}/IDTF/Common/Int3.h
+	${U3D_DIR}/IDTF/Common/IResource.h
+	${U3D_DIR}/IDTF/Common/LightNode.h
+	${U3D_DIR}/IDTF/Common/LightResource.h
+	${U3D_DIR}/IDTF/Common/LightResourceList.h
+	${U3D_DIR}/IDTF/Common/LineSetResource.h
+	${U3D_DIR}/IDTF/Common/MaterialResource.h
+	${U3D_DIR}/IDTF/Common/MaterialResourceList.h
+	${U3D_DIR}/IDTF/Common/MeshResource.h
+	${U3D_DIR}/IDTF/Common/MetaDataList.h
+	${U3D_DIR}/IDTF/Common/ModelNode.h
+	${U3D_DIR}/IDTF/Common/ModelResource.h
+	${U3D_DIR}/IDTF/Common/ModelResourceList.h
+	${U3D_DIR}/IDTF/Common/ModelSkeleton.h
+	${U3D_DIR}/IDTF/Common/Modifier.h
+	${U3D_DIR}/IDTF/Common/ModifierList.h
+	${U3D_DIR}/IDTF/Common/MotionResource.h
+	${U3D_DIR}/IDTF/Common/MotionResourceList.h
+	${U3D_DIR}/IDTF/Common/Node.h
+	${U3D_DIR}/IDTF/Common/NodeList.h
+	${U3D_DIR}/IDTF/Common/ParentData.h
+	${U3D_DIR}/IDTF/Common/ParentList.h
+	${U3D_DIR}/IDTF/Common/Point.h
+	${U3D_DIR}/IDTF/Common/PointSetResource.h
+	${U3D_DIR}/IDTF/Common/Quat.h
+	${U3D_DIR}/IDTF/Common/Resource.h
+	${U3D_DIR}/IDTF/Common/ResourceList.h
+	${U3D_DIR}/IDTF/Common/SceneData.h
+	${U3D_DIR}/IDTF/Common/SceneResources.h
+	${U3D_DIR}/IDTF/Common/ShaderResource.h
+	${U3D_DIR}/IDTF/Common/ShaderResourceList.h
+	${U3D_DIR}/IDTF/Common/ShadingDescription.h
+	${U3D_DIR}/IDTF/Common/ShadingDescriptionList.h
+	${U3D_DIR}/IDTF/Common/ShadingModifier.h
+	${U3D_DIR}/IDTF/Common/SubdivisionModifier.h
+	${U3D_DIR}/IDTF/Common/TextureResource.h
+	${U3D_DIR}/IDTF/Common/TextureResourceList.h
+	${U3D_DIR}/IDTF/Common/Tokens.h
+	${U3D_DIR}/IDTF/Common/UrlList.h
+	${U3D_DIR}/IDTF/Common/ViewNodeData.h
+	${U3D_DIR}/IDTF/Common/ViewNode.h
+	${U3D_DIR}/IDTF/Common/ViewResource.h
+	${U3D_DIR}/IDTF/Common/ViewResourceList.h
+	${U3D_DIR}/RTL/Dependencies/WildCards/wcmatch.h
+	${U3D_DIR}/RTL/Component/Base/IFXVectorHasher.h
+)
+
+IF(U3D_USE_SYSTEM_EXTERNAL_LIBS)
+	SET_PROPERTY(SOURCE
+		libIDTF/IFXOSLoader.cpp
+		PROPERTY COMPILE_DEFINITIONS U3DPluginsPath="." U3DCorePath="${CMAKE_INSTALL_PREFIX}/${LIB_DESTINATION}")
+ELSE(U3D_USE_SYSTEM_EXTERNAL_LIBS)
+	SET_PROPERTY(SOURCE
+		libIDTF/IFXOSLoader.cpp
+		PROPERTY COMPILE_DEFINITIONS U3DPluginsPath="Plugins" U3DCorePath=".")
+ENDIF(U3D_USE_SYSTEM_EXTERNAL_LIBS)
+
+if(U3D_BUILD_STATIC_IDTF_LIB)
+	ADD_LIBRARY(IDTF STATIC ${libIDTF_SRCS} ${libIDTF_HDRS})
+else(U3D_BUILD_STATIC_IDTF_LIB)
+	ADD_LIBRARY(IDTF SHARED ${libIDTF_SRCS} ${libIDTF_HDRS})
+endif(U3D_BUILD_STATIC_IDTF_LIB)
+
+target_link_libraries(IDTF PUBLIC IFXCoreStatic ${CMAKE_DL_LIBS})
+
+target_include_directories(IDTF PRIVATE ${libIDTF_Dirs})
+target_include_directories(IDTF PUBLIC ${U3D_DIR})
+
+SET_PROPERTY(
+	TARGET IDTF
+	PROPERTY COMPILE_DEFINITIONS LIBIDTF
+)
+
+if(U3D_INSTALL_LIBS)
+	install(
+		TARGETS IDTF
+		ARCHIVE DESTINATION ${LIB_DESTINATION}
+		LIBRARY DESTINATION ${LIB_DESTINATION}
+	)
+endif()

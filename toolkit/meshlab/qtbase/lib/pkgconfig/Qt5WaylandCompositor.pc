@@ -1,0 +1,13 @@
+prefix=/home/jiping/Downloads/qtbase
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+
+Name: Qt5 WaylandCompositor
+Description: Qt WaylandCompositor module
+Version: 5.15.16
+Libs: -L${libdir} -lQt5WaylandCompositor 
+Cflags: -DQT_WAYLANDCOMPOSITOR_LIB -I${includedir}/QtWaylandCompositor -I${includedir}
+Requires: Qt5Core Qt5Gui Qt5Quick Qt5Qml
+

@@ -1,0 +1,85 @@
+<template defaultExtension="POV-Ray scene file (*.pov)" name="POV-Ray" >
+ <description>
+A rough POV-Ray export template.
+Notice that the camera position is not handled correctly in all cases yet.
+
+Template by Syntopia.
+</description>
+ <primitive name="begin" ><![CDATA[
+// Structure Synth Pov Ray Export. 
+
+// Global settings
+global_settings {
+  max_trace_level 5
+  ambient_light rgb <1,1,1>
+}
+
+#default {
+  texture { 
+    pigment { color rgb 1 }
+    finish { ambient 0.1 diffuse 0.5 specular 0.5 }
+   normal { dents 0 scale 0.01 }
+  }
+}
+    
+// Background
+plane {
+  z, 100.0
+  texture {
+	pigment { color rgb <0.0,0.0,0.0> }
+	finish { ambient 1 }
+  }
+  hollow
+}
+
+// Camera
+camera {
+  location <{CamPosX},{CamPosY},{CamPosZ}>
+  right <{CamRightX}*{aspect},{CamRightY}*{aspect},{CamRightZ}*{aspect}>
+  up <{CamUpX},{CamUpY},{CamUpZ}>
+  look_at <{CamTargetX},{CamTargetY},{CamTargetZ}>
+
+}
+
+// Lights
+light_source { <500,500,-1000> rgb <1,1,1>  } 
+light_source { <-500,-500,-1000> rgb <1,1,1>  } 
+light_source { <-500,500,1000> rgb <1,1,1>  } 
+		]]></primitive>
+ <primitive name="end" ><![CDATA[
+
+// Done...
+
+		]]></primitive>
+ <primitive name="box" ><![CDATA[
+object {   
+  box { <0,  0.0, 0>, <1,  1,  1> }
+  matrix < {povmatrix} > 
+  texture { pigment { color rgbt <{r},{g},{b},{oneminusalpha}> } }
+}
+		]]></primitive>
+ <primitive name="sphere" ><![CDATA[
+object {   
+  sphere { <{cx}, {cy}, {cz}>, {rad} }
+  texture { pigment { color rgbt <{r},{g},{b},{oneminusalpha}> } }
+}
+		]]></primitive>
+ <primitive type="intersection-begin" name="template" >
+	   intersection {
+	</primitive>
+ <primitive type="intersection-end" name="template" >
+		}
+	</primitive>
+ <primitive type="union-begin" name="template" >
+	    union {
+	</primitive>
+ <primitive type="union-end" name="template" >
+	    }
+	</primitive>
+ <primitive type="difference-begin" name="template" >
+	    difference {
+	</primitive>
+ <primitive type="difference-end" name="template" >
+	    }
+	</primitive>
+</template>

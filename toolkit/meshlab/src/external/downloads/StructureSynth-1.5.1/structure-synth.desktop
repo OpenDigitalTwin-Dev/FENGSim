@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=Structure Synth
+Name[ru]=Structure Synth
+Comment=Creating 3D structures from a set of user specified rules
+Comment[ru]=Создание трехмерных структур по заданным правилам
+Exec=structure-synth
+Icon=structure-synth.png
+Categories=Graphics;VectorGraphics;Qt;
+Terminal=false
+Type=Application
+X-SuSE-translate=true

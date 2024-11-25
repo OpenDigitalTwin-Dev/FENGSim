@@ -1,0 +1,15 @@
+Bug List:
+---------
+Priority 0-5, 5 is worst:
+
+- [3] Some reports of mesh showing up with broken polygons (they are quads, so I think this is because of faulty normal interpolation)
+- [3] Some Ubuntu user has problems with loosing the cursor in the edit view (I can not reproduce this in my VM-Ware)
+- [2] Triangles does not support ClassID
+- [2] Face Culling does not work for boxes, when coordinates are flipped.
+- [2] A self-refering cycle of rule retirements would crash structure synth.
+- [2] Parser do not allow operator names as rule names. 'rule R1 maxdepth 2 > c ' fails.
+- [1] Syntax Highlightning has several errors.
+
+Other TO-DO's:
+
+

@@ -1,0 +1,597 @@
+ 
+Changelog for Structure Synth:
+------------
+21 Nov 10 [MHC] Fixed an working path error, when using .es file associations.
+[2h]			Created Inno Setup Installer
+	
+<- 1.5 Mac Builds here.
+				
+17 Nov 10 [MHC] Updated web site
+[3h Adms]
+
+14 Nov 10 [MHC] --> Release Candidate version 1.5
+[1h]			Cleaned up examples.
+
+12 Nov 10 [MHC] The filters are disabled for now (until they have been properly integrated).
+[3h]			Fixed Linux compilation warnings.
+				Decorrelated progressive preview AO directions.
+				Added 'set raytracer::max-depth 3'
+				Added JavaScript command templates to context menu.
+				
+				
+6  Nov 10 [MHC] Fixed JavaScript TemplateRender (size+cancel)
+				Added BoxFilter, TriangleFilter, GaussianFilter.
+ 
+1  Nov 10 [MHC] Added int sliders to the Variable GUI interface.
+[2h]			Made JavaScript-rendering cancellable, fixed Raytrace (Final)
+				Fixed StratifiedSampler lens samples.
+
+(Last count: 82h)
+
+31 Oct 10 [MHC] Refactored GUI menus. 
+[5h]			Added 'random[-2,3]' for preprocessor generated random numbers (uniform distributed).
+				Added 'show coordinate system'.
+				JavaScript: fixed relative directory locations. Added Builder.prepend(...)
+				Added better raytracing thread termination.
+
+30 Oct 10 [MHC] Fixed memleaks for colors[], fixed GUI reentry
+[5h]			Added LensSamples stratification
+				Removed Mutex Locks for progressive rendering (because the column rendering was too slow)
+				Tried out sRGB conversion and simple exponential 'exposure' tonemapping, but discarded it for now.
+				
+25 Oct 10 [MHC] Fixed progressive sampling concurrency bug. 
+[2h]            New ProgressBox
+
+24 Oct 10 [MHC] Added progressive sampling.
+[2h] 
+
+23 Oct 10 [MHC] Fixed sampling bug. Stratified sampling does improve results :-) Only stratifies AA & AO, not Lens samples.
+[1h] 
+
+23 Oct 10 [MHC] OBJ exporter is done. Supports Sphere (with adjustable resolution), Box, Mesh, Grid, Line, and Dots. Group by tag or color. No .mat file support.
+[2h] 
+
+15 Oct 10 [MHC] Removed old anti-alias code. Added stratified sampling (for AO). No visible effect :-(
+[2h]
+
+07 Oct 10 [MHC] More Obj export: added settings dialog.
+[1h]
+
+05 Oct 10 [MHC] Added 'Raytrace preview' button. Fixed bug: random seeds are no longer synchronized between threads.
+[3h]
+
+04 Oct 10 [MHC] OBJ exporter: now prunes geometry a bit, added normals, groups according to tagging.
+[2h]
+
+03 Oct 10 [MHC] Started implementing an OBJ exporter.
+[1h]
+
+22 Sep 10 [MHC] Added 'set raytracer::light [x,y,z]' command
+				Added 'set perspective-angle <angle>' command (still a bit fuzzy)
+
+21 Sep 10 [MHC] Proper sorting of transparent OpenGL objects. 
+[2h]			Changed name to 'Raytracer::samples' and 'Raytracer::ambient-occlusion-samples'
+				Added the context menu 'Toggle Object Depth'
+
+
+17 Sep 10 [MHC] Tried out different lens sampling techniques (uniform density disc, random angle+radius, gaussian radius). Random angle+radius turned out to look best
+[2h]			Fixed the RayID multi-threading issues.
+
+15 Sep 10 [MHC] Fixed applying AA after AO.
+[1h]
+
+14 Sep 10 [MHC] Added multithreaded AA + AO support.
+[1h]
+
+13 Sep 10 [MHC] Trying out different post-processing Depth-of-field techniques, using the z-buffer. Too many artifacts.
+[2h]
+
+8  Sep 10 [MHC] The raytracer multithreading scheduling is working. Missing anti-alias + AO. The RayID tagging is still not thread-safe.
+[2h]
+
+6  Sep 10 [MHC] Fixed skewed box ray-interception test. Begun multithreading code for raytracer.
+[3h]
+
+4  Sep 10 [MHC] Fixed Mesh bounding-box error. Added support for raytracing of triangle primitive.
+[1h]
+
+1  Sep 10 [MHC] PreviewWindow for raytracer. Fixed raytracer sizing problems.
+[2h]
+
+31 Aug 10 [MHC] Context menu with command help in text edit area.
+[2h]
+
+30 Aug 10 [MHC] More raytracer stuff. 
+[2h]
+
+29 Aug 10 [MHC] Cleaned up raytracer interface a bit.
+[1h]
+
+18 Aug 10 [MHC] Javascript work
+[2h]
+
+16 Aug 10 [MHC] Added a patch by François Beaune to support Appleseed (http://appleseedhq.net/), including an Appleseed rendertemplate plus two obj-files. 
+
+29 Mar 10 [MHC] Added option to Template Export Dialog to Autosave Eisenscript. The Autosave includes the random seed and camera settings. 
+[1h]  
+
+ 5 Oct 09 [MHC] Triangles/Mesh
+[2h]
+
+ 1 Oct 09 [MHC] Working on adaptive ambient occlusion.
+30 Sep 09 [MHC] 
+[5h]
+
+27 Sep 09 [MHC] Changed the class attribute from a simple string to a class (for setting raytracer properties on per object basis)
+[3h]            Changed to displaylists for spheres (modest speedup).
+                Some code cleanup.
+
+22 Sep 09 [MHC] Worked on JavaScript image export.
+[3h]
+
+18 Sep 09 [MHC] JavaScript work.
+[1h]
+
+12 Sep 09 [MHC] Raytracer opts.
+[1h]
+
+10 Sep 09 [MHC] Parsing for ray tracer parameters.
+[1h]
+
+9  Sep 09 [MHC] Added Ambient Occlusion. Fixed Slab normals (box test).
+[3h]
+
+6  Sep 09 [MHC] Better OBB-Ray intersection. Fixed Bounding Box error for OBB's. (But no support for skewed boxes!)
+[3h] 
+
+3  Sep 09 [MHC] Raytracer: added adaptive anti-alias. Speeded up viewport transforms.
+[3h]
+
+2  Sep 09 [MHC] Raytracer now supports Boxes.
+[1h]
+
+1  Sep 09 [MHC] Added VoxelStepper raytracer accelerator.
+[2h]
+
+31 Aug 09 [MHC] Fixed a bug for the Visual Studio project: the 'Release' target had to built before the 'Debug' target could be built.
+[4h]			Created RayTracer skeleton. Basic, but very slow sphere rendering working.
+
+----- Release of v1.0.0 (Potemkin) [10 July 2009 ] ----------------------------------------------------------
+This release: 43 hours of work (40½ hours coding + 2½ hours non-coding). 20 log entries.
+Stats total: 235 hours of work (184½ hours coding + 50½ hours non-coding). 118 log entries.
+
+10 Jul 09 [MHC] Creating release.
+[2½h Adm]
+
+08 Jul 09 [MHC] Added support for environment variables when spawning process. Created Splash.
+[1½h] 
+
+07 Jul 09 [MHC] Added icon+ Persistence of RunAfter
+[1h]           
+  
+06 Jul 09 [MHC] Added double/half/default size. 
+[2½h]            Fixed AR problems.
+                
+05 Jul 09 [MHC] Change template path button.
+[2h]            Created Post Modifications Dialog.
+
+02-04 Jul 09 [MHC] Created easter egg.
+[5h]
+
+30 Jun 09 [MHC] The 'runAfter' command works now. Minor changes.
+[2h]
+
+28 Jun 09 [MHC] Persistence work, file saving. The template export dialog is working now.
+[2½h]
+
+18 Jun 09 [MHC] Optional depth-first recursion (use 'set recursion depth') - made for playing around with CSG in PovRay.
+[2h]			A new dummy primitive called 'template' which can be used for generic purposes (such as CSG).
+				[Depth-first still has issues with maxdepth]
+				
+16 Jun 09 [MHC] Fixed Recent Files.
+[1½h]           Unique filename generation.
+
+11 Jun 09 [MHC] Fixed XML syntax highlighning.
+[1h]            Added check for missing primitives.
+				Added extension change
+
+08 Jun 09 [MHC] Template changes: 'substitution' -> 'primitive', added 'defaultExtension' tag.
+[1h]
+
+03 Jun 09 [MHC] Added SourceZuka's Mesh exports [needs some polish to be of generic value]
+[2h]            Added structure-synth.desktop file [for Linux desktop - might need a new icon]
+			    Fixed XML Syntax highlighter bug, added XML parsing error info.      
+
+02 Jun 09 [MHC] TemplateExporter. Added XML view, XML syntaxhighlightning
+[2h]            
+
+28 May 09 [MHC] More TemplateExport Code.
+[1½h]
+
+27 May 09 [MHC] More TemplateExport Code.
+[2h]			Recent files.
+				
+26 May 09 [MHC] More TemplateExport Code. 
+[3h]			Persistence skeleton.
+				Refactored Template parsing. 
+				Templates now also have a <description> element.
+				
+25 May 09 [MHC] Added TemplateExportDialog skeleton
+[3h]            Changed to Cleanlooks.
+
+04 May 09 [MHC] Added application (and .es) icons
+[4h]
+
+---- Release of v0.9.5.1 (Haiku) - Source Only [29 April 2009] -------------------------------------------
+
+29 Apr 09 [MHC] Corrected a bug, causing compile errors on Linux. Changed build name from "Kwazam" to "Haiku". Restored compatibility for Qt 4.x (x<5). Updated about.html to include LGPL option.
+[1h] 
+
+----- Release of v0.9.5 (Haiku) [27 April 2009 ] ----------------------------------------------------------
+This release: 26 hours of work (22 hours coding + 4 hours non-coding). 13 log entries.
+Stats total: 192 hours of work (144 hours coding + 48 hours non-coding). 98 log entries.
+
+27/28 Apr 09 [MHC] Created builds, updated web pages, wrote release notes.
+[2h]C
+[2h]Adm
+
+26 Apr 09 [MHC] Cleaned up preprocesser GUI a bit, cleaned up examples.
+[2h]C
+
+3  Apr 09 [MHC] Added new random number system. Now uses two independent Mersenne Twisters for generating random numbers: one for geometry and one for colors.
+[2h]C
+
+1  Apr 09 [MHC] Added 'set colorpool' operator. Can be either: 'randomhue', 'randomrgb', 'greyscale'/'grayscale', 'image:001.png', or 'colorlist:orange,yellow,red'. Do not use spaces in color lists!
+[2h]C
+
+30 Mar 09 [MHC] Added 'random color' operator.
+[1h]C
+
+23 Mar 09 [MHC] Changed to Qt 4.5.0
+[2h]C			Added close icon to tabs.
+				Compiler settings: now global optimization, SSE2 instructions, fast fp-math. (much more responsive!)
+				
+18 Mar 09 [MHC] Fixed a bug where a recursive rule not producing objects could fill memory (making system very unresponsive)
+[1h]C           Added export of background color to templates.
+                Added templates by Neon22 and Groovelock to SVN.
+
+17 Feb 09 [MHC] Added 'blend {color} {strenght}' operator
+[1h]C
+
+15 Feb 09 [MHC] Continued work on GUI for vars. Floats working now. Needs polish. 
+[3h]C
+
+11 Feb 09 [MHC] Added 'set seed initial' for syncing random seed. This required adding a seed field to each state.
+[3h]C
+
+09 Feb 09 [MHC] Added 'set maxsize ...' and 'set minsize ...'.
+[2h]C           Started working on a Sunflow-Ward template.
+
+02 Feb 09 [MHC] Web: updated references, Added icons for downloads.
+[1h Adm]
+
+29 Jan 09 [MHC] Added support for specifying a startup .es file on the Commandline (this makes file associations possible). Notice this should work with Unicode paths.
+[1h]C           Added support for drag'and'drop (drop a .es file onto the clipboard...)
+                -> TODO: Check on Linux/Mac.
+                BugFix: The scrollwheel can now be used to zoom again.
+
+----- Release of v0.9.0 (Glasnost) [23 Jan 2009 ] ----------------------------------------------------------
+This release: 33 hours of work (30 hours coding + 3 hours non-coding). 15 log entries.
+Stats total: 166 hours of work (122 hours coding + 44 hours non-coding). 85 log entries.
+
+
+23 Jan 09 [MHC] Created builds and updated webpages.
+[2hA]
+
+21 Jan 09 [MHC] Template Renderer: Missing primitives no longer cancels the renderer
+[2h]            OpenGL renderer now turns off GLWidget when rendering...
+                Add 'FastRotate' button. 
+
+20 Jan 09 [MHC] Fixed CR+CR+LF export bug.
+[3h]            Fixed infoText bg color.
+				Removed 'copied to clipboard' info text for file renders.
+				Update info text to correct ALT modifier for fast draw.
+				Enabled the Cut,Paste,Copy main menu (this did not work before :-))				
+
+19 Jan 09 [MHC] More Cam Export stuff. Now works with more aspect ratios. Added the following exports to the 'begin' template:
+[1h]			{fov},{aspect},{width} {height} [Width and Height being the size of the OpenGL viewport, aspect their proprotion and fov=29*aspect (pretty close for SunFlow export)]
+
+18 Jan 09 [MHC] Added Camera Export. Now in the 'begin' template, it is possible to do stuff like:
+[5h]			   eye    {CamPosX} {CamPosY} {CamPosZ}
+				   target {CamTargetX} {CamTargetY} {CamTargetZ}
+				   up     {CamUpX} {CamUpY} {CamUpZ}
+				   fov    29
+				When resizing OpenGL window, width/height/a.r. is shown.
+				Removed an extensive memoryleak (leaked 16 bytes per created state).
+			 
+14 Jan 09 [MHC] Updated web page
+[1h+1hA]        More work on the GUI editors.
+
+5  Jan 09 [MHC] Corrected some syntax highlighter bugs...
+[1h]
+
+4  Jan 09 [MHC] Restored GCC/Linux code compatibility. (Some header paths were invalid)
+[1h]
+
+3  Jan 09 [MHC] Implemented a 'Triangle'. E.g.: 'Triangle[0,0,0;1,0,0;0.5,0.5,0.5]' is now a valid primitive.
+[3h]
+
+2  Jan 09 [MHC] Some refactoring. Started sketching a framework for GUI editors for the '#define' statements.
+[4h]            Some more work on the QtScripting.
+
+30 Dec 08 [MHC] Added support for '#define varname value' preprocessor substitutions. (Useful for declaring constant variables)
+[1h]
+
+23 Nov 08 [MHC] Started experimenting with QtScript'ing.
+[4h]
+
+18 Nov 08 [MHC] Fixed a bug when going into full screen mode (not all chrome was hidden).
+[1h]
+
+17 Nov 08 [MHC] Tried to find out why I could not run in Release mode without crashing on Windows anymore.
+[1h]            Turns out, that QtScriptd4.dll works just fine, but my QtScript4.dll does not, and crashes when called into. This is weird.
+                Well, I tried linking to another set of DLL found here (http://pallas.copai.de/index.php?option=com_content&view=article&id=49&Itemid=58), and these works too.
+                Weirdness. Well, recompiling the entire Qt just takes too long, so I will not test this.
+                
+16 Nov 08 [MHC] Started added stub code for the JavaScript controller interface. 
+[2h]            This will make it possible to use JavaScript (using Qt's embedded JavaScript interpreter) to make e.g. animations.
+                
+----- Release of v0.8.5 (Exonautica Reloaded) [13 Jul 2008 ] ----------------------------------------------------------
+This release: 14 hours of work: 12 hours coding, 2 hours non-coding. (9 log entries)
+Stats total: 133 hours total shared over 70 log entries. 92 hours coding, 41 hours non-coding
+
+
+13 Jul 08 [MHC] Bug fix: window position and size were not persisted.
+[1h]C           Build/Deploy: wrong dependencies for Windows Binaries (VS2005 instead of VS2008)
+[1h]A
+
+8 Jul 08 [MHC] Found some faults with the build instructions which caused compilation to fail with Qt 4.4.0 and a small error causing compilation to fail on Debian.
+[1½h]C
+
+1 Jul 08 [MHC] Fixed a bug, which caused compile errors on Mac.
+[1h]C          The default windows size is now larger.
+               Now shows Line number and position when moving cursor.
+               
+30 Jun 08 [MHC] Fixed a bug which caused errors to be highlighted on the wrong text line in GUI, when comments were present.
+[1h]C            
+
+29 Jun 08 [MHC] Fixed a newly introduced bug which caused the 'maxdepth' property for a custom rule to fail.
+[1h]C           Added some more web documentation.
+[1h]A 
+                
+22 Jun 08 [MHC] Started working on Export of Camera settings.
+[2h]C
+
+15 Jun 08 [MHC] BugFix: TemplateExporter: All objects may now use the {UID} tag.
+[1h]C
+
+12 Jun 08 [MHC] Started playing around with a 'mesh' object (requires some internal changes).
+[3h]C
+
+7  Jun 08 [MHC] Bugfix: Reset View did not reset scale.
+[½h]C
+
+----- Release of v0.8.0 (Exonautica) [5 Jun 2008 ] ----------------------------------------------------------
+This release: 24 hours of work: 17½ hours coding, 6½ hours non-coding. (12 log entries)
+Stats total: 119 hours total shared over 61 log entries. 80 hours coding, 39 hours non-coding
+
+5  Jun 08 [MHC] Creating builds for Structure Synth 0.8 'Exonautica'.
+[3h] a
+
+15 May 08 [MHC] Completed the Template Rendering code.
+[2½h]c          Corrected a small bug in the syntax-highlightning
+                Implemented Template Render to File:
+                -> Notice: a small bug: it saves files with \d\d\a carriage returns (instead of \d\a). Don't know why yet
+                Added 'Auto Increment' check box, for whether the seed should auto increment (makes this a bit more logic to use)
+				Added support for different Template classes:
+                -> Now it possible to specify a class signifier for a primitive object:
+                -> For instance 'box::metal'.
+                -> The OpenGL will just ignore this, but the Template Renderers
+                -> will try to find a substitution of the type:
+                -> <substitution name="box" type="metal">
+
+
+05 May 08 [MHC] Created initial DoxyGen setup.
+[1½h]a
+
+01 May 08 [MHC] Examples menu now recurses the Examples directory (so that we can introduce 'tutorials' and clean up the mess of examples)
+[2h]c			Bug Fix: [1] 'Save as...' and 'Load...' should default to '*.es* filter.
+				Updated Icon for About dialog.
+				Added several new icons.
+
+22 Apr 08 [MHC] Bug Fix: CTRL+S works again.
+[1.5h]c			Templates: Added support for different types of substitutions, usings the 'type' attribute.
+                Removed the 'Export to PovRay' menu item (now all export must take place using templates).
+                Renamed template rendering menu item.
+
+21 Apr 08 [MHC] Bug Fix: no longer crashes on certain operations when no textedit areas are present
+[0.5h]c
+
+30 Mar 08 [MHC] Web site updates (build instruction for Vista and Mac Os X)
+[2h]a           
+
+17 Mar 08 [MHC] Long development break (lots of work and a Japan visit)  
+[4h]c           I've got a new laptop, so I updated to Windows Vista and Visual Studio Express 2008. This means the VS solution files will no longer work for VS 2005!
+                I managed to get Structure Synth compiled on Mac OS X (10.4.7 with XCode 2.5) and Qt 4.3.4 Open Source. Build instruction will be added to the SourceForge web site shortly.
+
+4  Feb 08 [MHC] Worked on the TemplateRenderer.
+[2h]c
+
+2  Feb 08 [MHC] Continued working on the TemplateRenderer.
+[2h]c
+
+6  Jan 08 [MHC] Started TemplateRenderer
+[1h]c
+
+4  Jan 08 [MHC] BugFix: when loading new script, a 'unsaved data' would occour (even though loaded scripts appears in new tabs)
+[2h]c           Added Random Seed control spinbox.
+
+----- Release of v0.7.0 [25 Dec 2007 ] ----------------------------------------------------------
+This release: 22 hours of work: 19½ hours coding, 2½ hours non-coding. (15 log entries)
+Stats total: 95 hours total shared over 49 log entries. 62½ hours coding, 32½ hours non-coding
+
+25 Dec 07 [MHC]: Created build and updated website for v0.7
+[1½h]a
+
+08 Dec 07 [MHC]: Corrected more Linux compiler warnings, and some const correctness.
+[1h]c
+
+07 Dec 07 [MHC]: Syntax highlighter now supports multi-line comments and highlight parse error positions. 
+          [MHC]: Added screenshot save capability.
+          [MHC]: Corrected lots of Linux warnings and a single bug.
+[2h]c
+
+06 Dec 07 [MHC]: Rewrote the tokenizer. It is better now. 
+          [MHC]: Fixed an infinite loop while parsing incorrect rule modifiers.
+          [MHC]: Added web links to the Help Menu.
+[2h]c
+
+05 Dec 07 [MHC]: Wrote a proper syntax highlighter
+[2h]c
+
+04 Dec 07 [MHC]: Fixed the tab window logic. Should be working now.
+[1h]c
+
+18 Nov 07 [MHC]: Added 'matrix x1 x2 x3 y1 y2 y3 z1 z2 z3' transformation.
+[1h]c
+
+09 Nov 07 [MHC]: Fixed a syntax error affecting compilation under GCC (Linux). Works on Linux again now.
+[½h]c
+
+23 Oct 07 [MHC]: Started working on POVRay export.
+[2h]c
+
+1x Oct 07 [MHC]: Started working on tutorial.
+[1h]a
+
+14 Oct 07 [MHC]: Fixed 'weight' bug. Now accepts floating points as weights.
+[1h]c
+
+09 Oct 07 [MHC]: Corrected: [4] Lines and dots do not respect color settings.
+[2h]c            Better fast-draw.
+                 Corrected: [3] When parser encounters an error, it should clear 3D view, and force shown log.
+
+
+08 Oct 07 [MHC]: Bugfixes: 'panic' doesn't change background color, context menus doesn't appear while dragging in 3D view
+[½h]c
+
+07 Oct 07 [MHC]: Added initial support for tabs. Not fully implemented.
+[3h]c            Did some 'const correctness' clean up
+
+04 Oct 07 [MHC]: Refactored AppCore -> SyntopiaCore
+[1½h]c           Added support for full screen (+context menu).
+
+----- Release of v0.5.0 [21 Sep 07 ] ----------------------------------------------------------
+Stats so far: 73 hours total shared over 34 log entries. 43 hours coding, 30 hours non-coding
+
+[2h]a
+
+18  Sep 07 [MHC]:   Added Background command (e.g. 'Set Background #F00')
+[1h]c				Added Seed command (e.g. 'Set seed 1')
+				    Added panic button.
+
+10  Sep 07 [MHC]:   Added bounding-box to 3D objects. Added quick-draw (invoke by holding ALT while rotating, translating).
+[1h]c
+
+6  Sep 07 [MHC]:    Web site updates.
+[1h]a
+
+5  Sep 07 [MHC]:    Structure Synth now builds on Linux.
+[2h]a
+
+3  Sep 07 [MHC]:    Tried to create a build that it is not dependend on a side-by-side installed DLL ('C:\WINDOWS\WinSxS\'...). I want the app to be distributable without any installation.
+[1½h]a
+
+31 Augc 07 [MHC]:   Added (absolute) 'Color' operator. Corrected the problems with opening new windows.
+[1h]c
+
+29 Aug 07 [MHC]:    Website modifications. (Added 'news', 'for Context Free users', 'Build - Linux')
+[1½h]a
+
+27 Aug 07 [MHC]:    Added Flickr group: http://flickr.com/groups/structuresynth/
+[2h]a
+
+26 Aug 07 [MHC]:    Added progress dialog.
+[½h]c
+
+25 Aug 07 [MHC]:    Web site modifications.
+[1½h]a              
+
+22 Aug 07 [MHC]:    Size transformation now has a three parameter overload.
+[½h]c
+
+21 Aug 07 [MHC]:    Transformation Loops new working. Corrected a HSV conversion bug.
+[1h]c
+
+20 Aug 07 [MHC]:    Added version object and about page.
+[1h]c
+
+19 Aug 07 [MHC]:    Created a web page for the project.
+[7h]a
+
+17 Aug 07 [MHC]:    Example dir entries added to menu. Added EULA.
+[1½h]a
+
+11 Aug 07 [MHC]:	Added HSV coloring model (operators Hue(H),Sat,Brightness(B))
+[2h]c				Added Preprocessor (only support C++ comments, multiline /* ... */ and single line //)
+					Support for global set command (rule calls and set commands can now appear unscoped (in a top-level rule))
+
+10 Aug 07 [MHC]:	Added mouse rotation about z-axis (press both mouse buttons)
+[2h]c				Added rule retirement ("Rule R MaxDepth > R2"), rule substitution (see Menger sponge example).
+	                Added 'MaxObjects' setting
+
+ 9 Aug 07 [MHC]:	Fixed rotation, scale offset. Rotations now in degrees instead of rad. 
+[1h]c               Added Grid, Box, Line, Dot primitives.
+	                
+ 7 Aug 07 [MHC]:	Ambiguous Rules works. Added 'weight' rule modifier. Added 'fx','fy','fz' commands.
+[1h]c
+
+ 6 Aug 07 [MHC]:	Initial SF.NET checkin + mini webpage. Added coloring to logger.
+[2h]a	
+
+ 5 Aug 07 [MHC]:	Added 'box' primitive (which should really be solid instead of wireframe). Corrected a bug wrt sphere coordinates.
+[1h]c	
+
+ 1 Aug 07 [MHC]:	Builder working (only spheres). Added 's' transformation.
+[1½h]c	
+
+30 Jul 07 [MHC]:	Builder (almost) complete
+[1½h]c				
+
+29 Jul 07 [MHC]:	EisenParser now creates a RuleSet (that is, it is working). 
+[1½h]c				Rules are resolved
+					Name-clashing custom rules are promoted to ambiguous rules
+
+
+28 Jul 07 [MHC]:	Added model skeleton classes. (Rules (Primitive, Custom, Ambiguous), State, Transformation, Builder, ExecutionStatck, ...)
+[1h]c
+
+27 Jul 07 [MHC]:	3D Engine now draws a list of Object3D's with a sphere implemented as the only primitive so far.
+[1h]c				Builder skeleton
+					Rendering skeleton
+
+26 Jul 07 [MHC]:	Added Matrix4 class with some auxillary methods (such as rotating an angle around a given vector)
+[2h]c
+
+24 Jul 07 [MHC]:	Changelog started.
+[2h]c				3D Engine skeleton up and running. Support for translation and zooming.
+					
+23 Jul 07 [MHC]:    Added Model Classes: Rule, Ruleset, Transformation
+[2h]c				Parser up and running. 
+					Tokenizer working
+	
+22 Jul 07 [MHC]:    Added Exceptions base class
+[4h]c				Added Eisenparser skeleton
+					Added Tokenizer skeleton
+
+18 Jul 07 [MHC]:    Added MiniGL engine skeleton
+[8h]c				Added Vector3 skeleton	
+					
+10 Jul 07 [MHC]:    Initial Check-In.
+[6h]c               Added icons
+                    Added a minimalist logging framework
+                    Added main window mockup
+                    Visual Studio 2005 Solution and Project files added.
+                   
+Earlier:            Initial design 
+[8h]d 
