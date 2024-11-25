@@ -1,0 +1,98 @@
+/* -*-c++-*- OpenSceneGraph - Copyright (C) 1998-2009 Robert Osfield 
+ *
+ * This library is open source and may be redistributed and/or modified under  
+ * the terms of the OpenSceneGraph Public License (OSGPL) version 0.0 or 
+ * (at your option) any later version.  The full license is in LICENSE file
+ * included with this distribution, and on the openscenegraph.org website.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ * OpenSceneGraph Public License for more details.
+*/
+
+#ifndef OSGVIEWER_GRAPHICSHANDLEWIN32
+#define OSGVIEWER_GRAPHICSHANDLEWIN32 1
+
+#include <osgViewer/api/Win32/Win32GWUtils>
+#include <osgViewer/Export>
+
+namespace osgViewer
+{
+
+	/** Class to encapsulate platform-specific OpenGL context handle variables.
+	  * Derived osg::GraphicsContext classes can inherit from this class to
+	  * share OpenGL resources.*/
+
+#if defined(OSG_USE_EGL)
+	class OSGVIEWER_EXPORT GraphicsHandleWin32
+	{
+	public:
+
+		GraphicsHandleWin32()
+			: _hwnd(0), _hdc(0) {}
+
+		/** Set native window.*/
+		inline void setHWND(HWND hwnd) { _hwnd = hwnd; }
+
+		/** Get native window.*/
+		inline HWND getHWND() const { return _hwnd; }
+
+		/** Set device context.*/
+		inline void setHDC(HDC hdc) { _hdc = hdc; }
+
+		/** Get device context.*/
+		inline HDC getHDC() const { return _hdc; }
+
+		/** Set native EGL graphics context.*/
+		inline void setEGLContext(const EGL::ContextInfo& eglContextInfo) { _eglContextInfo = eglContextInfo; }
+
+		/** Get native EGL graphics context.*/
+		inline const EGL::ContextInfo& getEGLContext() const { return _eglContextInfo; }
+
+	protected:
+
+		HWND            _hwnd;
+		HDC             _hdc;
+		EGL::ContextInfo  _eglContextInfo;
+	};
+
+#else
+	class OSGVIEWER_EXPORT GraphicsHandleWin32
+	{
+	public:
+
+		GraphicsHandleWin32() :
+			_hwnd(0),
+			_hdc(0),
+			_hglrc(0) {}
+
+		/** Set native window.*/
+		inline void setHWND(HWND hwnd) { _hwnd = hwnd; }
+
+		/** Get native window.*/
+		inline HWND getHWND() const { return _hwnd; }
+
+		/** Set device context.*/
+		inline void setHDC(HDC hdc) { _hdc = hdc; }
+
+		/** Get device context.*/
+		inline HDC getHDC() const { return _hdc; }
+
+		/** Set native OpenGL graphics context.*/
+		inline void setWGLContext(HGLRC hglrc) { _hglrc = hglrc; }
+
+		/** Get native OpenGL graphics context.*/
+		inline HGLRC getWGLContext() const { return _hglrc; }
+
+	protected:
+
+		HWND            _hwnd;
+		HDC             _hdc;
+		HGLRC           _hglrc;
+
+	};
+#endif
+}
+
+#endif
