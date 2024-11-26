@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>Button.qml</file>
-        <file>Block.qml</file>
-        <file>samegame.qml</file>
-    </qresource>
-</RCC>
