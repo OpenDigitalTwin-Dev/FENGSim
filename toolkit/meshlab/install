@@ -1,0 +1,7 @@
+sudo apt install cmake make gcc g++ libboost-dev libgmp-dev libembree-dev lib3ds-dev libmuparser-dev
+
+mkdir build
+cd build
+cmake .. -DQt5_DIR=/home/jiping/Downloads/qtbase/lib/cmake/Qt5 -DCMAKE_INSTALL_PREFIX=$PWD/../../install/meshlab_install
+make -j4
+make install
