@@ -1,2 +1,4 @@
 rm -rf build
 rm -rf ../install/meshlab_install
+rm qt-everywhere-opensource-src-5.15.16.tar.xz
+rm -rf qt-everywhere-src-5.15.16
