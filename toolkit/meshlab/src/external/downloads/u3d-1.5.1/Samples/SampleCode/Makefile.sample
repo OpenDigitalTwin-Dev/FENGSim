@@ -1,8 +1,0 @@
-# Remember to correct the patch to the actual install location!
-all:
-	g++ -Wall -c -o HelloWorld.o -I/usr/local/include/u3d HelloWorld.cpp
-	g++ -Wall -o HelloWorld HelloWorld.o /usr/local/lib/libIFXCoreStatic.a -lm -ldl
-	g++ -Wall -c -o IDTFGen.o -I/usr/local/include/u3d IDTFGen.cpp
-	g++ -Wall -o IDTFGen IDTFGen.o -Wl,-rpath,/usr/local/lib -L/usr/local/lib -lIDTF -lm -ldl
-clean:
-	rm HelloWorld.o IDTFGen.o
