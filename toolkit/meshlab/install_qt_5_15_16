@@ -1,0 +1,7 @@
+sudo apt -y install make gcc g++ python3 build-essential libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev
+
+mkdir build
+cd build
+./../configure -nomake tests -nomake examples -prefix $PWD/../../qtbase
+make -j4
+make install
