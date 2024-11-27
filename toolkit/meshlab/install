@@ -1,22 +1,23 @@
 # >>> compile and install qt5.15.16
-sudo apt install wget tar gzip
+sudo apt -y install dialog wget tar gzip xz-utils libreadline-dev apt-utils 
 wget https://mirrors.ustc.edu.cn/qtproject/archive/qt/5.15/5.15.16/single/qt-everywhere-opensource-src-5.15.16.tar.xz
 tar -xvf qt-everywhere-opensource-src-5.15.16.tar.xz
 
-sudo apt -y install make gcc g++ python3 build-essential libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev
+sudo apt -y install make gcc g++ python3 build-essential libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev libboost-dev libclang-dev libqhull-dev libmpfr-dev
+sudo apt -y install cmake make gcc g++ libboost-dev libgmp-dev libembree-dev lib3ds-dev libmuparser-dev libxerces-c-dev libdouble-conversion-dev libpcre2-dev libglib2.0-dev libharfbuzz-dev
+
 cd qt-everywhere-src-5.15.16
 mkdir build
 cd build
-./../configure -nomake tests -nomake examples -prefix $PWD/../../qtbase
+./../configure -nomake tests -nomake examples -prefix $PWD/../../qtbase -opensource -confirm-license 
 make -j4
 make install
 cd ../../
 
 # >>> compile meshlab
-sudo apt -y install cmake make gcc g++ libboost-dev libgmp-dev libembree-dev lib3ds-dev libmuparser-dev libxerces-c-dev libqhull-dev
 
 mkdir build
 cd build
-cmake .. -DQt5_DIR=$PWD/../qtbase/lib/cmake/Qt5 -DCMAKE_INSTALL_#PREFIX=$PWD/../../install/meshlab_install
+cmake .. -DQt5_DIR=$PWD/../qtbase/lib/cmake/Qt5 -DCMAKE_INSTALL_PREFIX=$PWD/../../install/meshlab_install
 make -j4
 make install
