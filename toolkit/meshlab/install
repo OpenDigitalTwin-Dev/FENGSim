@@ -16,7 +16,7 @@ sudo apt -y install build-essential cmake freeglut3-dev gdb git iputils-ping lib
             '^libxcb.*-dev' libxkbcommon-dev libxkbcommon-x11-dev libgl-dev 
 
 sudo apt -y install cmake make gcc g++ python3 build-essential libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev libboost-dev libclang-dev libboost-thread-dev
-sudo apt -y install libgmp-dev libembree-dev lib3ds-dev libmuparser-dev libxerces-c-dev libdouble-conversion-dev libpcre2-dev libglib2.0-dev libharfbuzz-dev libqhull-dev libmpfr-dev
+sudo apt -y install libgmp-dev libembree-dev lib3ds-dev libmuparser-dev libxerces-c-dev libdouble-conversion-dev libpcre2-dev libglib2.0-dev libharfbuzz-dev libqhull-dev libmpfr-dev p7zip-full
 
 cd qt-everywhere-src-5.15.16
 mkdir build
