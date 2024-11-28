@@ -1,23 +1,51 @@
 # >>> compile and install qt5.15.16
+
+# export DEBIAN_FRONTEND=noninteractive
+
 sudo apt -y install dialog wget tar gzip xz-utils libreadline-dev apt-utils 
 wget https://mirrors.ustc.edu.cn/qtproject/archive/qt/5.15/5.15.16/single/qt-everywhere-opensource-src-5.15.16.tar.xz
 tar -xvf qt-everywhere-opensource-src-5.15.16.tar.xz
 
-sudo apt -y install make gcc g++ python3 build-essential libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev libboost-dev libclang-dev libqhull-dev libmpfr-dev
-sudo apt -y install cmake make gcc g++ libboost-dev libgmp-dev libembree-dev lib3ds-dev libmuparser-dev libxerces-c-dev libdouble-conversion-dev libpcre2-dev libglib2.0-dev libharfbuzz-dev
+# >>> we must follow all the things from apt, otherwise the compilation of qt in docker will has some problem.
+
+sudo apt -y install build-essential cmake freeglut3-dev gdb git iputils-ping libgl1-mesa-dev \
+            libglu1-mesa-dev libjpeg-dev libmysqlclient-dev libnss3-dev libopus-dev \
+            libpng-dev libsqlite3-dev libssl-dev libx11-xcb-dev libxcb-xinerama0-dev \
+            libxcb-xkb-dev libxcb1-dev libxcursor-dev libxi-dev libxml2-dev libxrender-dev \
+            libxslt-dev lzip mesa-common-dev nano perl python3 valgrind wget zlib1g-dev \
+            '^libxcb.*-dev' libxkbcommon-dev libxkbcommon-x11-dev libgl-dev 
+
+sudo apt -y install cmake make gcc g++ python3 build-essential libgl1-mesa-dev libglu1-mesa-dev freeglut3-dev libboost-dev libclang-dev libboost-thread-dev
+sudo apt -y install libgmp-dev libembree-dev lib3ds-dev libmuparser-dev libxerces-c-dev libdouble-conversion-dev libpcre2-dev libglib2.0-dev libharfbuzz-dev libqhull-dev libmpfr-dev
 
 cd qt-everywhere-src-5.15.16
 mkdir build
 cd build
-./../configure -nomake tests -nomake examples -prefix $PWD/../../qtbase -opensource -confirm-license 
-make -j4
+./../configure -opensource -confirm-license -release -static -nomake tests -nomake examples -skip qtwebengine \
+    -qt-zlib -qt-libjpeg -qt-libpng -xcb -qt-freetype -qt-pcre -qt-harfbuzz -prefix $PWD/../../qtbase
+make -j16
 make install
 cd ../../
 
 # >>> compile meshlab
 
+7za x ./src/vcglib.7z -o/$PWD/src
+
+7za x ./src/external/downloads/CGAL-5.6.7z -o/$PWD/src/external/downloads
+7za x ./src/external/downloads/levmar-2.6.1.7z -o/$PWD/src/external/downloads
+7za x ./src/external/downloads/nexus-master.7z -o/$PWD/src/external/downloads
+7za x ./src/external/downloads/StructureSynth-1.5.1.7z -o/$PWD/src/external/downloads
+7za x ./src/external/downloads/embree-4.3.0.7z -o/$PWD/src/external/downloads
+7za x ./src/external/downloads/libE57Format-2.3.0.7z -o/$PWD/src/external/downloads
+7za x ./src/external/downloads/OpenCTM-1.0.3.7z -o/$PWD/src/external/downloads
+7za x ./src/external/downloads/tinygltf-2.6.3.7z -o/$PWD/src/external/downloads
+7za x ./src/external/downloads/ispc-v1.18.1-linux.7z -o/$PWD/src/external/downloads
+7za x ./src/external/downloads/libigl-2.4.0.7z -o/$PWD/src/external/downloads
+7za x ./src/external/downloads/qhull-2020.2.7z -o/$PWD/src/external/downloads
+7za x ./src/external/downloads/u3d-1.5.1.7z -o/$PWD/src/external/downloads
+
 mkdir build
 cd build
 cmake .. -DQt5_DIR=$PWD/../qtbase/lib/cmake/Qt5 -DCMAKE_INSTALL_PREFIX=$PWD/../../install/meshlab_install
-make -j4
+make -j16
 make install
