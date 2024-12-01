@@ -1,0 +1,124 @@
+# dialog Japanese po file.
+# Copyright 2000, Thomas Dickey
+# This file is distributed under the same license as the dialog package.
+# Hirofumi Takeda <takepin@turbolinux.co.jp>, 2000.
+# Takeshi Hamasaki <hmatrjp@users.sourceforge.jp>, 2008, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: dialog 1.3.20210117\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-01-17 15:18-0500\n"
+"PO-Revision-Date: 2021-03-07 09:55+0900\n"
+"Last-Translator: Takeshi Hamasaki <hmatrjp@users.sourceforge.jp>\n"
+"Language-Team: Japanese <translation-team-ja@lists.sourceforge.net>\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Bugs: Report translation errors to the Language-Team address.\n"
+"X-Generator: Poedit 2.2.1\n"
+
+#: buttons.c:500
+msgid "Yes"
+msgstr "はい"
+
+#: buttons.c:508
+msgid "No"
+msgstr "いいえ"
+
+#: buttons.c:516
+msgid "OK"
+msgstr "了解"
+
+#: buttons.c:524
+msgid "Cancel"
+msgstr "取消"
+
+#: buttons.c:532
+msgid "EXIT"
+msgstr "終了"
+
+#: buttons.c:540
+msgid "Extra"
+msgstr "拡張"
+
+#: buttons.c:548
+msgid "Help"
+msgstr "ヘルプ"
+
+#. Headline "Month"
+#: calendar.c:463
+msgid "Month"
+msgstr "月"
+
+#. Headline "Year"
+#: calendar.c:485
+msgid "Year"
+msgstr "年"
+
+#: dialog.c:744
+#, c-format
+msgid "Expected %d arguments, found only %d"
+msgstr "%d個の引数が必要ですが、%d個しかありません"
+
+#: dialog.c:748
+#, c-format
+msgid "Expected %d arguments, found extra %d"
+msgstr "%d個の引数が必要で、%d個が余分です"
+
+#: dialog.c:907
+msgid "Rename"
+msgstr "名前変更"
+
+#: fselect.c:623
+msgid "Directories"
+msgstr "ディレクトリ"
+
+#: fselect.c:624
+msgid "Files"
+msgstr "ファイル"
+
+#: mixedgauge.c:58
+msgid "Succeeded"
+msgstr "成功"
+
+#: mixedgauge.c:61
+msgid "Failed"
+msgstr "失敗"
+
+#: mixedgauge.c:64
+msgid "Passed"
+msgstr "パス"
+
+#: mixedgauge.c:67
+msgid "Completed"
+msgstr "完了"
+
+#: mixedgauge.c:70
+msgid "Checked"
+msgstr "確認終了"
+
+#: mixedgauge.c:73
+msgid "Done"
+msgstr "終了"
+
+#: mixedgauge.c:76
+msgid "Skipped"
+msgstr "スキップ"
+
+#: mixedgauge.c:79
+msgid "In Progress"
+msgstr "処理中"
+
+#: mixedgauge.c:85
+msgid "N/A"
+msgstr "無効"
+
+#: mixedgauge.c:193
+msgid "Overall Progress"
+msgstr "全体の進行状況"
+
+#: textbox.c:515
+msgid "Search"
+msgstr "調査"

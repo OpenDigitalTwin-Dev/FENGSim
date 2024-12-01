@@ -1,0 +1,21 @@
+#!/bin/sh
+# $Id: textbox3,v 1.10 2024/03/07 21:20:02 tom Exp $
+
+. ./setup-vars
+
+. ./setup-tempfile
+
+TEXT=/usr/share/common-licenses/GPL
+test -f $TEXT || TEXT=../COPYING
+
+expand < textbox.txt > $tempfile
+expand < $TEXT | sed -e 's%free%\\Zu\\Zr\\Z4FREE\\Zn%g' >> $tempfile
+
+$DIALOG --clear --title "TEXT BOX" \
+	--extra-button "$@" \
+	--color-mode 2 \
+	--textbox "$tempfile" 22 77
+
+returncode=$?
+
+. ./report-button

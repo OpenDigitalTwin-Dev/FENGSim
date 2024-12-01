@@ -1,0 +1,126 @@
+# Finnish translation for dialog.
+# Copyright © 2010 Free Software Foundation, Inc.
+# Copyright © 2005 Lauri Nurmi <lanurmi@iki.fi>
+# This file is distributed under the same license as the dialog package.
+# Lauri Nurmi <lanurmi@iki.fi>, 2005, 2021.
+# Jorma Karvonen <karvonen.jorma@gmail.com>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: dialog 1.3.20210117\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-01-17 15:18-0500\n"
+"PO-Revision-Date: 2021-03-04 23:30+0200\n"
+"Last-Translator: Lauri Nurmi <lanurmi@iki.fi>\n"
+"Language-Team: Finnish <translation-team-fi@lists.sourceforge.net>\n"
+"Language: fi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Bugs: Report translation errors to the Language-Team address.\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 2.4.2\n"
+
+#: buttons.c:500
+msgid "Yes"
+msgstr "Kyllä"
+
+#: buttons.c:508
+msgid "No"
+msgstr "Ei"
+
+#: buttons.c:516
+msgid "OK"
+msgstr "Ok"
+
+#: buttons.c:524
+msgid "Cancel"
+msgstr "Peru"
+
+#: buttons.c:532
+msgid "EXIT"
+msgstr "POISTU"
+
+#: buttons.c:540
+msgid "Extra"
+msgstr "Painike"
+
+#: buttons.c:548
+msgid "Help"
+msgstr "Opaste"
+
+#. Headline "Month"
+#: calendar.c:463
+msgid "Month"
+msgstr "Kuukausi"
+
+#. Headline "Year"
+#: calendar.c:485
+msgid "Year"
+msgstr "Vuosi"
+
+#: dialog.c:744
+#, c-format
+msgid "Expected %d arguments, found only %d"
+msgstr "Odotettiin %d argumenttia, löytyi vain %d"
+
+#: dialog.c:748
+#, c-format
+msgid "Expected %d arguments, found extra %d"
+msgstr "Odotettiin %d argumenttia, löytyi %d ylimääräistä"
+
+#: dialog.c:907
+msgid "Rename"
+msgstr "Nimeä"
+
+#: fselect.c:623
+msgid "Directories"
+msgstr "Kansiot"
+
+#: fselect.c:624
+msgid "Files"
+msgstr "Tiedostot"
+
+#: mixedgauge.c:58
+msgid "Succeeded"
+msgstr "Onnistui"
+
+#: mixedgauge.c:61
+msgid "Failed"
+msgstr "Epäonnistui"
+
+#: mixedgauge.c:64
+msgid "Passed"
+msgstr "Hyväksytty"
+
+#: mixedgauge.c:67
+msgid "Completed"
+msgstr "Suoritettu"
+
+#: mixedgauge.c:70
+msgid "Checked"
+msgstr "Valittu"
+
+#: mixedgauge.c:73
+msgid "Done"
+msgstr "Valmis"
+
+#: mixedgauge.c:76
+msgid "Skipped"
+msgstr "Ohitettiin"
+
+#: mixedgauge.c:79
+msgid "In Progress"
+msgstr "Käynnissä"
+
+#: mixedgauge.c:85
+msgid "N/A"
+msgstr "-"
+
+#: mixedgauge.c:193
+msgid "Overall Progress"
+msgstr "Kokonaisedistyminen"
+
+#: textbox.c:515
+msgid "Search"
+msgstr "Etsi"

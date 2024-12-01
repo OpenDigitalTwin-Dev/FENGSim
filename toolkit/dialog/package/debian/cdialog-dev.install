@@ -1,0 +1,8 @@
+#! /usr/bin/dh-exec
+
+/usr/bin/*-config               /usr/bin
+/usr/include/*.h                /usr/include
+/usr/include/*/*.h              /usr/include/cdialog
+*.so                            /lib/${DEB_HOST_MULTIARCH}
+*.so.[1-9].[0-9]                /lib/${DEB_HOST_MULTIARCH}
+/usr/share/man/man3/*.3         /usr/share/man/man3

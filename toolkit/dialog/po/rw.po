@@ -1,0 +1,86 @@
+# translation of dialog to Kinyarwanda.
+# Copyright (C) 2005 Free Software Foundation, Inc.
+# This file is distributed under the same license as the dialog package.
+# Steve Murphy <murf@e-tools.com>, 2005.
+# Steve performed initial rough translation from compendium built from translations provided by the following translators:
+# Philibert Ndandali  <ndandali@yahoo.fr>, 2005.
+# Viateur MUGENZI <muvia1@yahoo.fr>, 2005.
+# Noëlla Mupole <s24211045@tuks.co.za>, 2005.
+# Carole Karema <karemacarole@hotmail.com>, 2005.
+# JEAN BAPTISTE NGENDAHAYO <ngenda_denis@yahoo.co.uk>, 2005.
+# Augustin KIBERWA  <akiberwa@yahoo.co.uk>, 2005.
+# Donatien NSENGIYUMVA <ndonatienuk@yahoo.co.uk>, 2005.
+# Antoine Bigirimana <antoine@e-tools.com>, 2005.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: dialog 1.0-rel20041222\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-12-19 20:14-0500\n"
+"PO-Revision-Date: 2005-04-04 10:55-0700\n"
+"Last-Translator: Steven Michael Murphy <murf@e-tools.com>\n"
+"Language-Team: Kinyarwanda <translation-team-rw@lists.sourceforge.net>\n"
+"X-Bugs: Report translation errors to the Language-Team address.\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: buttons.c:359
+msgid "Yes"
+msgstr "Yego"
+
+#: buttons.c:367
+msgid "No"
+msgstr "Oya"
+
+#: buttons.c:375
+msgid "OK"
+msgstr "OKE"
+
+#: buttons.c:383
+msgid "Cancel"
+msgstr "Kureka"
+
+# #-#-#-#-#  setup2.pot (PACKAGE VERSION)  #-#-#-#-#
+# setup2/source\ui\app.src:STR_RESTART_BTN_NO.text
+# #-#-#-#-#  setup2.pot (PACKAGE VERSION)  #-#-#-#-#
+# setup2/source\ui\pages\phavefun.src:RESID_PAGE_PAGEHAVEFUN.STR_LOGOUT_BTN_NO.text
+#: buttons.c:391
+#, fuzzy
+msgid "EXIT"
+msgstr "Gusohoka"
+
+#: buttons.c:399
+#, fuzzy
+msgid "Extra"
+msgstr "Birenga"
+
+#: buttons.c:407
+msgid "Help"
+msgstr "Gufasha"
+
+#. Headline "Month"
+#: calendar.c:299
+msgid "Month"
+msgstr "Ukwezi"
+
+#. Headline "Year"
+#: calendar.c:319
+msgid "Year"
+msgstr "Umwaka"
+
+#: dialog.c:672
+msgid "Rename"
+msgstr "Guhindura izina"
+
+#: fselect.c:426
+msgid "Directories"
+msgstr "ububiko bw'amaderese"
+
+#: fselect.c:427
+msgid "Files"
+msgstr "amadosiye"
+
+#: textbox.c:437
+msgid "Search"
+msgstr "Gushaka"
