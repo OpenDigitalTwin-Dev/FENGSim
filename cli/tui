@@ -1,2 +1,32 @@
-dialog --clear --checklist "FENGSim: " 20 50 20 1 FENGSim on 2 NSM off 3 CFD off 4 CEM off 5 DAE off 6 NLA off 7 Particles off 8 PS off
+#!/bin/bash
+
+# >>> the original dialog from https://invisible-island.net/dialog/
+# >>> i could find the introduction of dialog from https://linuxcommand.org/lc3_adv_dialog.php
+# >>> https://pythondialog.sourceforge.io/doc/widgets.html
+# >>> This manual documents pythondialog, a Python wrapper for the dialog utility originally written by Savio Lam, and later rewritten by Thomas E. Dickey. Its purpose is to provide an easy to use, pythonic and comprehensive Python interface to dialog. This allows one to make simple text-mode user interfaces on Unix-like systems.
+
+# inputbox - demonstrate the input dialog box with a temporary file
+
+# Define the dialog exit status codes
+: ${DIALOG_OK=0}
+: ${DIALOG_CANCEL=1}
+: ${DIALOG_HELP=2}
+: ${DIALOG_EXTRA=3}
+: ${DIALOG_ITEM_HELP=4}
+: ${DIALOG_ESC=255}
+
+# Create a temporary file and make sure it goes away when we're dome
+tmp_file=$PWD/tui_tmp.txt
+
+dialog --clear --buildlist "FENGSim: " 20 50 5 \
+1 FENGSim on      \
+2 NSM off         \
+3 CFD off         \
+4 CEM off         \
+5 DAE off         \
+6 NLA off         \
+7 Particles off   \
+8 PS off
+
 clear
+
