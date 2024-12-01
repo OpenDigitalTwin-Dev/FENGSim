@@ -4,3 +4,18 @@ rm -rf ../install/meshlab_install
 rm qt-everywhere-opensource-src-5.15.16.tar.xz
 rm -rf qt-everywhere-src-5.15.16
 rm -rf qtbase
+
+rm -rf ./src/vcglib
+
+rm -rf ./src/external/downloads/CGAL-5.6
+rm -rf ./src/external/downloads/levmar-2.6.1
+rm -rf ./src/external/downloads/nexus-master
+rm -rf ./src/external/downloads/StructureSynth-1.5.1
+rm -rf ./src/external/downloads/embree-4.3.0
+rm -rf ./src/external/downloads/libE57Format-2.3.0
+rm -rf ./src/external/downloads/OpenCTM-1.0.3
+rm -rf ./src/external/downloads/tinygltf-2.6.3
+rm -rf ./src/external/downloads/ispc-v1.18.1-linux
+rm -rf ./src/external/downloads/libigl-2.4.0
+rm -rf ./src/external/downloads/qhull-2020.2
+rm -rf ./src/external/downloads/u3d-1.5.1
