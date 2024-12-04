@@ -43,6 +43,10 @@ To launch the Qt project for FENGSim:
 <img decoding="async" src="image/3.jpg" width="1800">
 </div>
 
+<div align="center">
+<img decoding="async" src="image/11.png" width="1800">
+</div>
+
 ## Additive Manufacturing
 
 <!--
