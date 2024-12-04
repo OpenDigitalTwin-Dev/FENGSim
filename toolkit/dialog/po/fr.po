@@ -1,0 +1,124 @@
+# French translation of Dialog.
+# This file is distributed under the same license as the dialog package.
+# Copyright (C) 2001 Thomas Dickey.
+# Frédéric L. W. Meunier <0 @ pervalidus.net>, 2001.
+# François-Xavier Coudert <fxcoudert@gmail.com>, 2008.
+# Jean-Philippe Guérard <jean-philippe.guerard@corbeaunoir.org>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: dialog 1.3.20210117\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-01-17 15:18-0500\n"
+"PO-Revision-Date: 2021-05-22 19:37+0200\n"
+"Last-Translator: Jean-Philippe Guérard <jean-philippe.guerard@corbeaunoir.org>\n"
+"Language-Team: French <traduc@traduc.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8-bit\n"
+"X-Bugs: Report translation errors to the Language-Team address.\n"
+
+#: buttons.c:500
+msgid "Yes"
+msgstr "Oui"
+
+#: buttons.c:508
+msgid "No"
+msgstr "Non"
+
+#: buttons.c:516
+msgid "OK"
+msgstr "Accepter"
+
+#: buttons.c:524
+msgid "Cancel"
+msgstr "Annuler"
+
+#: buttons.c:532
+msgid "EXIT"
+msgstr "QUITTER"
+
+#: buttons.c:540
+msgid "Extra"
+msgstr "Extra"
+
+#: buttons.c:548
+msgid "Help"
+msgstr "Aide"
+
+#. Headline "Month"
+#: calendar.c:463
+msgid "Month"
+msgstr "Mois"
+
+#. Headline "Year"
+#: calendar.c:485
+msgid "Year"
+msgstr "Année"
+
+#: dialog.c:744
+#, c-format
+msgid "Expected %d arguments, found only %d"
+msgstr "%d arguments attendus, %d trouvés"
+
+#: dialog.c:748
+#, c-format
+msgid "Expected %d arguments, found extra %d"
+msgstr "%d arguments attendus, %d trouvés en trop"
+
+#: dialog.c:907
+msgid "Rename"
+msgstr "Renommer"
+
+#: fselect.c:623
+msgid "Directories"
+msgstr "Répertoires"
+
+#: fselect.c:624
+msgid "Files"
+msgstr "Fichiers"
+
+#: mixedgauge.c:58
+msgid "Succeeded"
+msgstr "Succès"
+
+#: mixedgauge.c:61
+msgid "Failed"
+msgstr "Échec"
+
+#: mixedgauge.c:64
+msgid "Passed"
+msgstr "Passé"
+
+#: mixedgauge.c:67
+msgid "Completed"
+msgstr "Terminé"
+
+#: mixedgauge.c:70
+msgid "Checked"
+msgstr "Vérifié"
+
+#: mixedgauge.c:73
+msgid "Done"
+msgstr "Fini"
+
+#: mixedgauge.c:76
+msgid "Skipped"
+msgstr "Ignoré"
+
+#: mixedgauge.c:79
+msgid "In Progress"
+msgstr "En cours"
+
+#: mixedgauge.c:85
+msgid "N/A"
+msgstr "N/A"
+
+#: mixedgauge.c:193
+msgid "Overall Progress"
+msgstr "Avancement global"
+
+#: textbox.c:515
+msgid "Search"
+msgstr "Rechercher"

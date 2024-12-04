@@ -1,0 +1,125 @@
+# Hungarian translation for dialog.
+# Copyright (C) 2003, 2014, 2022 Free Software Foundation, Inc.
+# This file is distributed under the same license as the dialog package.
+#
+# Árpad Biró <biro_arpad@yahoo.com>, 2003.
+# Balázs Úr <ur.balazs@fsf.hu>, 2014, 2022.
+msgid ""
+msgstr ""
+"Project-Id-Version: dialog 1.3.20210117\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-01-17 15:18-0500\n"
+"PO-Revision-Date: 2022-10-21 00:11+0200\n"
+"Last-Translator: Balázs Úr <ur.balazs@fsf.hu>\n"
+"Language-Team: Hungarian <translation-team-hu@lists.sourceforge.net>\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Bugs: Report translation errors to the Language-Team address.\n"
+"X-Generator: Lokalize 19.12.3\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: buttons.c:500
+msgid "Yes"
+msgstr "Igen"
+
+#: buttons.c:508
+msgid "No"
+msgstr "Nem"
+
+#: buttons.c:516
+msgid "OK"
+msgstr "OK"
+
+#: buttons.c:524
+msgid "Cancel"
+msgstr "Mégse"
+
+#: buttons.c:532
+msgid "EXIT"
+msgstr "KILÉPÉS"
+
+#: buttons.c:540
+msgid "Extra"
+msgstr "Extra"
+
+#: buttons.c:548
+msgid "Help"
+msgstr "Súgó"
+
+#. Headline "Month"
+#: calendar.c:463
+msgid "Month"
+msgstr "Hónap"
+
+#. Headline "Year"
+#: calendar.c:485
+msgid "Year"
+msgstr "Év"
+
+#: dialog.c:744
+#, c-format
+msgid "Expected %d arguments, found only %d"
+msgstr "%d argumentum várt, de csak %d található"
+
+#: dialog.c:748
+#, c-format
+msgid "Expected %d arguments, found extra %d"
+msgstr "%d argumentum várt, de további %d található"
+
+#: dialog.c:907
+msgid "Rename"
+msgstr "Átnevezés"
+
+#: fselect.c:623
+msgid "Directories"
+msgstr "Könyvtárak"
+
+#: fselect.c:624
+msgid "Files"
+msgstr "Fájlok"
+
+#: mixedgauge.c:58
+msgid "Succeeded"
+msgstr "Sikerült"
+
+#: mixedgauge.c:61
+msgid "Failed"
+msgstr "Meghiúsult"
+
+#: mixedgauge.c:64
+msgid "Passed"
+msgstr "Teljesült"
+
+#: mixedgauge.c:67
+msgid "Completed"
+msgstr "Befejezve"
+
+#: mixedgauge.c:70
+msgid "Checked"
+msgstr "Bejelölve"
+
+#: mixedgauge.c:73
+msgid "Done"
+msgstr "Kész"
+
+#: mixedgauge.c:76
+msgid "Skipped"
+msgstr "Kihagyva"
+
+#: mixedgauge.c:79
+msgid "In Progress"
+msgstr "Folyamatban"
+
+#: mixedgauge.c:85
+msgid "N/A"
+msgstr "N/A"
+
+#: mixedgauge.c:193
+msgid "Overall Progress"
+msgstr "Teljes folyamat"
+
+#: textbox.c:515
+msgid "Search"
+msgstr "Keresés"

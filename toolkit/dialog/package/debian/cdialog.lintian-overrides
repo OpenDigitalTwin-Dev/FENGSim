@@ -1,0 +1,5 @@
+# the source filename was misspelled in the original version
+# cdialog: spelling-error-in-binary usr/bin/cdialog guage gauge
+
+# the soname name is for the shared library used by cdialog-dev
+cdialog: package-name-doesnt-match-sonames libcdialog15.0.0

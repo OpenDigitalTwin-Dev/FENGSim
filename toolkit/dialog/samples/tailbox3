@@ -1,0 +1,17 @@
+#!/bin/sh
+# $Id: tailbox3,v 1.1 2024/03/07 21:20:02 tom Exp $
+
+. ./setup-vars
+
+./killall listing
+./listing | sed -e 's%report%\\Zu\\Zr\\Z4REPORT\\Zn%g' >listing.out &
+
+$DIALOG --title "TAIL BOX" "$@" \
+	--color-mode 2 \
+        --tailbox listing.out 24 70
+
+returncode=$?
+
+. ./report-button
+
+./killall listing

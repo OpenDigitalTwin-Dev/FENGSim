@@ -1,0 +1,69 @@
+#!/usr/bin/make -f
+
+ACTUAL_PROG	= cdialog
+
+export DEB_BUILD_MAINT_OPTIONS := hardening=+all qa=+bug reproducible=+all
+
+%:
+	dh $@
+
+# dh_autoreconf interferes with portability -- skip it
+override_dh_autoreconf:
+	echo "skip: dh_autoreconf autoreconf-dickey -- -f -i"
+
+override_dh_auto_configure:
+	cp -v package/dialog.map package/${ACTUAL_PROG}.map
+	dh_auto_configure -- \
+		--prefix=/usr \
+		--disable-echo \
+		--enable-nls \
+		--with-shlib-version=abi \
+		--enable-header-subdir \
+		--enable-pc-files \
+		--enable-stdnoreturn \
+		--enable-widec \
+		--with-package=${ACTUAL_PROG} \
+		--with-program-prefix=c \
+		--with-shared \
+		--with-screen=ncursesw6td \
+		--with-versioned-syms \
+		--disable-rpath-hack
+
+override_dh_auto_install:
+	dh_auto_install -- install install-lib install-examples
+
+override_dh_install:
+	dh_install
+	sh -c '\
+		pc_source=$$(find debian/tmp -name "*.pc"); \
+		pc_target=$$(echo $$pc_source | sed -e "s,tmp,cdialog-dev,"); \
+		pc_holder=$$(echo $$pc_target | sed -e "s,/[^/]*$$,,"); \
+		mkdir -v -p $$pc_holder; \
+		mv -v $$pc_source $$pc_target'
+
+override_dh_link:
+	sh -c "\
+		D=$$(awk '{gsub(":","."); print $$1}' <VERSION); \
+		S=$$(awk '{gsub(":","."); print $$2}' <VERSION); \
+	sed -i.bak \
+		-e \"s/.SRC/.\$$S/\" \
+		-e \"s/.DST/.\$$D/\" \
+		debian/cdialog-dev.links"
+	diff -u debian/cdialog-dev.links.bak debian/cdialog-dev.links || echo OK
+	dh_link
+
+override_dh_installdocs:
+	dh_installdocs README
+
+override_dh_installexamples:
+	# the makefile rule adjusts the default program-name
+	mv -v debian/tmp/usr/share/doc/cdialog/examples debian/cdialog/usr/share/doc/cdialog/
+
+override_dh_installchangelogs:
+	dh_installchangelogs CHANGES
+
+override_dh_installman:
+	# dh_install does this
+
+override_dh_shlibdeps:
+	dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info
