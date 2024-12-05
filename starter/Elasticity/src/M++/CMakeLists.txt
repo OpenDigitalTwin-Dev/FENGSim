@@ -1,7 +1,13 @@
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 project(m++_api)
 
-set(CMAKE_CXX_COMPILER /usr/bin/mpicxx.openmpi)
+# >>> if use /usr/bin/mpicxx.openmpi don't need to inlcude
+# >>> "/usr/include/x86_64-linux-gnu/openmpi/" as the following
+
+#set(CMAKE_CXX_COMPILER /usr/bin/mpicxx.openmpi)
+
+# >>> g++-12 and g++-13 have problems
+set(CMAKE_CXX_COMPILER /usr/bin/g++-11)
 
 find_package(MPI)
 if(MPI_FOUND)
@@ -11,6 +17,8 @@ if(MPI_FOUND)
   link_directories(${MPI_LIBRARY_DIRS})
   add_definitions(${MPI_DEFINITIONS})
 endif()
+
+include_directories("/usr/include/x86_64-linux-gnu/openmpi/")
 
 include_directories("src")
 aux_source_directory(solver/src solver_DIR_SRCS)
