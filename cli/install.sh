@@ -8,7 +8,7 @@ sudo apt -y install gfortran
 sudo apt -y install liblapack-dev
 sudo apt -y install libsuperlu-dev
 sudo apt -y install libopenmpi-dev
-sudo apt -y install p7zip-full dialog g++-11
+sudo apt -y install p7zip-full dialog g++-10
 
 # qt install
 rm -rf $PWD/../toolkit/qt/5.12.12

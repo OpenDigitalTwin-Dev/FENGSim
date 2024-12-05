@@ -7,7 +7,7 @@ project(m++_api)
 #set(CMAKE_CXX_COMPILER /usr/bin/mpicxx.openmpi)
 
 # >>> g++-12 and g++-13 have problems
-set(CMAKE_CXX_COMPILER /usr/bin/g++-11)
+set(CMAKE_CXX_COMPILER /usr/bin/g++-10)
 
 find_package(MPI)
 if(MPI_FOUND)
