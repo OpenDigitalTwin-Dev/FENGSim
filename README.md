@@ -1,12 +1,10 @@
-# [FENGSim](https://ocp-docs.readthedocs.io)
+<div align="center">
+<img decoding="async" src="image/Fengsim_logo_hi.png" height="120">
+</div>
 
 The FENGSim project serves as a software development kit (SDK) for adaptive manufacturing, integrating a variety of mathematical libraries such as computational geometry, computer algebra, numerical methods, numerical linear algebra, computer graphics, image processing, probability and statistics, optimization, and artificial intelligence. It also incorporates the CAX software framework along with practical examples. Central to the project are multilevel couplers tailored for intricate manufacturing applications. 
 
 Moreover, FENGSim offers tools for managing library dependencies, package management, and continuous integration and continuous deployment (CICD) processes, which include compiling, code merging, version control, testing, and deployment. The project also features interfaces for the integration of machinery and sensors, covering drivers, communication, and control applications. Additionally, FENGSim includes a large language model (LLM) assistant, developed using open-source code and classical literature, to enhance user experience and support.
-
-<div align="center">
-<img decoding="async" src="image/Fengsim_logo_hi.png" height="120">
-</div>
 
 To install FENGSim on Ubuntu 22.04:
 
