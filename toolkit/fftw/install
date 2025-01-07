@@ -1,5 +1,5 @@
 sudo apt update
-sudo apt install make gcc g++ gfortran texinfo
+sudo apt -y install make gcc g++ gfortran texinfo libmpich-dev
 
 mkdir build
 cd build
