@@ -2,6 +2,7 @@ sudo apt -y install gcc g++ cmake make
 
 mkdir build
 cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../install/hdf5_install -DHDF_BUILD_FORTRAN=ON -DBUILD_SHARED_LIBS=ON 
+# must use -DHDF5_BUILD_FORTRAN=ON, otherwise no hdf5.mod
+cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../install/hdf5_install -DHDF5_BUILD_FORTRAN=ON -DBUILD_SHARED_LIBS=ON 
 make -j4
 make install
