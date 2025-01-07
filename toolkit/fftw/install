@@ -1,3 +1,6 @@
+sudo apt update
+sudo apt install make gcc g++ gfortran texinfo
+
 mkdir build
 cd build
 ./../configure --enable-mpi --enable-openmp --enable-shared --prefix=$PWD/../../install/fftw_install
