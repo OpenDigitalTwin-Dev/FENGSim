@@ -7,7 +7,7 @@ process enjoyable and straightforward.
 This document describes guiding principles for the HDF5 code contributors and does not pretend to address any possible
 contribution. If in doubt, please do not hesitate to ask us for guidance.
 ***Note that no contribution may be accepted unless the donor agrees with the HDF Group software license terms
-found in the LICENSE file in every branch's top source directory.***
+found in the COPYING file in every branch's top source directory.***
 
 
 > We will assume that you are familiar with `git` and `GitHub`.  If not, you may go through the GitHub tutorial found at
@@ -122,10 +122,10 @@ Please make sure that you check the items applicable to your pull request:
   * [ ] If changes were done to Autotools build, were they added to CMake and vice versa?
   * [ ] Is the pull request applicable to any other branches? If yes, which ones? Please document it in the GitHub issue.
   * [ ] Is the new code sufficiently documented for future maintenance?
-  * [ ] Does the new feature require a change to an existing API? See "API Compatibility Macros" document (https://hdfgroup.github.io/hdf5/develop/api-compat-macros.html)
+  * [ ] Does the new feature require a change to an existing API? See "API Compatibility Macros" document (https://support.hdfgroup.org/releases/hdf5/v1_14/v1_14_5/documentation/doxygen/api-compat-macros.html)
 * Documentation
   * [ ] Was the change described in the release_docs/RELEASE.txt file?
-  * [ ] Was the new function documented in the corresponding public header file using [Doxygen](https://hdfgroup.github.io/hdf5/develop/_r_m_t.html)?
+  * [ ] Was the new function documented in the corresponding public header file using [Doxygen](https://support.hdfgroup.org/releases/hdf5/v1_14/v1_14_5/documentation/doxygen/_r_m_t.html)?
   * [ ] Was new functionality documented for the HDF5 community (the level of documentation depends on the feature; ask us what would be appropriate)
 * Testing
   * [ ] Does the pull request have tests?

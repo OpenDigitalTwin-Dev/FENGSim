@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -103,8 +103,8 @@ randll(hsize_t limit, int current_index)
     /* Generate up to MAX_TRIES random numbers until one of them */
     /* does not overlap with any previous writes */
     while (overlap != 0 && tries < MAX_TRIES) {
-        acc = (hsize_t)rand();
-        acc *= (hsize_t)rand();
+        acc = (hsize_t)HDrandom();
+        acc *= (hsize_t)HDrandom();
         acc     = acc % limit;
         overlap = 0;
 
@@ -760,7 +760,7 @@ main(int ac, char **av)
     /* seed = (unsigned long)1155438845; */
     fprintf(stderr, "Random # seed was: %lu\n", seed);
 #endif
-    srand((unsigned)seed);
+    HDsrandom((unsigned)seed);
 
     /* run VFD-specific test */
     if (H5FD_SEC2 == driver) {

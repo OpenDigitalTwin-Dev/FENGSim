@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -1061,7 +1061,7 @@ Java_hdf_hdf5lib_H5_H5Pset_1external(JNIEnv *env, jclass clss, jlong plist, jstr
 
     PIN_JAVA_STRING(ENVONLY, name, fileName, NULL, "H5Pset_external: file name not pinned");
 
-    if ((status = H5Pset_external((hid_t)plist, fileName, (HDoff_t)offset, (hsize_t)size)) < 0)
+    if ((status = H5Pset_external((hid_t)plist, fileName, (off_t)offset, (hsize_t)size)) < 0)
         H5_LIBRARY_ERROR(ENVONLY);
 
 done:
@@ -1083,7 +1083,7 @@ Java_hdf_hdf5lib_H5_H5Pget_1external(JNIEnv *env, jclass clss, jlong plist, jint
     jboolean isCopy;
     jstring  str;
     hsize_t  s;
-    HDoff_t  o;
+    off_t    o;
     jsize    arrLen;
     jlong   *theArray = NULL;
     char    *file     = NULL;
@@ -1105,8 +1105,8 @@ Java_hdf_hdf5lib_H5_H5Pget_1external(JNIEnv *env, jclass clss, jlong plist, jint
         if (NULL == (file = (char *)malloc(sizeof(char) * (size_t)name_size)))
             H5_OUT_OF_MEMORY_ERROR(ENVONLY, "H5Pget_external: memory allocation failed");
 
-    if ((status = H5Pget_external((hid_t)plist, (unsigned)idx, (size_t)name_size, file, &o, (hsize_t *)&s)) <
-        0)
+    if ((status = H5Pget_external((hid_t)plist, (unsigned)idx, (size_t)name_size, file, (off_t *)&o,
+                                  (hsize_t *)&s)) < 0)
         H5_LIBRARY_ERROR(ENVONLY);
 
     if (NULL != size) {

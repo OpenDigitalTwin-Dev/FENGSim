@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -1761,6 +1761,7 @@ H5FD__s3comms_load_aws_creds_from_file(FILE *file, const char *profile_name, cha
     };
     unsigned setting_count = 3;
     herr_t   ret_value     = SUCCEED;
+    unsigned buffer_i      = 0;
     unsigned setting_i     = 0;
     int      found_setting = 0;
     char    *line_buffer   = &(buffer[0]);

@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -296,7 +296,7 @@ test_large(hid_t fcpl, hid_t fapl, bool new_format)
         if (H5G__has_stab_test(cwg) != false)
             TEST_ERROR;
     for (i = 0; i < LARGE_NOBJS; i++) {
-        snprintf(name, sizeof(name), "%05d%05d", (rand() % 100000), i);
+        snprintf(name, sizeof(name), "%05d%05d", (HDrandom() % 100000), i);
         if ((dir = H5Gcreate2(cwg, name, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT)) < 0)
             TEST_ERROR;
         if (H5Gclose(dir) < 0)
@@ -1466,9 +1466,10 @@ main(void)
     puts("All symbol table tests passed.");
 
     /* Cleanup */
-    HDremove(FILE_OLD_GROUPS_COPY);
-    HDremove(CORRUPT_STAB_TMP_FILE);
-
+    if (GetTestCleanup()) {
+        HDremove(FILE_OLD_GROUPS_COPY);
+        HDremove(CORRUPT_STAB_TMP_FILE);
+    }
     h5_cleanup(FILENAME, fapl);
 
     return 0;

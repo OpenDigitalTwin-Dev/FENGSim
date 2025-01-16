@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -128,7 +128,7 @@ static hid_t create_stype1(void);
 static hid_t create_stype2(void);
 static hid_t create_stype3(void);
 static hid_t create_stype4(void);
-static int   compare_data(void *src_data, void *dst_data, bool src_subset);
+static int   compare_data(void *src_data, void *dst_data, hbool_t src_subset);
 static int   compare_stype4_data(void *expect_buf, void *rbuf);
 static int   compare_s1_data(void *expect_buf, void *rbuf);
 static int   compare_s1_s3_data(void *expect_buf, void *rbuf);
@@ -1211,11 +1211,11 @@ test_compounds_selection_io(void)
     fapl = h5_fileaccess();
     h5_fixname(FILENAME[3], fapl, fname, sizeof(fname));
 
-    for (set_cache = false; set_cache <= true; set_cache++) {
-        for (set_fillvalue = false; set_fillvalue <= true; set_fillvalue++) {
-            for (select_io = false; select_io <= true; select_io++) {
-                for (mwbuf = false; mwbuf <= true; mwbuf++) {
-                    for (set_buf = false; set_buf <= true; set_buf++) {
+    for (set_cache = FALSE; set_cache <= TRUE; set_cache++) {
+        for (set_fillvalue = FALSE; set_fillvalue <= TRUE; set_fillvalue++) {
+            for (select_io = FALSE; select_io <= TRUE; select_io++) {
+                for (mwbuf = FALSE; mwbuf <= TRUE; mwbuf++) {
+                    for (set_buf = FALSE; set_buf <= TRUE; set_buf++) {
 
                         if ((dxpl = H5Pcreate(H5P_DATASET_XFER)) < 0)
                             goto error;
@@ -1243,7 +1243,7 @@ test_compounds_selection_io(void)
 
                         if (mwbuf) {
                             printf("with modify write buf, ");
-                            if (H5Pset_modify_write_buf(dxpl, true) < 0)
+                            if (H5Pset_modify_write_buf(dxpl, TRUE) < 0)
                                 goto error;
                         }
                         else
@@ -2832,7 +2832,7 @@ test_pack_ooo(void)
                                        * the compound */
     unsigned i, j;                    /* Indices */
 
-    srand((unsigned)time(NULL));
+    HDsrand((unsigned)time(NULL));
 
     /* Initialize "free_order" array to indicate that all slots in order are
      * free */
@@ -2843,7 +2843,7 @@ test_pack_ooo(void)
     for (i = 0; i < PACK_NMEMBS; i++) {
         /* Generate index into free_order array */
         num_free = PACK_NMEMBS - i;
-        j        = (unsigned)rand() % num_free;
+        j        = (unsigned)HDrandom() % num_free;
 
         /* Update order array at the randomly generated (but guaranteed to be
          * free) location */
@@ -2855,7 +2855,7 @@ test_pack_ooo(void)
     } /* end for */
 
     /* Generate order to insert inner compound type */
-    sub_cmpd_order = (unsigned)rand() % PACK_NMEMBS;
+    sub_cmpd_order = (unsigned)HDrandom() % PACK_NMEMBS;
 
     for (extra_space = 0; extra_space < 2; extra_space++) {
         if (extra_space)

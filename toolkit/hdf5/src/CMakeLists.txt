@@ -272,8 +272,9 @@ set (H5FD_HDRS
     ${HDF5_SRC_DIR}/H5FDwindows.h
 )
 
-# Append Subfiling VFD sources to H5FD interface if it is built.
-# Append Subfiling VFD public headers to H5FD_HDRS regardless.
+# Append Subfiling VFD and Mercury sources to H5FD
+# interface if Subfiling VFD is built. Append Subfiling
+# VFD public headers to H5FD_HDRS regardless.
 add_subdirectory (${H5FD_SUBFILING_DIR})
 
 IDE_GENERATED_PROPERTIES ("H5FD" "${H5FD_HDRS}" "${H5FD_SOURCES}" )
@@ -640,21 +641,6 @@ IDE_GENERATED_PROPERTIES ("H5T" "${H5T_HDRS}" "${H5T_SOURCES}" )
 
 set (H5TS_SOURCES
     ${HDF5_SRC_DIR}/H5TS.c
-    ${HDF5_SRC_DIR}/H5TSatomic.c
-    ${HDF5_SRC_DIR}/H5TSbarrier.c
-    ${HDF5_SRC_DIR}/H5TSc11.c
-    ${HDF5_SRC_DIR}/H5TScond.c
-    ${HDF5_SRC_DIR}/H5TSint.c
-    ${HDF5_SRC_DIR}/H5TSkey.c
-    ${HDF5_SRC_DIR}/H5TSmutex.c
-    ${HDF5_SRC_DIR}/H5TSonce.c
-    ${HDF5_SRC_DIR}/H5TSpool.c
-    ${HDF5_SRC_DIR}/H5TSpthread.c
-    ${HDF5_SRC_DIR}/H5TSrec_rwlock.c
-    ${HDF5_SRC_DIR}/H5TSrwlock.c
-    ${HDF5_SRC_DIR}/H5TSsemaphore.c
-    ${HDF5_SRC_DIR}/H5TSthread.c
-    ${HDF5_SRC_DIR}/H5TSwin.c
 )
 set (H5TS_HDRS
     ${HDF5_SRC_DIR}/H5TSdevelop.h
@@ -687,8 +673,6 @@ set (H5VL_SOURCES
     ${HDF5_SRC_DIR}/H5VLnative_object.c
     ${HDF5_SRC_DIR}/H5VLnative_token.c
     ${HDF5_SRC_DIR}/H5VLpassthru.c
-    ${HDF5_SRC_DIR}/H5VLpassthru_int.c
-    ${HDF5_SRC_DIR}/H5VLquery.c
     ${HDF5_SRC_DIR}/H5VLtest.c
 )
 set (H5VL_HDRS
@@ -774,7 +758,6 @@ set (H5_MODULE_HEADERS
     ${HDF5_SRC_DIR}/H5SLmodule.h
     ${HDF5_SRC_DIR}/H5SMmodule.h
     ${HDF5_SRC_DIR}/H5Tmodule.h
-    ${HDF5_SRC_DIR}/H5TSmodule.h
     ${HDF5_SRC_DIR}/H5VLmodule.h
     ${HDF5_SRC_DIR}/H5Zmodule.h
 )
@@ -863,8 +846,6 @@ set (H5_PUBLIC_HEADERS
 
 set (H5_PRIVATE_HEADERS
     ${HDF5_SRC_DIR}/H5private.h
-    ${HDF5_SRC_DIR}/H5timer.h
-    ${HDF5_SRC_DIR}/H5warnings.h
 
     ${HDF5_SRC_DIR}/H5Apkg.h
     ${HDF5_SRC_DIR}/H5Aprivate.h
@@ -988,7 +969,6 @@ set (H5_PRIVATE_HEADERS
     ${HDF5_SRC_DIR}/H5Tpkg.h
     ${HDF5_SRC_DIR}/H5Tprivate.h
 
-    ${HDF5_SRC_DIR}/H5TSpkg.h
     ${HDF5_SRC_DIR}/H5TSprivate.h
 
     ${HDF5_SRC_DIR}/H5UCprivate.h
@@ -1024,7 +1004,7 @@ set (H5_PUBLIC_GENERATED_HEADERS
     ${HDF5_SRC_DIR}/H5overflow.h
 )
 
-option (HDF5_GENERATE_HEADERS "Rebuild Generated Files" ON)
+option (HDF5_GENERATE_HEADERS "Rebuild Generated Files" OFF)
 if (HDF5_GENERATE_HEADERS)
   set_source_files_properties(${H5_GENERATED_HEADERS} PROPERTIES GENERATED TRUE)
   if (H5_PERL_FOUND)
@@ -1108,7 +1088,7 @@ if (BUILD_STATIC_LIBS)
   )
   if (NOT WIN32)
     target_link_libraries (${HDF5_LIB_TARGET}
-      PRIVATE "$<$<OR:$<BOOL:${HDF5_ENABLE_THREADS}>,$<BOOL:${HDF5_ENABLE_SUBFILING_VFD}>>:Threads::Threads>"
+      PRIVATE "$<$<OR:$<BOOL:${HDF5_ENABLE_THREADSAFE}>,$<BOOL:${HDF5_ENABLE_SUBFILING_VFD}>>:Threads::Threads>"
     )
   endif ()
   set_global_variable (HDF5_LIBRARIES_TO_EXPORT ${HDF5_LIB_TARGET})
@@ -1131,7 +1111,6 @@ if (BUILD_SHARED_LIBS)
           "H5_BUILT_AS_DYNAMIC_LIB"
           ${HDF_EXTRA_C_FLAGS}
       PRIVATE
-          "$<$<BOOL:${HDF5_ENABLE_THREADS}>:H5_HAVE_THREADS>"
           "$<$<BOOL:${HDF5_ENABLE_THREADSAFE}>:H5_HAVE_THREADSAFE>"
           "$<$<BOOL:${HDF5_ENABLE_TRACE}>:H5_DEBUG_API>"  # Enable tracing of the API
           "$<$<BOOL:${HDF5_ENABLE_DEBUG_APIS}>:${HDF5_DEBUG_APIS}>"

@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -53,7 +53,6 @@
     H5E_SOHM_g =
     H5E_STORAGE_g =
     H5E_SYM_g =
-    H5E_THREADSAFE_g =
     H5E_TST_g =
     H5E_VFL_g =
     H5E_VOL_g =

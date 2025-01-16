@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -1956,7 +1956,7 @@ test_attr_corder_create_basic(FileCreatPropList &fcpl, FileAccPropList &fapl)
  *-------------------------------------------------------------------------
  */
 extern "C" void
-test_attr(const void *params)
+test_attr()
 {
     // Output message about test being performed
     MESSAGE(5, ("Testing Attributes\n"));
@@ -1983,7 +1983,7 @@ test_attr(const void *params)
 
         // Loop over using new group format
         unsigned new_format;
-        for (new_format = false; new_format <= true; new_format++) {
+        for (new_format = FALSE; new_format <= TRUE; new_format++) {
             FileAccPropList curr_fapl;
 
             // Set the file access proplist for the type of format
@@ -2041,14 +2041,12 @@ test_attr(const void *params)
  *-------------------------------------------------------------------------
  */
 extern "C" void
-cleanup_attr(void *params)
+cleanup_attr()
 {
-    if (GetTestCleanup()) {
-        HDremove(FILE_BASIC.c_str());
-        HDremove(FILE_COMPOUND.c_str());
-        HDremove(FILE_SCALAR.c_str());
-        HDremove(FILE_MULTI.c_str());
-        HDremove(FILE_DTYPE.c_str());
-        HDremove(FILE_CRTPROPS.c_str());
-    }
+    HDremove(FILE_BASIC.c_str());
+    HDremove(FILE_COMPOUND.c_str());
+    HDremove(FILE_SCALAR.c_str());
+    HDremove(FILE_MULTI.c_str());
+    HDremove(FILE_DTYPE.c_str());
+    HDremove(FILE_CRTPROPS.c_str());
 }

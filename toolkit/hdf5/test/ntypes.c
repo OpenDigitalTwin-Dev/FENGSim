@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -3080,7 +3080,7 @@ test__Float16(hid_t file)
     /* Initialize the data */
     for (size_t i = 0; i < DIM0; i++)
         for (size_t j = 0; j < DIM1; j++)
-            ipoints->arr[i][j] = (H5__Float16)(rand() / (double)RAND_MAX);
+            ipoints->arr[i][j] = (H5__Float16)(HDrand() / (double)RAND_MAX);
 
     /* Create the data space */
     dims[0] = DIM0;

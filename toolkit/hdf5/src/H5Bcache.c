@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -178,12 +178,6 @@ H5B__cache_deserialize(const void *_image, size_t len, void *_udata, bool H5_ATT
     /* Check if bt->nchildren is greater than two_k */
     if (bt->nchildren > shared->two_k)
         HGOTO_ERROR(H5E_BTREE, H5E_BADVALUE, NULL, "number of children is greater than maximum");
-
-    /* Check in case of level is corrupted, it is unreasonable for level to be
-       larger than the number of entries */
-    if (bt->level > bt->nchildren)
-        HGOTO_ERROR(H5E_BTREE, H5E_BADVALUE, NULL,
-                    "level cannot be greater than the number of children, possibly corrupted");
 
     /* Sibling pointers */
     if (H5_IS_BUFFER_OVERFLOW(image, H5F_sizeof_addr(udata->f), p_end))

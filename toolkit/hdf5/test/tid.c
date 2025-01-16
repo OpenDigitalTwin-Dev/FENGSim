@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -642,7 +642,7 @@ rct_free_cb(void *_obj, void H5_ATTR_UNUSED **_ctx)
          * and then scanning through the list to find that nth unfreed
          * object.
          */
-        remove_nth = rand() % obj->list->remaining;
+        remove_nth = HDrandom() % obj->list->remaining;
         for (i = 0; i < obj->list->count; i++)
             if (obj->list->objects[i].nfrees == 0) {
                 if (remove_nth == 0)
@@ -731,7 +731,7 @@ test_remove_clear_type(void)
 
         /* The number of objects used is a random number between the min and max */
         obj_list.count = obj_list.remaining =
-            RCT_MIN_NOBJS + (rand() % (long)(RCT_MAX_NOBJS - RCT_MIN_NOBJS + 1));
+            RCT_MIN_NOBJS + (HDrandom() % (long)(RCT_MAX_NOBJS - RCT_MIN_NOBJS + 1));
 
         /* Create the actual objects */
         for (j = 0; j < obj_list.count; j++) {
@@ -748,7 +748,7 @@ test_remove_clear_type(void)
                 goto error;
 
             /* Bump the reference count by 1 (to 2) 50% of the time */
-            if (rand() % 2) {
+            if (HDrandom() % 2) {
                 ret = H5Iinc_ref(objects[j].id);
                 CHECK(ret, FAIL, "H5Iinc_ref");
                 if (ret == FAIL)
@@ -1495,10 +1495,10 @@ test_appropriate_ids(void)
 }
 
 void
-test_ids(const void H5_ATTR_UNUSED *params)
+test_ids(void)
 {
     /* Set the random # seed */
-    srand((unsigned)time(NULL));
+    HDsrandom((unsigned)time(NULL));
 
     if (basic_id_test() < 0)
         TestErrPrintf("Basic ID test failed\n");

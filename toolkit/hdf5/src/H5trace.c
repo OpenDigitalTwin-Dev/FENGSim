@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -1449,15 +1449,7 @@ H5_trace_args(H5RS_str_t *rs, const char *type, va_list ap)
                                     break;
 
                                 case H5F_LIBVER_V114:
-                                    H5RS_acat(rs, "H5F_LIBVER_V114");
-                                    break;
-
-                                case H5F_LIBVER_V116:
-                                    H5RS_acat(rs, "H5F_LIBVER_V116");
-                                    break;
-
-                                case H5F_LIBVER_V118:
-                                    HDcompile_assert(H5F_LIBVER_LATEST == H5F_LIBVER_V118);
+                                    HDcompile_assert(H5F_LIBVER_LATEST == H5F_LIBVER_V114);
                                     H5RS_acat(rs, "H5F_LIBVER_LATEST");
                                     break;
 

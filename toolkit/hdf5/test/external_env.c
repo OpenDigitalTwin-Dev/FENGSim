@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -68,7 +68,7 @@ test_path_env(hid_t fapl)
         FAIL_STACK_ERROR;
     for (i = 0; i < N_EXT_FILES; i++) {
         snprintf(filename, sizeof(filename), "..%sextern_env_%dr.raw", H5_DIR_SEPS, (int)i + 1);
-        if (H5Pset_external(dcpl, filename, (HDoff_t)(i * GARBAGE_PER_FILE), (hsize_t)sizeof(part)) < 0)
+        if (H5Pset_external(dcpl, filename, (off_t)(i * GARBAGE_PER_FILE), (hsize_t)sizeof(part)) < 0)
             FAIL_STACK_ERROR;
     } /* end for */
 

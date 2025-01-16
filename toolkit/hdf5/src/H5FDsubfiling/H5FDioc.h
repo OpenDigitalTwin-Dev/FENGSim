@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -174,6 +174,18 @@ H5_DLL herr_t H5Pset_fapl_ioc(hid_t fapl_id, H5FD_ioc_config_t *vfd_config);
  *
  */
 H5_DLL herr_t H5Pget_fapl_ioc(hid_t fapl_id, H5FD_ioc_config_t *config_out);
+/**
+ * \brief Internal routine for managing exclusive access to critical sections
+ *        by the #H5FD_IOC driver's worker threads. Not meant to be called
+ *        directly by an HDF5 application
+ */
+H5_DLL void H5FD_ioc_begin_thread_exclusive(void);
+/**
+ * \brief Internal routine for managing exclusive access to critical sections
+ *        by the #H5FD_IOC driver's worker threads. Not meant to be called
+ *        directly by an HDF5 application
+ */
+H5_DLL void H5FD_ioc_end_thread_exclusive(void);
 
 #ifdef __cplusplus
 }

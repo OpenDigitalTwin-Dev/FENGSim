@@ -27,10 +27,10 @@ Obtaining HDF5 source code
    2. Obtain HDF5 source from Github
          development branch:  https://github.com/HDFGroup/hdf5
          last release:        https://github.com/HDFGroup/hdf5/releases/latest
-             hdf5-1_17_"X".tar.gz or hdf5-1_17_"X".zip
+             hdf5-1_14_"X".tar.gz or hdf5-1_14_"X".zip
 
       and put it in "myhdfstuff".
-      Uncompress the file. There should be a hdf5-1.17."X" folder.
+      Uncompress the file. There should be a hdf5-1.14."X" folder.
 
 
 ========================================================================
@@ -345,12 +345,8 @@ III. Full installation instructions for source distributions
 
 
    3.11. Backward compatibility
-        The 1.17 version of the HDF5 library can be configured to operate
-        identically to the v1.16 library with the
-            --with-default-api-version=v116
-        configure flag, or identically to the v1.14 library with the
-            --with-default-api-version=v114
-        configure flag, or identically to the v1.12 library with the
+        The 1.14 version of the HDF5 library can be configured to operate
+        identically to the v1.12 library with the
             --with-default-api-version=v112
         configure flag, or identically to the v1.10 library with the
             --with-default-api-version=v110
@@ -359,11 +355,11 @@ III. Full installation instructions for source distributions
         configure flag, or identically to the v1.6 library with the
             --with-default-api-version=v16
         configure flag. This allows existing code to be compiled with the
-        v1.17 library without requiring immediate changes to the application
+        v1.14 library without requiring immediate changes to the application
         source code.  For additional configuration options and other details,
         see "API Compatibility Macros":
 
-            https://hdfgroup.github.io/hdf5/develop/api-compat-macros.html
+            https://support.hdfgroup.org/releases/hdf5/v1_14/v1_14_5/documentation/doxygen/api-compat-macros.html
 
    4. Building
         The library, confidence tests, and programs can be built by
@@ -484,6 +480,8 @@ III. Full installation instructions for source distributions
             ./tools/misc/h5debug            (low-level file debugging)
             ./tools/h5import/h5import       (imports data to HDF5 file)
             ./tools/h5diff/h5diff           (compares two HDF5 files)
+            ./tools/gifconv/h52gif          (HDF5 to GIF converter)
+            ./tools/gifconv/gif2h5          (GIF to HDF5 converter)
 
 
 ========================================================================

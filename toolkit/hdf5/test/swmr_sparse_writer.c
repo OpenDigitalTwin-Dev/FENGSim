@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -102,7 +102,7 @@ open_skeleton(const char *filename, unsigned verbose)
         return -1;
     if (H5Aclose(aid) < 0)
         return -1;
-    srand(seed);
+    HDsrandom(seed);
 
     /* Open the datasets */
     for (u = 0; u < NLEVELS; u++)
@@ -208,7 +208,7 @@ add_records(hid_t fid, unsigned verbose, unsigned long nrecords, unsigned long f
         } /* end else */
 
         /* Get the coordinate to write */
-        start[1] = (hsize_t)rand() % symbol->nrecords;
+        start[1] = (hsize_t)HDrandom() % symbol->nrecords;
 
         /* Set the record's ID (equal to its position) */
         record.rec_id = start[1];

@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -316,7 +316,6 @@ test_es_get_requests(void)
     void  *requests[2];      /* Requests */
     int    req_targets[2];   /* Dummy targets for void * requests */
     size_t count;            /* # of events in set */
-    int    cmp_value;        /* Comparison value */
     bool   op_failed;        /* Whether an operation failed (unused) */
 
     TESTING("event set get requests");
@@ -396,12 +395,7 @@ test_es_get_requests(void)
         TEST_ERROR;
     if (count != 1)
         TEST_ERROR;
-    cmp_value = 0;
-    if (H5VLcmp_connector_cls(&cmp_value, connector_ids[0], connector_ids_g[0]) < 0)
-        TEST_ERROR;
-    if (cmp_value)
-        TEST_ERROR;
-    if (H5Idec_ref(connector_ids[0]) < 0)
+    if (connector_ids[0] != connector_ids_g[0])
         TEST_ERROR;
     if (connector_ids[1] != H5I_INVALID_HID)
         TEST_ERROR;
@@ -429,12 +423,7 @@ test_es_get_requests(void)
         TEST_ERROR;
     if (count != 1)
         TEST_ERROR;
-    cmp_value = 0;
-    if (H5VLcmp_connector_cls(&cmp_value, connector_ids[0], connector_ids_g[0]) < 0)
-        TEST_ERROR;
-    if (cmp_value)
-        TEST_ERROR;
-    if (H5Idec_ref(connector_ids[0]) < 0)
+    if (connector_ids[0] != connector_ids_g[0])
         TEST_ERROR;
     if (connector_ids[1] != H5I_INVALID_HID)
         TEST_ERROR;
@@ -462,19 +451,9 @@ test_es_get_requests(void)
         TEST_ERROR;
     if (count != 2)
         TEST_ERROR;
-    cmp_value = 0;
-    if (H5VLcmp_connector_cls(&cmp_value, connector_ids[0], connector_ids_g[0]) < 0)
+    if (connector_ids[0] != connector_ids_g[0])
         TEST_ERROR;
-    if (cmp_value)
-        TEST_ERROR;
-    if (H5Idec_ref(connector_ids[0]) < 0)
-        TEST_ERROR;
-    cmp_value = 0;
-    if (H5VLcmp_connector_cls(&cmp_value, connector_ids[1], connector_ids_g[1]) < 0)
-        TEST_ERROR;
-    if (cmp_value)
-        TEST_ERROR;
-    if (H5Idec_ref(connector_ids[1]) < 0)
+    if (connector_ids[1] != connector_ids_g[1])
         TEST_ERROR;
 
     /* Try with H5_ITER_DEC */
@@ -485,19 +464,9 @@ test_es_get_requests(void)
         TEST_ERROR;
     if (count != 2)
         TEST_ERROR;
-    cmp_value = 0;
-    if (H5VLcmp_connector_cls(&cmp_value, connector_ids[0], connector_ids_g[1]) < 0)
+    if (connector_ids[0] != connector_ids_g[1])
         TEST_ERROR;
-    if (cmp_value)
-        TEST_ERROR;
-    if (H5Idec_ref(connector_ids[0]) < 0)
-        TEST_ERROR;
-    cmp_value = 0;
-    if (H5VLcmp_connector_cls(&cmp_value, connector_ids[1], connector_ids_g[0]) < 0)
-        TEST_ERROR;
-    if (cmp_value)
-        TEST_ERROR;
-    if (H5Idec_ref(connector_ids[1]) < 0)
+    if (connector_ids[1] != connector_ids_g[0])
         TEST_ERROR;
 
     /* Get only requests */
@@ -536,19 +505,9 @@ test_es_get_requests(void)
         TEST_ERROR;
     if (count != 2)
         TEST_ERROR;
-    cmp_value = 0;
-    if (H5VLcmp_connector_cls(&cmp_value, connector_ids[0], connector_ids_g[0]) < 0)
+    if (connector_ids[0] != connector_ids_g[0])
         TEST_ERROR;
-    if (cmp_value)
-        TEST_ERROR;
-    if (H5Idec_ref(connector_ids[0]) < 0)
-        TEST_ERROR;
-    cmp_value = 0;
-    if (H5VLcmp_connector_cls(&cmp_value, connector_ids[1], connector_ids_g[1]) < 0)
-        TEST_ERROR;
-    if (cmp_value)
-        TEST_ERROR;
-    if (H5Idec_ref(connector_ids[1]) < 0)
+    if (connector_ids[1] != connector_ids_g[1])
         TEST_ERROR;
     if (requests[0] != &req_targets[0])
         TEST_ERROR;
@@ -565,19 +524,9 @@ test_es_get_requests(void)
         TEST_ERROR;
     if (count != 2)
         TEST_ERROR;
-    cmp_value = 0;
-    if (H5VLcmp_connector_cls(&cmp_value, connector_ids[0], connector_ids_g[1]) < 0)
+    if (connector_ids[0] != connector_ids_g[1])
         TEST_ERROR;
-    if (cmp_value)
-        TEST_ERROR;
-    if (H5Idec_ref(connector_ids[0]) < 0)
-        TEST_ERROR;
-    cmp_value = 0;
-    if (H5VLcmp_connector_cls(&cmp_value, connector_ids[1], connector_ids_g[0]) < 0)
-        TEST_ERROR;
-    if (cmp_value)
-        TEST_ERROR;
-    if (H5Idec_ref(connector_ids[1]) < 0)
+    if (connector_ids[1] != connector_ids_g[0])
         TEST_ERROR;
     if (requests[0] != &req_targets[1])
         TEST_ERROR;
@@ -592,12 +541,7 @@ test_es_get_requests(void)
         TEST_ERROR;
     if (count != 2)
         TEST_ERROR;
-    cmp_value = 0;
-    if (H5VLcmp_connector_cls(&cmp_value, connector_ids[0], connector_ids_g[0]) < 0)
-        TEST_ERROR;
-    if (cmp_value)
-        TEST_ERROR;
-    if (H5Idec_ref(connector_ids[0]) < 0)
+    if (connector_ids[0] != connector_ids_g[0])
         TEST_ERROR;
     if (connector_ids[1] != H5I_INVALID_HID)
         TEST_ERROR;
@@ -610,12 +554,7 @@ test_es_get_requests(void)
         TEST_ERROR;
     if (count != 2)
         TEST_ERROR;
-    cmp_value = 0;
-    if (H5VLcmp_connector_cls(&cmp_value, connector_ids[0], connector_ids_g[1]) < 0)
-        TEST_ERROR;
-    if (cmp_value)
-        TEST_ERROR;
-    if (H5Idec_ref(connector_ids[0]) < 0)
+    if (connector_ids[0] != connector_ids_g[1])
         TEST_ERROR;
     if (connector_ids[1] != H5I_INVALID_HID)
         TEST_ERROR;
@@ -654,12 +593,7 @@ test_es_get_requests(void)
     requests[1]      = NULL;
     if (H5ESget_requests(es_id, H5_ITER_INC, connector_ids, requests, 1, &count) < 0)
         TEST_ERROR;
-    cmp_value = 0;
-    if (H5VLcmp_connector_cls(&cmp_value, connector_ids[0], connector_ids_g[0]) < 0)
-        TEST_ERROR;
-    if (cmp_value)
-        TEST_ERROR;
-    if (H5Idec_ref(connector_ids[0]) < 0)
+    if (connector_ids[0] != connector_ids_g[0])
         TEST_ERROR;
     if (connector_ids[1] != H5I_INVALID_HID)
         TEST_ERROR;
@@ -676,12 +610,7 @@ test_es_get_requests(void)
     requests[1]      = NULL;
     if (H5ESget_requests(es_id, H5_ITER_DEC, connector_ids, requests, 1, &count) < 0)
         TEST_ERROR;
-    cmp_value = 0;
-    if (H5VLcmp_connector_cls(&cmp_value, connector_ids[0], connector_ids_g[1]) < 0)
-        TEST_ERROR;
-    if (cmp_value)
-        TEST_ERROR;
-    if (H5Idec_ref(connector_ids[0]) < 0)
+    if (connector_ids[0] != connector_ids_g[1])
         TEST_ERROR;
     if (connector_ids[1] != H5I_INVALID_HID)
         TEST_ERROR;

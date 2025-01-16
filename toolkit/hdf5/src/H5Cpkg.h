@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -593,7 +593,7 @@
  ***********************************************************************/
 
 #define H5C__HASH_MASK   ((size_t)(H5C__HASH_TABLE_LEN - 1) << 3)
-#define H5C__HASH_FCN(x) (int)((unsigned)((x) & H5C__HASH_MASK) >> 3)
+#define H5C__HASH_FCN(x) (int)((unsigned)((x)&H5C__HASH_MASK) >> 3)
 
 #define H5C__POST_HT_SHIFT_TO_FRONT_SC_CMP(cache_ptr, entry_ptr, k)                                          \
     ((cache_ptr) == NULL || (cache_ptr)->index[k] != (entry_ptr) || (entry_ptr)->ht_prev != NULL)

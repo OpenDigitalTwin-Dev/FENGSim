@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -53,22 +53,9 @@
 #include <sys/wait.h>
 #endif
 
-/* Include the threading header, if necessary */
-#if defined(H5_HAVE_THREADS)
-/* C11 threads */
-#if defined(H5_HAVE_THREADS_H)
-#include <threads.h>
-#endif
-
-/* Pthreads */
-#if defined(H5_HAVE_PTHREAD_H)
+/* Include the Pthreads header, if necessary */
+#if defined(H5_HAVE_THREADSAFE) && defined(H5_HAVE_PTHREAD_H)
 #include <pthread.h>
-#endif
-#endif
-
-/* C11 atomics */
-#if defined(H5_HAVE_STDATOMIC_H) && !defined(__cplusplus)
-#include <stdatomic.h>
 #endif
 
 /*
@@ -126,8 +113,8 @@
 #define H5_DEFAULT_VFD      H5FD_SEC2
 #define H5_DEFAULT_VFD_NAME "sec2"
 
-/* Define the default VOL connector */
-#define H5_DEFAULT_VOL H5VL_NATIVE_conn_g
+/* Define the default VOL driver */
+#define H5_DEFAULT_VOL H5VL_NATIVE
 
 #ifdef H5_HAVE_WIN32_API
 
@@ -136,7 +123,7 @@
 #define NOGDI               /* Exclude Graphic Display Interface macros */
 
 /* InitOnceExecuteOnce() requires 0x0600 to work on MinGW w/ Win32 threads */
-#if defined(H5_HAVE_MINGW) && defined(H5_HAVE_THREADS)
+#if defined(H5_HAVE_MINGW) && defined(H5_HAVE_THREADSAFE)
 #if !defined(_WIN32_WINNT) || (_WIN32_WINNT < 0x0600)
 #undef _WIN32_WINNT
 #define _WIN32_WINNT 0x0600
@@ -150,10 +137,11 @@
 #include <winsock2.h> /* For GetUserName() */
 #include <shlwapi.h>  /* For StrStrIA */
 
-#endif /*H5_HAVE_WIN32_API*/
+#ifdef H5_HAVE_THREADSAFE
+#include <process.h> /* For _beginthread() */
+#endif
 
-/* Macros for suppressing warnings */
-#include "H5warnings.h"
+#endif /*H5_HAVE_WIN32_API*/
 
 #ifndef F_OK
 #define F_OK 00
@@ -251,13 +239,6 @@
 #       define H5_ATTR_NO_OPTIMIZE /*void*/
 #  endif
 
-/* Enable thread-safety annotations when built with clang */
-#  if defined(__clang__)
-#       define H5_ATTR_THREAD_ANNOT(X) __attribute__((X))
-#  else
-#       define H5_ATTR_THREAD_ANNOT(X) /*void*/
-#  endif
-
 #else
 #   define H5_ATTR_FORMAT(X, Y, Z) /*void*/
 #   define H5_ATTR_UNUSED          /*void*/
@@ -271,7 +252,6 @@
 #   define H5_ATTR_FALLTHROUGH     /*void*/
 #   define H5_ATTR_MALLOC          /*void*/
 #   define H5_ATTR_NO_OPTIMIZE     /*void*/
-#   define H5_ATTR_THREAD_ANNOT(X) /*void*/
 #endif
 /* clang-format on */
 
@@ -339,6 +319,11 @@
 #define ABS(a) (((a) >= 0) ? (a) : -(a))
 #endif
 
+/* sign of argument */
+#ifndef SIGN
+#define SIGN(a) ((a) > 0 ? 1 : (a) < 0 ? -1 : 0)
+#endif
+
 /* test for number that is a power of 2 */
 /* (from: http://graphics.stanford.edu/~seander/bithacks.html#DetermineIfPowerOf2) */
 #define POWER_OF_TWO(n) (!(n & (n - 1)) && n)
@@ -378,6 +363,16 @@
  */
 #define H5_IS_KNOWN_BUFFER_OVERFLOW(skip, ptr, size, buffer_end)                                             \
     (skip ? false : H5_IS_BUFFER_OVERFLOW(ptr, size, buffer_end))
+
+/*
+ * HDF Boolean type.
+ */
+#ifndef FALSE
+#define FALSE false
+#endif
+#ifndef TRUE
+#define TRUE true
+#endif
 
 /*
  * The max value for ssize_t.
@@ -510,6 +505,14 @@
 #endif
 #endif
 
+/* KiB, MiB, GiB, TiB, PiB, EiB - Used in profiling and timing code */
+#define H5_KB (1024.0F)
+#define H5_MB (1024.0F * 1024.0F)
+#define H5_GB (1024.0F * 1024.0F * 1024.0F)
+#define H5_TB (1024.0F * 1024.0F * 1024.0F * 1024.0F)
+#define H5_PB (1024.0F * 1024.0F * 1024.0F * 1024.0F * 1024.0F)
+#define H5_EB (1024.0F * 1024.0F * 1024.0F * 1024.0F * 1024.0F * 1024.0F)
+
 #ifndef H5_HAVE_FLOCK
 /* flock() operations. Used in the source so we have to define them when
  * the call is not available (e.g.: Windows). These should NOT be used
@@ -521,6 +524,63 @@
 #define LOCK_NB 0x04
 #define LOCK_UN 0x08
 #endif /* H5_HAVE_FLOCK */
+
+/* Macros for enabling/disabling particular GCC / clang warnings
+ *
+ * These are duplicated in H5FDmulti.c (we don't want to put them in the
+ * public header and the multi VFD can't use private headers). If you make
+ * changes here, be sure to update those as well.
+ *
+ * (see the following web-sites for more info:
+ *      http://www.dbp-consulting.com/tutorials/SuppressingGCCWarnings.html
+ *      http://gcc.gnu.org/onlinedocs/gcc/Diagnostic-Pragmas.html#Diagnostic-Pragmas
+ */
+#define H5_DIAG_JOINSTR(x, y) x y
+#define H5_DIAG_DO_PRAGMA(x)  _Pragma(#x)
+#define H5_DIAG_PRAGMA(x)     H5_DIAG_DO_PRAGMA(GCC diagnostic x)
+
+/* Allow suppression of compiler diagnostics unless H5_SHOW_ALL_WARNINGS is
+ *      defined (enabled with '--enable-show-all-warnings' configure option).
+ */
+#ifndef H5_SHOW_ALL_WARNINGS
+#define H5_DIAG_OFF(x) H5_DIAG_PRAGMA(push) H5_DIAG_PRAGMA(ignored H5_DIAG_JOINSTR("-W", x))
+#define H5_DIAG_ON(x)  H5_DIAG_PRAGMA(pop)
+#else
+#define H5_DIAG_OFF(x)
+#define H5_DIAG_ON(x)
+#endif
+
+/* Macros for enabling/disabling particular GCC-only warnings.
+ * These pragmas are only implemented usefully in gcc 4.6+
+ */
+#if (((__GNUC__ * 100) + __GNUC_MINOR__) >= 406)
+#define H5_GCC_DIAG_OFF(x) H5_DIAG_OFF(x)
+#define H5_GCC_DIAG_ON(x)  H5_DIAG_ON(x)
+#else
+#define H5_GCC_DIAG_OFF(x)
+#define H5_GCC_DIAG_ON(x)
+#endif
+
+/* Macros for enabling/disabling particular clang-only warnings.
+ */
+#if defined(__clang__)
+#define H5_CLANG_DIAG_OFF(x) H5_DIAG_OFF(x)
+#define H5_CLANG_DIAG_ON(x)  H5_DIAG_ON(x)
+#else
+#define H5_CLANG_DIAG_OFF(x)
+#define H5_CLANG_DIAG_ON(x)
+#endif
+
+/* Macros for enabling/disabling particular GCC / clang warnings.
+ * These macros should be used for warnings supported by both gcc and clang.
+ */
+#if (((__GNUC__ * 100) + __GNUC_MINOR__) >= 406) || defined(__clang__)
+#define H5_GCC_CLANG_DIAG_OFF(x) H5_DIAG_OFF(x)
+#define H5_GCC_CLANG_DIAG_ON(x)  H5_DIAG_ON(x)
+#else
+#define H5_GCC_CLANG_DIAG_OFF(x)
+#define H5_GCC_CLANG_DIAG_ON(x)
+#endif
 
 /* If necessary, create a typedef for library usage of the
  * _Float16 type to avoid issues when compiling the library
@@ -545,10 +605,37 @@ typedef _Float16 H5__Float16;
 typedef int (*H5_sort_func_cb_t)(const void *, const void *);
 
 /* Typedefs and functions for timing certain parts of the library. */
-#include "H5timer.h"
 
-/* Substitute for strcasestr() when that doesn't exist on the platform */
-H5_DLL char *H5_strcasestr(const char *haystack, const char *needle);
+/* A set of elapsed/user/system times emitted as a time point by the
+ * platform-independent timers.
+ */
+typedef struct {
+    double user;    /* User time in seconds */
+    double system;  /* System time in seconds */
+    double elapsed; /* Elapsed (wall clock) time in seconds */
+} H5_timevals_t;
+
+/* Timer structure for platform-independent timers */
+typedef struct {
+    H5_timevals_t initial;        /* Current interval start time */
+    H5_timevals_t final_interval; /* Last interval elapsed time */
+    H5_timevals_t total;          /* Total elapsed time for all intervals */
+    bool          is_running;     /* Whether timer is running */
+} H5_timer_t;
+
+/* Returns library bandwidth as a pretty string */
+H5_DLL void H5_bandwidth(char *buf /*out*/, size_t bufsize, double nbytes, double nseconds);
+
+/* Timer functionality */
+H5_DLL time_t   H5_now(void);
+H5_DLL uint64_t H5_now_usec(void);
+H5_DLL herr_t   H5_timer_init(H5_timer_t *timer /*in,out*/);
+H5_DLL herr_t   H5_timer_start(H5_timer_t *timer /*in,out*/);
+H5_DLL herr_t   H5_timer_stop(H5_timer_t *timer /*in,out*/);
+H5_DLL herr_t   H5_timer_get_times(H5_timer_t timer, H5_timevals_t *times /*in,out*/);
+H5_DLL herr_t   H5_timer_get_total_times(H5_timer_t timer, H5_timevals_t *times /*in,out*/);
+H5_DLL char    *H5_timer_get_time_string(double seconds);
+H5_DLL char    *H5_strcasestr(const char *haystack, const char *needle);
 
 /* Depth of object copy */
 typedef enum {
@@ -576,18 +663,15 @@ typedef struct {
  */
 #include "H5win32defs.h"
 
-/* Platform-independent definition for struct stat. For Win32, see
- * H5win32defs.h.
- */
+/* Platform-independent definitions for struct stat and off_t */
 #ifndef H5_HAVE_WIN32_API
-typedef struct stat h5_stat_t;
-#endif
-
-/* __int64 is the correct type for the st_size field of the _stati64
- * struct on Windows (MSDN isn't very clear about this). POSIX systems use
- * off_t. Both of these are typedef'd to HDoff_t in H5public.h.
+/* These definitions differ in Windows and are defined in
+ * H5win32defs for that platform.
  */
-typedef HDoff_t h5_stat_size_t;
+typedef struct stat h5_stat_t;
+typedef off_t       h5_stat_size_t;
+#define HDoff_t off_t
+#endif
 
 /* Redefinions of some POSIX and C functions (mainly to deal with Windows) */
 
@@ -695,6 +779,46 @@ H5_DLL H5_ATTR_CONST int Nflock(int fd, int operation);
 #ifndef HDpwrite
 #define HDpwrite(F, B, C, O) pwrite(F, B, C, O)
 #endif
+
+/* clang-format off */
+#ifdef H5_HAVE_RAND_R
+#   ifndef HDrandom
+#   define HDrandom() HDrand()
+#   endif
+    H5_DLL int HDrand(void);
+#   ifndef HDsrandom
+#   define HDsrandom(S) HDsrand(S)
+#   endif
+    H5_DLL void HDsrand(unsigned int seed);
+#elif defined(H5_HAVE_RANDOM)
+#   ifndef HDrand
+#   define HDrand() random()
+#   endif
+#   ifndef HDrandom
+#   define HDrandom() random()
+#   endif
+#   ifndef HDsrand
+#   define HDsrand(S) srandom(S)
+#   endif
+#   ifndef HDsrandom
+#   define HDsrandom(S) srandom(S)
+#   endif
+#else
+#   ifndef HDrand
+#   define HDrand() rand()
+#   endif
+#   ifndef HDrandom
+#   define HDrandom() rand()
+#   endif
+#   ifndef HDsrand
+#   define HDsrand(S) srand(S)
+#   endif
+#   ifndef HDsrandom
+#   define HDsrandom(S) srand(S)
+#   endif
+#endif
+/* clang-format on */
+
 #ifndef HDread
 #define HDread(F, M, Z) read(F, M, Z)
 #endif
@@ -758,7 +882,7 @@ H5_DLL H5_ATTR_CONST int Nflock(int fd, int operation);
 #ifdef H5_HAVE_VASPRINTF
 #define HDvasprintf(RET, FMT, A) vasprintf(RET, FMT, A)
 #else
-H5_DLL int HDvasprintf(char **bufp, const char *fmt, va_list _ap);
+H5_DLL int       HDvasprintf(char **bufp, const char *fmt, va_list _ap);
 #endif
 #endif
 
@@ -1062,65 +1186,62 @@ H5_DLL herr_t H5_trace_args(struct H5RS_str_t *rs, const char *type, va_list ap)
 /* global library version information string */
 extern char H5_lib_vers_info_g[];
 
-#ifdef H5_HAVE_THREADSAFE
-
-/* Lock headers */
 #include "H5TSprivate.h"
 
-/* Thread cancellation is only possible w/pthreads */
-#if defined(H5_HAVE_PTHREAD_H)
-/* Local variable for saving cancellation state */
-#define H5CANCEL_DECL int oldstate = 0;
+/* Lock headers */
+#ifdef H5_HAVE_THREADSAFE
 
-/* Disable & restore canceling the thread */
-#define H5TS_DISABLE_CANCEL                                                                                  \
-    do {                                                                                                     \
-        pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &oldstate);                                           \
-    } while (0)
-#define H5TS_RESTORE_CANCEL                                                                                  \
-    do {                                                                                                     \
-        pthread_setcancelstate(oldstate, NULL);                                                              \
-    } while (0)
+/* replacement structure for original global variable */
+typedef struct H5_api_struct {
+    H5TS_mutex_t init_lock;    /* API entrance mutex */
+    bool         H5_libinit_g; /* Has the library been initialized? */
+    bool         H5_libterm_g; /* Is the library being shutdown? */
+} H5_api_t;
+
+/* Macros for accessing the global variables */
+#define H5_INIT_GLOBAL (H5_g.H5_libinit_g)
+#define H5_TERM_GLOBAL (H5_g.H5_libterm_g)
+
+/* Macro for first thread initialization */
+#ifdef H5_HAVE_WIN_THREADS
+#define H5_FIRST_THREAD_INIT InitOnceExecuteOnce(&H5TS_first_init_g, H5TS_win32_process_enter, NULL, NULL);
 #else
-/* Local variable for saving cancellation state */
-#define H5CANCEL_DECL       /* */
-
-/* Disable & restore canceling the thread */
-#define H5TS_DISABLE_CANCEL /* */
-#define H5TS_RESTORE_CANCEL /* */
+#define H5_FIRST_THREAD_INIT pthread_once(&H5TS_first_init_g, H5TS_pthread_first_thread_init);
 #endif
 
-/* Macros for entering & leaving an API routine in a threadsafe manner */
-#define H5_API_LOCK                                                                                          \
-    /* Acquire the API lock */                                                                               \
-    H5TS_api_lock();                                                                                         \
-                                                                                                             \
-    /* Set thread cancellation state to 'disable', and remember previous state */                            \
-    H5TS_DISABLE_CANCEL;
-#define H5_API_UNLOCK                                                                                        \
-    /* Release the API lock */                                                                               \
-    H5TS_api_unlock();                                                                                       \
-                                                                                                             \
-    /* Restore previous thread cancellation state */                                                         \
-    H5TS_RESTORE_CANCEL;
-#else                 /* H5_HAVE_THREADSAFE */
+/* Macros for threadsafe HDF5 Phase I locks */
+#define H5_API_LOCK   H5TS_mutex_lock(&H5_g.init_lock);
+#define H5_API_UNLOCK H5TS_mutex_unlock(&H5_g.init_lock);
 
-/* Local variable for saving cancellation state */
-#define H5CANCEL_DECL /* */
+/* Macros for thread cancellation-safe mechanism */
+#define H5_API_UNSET_CANCEL H5TS_cancel_count_inc();
 
-/* No locks (non-threadsafe builds) */
-#define H5_API_LOCK   /* */
-#define H5_API_UNLOCK /* */
+#define H5_API_SET_CANCEL H5TS_cancel_count_dec();
 
-#endif /* H5_HAVE_THREADSAFE */
+extern H5_api_t H5_g;
 
-/* Library init / term status (global) */
+#else /* H5_HAVE_THREADSAFE */
+
+/* disable any first thread init mechanism */
+#define H5_FIRST_THREAD_INIT
+
+/* disable locks (sequential version) */
+#define H5_API_LOCK
+#define H5_API_UNLOCK
+
+/* disable cancellability (sequential version) */
+#define H5_API_UNSET_CANCEL
+#define H5_API_SET_CANCEL
+
+/* extern global variables */
 extern bool H5_libinit_g; /* Has the library been initialized? */
 extern bool H5_libterm_g; /* Is the library being shutdown? */
 
 /* Macros for accessing the global variables */
 #define H5_INIT_GLOBAL (H5_libinit_g)
 #define H5_TERM_GLOBAL (H5_libterm_g)
+
+#endif /* H5_HAVE_THREADSAFE */
 
 /* Forward declaration of H5CXpush() / H5CXpop() */
 /* (Including H5CXprivate.h creates bad circular dependencies - QAK, 3/18/2018) */
@@ -1153,13 +1274,18 @@ H5_DLL herr_t H5CX_pop(bool update_dxpl_props);
 
 #define FUNC_ENTER_COMMON_NOERR(asrt) FUNC_ENTER_CHECK_NAME(asrt);
 
-/* Local variables for API routines */
-#define FUNC_ENTER_API_VARS H5CANCEL_DECL
+/* Threadsafety initialization code for API routines */
+#define FUNC_ENTER_API_THREADSAFE                                                                            \
+    /* Initialize the thread-safe code */                                                                    \
+    H5_FIRST_THREAD_INIT                                                                                     \
+                                                                                                             \
+    /* Grab the mutex for the library */                                                                     \
+    H5_API_UNSET_CANCEL                                                                                      \
+    H5_API_LOCK
 
 #define FUNC_ENTER_API_COMMON                                                                                \
-    FUNC_ENTER_API_VARS                                                                                      \
     FUNC_ENTER_COMMON(H5_IS_API(__func__));                                                                  \
-    H5_API_LOCK
+    FUNC_ENTER_API_THREADSAFE;
 
 #define FUNC_ENTER_API_INIT(err)                                                                             \
     /* Initialize the library */                                                                             \
@@ -1205,7 +1331,8 @@ H5_DLL herr_t H5CX_pop(bool update_dxpl_props);
 /*
  * Use this macro for API functions that shouldn't perform _any_ initialization
  *      of the library or an interface, just perform tracing, etc.  Examples
- *      are: H5is_library_threadsafe, H5VLretrieve_lib_state, etc.
+ *      are: H5allocate_memory, H5is_library_threadsafe, public VOL callback
+ *      wrappers (e.g. H5VLfile_create, H5VLdataset_read, etc.), etc.
  *
  */
 #define FUNC_ENTER_API_NOINIT                                                                                \
@@ -1227,9 +1354,8 @@ H5_DLL herr_t H5CX_pop(bool update_dxpl_props);
         {                                                                                                    \
             {                                                                                                \
                 {                                                                                            \
-                    FUNC_ENTER_API_VARS                                                                      \
                     FUNC_ENTER_COMMON_NOERR(H5_IS_API(__func__));                                            \
-                    H5_API_LOCK                                                                              \
+                    FUNC_ENTER_API_THREADSAFE;                                                               \
                     {
 
 /*
@@ -1244,9 +1370,8 @@ H5_DLL herr_t H5CX_pop(bool update_dxpl_props);
             {                                                                                                \
                 {                                                                                            \
                     {                                                                                        \
-                        FUNC_ENTER_API_VARS                                                                  \
                         FUNC_ENTER_COMMON(H5_IS_API(__func__));                                              \
-                        H5_API_LOCK                                                                          \
+                        FUNC_ENTER_API_THREADSAFE;                                                           \
                         FUNC_ENTER_API_INIT(err);                                                            \
                         {
 
@@ -1381,6 +1506,10 @@ H5_DLL herr_t H5CX_pop(bool update_dxpl_props);
  *          the last statement executed by a function.
  *-------------------------------------------------------------------------
  */
+/* Threadsafety termination code for API routines */
+#define FUNC_LEAVE_API_THREADSAFE                                                                            \
+    H5_API_UNLOCK                                                                                            \
+    H5_API_SET_CANCEL
 
 #define FUNC_LEAVE_API(ret_value)                                                                            \
     ;                                                                                                        \
@@ -1391,7 +1520,7 @@ H5_DLL herr_t H5CX_pop(bool update_dxpl_props);
     }                                                                                                        \
     if (H5_UNLIKELY(err_occurred))                                                                           \
         (void)H5E_dump_api_stack();                                                                          \
-    H5_API_UNLOCK                                                                                            \
+    FUNC_LEAVE_API_THREADSAFE                                                                                \
     return (ret_value);                                                                                      \
     }                                                                                                        \
     } /*end scope from beginning of FUNC_ENTER*/
@@ -1402,7 +1531,7 @@ H5_DLL herr_t H5CX_pop(bool update_dxpl_props);
     } /*end scope from end of FUNC_ENTER*/                                                                   \
     if (H5_UNLIKELY(err_occurred))                                                                           \
         (void)H5E_dump_api_stack();                                                                          \
-    H5_API_UNLOCK                                                                                            \
+    FUNC_LEAVE_API_THREADSAFE                                                                                \
     return (ret_value);                                                                                      \
     }                                                                                                        \
     }                                                                                                        \
@@ -1412,7 +1541,7 @@ H5_DLL herr_t H5CX_pop(bool update_dxpl_props);
 #define FUNC_LEAVE_API_NOFS(ret_value)                                                                       \
     ;                                                                                                        \
     } /*end scope from end of FUNC_ENTER*/                                                                   \
-    H5_API_UNLOCK                                                                                            \
+    FUNC_LEAVE_API_THREADSAFE                                                                                \
     return (ret_value);                                                                                      \
     }                                                                                                        \
     }                                                                                                        \
@@ -1425,7 +1554,7 @@ H5_DLL herr_t H5CX_pop(bool update_dxpl_props);
     } /*end scope from end of FUNC_ENTER*/                                                                   \
     if (H5_UNLIKELY(err_occurred))                                                                           \
         (void)H5E_dump_api_stack();                                                                          \
-    H5_API_UNLOCK                                                                                            \
+    FUNC_LEAVE_API_THREADSAFE                                                                                \
     return (ret_value);                                                                                      \
     }                                                                                                        \
     }                                                                                                        \

@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -235,14 +235,11 @@ const H5S_select_class_t H5S_sel_hyper[1] = {{
 }};
 
 /* Format version bounds for dataspace hyperslab selection */
-static const unsigned H5O_sds_hyper_ver_bounds[] = {
+const unsigned H5O_sds_hyper_ver_bounds[] = {
     H5S_HYPER_VERSION_1, /* H5F_LIBVER_EARLIEST */
     H5S_HYPER_VERSION_1, /* H5F_LIBVER_V18 */
     H5S_HYPER_VERSION_2, /* H5F_LIBVER_V110 */
     H5S_HYPER_VERSION_3, /* H5F_LIBVER_V112 */
-    H5S_HYPER_VERSION_3, /* H5F_LIBVER_V114 */
-    H5S_HYPER_VERSION_3, /* H5F_LIBVER_V116 */
-    H5S_HYPER_VERSION_3, /* H5F_LIBVER_V118 */
     H5S_HYPER_VERSION_3  /* H5F_LIBVER_LATEST */
 };
 
@@ -269,7 +266,7 @@ static const H5S_sel_iter_class_t H5S_sel_iter_hyper[1] = {{
 static const hsize_t H5S_hyper_zeros_g[H5S_MAX_RANK] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                                                         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 static const hsize_t H5S_hyper_ones_g[H5S_MAX_RANK]  = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                                                        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+                                                       1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
 
 /* Declare a free list to manage the H5S_hyper_sel_t struct */
 H5FL_DEFINE_STATIC(H5S_hyper_sel_t);

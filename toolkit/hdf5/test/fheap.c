@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -6239,12 +6239,12 @@ test_man_remove_bogus(hid_t fapl, H5HF_create_t *cparam, fheap_test_param_t *tpa
 /* seed = (unsigned long)1155438845; */
 fprintf(stderr, "Random # seed was: %lu\n", seed);
 #endif
-    srand((unsigned)seed);
+    HDsrandom((unsigned)seed);
 
     /* Set heap ID to random (non-null) value */
     heap_id[0] = H5HF_ID_VERS_CURR | H5HF_ID_TYPE_MAN;
     for (u = 1; u < HEAP_ID_LEN; u++)
-        heap_id[u] = (unsigned char)(rand() + 1);
+        heap_id[u] = (unsigned char)(HDrandom() + 1);
 
     /* Try removing bogus heap ID from empty heap */
     H5E_BEGIN_TRY
@@ -6268,7 +6268,7 @@ fprintf(stderr, "Random # seed was: %lu\n", seed);
         /* Set heap ID to random (non-null) value */
         heap_id[0] = H5HF_ID_VERS_CURR | H5HF_ID_TYPE_MAN;
         for (u = 1; u < HEAP_ID_LEN; u++)
-            heap_id[u] = (unsigned char)(rand() + 1);
+            heap_id[u] = (unsigned char)(HDrandom() + 1);
 
         /* Get offset of random heap ID */
         if (H5HF_get_id_off_test(fh, heap_id, &obj_off) < 0)
@@ -15147,13 +15147,13 @@ test_random(hsize_t size_limit, hid_t fapl, H5HF_create_t *cparam, fheap_test_pa
 /* seed = (unsigned long)1156158635; */
 fprintf(stderr, "Random # seed was: %lu\n", seed);
 #endif
-    srand((unsigned)seed);
+    HDsrandom((unsigned)seed);
 
     /* Loop over adding objects to the heap, until the size limit is reached */
     total_obj_added = 0;
     while (total_obj_added < size_limit) {
         /* Choose a random size of object (from 1 up to above standalone block size limit) */
-        obj_size = (((uint32_t)rand() % (tmp_cparam.max_man_size + 255)) + 1);
+        obj_size = (((uint32_t)HDrandom() % (tmp_cparam.max_man_size + 255)) + 1);
         obj_loc  = (tmp_cparam.max_man_size + 255) - obj_size;
 
         /* Insert object */
@@ -15174,7 +15174,7 @@ fprintf(stderr, "Random # seed was: %lu\n", seed);
 
         /* Choose a position to swap with */
         /* (0 is current position) */
-        pos = ((size_t)rand() % (keep_ids.num_ids - u));
+        pos = ((size_t)HDrandom() % (keep_ids.num_ids - u));
 
         /* If we chose a different position, swap with it */
         if (pos > 0) {
@@ -15350,7 +15350,7 @@ test_random_pow2(hsize_t size_limit, hid_t fapl, H5HF_create_t *cparam, fheap_te
 /* seed = (unsigned long)1155181717; */
 fprintf(stderr, "Random # seed was: %lu\n", seed);
 #endif
-    srand((unsigned)seed);
+    HDsrandom((unsigned)seed);
 
     /* Loop over adding objects to the heap, until the size limit is reached */
     total_obj_added = 0;
@@ -15362,13 +15362,13 @@ fprintf(stderr, "Random # seed was: %lu\n", seed);
          *      25% of the objects will be twice as large, 12.5% will be
          *      four times larger, etc.)
          */
-        while (rand() < (RAND_MAX / 2) && size_range < tmp_cparam.max_man_size)
+        while (HDrandom() < (RAND_MAX / 2) && size_range < tmp_cparam.max_man_size)
             size_range *= 2;
         if (size_range > (tmp_cparam.max_man_size + 255))
             size_range = tmp_cparam.max_man_size + 255;
 
         /* Choose a random size of object (from 1 up to stand alone block size) */
-        obj_size = (((unsigned)rand() % (size_range - 1)) + 1);
+        obj_size = (((unsigned)HDrandom() % (size_range - 1)) + 1);
         obj_loc  = (tmp_cparam.max_man_size + 255) - obj_size;
 
         /* Insert object */
@@ -15389,7 +15389,7 @@ fprintf(stderr, "Random # seed was: %lu\n", seed);
 
         /* Choose a position to swap with */
         /* (0 is current position) */
-        pos = ((size_t)rand() % (keep_ids.num_ids - u));
+        pos = ((size_t)HDrandom() % (keep_ids.num_ids - u));
 
         /* If we chose a different position, swap with it */
         if (pos > 0) {
@@ -15960,7 +15960,6 @@ main(void)
     const char *driver_name;   /* Environment variable */
     bool        contig_addr_vfd;        /* Whether VFD used has a contiguous address space */
     bool        api_ctx_pushed = false; /* Whether API context pushed */
-    int         test_express;
 
     /* Don't run this test using certain file drivers */
     driver_name = h5_get_test_driver_name();
@@ -15983,10 +15982,9 @@ main(void)
      *      Activate full testing when this feature is re-enabled
      *      in the future for parallel build.
      */
-    test_express = h5_get_testexpress();
-    if (test_express > 0)
-        printf("***Express test mode %d.  Some tests may be skipped\n", test_express);
-    else if (test_express == 0) {
+    if (TestExpress > 0)
+        printf("***Express test mode %d.  Some tests may be skipped\n", TestExpress);
+    else if (TestExpress == 0) {
 #ifdef H5_HAVE_PARALLEL
         num_pb_fs = NUM_PB_FS - 2;
 #else
@@ -16202,7 +16200,7 @@ main(void)
                     /* If this test fails, uncomment the tests above, which build up to this
                      * level of complexity gradually. -QAK
                      */
-                    if (test_express > 1)
+                    if (TestExpress > 1)
                         printf(
                             "***Express test mode on.  test_man_start_5th_recursive_indirect is skipped\n");
                     else
@@ -16250,7 +16248,7 @@ main(void)
                                 nerrors += test_man_remove_first_row(fapl, &small_cparam, &tparam);
                                 nerrors += test_man_remove_first_two_rows(fapl, &small_cparam, &tparam);
                                 nerrors += test_man_remove_first_four_rows(fapl, &small_cparam, &tparam);
-                                if (test_express > 1)
+                                if (TestExpress > 1)
                                     printf("***Express test mode on.  Some tests skipped\n");
                                 else {
                                     nerrors += test_man_remove_all_root_direct(fapl, &small_cparam, &tparam);
@@ -16300,7 +16298,7 @@ main(void)
                                 nerrors +=
                                     test_man_fill_1st_row_3rd_direct_fill_2nd_direct_less_one_wrap_start_block_add_skipped(
                                         fapl, &small_cparam, &tparam);
-                                if (test_express > 1)
+                                if (TestExpress > 1)
                                     printf("***Express test mode on.  Some tests skipped\n");
                                 else {
                                     nerrors +=
@@ -16430,7 +16428,7 @@ main(void)
             }     /* end block */
 
             /* Random object insertion & deletion */
-            if (test_express > 1)
+            if (TestExpress > 1)
                 printf("***Express test mode on.  Some tests skipped\n");
             else {
                 /* Random tests using "small" heap creation parameters */

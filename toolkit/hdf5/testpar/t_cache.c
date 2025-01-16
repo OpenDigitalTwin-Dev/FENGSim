@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -779,7 +779,7 @@ init_data(void)
  * Function:    do_express_test()
  *
  * Purpose:    Do an MPI_Allreduce to obtain the maximum value returned
- *         by h5_get_testexpress() across all processes.  Return this
+ *         by GetTestExpress() across all processes.  Return this
  *         value.
  *
  *         Envirmoment variables can be different across different
@@ -787,7 +787,7 @@ init_data(void)
  *         on whether to do an express test.
  *
  * Return:    Success:    Maximum of the values returned by
- *                 h5_get_testexpress() across    all processes.
+ *                 GetTestExpress() across    all processes.
  *
  *        Failure:    -1
  *
@@ -799,7 +799,7 @@ do_express_test(void)
     int max_express_test;
     int result;
 
-    express_test = h5_get_testexpress();
+    express_test = GetTestExpress();
 
     result =
         MPI_Allreduce((void *)&express_test, (void *)&max_express_test, 1, MPI_INT, MPI_MAX, world_mpi_comm);
@@ -1068,7 +1068,7 @@ setup_derived_types(void)
     int           i;
     int           result;
     MPI_Datatype  mpi_types[9] = {MPI_INT, MPI_INT, MPI_INT,      MPI_LONG,    HADDR_AS_MPI_TYPE,
-                                  MPI_INT, MPI_INT, MPI_UNSIGNED, MPI_UNSIGNED};
+                                 MPI_INT, MPI_INT, MPI_UNSIGNED, MPI_UNSIGNED};
     int           block_len[9] = {1, 1, 1, 1, 1, 1, 1, 1, 1};
     MPI_Aint      displs[9];
     struct mssg_t sample; /* used to compute displacements */
@@ -2883,7 +2883,7 @@ local_pin_and_unpin_random_entries(H5F_t *file_ptr, int min_idx, int max_idx, in
         assert(0 <= min_count);
         assert(min_count < max_count);
 
-        count = (rand() % (max_count - min_count)) + min_count;
+        count = (HDrand() % (max_count - min_count)) + min_count;
 
         assert(min_count <= count);
         assert(count <= max_count);
@@ -2892,7 +2892,7 @@ local_pin_and_unpin_random_entries(H5F_t *file_ptr, int min_idx, int max_idx, in
             local_pin_random_entry(file_ptr, min_idx, max_idx);
         }
 
-        count = (rand() % (max_count - min_count)) + min_count;
+        count = (HDrand() % (max_count - min_count)) + min_count;
 
         assert(min_count <= count);
         assert(count <= max_count);
@@ -2938,7 +2938,7 @@ local_pin_random_entry(H5F_t *file_ptr, int min_idx, int max_idx)
         assert(max_idx < virt_num_data_entries);
 
         do {
-            idx = (rand() % (max_idx - min_idx)) + min_idx;
+            idx = (HDrand() % (max_idx - min_idx)) + min_idx;
             assert(min_idx <= idx);
             assert(idx <= max_idx);
         } while (data[idx].global_pinned || data[idx].local_pinned);
@@ -3055,7 +3055,7 @@ lock_and_unlock_random_entries(H5F_t *file_ptr, int min_idx, int max_idx, int mi
         assert(0 <= min_count);
         assert(min_count < max_count);
 
-        count = (rand() % (max_count - min_count)) + min_count;
+        count = (HDrand() % (max_count - min_count)) + min_count;
 
         assert(min_count <= count);
         assert(count <= max_count);
@@ -3093,7 +3093,7 @@ lock_and_unlock_random_entry(H5F_t *file_ptr, int min_idx, int max_idx)
         assert(max_idx < NUM_DATA_ENTRIES);
         assert(max_idx < virt_num_data_entries);
 
-        idx = (rand() % (max_idx - min_idx)) + min_idx;
+        idx = (HDrand() % (max_idx - min_idx)) + min_idx;
 
         assert(min_idx <= idx);
         assert(idx <= max_idx);
@@ -3933,7 +3933,7 @@ setup_rand(void)
         seed = predefined_seeds[world_mpi_rank];
         fprintf(stdout, "%d:%s: predefined_seed = %d.\n", world_mpi_rank, __func__, seed);
         fflush(stdout);
-        srand(seed);
+        HDsrand(seed);
     }
     else {
 
@@ -3950,7 +3950,7 @@ setup_rand(void)
                 fprintf(stdout, "%d:%s: seed = %d.\n", world_mpi_rank, __func__, seed);
                 fflush(stdout);
             }
-            srand(seed);
+            HDsrand(seed);
         }
     }
 
@@ -6037,57 +6037,57 @@ trace_file_check(int metadata_write_strategy)
 
     const char *((*expected_output)[])      = NULL;
     const char         *expected_output_0[] = {"### HDF5 metadata cache trace file version 1 ###\n",
-                                               "H5AC_set_cache_auto_resize_config",
-                                               "H5AC_insert_entry",
-                                               "H5AC_insert_entry",
-                                               "H5AC_insert_entry",
-                                               "H5AC_insert_entry",
-                                               "H5AC_protect",
-                                               "H5AC_mark_entry_dirty",
-                                               "H5AC_unprotect",
-                                               "H5AC_protect",
-                                               "H5AC_pin_protected_entry",
-                                               "H5AC_unprotect",
-                                               "H5AC_unpin_entry",
-                                               "H5AC_expunge_entry",
-                                               "H5AC_protect",
-                                               "H5AC_pin_protected_entry",
-                                               "H5AC_unprotect",
-                                               "H5AC_mark_entry_dirty",
-                                               "H5AC_resize_entry",
-                                               "H5AC_resize_entry",
-                                               "H5AC_unpin_entry",
-                                               "H5AC_move_entry",
-                                               "H5AC_move_entry",
-                                               "H5AC_flush",
-                                               "H5AC_flush",
-                                               NULL};
+                                       "H5AC_set_cache_auto_resize_config",
+                                       "H5AC_insert_entry",
+                                       "H5AC_insert_entry",
+                                       "H5AC_insert_entry",
+                                       "H5AC_insert_entry",
+                                       "H5AC_protect",
+                                       "H5AC_mark_entry_dirty",
+                                       "H5AC_unprotect",
+                                       "H5AC_protect",
+                                       "H5AC_pin_protected_entry",
+                                       "H5AC_unprotect",
+                                       "H5AC_unpin_entry",
+                                       "H5AC_expunge_entry",
+                                       "H5AC_protect",
+                                       "H5AC_pin_protected_entry",
+                                       "H5AC_unprotect",
+                                       "H5AC_mark_entry_dirty",
+                                       "H5AC_resize_entry",
+                                       "H5AC_resize_entry",
+                                       "H5AC_unpin_entry",
+                                       "H5AC_move_entry",
+                                       "H5AC_move_entry",
+                                       "H5AC_flush",
+                                       "H5AC_flush",
+                                       NULL};
     const char         *expected_output_1[] = {"### HDF5 metadata cache trace file version 1 ###\n",
-                                               "H5AC_set_cache_auto_resize_config",
-                                               "H5AC_insert_entry",
-                                               "H5AC_insert_entry",
-                                               "H5AC_insert_entry",
-                                               "H5AC_insert_entry",
-                                               "H5AC_protect",
-                                               "H5AC_mark_entry_dirty",
-                                               "H5AC_unprotect",
-                                               "H5AC_protect",
-                                               "H5AC_pin_protected_entry",
-                                               "H5AC_unprotect",
-                                               "H5AC_unpin_entry",
-                                               "H5AC_expunge_entry",
-                                               "H5AC_protect",
-                                               "H5AC_pin_protected_entry",
-                                               "H5AC_unprotect",
-                                               "H5AC_mark_entry_dirty",
-                                               "H5AC_resize_entry",
-                                               "H5AC_resize_entry",
-                                               "H5AC_unpin_entry",
-                                               "H5AC_move_entry",
-                                               "H5AC_move_entry",
-                                               "H5AC_flush",
-                                               "H5AC_flush",
-                                               NULL};
+                                       "H5AC_set_cache_auto_resize_config",
+                                       "H5AC_insert_entry",
+                                       "H5AC_insert_entry",
+                                       "H5AC_insert_entry",
+                                       "H5AC_insert_entry",
+                                       "H5AC_protect",
+                                       "H5AC_mark_entry_dirty",
+                                       "H5AC_unprotect",
+                                       "H5AC_protect",
+                                       "H5AC_pin_protected_entry",
+                                       "H5AC_unprotect",
+                                       "H5AC_unpin_entry",
+                                       "H5AC_expunge_entry",
+                                       "H5AC_protect",
+                                       "H5AC_pin_protected_entry",
+                                       "H5AC_unprotect",
+                                       "H5AC_mark_entry_dirty",
+                                       "H5AC_resize_entry",
+                                       "H5AC_resize_entry",
+                                       "H5AC_unpin_entry",
+                                       "H5AC_move_entry",
+                                       "H5AC_move_entry",
+                                       "H5AC_flush",
+                                       "H5AC_flush",
+                                       NULL};
     char                buffer[256];
     char                trace_file_name[64];
     bool                done = false;

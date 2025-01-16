@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -188,12 +188,10 @@ typedef enum H5F_libver_t {
     H5F_LIBVER_V110     = 2, /**< Use the latest v110 format for storing objects */
     H5F_LIBVER_V112     = 3, /**< Use the latest v112 format for storing objects */
     H5F_LIBVER_V114     = 4, /**< Use the latest v114 format for storing objects */
-    H5F_LIBVER_V116     = 5, /**< Use the latest v116 format for storing objects */
-    H5F_LIBVER_V118     = 6, /**< Use the latest v118 format for storing objects */
     H5F_LIBVER_NBOUNDS       /**< Sentinel */
 } H5F_libver_t;
 
-#define H5F_LIBVER_LATEST H5F_LIBVER_V118
+#define H5F_LIBVER_LATEST H5F_LIBVER_V114
 
 /**
  * File space handling strategy

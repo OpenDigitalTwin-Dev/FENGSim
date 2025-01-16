@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -106,6 +106,9 @@
 
 /* Define to 1 if you have the `clock_gettime' function. */
 #cmakedefine H5_HAVE_CLOCK_GETTIME @H5_HAVE_CLOCK_GETTIME@
+
+/* Define to 1 if CLOCK_MONOTONIC_COARSE is available */
+#cmakedefine H5_HAVE_CLOCK_MONOTONIC_COARSE @H5_HAVE_CLOCK_MONOTONIC_COARSE@
 
 /* Define to 1 if you have the <curl/curl.h> header file. */
 #cmakedefine H5_HAVE_CURL_CURL_H @H5_HAVE_CURL_H@
@@ -258,8 +261,11 @@
 /* Define to 1 if you have the <pthread.h> header file. */
 #cmakedefine H5_HAVE_PTHREAD_H @H5_HAVE_PTHREAD_H@
 
-/* Define to 1 if the compiler supports the pthread_barrier_*() routines */
-#cmakedefine H5_HAVE_PTHREAD_BARRIER @H5_HAVE_PTHREAD_BARRIER@
+/* Define to 1 if 'pthread_condattr_setclock()' is available */
+#cmakedefine H5_HAVE_PTHREAD_CONDATTR_SETCLOCK @H5_HAVE_PTHREAD_CONDATTR_SETCLOCK@
+
+/* Define to 1 if PTHREAD_MUTEX_ADAPTIVE_NP is available */
+#cmakedefine H5_HAVE_PTHREAD_MUTEX_ADAPTIVE_NP @H5_HAVE_PTHREAD_MUTEX_ADAPTIVE_NP@
 
 /* Define to 1 if you have the <pwd.h> header file. */
 #cmakedefine H5_HAVE_PWD_H @H5_HAVE_PWD_H@
@@ -319,9 +325,6 @@
 /* Define to 1 if the compiler supports the __builtin_expect() extension */
 #cmakedefine H5_HAVE_BUILTIN_EXPECT @H5_HAVE_BUILTIN_EXPECT@
 
-/* Define if we have thread support */
-# cmakedefine H5_HAVE_THREADS @H5_HAVE_THREADS@
-
 #if defined(_WIN32) && !defined(H5_BUILT_AS_DYNAMIC_LIB)
 /* Not supported on WIN32 platforms with static linking */
 /* #undef H5_HAVE_THREADSAFE */
@@ -356,9 +359,6 @@
 
 /* Define to 1 if you have Win32 threads */
 #cmakedefine H5_HAVE_WIN_THREADS @H5_HAVE_WIN_THREADS@
-
-/* Define to 1 if you have C11 threads */
-#cmakedefine H5_HAVE_C11_THREADS @H5_HAVE_C11_THREADS@
 
 /* Define if your system has Windows-style path name. */
 #cmakedefine H5_HAVE_WINDOW_PATH @H5_HAVE_WINDOW_PATH@
@@ -589,6 +589,10 @@
 /* Define if strict file format checks are enabled */
 #cmakedefine H5_STRICT_FORMAT_CHECKS @H5_STRICT_FORMAT_CHECKS@
 
+/* Define if your system supports pthread_attr_setscope(&attribute,
+   PTHREAD_SCOPE_SYSTEM) call. */
+#cmakedefine H5_SYSTEM_SCOPE_THREADS @H5_SYSTEM_SCOPE_THREADS@
+
 /* Define using v1.6 public API symbols by default */
 #cmakedefine H5_USE_16_API_DEFAULT @H5_USE_16_API_DEFAULT@
 
@@ -603,12 +607,6 @@
 
 /* Define using v1.14 public API symbols by default */
 #cmakedefine H5_USE_114_API_DEFAULT @H5_USE_114_API_DEFAULT@
-
-/* Define using v1.16 public API symbols by default */
-#cmakedefine H5_USE_116_API_DEFAULT @H5_USE_116_API_DEFAULT@
-
-/* Define using v1.18 public API symbols by default */
-#cmakedefine H5_USE_118_API_DEFAULT @H5_USE_118_API_DEFAULT@
 
 /* Define if the library will use file locking */
 #cmakedefine H5_USE_FILE_LOCKING @H5_USE_FILE_LOCKING@

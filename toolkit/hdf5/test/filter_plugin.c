@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -294,7 +294,7 @@ ensure_filter_works(hid_t fid, const char *name, hid_t dcpl_id)
 
     for (i = 0; i < r; i++)
         for (j = 0; j < c / 2; j++)
-            orig[i][j] = (int)rand() % RANDOM_LIMIT;
+            orig[i][j] = (int)HDrandom() % RANDOM_LIMIT;
 
     if (H5Dwrite(did, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, write_dxpl_id, *orig) < 0)
         TEST_ERROR;
@@ -349,7 +349,7 @@ ensure_filter_works(hid_t fid, const char *name, hid_t dcpl_id)
     hs_offc = (size_t)hs_offsets_g[1];
     for (i = 0; i < hs_r; i++)
         for (j = 0; j < hs_c; j++)
-            orig[hs_offr + i][hs_offc + j] = (int)rand() % RANDOM_LIMIT;
+            orig[hs_offr + i][hs_offc + j] = (int)HDrandom() % RANDOM_LIMIT;
 
     if (H5Sselect_hyperslab(sid, H5S_SELECT_SET, hs_offsets_g, NULL, hs_sizes_g, NULL) < 0)
         TEST_ERROR;

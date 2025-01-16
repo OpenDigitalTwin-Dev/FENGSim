@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -228,7 +228,7 @@ read_records(const char *filename, bool verbose, FILE *verbose_file, unsigned ra
 
             /* Determine the offset of the symbol, within level 0 symbols */
             /* (level 0 symbols are the most common symbols) */
-            offset     = (unsigned)((unsigned)rand() % symbol_count[0]);
+            offset     = (unsigned)((unsigned)HDrandom() % symbol_count[0]);
             sym_com[v] = &symbol_info[0][offset];
 
             /* Emit informational message */
@@ -475,7 +475,7 @@ main(int argc, char *argv[])
         HDgettimeofday(&t, NULL);
         random_seed = (unsigned)(t.tv_usec);
     } /* end if */
-    srand(random_seed);
+    HDsrandom(random_seed);
 
     /* Open output file */
     if (verbose) {

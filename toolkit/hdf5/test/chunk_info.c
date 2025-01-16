@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -38,15 +38,19 @@
 #define H5D_TESTING /* to use H5D__ functions */
 #include "H5Dpkg.h"
 
-#include "h5test.h"
+#include "testhdf5.h"
 #ifdef H5_HAVE_FILTER_DEFLATE
 #include "zlib.h"
 #endif
 
 /* Test file names, using H5F_libver_t as indices */
-static const char *FILENAME[] = {
-    "tchunk_info_earliest", "tchunk_info_v18",  "tchunk_info_v110", "tchunk_info_v112",
-    "tchunk_info_v114",     "tchunk_info_v116", "tchunk_info_v118", NULL};
+static const char *FILENAME[] = {"tchunk_info_earliest",
+                                 "tchunk_info_v18",
+                                 "tchunk_info_v110",
+                                 "tchunk_info_v112",
+                                 "tchunk_info_v114",
+                                 "tchunk_info_v116",
+                                 NULL};
 
 /* File to be used in test_failed_attempts */
 #define FILTERMASK_FILE "tflt_msk"

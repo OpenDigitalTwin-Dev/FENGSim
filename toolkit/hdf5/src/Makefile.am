@@ -4,7 +4,7 @@
 #
 # This file is part of HDF5.  The full HDF5 copyright notice, including
 # terms governing use, modification, and redistribution, is contained in
-# the LICENSE file, which can be found at the root of the source code
+# the COPYING file, which can be found at the root of the source code
 # distribution tree, or in https://www.hdfgroup.org/licenses.
 # If you do not have access to either file, you may request a copy from
 # help@hdfgroup.org.
@@ -97,15 +97,12 @@ libhdf5_la_SOURCES= H5.c H5build_settings.c H5checksum.c H5dbg.c H5system.c \
         H5Tfloat.c H5Tinit_float.c H5Tnative.c H5Toffset.c H5Toh.c H5Topaque.c \
         H5Torder.c H5Tref.c H5Tpad.c H5Tprecis.c H5Tstrpad.c H5Tvisit.c \
         H5Tvlen.c \
-        H5TS.c H5TSatomic.c H5TSbarrier.c H5TSc11.c H5TScond.c \
-        H5TSint.c H5TSkey.c H5TSmutex.c H5TSonce.c H5TSpool.c H5TSpthread.c \
-        H5TSrec_rwlock.c H5TSrwlock.c H5TSsemaphore.c H5TSthread.c H5TSwin.c \
+        H5TS.c \
         H5VL.c H5VLcallback.c H5VLdyn_ops.c H5VLint.c H5VLnative.c \
         H5VLnative_attr.c H5VLnative_blob.c H5VLnative_dataset.c \
         H5VLnative_datatype.c H5VLnative_file.c H5VLnative_group.c \
         H5VLnative_link.c H5VLnative_introspect.c H5VLnative_object.c \
-        H5VLnative_token.c H5VLpassthru.c H5VLpassthru_int.c H5VLquery.c \
-        H5VLtest.c \
+        H5VLnative_token.c H5VLpassthru.c H5VLtest.c \
         H5VM.c H5WB.c H5Z.c  \
         H5Zdeflate.c H5Zfletcher32.c H5Znbit.c H5Zshuffle.c H5Zscaleoffset.c \
         H5Zszip.c H5Ztrans.c
@@ -166,6 +163,18 @@ include_HEADERS = hdf5.h H5api_adpt.h H5overflow.h H5pubconf.h H5public.h H5vers
 # Public component author headers
 include_HEADERS += H5ESdevelop.h H5FDdevelop.h H5Idevelop.h H5Ldevelop.h \
         H5Tdevelop.h H5TSdevelop.h H5Zdevelop.h
+
+if SUBFILING_VFD_CONDITIONAL
+
+# Temporarily use internal Mercury until usage of Mercury is refactored
+if HAVE_MERCURY_CONDITIONAL
+    libhdf5_la_SOURCES += H5FDsubfiling/mercury/src/util/mercury_thread.c \
+    H5FDsubfiling/mercury/src/util/mercury_thread_condition.c \
+    H5FDsubfiling/mercury/src/util/mercury_thread_pool.c \
+    H5FDsubfiling/mercury/src/util/mercury_thread_mutex.c
+endif
+
+endif
 
 # install libhdf5.settings in lib directory
 settingsdir=$(libdir)

@@ -4,7 +4,7 @@
 #
 # This file is part of HDF5.  The full HDF5 copyright notice, including
 # terms governing use, modification, and redistribution, is contained in
-# the LICENSE file, which can be found at the root of the source code
+# the COPYING file, which can be found at the root of the source code
 # distribution tree, or in https://www.hdfgroup.org/licenses.
 # If you do not have access to either file, you may request a copy from
 # help@hdfgroup.org.
@@ -161,12 +161,6 @@ option (HDF5_ENABLE_DEBUG_H5FS_ASSERT "Enable extra debugging of H5FS module" OF
 mark_as_advanced (HDF5_ENABLE_DEBUG_H5FS_ASSERT)
 if (HDF5_ENABLE_DEBUG_H5FS_ASSERT)
   list (APPEND HDF5_DEBUG_APIS H5FS_DEBUG_ASSERT)
-endif ()
-
-option (HDF5_ENABLE_DEBUG_H5TS "Enable debugging of H5TS module" OFF)
-mark_as_advanced (HDF5_ENABLE_DEBUG_H5TS)
-if (HDF5_ENABLE_DEBUG_H5TS)
-  list (APPEND HDF5_DEBUG_APIS H5TS_DEBUG)
 endif ()
 
 # If HDF5 free list debugging wasn't specifically enabled, disable

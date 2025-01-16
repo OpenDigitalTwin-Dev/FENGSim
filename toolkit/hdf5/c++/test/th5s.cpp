@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -471,7 +471,7 @@ test_h5s_compound_scalar_read()
  *-------------------------------------------------------------------------
  */
 extern "C" void
-test_h5s(const void *params)
+test_h5s()
 {
     // Output message about test being performed
     MESSAGE(5, ("Testing Dataspaces\n"));
@@ -493,9 +493,7 @@ test_h5s(const void *params)
  *-------------------------------------------------------------------------
  */
 extern "C" void
-cleanup_h5s(void *params)
+cleanup_h5s()
 {
-    if (GetTestCleanup()) {
-        HDremove(DATAFILE.c_str());
-    }
+    HDremove(DATAFILE.c_str());
 } // cleanup_h5s

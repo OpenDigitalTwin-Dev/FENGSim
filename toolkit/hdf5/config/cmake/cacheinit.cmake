@@ -4,7 +4,7 @@
 #
 # This file is part of HDF5.  The full HDF5 copyright notice, including
 # terms governing use, modification, and redistribution, is contained in
-# the LICENSE file, which can be found at the root of the source code
+# the COPYING file, which can be found at the root of the source code
 # distribution tree, or in https://www.hdfgroup.org/licenses.
 # If you do not have access to either file, you may request a copy from
 # help@hdfgroup.org.
@@ -80,11 +80,14 @@ set (KWSYS_USE_LOCALCONTENT OFF CACHE BOOL "Use local file for KWSYS FetchConten
 ########################
 
 set (PLUGIN_TGZ_ORIGPATH "https://github.com/HDFGroup/hdf5_plugins/releases/download/snapshots" CACHE STRING "Use PLUGINS from original location" FORCE)
-set (PLUGIN_TGZ_NAME "hdf5_plugins-master.tar.gz" CACHE STRING "Use PLUGINS from compressed file" FORCE)
+set (PLUGIN_TGZ_NAME "hdf5_plugins-1.14.tar.gz" CACHE STRING "Use PLUGINS from compressed file" FORCE)
 set (PLUGIN_USE_LOCALCONTENT ON CACHE BOOL "Use local file for PLUGIN FetchContent" FORCE)
 set (PLUGIN_PACKAGE_NAME "pl" CACHE STRING "Name of PLUGIN package" FORCE)
 set (PLUGIN_GIT_URL "https://github.com/HDFGroup/hdf5_plugins.git" CACHE STRING "Use plugins from HDF Group repository" FORCE)
 set (PLUGIN_GIT_BRANCH "master" CACHE STRING "" FORCE)
+set (H5PL_VERS_MAJOR "1" CACHE STRING "Major version of hdf5 package for PLUGIN package" FORCE)
+set (H5PL_VERS_MINOR "14" CACHE STRING "Minor version of hdf5 package for PLUGIN package" FORCE)
+set (H5PL_VERS_RELEASE "5" CACHE STRING "Release version of hdf5 package for PLUGIN package" FORCE)
 
 #############
 # bitshuffle

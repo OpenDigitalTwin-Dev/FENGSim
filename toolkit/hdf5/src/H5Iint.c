@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -36,7 +36,7 @@
 /****************/
 
 /* Combine a Type number and an ID index into an ID */
-#define H5I_MAKE(g, i) ((((hid_t)(g) & TYPE_MASK) << ID_BITS) | ((hid_t)(i) & ID_MASK))
+#define H5I_MAKE(g, i) ((((hid_t)(g)&TYPE_MASK) << ID_BITS) | ((hid_t)(i)&ID_MASK))
 
 /******************/
 /* Local Typedefs */

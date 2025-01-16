@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -322,12 +322,7 @@ test_iter_group(hid_t fapl, bool new_format)
     i            = 0;
     idx          = 0;
     memset(info.name, 0, NAMELEN);
-    H5E_BEGIN_TRY
-    {
-        ret = H5Literate2(file, H5_INDEX_NAME, H5_ITER_INC, &idx, liter_cb, &info);
-    }
-    H5E_END_TRY
-    while (ret > 0) {
+    while ((ret = H5Literate2(file, H5_INDEX_NAME, H5_ITER_INC, &idx, liter_cb, &info)) > 0) {
         /* Verify return value from iterator gets propagated correctly */
         VERIFY(ret, 2, "H5Literate2");
 
@@ -346,13 +341,7 @@ test_iter_group(hid_t fapl, bool new_format)
             TestErrPrintf(
                 "Group iteration function didn't return name correctly for link - lnames[%u] = '%s'!\n",
                 (unsigned)(idx - 1), lnames[(size_t)(idx - 1)]);
-
-        H5E_BEGIN_TRY
-        {
-            ret = H5Literate2(file, H5_INDEX_NAME, H5_ITER_INC, &idx, liter_cb, &info);
-        }
-        H5E_END_TRY
-    }
+    } /* end while */
     VERIFY(ret, -1, "H5Literate2");
 
     if (i != (NDATASETS + 2))
@@ -365,12 +354,7 @@ test_iter_group(hid_t fapl, bool new_format)
     i            = 0;
     idx          = 0;
     memset(info.name, 0, NAMELEN);
-    H5E_BEGIN_TRY
-    {
-        ret = H5Literate2(file, H5_INDEX_NAME, H5_ITER_INC, &idx, liter_cb, &info);
-    }
-    H5E_END_TRY
-    while (ret >= 0) {
+    while ((ret = H5Literate2(file, H5_INDEX_NAME, H5_ITER_INC, &idx, liter_cb, &info)) >= 0) {
         /* Verify return value from iterator gets propagated correctly */
         VERIFY(ret, 1, "H5Literate2");
 
@@ -389,12 +373,6 @@ test_iter_group(hid_t fapl, bool new_format)
             TestErrPrintf(
                 "Group iteration function didn't return name correctly for link - lnames[%u] = '%s'!\n",
                 (unsigned)(idx - 1), lnames[(size_t)(idx - 1)]);
-
-        H5E_BEGIN_TRY
-        {
-            ret = H5Literate2(file, H5_INDEX_NAME, H5_ITER_INC, &idx, liter_cb, &info);
-        }
-        H5E_END_TRY
     } /* end while */
     VERIFY(ret, -1, "H5Literate2");
 
@@ -1243,7 +1221,7 @@ test_links_deprec(hid_t fapl)
 **
 ****************************************************************/
 void
-test_iterate(const void H5_ATTR_UNUSED *params)
+test_iterate(void)
 {
     hid_t    fapl, fapl2; /* File access property lists */
     unsigned new_format;  /* Whether to use the new format or not */
@@ -1296,13 +1274,11 @@ test_iterate(const void H5_ATTR_UNUSED *params)
  *-------------------------------------------------------------------------
  */
 void
-cleanup_iterate(void H5_ATTR_UNUSED *params)
+cleanup_iterate(void)
 {
-    if (GetTestCleanup()) {
-        H5E_BEGIN_TRY
-        {
-            H5Fdelete(DATAFILE, H5P_DEFAULT);
-        }
-        H5E_END_TRY
+    H5E_BEGIN_TRY
+    {
+        H5Fdelete(DATAFILE, H5P_DEFAULT);
     }
+    H5E_END_TRY
 }

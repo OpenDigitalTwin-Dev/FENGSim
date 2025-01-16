@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -1184,9 +1184,9 @@ mdc_api_call_smoke_check(int express_test, unsigned paged, hid_t fcpl_id)
     /* do random reads on all datasets */
     n = 0;
     while ((pass) && (n < NUM_RANDOM_ACCESSES)) {
-        m = rand() % NUM_DSETS;
-        i = (rand() % (DSET_SIZE / CHUNK_SIZE)) * CHUNK_SIZE;
-        j = (rand() % (DSET_SIZE / CHUNK_SIZE)) * CHUNK_SIZE;
+        m = HDrand() % NUM_DSETS;
+        i = (HDrand() % (DSET_SIZE / CHUNK_SIZE)) * CHUNK_SIZE;
+        j = (HDrand() % (DSET_SIZE / CHUNK_SIZE)) * CHUNK_SIZE;
 
         /* select on disk hyperslab */
         offset[0] = (hsize_t)i; /*offset of hyperslab in file*/
@@ -1282,8 +1282,8 @@ mdc_api_call_smoke_check(int express_test, unsigned paged, hid_t fcpl_id)
     m = 0;
     n = 0;
     while ((pass) && (n < NUM_RANDOM_ACCESSES)) {
-        i = (rand() % (DSET_SIZE / CHUNK_SIZE)) * CHUNK_SIZE;
-        j = (rand() % (DSET_SIZE / CHUNK_SIZE)) * CHUNK_SIZE;
+        i = (HDrand() % (DSET_SIZE / CHUNK_SIZE)) * CHUNK_SIZE;
+        j = (HDrand() % (DSET_SIZE / CHUNK_SIZE)) * CHUNK_SIZE;
 
         /* select on disk hyperslab */
         offset[0] = (hsize_t)i; /*offset of hyperslab in file*/
@@ -2223,7 +2223,7 @@ main(void)
 
     H5open();
 
-    express_test = h5_get_testexpress();
+    express_test = GetTestExpress();
 
     printf("===================================\n");
     printf("Cache API tests\n");

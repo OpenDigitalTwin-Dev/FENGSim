@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -63,14 +63,14 @@
  * arbitrary number (0 was chosen).
  */
 void
-test_partial_no_selection_coll_md_read(const void *params)
+test_partial_no_selection_coll_md_read(void)
 {
     const char *filename;
     hsize_t    *dataset_dims = NULL;
     hsize_t     max_dataset_dims[PARTIAL_NO_SELECTION_DATASET_NDIMS];
     hsize_t     sel_dims[1];
     hsize_t     chunk_dims[PARTIAL_NO_SELECTION_DATASET_NDIMS] = {PARTIAL_NO_SELECTION_Y_DIM_SCALE,
-                                                                  PARTIAL_NO_SELECTION_X_DIM_SCALE};
+                                                              PARTIAL_NO_SELECTION_X_DIM_SCALE};
     hsize_t     start[PARTIAL_NO_SELECTION_DATASET_NDIMS];
     hsize_t     stride[PARTIAL_NO_SELECTION_DATASET_NDIMS];
     hsize_t     count[PARTIAL_NO_SELECTION_DATASET_NDIMS];
@@ -102,7 +102,7 @@ test_partial_no_selection_coll_md_read(const void *params)
         return;
     }
 
-    filename = ((const H5Ptest_param_t *)params)->name;
+    filename = GetTestParameters();
 
     fapl_id = create_faccess_plist(MPI_COMM_WORLD, MPI_INFO_NULL, facc_type);
     VRFY((fapl_id >= 0), "create_faccess_plist succeeded");
@@ -262,7 +262,7 @@ test_partial_no_selection_coll_md_read(const void *params)
  *
  */
 void
-test_multi_chunk_io_addrmap_issue(const void *params)
+test_multi_chunk_io_addrmap_issue(void)
 {
     const char *filename;
     hsize_t     start[MULTI_CHUNK_IO_ADDRMAP_ISSUE_DIMS];
@@ -297,7 +297,7 @@ test_multi_chunk_io_addrmap_issue(const void *params)
         return;
     }
 
-    filename = ((const H5Ptest_param_t *)params)->name;
+    filename = GetTestParameters();
 
     fapl_id = create_faccess_plist(MPI_COMM_WORLD, MPI_INFO_NULL, facc_type);
     VRFY((fapl_id >= 0), "create_faccess_plist succeeded");
@@ -390,7 +390,7 @@ test_multi_chunk_io_addrmap_issue(const void *params)
  *2096 but expected 320000 major: Internal error (too specific to document in detail) minor: MPI Error String
  */
 void
-test_link_chunk_io_sort_chunk_issue(const void *params)
+test_link_chunk_io_sort_chunk_issue(void)
 {
     const char *filename;
     hsize_t     dataset_dims[LINK_CHUNK_IO_SORT_CHUNK_ISSUE_DIMS];
@@ -427,7 +427,7 @@ test_link_chunk_io_sort_chunk_issue(const void *params)
         return;
     }
 
-    filename = ((const H5Ptest_param_t *)params)->name;
+    filename = GetTestParameters();
 
     fapl_id = create_faccess_plist(MPI_COMM_WORLD, MPI_INFO_NULL, facc_type);
     VRFY((fapl_id >= 0), "create_faccess_plist succeeded");
@@ -554,7 +554,7 @@ test_link_chunk_io_sort_chunk_issue(const void *params)
  * heap data is not correctly mapped as raw data.
  */
 void
-test_collective_global_heap_write(const void *params)
+test_collective_global_heap_write(void)
 {
     const char *filename;
     hsize_t     attr_dims[COLL_GHEAP_WRITE_ATTR_DIMS];
@@ -583,7 +583,7 @@ test_collective_global_heap_write(const void *params)
         return;
     }
 
-    filename = ((const H5Ptest_param_t *)params)->name;
+    filename = GetTestParameters();
 
     fapl_id = create_faccess_plist(MPI_COMM_WORLD, MPI_INFO_NULL, facc_type);
     VRFY((fapl_id >= 0), "create_faccess_plist succeeded");
@@ -634,7 +634,7 @@ test_collective_global_heap_write(const void *params)
  * collective metadata writes are NOT requested.
  */
 void
-test_coll_io_ind_md_write(const void *params)
+test_coll_io_ind_md_write(void)
 {
     const char *filename;
     long long  *data = NULL;
@@ -654,7 +654,7 @@ test_coll_io_ind_md_write(const void *params)
     MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
 
-    filename = ((const H5Ptest_param_t *)params)->name;
+    filename = GetTestParameters();
 
     fapl_id = create_faccess_plist(MPI_COMM_WORLD, MPI_INFO_NULL, facc_type);
     VRFY((fapl_id >= 0), "create_faccess_plist succeeded");

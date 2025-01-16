@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -212,11 +212,7 @@ test_h5s_basic(void)
         fid1 = H5Fopen(testfile, H5F_ACC_RDONLY, H5P_DEFAULT);
         CHECK_I(fid1, "H5Fopen");
         if (fid1 >= 0) {
-            H5E_BEGIN_TRY
-            {
-                dset1 = H5Dopen2(fid1, "dset", H5P_DEFAULT);
-            }
-            H5E_END_TRY;
+            dset1 = H5Dopen2(fid1, "dset", H5P_DEFAULT);
             VERIFY(dset1, FAIL, "H5Dopen2");
             ret = H5Fclose(fid1);
             CHECK_I(ret, "H5Fclose");
@@ -3480,7 +3476,7 @@ test_versionbounds(void)
 **
 ****************************************************************/
 void
-test_h5s(const void H5_ATTR_UNUSED *params)
+test_h5s(void)
 {
     H5F_libver_t low, high; /* Low and high bounds */
 
@@ -3538,17 +3534,15 @@ test_h5s(const void H5_ATTR_UNUSED *params)
  *-------------------------------------------------------------------------
  */
 void
-cleanup_h5s(void H5_ATTR_UNUSED *params)
+cleanup_h5s(void)
 {
-    if (GetTestCleanup()) {
-        H5E_BEGIN_TRY
-        {
-            H5Fdelete(DATAFILE, H5P_DEFAULT);
-            H5Fdelete(NULLFILE, H5P_DEFAULT);
-            H5Fdelete(BASICFILE, H5P_DEFAULT);
-            H5Fdelete(ZEROFILE, H5P_DEFAULT);
-            H5Fdelete(VERBFNAME, H5P_DEFAULT);
-        }
-        H5E_END_TRY
+    H5E_BEGIN_TRY
+    {
+        H5Fdelete(DATAFILE, H5P_DEFAULT);
+        H5Fdelete(NULLFILE, H5P_DEFAULT);
+        H5Fdelete(BASICFILE, H5P_DEFAULT);
+        H5Fdelete(ZEROFILE, H5P_DEFAULT);
+        H5Fdelete(VERBFNAME, H5P_DEFAULT);
     }
+    H5E_END_TRY
 }

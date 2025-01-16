@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -323,7 +323,7 @@ H5D__efl_read(const H5O_efl_t *efl, const H5D_t *dset, haddr_t addr, size_t size
         H5_CHECK_OVERFLOW(tempto_read, hsize_t, size_t);
         to_read = (size_t)tempto_read;
 #else  /* NDEBUG */
-        to_read = MIN((size_t)(efl->slot[u].size - skip), (hsize_t)size);
+        to_read  = MIN((size_t)(efl->slot[u].size - skip), (hsize_t)size);
 #endif /* NDEBUG */
 
         /* Inner loop - read to_read bytes from a single external file */

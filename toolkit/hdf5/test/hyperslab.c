@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -1063,9 +1063,9 @@ test_array_offset_n_calc(size_t n, size_t x, size_t y, size_t z)
     /* Check offsets */
     for (u = 0; u < n; u++) {
         /* Get random coordinate */
-        coords[0] = (hsize_t)((size_t)rand() % z);
-        coords[1] = (hsize_t)((size_t)rand() % y);
-        coords[2] = (hsize_t)((size_t)rand() % x);
+        coords[0] = (hsize_t)((size_t)HDrandom() % z);
+        coords[1] = (hsize_t)((size_t)HDrandom() % y);
+        coords[2] = (hsize_t)((size_t)HDrandom() % x);
 
         /* Get offset of coordinate */
         off = H5VM_array_offset(ARRAY_OFFSET_NDIMS, dims, coords);
@@ -1144,7 +1144,7 @@ main(int argc, char *argv[])
     printf("\n");
 
     /* Set the random # seed */
-    srand((unsigned)time(NULL));
+    HDsrandom((unsigned)time(NULL));
 
     /*
      * Open the library explicitly for thread-safe builds, so per-thread

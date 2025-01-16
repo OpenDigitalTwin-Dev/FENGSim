@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -65,10 +65,10 @@ typedef struct H5FD_mirror_t {
 
 #ifndef BSWAP_64
 #define BSWAP_64(X)                                                                                          \
-    (uint64_t)((((X) & 0x00000000000000FF) << 56) | (((X) & 0x000000000000FF00) << 40) |                     \
-               (((X) & 0x0000000000FF0000) << 24) | (((X) & 0x00000000FF000000) << 8) |                      \
-               (((X) & 0x000000FF00000000) >> 8) | (((X) & 0x0000FF0000000000) >> 24) |                      \
-               (((X) & 0x00FF000000000000) >> 40) | (((X) & 0xFF00000000000000) >> 56))
+    (uint64_t)((((X)&0x00000000000000FF) << 56) | (((X)&0x000000000000FF00) << 40) |                         \
+               (((X)&0x0000000000FF0000) << 24) | (((X)&0x00000000FF000000) << 8) |                          \
+               (((X)&0x000000FF00000000) >> 8) | (((X)&0x0000FF0000000000) >> 24) |                          \
+               (((X)&0x00FF000000000000) >> 40) | (((X)&0xFF00000000000000) >> 56))
 #endif /* BSWAP_64 */
 
 /* Debugging flabs for verbose tracing -- nonzero to enable */

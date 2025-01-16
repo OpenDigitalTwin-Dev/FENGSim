@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -2050,6 +2050,8 @@ H5FD__subfiling_io_helper(H5FD_subfiling_t *file, size_t io_count, H5FD_mem_t ty
         H5_subfiling_dump_iovecs(sf_context, ioreq_count, iovec_len, io_type, io_types, io_addrs, io_sizes,
                                  io_bufs);
 #endif
+
+        /* clang-format off */
         /*
          * Having now populated the I/O vectors for this I/O request and
          * having determined how many I/O calls need to be made to satisfy
@@ -2078,6 +2080,7 @@ H5FD__subfiling_io_helper(H5FD_subfiling_t *file, size_t io_count, H5FD_mem_t ty
          * ultimately responsible for mapping each I/O vector to its corresponding
          * subfile (here, pointed to by '->' to the right of each I/O vector).
          */
+        /* clang-format on */
         for (size_t ioreq_idx = 0; ioreq_idx < ioreq_count; ioreq_idx++) {
             H5_flexible_const_ptr_t *io_bufs_ptr   = NULL;
             H5FD_mem_t              *io_types_ptr  = NULL;

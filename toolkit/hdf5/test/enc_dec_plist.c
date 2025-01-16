@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -14,7 +14,7 @@
  * Serial tests for encoding/decoding plists
  */
 
-#include "h5test.h"
+#include "testhdf5.h"
 #include "H5ACprivate.h"
 #include "H5Pprivate.h"
 
@@ -190,6 +190,9 @@ main(void)
             snprintf(msg, sizeof(msg),
                      "Testing ENCODE/DECODE with file version bounds: (%s, %s):", low_string, high_string);
             puts(msg);
+
+            if (VERBOSE_MED)
+                printf("Encode/Decode DCPLs\n");
 
             /******* ENCODE/DECODE DCPLS *****/
             TESTING("Default DCPL Encoding/Decoding");

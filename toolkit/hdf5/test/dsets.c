@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -20,7 +20,7 @@
 
 #define H5Z_FRIEND /*suppress error about including H5Zpkg      */
 
-#include "h5test.h"
+#include "testhdf5.h"
 #include "H5srcdir.h"
 
 #include "H5CXprivate.h" /* API Contexts                         */
@@ -990,16 +990,14 @@ test_compact_io(hid_t fapl)
 
             /* Verify the dataset's layout and fill message versions */
             if (fp->shared->low_bound == H5F_LIBVER_EARLIEST) {
-                if (dsetp->shared->layout.version != H5O_LAYOUT_VERSION_DEFAULT)
-                    TEST_ERROR;
-                if (dsetp->shared->dcpl_cache.fill.version != H5O_FILL_VERSION_2)
-                    TEST_ERROR;
+                VERIFY(dsetp->shared->layout.version, H5O_LAYOUT_VERSION_DEFAULT, "layout_ver_bounds");
+                VERIFY(dsetp->shared->dcpl_cache.fill.version, H5O_FILL_VERSION_2, "fill_ver_bounds");
             }
             else {
-                if (dsetp->shared->layout.version != H5O_layout_ver_bounds[fp->shared->low_bound])
-                    TEST_ERROR;
-                if (dsetp->shared->dcpl_cache.fill.version != H5O_fill_ver_bounds[fp->shared->low_bound])
-                    TEST_ERROR;
+                VERIFY(dsetp->shared->layout.version, H5O_layout_ver_bounds[fp->shared->low_bound],
+                       "layout_ver_bounds");
+                VERIFY(dsetp->shared->dcpl_cache.fill.version, H5O_fill_ver_bounds[fp->shared->low_bound],
+                       "fill_ver_bounds");
             }
 
             /* Close the dataset and delete from the file */
@@ -2057,7 +2055,7 @@ test_filter_internal(hid_t fid, const char *name, hid_t dcpl, int if_fletcher32,
 
     for (i = 0; i < size[0]; i++) {
         for (j = 0; j < size[1] / 2; j++) {
-            points[i][j] = (int)rand();
+            points[i][j] = (int)HDrandom();
         }
     }
     if (H5Dwrite(dataset, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, write_dxpl, points_data) < 0)
@@ -2184,7 +2182,7 @@ test_filter_internal(hid_t fid, const char *name, hid_t dcpl, int if_fletcher32,
 
     for (i = 0; i < (size_t)hs_size[0]; i++) {
         for (j = 0; j < (size_t)hs_size[1]; j++) {
-            points[(size_t)hs_offset[0] + i][(size_t)hs_offset[1] + j] = (int)rand();
+            points[(size_t)hs_offset[0] + i][(size_t)hs_offset[1] + j] = (int)HDrandom();
         }
     }
     if (H5Sselect_hyperslab(sid, H5S_SELECT_SET, hs_offset, NULL, hs_size, NULL) < 0)
@@ -3118,7 +3116,7 @@ test_onebyte_shuffle(hid_t file)
 
     for (i = 0; i < 10; i++)
         for (j = 0; j < 20; j++)
-            orig_data[i][j] = (unsigned char)rand();
+            orig_data[i][j] = (unsigned char)HDrandom();
 
     PASSED();
 
@@ -3234,7 +3232,7 @@ test_nbit_int(hid_t file)
     for (i = 0; i < (size_t)size[0]; i++)
         for (j = 0; j < (size_t)size[1]; j++) {
             power           = pow(2.0, (double)(precision - 1));
-            orig_data[i][j] = (int)(((long long)rand() % (long long)power) << offset);
+            orig_data[i][j] = (int)(((long long)HDrandom() % (long long)power) << offset);
 
             /* even-numbered values are negative */
             if ((i * size[1] + j + 1) % 2 == 0)
@@ -3321,7 +3319,7 @@ test_nbit_float(hid_t file)
      * dataset datatype (no precision loss during datatype conversion)
      */
     float  orig_data[2][5] = {{188384.0F, 19.103516F, -1.0831790e9F, -84.242188F, 5.2045898F},
-                              {-49140.0F, 2350.25F, -3.2110596e-1F, 6.4998865e-5F, -0.0F}};
+                             {-49140.0F, 2350.25F, -3.2110596e-1F, 6.4998865e-5F, -0.0F}};
     float  new_data[2][5];
     size_t precision, offset;
     size_t i, j;
@@ -3610,8 +3608,9 @@ test_nbit_array(hid_t file)
         for (j = 0; j < (size_t)size[1]; j++)
             for (m = 0; m < (size_t)adims[0]; m++)
                 for (n = 0; n < (size_t)adims[1]; n++) {
-                    power                 = pow(2.0, (double)precision);
-                    orig_data[i][j][m][n] = (unsigned int)(((long long)rand() % (long long)power) << offset);
+                    power = pow(2.0, (double)precision);
+                    orig_data[i][j][m][n] =
+                        (unsigned int)(((long long)HDrandom() % (long long)power) << offset);
                 } /* end for */
     PASSED();
 
@@ -3708,7 +3707,7 @@ test_nbit_compound(hid_t file)
     const hsize_t size[2]         = {2, 5};
     const hsize_t chunk_size[2]   = {2, 5};
     const float   float_val[2][5] = {{188384.0F, 19.103516F, -1.0831790e9F, -84.242188F, 5.2045898F},
-                                     {-49140.0F, 2350.25F, -3.2110596e-1F, 6.4998865e-5F, -0.0F}};
+                                   {-49140.0F, 2350.25F, -3.2110596e-1F, 6.4998865e-5F, -0.0F}};
     atomic        orig_data[2][5];
     atomic        new_data[2][5];
     unsigned int  i_mask, s_mask, c_mask;
@@ -3803,11 +3802,11 @@ test_nbit_compound(hid_t file)
     for (i = 0; i < (size_t)size[0]; i++)
         for (j = 0; j < (size_t)size[1]; j++) {
             power             = pow(2.0, (double)(precision[0] - 1));
-            orig_data[i][j].i = (int)(((long long)rand() % (long long)power) << offset[0]);
+            orig_data[i][j].i = (int)(((long long)HDrandom() % (long long)power) << offset[0]);
             power             = pow(2.0, (double)(precision[1] - 1));
-            orig_data[i][j].c = (char)(((long long)rand() % (long long)power) << offset[1]);
+            orig_data[i][j].c = (char)(((long long)HDrandom() % (long long)power) << offset[1]);
             power             = pow(2.0, (double)(precision[2] - 1));
-            orig_data[i][j].s = (short)(((long long)rand() % (long long)power) << offset[2]);
+            orig_data[i][j].s = (short)(((long long)HDrandom() % (long long)power) << offset[2]);
             orig_data[i][j].f = float_val[i][j];
 
             /* some even-numbered integer values are negative */
@@ -3935,7 +3934,7 @@ test_nbit_compound_2(hid_t file)
     const hsize_t size[2]         = {2, 5};
     const hsize_t chunk_size[2]   = {2, 5};
     const float   float_val[2][5] = {{188384.0F, 19.103516F, -1.0831790e9F, -84.242188F, 5.2045898F},
-                                     {-49140.0F, 2350.25F, -3.2110596e-1F, 6.4998865e-5F, -0.0F}};
+                                   {-49140.0F, 2350.25F, -3.2110596e-1F, 6.4998865e-5F, -0.0F}};
     complex       orig_data[2][5];
     complex       new_data[2][5];
     unsigned int  i_mask, s_mask, c_mask, b_mask;
@@ -4082,30 +4081,33 @@ test_nbit_compound_2(hid_t file)
     for (i = 0; i < (size_t)size[0]; i++)
         for (j = 0; j < (size_t)size[1]; j++) {
             power               = pow(2.0, (double)(precision[0] - 1));
-            orig_data[i][j].a.i = (int)(((long long)rand() % (long long)power) << offset[0]);
+            orig_data[i][j].a.i = (int)(((long long)HDrandom() % (long long)power) << offset[0]);
             power               = pow(2.0, (double)(precision[1] - 1));
-            orig_data[i][j].a.c = (char)(((long long)rand() % (long long)power) << offset[1]);
+            orig_data[i][j].a.c = (char)(((long long)HDrandom() % (long long)power) << offset[1]);
             power               = pow(2.0, (double)(precision[2] - 1));
-            orig_data[i][j].a.s = (short)(-(((long long)rand() % (long long)power) << offset[2]));
+            orig_data[i][j].a.s = (short)(-(((long long)HDrandom() % (long long)power) << offset[2]));
             orig_data[i][j].a.f = float_val[i][j];
 
             power             = pow(2.0, (double)precision[3]);
-            orig_data[i][j].v = (unsigned int)(((long long)rand() % (long long)power) << offset[3]);
+            orig_data[i][j].v = (unsigned int)(((long long)HDrandom() % (long long)power) << offset[3]);
 
             for (m = 0; m < (size_t)array_dims[0]; m++)
                 for (n = 0; n < (size_t)array_dims[1]; n++) {
                     power                   = pow(2.0, (double)(precision[4] - 1));
-                    orig_data[i][j].b[m][n] = (char)(((long long)rand() % (long long)power) << offset[4]);
+                    orig_data[i][j].b[m][n] = (char)(((long long)HDrandom() % (long long)power) << offset[4]);
                 } /* end for */
 
             for (m = 0; m < (size_t)array_dims[0]; m++)
                 for (n = 0; n < (size_t)array_dims[1]; n++) {
-                    power                     = pow(2.0, (double)(precision[0] - 1));
-                    orig_data[i][j].d[m][n].i = (int)(-(((long long)rand() % (long long)power) << offset[0]));
-                    power                     = pow(2.0, (double)(precision[1] - 1));
-                    orig_data[i][j].d[m][n].c = (char)(((long long)rand() % (long long)power) << offset[1]);
-                    power                     = pow(2.0, (double)(precision[2] - 1));
-                    orig_data[i][j].d[m][n].s = (short)(((long long)rand() % (long long)power) << offset[2]);
+                    power = pow(2.0, (double)(precision[0] - 1));
+                    orig_data[i][j].d[m][n].i =
+                        (int)(-(((long long)HDrandom() % (long long)power) << offset[0]));
+                    power = pow(2.0, (double)(precision[1] - 1));
+                    orig_data[i][j].d[m][n].c =
+                        (char)(((long long)HDrandom() % (long long)power) << offset[1]);
+                    power = pow(2.0, (double)(precision[2] - 1));
+                    orig_data[i][j].d[m][n].s =
+                        (short)(((long long)HDrandom() % (long long)power) << offset[2]);
                     orig_data[i][j].d[m][n].f = float_val[i][j];
                 } /* end for */
         }         /* end for */
@@ -4333,7 +4335,7 @@ test_nbit_compound_3(hid_t file)
     for (i = 0; i < (size_t)size[0]; i++) {
         power = pow(2.0, 17.0 - 1.0);
         memset(&orig_data[i], 0, sizeof(orig_data[i]));
-        orig_data[i].i = (int)(rand() % (long)power);
+        orig_data[i].i = (int)(HDrandom() % (long)power);
         strcpy(orig_data[i].str, "fixed-length C string");
         orig_data[i].vl_str = strdup("variable-length C string");
 
@@ -4518,7 +4520,7 @@ test_nbit_int_size(hid_t file)
     for (i = 0; i < DSET_DIM1; i++)
         for (j = 0; j < DSET_DIM2; j++) {
             power      = pow(2.0, (double)(precision - 1));
-            orig[i][j] = rand() % (int)power << offset;
+            orig[i][j] = HDrandom() % (int)power << offset;
         }
 
     /* Describe the dataspace. */
@@ -4726,7 +4728,7 @@ test_nbit_flt_size(hid_t file)
      */
     for (i = 0; i < DSET_DIM1; i++)
         for (j = 0; j < DSET_DIM2; j++)
-            orig[i][j] = (float)(rand() % 1234567) / 2;
+            orig[i][j] = (float)(HDrandom() % 1234567) / 2;
 
     /* Describe the dataspace. */
     dims[0] = DSET_DIM1;
@@ -4876,7 +4878,7 @@ test_scaleoffset_int(hid_t file)
     /* Initialize data */
     for (i = 0; i < (size_t)size[0]; i++)
         for (j = 0; j < (size_t)size[1]; j++) {
-            orig_data[i][j] = rand() % 10000;
+            orig_data[i][j] = HDrandom() % 10000;
 
             /* even-numbered values are negative */
             if ((i * size[1] + j + 1) % 2 == 0)
@@ -5017,7 +5019,7 @@ test_scaleoffset_int_2(hid_t file)
 
     /* Initialize data of hyperslab */
     for (j = 0; j < (size_t)size[1]; j++) {
-        orig_data[0][j] = (int)rand() % 10000;
+        orig_data[0][j] = (int)HDrandom() % 10000;
 
         /* even-numbered values are negative */
         if ((j + 1) % 2 == 0)
@@ -5136,7 +5138,7 @@ test_scaleoffset_float(hid_t file)
     /* Initialize data */
     for (i = 0; i < (size_t)size[0]; i++)
         for (j = 0; j < (size_t)size[1]; j++) {
-            orig_data[i][j] = (float)(rand() % 100000) / 1000.0F;
+            orig_data[i][j] = (float)(HDrandom() % 100000) / 1000.0F;
 
             /* even-numbered values are negative */
             if ((i * size[1] + j + 1) % 2 == 0)
@@ -5279,7 +5281,7 @@ test_scaleoffset_float_2(hid_t file)
 
     /* Initialize data of hyperslab */
     for (j = 0; j < (size_t)size[1]; j++) {
-        orig_data[0][j] = (float)(rand() % 100000) / 1000.0F;
+        orig_data[0][j] = (float)(HDrandom() % 100000) / 1000.0F;
 
         /* even-numbered values are negative */
         if ((j + 1) % 2 == 0)
@@ -5397,7 +5399,7 @@ test_scaleoffset_double(hid_t file)
     /* Initialize data */
     for (i = 0; i < (size_t)size[0]; i++)
         for (j = 0; j < (size_t)size[1]; j++) {
-            orig_data[i][j] = (rand() % 10000000) / 10000000.0;
+            orig_data[i][j] = (HDrandom() % 10000000) / 10000000.0;
 
             /* even-numbered values are negative */
             if ((i * size[1] + j + 1) % 2 == 0)
@@ -5540,7 +5542,7 @@ test_scaleoffset_double_2(hid_t file)
 
     /* Initialize data of hyperslab */
     for (j = 0; j < (size_t)size[1]; j++) {
-        orig_data[0][j] = (rand() % 10000000) / 10000000.0;
+        orig_data[0][j] = (HDrandom() % 10000000) / 10000000.0;
 
         /* even-numbered values are negative */
         if ((j + 1) % 2 == 0)
@@ -7191,7 +7193,7 @@ test_copy_dcpl(hid_t file, hid_t fapl)
         TEST_ERROR;
     if (H5Premove_filter(dcpl, H5Z_FILTER_FLETCHER32) < 0)
         TEST_ERROR;
-    if (H5Pset_external(dcpl, COPY_DCPL_EXTFILE_NAME, 0, (hsize_t)(500 * 4096 * sizeof(int))) < 0)
+    if (H5Pset_external(dcpl, COPY_DCPL_EXTFILE_NAME, (off_t)0, (hsize_t)(500 * 4096 * sizeof(int))) < 0)
         TEST_ERROR;
 
     /* Create second dataset of contiguous layout with external storage */
@@ -8095,7 +8097,7 @@ make_random_offset_and_increment(long nelts, long *offsetp, long *incp)
 
     assert(0 < nelts);
 
-    *offsetp = rand() % nelts;
+    *offsetp = HDrandom() % nelts;
 
     /* `maxinc` is chosen so that for any `x` in [0, nelts - 1],
      * `x + maxinc` does not overflow a long.
@@ -8108,7 +8110,7 @@ make_random_offset_and_increment(long nelts, long *offsetp, long *incp)
      * number.
      */
     do {
-        inc = 1 + rand() % maxinc;
+        inc = 1 + HDrandom() % maxinc;
     } while (gcd(inc, nelts) != 1);
 
     *incp = inc;
@@ -12724,9 +12726,9 @@ test_bt2_hdr_fd(const char *driver_name, hid_t fapl)
     const hsize_t     maxshape[2]  = {H5S_UNLIMITED, H5S_UNLIMITED};
     const hsize_t     chunk[2]     = {8, 8};
     const int         buffer[8][8] = {{0, 1, 2, 3, 4, 5, 6, 7},         {8, 9, 10, 11, 12, 13, 14, 15},
-                                      {16, 17, 18, 19, 20, 21, 22, 23}, {24, 25, 26, 27, 28, 29, 30, 31},
-                                      {32, 33, 34, 35, 36, 37, 38, 39}, {40, 41, 42, 43, 44, 45, 46, 47},
-                                      {48, 49, 50, 51, 52, 53, 54, 55}, {56, 57, 58, 59, 60, 61, 62, 63}};
+                              {16, 17, 18, 19, 20, 21, 22, 23}, {24, 25, 26, 27, 28, 29, 30, 31},
+                              {32, 33, 34, 35, 36, 37, 38, 39}, {40, 41, 42, 43, 44, 45, 46, 47},
+                              {48, 49, 50, 51, 52, 53, 54, 55}, {56, 57, 58, 59, 60, 61, 62, 63}};
     H5O_info2_t       info;
 
     TESTING("Version 2 B-tree chunk index header flush dependencies handled correctly");
@@ -14985,8 +14987,7 @@ test_versionbounds(void)
             if (vdset > 0) /* dataset created successfully */
             {
                 /* Virtual dataset is only available starting in V110 */
-                if (high < H5F_LIBVER_V110)
-                    TEST_ERROR;
+                VERIFY(high >= H5F_LIBVER_V110, true, "virtual dataset");
 
                 if (H5Dclose(vdset) < 0)
                     TEST_ERROR;
@@ -15920,7 +15921,7 @@ main(void)
     contig_addr_vfd = (bool)(strcmp(driver_name, "split") != 0 && strcmp(driver_name, "multi") != 0);
 
     /* Set the random # seed */
-    srand((unsigned)time(NULL));
+    HDsrandom((unsigned)time(NULL));
 
     /* Initialize global arrays */
     /* points */
@@ -16168,7 +16169,8 @@ main(void)
         goto error;
     printf("All dataset tests passed.\n");
 #ifdef H5_HAVE_FILTER_SZIP
-    HDremove(NOENCODER_COPY_FILENAME);
+    if (GetTestCleanup())
+        HDremove(NOENCODER_COPY_FILENAME);
 #endif /* H5_HAVE_FILTER_SZIP */
     h5_cleanup(FILENAME, fapl);
 

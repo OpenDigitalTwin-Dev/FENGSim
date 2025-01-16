@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -468,7 +468,7 @@
  *     } H5L_info2_t;
  * \endcode
  *
- * <h4>H5Literate() and H5Lvisit() → H5Literate2() and H5Lvisit2()</h4>
+ * <h4>H5Literate() and H5Lvisit() → H5Literte2() and H5Lvisit2()</h4>
  * The callback used in these API calls used the old #H5L_info_t struct, which used
  * addresses instead of tokens. These callbacks were versioned in the C library and
  * now take modified #H5L_iterate2_t callbacks which use the new token-based info

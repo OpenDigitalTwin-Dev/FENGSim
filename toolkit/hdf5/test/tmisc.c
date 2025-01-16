@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -1196,19 +1196,11 @@ test_misc7(void)
     CHECK(tid, FAIL, "H5Tcreate");
 
     /* Attempt to commit an empty compound datatype */
-    H5E_BEGIN_TRY
-    {
-        ret = H5Tcommit2(fid, MISC7_TYPENAME1, tid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-    }
-    H5E_END_TRY
+    ret = H5Tcommit2(fid, MISC7_TYPENAME1, tid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
     VERIFY(ret, FAIL, "H5Tcommit2");
 
     /* Attempt to use empty compound datatype to create dataset */
-    H5E_BEGIN_TRY
-    {
-        did = H5Dcreate2(fid, MISC7_DSETNAME1, tid, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-    }
-    H5E_END_TRY
+    did = H5Dcreate2(fid, MISC7_DSETNAME1, tid, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
     VERIFY(ret, FAIL, "H5Dcreate2");
 
     /* Add a field to the compound datatype */
@@ -1236,19 +1228,11 @@ test_misc7(void)
     CHECK(tid, FAIL, "H5Tenum_create");
 
     /* Attempt to commit an empty enum datatype */
-    H5E_BEGIN_TRY
-    {
-        ret = H5Tcommit2(fid, MISC7_TYPENAME2, tid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-    }
-    H5E_END_TRY
+    ret = H5Tcommit2(fid, MISC7_TYPENAME2, tid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
     VERIFY(ret, FAIL, "H5Tcommit2");
 
     /* Attempt to use empty enum datatype to create dataset */
-    H5E_BEGIN_TRY
-    {
-        did = H5Dcreate2(fid, MISC7_DSETNAME2, tid, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
-    }
-    H5E_END_TRY
+    did = H5Dcreate2(fid, MISC7_DSETNAME2, tid, sid, H5P_DEFAULT, H5P_DEFAULT, H5P_DEFAULT);
     VERIFY(did, FAIL, "H5Dcreate2");
 
     /* Add a member to the enum datatype */
@@ -3837,11 +3821,7 @@ test_misc20(void)
     CHECK(dcpl, FAIL, "H5Pcreate");
 
     /* Try to use chunked storage for this dataset */
-    H5E_BEGIN_TRY
-    {
-        ret = H5Pset_chunk(dcpl, rank, big_dims);
-    }
-    H5E_END_TRY
+    ret = H5Pset_chunk(dcpl, rank, big_dims);
     VERIFY(ret, FAIL, "H5Pset_chunk");
 
     /* Verify that the storage for the dataset is the correct size and hasn't
@@ -6589,7 +6569,7 @@ test_misc39(void)
      * the object should have a reference count of 1 since the file
      * was just created.
      */
-    VERIFY(H5VL_OBJ_RC(file_vol_obj), 1, "checking reference count");
+    VERIFY(file_vol_obj->rc, 1, "checking reference count");
 
     /* Create a variable-length string type */
     str_type = H5Tcopy(H5T_C_S1);
@@ -6650,7 +6630,7 @@ test_misc39(void)
      * associate each attribute's datatype with the file's VOL object
      * and will have incremented the reference count by 5.
      */
-    VERIFY(H5VL_OBJ_RC(file_vol_obj), 6, "checking reference count");
+    VERIFY(file_vol_obj->rc, 6, "checking reference count");
 
     /* Increments file's VOL object reference count by 1 */
     ret = H5Awrite(attr_id1, str_type, buf);
@@ -6682,7 +6662,7 @@ test_misc39(void)
      * incrementing the reference count of the associated file's VOL
      * object.
      */
-    VERIFY(H5VL_OBJ_RC(file_vol_obj), 12, "checking reference count");
+    VERIFY(file_vol_obj->rc, 12, "checking reference count");
 
     ret = H5Aclose(attr_id1);
     CHECK(ret, FAIL, "H5Aclose");
@@ -6716,7 +6696,7 @@ test_misc39(void)
          * the object should have a reference count of 1 since the file
          * was just opened.
          */
-        VERIFY(H5VL_OBJ_RC(file_vol_obj), 1, "checking reference count");
+        VERIFY(file_vol_obj->rc, 1, "checking reference count");
 
         /* Increments file's VOL object reference count by 1 */
         attr_id1 = H5Aopen(file_id, "varstr_attribute", H5P_DEFAULT);
@@ -6737,7 +6717,7 @@ test_misc39(void)
          * the attributes will also have associated their datatypes with
          * the file's VOL object.
          */
-        VERIFY(H5VL_OBJ_RC(file_vol_obj), 6, "checking reference count");
+        VERIFY(file_vol_obj->rc, 6, "checking reference count");
 
         /* Increments file's VOL object reference count by 1 */
         ret = H5Aread(attr_id1, str_type, rbuf);
@@ -6769,7 +6749,7 @@ test_misc39(void)
          * incrementing the reference count of the associated file's VOL
          * object.
          */
-        VERIFY(H5VL_OBJ_RC(file_vol_obj), 12, "checking reference count");
+        VERIFY(file_vol_obj->rc, 12, "checking reference count");
 
         ret = H5Treclaim(str_type, space_id, H5P_DEFAULT, rbuf);
         ret = H5Treclaim(array_type, space_id, H5P_DEFAULT, arr_rbuf);
@@ -6868,7 +6848,7 @@ test_misc40(void)
     CHECK(ret, FAIL, "H5Fclose");
 
     /* Re-open the file */
-    fid = H5Fopen(MISC25C_FILE, H5F_ACC_RDWR, fapl);
+    fid = H5Fopen(MISC25C_FILE, H5F_ACC_RDWR, H5P_DEFAULT);
     CHECK(fid, H5I_INVALID_HID, "H5Fopen");
 
     /* Set the compact/dense value high, to see if we can trick the
@@ -7125,7 +7105,7 @@ test_misc41(void)
 **
 ****************************************************************/
 void
-test_misc(const void H5_ATTR_UNUSED *params)
+test_misc(void)
 {
     bool default_driver = h5_using_default_driver(NULL);
 
@@ -7208,54 +7188,52 @@ test_misc(const void H5_ATTR_UNUSED *params)
  *-------------------------------------------------------------------------
  */
 void
-cleanup_misc(void H5_ATTR_UNUSED *params)
+cleanup_misc(void)
 {
-    if (GetTestCleanup()) {
-        H5E_BEGIN_TRY
-        {
-            H5Fdelete(MISC1_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC2_FILE_1, H5P_DEFAULT);
-            H5Fdelete(MISC2_FILE_2, H5P_DEFAULT);
-            H5Fdelete(MISC3_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC4_FILE_1, H5P_DEFAULT);
-            H5Fdelete(MISC4_FILE_2, H5P_DEFAULT);
-            H5Fdelete(MISC5_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC6_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC7_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC8_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC9_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC10_FILE_NEW, H5P_DEFAULT);
-            H5Fdelete(MISC11_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC12_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC13_FILE_1, H5P_DEFAULT);
-            H5Fdelete(MISC13_FILE_2, H5P_DEFAULT);
-            H5Fdelete(MISC14_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC15_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC16_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC17_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC18_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC19_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC20_FILE, H5P_DEFAULT);
+    H5E_BEGIN_TRY
+    {
+        H5Fdelete(MISC1_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC2_FILE_1, H5P_DEFAULT);
+        H5Fdelete(MISC2_FILE_2, H5P_DEFAULT);
+        H5Fdelete(MISC3_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC4_FILE_1, H5P_DEFAULT);
+        H5Fdelete(MISC4_FILE_2, H5P_DEFAULT);
+        H5Fdelete(MISC5_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC6_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC7_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC8_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC9_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC10_FILE_NEW, H5P_DEFAULT);
+        H5Fdelete(MISC11_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC12_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC13_FILE_1, H5P_DEFAULT);
+        H5Fdelete(MISC13_FILE_2, H5P_DEFAULT);
+        H5Fdelete(MISC14_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC15_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC16_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC17_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC18_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC19_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC20_FILE, H5P_DEFAULT);
 #ifdef H5_HAVE_FILTER_SZIP
-            H5Fdelete(MISC21_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC22_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC21_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC22_FILE, H5P_DEFAULT);
 #endif /* H5_HAVE_FILTER_SZIP */
-            H5Fdelete(MISC23_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC24_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC25A_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC25C_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC26_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC28_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC29_COPY_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC30_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC23_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC24_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC25A_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC25C_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC26_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC28_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC29_COPY_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC30_FILE, H5P_DEFAULT);
 #ifndef H5_NO_DEPRECATED_SYMBOLS
-            H5Fdelete(MISC31_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC31_FILE, H5P_DEFAULT);
 #endif /* H5_NO_DEPRECATED_SYMBOLS */
-            H5Fdelete(MISC38C_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC39_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC40_FILE, H5P_DEFAULT);
-            H5Fdelete(MISC41_FILE, H5P_DEFAULT);
-        }
-        H5E_END_TRY
+        H5Fdelete(MISC38C_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC39_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC40_FILE, H5P_DEFAULT);
+        H5Fdelete(MISC41_FILE, H5P_DEFAULT);
     }
+    H5E_END_TRY
 } /* end cleanup_misc() */

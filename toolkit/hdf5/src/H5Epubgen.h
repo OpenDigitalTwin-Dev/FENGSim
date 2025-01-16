@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -60,7 +60,6 @@ extern "C" {
 #define H5E_SOHM             (H5OPEN H5E_SOHM_g)
 #define H5E_STORAGE          (H5OPEN H5E_STORAGE_g)
 #define H5E_SYM              (H5OPEN H5E_SYM_g)
-#define H5E_THREADSAFE       (H5OPEN H5E_THREADSAFE_g)
 #define H5E_TST              (H5OPEN H5E_TST_g)
 #define H5E_VFL              (H5OPEN H5E_VFL_g)
 #define H5E_VOL              (H5OPEN H5E_VOL_g)
@@ -100,7 +99,6 @@ H5_DLLVAR hid_t H5E_SLIST_g;         /* Skip Lists */
 H5_DLLVAR hid_t H5E_SOHM_g;          /* Shared Object Header Messages */
 H5_DLLVAR hid_t H5E_STORAGE_g;       /* Data storage */
 H5_DLLVAR hid_t H5E_SYM_g;           /* Symbol table */
-H5_DLLVAR hid_t H5E_THREADSAFE_g;    /* Threadsafety */
 H5_DLLVAR hid_t H5E_TST_g;           /* Ternary Search Trees */
 H5_DLLVAR hid_t H5E_VFL_g;           /* Virtual File Layer */
 H5_DLLVAR hid_t H5E_VOL_g;           /* Virtual Object Layer */

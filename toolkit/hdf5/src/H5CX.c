@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -42,12 +42,15 @@
 
 #ifdef H5_HAVE_THREADSAFE
 /*
- * The per-thread API context.
+ * The per-thread API context. pthread_once() initializes a special
+ * key that will be used by all threads to create a stack specific to
+ * each thread individually. The association of contexts to threads will
+ * be handled by the pthread library.
  *
  * In order for this macro to work, H5CX_get_my_context() must be preceded
  * by "H5CX_node_t **ctx =".
  */
-#define H5CX_get_my_context() H5TS_get_api_ctx_ptr()
+#define H5CX_get_my_context() H5CX__get_context()
 #else /* H5_HAVE_THREADSAFE */
 /*
  * The current API context.
@@ -442,6 +445,9 @@ typedef struct H5CX_fapl_cache_t {
 /********************/
 /* Local Prototypes */
 /********************/
+#ifdef H5_HAVE_THREADSAFE
+static H5CX_node_t **H5CX__get_context(void);
+#endif /* H5_HAVE_THREADSAFE */
 static void         H5CX__push_common(H5CX_node_t *cnode);
 static H5CX_node_t *H5CX__pop_common(bool update_dxpl_props);
 
@@ -722,6 +728,55 @@ H5CX_term_package(void)
     FUNC_LEAVE_NOAPI(0)
 } /* end H5CX_term_package() */
 
+#ifdef H5_HAVE_THREADSAFE
+/*-------------------------------------------------------------------------
+ * Function:	H5CX__get_context
+ *
+ * Purpose:	Support function for H5CX_get_my_context() to initialize and
+ *              acquire per-thread API context stack.
+ *
+ * Return:	Success: Non-NULL pointer to head pointer of API context stack for thread
+ *		Failure: NULL
+ *
+ *-------------------------------------------------------------------------
+ */
+static H5CX_node_t **
+H5CX__get_context(void)
+{
+    H5CX_node_t **ctx = NULL;
+
+    FUNC_ENTER_PACKAGE_NOERR
+
+    ctx = (H5CX_node_t **)H5TS_get_thread_local_value(H5TS_apictx_key_g);
+
+    if (!ctx) {
+        /* No associated value with current thread - create one */
+#ifdef H5_HAVE_WIN_THREADS
+        /* Win32 has to use LocalAlloc to match the LocalFree in DllMain */
+        ctx = (H5CX_node_t **)LocalAlloc(LPTR, sizeof(H5CX_node_t *));
+#else
+        /* Use malloc here since this has to match the free in the
+         * destructor and we want to avoid the codestack there.
+         */
+        ctx = (H5CX_node_t **)malloc(sizeof(H5CX_node_t *));
+#endif /* H5_HAVE_WIN_THREADS */
+        assert(ctx);
+
+        /* Reset the thread-specific info */
+        *ctx = NULL;
+
+        /* (It's not necessary to release this in this API, it is
+         *      released by the "key destructor" set up in the H5TS
+         *      routines.  See calls to pthread_key_create() in H5TS.c -QAK)
+         */
+        H5TS_set_thread_local_value(H5TS_apictx_key_g, (void *)ctx);
+    } /* end if */
+
+    /* Set return value */
+    FUNC_LEAVE_NOAPI(ctx)
+} /* end H5CX__get_context() */
+#endif /* H5_HAVE_THREADSAFE */
+
 /*-------------------------------------------------------------------------
  * Function:    H5CX_pushed
  *
@@ -931,27 +986,33 @@ H5CX_retrieve_state(H5CX_state_t **api_state)
     } /* end if */
 
     /* Keep a copy of the VOL connector property, if there is one */
-    if ((*head)->ctx.vol_connector_prop_valid && (*head)->ctx.vol_connector_prop.connector) {
+    if ((*head)->ctx.vol_connector_prop_valid && (*head)->ctx.vol_connector_prop.connector_id > 0) {
         /* Get the connector property */
         H5MM_memcpy(&(*api_state)->vol_connector_prop, &(*head)->ctx.vol_connector_prop,
                     sizeof(H5VL_connector_prop_t));
 
         /* Check for actual VOL connector property */
-        if ((*api_state)->vol_connector_prop.connector) {
+        if ((*api_state)->vol_connector_prop.connector_id) {
             /* Copy connector info, if it exists */
             if ((*api_state)->vol_connector_prop.connector_info) {
-                void *new_connector_info = NULL; /* Copy of connector info */
+                H5VL_class_t *connector;                 /* Pointer to connector */
+                void         *new_connector_info = NULL; /* Copy of connector info */
+
+                /* Retrieve the connector for the ID */
+                if (NULL ==
+                    (connector = (H5VL_class_t *)H5I_object((*api_state)->vol_connector_prop.connector_id)))
+                    HGOTO_ERROR(H5E_CONTEXT, H5E_BADTYPE, FAIL, "not a VOL connector ID");
 
                 /* Allocate and copy connector info */
-                if (H5VL_copy_connector_info((*api_state)->vol_connector_prop.connector, &new_connector_info,
+                if (H5VL_copy_connector_info(connector, &new_connector_info,
                                              (*api_state)->vol_connector_prop.connector_info) < 0)
                     HGOTO_ERROR(H5E_CONTEXT, H5E_CANTCOPY, FAIL, "connector info copy failed");
                 (*api_state)->vol_connector_prop.connector_info = new_connector_info;
             } /* end if */
 
-            /* Increment the refcount on the connector */
-            if (H5VL_conn_inc_rc((*api_state)->vol_connector_prop.connector) < 0)
-                HGOTO_ERROR(H5E_CONTEXT, H5E_CANTINC, FAIL, "incrementing VOL connector refcount failed");
+            /* Increment the refcount on the connector ID */
+            if (H5I_inc_ref((*api_state)->vol_connector_prop.connector_id, false) < 0)
+                HGOTO_ERROR(H5E_CONTEXT, H5E_CANTINC, FAIL, "incrementing VOL connector ID failed");
         } /* end if */
     }     /* end if */
 
@@ -1022,7 +1083,7 @@ H5CX_restore_state(const H5CX_state_t *api_state)
         (*head)->ctx.vol_wrap_ctx_valid = true;
 
     /* Restore the VOL connector info */
-    if (api_state->vol_connector_prop.connector) {
+    if (api_state->vol_connector_prop.connector_id) {
         H5MM_memcpy(&(*head)->ctx.vol_connector_prop, &api_state->vol_connector_prop,
                     sizeof(H5VL_connector_prop_t));
         (*head)->ctx.vol_connector_prop_valid = true;
@@ -1081,17 +1142,16 @@ H5CX_free_state(H5CX_state_t *api_state)
             HGOTO_ERROR(H5E_CONTEXT, H5E_CANTDEC, FAIL, "can't decrement refcount on VOL wrapping context");
 
     /* Release the VOL connector property, if it was set */
-    if (api_state->vol_connector_prop.connector) {
+    if (api_state->vol_connector_prop.connector_id) {
         /* Clean up any VOL connector info */
         if (api_state->vol_connector_prop.connector_info)
-            if (H5VL_free_connector_info(api_state->vol_connector_prop.connector,
+            if (H5VL_free_connector_info(api_state->vol_connector_prop.connector_id,
                                          api_state->vol_connector_prop.connector_info) < 0)
                 HGOTO_ERROR(H5E_CONTEXT, H5E_CANTRELEASE, FAIL,
                             "unable to release VOL connector info object");
-
-        /* Decrement connector refcount */
-        if (H5VL_conn_dec_rc(api_state->vol_connector_prop.connector) < 0)
-            HDONE_ERROR(H5E_CONTEXT, H5E_CANTDEC, FAIL, "can't close VOL connector");
+        /* Decrement connector ID */
+        if (H5I_dec_ref(api_state->vol_connector_prop.connector_id) < 0)
+            HDONE_ERROR(H5E_CONTEXT, H5E_CANTDEC, FAIL, "can't close VOL connector ID");
     } /* end if */
 
     /* Free the state */
@@ -1685,6 +1745,7 @@ H5CX_get_ring(void)
 } /* end H5CX_get_ring() */
 
 #ifdef H5_HAVE_PARALLEL
+
 /*-------------------------------------------------------------------------
  * Function:    H5CX_get_coll_metadata_read
  *

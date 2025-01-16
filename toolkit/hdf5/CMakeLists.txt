@@ -159,7 +159,6 @@ set (HDF5_LIB_BASE              "hdf5")
 
 set (HDF5_LIB_CORE              "")
 set (HDF5_TEST_LIB_CORE         "_test")
-set (HDF5_TEST_PAR_LIB_CORE     "_testpar")
 set (HDF5_CPP_LIB_CORE          "_cpp")
 set (HDF5_HL_LIB_CORE           "_hl")
 set (HDF5_HL_CPP_LIB_CORE       "_hl_cpp")
@@ -175,7 +174,6 @@ set (HDF5_JAVA_JNI_LIB_CORE     "_java")
 
 set (HDF5_LIB_CORENAME              "${HDF5_LIB_BASE}")
 set (HDF5_TEST_LIB_CORENAME         "${HDF5_LIB_BASE}${HDF5_TEST_LIB_CORE}")
-set (HDF5_TEST_PAR_LIB_CORENAME     "${HDF5_LIB_BASE}${HDF5_TEST_PAR_LIB_CORE}")
 set (HDF5_CPP_LIB_CORENAME          "${HDF5_LIB_BASE}${HDF5_CPP_LIB_CORE}")
 set (HDF5_HL_LIB_CORENAME           "${HDF5_LIB_BASE}${HDF5_HL_LIB_CORE}")
 set (HDF5_HL_CPP_LIB_CORENAME       "${HDF5_LIB_BASE}${HDF5_HL_CPP_LIB_CORE}")
@@ -196,7 +194,6 @@ set (HDF5_JAVA_TEST_LIB_CORENAME    "jartest5")
 #-----------------------------------------------------------------------------
 set (HDF5_LIB_NAME              "${HDF5_EXTERNAL_LIB_PREFIX}${HDF5_LIB_BASE}${HDF5_LIB_INFIX}${HDF5_LIB_CORE}${HDF5_EXTERNAL_LIB_SUFFIX}")
 set (HDF5_TEST_LIB_NAME         "${HDF5_EXTERNAL_LIB_PREFIX}${HDF5_LIB_BASE}${HDF5_LIB_INFIX}${HDF5_TEST_LIB_CORE}${HDF5_EXTERNAL_LIB_SUFFIX}")
-set (HDF5_TEST_PAR_LIB_NAME     "${HDF5_EXTERNAL_LIB_PREFIX}${HDF5_LIB_BASE}${HDF5_LIB_INFIX}${HDF5_TEST_PAR_LIB_CORE}${HDF5_EXTERNAL_LIB_SUFFIX}")
 set (HDF5_CPP_LIB_NAME          "${HDF5_EXTERNAL_LIB_PREFIX}${HDF5_LIB_BASE}${HDF5_LIB_INFIX}${HDF5_CPP_LIB_CORE}${HDF5_EXTERNAL_LIB_SUFFIX}")
 set (HDF5_HL_LIB_NAME           "${HDF5_EXTERNAL_LIB_PREFIX}${HDF5_LIB_BASE}${HDF5_LIB_INFIX}${HDF5_HL_LIB_CORE}${HDF5_EXTERNAL_LIB_SUFFIX}")
 set (HDF5_HL_CPP_LIB_NAME       "${HDF5_EXTERNAL_LIB_PREFIX}${HDF5_LIB_BASE}${HDF5_LIB_INFIX}${HDF5_HL_CPP_LIB_CORE}${HDF5_EXTERNAL_LIB_SUFFIX}")
@@ -219,7 +216,6 @@ set (HDF5_JAVA_TEST_LIB_NAME    "${HDF5_EXTERNAL_LIB_PREFIX}${HDF5_JAVA_TEST_LIB
 #-----------------------------------------------------------------------------
 set (HDF5_LIB_TARGET              "${HDF5_LIB_CORENAME}-static")
 set (HDF5_TEST_LIB_TARGET         "${HDF5_TEST_LIB_CORENAME}-static")
-set (HDF5_TEST_PAR_LIB_TARGET     "${HDF5_TEST_PAR_LIB_CORENAME}-static")
 set (HDF5_CPP_LIB_TARGET          "${HDF5_CPP_LIB_CORENAME}-static")
 set (HDF5_HL_LIB_TARGET           "${HDF5_HL_LIB_CORENAME}-static")
 set (HDF5_HL_CPP_LIB_TARGET       "${HDF5_HL_CPP_LIB_CORENAME}-static")
@@ -236,7 +232,6 @@ set (HDF5_JAVA_HDF5_LIB_TARGET    "${HDF5_JAVA_HDF5_LIB_CORENAME}")
 set (HDF5_JAVA_TEST_LIB_TARGET    "${HDF5_JAVA_TEST_LIB_CORENAME}")
 set (HDF5_LIBSH_TARGET            "${HDF5_LIB_CORENAME}-shared")
 set (HDF5_TEST_LIBSH_TARGET       "${HDF5_TEST_LIB_CORENAME}-shared")
-set (HDF5_TEST_PAR_LIBSH_TARGET   "${HDF5_TEST_PAR_LIB_CORENAME}-shared")
 set (HDF5_CPP_LIBSH_TARGET        "${HDF5_CPP_LIB_CORENAME}-shared")
 set (HDF5_HL_LIBSH_TARGET         "${HDF5_HL_LIB_CORENAME}-shared")
 set (HDF5_HL_CPP_LIBSH_TARGET     "${HDF5_HL_CPP_LIB_CORENAME}-shared")
@@ -600,10 +595,8 @@ option (HDF5_ENABLE_COVERAGE "Enable code coverage for Libraries and Programs" O
 if (HDF5_ENABLE_COVERAGE)
   include (${HDF5_SOURCE_DIR}/config/sanitizer/code-coverage.cmake)
   if(CODE_COVERAGE AND CODE_COVERAGE_ADDED)
-    message(VERBOSE "Add instrumentation to all targets")
     add_code_coverage () # Adds instrumentation to all targets
   else ()
-    message(VERBOSE "Use --coverage option")
     set (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -O0 --coverage -fprofile-arcs -ftest-coverage")
     set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g --coverage -O0 -fprofile-arcs -ftest-coverage")
     if (CMAKE_C_COMPILER_ID STREQUAL "GNU")
@@ -775,9 +768,6 @@ if (HDF5_ENABLE_PARALLEL)
                Reading/Writing >2GB of data in a single parallel I/O operation will be disabled.")
       set (LARGE_PARALLEL_IO OFF)
     endif ()
-
-    # Used by Subfiling VFD feature
-    CHECK_SYMBOL_EXISTS (MPI_Comm_split_type "mpi.h" H5_HAVE_MPI_Comm_split_type)
   else ()
     message (FATAL_ERROR "Parallel libraries not found")
   endif ()
@@ -789,38 +779,6 @@ if (H5_HAVE_PARALLEL)
   if (MPI_C_LINK_FLAGS)
     set (CMAKE_EXE_LINKER_FLAGS "${MPI_C_LINK_FLAGS} ${CMAKE_EXE_LINKER_FLAGS}")
   endif ()
-endif ()
-
-# Determine if a threading package is available on this system
-option (HDF5_ENABLE_THREADS "Enable thread support" ON)
-set (THREADS_PREFER_PTHREAD_FLAG ON)
-find_package (Threads)
-if (Threads_FOUND)
-  set (H5_HAVE_THREADS 1)
-  set (CMAKE_REQUIRED_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
-
-  # Determine which threading package to use
-  # Comment out check for C11 threads for now, since it conflicts with the
-  # current --std=c99 compile flags at configuration time.  When we switch to
-  # --std=c11, this can be uncommented.
-  #CHECK_INCLUDE_FILE("threads.h" HAVE_THREADS_H)
-  if (WIN32)
-    # When Win32 is available, we use those threads
-    set (H5_HAVE_WIN_THREADS 1)
-  elseif (HAVE_THREADS_H)
-    # When C11 threads are available, those are the top choice
-    set (H5_HAVE_C11_THREADS 1)
-  elseif (CMAKE_USE_PTHREADS_INIT)
-    set (H5_HAVE_PTHREAD_H 1)
-  else ()
-    message (FATAL_ERROR " **** thread support requires C11 threads, Win32 threads or Pthreads **** ")
-  endif ()
-
-  # Check for compiler support for atomic variables
-  CHECK_INCLUDE_FILE("stdatomic.h" HAVE_STDATOMIC_H)
-  if (HAVE_STDATOMIC_H)
-    set (H5_HAVE_STDATOMIC_H 1)
-  endif()
 endif ()
 
 # Determine whether to build the HDF5 Subfiling VFD
@@ -837,29 +795,66 @@ if (HDF5_ENABLE_SUBFILING_VFD)
   if (NOT HDF5_ENABLE_PARALLEL)
     message (FATAL_ERROR "Subfiling VFD requires a parallel HDF5 build")
   else ()
-    # Make sure we found MPI_Comm_split_type previously
+    # Check for MPI_Comm_split_type
+    CHECK_SYMBOL_EXISTS (MPI_Comm_split_type "mpi.h" H5_HAVE_MPI_Comm_split_type)
     if (NOT H5_HAVE_MPI_Comm_split_type)
       message (FATAL_ERROR "Subfiling VFD requires MPI-3 support for MPI_Comm_split_type")
     endif ()
   endif ()
 
-  # Subfiling requires thread operations
-  if (NOT Threads_FOUND)
-    message (FATAL_ERROR "Subfiling requires thread operations support")
+  if (NOT DEFINED Threads_FOUND)
+    set (THREADS_PREFER_PTHREAD_FLAG ON)
+    find_package (Threads REQUIRED)
   endif ()
+
+  # For now, make sure we're using pthreads. Once Subfiling can be
+  # supported on Windows, we should allow Win32 threads as well
+  if (NOT ${Threads_FOUND} OR NOT ${CMAKE_USE_PTHREADS_INIT})
+    message (FATAL_ERROR "Subfiling requires pthreads for system thread library")
+  endif ()
+
+  CHECK_INCLUDE_FILE("stdatomic.h" HAVE_STDATOMIC_H)
+  if (NOT HAVE_STDATOMIC_H)
+    message (FATAL_ERROR "Subfiling VFD requires atomic operations support. C11 stdatomic.h NOT available.")
+  else()
+    set (H5_HAVE_STDATOMIC_H 1)
+  endif()
 
   set (H5_HAVE_SUBFILING_VFD 1)
   # IOC VFD is currently only built when subfiling is enabled
   set (H5_HAVE_IOC_VFD 1)
 
+  message (STATUS "Setting up to use Mercury components")
+  set (H5FD_SUBFILING_MERCURY_DIR ${H5FD_SUBFILING_DIR}/mercury/src/util)
+  set (HDF5_SRC_INCLUDE_DIRS
+      ${HDF5_SRC_INCLUDE_DIRS}
+      ${H5FD_SUBFILING_MERCURY_DIR}
+  )
+  set (CMAKE_REQUIRED_INCLUDES "${H5FD_SUBFILING_MERCURY_DIR}")
+
+  # Run some configure checks for the Mercury util files
+  set (CMAKE_EXTRA_INCLUDE_FILES pthread.h)
+  set (CMAKE_REQUIRED_LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
+
+  check_type_size(PTHREAD_MUTEX_ADAPTIVE_NP PTHREAD_MUTEX_ADAPTIVE_NP_SIZE)
+  if (HAVE_PTHREAD_MUTEX_ADAPTIVE_NP_SIZE)
+    set (${HDF_PREFIX}_HAVE_PTHREAD_MUTEX_ADAPTIVE_NP 1)
+  endif ()
+
+  check_symbol_exists(pthread_condattr_setclock pthread.h
+    ${HDF_PREFIX}_HAVE_PTHREAD_CONDATTR_SETCLOCK)
+
+  unset (CMAKE_EXTRA_INCLUDE_FILES)
+  unset (CMAKE_REQUIRED_LIBRARIES)
   if(NOT H5_HAVE_SUBFILING_VFD EQUAL 1)
     set (HDF5_ENABLE_SUBFILING_VFD OFF CACHE BOOL "Build Parallel HDF5 Subfiling VFD" FORCE)
   endif()
 endif()
 
+#option (DEFAULT_API_VERSION "Enable v1.14 API (v16, v18, v110, v112, v114)" "v114")
+set (DEFAULT_API_VERSION "v114" CACHE STRING "Enable v1.14 API (v16, v18, v110, v112, v114)")
+set_property (CACHE DEFAULT_API_VERSION PROPERTY STRINGS v16 v18 v110 v112 v114)
 
-set (DEFAULT_API_VERSION "v118" CACHE STRING "Enable v1.16 API (v16, v18, v110, v112, v114, v116, v118)")
-set_property (CACHE DEFAULT_API_VERSION PROPERTY STRINGS v16 v18 v110 v112 v114 v116 v118)
 #-----------------------------------------------------------------------------
 # Option to use 1.6.x API
 #-----------------------------------------------------------------------------
@@ -895,28 +890,12 @@ endif ()
 #-----------------------------------------------------------------------------
 # Option to use 1.14.x API
 #-----------------------------------------------------------------------------
+if (NOT DEFAULT_API_VERSION)
+  set (DEFAULT_API_VERSION "v114")
+endif ()
 set (H5_USE_114_API_DEFAULT 0)
 if (DEFAULT_API_VERSION MATCHES "v114")
   set (H5_USE_114_API_DEFAULT 1)
-endif ()
-
-#-----------------------------------------------------------------------------
-# Option to use 1.16.x API
-#-----------------------------------------------------------------------------
-set (H5_USE_116_API_DEFAULT 0)
-if (DEFAULT_API_VERSION MATCHES "v116")
-  set (H5_USE_116_API_DEFAULT 1)
-endif ()
-
-#-----------------------------------------------------------------------------
-# Option to use 1.18.x API
-#-----------------------------------------------------------------------------
-if (NOT DEFAULT_API_VERSION)
-  set (DEFAULT_API_VERSION "v118")
-endif ()
-set (H5_USE_118_API_DEFAULT 0)
-if (DEFAULT_API_VERSION MATCHES "v118")
-  set (H5_USE_118_API_DEFAULT 1)
 endif ()
 
 #-----------------------------------------------------------------------------
@@ -955,13 +934,6 @@ if (HDF5_ENABLE_THREADSAFE)
       message (FATAL_ERROR " **** thread-safety option not supported with static library **** ")
     endif ()
   endif ()
-  if (HDF_ENABLE_PARALLEL)
-    if (NOT ALLOW_UNSUPPORTED)
-      message (FATAL_ERROR " **** Parallel and thread-safety options are not supported, override with ALLOW_UNSUPPORTED option **** ")
-    else ()
-      message (VERBOSE " **** Allowing unsupported parallel and thread-safety options **** ")
-    endif ()
-  endif ()
   if (HDF5_BUILD_FORTRAN)
     if (NOT ALLOW_UNSUPPORTED)
       message (FATAL_ERROR " **** Fortran and thread-safety options are not supported, override with ALLOW_UNSUPPORTED option **** ")
@@ -983,13 +955,19 @@ if (HDF5_ENABLE_THREADSAFE)
       message (VERBOSE " **** Allowing unsupported HL and thread-safety options **** ")
     endif ()
   endif ()
-
-  # Check for threading package
-  if (NOT Threads_FOUND)
-    message (FATAL_ERROR " **** thread-safety option requires a threading package and none was found **** ")
+  if (WIN32)
+    # When Win32 is available, we use those threads
+    set (H5_HAVE_WIN_THREADS 1)
+  else ()
+    if (NOT H5_HAVE_PTHREAD_H)
+      message (FATAL_ERROR " **** thread-safe option requires Win32 threads or Pthreads **** ")
+    endif ()
   endif ()
-
-  set (H5_HAVE_THREADSAFE 1)
+  set (THREADS_PREFER_PTHREAD_FLAG ON)
+  find_package (Threads REQUIRED)
+  if (Threads_FOUND)
+    set (H5_HAVE_THREADSAFE 1)
+  endif ()
 endif ()
 
 #-----------------------------------------------------------------------------

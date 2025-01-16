@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -126,7 +126,7 @@ H5Tcommit1(hid_t loc_id, const char *name, hid_t type_id)
         HGOTO_ERROR(H5E_DATATYPE, H5E_CANTINIT, FAIL, "unable to commit datatype");
 
     /* Set up VOL object */
-    if (NULL == (new_obj = H5VL_create_object(data, H5VL_OBJ_CONNECTOR(vol_obj))))
+    if (NULL == (new_obj = H5VL_create_object(data, vol_obj->connector)))
         HGOTO_ERROR(H5E_DATATYPE, H5E_CANTALLOC, FAIL, "can't create VOL object for committed datatype");
 
     /* Set the committed type object to the VOL connector pointer in the H5T_t struct */
@@ -176,7 +176,7 @@ H5Topen1(hid_t loc_id, const char *name)
         HGOTO_ERROR(H5E_DATATYPE, H5E_CANTOPENOBJ, H5I_INVALID_HID, "unable to open named datatype");
 
     /* Register the type and return the ID */
-    if ((ret_value = H5VL_register(H5I_DATATYPE, dt, H5VL_OBJ_CONNECTOR(vol_obj), true)) < 0)
+    if ((ret_value = H5VL_register(H5I_DATATYPE, dt, vol_obj->connector, true)) < 0)
         HGOTO_ERROR(H5E_DATATYPE, H5E_CANTREGISTER, H5I_INVALID_HID, "unable to register named datatype");
 
 done:

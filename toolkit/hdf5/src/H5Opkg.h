@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -626,10 +626,10 @@ H5_DLL herr_t H5O__attr_count_real(H5F_t *f, H5O_t *oh, hsize_t *nattrs);
  * Object header, Attribute/Fill value/Filter pipeline messages
  */
 /* Layout/Datatype/Dataspace arrays of versions are in H5Dpkg.h, H5Tpkg.h and H5Spkg.h */
-H5_DLLVAR const unsigned H5O_obj_ver_bounds[H5F_LIBVER_NBOUNDS + 1];
-H5_DLLVAR const unsigned H5O_attr_ver_bounds[H5F_LIBVER_NBOUNDS + 1];
-H5_DLLVAR const unsigned H5O_fill_ver_bounds[H5F_LIBVER_NBOUNDS + 1];
-H5_DLLVAR const unsigned H5O_pline_ver_bounds[H5F_LIBVER_NBOUNDS + 1];
+H5_DLLVAR const unsigned H5O_obj_ver_bounds[H5F_LIBVER_NBOUNDS];
+H5_DLLVAR const unsigned H5O_attr_ver_bounds[H5F_LIBVER_NBOUNDS];
+H5_DLLVAR const unsigned H5O_fill_ver_bounds[H5F_LIBVER_NBOUNDS];
+H5_DLLVAR const unsigned H5O_pline_ver_bounds[H5F_LIBVER_NBOUNDS];
 
 /* Testing functions */
 #ifdef H5O_TESTING

@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -206,7 +206,7 @@ test(fill_t fill_style, const double splits[], bool verbose, bool use_rdcc)
                 hs_start[0] = k % 2 ? (k / 2) : (hsize_t)((hssize_t)cur_size[0] - (hssize_t)(k / 2));
                 break;
             case FILL_RANDOM:
-                for (j = rand() % (int)cur_size[0]; had[j]; j = (j + 1) % (int)cur_size[0])
+                for (j = HDrand() % (int)cur_size[0]; had[j]; j = (j + 1) % (int)cur_size[0])
                     /*void*/;
                 hs_start[0] = (hsize_t)j;
                 had[j]      = 1;

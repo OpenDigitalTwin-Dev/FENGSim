@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -79,11 +79,11 @@
 /**
  * For minor interface/format changes
  */
-#define H5_VERS_MINOR 17
+#define H5_VERS_MINOR 14
 /**
  * For tweaks, bug-fixes, or development
  */
-#define H5_VERS_RELEASE 0
+#define H5_VERS_RELEASE 5
 /**
  * For pre-releases like \c snap0. Empty string for official releases.
  */
@@ -91,11 +91,11 @@
 /**
  * Short version string
  */
-#define H5_VERS_STR "1.17.0"
+#define H5_VERS_STR "1.14.5"
 /**
  * Full version string
  */
-#define H5_VERS_INFO "HDF5 library version: 1.17.0"
+#define H5_VERS_INFO "HDF5 library version: 1.14.5"
 
 #define H5check() H5check_version(H5_VERS_MAJOR, H5_VERS_MINOR, H5_VERS_RELEASE)
 
@@ -299,22 +299,6 @@ typedef long long ssize_t;
  * \internal Defined as a (minimum) 64-bit integer type.
  */
 typedef uint64_t hsize_t;
-
-/* off_t exists on Windows, but is always a 32-bit long, even on 64-bit Windows,
- * so on Windows we define HDoff_t to be int64_t, which is equivalent to __int64,
- * the type of the st_size field of the _stati64 struct.
- */
-#ifdef H5_HAVE_WIN32_API
-/**
- * Platform-independent offset
- */
-typedef int64_t HDoff_t;
-#else
-/**
- * Platform-independent offset
- */
-typedef off_t HDoff_t;
-#endif
 
 #ifdef H5_HAVE_PARALLEL
 #define HSIZE_AS_MPI_TYPE MPI_UINT64_T

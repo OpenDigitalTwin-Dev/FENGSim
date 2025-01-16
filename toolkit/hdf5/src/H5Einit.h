@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -168,10 +168,6 @@ if((H5E_STORAGE_g = H5I_register(H5I_ERROR_MSG, &H5E_STORAGE_msg_s, false)) < 0)
 /* H5E_SYM */
 assert(H5I_INVALID_HID == H5E_SYM_g);
 if((H5E_SYM_g = H5I_register(H5I_ERROR_MSG, &H5E_SYM_msg_s, false)) < 0)
-    HGOTO_ERROR(H5E_ERROR, H5E_CANTREGISTER, FAIL, "can't register error message");
-/* H5E_THREADSAFE */
-assert(H5I_INVALID_HID == H5E_THREADSAFE_g);
-if((H5E_THREADSAFE_g = H5I_register(H5I_ERROR_MSG, &H5E_THREADSAFE_msg_s, false)) < 0)
     HGOTO_ERROR(H5E_ERROR, H5E_CANTREGISTER, FAIL, "can't register error message");
 /* H5E_TST */
 assert(H5I_INVALID_HID == H5E_TST_g);

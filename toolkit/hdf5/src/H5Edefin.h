@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -53,13 +53,12 @@ hid_t H5E_SLIST_g          = H5I_INVALID_HID;      /* Skip Lists */
 hid_t H5E_SOHM_g           = H5I_INVALID_HID;      /* Shared Object Header Messages */
 hid_t H5E_STORAGE_g        = H5I_INVALID_HID;      /* Data storage */
 hid_t H5E_SYM_g            = H5I_INVALID_HID;      /* Symbol table */
-hid_t H5E_THREADSAFE_g     = H5I_INVALID_HID;      /* Threadsafety */
 hid_t H5E_TST_g            = H5I_INVALID_HID;      /* Ternary Search Trees */
 hid_t H5E_VFL_g            = H5I_INVALID_HID;      /* Virtual File Layer */
 hid_t H5E_VOL_g            = H5I_INVALID_HID;      /* Virtual Object Layer */
 
 /* Number of major error messages */
-#define H5E_NUM_MAJ_ERRORS 40
+#define H5E_NUM_MAJ_ERRORS 39
 
 /* Minor error IDs */
 

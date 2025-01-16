@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -3124,7 +3124,7 @@ H5D__virtual_refresh_source_dset(H5D_t **dset)
         HGOTO_ERROR(H5E_DATASET, H5E_CANTREMOVE, FAIL, "can't unregister source dataset ID");
     if (NULL == (*dset = (H5D_t *)H5VL_object_unwrap(vol_obj)))
         HGOTO_ERROR(H5E_DATASET, H5E_CANTGET, FAIL, "can't retrieve library object from VOL object");
-    H5VL_OBJ_DATA_RESET(vol_obj);
+    vol_obj->data = NULL;
 
 done:
     if (vol_obj && H5VL_free_object(vol_obj) < 0)

@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -73,7 +73,7 @@ static hid_t H5FD_HDFS_g = 0;
         unsigned long long donotshadowresult = 1;                                                            \
         unsigned           donotshadowindex  = 0;                                                            \
         for (donotshadowindex = 0;                                                                           \
-             donotshadowindex < (((bin_i) * HDFS_STATS_INTERVAL) + HDFS_STATS_START_POWER);                  \
+             donotshadowindex < (((bin_i)*HDFS_STATS_INTERVAL) + HDFS_STATS_START_POWER);                    \
              donotshadowindex++) {                                                                           \
             donotshadowresult *= HDFS_STATS_BASE;                                                            \
         }                                                                                                    \

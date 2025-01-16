@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -27,7 +27,7 @@
  * 1 to MAX_NINC).  Assumes integers i and ninc are in scope. */
 #define RAND_INC(id)                                                                                         \
     do {                                                                                                     \
-        ninc = (rand() % MAX_NINC) + 1;                                                                      \
+        ninc = (HDrand() % MAX_NINC) + 1;                                                                    \
                                                                                                              \
         for (i = 0; i < ninc; i++)                                                                           \
             if (H5Iinc_ref(ids[id]) != i + 2)                                                                \
@@ -89,7 +89,7 @@ main(void)
     h5_test_init();
     h5_fixname(FILENAME[0], H5P_DEFAULT, filename, sizeof filename);
 
-    srand((unsigned)time(NULL));
+    HDsrand((unsigned)time(NULL));
 
     TESTING("library shutdown with reference count > 1");
 

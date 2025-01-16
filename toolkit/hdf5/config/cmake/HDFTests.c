@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -64,21 +64,23 @@ SIMPLE_TEST(timezone = 0);
 
 #endif /* HAVE_TIMEZONE */
 
-#ifdef PTHREAD_BARRIER
+#ifdef SYSTEM_SCOPE_THREADS
+#include <stdlib.h>
 #include <pthread.h>
 
 int main(void)
 {
-    pthread_barrier_t barr;
+    pthread_attr_t attribute;
     int ret;
 
-    ret = pthread_barrier_init(&barr, NULL, 1);
+    pthread_attr_init(&attribute);
+    ret = pthread_attr_setscope(&attribute, PTHREAD_SCOPE_SYSTEM);
     if (ret == 0)
         return 0;
     return 1;
 }
 
-#endif /* PTHREAD_BARRIER */
+#endif /* SYSTEM_SCOPE_THREADS */
 
 #ifdef HAVE_SOCKLEN_T
 

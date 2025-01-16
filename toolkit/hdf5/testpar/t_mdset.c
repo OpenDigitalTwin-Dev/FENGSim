@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -30,9 +30,6 @@ static void write_attribute(hid_t, int, int);
 static int  read_attribute(hid_t, int, int);
 static int  check_value(DATATYPE *, DATATYPE *, int);
 static void get_slab(hsize_t[], hsize_t[], hsize_t[], hsize_t[], int);
-
-static void rr_obj_hdr_flush_confusion_writer(const void *params, MPI_Comm comm);
-static void rr_obj_hdr_flush_confusion_reader(const void *params, MPI_Comm comm);
 
 /*
  * The size value computed by this function is used extensively in
@@ -75,7 +72,7 @@ get_size(void)
  *
  */
 void
-zero_dim_dset(const void *params)
+zero_dim_dset(void)
 {
     int         mpi_size, mpi_rank;
     const char *filename;
@@ -98,7 +95,7 @@ zero_dim_dset(const void *params)
         return;
     }
 
-    filename = ((const H5Ptest_param_t *)params)->name;
+    filename = GetTestParameters();
 
     plist = create_faccess_plist(MPI_COMM_WORLD, MPI_INFO_NULL, facc_type);
     VRFY((plist >= 0), "create_faccess_plist succeeded");
@@ -144,7 +141,7 @@ zero_dim_dset(const void *params)
  * a slab of array to the file.
  */
 void
-multiple_dset_write(const void *params)
+multiple_dset_write(void)
 {
     int                    i, j, n, mpi_size, mpi_rank, size;
     hid_t                  iof, plist, dataset, memspace, filespace;
@@ -160,7 +157,7 @@ multiple_dset_write(const void *params)
     char                  *filename;
     int                    ndatasets;
 
-    pt        = params;
+    pt        = GetTestParameters();
     filename  = pt->name;
     ndatasets = pt->count;
 
@@ -238,7 +235,7 @@ multiple_dset_write(const void *params)
 /* Example of using PHDF5 to create, write, and read compact dataset.
  */
 void
-compact_dataset(const void *params)
+compact_dataset(void)
 {
     int         i, j, mpi_size, mpi_rank, size, err_num = 0;
     hid_t       iof, plist, dcpl, dxpl, dataset, filespace;
@@ -277,7 +274,7 @@ compact_dataset(const void *params)
     inme = malloc((size_t)size * (size_t)size * sizeof(double));
     VRFY((outme != NULL), "malloc succeeded for inme");
 
-    filename = ((const H5Ptest_param_t *)params)->name;
+    filename = GetTestParameters();
     VRFY((mpi_size <= size), "mpi_size <= size");
 
     plist = create_faccess_plist(MPI_COMM_WORLD, MPI_INFO_NULL, facc_type);
@@ -378,7 +375,7 @@ compact_dataset(const void *params)
  * of Null dataspace.
  */
 void
-null_dataset(const void *params)
+null_dataset(void)
 {
     int         mpi_size, mpi_rank;
     hid_t       iof, plist, dxpl, dataset, attr, sid;
@@ -406,7 +403,7 @@ null_dataset(const void *params)
         return;
     }
 
-    filename = ((const H5Ptest_param_t *)params)->name;
+    filename = GetTestParameters();
 
     plist = create_faccess_plist(MPI_COMM_WORLD, MPI_INFO_NULL, facc_type);
     iof   = H5Fcreate(filename, H5F_ACC_TRUNC, H5P_DEFAULT, plist);
@@ -495,7 +492,7 @@ null_dataset(const void *params)
  * the boundary of interest.
  */
 void
-big_dataset(const void *params)
+big_dataset(void)
 {
     int   mpi_size, mpi_rank;        /* MPI info */
     hid_t iof,                       /* File ID */
@@ -526,7 +523,7 @@ big_dataset(const void *params)
     /* Verify MPI_Offset can handle larger than 2GB sizes */
     VRFY((sizeof(MPI_Offset) > 4), "sizeof(MPI_Offset)>4");
 
-    filename = ((const H5Ptest_param_t *)params)->name;
+    filename = GetTestParameters();
 
     fapl = create_faccess_plist(MPI_COMM_WORLD, MPI_INFO_NULL, facc_type);
     VRFY((fapl >= 0), "create_faccess_plist succeeded");
@@ -637,7 +634,7 @@ big_dataset(const void *params)
  * default fill value of zeros to work correctly.
  */
 void
-dataset_fillvalue(const void *params)
+dataset_fillvalue(void)
 {
     int   mpi_size, mpi_rank;             /* MPI info */
     int   err_num;                        /* Number of errors */
@@ -675,7 +672,7 @@ dataset_fillvalue(const void *params)
         return;
     }
 
-    filename = ((const H5Ptest_param_t *)params)->name;
+    filename = GetTestParameters();
 
     /* Set the dataset dimension to be one row more than number of processes */
     /* and calculate the actual dataset size. */
@@ -891,17 +888,17 @@ dataset_fillvalue(const void *params)
 
 /* combined cngrpw and ingrpr tests because ingrpr reads file created by cngrpw. */
 void
-collective_group_write_independent_group_read(const void *params)
+collective_group_write_independent_group_read(void)
 {
-    collective_group_write(params);
-    independent_group_read(params);
+    collective_group_write();
+    independent_group_read();
 }
 
 /* Write multiple groups with a chunked dataset in each group collectively.
  * These groups and datasets are for testing independent read later.
  */
 void
-collective_group_write(const void *params)
+collective_group_write(void)
 {
     int                    mpi_rank, mpi_size, size;
     int                    i, j, m;
@@ -916,7 +913,7 @@ collective_group_write(const void *params)
     char                  *filename;
     int                    ngroups;
 
-    pt       = params;
+    pt       = GetTestParameters();
     filename = pt->name;
     ngroups  = pt->count;
 
@@ -1014,7 +1011,7 @@ collective_group_write(const void *params)
  * datasets independently.
  */
 void
-independent_group_read(const void *params)
+independent_group_read(void)
 {
     int                    mpi_rank, m;
     hid_t                  plist, fid;
@@ -1023,7 +1020,7 @@ independent_group_read(const void *params)
     int                    ngroups;
     herr_t                 ret;
 
-    pt       = params;
+    pt       = GetTestParameters();
     filename = pt->name;
     ngroups  = pt->count;
 
@@ -1142,7 +1139,7 @@ group_dataset_read(hid_t fid, int mpi_rank, int m)
  *
  */
 void
-multiple_group_write(const void *params)
+multiple_group_write(void)
 {
     int                    mpi_rank, mpi_size, size;
     int                    m;
@@ -1155,7 +1152,7 @@ multiple_group_write(const void *params)
     char                  *filename;
     int                    ngroups;
 
-    pt       = params;
+    pt       = GetTestParameters();
     filename = pt->name;
     ngroups  = pt->count;
 
@@ -1311,7 +1308,7 @@ create_group_recursive(hid_t memspace, hid_t filespace, hid_t gid, int counter)
  * every dataset in every group and check their correctness.
  */
 void
-multiple_group_read(const void *params)
+multiple_group_read(void)
 {
     int                    mpi_rank, mpi_size, error_num, size;
     int                    m;
@@ -1323,7 +1320,7 @@ multiple_group_read(const void *params)
     char                  *filename;
     int                    ngroups;
 
-    pt       = params;
+    pt       = GetTestParameters();
     filename = pt->name;
     ngroups  = pt->count;
 
@@ -1620,7 +1617,7 @@ get_slab(hsize_t chunk_origin[], hsize_t chunk_dims[], hsize_t count[], hsize_t 
 #define N 4
 
 void
-io_mode_confusion(const void *params)
+io_mode_confusion(void)
 {
     /*
      * HDF5 APIs definitions
@@ -1653,7 +1650,7 @@ io_mode_confusion(const void *params)
     const H5Ptest_param_t *pt;
     char                  *filename;
 
-    pt       = params;
+    pt       = GetTestParameters();
     filename = pt->name;
 
     MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
@@ -1897,10 +1894,10 @@ io_mode_confusion(const void *params)
 const char *dataset_name[NUM_DATA_SETS] = {"dataset_0", "dataset_1", "dataset_2", "dataset_3"};
 const char *att_name[NUM_DATA_SETS]     = {"attribute_0", "attribute_1", "attribute_2", "attribute_3"};
 const char *lg_att_name[NUM_DATA_SETS]  = {"large_attribute_0", "large_attribute_1", "large_attribute_2",
-                                           "large_attribute_3"};
+                                          "large_attribute_3"};
 
 void
-rr_obj_hdr_flush_confusion(const void *params)
+rr_obj_hdr_flush_confusion(void)
 {
     /* MPI variables */
     /* private communicator size and rank */
@@ -1949,9 +1946,9 @@ rr_obj_hdr_flush_confusion(const void *params)
      * step. When all steps are done, they inform readers to end.
      */
     if (is_reader)
-        rr_obj_hdr_flush_confusion_reader(params, comm);
+        rr_obj_hdr_flush_confusion_reader(comm);
     else
-        rr_obj_hdr_flush_confusion_writer(params, comm);
+        rr_obj_hdr_flush_confusion_writer(comm);
 
     MPI_Comm_free(&comm);
     if (verbose)
@@ -1961,8 +1958,8 @@ rr_obj_hdr_flush_confusion(const void *params)
 
 } /* rr_obj_hdr_flush_confusion() */
 
-static void
-rr_obj_hdr_flush_confusion_writer(const void *params, MPI_Comm comm)
+void
+rr_obj_hdr_flush_confusion_writer(MPI_Comm comm)
 {
     int     i;
     int     j;
@@ -2011,7 +2008,7 @@ rr_obj_hdr_flush_confusion_writer(const void *params, MPI_Comm comm)
      * setup test bed related variables:
      */
 
-    pt       = params;
+    pt       = (const H5Ptest_param_t *)GetTestParameters();
     filename = pt->name;
 
     MPI_Comm_rank(MPI_COMM_WORLD, &mpi_world_rank);
@@ -2342,8 +2339,8 @@ rr_obj_hdr_flush_confusion_writer(const void *params, MPI_Comm comm)
 
 } /* rr_obj_hdr_flush_confusion_writer() */
 
-static void
-rr_obj_hdr_flush_confusion_reader(const void *params, MPI_Comm comm)
+void
+rr_obj_hdr_flush_confusion_reader(MPI_Comm comm)
 {
     int     i;
     int     j;
@@ -2390,7 +2387,7 @@ rr_obj_hdr_flush_confusion_reader(const void *params, MPI_Comm comm)
      * setup test bed related variables:
      */
 
-    pt       = params;
+    pt       = (const H5Ptest_param_t *)GetTestParameters();
     filename = pt->name;
 
     MPI_Comm_rank(MPI_COMM_WORLD, &mpi_world_rank);
@@ -2705,7 +2702,7 @@ rr_obj_hdr_flush_confusion_reader(const void *params, MPI_Comm comm)
 #define EXTRA_ALIGN 100
 
 void
-chunk_align_bug_1(const void *params)
+chunk_align_bug_1(void)
 {
     int            mpi_rank;
     hid_t          file_id, dset_id, fapl_id, dcpl_id, space_id;
@@ -2729,7 +2726,7 @@ chunk_align_bug_1(const void *params)
         return;
     }
 
-    filename = ((const H5Ptest_param_t *)params)->name;
+    filename = (const char *)GetTestParameters();
 
     /* Create file without alignment */
     fapl_id = create_faccess_plist(MPI_COMM_WORLD, MPI_INFO_NULL, facc_type);

@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -645,14 +645,11 @@ DSetCreatPropList::setFletcher32() const
 ///             the total size is larger than the size of a dataset then the
 ///             dataset can be extended (provided the data space also allows
 ///             the extending).
-///\note        In 1.14.x and earlier, the offset parameter was of type off_t,
-///             which is a 32-bit signed long value on Windows, which limited
-///             the valid offset that can be set to 2 GiB.
-///
-///\version     1.16.0 \p offset parameter type changed to HDoff_t from off_t.
+///\note        On Windows, off_t is typically a 32-bit signed long value, which
+///             limits the valid offset that can be set to 2 GiB.
 //--------------------------------------------------------------------------
 void
-DSetCreatPropList::setExternal(const char *name, HDoff_t offset, hsize_t size) const
+DSetCreatPropList::setExternal(const char *name, off_t offset, hsize_t size) const
 {
     herr_t ret_value = H5Pset_external(id, name, offset, size);
     if (ret_value < 0) {
@@ -698,15 +695,11 @@ DSetCreatPropList::getExternalCount() const
 ///             external file name will not be returned.  If \a offset or
 ///             \a size are null pointers then the corresponding information
 ///             will not be returned.
-///\note        In 1.14.x and earlier, the offset parameter was of type off_t,
-///             which is a 32-bit signed long value on Windows, which limited
-///             the valid offset that can be returned to 2 GiB.
-///
-///\version     1.16.0 \p offset parameter type changed to HDoff_t from off_t.
+///\note        On Windows, off_t is typically a 32-bit signed long value, which
+///             limits the valid offset that can be returned to 2 GiB.
 //--------------------------------------------------------------------------
 void
-DSetCreatPropList::getExternal(unsigned idx, size_t name_size, char *name, HDoff_t &offset,
-                               hsize_t &size) const
+DSetCreatPropList::getExternal(unsigned idx, size_t name_size, char *name, off_t &offset, hsize_t &size) const
 {
     herr_t ret_value = H5Pget_external(id, idx, name_size, name, &offset, &size);
     if (ret_value < 0) {

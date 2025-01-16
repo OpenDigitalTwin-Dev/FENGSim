@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -119,7 +119,7 @@ main(void)
     contig_addr_vfd = (bool)(strcmp(driver_name, "split") != 0 && strcmp(driver_name, "multi") != 0);
 
     /* Initialize random number seed */
-    srand((unsigned)time(NULL));
+    HDsrandom((unsigned)time(NULL));
 
     h5_test_init();
     fapl = h5_fileaccess();
@@ -1839,7 +1839,7 @@ test_external(hid_t fapl, bool use_select_io)
     {
 
         char    name[256];   /*external file name        */
-        HDoff_t file_offset; /*external file offset        */
+        off_t   file_offset; /*external file offset        */
         hsize_t file_size;   /*sizeof external file segment    */
 
         if (H5Pget_external(dcpl, 0, sizeof(name), name, &file_offset, &file_size) < 0)
@@ -2316,7 +2316,7 @@ test_random_rank4(hid_t fapl, hid_t dcpl, hid_t dxpl, bool do_fillvalue, bool di
     } *wbuf = NULL; /* Write buffer */
     struct {
         hsize_t arr[RAND4_NITER + 1][4];
-    }       *dim_log  = NULL;  /* Log of dataset dimensions */
+    } *dim_log        = NULL;  /* Log of dataset dimensions */
     bool     zero_dim = false; /* Whether a dimension is 0 */
     bool     writing  = true;  /* Whether we're writing to the dset */
     unsigned scalar_iter;      /* Iteration to shrink dset to 1x1x1x1 */
@@ -2345,16 +2345,17 @@ test_random_rank4(hid_t fapl, hid_t dcpl, hid_t dxpl, bool do_fillvalue, bool di
 
     /* Generate random chunk dimensions, 2-4 */
     for (i = 0; i < 4; i++)
-        cdims[i] = (hsize_t)((rand() % 3) + 2);
+        cdims[i] = (hsize_t)((HDrandom() % 3) + 2);
 
     /* Pick iteration to shrink dataset to 1x1x1x1 */
-    scalar_iter = (unsigned)(rand() % RAND4_NITER);
+    scalar_iter = (unsigned)(HDrandom() % RAND4_NITER);
 
     /* Generate initial dataset size, 1-10, unless using fixed array index or
      * scalar_iter is 0 */
     for (i = 0; i < 4; i++) {
         dims[i] =
-            (hsize_t)(index_type != RANK4_INDEX_FARRAY ? (0 == scalar_iter ? 1 : ((rand() % 10) + 1)) : 10);
+            (hsize_t)(index_type != RANK4_INDEX_FARRAY ? (0 == scalar_iter ? 1 : ((HDrandom() % 10) + 1))
+                                                       : 10);
         dim_log->arr[0][i] = dims[i];
     } /* end for */
 
@@ -2388,7 +2389,7 @@ test_random_rank4(hid_t fapl, hid_t dcpl, hid_t dxpl, bool do_fillvalue, bool di
                 for (k = 0; k < dims[1]; k++)
                     for (l = 0; l < dims[2]; l++)
                         for (m = 0; m < dims[3]; m++)
-                            wbuf->arr[j][k][l][m] = rand();
+                            wbuf->arr[j][k][l][m] = HDrandom();
 
             /* Write data */
             if (H5Dwrite(dset, H5T_NATIVE_INT, mspace, H5S_ALL, dxpl, wbuf) < 0)
@@ -2400,8 +2401,8 @@ test_random_rank4(hid_t fapl, hid_t dcpl, hid_t dxpl, bool do_fillvalue, bool di
         zero_dim = false;
         for (j = 0; j < 4; j++) {
             old_dims[j] = dims[j];
-            if ((dims[j] = (hsize_t)(i == scalar_iter ? 1 : (rand() % 11))) == 0)
-                if ((dims[j] = (hsize_t)(rand() % 11)) == 0)
+            if ((dims[j] = (hsize_t)(i == scalar_iter ? 1 : (HDrandom() % 11))) == 0)
+                if ((dims[j] = (hsize_t)(HDrandom() % 11)) == 0)
                     zero_dim = true;
             dim_log->arr[i + 1][j] = dims[j];
         } /* end for */
@@ -2533,7 +2534,7 @@ test_random_rank4_vl(hid_t fapl, hid_t dcpl, hid_t dxpl, bool do_fillvalue, bool
     } *wbuf = NULL; /* Write buffer */
     struct {
         hsize_t arr[RAND4_NITER + 1][4];
-    }       *dim_log  = NULL;  /* Log of dataset dimensions */
+    } *dim_log        = NULL;  /* Log of dataset dimensions */
     bool     zero_dim = false; /* Whether a dimension is 0 */
     bool     writing  = true;  /* Whether we're writing to the dset */
     hvl_t    fill_value;       /* Fill value */
@@ -2591,16 +2592,17 @@ test_random_rank4_vl(hid_t fapl, hid_t dcpl, hid_t dxpl, bool do_fillvalue, bool
 
     /* Generate random chunk dimensions, 2-4 */
     for (i = 0; i < 4; i++)
-        cdims[i] = (hsize_t)((rand() % 3) + 2);
+        cdims[i] = (hsize_t)((HDrandom() % 3) + 2);
 
     /* Pick iteration to shrink dataset to 1x1x1x1 */
-    scalar_iter = (unsigned)(rand() % RAND4_NITER);
+    scalar_iter = (unsigned)(HDrandom() % RAND4_NITER);
 
     /* Generate initial dataset size, 1-10, unless using fixed array index or
      * scalar_iter is 0 */
     for (i = 0; i < 4; i++) {
         dims[i] =
-            (hsize_t)(index_type != RANK4_INDEX_FARRAY ? (0 == scalar_iter ? 1 : ((rand() % 10) + 1)) : 10);
+            (hsize_t)(index_type != RANK4_INDEX_FARRAY ? (0 == scalar_iter ? 1 : ((HDrandom() % 10) + 1))
+                                                       : 10);
         dim_log->arr[0][i] = dims[i];
     }
 
@@ -2647,8 +2649,8 @@ test_random_rank4_vl(hid_t fapl, hid_t dcpl, hid_t dxpl, bool do_fillvalue, bool
                 for (k = 0; k < dims[1]; k++)
                     for (l = 0; l < dims[2]; l++)
                         for (m = 0; m < dims[3]; m++) {
-                            ((int *)wbuf->arr[j][k][l][m].p)[0] = rand();
-                            ((int *)wbuf->arr[j][k][l][m].p)[1] = rand();
+                            ((int *)wbuf->arr[j][k][l][m].p)[0] = HDrandom();
+                            ((int *)wbuf->arr[j][k][l][m].p)[1] = HDrandom();
                         } /* end for */
 
             /* Write data */
@@ -2661,8 +2663,8 @@ test_random_rank4_vl(hid_t fapl, hid_t dcpl, hid_t dxpl, bool do_fillvalue, bool
         zero_dim = false;
         for (j = 0; j < 4; j++) {
             old_dims[j] = dims[j];
-            if ((dims[j] = (hsize_t)(i == scalar_iter ? 1 : (rand() % 11))) == 0)
-                if ((dims[j] = (hsize_t)(rand() % 11)) == 0)
+            if ((dims[j] = (hsize_t)(i == scalar_iter ? 1 : (HDrandom() % 11))) == 0)
+                if ((dims[j] = (hsize_t)(HDrandom() % 11)) == 0)
                     zero_dim = true;
             dim_log->arr[i + 1][j] = dims[j];
         }

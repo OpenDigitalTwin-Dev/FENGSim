@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -257,7 +257,6 @@ test_getters(void)
     htri_t is_registered = FAIL;
     hid_t  vol_id        = H5I_INVALID_HID;
     hid_t  vol_id_out    = H5I_INVALID_HID;
-    int    cmp_value; /* Comparison value */
 
     TESTING("VOL getters");
 
@@ -274,10 +273,7 @@ test_getters(void)
     /* Get the connector's ID by name */
     if ((vol_id_out = H5VLget_connector_id_by_name(NULL_VOL_CONNECTOR_NAME)) < 0)
         TEST_ERROR;
-    cmp_value = 0;
-    if (H5VLcmp_connector_cls(&cmp_value, vol_id, vol_id_out) < 0)
-        TEST_ERROR;
-    if (cmp_value)
+    if (vol_id != vol_id_out)
         FAIL_PUTS_ERROR("VOL connector IDs don't match");
     if (H5VLclose(vol_id_out) < 0)
         TEST_ERROR;
@@ -299,10 +295,7 @@ test_getters(void)
     /* Get the connector's ID by value */
     if ((vol_id_out = H5VLget_connector_id_by_value(NULL_VOL_CONNECTOR_VALUE)) < 0)
         TEST_ERROR;
-    cmp_value = 0;
-    if (H5VLcmp_connector_cls(&cmp_value, vol_id, vol_id_out) < 0)
-        TEST_ERROR;
-    if (cmp_value)
+    if (vol_id != vol_id_out)
         FAIL_PUTS_ERROR("VOL connector IDs don't match");
     if (H5VLclose(vol_id_out) < 0)
         TEST_ERROR;

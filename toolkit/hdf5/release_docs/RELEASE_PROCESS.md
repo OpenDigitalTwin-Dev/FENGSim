@@ -45,7 +45,7 @@ For more information on the HDF5 versioning and backward and forward compatibili
     - **See: Testing/Testing Systems(this is a page in confluence)**
 4. Update current compiler information for each platform in the PLATFORMS TESTED section of [RELEASE.txt][u1].
 5. Review the [RELEASE.txt][u1] for formatting and language to verify that it corresponds to guidelines found in **[Writing Notes in a RELEASE.txt(this is missing)]()** File.
-6. Review and update, if needed, the [README][u2] and [LICENSE][u3] files.
+6. Review and update, if needed, the [README][u2] and [COPYING][u3] files.
 7. Review and update all INSTALL_* files in [release_docs][u4], if needed.
     - [INSTALL][u5] should be general info and not require extensive changes
     - [INSTALL_Autotools.txt][u6] are the instructions for building under autotools.
@@ -182,36 +182,30 @@ For more information on the HDF5 versioning and backward and forward compatibili
 3. Run `bin/release` (similar to 8.2) and commit all the changed files.
 4. Select release build from workflow.
     - Choose the release branch
-    - Change ‘Release version tag’ name to 'hdf5_X.Y.Z'
+    - Change ‘Release version tag’ name to 'hdf5_X.Y.Z' 
     - Press "Run Workflow"
 5. Review the release files in Github
 6. Edit the Github Release and change status to Release
     - Change status from Pre-release to Release
-7. Select publish-release build from workflow.
-    - Choose the release branch
-    - Change ‘HDF5 Release version tag’ name to 'hdf5_X.Y.Z'
-    - Change 'HDF5 Release file name base' to 'hdf5-X.Y.Z'
-    - Change 'HDF5 target bucket directory' to 'vX_Y/vX_Y_Z'
-    - Press "Run Workflow"
 
-### 10. Add the contents of the RELEASE.txt file in the release code to the HISTORY-<branch> file in the **support** branch, just below the introductory lines at the top of the HISTORY file.
+### 10. Add the contents of the RELEASE.txt file in the release code to the HISTORY file in the **support** branch, just below the introductory lines at the top of the HISTORY file.
 
 ### 11. Conduct Release Retrospective (Release Manager)
 1. Schedule time and solicit comments from retrospective
 2. Identify issues and document them
 
-[u1]: https://github.com/HDFGroup/hdf5/blob/develop/release_docs/RELEASE.txt
-[u2]: https://github.com/HDFGroup/hdf5/blob/develop/README.md
-[u3]: https://github.com/HDFGroup/hdf5/blob/develop/LICENSE
-[u4]: https://github.com/HDFGroup/hdf5/blob/develop/release_docs
-[u5]: https://github.com/HDFGroup/hdf5/blob/develop/release_docs/INSTALL
-[u6]: https://github.com/HDFGroup/hdf5/blob/develop/release_docs/INSTALL_Autotools.txt
-[u7]: https://github.com/HDFGroup/hdf5/blob/develop/release_docs/INSTALL_CMake.txt
-[u8]: https://github.com/HDFGroup/hdf5/blob/develop/.github/workflows/release.yml
-[u9]: https://github.com/HDFGroup/hdf5/blob/develop/config/lt_vers.am
-[u10]: https://github.com/HDFGroup/hdf5/blob/develop/bin/h5vers
-[u11]: https://github.com/HDFGroup/hdf5/blob/develop/src/CMakeLists.txt
-[u12]: https://github.com/HDFGroup/hdf5/blob/develop/configure.ac
-[u13]: https://hdfgroup.github.io/hdf5/develop/api-compat-macros.html
-[u14]: https://github.com/HDFGroup/hdf5/releases/tag/snapshot-1.16
+[u1]: https://github.com/HDFGroup/hdf5/blob/hdf5_1_14/release_docs/RELEASE.txt
+[u2]: https://github.com/HDFGroup/hdf5/blob/hdf5_1_14/README.md
+[u3]: https://github.com/HDFGroup/hdf5/blob/hdf5_1_14/COPYING
+[u4]: https://github.com/HDFGroup/hdf5/blob/hdf5_1_14/release_docs
+[u5]: https://github.com/HDFGroup/hdf5/blob/hdf5_1_14/release_docs/INSTALL
+[u6]: https://github.com/HDFGroup/hdf5/blob/hdf5_1_14/release_docs/INSTALL_Autotools.txt
+[u7]: https://github.com/HDFGroup/hdf5/blob/hdf5_1_14/release_docs/INSTALL_CMake.txt
+[u8]: https://github.com/HDFGroup/hdf5/blob/hdf5_1_14/.github/workflows/release.yml
+[u9]: https://github.com/HDFGroup/hdf5/blob/hdf5_1_14/config/lt_vers.am
+[u10]: https://github.com/HDFGroup/hdf5/blob/hdf5_1_14/bin/h5vers
+[u11]: https://github.com/HDFGroup/hdf5/blob/hdf5_1_14/src/CMakeLists.txt
+[u12]: https://github.com/HDFGroup/hdf5/blob/hdf5_1_14/configure.ac
+[u13]: https://support.hdfgroup.org/releases/hdf5/v1_14/v1_14_5/documentation/doxygen/api-compat-macros.html
+[u14]: https://github.com/HDFGroup/hdf5/releases/tag/snapshot-1.14
 [u15]: https://github.com/HDFGroup/hdf5/releases/tag/snapshot

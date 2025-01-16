@@ -4,7 +4,7 @@
 #
 # This file is part of HDF5.  The full HDF5 copyright notice, including
 # terms governing use, modification, and redistribution, is contained in
-# the LICENSE file, which can be found at the root of the source code
+# the COPYING file, which can be found at the root of the source code
 # distribution tree, or in https://www.hdfgroup.org/licenses.
 # If you do not have access to either file, you may request a copy from
 # help@hdfgroup.org.
@@ -67,8 +67,6 @@ if (WIN32 AND NOT MINGW)
       set (${HDF_PREFIX}_HAVE_VISUAL_STUDIO 1)
     endif ()
   endif ()
-  message (TRACE "MSVC=${MSVC}")
-  message (TRACE "HAVE_VISUAL_STUDIO=${${HDF_PREFIX}_HAVE_VISUAL_STUDIO}")
 endif ()
 
 if (WINDOWS)
@@ -81,12 +79,13 @@ if (WINDOWS)
   endif ()
   if (NOT UNIX AND NOT CYGWIN)
     set (${HDF_PREFIX}_HAVE_GETCONSOLESCREENBUFFERINFO 1)
-    set (${HDF_PREFIX}_HAVE_TIMEZONE 1)
+    if (MSVC_VERSION GREATER_EQUAL 1900)
+      set (${HDF_PREFIX}_HAVE_TIMEZONE 1)
+    endif ()
     set (${HDF_PREFIX}_HAVE_GETTIMEOFDAY 1)
     set (${HDF_PREFIX}_HAVE_LIBWS2_32 1)
     set (${HDF_PREFIX}_HAVE_LIBWSOCK32 1)
   endif ()
-  message (TRACE "HAVE_TIMEZONE=${${HDF_PREFIX}_HAVE_TIMEZONE}")
 endif ()
 
 # ----------------------------------------------------------------------
@@ -414,6 +413,8 @@ CHECK_FUNCTION_EXISTS (getrusage         ${HDF_PREFIX}_HAVE_GETRUSAGE)
 
 CHECK_FUNCTION_EXISTS (pread             ${HDF_PREFIX}_HAVE_PREAD)
 CHECK_FUNCTION_EXISTS (pwrite            ${HDF_PREFIX}_HAVE_PWRITE)
+CHECK_FUNCTION_EXISTS (rand_r            ${HDF_PREFIX}_HAVE_RAND_R)
+CHECK_FUNCTION_EXISTS (random            ${HDF_PREFIX}_HAVE_RANDOM)
 
 CHECK_FUNCTION_EXISTS (strcasestr        ${HDF_PREFIX}_HAVE_STRCASESTR)
 CHECK_FUNCTION_EXISTS (strdup            ${HDF_PREFIX}_HAVE_STRDUP)
@@ -441,7 +442,7 @@ if (MINGW OR NOT WINDOWS)
   foreach (other_test
       HAVE_ATTRIBUTE
       HAVE_BUILTIN_EXPECT
-      PTHREAD_BARRIER
+      SYSTEM_SCOPE_THREADS
       HAVE_SOCKLEN_T
   )
     HDF_FUNCTION_TEST (${other_test})
@@ -584,6 +585,12 @@ if (MINGW OR NOT WINDOWS)
   endif ()
 endif ()
 
+# Check for clock_gettime() CLOCK_MONOTONIC_COARSE
+set (CMAKE_EXTRA_INCLUDE_FILES time.h)
+check_type_size(CLOCK_MONOTONIC_COARSE CLOCK_MONOTONIC_COARSE_SIZE)
+if (HAVE_CLOCK_MONOTONIC_COARSE_SIZE)
+  set (${HDF_PREFIX}_HAVE_CLOCK_MONOTONIC_COARSE 1)
+endif ()
 unset (CMAKE_EXTRA_INCLUDE_FILES)
 
 #-----------------------------------------------------------------------------

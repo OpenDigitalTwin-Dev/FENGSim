@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -1844,7 +1844,7 @@ dataset_list2(hid_t dset, const char H5_ATTR_UNUSED *name)
     size_t            cd_num;        /* filter client data counter */
     char              f_name[256];   /* filter/file name */
     char              s[64];         /* temporary string buffer */
-    HDoff_t           f_offset;      /* offset in external file */
+    off_t             f_offset;      /* offset in external file */
     hsize_t           f_size;        /* bytes used in external file */
     hsize_t           total, used;   /* total size or offset */
     int               ndims;         /* dimensionality */

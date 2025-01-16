@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -158,7 +158,7 @@ remove_records(hid_t fid, unsigned verbose, unsigned long nshrinks, unsigned lon
         symbol = choose_dataset();
 
         /* Shrink the dataset's dataspace */
-        remove_size = (hsize_t)rand() % MAX_REMOVE_SIZE + 1;
+        remove_size = (hsize_t)HDrandom() % MAX_REMOVE_SIZE + 1;
         if (remove_size > symbol->nrecords)
             symbol->nrecords = 0;
         else
@@ -297,7 +297,7 @@ main(int argc, char *argv[])
         HDgettimeofday(&t, NULL);
         random_seed = (unsigned)(t.tv_usec);
     } /* end if */
-    srand(random_seed);
+    HDsrandom(random_seed);
     /* ALWAYS emit the random seed for possible debugging */
     fprintf(stderr, "Using writer random seed: %u\n", random_seed);
 

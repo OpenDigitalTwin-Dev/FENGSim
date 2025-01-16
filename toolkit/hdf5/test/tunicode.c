@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -802,7 +802,7 @@ dump_string(const char *string)
  * that string.
  */
 void
-test_unicode(const void H5_ATTR_UNUSED *params)
+test_unicode(void)
 {
     char         test_string[MAX_STRING_LENGTH];
     unsigned int cur_pos = 0;   /* Current position in test_string */
@@ -815,14 +815,14 @@ test_unicode(const void H5_ATTR_UNUSED *params)
     MESSAGE(5, ("Testing UTF-8 Encoding\n"));
 
     /* Create a random string with length NUM_CHARS */
-    srand((unsigned)time(NULL));
+    HDsrandom((unsigned)time(NULL));
 
     memset(test_string, 0, sizeof(test_string));
     for (x = 0; x < NUM_CHARS; x++) {
         /* We need to avoid unprintable characters (codes 0-31) and the
          * . and / characters, since they aren't allowed in path names.
          */
-        unicode_point = (unsigned)(rand() % (MAX_CODE_POINT - 32)) + 32;
+        unicode_point = (unsigned)(HDrandom() % (MAX_CODE_POINT - 32)) + 32;
         if (unicode_point != 46 && unicode_point != 47)
             cur_pos = write_char(unicode_point, test_string, cur_pos);
     }
@@ -864,13 +864,11 @@ test_unicode(const void H5_ATTR_UNUSED *params)
  * Delete the file this test created.
  */
 void
-cleanup_unicode(void H5_ATTR_UNUSED *params)
+cleanup_unicode(void)
 {
-    if (GetTestCleanup()) {
-        H5E_BEGIN_TRY
-        {
-            H5Fdelete(FILENAME, H5P_DEFAULT);
-        }
-        H5E_END_TRY
+    H5E_BEGIN_TRY
+    {
+        H5Fdelete(FILENAME, H5P_DEFAULT);
     }
+    H5E_END_TRY
 }

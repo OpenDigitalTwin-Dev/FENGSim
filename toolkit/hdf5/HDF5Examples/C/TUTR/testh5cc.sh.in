@@ -5,7 +5,7 @@
 #
 # This file is part of HDF5.  The full HDF5 copyright notice, including
 # terms governing use, modification, and redistribution, is contained in
-# the LICENSE file, which can be found at the root of the source code
+# the COPYING file, which can be found at the root of the source code
 # distribution tree, or in https://www.hdfgroup.org/licenses.
 # If you do not have access to either file, you may request a copy from
 # help@hdfgroup.org.
@@ -43,8 +43,6 @@ H5_USE_18_API_DEFAULT=`grep '#define H5_USE_18_API_DEFAULT ' ../src/H5pubconf.h`
 H5_USE_110_API_DEFAULT=`grep '#define H5_USE_110_API_DEFAULT ' ../src/H5pubconf.h`
 H5_USE_112_API_DEFAULT=`grep '#define H5_USE_112_API_DEFAULT ' ../src/H5pubconf.h`
 H5_USE_114_API_DEFAULT=`grep '#define H5_USE_114_API_DEFAULT ' ../src/H5pubconf.h`
-H5_USE_116_API_DEFAULT=`grep '#define H5_USE_116_API_DEFAULT ' ../src/H5pubconf.h`
-H5_USE_118_API_DEFAULT=`grep '#define H5_USE_118_API_DEFAULT ' ../src/H5pubconf.h`
 
 # setup my machine information.
 myos=`uname -s`
@@ -62,8 +60,6 @@ v110main=${H5TOOL}_v110main.$suffix
 v110main_o=${H5TOOL}_v110main.o
 v112main=${H5TOOL}_v112main.$suffix
 v112main_o=${H5TOOL}_v112main.o
-v114main=${H5TOOL}_v114main.$suffix
-v114main_o=${H5TOOL}_v114main.o
 appmain=${H5TOOL}_appmain.$suffix
 appmain_o=${H5TOOL}_appmain.o
 prog1=${H5TOOL}_prog1.$suffix
@@ -79,7 +75,7 @@ applib=libapp${H5TOOL}.a
 # Don't use the wildcard form of *.h5 as it will wipe out even *.h5 generated
 # by other test programs. This will cause a racing condition error when
 # parallel make (e.g., gmake -j 4) is used.
-temp_SRC="$hdf5main $v16main $v18main $v110main $v112main $v114main $appmain $prog1 $prog2"
+temp_SRC="$hdf5main $v16main $v18main $v110main $v112main $appmain $prog1 $prog2"
 temp_OBJ=`echo $temp_SRC | sed -e "s/\.${suffix}/.o/g"`
 temp_FILES="a.out $applib"
 
@@ -482,10 +478,6 @@ elif [ -n "$H5_USE_112_API_DEFAULT" ]; then
     echo "H5_USE_112_API_DEFAULT is defined."
 elif [ -n "$H5_USE_114_API_DEFAULT" ]; then
     echo "H5_USE_114_API_DEFAULT is defined."
-elif [ -n "$H5_USE_116_API_DEFAULT" ]; then
-    echo "H5_USE_116_API_DEFAULT is defined."
-elif [ -n "$H5_USE_118_API_DEFAULT" ]; then
-    echo "H5_USE_118_API_DEFAULT is defined."
 else
     echo "No H5 API_DEFAULT is defined."
 fi
@@ -500,7 +492,6 @@ if [ -n "$H5_NO_DEPRECATED_SYMBOLS" ]; then
     TOOLTEST $v18main
     TOOLTEST $v110main
     TOOLTEST $v112main
-    TOOLTEST $v114main
 elif [ -n "$H5_USE_16_API_DEFAULT" ]; then
     echo "Testing HDF5  with 16_API_DEFAULT"
     TOOLTEST $v16main
@@ -519,34 +510,15 @@ elif [ -n "$H5_USE_112_API_DEFAULT" ]; then
     TOOLTEST -DH5_USE_18_API_DEFAULT $v18main
     TOOLTEST -DH5_USE_110_API_DEFAULT $v110main
     TOOLTEST $v112main
-elif [ -n "$H5_USE_114_API_DEFAULT" ]; then
+else
     echo "Testing HDF5  with 114_API_DEFAULT"
     TOOLTEST -DH5_USE_16_API_DEFAULT $v16main
     TOOLTEST -DH5_USE_18_API_DEFAULT $v18main
     TOOLTEST -DH5_USE_110_API_DEFAULT $v110main
     TOOLTEST -DH5_USE_112_API_DEFAULT $v112main
-    TOOLTEST $v114main
-elif [ -n "$H5_USE_116_API_DEFAULT" ]; then
-    echo "Testing HDF5  with 116_API_DEFAULT"
-    TOOLTEST -DH5_USE_16_API_DEFAULT $v16main
-    TOOLTEST -DH5_USE_18_API_DEFAULT $v18main
-    TOOLTEST -DH5_USE_110_API_DEFAULT $v110main
-    TOOLTEST -DH5_USE_112_API_DEFAULT $v112main
-    TOOLTEST -DH5_USE_114_API_DEFAULT $v114main
-    TOOLTEST $v116main
-else
-    echo "Testing HDF5  with 118_API_DEFAULT"
-    TOOLTEST -DH5_USE_16_API_DEFAULT $v16main
-    TOOLTEST -DH5_USE_18_API_DEFAULT $v18main
-    TOOLTEST -DH5_USE_110_API_DEFAULT $v110main
-    TOOLTEST -DH5_USE_112_API_DEFAULT $v112main
-    TOOLTEST -DH5_USE_114_API_DEFAULT $v114main
-    TOOLTEST -DH5_USE_116_API_DEFAULT $v116main
     TOOLTEST $v18main
     TOOLTEST $v110main
     TOOLTEST $v112main
-    TOOLTEST $v114main
-    TOOLTEST $v116main
 fi
 
 # Group 6: # HDF5 program that depends on input args.

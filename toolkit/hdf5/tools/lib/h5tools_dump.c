@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -3144,7 +3144,7 @@ h5tools_dump_dcpl(FILE *stream, const h5tool_format_t *info, h5tools_context_t *
     H5D_layout_t     stl      = H5D_LAYOUT_ERROR;
     size_t           ncols    = 80; /* available output width        */
     size_t           cd_nelmts;     /* filter client number of values */
-    HDoff_t          offset;        /* offset of external file     */
+    off_t            offset;        /* offset of external file     */
     char             f_name[256];   /* filter name */
     char             name[256];     /* external or virtual file name       */
     hsize_t          chsize[64];    /* chunk size in elements */

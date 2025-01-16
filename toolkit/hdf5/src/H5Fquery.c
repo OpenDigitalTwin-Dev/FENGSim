@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -372,8 +372,9 @@ H5F_get_fcpl(const H5F_t *f)
 /*-------------------------------------------------------------------------
  * Function: H5F_sizeof_addr
  *
- * Purpose:  Quick and dirty routine to retrieve the size of the file's size
- *           of addresses
+ * Purpose:  Quick and dirty routine to retrieve the size of the file's size_t
+ *           (Mainly added to stop non-file routines from poking about in the
+ *           H5F_t data structure)
  *
  * Return:   'sizeof_addr' on success/abort on failure (shouldn't fail)
  *-------------------------------------------------------------------------
@@ -393,8 +394,9 @@ H5F_sizeof_addr(const H5F_t *f)
 /*-------------------------------------------------------------------------
  * Function: H5F_sizeof_size
  *
- * Purpose:  Quick and dirty routine to retrieve the size of the file's size
- *           of sizes
+ * Purpose:  Quick and dirty routine to retrieve the size of the file's off_t
+ *           (Mainly added to stop non-file routines from poking about in the
+ *           H5F_t data structure)
  *
  * Return:   'sizeof_size' on success/abort on failure (shouldn't fail)
  *-------------------------------------------------------------------------
@@ -1279,6 +1281,26 @@ H5F_get_null_fsm_addr(const H5F_t *f)
 
     FUNC_LEAVE_NOAPI(f->shared->null_fsm_addr)
 } /* end H5F_get_null_fsm_addr() */
+
+/*-------------------------------------------------------------------------
+ * Function: H5F_get_vol_cls
+ *
+ * Purpose:  Get the VOL class for the file
+ *
+ * Return:   VOL class pointer for file, can't fail
+ *
+ *-------------------------------------------------------------------------
+ */
+const H5VL_class_t *
+H5F_get_vol_cls(const H5F_t *f)
+{
+    FUNC_ENTER_NOAPI_NOINIT_NOERR
+
+    assert(f);
+    assert(f->shared);
+
+    FUNC_LEAVE_NOAPI(f->shared->vol_cls)
+} /* end H5F_get_vol_cls */
 
 /*-------------------------------------------------------------------------
  * Function: H5F_get_vol_obj

@@ -4,7 +4,7 @@
 #
 # This file is part of HDF5.  The full HDF5 copyright notice, including
 # terms governing use, modification, and redistribution, is contained in
-# the LICENSE file, which can be found at the root of the source code
+# the COPYING file, which can be found at the root of the source code
 # distribution tree, or in https://www.hdfgroup.org/licenses.
 # If you do not have access to either file, you may request a copy from
 # help@hdfgroup.org.
@@ -659,7 +659,6 @@ endif ()
 add_test (NAME H5TEST-tcheck_version-release COMMAND ${CMAKE_CROSSCOMPILING_EMULATOR} $<TARGET_FILE:tcheck_version> "-tr")
 set_tests_properties (H5TEST-tcheck_version-release PROPERTIES
     WORKING_DIRECTORY ${HDF5_TEST_BINARY_DIR}/H5TEST
-    WILL_FAIL "true"
 )
 if ("H5TEST-tcheck_version-release" MATCHES "${HDF5_DISABLE_TESTS_REGEX}")
   set_tests_properties (H5TEST-tcheck_version-release PROPERTIES DISABLED true)

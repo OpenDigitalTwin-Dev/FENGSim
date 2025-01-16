@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -1887,7 +1887,7 @@ test_h5o_getinfo_visit(void)
 **
 ****************************************************************/
 void
-test_h5o(const void H5_ATTR_UNUSED *params)
+test_h5o(void)
 {
     /* Output message about test being performed */
     MESSAGE(5, ("Testing Objects\n"));
@@ -1920,16 +1920,14 @@ test_h5o(const void H5_ATTR_UNUSED *params)
  *-------------------------------------------------------------------------
  */
 void
-cleanup_h5o(void H5_ATTR_UNUSED *params)
+cleanup_h5o(void)
 {
-    if (GetTestCleanup()) {
-        char filename[1024];
+    char filename[1024];
 
-        H5E_BEGIN_TRY
-        {
-            h5_fixname(TEST_FILENAME, H5P_DEFAULT, filename, sizeof filename);
-            H5Fdelete(filename, H5P_DEFAULT);
-        }
-        H5E_END_TRY
+    H5E_BEGIN_TRY
+    {
+        h5_fixname(TEST_FILENAME, H5P_DEFAULT, filename, sizeof filename);
+        H5Fdelete(filename, H5P_DEFAULT);
     }
+    H5E_END_TRY
 }

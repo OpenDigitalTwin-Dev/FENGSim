@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -14,7 +14,7 @@
  * Purpose:    Tests selection IO for the dataset interface (H5D)
  */
 
-#include "h5test.h"
+#include "testhdf5.h"
 #include "H5srcdir.h"
 
 const char *FILENAME[] = {"select_io", /* 0 */
@@ -1165,8 +1165,9 @@ test_multi_dsets_no_bkg(hid_t fid, unsigned set_cache, unsigned chunked, unsigne
                  chunked ? "chunked" : "contig", dtrans ? "xform" : "noxform", mwbuf ? "mwbuf" : "nomwbuf");
 
         /* Create ith dataset */
-        if ((dset_dids[i] = H5Dcreate2(fid, dset_names[i], ((rand() % 2) ? H5T_NATIVE_LONG : H5T_NATIVE_INT),
-                                       file_sids[i], H5P_DEFAULT, dcpl, H5P_DEFAULT)) < 0)
+        if ((dset_dids[i] =
+                 H5Dcreate2(fid, dset_names[i], ((HDrandom() % 2) ? H5T_NATIVE_LONG : H5T_NATIVE_INT),
+                            file_sids[i], H5P_DEFAULT, dcpl, H5P_DEFAULT)) < 0)
             TEST_ERROR;
     }
 
@@ -1650,7 +1651,7 @@ test_multi_dsets_cmpd_with_bkg(hid_t fid, unsigned chunked, unsigned mwbuf)
             }
 
     /* Case c */
-    mm = rand() % (int)ndsets;
+    mm = HDrandom() % (int)ndsets;
     if (!mm)
         mm++;
 
@@ -2400,7 +2401,7 @@ test_multi_dsets_all(int niter, hid_t fid, unsigned chunked, unsigned mwbuf)
             if ((mem_sids[i] = H5Screate_simple(1, dims, NULL)) < 0)
                 TEST_ERROR;
 
-            mm = rand() % (int)ndsets;
+            mm = HDrandom() % (int)ndsets;
             if (mm == 0) {
                 dset_types[i] = DSET_WITH_NO_CONV;
                 snprintf(dset_names[i], sizeof(dset_names[i]), "multi_all_nconv_dset%d_%s_%s", i,
@@ -3214,7 +3215,7 @@ main(void)
     if ((fapl2 = H5Pcopy(fapl)) < 0)
         TEST_ERROR;
 
-    for (set_cache = false; set_cache <= true; set_cache++) {
+    for (set_cache = FALSE; set_cache <= TRUE; set_cache++) {
 
         /* Disable chunk caching on fapl2 */
         if (set_cache) {

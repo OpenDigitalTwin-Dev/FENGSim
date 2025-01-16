@@ -4,7 +4,7 @@
  *                                                                           *
  * This file is part of HDF5.  The full HDF5 copyright notice, including     *
  * terms governing use, modification, and redistribution, is contained in    *
- * the LICENSE file, which can be found at the root of the source code       *
+ * the COPYING file, which can be found at the root of the source code       *
  * distribution tree, or in https://www.hdfgroup.org/licenses.               *
  * If you do not have access to either file, you may request a copy from     *
  * help@hdfgroup.org.                                                        *
@@ -20,10 +20,17 @@
 
 #ifdef H5_HAVE_WIN32_API
 
-/* Win32 platform-independent definition for struct stat. For POSIX, see
- * H5private.h.
+/* off_t exists on Windows, but is always a 32-bit long, even on 64-bit Windows,
+ * so we define HDoff_t to be __int64, which is the type of the st_size field
+ * of the _stati64 struct and what is returned by _ftelli64().
+ */
+#define HDoff_t __int64
+
+/* __int64 is the correct type for the st_size field of the _stati64 struct.
+ * MSDN isn't very clear about this.
  */
 typedef struct _stati64 h5_stat_t;
+typedef __int64         h5_stat_size_t;
 
 #ifdef H5_HAVE_VISUAL_STUDIO
 struct timezone {
@@ -43,8 +50,20 @@ struct timezone {
 #define HDlstat(S, B)        _lstati64(S, B)
 #define HDmkdir(S, M)        _mkdir(S)
 
-/* We only support the standards conformant preprocessor */
+/* Note that with the traditional MSVC preprocessor, the variadic
+ * HDopen macro uses an MSVC-specific extension where the comma
+ * is dropped if nothing is passed to the ellipsis.
+ *
+ * MinGW and the newer, conforming MSVC preprocessor do not exhibit this
+ * behavior.
+ */
+#if (defined(_MSC_VER) && !defined(_MSVC_TRADITIONAL)) || defined(_MSVC_TRADITIONAL)
+/* Using the MSVC traditional preprocessor */
+#define HDopen(S, F, ...) Wopen(S, F, __VA_ARGS__)
+#else
+/* Using a standards conformant preprocessor */
 #define HDopen(S, F, ...) Wopen(S, F, ##__VA_ARGS__)
+#endif
 
 #define HDremove(S)           Wremove(S)
 #define HDsetenv(N, V, O)     Wsetenv(N, V, O)
