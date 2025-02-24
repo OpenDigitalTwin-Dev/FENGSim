@@ -33,7 +33,7 @@ using namespace Foam;
 
 int main(int argc, char *argv[])
 {
-    fileName path("/hmm/hmm2/hmm3");
+    fileName path("./test");
 
     mkDir(path);
 
