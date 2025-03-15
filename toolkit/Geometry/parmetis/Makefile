@@ -7,8 +7,8 @@ debug      = not-set
 openmp     = not-set
 shared     = not-set
 prefix     = ~/local
-gklib_path = ../NSM/extern/ALE/install/gk
-metis_path = ../NSM/extern/ALE/install/metis
+gklib_path = ../../NSM/extern/ALE/install/gk
+metis_path = ../../NSM/extern/ALE/install/metis
 
 
 # Basically proxies everything to the builddir cmake.
