@@ -33,14 +33,14 @@ To launch the Qt project for FENGSim:
 There exist various solvers designed for nonlinear solid mechanics, computational fluid dynamics, computational electrodynamics, differential algebraic equations, particle methods, numerical linear algebra, and probability and statistics. These solvers can be obtained from Git by following the provided instructions.
 
 ```
-cd FENGSim/toolkit/
-git clone https://github.com/OpenDigitalTwin-Dev/NSM.git
-git clone https://github.com/OpenDigitalTwin-Dev/CFD.git
-git clone https://github.com/OpenDigitalTwin-Dev/CEM.git
-git clone https://github.com/OpenDigitalTwin-Dev/DAE.git
-git clone https://github.com/OpenDigitalTwin-Dev/Particles.git
-git clone https://github.com/OpenDigitalTwin-Dev/NLA.git
-git clone https://github.com/OpenDigitalTwin-Dev/PS.git
+	cd FENGSim/toolkit/
+	git clone https://github.com/OpenDigitalTwin-Dev/NSM.git
+	git clone https://github.com/OpenDigitalTwin-Dev/CFD.git
+	git clone https://github.com/OpenDigitalTwin-Dev/CEM.git
+	git clone https://github.com/OpenDigitalTwin-Dev/DAE.git
+	git clone https://github.com/OpenDigitalTwin-Dev/Particles.git
+	git clone https://github.com/OpenDigitalTwin-Dev/NLA.git
+	git clone https://github.com/OpenDigitalTwin-Dev/PS.git
 ```
 
 
