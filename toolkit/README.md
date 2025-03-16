@@ -1,99 +1,13 @@
-vtk
-```
-	cd FENGSim/toolkit/vtk
-	./install.sh or ./uninstall.sh
-```
-oce
-```
-	cd FENGSim/toolkit/vtk
-	./install.sh
-	cd FENGSim/toolkit/oce
-	./install.sh or ./uninstall.sh
-```
-gmsh
-```
-	cd FENGSim/toolkit/vtk
-	./install.sh
-	cd FENGSim/toolkit/oce
-	./install.sh
-	cd FENGSim/toolkit/gmsh
-	./install.sh or ./uninstall.sh
-```
-triangle
-```
-	cd FENGSim/toolkit/triangle
-	./install.sh or ./uninstall.sh
-```
-tetgen
-```
-	cd FENGSim/toolkit/tetgen
-	./install.sh or ./uninstall.sh
-```
-slice2mesh
-```
-	cd FENGSim/toolkit/triangle
-	./install.sh
-	cd FENGSim/toolkit/tetgen
-	./install.sh
-	cd FENGSim/toolkit/slice2mesh
-	./install.sh or ./uninstall.sh
-```
-vcglib
-```
-	cd FENGSim/toolkit/vcglib
-	./install.sh or ./uninstall.sh
-```
-mmg
-```
-	cd FENGSim/toolkit/mmg
-	./install.sh or ./uninstall.sh
-```
-r3d
-```
-	cd FENGSim/toolkit/r3d
-	./install.sh or ./uninstall.sh
-```
-protobuf
-```
-	cd FENGSim/toolkit/protobuf
-	./install.sh or ./uninstall.sh
-```
-libarcus
-```
-	cd FENGSim/toolkit/protobuf
-	./install.sh
-	cd FENGSim/toolkit/libarcus
-	./install.sh or ./uninstall.sh
-```
-cura_engine
-```
-	cd FENGSim/toolkit/protobuf
-	./install.sh
-	cd FENGSim/toolkit/libarcus
-	./install.sh
-	cd FENGSim/toolkit/cura_engine
-	./install.sh or ./uninstall.sh
-```
-
-You can also download NSM, CFD, CEM, DAE, CM, NLA repositories from GitHub by cloning them.
-
-```
-cd FENGSim/toolkit/
-git clone https://github.com/OpenDigitalTwin-Dev/NSM.git
-
-cd FENGSim/toolkit/
-git clone https://github.com/OpenDigitalTwin-Dev/CFD.git
-
-cd FENGSim/toolkit/
-git clone https://github.com/OpenDigitalTwin-Dev/CEM.git
-
-cd FENGSim/toolkit/
-git clone https://github.com/OpenDigitalTwin-Dev/DAE.git
-
-cd FENGSim/toolkit/
-git clone https://github.com/OpenDigitalTwin-Dev/CM.git
-
-cd FENGSim/toolkit/
-git clone https://github.com/OpenDigitalTwin-Dev/NLA.git
-```
+1. vtk
+2. oce
+3. gmsh
+4. triangle
+5. tetgen
+6. slice2mesh
+7. vcglib
+8. mmg
+9. r3d
+10. protobuf
+11. libarcus
+12. cura_engine
 
