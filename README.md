@@ -6,7 +6,7 @@ The FENGSim project serves as a software development kit (SDK) for adaptive manu
 
 Moreover, FENGSim offers tools for managing library dependencies, package management, and continuous integration and continuous deployment (CICD) processes, which include compiling, code merging, version control, testing, and deployment. The project also features interfaces for the integration of machinery and sensors, covering drivers, communication, and control applications. Additionally, FENGSim includes a large language model (LLM) assistant, developed using open-source code and classical literature, to enhance user experience and support.
 
-To install FENGSim on Ubuntu 22.04:
+To install FENGSim on Ubuntu 24.04:
 
 ```
 	sudo apt install git
