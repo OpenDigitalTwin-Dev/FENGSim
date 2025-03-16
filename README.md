@@ -1,5 +1,5 @@
 <div align="center">
-<img decoding="async" src="image/Fengsim_logo_hi.png" height="120">
+<img decoding="async" src="image/Fengsim_logo_hi.png" height="200">
 </div>
 
 The FENGSim project serves as a software development kit (SDK) for adaptive manufacturing, integrating a variety of mathematical libraries such as computational geometry, computer algebra, numerical methods, numerical linear algebra, computer graphics, image processing, probability and statistics, optimization, and artificial intelligence. It also incorporates the CAX software framework along with practical examples. Central to the project are multilevel couplers tailored for intricate manufacturing applications. 
