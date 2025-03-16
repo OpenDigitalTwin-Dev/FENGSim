@@ -25,11 +25,6 @@ To launch the Qt project for FENGSim:
 <img decoding="async" src="/image/log/1.jpg" width="450">
 </div>
 
-<div align="center">
-<img decoding="async" src="/image/log/3.png" width="450">
-</div>
-
-
 There exist various solvers designed for nonlinear solid mechanics, computational fluid dynamics, computational electrodynamics, differential algebraic equations, particle methods, numerical linear algebra, and probability and statistics. These solvers can be obtained from Git by following the provided instructions.
 
 ```
@@ -42,6 +37,13 @@ There exist various solvers designed for nonlinear solid mechanics, computationa
 	git clone https://github.com/OpenDigitalTwin-Dev/NLA.git
 	git clone https://github.com/OpenDigitalTwin-Dev/PS.git
 ```
+
+Subsequently, all commands will be modified to utilize a text user interface (TUI).
+
+<div align="center">
+<img decoding="async" src="/image/log/3.png" width="450">
+</div>
+
 
 
 # Solutions
