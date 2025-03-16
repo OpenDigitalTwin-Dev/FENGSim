@@ -11,18 +11,18 @@ sudo apt -y install libopenmpi-dev
 sudo apt -y install p7zip-full dialog g++-10
 
 # qt install
-rm -rf $PWD/../toolkit/Geometry/qt/5.12.12
-rm -rf $PWD/../toolkit/Geometry/qt/icu
-rm -rf $PWD/../toolkit/Geometry/qt/qtcreator/bin
-rm -rf $PWD/../toolkit/Geometry/qt/qtcreator/lib
-rm -rf $PWD/../toolkit/Geometry/qt/qtcreator/libexec
-rm -rf $PWD/../toolkit/Geometry/qt/qtcreator/share
-7za x ../toolkit/Geometry/qt/5.12.12.7z -o/$PWD/../toolkit/Geometry/qt
-7za x ../toolkit/Geometry/qt/icu.7z -o/$PWD/../toolkit/Geometry/qt
-7za x ../toolkit/Geometry/qt/qtcreator/bin.7z -o/$PWD/../toolkit/Geometry/qt/qtcreator
-7za x ../toolkit/Geometry/qt/qtcreator/lib.7z -o/$PWD/../toolkit/Geometry/qt/qtcreator
-7za x ../toolkit/Geometry/qt/qtcreator/libexec.7z -o/$PWD/../toolkit/Geometry/qt/qtcreator
-7za x ../toolkit/Geometry/qt/qtcreator/share.7z -o/$PWD/../toolkit/Geometry/qt/qtcreator
+rm -rf $PWD/../toolkit/Tools/qt/5.12.12
+rm -rf $PWD/../toolkit/Tools/qt/icu
+rm -rf $PWD/../toolkit/Tools/qt/qtcreator/bin
+rm -rf $PWD/../toolkit/Tools/qt/qtcreator/lib
+rm -rf $PWD/../toolkit/Tools/qt/qtcreator/libexec
+rm -rf $PWD/../toolkit/Tools/qt/qtcreator/share
+7za x ../toolkit/Tools/qt/5.12.12.7z -o/$PWD/../toolkit/Tools/qt
+7za x ../toolkit/Tools/qt/icu.7z -o/$PWD/../toolkit/Tools/qt
+7za x ../toolkit/Tools/qt/qtcreator/bin.7z -o/$PWD/../toolkit/Tools/qt/qtcreator
+7za x ../toolkit/Tools/qt/qtcreator/lib.7z -o/$PWD/../toolkit/Tools/qt/qtcreator
+7za x ../toolkit/Tools/qt/qtcreator/libexec.7z -o/$PWD/../toolkit/Tools/qt/qtcreator
+7za x ../toolkit/Tools/qt/qtcreator/share.7z -o/$PWD/../toolkit/Tools/qt/qtcreator
 
 sudo apt -y install libxcb-xinerama0-dev
 sudo apt -y install libpcre2-dev
@@ -38,7 +38,7 @@ sudo apt -y install libgmp-dev
 sudo apt -y install libmpfr-dev
 sudo apt -y install libboost-all-dev
 
-sed -i 11c"<value type=\"QString\" key=\"QMakePath\">"$PWD/../toolkit/Geometry/qt/5.12.12/bin/qmake"</value>" $PWD/../toolkit/Geometry/qt/qtcreator/share/qtcreator/QtProject/qtcreator/qtversion.xml
+sed -i 11c"<value type=\"QString\" key=\"QMakePath\">"$PWD/../toolkit/Tools/qt/5.12.12/bin/qmake"</value>" $PWD/../toolkit/Tools/qt/qtcreator/share/qtcreator/QtProject/qtcreator/qtversion.xml
 
 # vtk install
 cd ../toolkit/Geometry/vtk
@@ -86,7 +86,7 @@ cmake ..
 make
 
 cd ../../../cli
-LD_LIBRARY_PATH=$PWD/../toolkit/Geometry/qt/icu/usr/local/lib
-LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/../toolkit/Geometry/qt/5.12.12/plugins
+LD_LIBRARY_PATH=$PWD/../toolkit/Tools/qt/icu/usr/local/lib
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/../toolkit/Tools/qt/5.12.12/plugins
 export LD_LIBRARY_PATH
-./../toolkit/Geometry/qt/qtcreator/bin/qtcreator ./../starter/FENGSim/FENGSim.pro
+./../toolkit/Tools/qt/qtcreator/bin/qtcreator ./../starter/FENGSim/FENGSim.pro
