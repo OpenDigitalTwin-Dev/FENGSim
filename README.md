@@ -12,13 +12,13 @@ To install FENGSim on Ubuntu 22.04:
 	sudo apt install git
 	git clone https://github.com/OpenDigitalTwin-Dev/FENGSim.git
 	cd FENGSim/cli
-	./install.sh or ./uninstall.sh
+	./install or ./uninstall
 ```
 To launch the Qt project for FENGSim:
 
 ```
 	cd FENGSim/cli
-	./qtcreator.sh
+	./qtcreator
 ```
 
 <div align="center">
@@ -28,6 +28,21 @@ To launch the Qt project for FENGSim:
 <div align="center">
 <img decoding="async" src="/image/log/3.png" width="450">
 </div>
+
+
+There exist various solvers designed for nonlinear solid mechanics, computational fluid dynamics, computational electrodynamics, differential algebraic equations, particle methods, numerical linear algebra, and probability and statistics. These solvers can be obtained from Git by following the provided instructions.
+
+```
+cd FENGSim/toolkit/
+git clone https://github.com/OpenDigitalTwin-Dev/NSM.git
+git clone https://github.com/OpenDigitalTwin-Dev/CFD.git
+git clone https://github.com/OpenDigitalTwin-Dev/CEM.git
+git clone https://github.com/OpenDigitalTwin-Dev/DAE.git
+git clone https://github.com/OpenDigitalTwin-Dev/Particles.git
+git clone https://github.com/OpenDigitalTwin-Dev/NLA.git
+git clone https://github.com/OpenDigitalTwin-Dev/PS.git
+```
+
 
 # Solutions
 
