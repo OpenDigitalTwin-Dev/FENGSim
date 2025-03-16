@@ -108,5 +108,5 @@ git clone https://github.com/OpenDigitalTwin-Dev/PS.git
 <img decoding="async" src="image/10.jpg" width="1800">
 </div>
 
-# [Logs](./log/logs.md)
+# [Docs](https://fengsim-docs.readthedocs.io)
 
