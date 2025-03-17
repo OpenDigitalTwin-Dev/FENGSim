@@ -2955,8 +2955,8 @@ void MainWindow::AMSetPathPlanningVisible()
 void MainWindow::AMSlices2Mesh()
 {
     QProcess *proc = new QProcess();
-    proc->setWorkingDirectory(meas_path+QString("/../../toolkit/install/slice2mesh_install/bin"));
-    std::cout << (meas_path+QString("/../../toolkit/install/slice2mesh_install/bin")).toStdString() << std::endl;
+    proc->setWorkingDirectory(meas_path+QString("/../../toolkit/Geometry/install/slice2mesh_install/bin"));
+    std::cout << (meas_path+QString("/../../toolkit/Geometry/install/slice2mesh_install/bin")).toStdString() << std::endl;
     std::cout << (QString("./slice2mesh_exec ")
                   +meas_path
                   +QString("/data/am/slices_meshing.cli ")
@@ -2969,7 +2969,7 @@ void MainWindow::AMSlices2Mesh()
 
     if (proc->waitForFinished(-1)) {
         MM.FileFormatMeshToVTK(meas_path
-                               +QString("/../../toolkit/install/slice2mesh_install/bin")
+                               +QString("/../../toolkit/Geometry/install/slice2mesh_install/bin")
                                +QString("/amslices2mesh.mesh"),
                                "./data/am/mesh.vtk");
 
@@ -2978,7 +2978,7 @@ void MainWindow::AMSlices2Mesh()
         //                               "/home/jiping/FENGSim/AM/Elasticity/conf/geo/thinwall.geo");
 
         MM.FileFormatMeshToGeo(meas_path
-                               +QString("/../../toolkit/install/slice2mesh_install/bin")
+                               +QString("/../../toolkit/Geometry/install/slice2mesh_install/bin")
                                +QString("/amslices2mesh.mesh"),
                                "./../AM/build/solver/conf/geo/thinwall.geo");
 
