@@ -1,7 +1,7 @@
 #!/bin/sh
 
 sudo apt update
-sudo apt -y install python3.10-dev
+sudo apt -y install python3.12-dev
 sudo apt -y install python3-sip-dev
 
 mkdir build
