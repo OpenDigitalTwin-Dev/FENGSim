@@ -1,0 +1,29 @@
+rm -rf FENGSim
+
+git clone https://github.com/OpenDigitalTwin-Dev/FENGSim.git
+
+cd FENGSim/toolkit
+
+git clone https://github.com/OpenDigitalTwin-Dev/NSM.git
+git clone https://github.com/OpenDigitalTwin-Dev/CFD.git
+git clone https://github.com/OpenDigitalTwin-Dev/CEM.git
+git clone https://github.com/OpenDigitalTwin-Dev/DAE.git
+git clone https://github.com/OpenDigitalTwin-Dev/NLA.git
+git clone https://github.com/OpenDigitalTwin-Dev/Particles.git
+git clone https://github.com/OpenDigitalTwin-Dev/PS.git
+
+cd ../starter
+git clone https://github.com/OpenDigitalTwin-Dev/AM.git
+
+cd ../../
+
+rm FENGSim.tar.gz
+
+echo "compression begin"
+echo "compression begin" > download_log.txt
+
+tar -zcf FENGSim.tar.gz FENGSim
+
+current_time=$(date)
+echo "compression end ${current_time}" > download_log.txt
+echo "compression end ${current_time}"
