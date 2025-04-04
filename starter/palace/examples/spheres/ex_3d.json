@@ -1,0 +1,64 @@
+{
+  "Problem":
+  {
+    "Type": "Electrostatic",
+    "Verbose": 2,
+    "Output": "postpro"
+  },
+  "Model":
+  {
+    "Mesh": "mesh/ex_3d.msh",
+    "L0": 1.0e-2  // cm
+  },
+  "Domains":
+  {
+    "Materials":
+    [
+      {
+        "Attributes": [16],
+        "Permittivity": 1.0
+      }
+    ],
+    "Postprocessing":
+    {
+    }
+  },
+  "Boundaries":
+  {
+    "Ground":
+    {
+	"Attributes": [13]
+    },
+    "ZeroCharge":
+    {
+	"Attributes": [15]
+    },
+    "Terminal":
+    [
+      {
+        "Index": 1,
+        "Attributes": [14]  // Sphere A
+      }
+    ],
+    "Postprocessing":  // Capacitance from charge instead of energy
+    {
+    }
+  },
+  "Solver":
+  {
+    "Order": 3,
+    "Device": "CPU",
+    "Electrostatic":
+    {
+      "Save": 2
+    },
+    "Linear":
+    {
+      "Type": "BoomerAMG",
+      "KSPType": "CG",
+      "Tol": 1.0e-8,
+      "MaxIts": 100
+    }
+  }
+}
+
