@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<problem>
+  <type>Electrostatic</type>
+  <verbose>2</verbose>
+  <output>postpro</output>
+</problem>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<quiz>
+  <maths>
+    <q1>
+      <question>8+7=?</question>
+      <options>10</options>
+      <options>11</options>
+      <options>12</options>
+      <options>15</options>
+      <answer>15</answer>
+    </q1>
+    <q2>
+      <question>20-6=?</question>
+      <options>1</options>
+      <options>2</options>
+      <options>3</options>
+      <options>14</options>
+      <answer>14</answer>
+    </q2>
+  </maths>
+</quiz>
