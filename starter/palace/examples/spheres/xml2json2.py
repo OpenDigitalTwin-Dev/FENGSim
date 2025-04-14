@@ -38,15 +38,16 @@ for child in root:
                             if child4.tag == 'Attributes' :
                                 array.append(int(child4.text))
                                 d3[child4.tag] = array
-                    if child3.tag == 'Ground' :
-                        d2[child3.tag] = d3
-                    if child3.tag == 'ZeroCharge' :
-                        d2[child3.tag] = d3
-                    if child3.tag == 'Terminal' :
-                        d3['Index'] = 1
-                        d4 = [d3]
-                        d2[child3.tag] = d4
-                d[child1.tag] = d2
+                                
+                        if child3.tag == 'Ground' :
+                            d2[child3.tag] = d3
+                        if child3.tag == 'ZeroCharge' :
+                            d2[child3.tag] = d3
+                        if child3.tag == 'Terminal' :
+                            d3['Index'] = 1
+                            d4 = [d3]
+                            d2[child3.tag] = d4
+                    d[child1.tag] = d2
     
 
 

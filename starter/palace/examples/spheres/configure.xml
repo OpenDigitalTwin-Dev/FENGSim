@@ -48,10 +48,10 @@
   <Electromagnetism>
     <Problem>Electrostatic</Problem>
     <Materials>
-      <domain>
+      <domain1>
         <Attributes>16</Attributes>
         <Permittivity>1</Permittivity>
-      </domain>
+      </domain1>
     </Materials>
     <Boundaries>
       <up>

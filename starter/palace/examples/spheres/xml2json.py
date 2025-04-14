@@ -18,12 +18,12 @@ with open("test2.xml") as xml_file:
 	# generate the object using json.dumps() 
 	# corresponding to json data
 	
-	json_data = json.dumps(data_dict)
+json_data = json.dumps(data_dict)
 	
 	# Write the json data to output 
 	# json file
-	with open("data2.json", "w") as json_file:
-		json_file.write(json_data)
-		# json_file.close()
+with open("data2.json", "w") as json_file:
+	json_file.write(json_data)
+        # json_file.close()
 
 # can also use tinyxml2 and jsoncpp
