@@ -14,8 +14,8 @@ XAUTH=/tmp/.docker.xauth
 
 sudo docker run --name test -it --privileged --network host \
     --shm-size=5G \
-    -w /workspace \
-    -v $HOME/FENGSim:/workspace \
+    -w /home/test \
+    -v $HOME/FENGSim:/home/test/FENGSim \
     -e DISPLAY=$DISPLAY \
     -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH \
     -v /tmp/.X11-unix/:/tmp/.X11-unix \
