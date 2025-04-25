@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<ESCAAS>
+  <GLOBAL>
+    <Dimension>3</Dimension>
+    <Unit>ESCAAS_METER</Unit>
+    <NumofBodies>1</NumofBodies>
+    <Explicit_Solution>
+      <Time_Step_Ratio>0.3</Time_Step_Ratio>
+    </Explicit_Solution>
+    <Simulation_Time>20</Simulation_Time>
+    <Dump>200</Dump>
+    <Search_Range>1</Search_Range>
+    <Extension>1.1</Extension>
+    <Gamma>1.6</Gamma>
+    <Update>1</Update>
+    <Truncation_Error>1E-06</Truncation_Error>
+    <Mass_Factor>0.5</Mass_Factor>
+    <Critical_NumofNeighbors>8</Critical_NumofNeighbors>
+    <Critical_Strain>0.25</Critical_Strain>
+    <Number_of_Threads>30</Number_of_Threads>
+    <Locking_Free>0</Locking_Free>
+  </GLOBAL>
+  <BODY_0>
+    <Mesh_File>Punch3d.NEU</Mesh_File>
+    <Mesh_Type>ESCAAS_HEXA_MESH</Mesh_Type>
+    <Element_Groups>
+      <Punch3d.NEU>
+        <Element_Type>ESCAAS_FINITE_ELEMENT</Element_Type>
+        <Element_Options>C3D8R</Element_Options>
+        <Density>1340</Density>
+        <Material_Type>ESCAAS_MAT_INCOMPNEOHOOKEAN</Material_Type>
+        <Material_Parameters>1, 400942.0, 80.1938</Material_Parameters>
+        <Artificial_Viscosity>1,0.01,0.1,0,0</Artificial_Viscosity>
+        <Hourglass_Control>0.3</Hourglass_Control>
+      </Punch3d.NEU>
+    </Element_Groups>
+    <Nodal_Constraints>
+      <bot_nodes>ESCAAS_FIXED</bot_nodes>
+      <load_nodes>ESCAAS_ZFREE</load_nodes>
+    </Nodal_Constraints>
+    <Traction_BC>
+      <load_nodes>ESCAAS_TIMEFUNCTION_LINEAR,5, 0, 0, 0, 0, 0, -300</load_nodes>
+    </Traction_BC>
+  </BODY_0>
+  
+
+
+  <Electromagnetism>
+    <Problem>Electrostatic</Problem>
+    <Materials>
+      <domain1>
+        <Attributes>16</Attributes>
+        <Permittivity>1</Permittivity>
+      </domain1>
+    </Materials>
+    <Boundaries>
+      <up>
+        <Ground>
+          <Attributes>14</Attributes>
+        </Ground>
+      </up>
+      <down>
+        <Terminal>
+          <Attributes>13</Attributes>
+        </Terminal>
+      </down>
+      <around>
+        <ZeroCharge>
+          <Attributes>15</Attributes>
+        </ZeroCharge>
+      </around>
+    </Boundaries>
+  </Electromagnetism>
+
+
+
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+</ESCAAS>
