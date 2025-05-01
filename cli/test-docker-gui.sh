@@ -2,6 +2,7 @@ sudo docker rm test
 
 #!/bin/bash
 IMAGE_NAME="ubuntu:24.04"
+#IMAGE_NAME="ros2:latest"
 WORKSPACE_DIR="$(pwd)"
 
 sudo xhost +si:localuser:root
@@ -19,4 +20,4 @@ sudo docker run --name test -it --privileged --network host \
     -e DISPLAY=$DISPLAY \
     -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH \
     -v /tmp/.X11-unix/:/tmp/.X11-unix \
-    $IMAGE_NAME
+    $IMAGE_NAME /bin/bash
