@@ -46,30 +46,20 @@
 
 
   <SU2>
-    <Problem>EULER</Problem>
-    <Materials>
-      <domain>
-        <Attributes>16</Attributes>
-	<GAMMA_VALUE>1.4</GAMMA_VALUE>
-      </domain>
-    </Materials>
-    <Boundaries>
-      <airfoil>
-        <MARKER_EULER>
-          <Attributes>14</Attributes>
-        </MARKER_EULER>
-      </airfoil>
-      <farfield>
-        <MARKER_FAR>
-          <Attributes>13</Attributes>
-	  <MACH_NUMBER>0.8</MACH_NUMBER>
-	  <AOA>1.25</AOA>
-	  <FREESTREAM_PRESSURE>101325.0</FREESTREAM_PRESSURE>
-	  <FREESTREAM_TEMPERATURE>273.15</FREESTREAM_TEMPERATURE>
-	  <GAS_CONSTANT>287.87</GAS_CONSTANT>
-        </MARKER_FAR>
-      </farfield>
-    </Boundaries>
+    <SOLVER>EULER</SOLVER>
+    <FluidConstants>
+      <GAMMA_VALUE>1.4</GAMMA_VALUE>
+      <GAS_CONSTANT>287.87</GAS_CONSTANT>
+    </FluidConstants>
+    <FreeStream>
+      <MACH_NUMBER>0.8</MACH_NUMBER>
+      <AOA>1.25</AOA>
+      <FREESTREAM_PRESSURE>101325.0</FREESTREAM_PRESSURE>
+      <FREESTREAM_TEMPERATURE>273.15</FREESTREAM_TEMPERATURE>
+    </FreeStream>
+    <MARKER_EULER>airfoil</MARKER_EULER>
+    <MARKER_FAR>farfield</MARKER_FAR>
+    <MESH_FILENAME>mesh_NACA0012_inv.su2</MESH_FILENAME>
   </SU2>
 
 
