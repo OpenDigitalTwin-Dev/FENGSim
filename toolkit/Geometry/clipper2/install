@@ -5,6 +5,6 @@ sudo apt install gcc g++ make cmake p7zip-full
 cd CPP
 mkdir build
 cd build
-cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../../install/clipper2_install
+cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../../install/clipper2_install -DCMAKE_CXX_COMPILER=/usr/bin/g++-13
 make -j4
 make install
