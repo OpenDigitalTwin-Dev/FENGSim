@@ -112,3 +112,6 @@ Subsequently, all commands will be modified to utilize a text user interface (TU
 
 # [Docs](https://fengsim-docs.readthedocs.io)
 
+<div align="center">
+<img decoding="async" src="image/qq/1.jpg" width="300">
+</div>
