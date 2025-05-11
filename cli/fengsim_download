@@ -2,7 +2,11 @@ rm -rf FENGSim
 
 git clone https://github.com/OpenDigitalTwin-Dev/FENGSim.git
 
-cd FENGSim/toolkit
+cd FENGSim
+
+git clone https://github.com/OpenDigitalTwin-Dev/docs.git
+
+cd toolkit
 
 git clone https://github.com/OpenDigitalTwin-Dev/NSM.git
 git clone https://github.com/OpenDigitalTwin-Dev/CFD.git
