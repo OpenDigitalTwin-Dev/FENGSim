@@ -1,0 +1,2 @@
+rm -rf build
+rm -rf ovito-basic-3.10.6-x86_64
