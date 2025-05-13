@@ -1,3 +1,5 @@
+#!/bin/bash
+
 filename=$PWD
 homepath="${filename%FENGSim*}"
 homepath+=FENGSim
