@@ -1,4 +1,11 @@
-#!/bin/sh
+#!/bin/bash
+
+filename=$PWD
+homepath="${filename%FENGSim*}"
+homepath+=FENGSim
+echo $homepath
+cd $homepath
+cd cli
 
 rm -rf $PWD/../toolkit/vtk/build
 rm -rf $PWD/../toolkit/install/vtk_install
