@@ -7,23 +7,23 @@ echo $homepath
 cd $homepath
 cd cli
 
-rm -rf $PWD/../toolkit/vtk/build
-rm -rf $PWD/../toolkit/install/vtk_install
-rm -rf $PWD/../toolkit/oce/build
-rm -rf $PWD/../toolkit/install/oce_install
-rm -rf $PWD/../toolkit/gmsh/build
-rm -rf $PWD/../toolkit/install/gmsh_install
-rm -rf $PWD/../toolkit/cgal/build
-rm -rf $PWD/../toolkit/install/cgal_install
-rm -rf $PWD/../toolkit/pcl/build
-rm -rf $PWD/../toolkit/install/pcl_install
+rm -rf $PWD/../toolkit/Geometry/vtk/build
+rm -rf $PWD/../toolkit/Geometry/install/vtk_install
+rm -rf $PWD/../toolkit/Geometry/oce/build
+rm -rf $PWD/../toolkit/Geometry/install/oce_install
+rm -rf $PWD/../toolkit/Geometry/gmsh/build
+rm -rf $PWD/../toolkit/Geometry/install/gmsh_install
+rm -rf $PWD/../toolkit/Geometry/cgal/build
+rm -rf $PWD/../toolkit/Geometry/install/cgal_install
+rm -rf $PWD/../toolkit/Geometry/pcl/build
+rm -rf $PWD/../toolkit/Geometry/install/pcl_install
 
-rm -rf $PWD/../toolkit/qt/5.12.12
-rm -rf $PWD/../toolkit/qt/icu
-rm -rf $PWD/../toolkit/qt/qtcreator/bin
-rm -rf $PWD/../toolkit/qt/qtcreator/lib
-rm -rf $PWD/../toolkit/qt/qtcreator/libexec
-rm -rf $PWD/../toolkit/qt/qtcreator/share
+rm -rf $PWD/../toolkit/Tools/qt/5.12.12
+rm -rf $PWD/../toolkit/Tools/qt/icu
+rm -rf $PWD/../toolkit/Tools/qt/qtcreator/bin
+rm -rf $PWD/../toolkit/Tools/qt/qtcreator/lib
+rm -rf $PWD/../toolkit/Tools/qt/qtcreator/libexec
+rm -rf $PWD/../toolkit/Tools/qt/qtcreator/share
 
 rm -rf $PWD/../starter/build*
 rm -rf $PWD/../starter/FENGSim/*.pro.user
