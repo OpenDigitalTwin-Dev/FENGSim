@@ -1,0 +1,40 @@
+filename=$PWD
+homepath="${filename%FENGSim*}"
+homepath+=FENGSim
+echo $homepath
+
+cd $homepath
+git pull origin main
+
+cd docs
+git pull origin main
+cd ..
+
+cd toolkit
+cd NSM
+git pull origin main
+cd ..
+
+cd CFD
+git pull origin main
+cd ..
+
+cd CEM
+git pull origin main
+cd ..
+
+cd DAE
+git pull origin main
+cd ..
+
+cd Particles
+git pull origin main
+cd ..
+
+cd NLA
+git pull origin main
+cd ..
+
+cd PS
+git pull origin main
+cd ..
