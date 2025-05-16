@@ -1,0 +1,61 @@
+{
+    "Problem":
+    {
+	"Type": "Magnetostatic",
+	"Verbose": 2,
+	"Output": "postpro"
+    },
+    "Model":
+    {
+	"Mesh": "mesh/mag.msh",
+	"L0": 1.0e-2  // cm
+    },
+    "Domains":
+    {
+	"Materials":
+	[
+	    {
+		"Attributes": [15],
+		"Permeability": 1.0
+	    }
+	],
+	"Postprocessing":
+	{
+	}
+    },
+    "Boundaries":
+    {
+	"PEC":
+	{
+	    "Attributes": [14]
+	},
+	"SurfaceCurrent":
+	[
+	    {
+		"Index": 1,
+		"Attributes": [13],  
+		"Direction": [1, 0.0, 0.0]  
+	    }
+	],
+	"Postprocessing":  // Capacitance from charge instead of energy
+	{
+	}
+    },
+    "Solver":
+    {
+	"Order": 1,
+	"Device": "CPU",
+	"Magnetostatic":
+	{
+	    "Save": 2
+	},
+	"Linear":
+	{
+	    "Type": "AMS",
+	    "KSPType": "CG",
+	    "Tol": 1.0e-8,
+	    "MaxIts": 100
+	}
+    }
+}
+
