@@ -48,11 +48,21 @@
   <Calculix>
     <Problem>Modal</Problem>
     <Materials>
-      <domain>
+      <sphere_tank>
+	<MATERIAL>STEEL</MATERIAL>
+	<ELASTIC>210000, 0.3</ELASTIC>
+	<DENSITY>7.7e-9</DENSITY>
+      </sphere_tank>
+      <pipe>
 	<MATERIAL>Aluminium</MATERIAL>
-	<ELASTIC>70000, 0.34</ELASTIC>
+	<ELASTIC>70000, 0.33</ELASTIC>
 	<DENSITY>2.7e-9</DENSITY>
-      </domain>
+      </pipe>
+      <support>
+	<MATERIAL>STEEL</MATERIAL>
+	<ELASTIC>210000, 0.3</ELASTIC>
+	<DENSITY>7.7e-9</DENSITY>
+      </support>
     </Materials>
     <Boundary>
       <fixed_nodes>1,6</fixed_nodes>

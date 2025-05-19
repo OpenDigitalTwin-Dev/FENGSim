@@ -21,6 +21,8 @@ ELSET = ""
 MATERIAL = ""
 ELASTIC = []
 DENSITY = 0
+MATERIALSET = {}
+PARTMATERIALSET = {}
 frequency = 1
 BNDS = {}
 
@@ -35,10 +37,13 @@ for child in root:
                             MATERIAL = child3.text
                         if child3.tag == "ELASTIC" :
                             values = re.split(',',child3.text)
-                            ELASTIC.append(float(values[0]))
-                            ELASTIC.append(float(values[1]))
+                            ELASTIC.append(values[0])
+                            ELASTIC.append(values[1])
                         if child3.tag == "DENSITY" :
                             DENSITY = float(child3.text)
+                    print(ELASTIC)
+                    MATERIALSET[MATERIAL] = [ELASTIC[0],ELASTIC[1],str(DENSITY)]
+                    PARTMATERIALSET[ELSET] = MATERIAL
             if child1.tag == "Boundary" :
                 for child2 in child1:
                     BNDS[child2.tag]=child2.text
@@ -117,13 +122,24 @@ while line != '' :
     line = f2.readline()
     
 
-f.write("*MATERIAL, NAME=" + MATERIAL + "\n")
-f.write("*ELASTIC"+"\n")
-f.write(str(ELASTIC[0]) + ", " + str(ELASTIC[1]) +"\n")
-f.write("*DENSITY"+"\n")
-f.write(str(DENSITY)+"\n")
-f.write("*SOLID SECTION, ELSET="+ELSET+",MATERIAL="+MATERIAL+"\n")
-f.write("1"+"\n")
+for key,values in MATERIALSET.items():
+    print(key)
+    print(values)
+    f.write("*MATERIAL, NAME=" + key + "\n")
+    f.write("*ELASTIC" + "\n")
+    f.write(values[0] + ", " + values[1] +"\n")
+    f.write("*DENSITY" + "\n")
+    f.write(values[2] + "\n")
+    
+#f.write("*SOLID SECTION, ELSET="+ELSET+",MATERIAL="+MATERIAL+"\n")
+#f.write("1"+"\n")
+
+for key,values in PARTMATERIALSET.items():
+    print(key)
+    print(values)
+    f.write("*SOLID SECTION, ELSET=" + key + ",MATERIAL=" + values + "\n")
+    f.write("1"+"\n")
+
 f.write("*boundary\n")
 for key,values in BNDS.items():
     f.write(key+","+values+"\n")
