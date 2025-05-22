@@ -38,10 +38,10 @@ There exist various solvers designed for nonlinear solid mechanics, computationa
 	git clone https://github.com/OpenDigitalTwin-Dev/PS.git
 ```
 
-Subsequently, all commands will be modified to utilize a text user interface (TUI).
+Consequently, all commands and the README.md files will be revised to be the rules and the notebooks in the Warp AI terminal.
 
 <div align="center">
-<img decoding="async" src="/image/log/3.png" width="450">
+<img decoding="async" src="/image/warp.jpg" width="450">
 </div>
 
 
