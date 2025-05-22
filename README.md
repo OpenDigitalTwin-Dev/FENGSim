@@ -41,7 +41,7 @@ There exist various solvers designed for nonlinear solid mechanics, computationa
 Consequently, all commands and the README.md files will be revised to be the rules and the notebooks in the Warp AI terminal.
 
 <div align="center">
-<img decoding="async" src="/image/warp.jpg" width="450">
+<img decoding="async" src="/image/warp.jpg" width="1800">
 </div>
 
 
