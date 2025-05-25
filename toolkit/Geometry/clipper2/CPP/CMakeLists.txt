@@ -162,6 +162,7 @@ if(CLIPPER2_EXAMPLES)
   if (NOT (CLIPPER2_USINGZ STREQUAL "ONLY"))
     set(EXAMPLES
       Benchmarks
+      ConcentricInfill
       Inflate
       MemLeakTest
       PolygonSamples
