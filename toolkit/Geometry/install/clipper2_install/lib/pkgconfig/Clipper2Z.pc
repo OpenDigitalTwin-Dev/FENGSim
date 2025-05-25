@@ -1,0 +1,12 @@
+prefix=/home/maning/CAEProject/FENGSim/toolkit/Geometry/install/clipper2_install
+exec_prefix=${prefix}
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: Clipper2Z
+Description: A Polygon Clipping and Offsetting library in C++
+Version: 1.4.0
+URL: https://github.com/AngusJohnson/Clipper2
+Requires:
+Libs: -L${libdir} -lClipper2Z
+Cflags: -I${includedir}
