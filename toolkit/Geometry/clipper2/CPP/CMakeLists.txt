@@ -352,3 +352,55 @@ install(
 # disable exceptions
 #string(REGEX REPLACE "/W[3|4]" "/w" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 #add_definitions(-D_HAS_EXCEPTIONS=0) # for STL
+# 导出 Clipper2utils 目标到单独的文件
+
+#message(STATUS "CLIPPER2_UTILS is" ${CLIPPER2_UTILS})
+
+# 导出 Clipper2utils 并指定导出目标名
+export(TARGETS Clipper2utils
+    FILE "${PROJECT_BINARY_DIR}/Clipper2UtilsTargets.cmake"
+    NAMESPACE Clipper2::)  
+
+# 导出 Clipper2Zutils 并指定导出目标名
+if (TARGET Clipper2Zutils)
+    export(TARGETS Clipper2Zutils
+        FILE "${PROJECT_BINARY_DIR}/Clipper2ZUtilsTargets.cmake"
+        NAMESPACE Clipper2::)  
+endif()
+
+
+
+write_basic_package_version_file(
+    "${PROJECT_BINARY_DIR}/Clipper2UtilsConfigVersion.cmake"
+    VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion)
+
+configure_package_config_file(
+    Clipper2UtilsConfig.cmake.in
+    "${PROJECT_BINARY_DIR}/Clipper2UtilsConfig.cmake"
+    INSTALL_DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/clipper2utils")
+
+# 安装配置文件
+install(FILES
+    "${PROJECT_BINARY_DIR}/Clipper2UtilsConfig.cmake"
+    "${PROJECT_BINARY_DIR}/Clipper2UtilsConfigVersion.cmake"
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/clipper2utils")    
+
+install(EXPORT Clipper2Utils-targets
+    FILE Clipper2UtilsTargets.cmake
+    NAMESPACE Clipper2::
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/clipper2utils")
+
+if (TARGET Clipper2Zutils)
+    install(EXPORT Clipper2ZUtils-targets
+        FILE Clipper2ZUtilsTargets.cmake
+        NAMESPACE Clipper2::
+        DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/clipper2utils")
+endif()
+
+
+install(TARGETS ${CLIPPER2_UTILS}
+    ARCHIVE DESTINATION lib
+    LIBRARY DESTINATION lib
+    RUNTIME DESTINATION bin
+    PUBLIC_HEADER DESTINATION include/clipper2/utils)
