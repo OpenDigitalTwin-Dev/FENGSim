@@ -37,7 +37,7 @@ def msh2geo ():
         line = f1.readline()
         line = line[:-1]
         values_point = re.split(r'\s\s*',line)
-        f2.write(values_point[1] + " " + values_point[2] + " " + values_point[3] + "\n")
+        f2.write(values_point[1] + " " + values_point[2] + "\n")
         i = i + 1
 
     i = 0
@@ -56,7 +56,7 @@ def msh2geo ():
         line = line[:-1]
         values_point = re.split(r'\s\s*',line)
         if int(values_point[1]) == 3:
-            f2.write(values_point[5] + " " + values_point[6] + " " + values_point[7]  + " " + values_point[8] + "\n")
+            f2.write("4 0 "+ str(int(values_point[5])-1) + " " + str(int(values_point[6])-1) + " " + str(int(values_point[7])-1)  + " " + str(int(values_point[8])-1) + "\n")
         i = i + 1
 
 msh2geo()
