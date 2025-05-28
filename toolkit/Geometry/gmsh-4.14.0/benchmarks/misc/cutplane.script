@@ -1,4 +1,0 @@
-Printf("DD = %g", DD);
-Plugin(CutPlane).View = 0 ;
-Plugin(CutPlane).D = DD;
-Plugin(CutPlane).Run ;

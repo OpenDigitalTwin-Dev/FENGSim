@@ -1,9 +1,0 @@
-[book]
-authors = ["Gmsh contributors"]
-language = "en"
-multilingual = false
-src = "src"
-title = "Gmsh API Cookbook"
-
-[output.html]
-additional-css = ["custom.css"]
