@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = -DCLIPPER2_MAX_DECIMAL_PRECISION=8
 
-CXX_INCLUDES = -isystem /home/maning/CAEProject/FENGSim/toolkit/Geometry/install/clipper2_install/include
+CXX_INCLUDES = -I/home/maning/CAEProject/FENGSim/starter/clipper2/Utils -isystem /home/maning/CAEProject/FENGSim/toolkit/Geometry/install/clipper2_install/include
 
 CXX_FLAGS = -std=gnu++17
 

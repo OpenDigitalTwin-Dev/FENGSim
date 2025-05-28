@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
 project(registration_api)
 
 set(PCL_DIR ../../../toolkit/Geometry/install/pcl_install/share/pcl-1.11/)
-find_package(PCL 1.3 REQUIRED)
+find_package(PCL 1.11 REQUIRED)
 if(PCL_FOUND)
   message("PCL FOUND")
   include_directories(${PCL_INCLUDE_DIRS})

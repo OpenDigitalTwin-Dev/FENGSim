@@ -7,6 +7,7 @@
 
 #include "clipper2/clipper.h"
 //#include "../../Utils/clipper.svg.utils.h"
+#include "../../../toolkit/Geometry/clipper2/CPP/Utils/clipper.svg.utils.h"
 
 using namespace Clipper2Lib;
 
@@ -71,12 +72,12 @@ void DoSimpleTest(bool show_solution_coords)
   //solution = Intersect(subject, clip, fr);
   //solution = InflatePaths(solution, -10, JoinType::Round, EndType::Polygon);
 
-  //SvgWriter svg;
-  //SvgAddSubject(svg, subject, fr);
+  SvgWriter svg;
+  SvgAddSubject(svg, subject, fr);
   //SvgAddClip(svg, clip, fr);
-  //SvgAddSolution(svg, solution, fr, false);
-  //SvgSaveToFile(svg, "solution.svg", 450, 450, 10);
-  //System("solution.svg");
+  SvgAddSolution(svg, solution, fr, false);
+  SvgSaveToFile(svg, "solution.svg", 450, 450, 10);
+  System("solution.svg");
 }
 
 
