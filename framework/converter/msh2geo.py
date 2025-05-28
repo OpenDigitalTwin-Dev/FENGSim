@@ -1,15 +1,29 @@
 import re
 import math
-# generate mesh by gmsh and change .msh to .geo
 
-def mesh2vtk ():
+# generate mesh by gmsh and change .msh to .geo
+# POINTS:
+# 0.0 0.0
+# 1.0 0.0
+# 1.0 1.0
+# 0.0 1.0
+# CELLS:
+# 4 0 0 1 2 3
+# FACES:
+# 2 1 0 1
+# 2 2 1 2
+# 2 3 2 3
+# 2 4 3 0
+
+
+def msh2geo ():
     f1 = open('data/msh2geo_ex_1.msh', 'r')
-    f2 = open('data/msh2geo_ex_1.vtk', 'w')
+    f2 = open('data/msh2geo_ex_1.geo', 'w')
     #############################
     # points
     #############################
     i = 0
-    while i < 4:
+    while i < 5:
         line = f1.readline()
         line = line[:-1]
         i = i + 1
@@ -17,48 +31,35 @@ def mesh2vtk ():
     i = 0
     n = int(line)
 
-    f2.write("# vtk DataFile Version 2.0\n")
-    f2.write("Structured Grid by Portage\n")
-    f2.write("ASCII\n")
-    f2.write("DATASET UNSTRUCTURED_GRID\n")
-    f2.write("POINTS "+str(n)+" float\n")
+    f2.write("POINTS:\n")
 
     while i < n:
         line = f1.readline()
         line = line[:-1]
         values_point = re.split(r'\s\s*',line)
-        f2.write(values_point[0] + " " + values_point[1] + " " + values_point[2] + "\n")
+        f2.write(values_point[1] + " " + values_point[2] + " " + values_point[3] + "\n")
         i = i + 1
-        
-    #############################
-    # cells
-    #############################
+
     i = 0
-    while i < 2:
+    while i < 3:
         line = f1.readline()
         line = line[:-1]
         i = i + 1
     print(line)
     i = 0
     n = int(line)
-    f2.write("CELLS " + str(n) + " " + str(5*n) + "\n")
+
+    f2.write("CELLS:\n")
+
     while i < n:
         line = f1.readline()
         line = line[:-1]
-        values_cell = re.split(r'\s\s*',line)
-        f2.write(str(4) + " " + str(int(values_cell[0])-1) + " " + str(int(values_cell[1])-1) + " " + str(int(values_cell[2])-1)  + " " + str(int(values_cell[3])-1) + "\n")
+        values_point = re.split(r'\s\s*',line)
+        if int(values_point[1]) == 3:
+            f2.write(values_point[5] + " " + values_point[6] + " " + values_point[7]  + " " + values_point[8] + "\n")
         i = i + 1
 
-    #############################
-    # cell type
-    #############################
-    f2.write("CELL_TYPES " + str(n) + "\n")
-    i = 0
-    while i < n:
-        f2.write(str(10) + "\n")
-        i = i + 1
-
-mesh2vtk()
+msh2geo()
 
 
 
