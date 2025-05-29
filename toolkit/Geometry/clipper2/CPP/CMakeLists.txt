@@ -108,20 +108,22 @@ set_target_properties(${CLIPPER2_LIBS} PROPERTIES FOLDER Libraries
                                          SOVERSION ${PROJECT_VERSION_MAJOR}
                                          PUBLIC_HEADER "${CLIPPER2_INC}"
 )
+set(CLIPPER2_UTILS_INC_FOLDER ${PROJECT_SOURCE_DIR}/Utils/)
+
 
 if(CLIPPER2_UTILS OR CLIPPER2_TESTS OR CLIPPER2_EXAMPLES)
   set(CLIPPER2_UTILS_INC
-    Utils/clipper.svg.h
-    Utils/ClipFileLoad.h
-    Utils/ClipFileSave.h
-    Utils/Timer.h
-    Utils/Colors.h
-    Utils/CommonUtils.h
+    ${CLIPPER2_UTILS_INC_FOLDER}/clipper.svg.h
+    ${CLIPPER2_UTILS_INC_FOLDER}/ClipFileLoad.h
+    ${CLIPPER2_UTILS_INC_FOLDER}/ClipFileSave.h
+    ${CLIPPER2_UTILS_INC_FOLDER}/Timer.h
+    ${CLIPPER2_UTILS_INC_FOLDER}/Colors.h
+    ${CLIPPER2_UTILS_INC_FOLDER}/CommonUtils.h
   )
   set(CLIPPER2_UTILS_SRC
-    Utils/clipper.svg.cpp
-    Utils/ClipFileLoad.cpp
-    Utils/ClipFileSave.cpp
+    ${CLIPPER2_UTILS_INC_FOLDER}/clipper.svg.cpp
+    ${CLIPPER2_UTILS_INC_FOLDER}/ClipFileLoad.cpp
+    ${CLIPPER2_UTILS_INC_FOLDER}/ClipFileSave.cpp
   )
   set(CLIPPER2_UTILS "") # one or both of Clipper2utils/Clipper2Zutils
 
@@ -389,7 +391,7 @@ export(TARGETS ${CLIPPER2_UTILS} FILE "${PROJECT_BINARY_DIR}/Clipper2UtilsTarget
 
 # installation
 install(TARGETS ${CLIPPER2_UTILS} EXPORT Clipper2Utils-targets
-        PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/clipper2uitls
+        PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/clipper2utils
         LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
