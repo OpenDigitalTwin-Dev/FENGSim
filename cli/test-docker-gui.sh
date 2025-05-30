@@ -3,10 +3,10 @@ sudo docker rm test
 file1=$0
 file2="${file1:1}"
 path=$PWD$file2
-echo "cli dir: $path"
+echo "path: $path"
 homepath="${path%FENGSim*}"
 homepath+=FENGSim
-echo "$home dir: $homepath"
+echo "homepath: $homepath"
 cd $homepath
 cd cli
 
