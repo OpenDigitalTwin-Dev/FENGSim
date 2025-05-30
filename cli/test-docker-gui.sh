@@ -1,5 +1,15 @@
 sudo docker rm test
 
+file1=$0
+file2="${file1:1}"
+path=$PWD$file2
+echo "cli dir: $path"
+homepath="${path%FENGSim*}"
+homepath+=FENGSim
+echo "$home dir: $homepath"
+cd $homepath
+cd cli
+
 #!/bin/bash
 IMAGE_NAME="ubuntu:24.04"
 #IMAGE_NAME="ros2:latest"
@@ -16,7 +26,7 @@ XAUTH=/tmp/.docker.xauth
 sudo docker run --name test -it --privileged --network host \
     --shm-size=5G \
     -w /home/test \
-    -v $HOME/FENGSim:/home/test/FENGSim \
+    -v $homepath:/home/test/FENGSim \
     -e DISPLAY=$DISPLAY \
     -v $XAUTH:$XAUTH -e XAUTHORITY=$XAUTH \
     -v /tmp/.X11-unix/:/tmp/.X11-unix \
