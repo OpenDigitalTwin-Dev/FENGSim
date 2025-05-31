@@ -1,0 +1,9 @@
+#!/bin/bash
+
+mkdir src
+mkdir conf
+mkdir docs
+mkdir log
+mkdir data
+touch README.md
+touch CMakeLists.txt
