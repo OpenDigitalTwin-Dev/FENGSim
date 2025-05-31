@@ -1,8 +1,8 @@
 #!/bin/sh
 
 # >>> chang the following in Makefile
-# >>> gklib_path = ../../NSM/extern/ALE/install/gk
-# >>> metis_path = ../../NSM/extern/ALE/install/metis
+# >>> gklib_path = ../../MultiX/extern/ALE/install/gk
+# >>> metis_path = ../../MultiX/extern/ALE/install/metis
 
 sudo apt update
 sudo apt -y install make gcc g++ cmake libmpich-dev
