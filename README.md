@@ -42,6 +42,12 @@ Consequently, all the commands and the README.md files will be revised to be the
 
 This is really interesting. Since Warp operates as a terminal, it can use commands like grep and find to search for particular files, such as README.md, and also look for specific content, like installation instructions, within those files. The outcomes can then be input into the AI. As a result, our SDK is a great data source for Warp.
 
+We will utilize Warp alongside our SDK to accomplish the following tasks:
+1. Manage the SDK
+2. Acquire background knowledge
+3. Develop code
+4. Enhance automation for CAD design, model simplification, structural mesh generation, path planning, and inverse modeling.
+
 <div align="center">
 <img decoding="async" src="/image/warp.png" width="1800">
 </div>
