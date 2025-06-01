@@ -40,6 +40,8 @@ There exist various solvers designed for nonlinear solid mechanics, computationa
 
 Consequently, all the commands and the README.md files will be revised to be the rules and the notebooks in the Warp AI terminal.
 
+This is really interesting. Since Warp operates as a terminal, it can use commands like grep and find to search for particular files, such as README.md, and also look for specific content, like installation instructions, within those files. The outcomes can then be input into the AI. As a result, our SDK is a great data source for Warp.
+
 <div align="center">
 <img decoding="async" src="/image/warp.png" width="1800">
 </div>
