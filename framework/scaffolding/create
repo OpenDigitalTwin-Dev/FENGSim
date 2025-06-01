@@ -1,6 +1,5 @@
 #!/bin/bash
 
-mkdir include
 mkdir src
 mkdir conf
 mkdir docs
