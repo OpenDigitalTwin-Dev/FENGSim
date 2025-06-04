@@ -48,17 +48,22 @@ for line in lines :
     values_point = re.split(' ',line)
     if values_point[0]=="POINTS" :
         ifnodal = 1
+        l = 0
     elif values_point[0]=="CELLS" :
         ifnodal = 0
+        l = 0
     else :
         if ifnodal == 1 :
-            f2.write(values_point[0] + " " + values_point[1] + " " + values_point[2] + "\n")
+            l = l + 1
+            f2.write(str(l) + " " + values_point[0] + " " + values_point[1] + " " + values_point[2] + "\n")
         else :
-            f2.write(values_point[2] + " " + values_point[3] + " " + values_point[4] + " " + values_point[5] + "\n")
+            l = l + 1
+            f2.write(str(l) + " " + values_point[2] + " " + values_point[3] + " " + values_point[4] + " " + values_point[5] + "\n")
             parts[values_point[1]] = str(int(parts[values_point[1]])+1)
 
 print(parts)
 
+"""
 for key,values in parts.items():
     f2.write(str(8) + " part_" + str(key) + " " + values + "\n")
     l = 0
@@ -74,5 +79,5 @@ for key,values in parts.items():
                 l = l + 1
                 if values_point[1] == key :
                     f2.write(str(l) + "\n")
-
+"""
     
