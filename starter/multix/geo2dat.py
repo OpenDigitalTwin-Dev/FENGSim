@@ -58,12 +58,12 @@ for line in lines :
             f2.write(str(l) + " " + values_point[0] + " " + values_point[1] + " " + values_point[2] + "\n")
         else :
             l = l + 1
-            f2.write(str(l) + " " + values_point[2] + " " + values_point[3] + " " + values_point[4] + " " + values_point[5] + "\n")
+            f2.write(str(l) + " " + str(int(values_point[2])+1) + " " + str(int(values_point[3])+1) + " " + str(int(values_point[4])+1) + " " + str(int(values_point[5])+1) + "\n")
             parts[values_point[1]] = str(int(parts[values_point[1]])+1)
 
 print(parts)
 
-"""
+
 for key,values in parts.items():
     f2.write(str(8) + " part_" + str(key) + " " + values + "\n")
     l = 0
@@ -79,5 +79,5 @@ for key,values in parts.items():
                 l = l + 1
                 if values_point[1] == key :
                     f2.write(str(l) + "\n")
-"""
+
     
