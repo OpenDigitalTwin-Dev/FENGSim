@@ -1,0 +1,32 @@
+start program on 1 procs at Wed Jun  4 15:29:18 2025
+  default ... DebugLevel = 0
+  default ... TimeLevel = 0
+  reading ... Model = MagnetoStaticsNonlinear
+  reading ... MeshFormatConvert = 0
+  reading ... Mesh = example14
+  reading ... GeoPath = Maxwell/
+  reading ... level = 0
+  reading ... plevel = 0
+  reading ... Distribution = Stripes
+70924
+  reading ... Discretization = curl
+  reading ... Discretization = curl
+83293 unknowns 
+  reading ... EXAMPLE = 14
+  reading ... Discretization = curl
+  reading ... Discretization = curl
+assemble vector:  2.02 seconds
+assemble matrix:  2.07 seconds
+  reading ... Preconditioner = Jacobi
+  default ... PreconditionerVerbose = 0
+  default ... PreconditionerDamp = 1
+  default ... SHIFTspecial = 0
+  reading ... LinearSolver = CG
+  default ... LinearVerbose = 0
+  reading ... LinearSteps = 50000
+  default ... LinearLineSearchSteps = 3
+  reading ... LinearEpsilon = 1e-10
+  reading ... LinearReduction = 1e-10
+  PCG: d(327)= 2.240145156e-10 rate 0.9334588992 time 15.16 seconds
+  reading ... NewtonSteps = 5
+  reading ... NewtonResidual = 1e-20

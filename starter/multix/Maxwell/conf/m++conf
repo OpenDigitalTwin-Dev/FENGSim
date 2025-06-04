@@ -1,0 +1,2 @@
+#loadconf = solver2/Maxwell/conf/emth.conf;
+loadconf = Maxwell/conf/magnetostatics.conf;

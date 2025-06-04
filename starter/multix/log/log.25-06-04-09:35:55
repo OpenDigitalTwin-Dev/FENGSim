@@ -1,0 +1,109 @@
+start program on 8 procs at Wed Jun  4 09:34:20 2025
+  default ... DebugLevel = 0
+  default ... TimeLevel = 0
+  reading ... Model = MagnetoStaticsNonlinear
+  reading ... MeshFormatConvert = 1
+  reading ... filetype = ansoft
+  reading ... file1 = data/mesh/team24/current
+  reading ... file2 = Maxwell/conf/geo/example14.geo
+  reading ... unit = 1
+  reading ... Mesh = example14
+  reading ... GeoPath = Maxwell/
+  reading ... level = 0
+  reading ... plevel = 0
+  reading ... Distribution = Stripes
+  reading ... Overlap_Distribution = 0
+8866 cells on proc 0 of 70924 cells on 8 procs
+  reading ... Overlap = none
+8866
+  reading ... Discretization = curl
+  reading ... Discretization = curl
+83293 unknowns 
+  reading ... EXAMPLE = 14
+  reading ... Discretization = curl
+  reading ... Discretization = curl
+assemble vector:  0.32 seconds
+assemble matrix:  0.38 seconds
+  reading ... Preconditioner = Jacobi
+  default ... PreconditionerVerbose = 0
+  default ... PreconditionerDamp = 1
+  default ... SHIFTspecial = 0
+  reading ... LinearSolver = CG
+  default ... LinearVerbose = 0
+  reading ... LinearSteps = 50000
+  default ... LinearLineSearchSteps = 3
+  reading ... LinearEpsilon = 1e-10
+  reading ... LinearReduction = 1e-10
+  PCG: d(325)= 2.318077208e-10 rate 0.9331616203 time  5.08 seconds
+  reading ... NewtonSteps = 5
+  reading ... NewtonResidual = 1e-20
+assemble matrix:  2.37 seconds
+assemble vector:  2.92 seconds
+  PCG: d(590)= 9.782784772e-11 rate 0.9681407606 time  8.35 seconds
+L2 error: 0.1284091802
+Magnetic Energy: 5.275328457
+residual: 0.0194420225
+Newton steps: 0
+assemble matrix:  2.37 seconds
+assemble vector:  2.93 seconds
+  PCG: d(707)= 8.753639178e-11 rate 0.9745525809 time 10.56 seconds
+L2 error: 0.06763781387
+Magnetic Energy: 3.251253428
+residual: 0.01976588832
+Newton steps: 1
+assemble matrix:  2.55 seconds
+assemble vector:  3.16 seconds
+  PCG: d(733)= 7.626065711e-11 rate 0.9752926798 time 11.19 seconds
+L2 error: 0.03237375819
+Magnetic Energy: 2.846610332
+residual: 0.01985257823
+Newton steps: 2
+assemble matrix:  2.55 seconds
+assemble vector:  3.15 seconds
+  PCG: d(733)= 9.427113226e-11 rate 0.9755759935 time 10.99 seconds
+L2 error: 0.02269878062
+Magnetic Energy: 2.797019848
+residual: 0.01984586058
+Newton steps: 3
+assemble matrix:  2.56 seconds
+assemble vector:  3.16 seconds
+  PCG: d(736)= 9.274130661e-11 rate 0.9756526517 time 11.06 seconds
+L2 error: 0.02235765403
+Magnetic Energy: 2.794249482
+residual: 0.01984002779
+Newton steps: 4
+  reading ... Discretization = curl
+  reading ... Discretization = curl
+  default ... gnuplot = 0
+  default ... dxplot = 0
+  default ... tecplot = 0
+  default ... vtkplot = 0
+  default ... gnuplot = 0
+  default ... dxplot = 0
+  default ... tecplot = 0
+  default ... vtkplot = 0
+  default ... gnuplot = 0
+  default ... dxplot = 0
+  default ... tecplot = 0
+  default ... vtkplot = 0
+  default ... gnuplot = 0
+  default ... dxplot = 0
+  default ... tecplot = 0
+  default ... vtkplot = 0
+  default ... gnuplot = 0
+  default ... dxplot = 0
+  default ... tecplot = 0
+  default ... vtkplot = 0
+  default ... gnuplot = 0
+  default ... dxplot = 0
+  default ... tecplot = 0
+  default ... vtkplot = 0
+  default ... gnuplot = 0
+  default ... dxplot = 0
+  default ... tecplot = 0
+  default ... vtkplot = 0
+  default ... gnuplot = 0
+  default ... dxplot = 0
+  default ... tecplot = 0
+  default ... vtkplot = 0
+end program after 1:34.71 minutes on 8 procs at Wed Jun  4 09:35:55 2025
