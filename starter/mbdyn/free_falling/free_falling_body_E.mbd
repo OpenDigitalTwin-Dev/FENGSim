@@ -1,0 +1,48 @@
+# free_falling_body_E.mbd
+
+begin: data;
+   problem: initial value;
+end: data;
+ 
+begin: initial value;
+   initial time:   0.;
+   final time:     1.;
+   time step:      1.e-3;
+   max iterations: 10;
+   tolerance:      1.e-6;
+end: initial value;
+ 
+begin: control data;
+   structural nodes: 1;
+   rigid bodies:     1;
+   gravity;
+end: control data;
+
+# Design Variables
+set: real Vy0 = 3.; #[m/s] Initial horizontal speed
+set: real M   = 1.; #[kg]  Mass of the ball
+
+# Node Labels
+set: integer Node_Ball = 1;
+
+# Body Labels
+set: integer Body_Ball = 1;
+ 
+begin: nodes;
+   structural: Node_Ball, dynamic,
+      null,        # absolute position
+      eye,         # absolute orientation
+      0., Vy0, 0., # absolute velocity
+      null;        # absolute angular velocity
+      
+end: nodes;
+ 
+begin: elements;
+   body: Body_Ball, Node_Ball,
+      M,    # mass
+      null, # relative center of mass
+      eye;  # inertia matrix
+      
+   gravity: 0., 0., -1., const, 9.81;
+   
+end: elements;
