@@ -417,6 +417,7 @@ public:
 private:
     vtkSmartPointer<vtkActor> mbd_simulation_actor_1;
     vtkSmartPointer<vtkActor> mbd_simulation_actor_2;
+    vtkSmartPointer<vtkActor> mbd_simulation_actor_3;
 public:
     void mbdImportResults (int n, QString file_name);
 
