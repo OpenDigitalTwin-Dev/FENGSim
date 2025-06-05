@@ -1,0 +1,21 @@
+start program on 1 procs at Wed Jun  4 13:52:27 2025
+  default ... DebugLevel = 0
+  default ... TimeLevel = 0
+  reading ... Model = MagnetoStaticsNonlinear
+  reading ... MeshFormatConvert = 1
+  reading ... filetype = ansoft
+  reading ... file1 = data/mesh/team24/current
+  reading ... file2 = Maxwell/conf/geo/example14.geo
+  reading ... unit = 1
+  reading ... Mesh = example14
+  reading ... GeoPath = Maxwell/
+  reading ... level = 0
+  reading ... plevel = 0
+  reading ... Distribution = Stripes
+70924
+  reading ... Discretization = curl
+  reading ... Discretization = curl
+83293 unknowns 
+  reading ... EXAMPLE = 14
+  reading ... Discretization = curl
+  reading ... Discretization = curl

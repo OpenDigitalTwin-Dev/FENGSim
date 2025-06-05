@@ -1,0 +1,1 @@
+定义线圈的磁导率和电流强度，iron的非线性先不动，边界条件全部为homogeneous Dirichlet

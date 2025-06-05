@@ -1,0 +1,44 @@
+start program on 1 procs at Wed Jun  4 09:32:09 2025
+  default ... DebugLevel = 0
+  default ... TimeLevel = 0
+  reading ... Model = MagnetoStaticsNonlinear
+  reading ... MeshFormatConvert = 1
+  reading ... filetype = ansoft
+  reading ... file1 = data/mesh/team24/current
+  reading ... file2 = Maxwell/conf/geo/example14.geo
+  reading ... unit = 1
+  reading ... Mesh = example14
+  reading ... GeoPath = Maxwell/
+  reading ... level = 0
+  reading ... plevel = 0
+  reading ... Distribution = Stripes
+70924
+  reading ... Discretization = curl
+  reading ... Discretization = curl
+83293 unknowns 
+  reading ... EXAMPLE = 14
+  reading ... Discretization = curl
+  reading ... Discretization = curl
+assemble vector:  2.02 seconds
+assemble matrix:  2.05 seconds
+  reading ... Preconditioner = Jacobi
+  default ... PreconditionerVerbose = 0
+  default ... PreconditionerDamp = 1
+  default ... SHIFTspecial = 0
+  reading ... LinearSolver = CG
+  default ... LinearVerbose = 0
+  reading ... LinearSteps = 50000
+  default ... LinearLineSearchSteps = 3
+  reading ... LinearEpsilon = 1e-10
+  reading ... LinearReduction = 1e-10
+  PCG: d(327)= 2.240145156e-10 rate 0.9334588992 time 15.10 seconds
+  reading ... NewtonSteps = 5
+  reading ... NewtonResidual = 1e-20
+assemble matrix: 15.72 seconds
+assemble vector: 19.30 seconds
+  PCG: d(594)= 8.806304612e-11 rate 0.9681804566 time 27.42 seconds
+L2 error: 0.1284091802
+Magnetic Energy: 5.275328457
+residual: 0.01008387199
+Newton steps: 0
+assemble matrix: 15.71 seconds

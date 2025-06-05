@@ -1,0 +1,3 @@
+#loadconf = Solid/conf/m++conf;
+loadconf = Maxwell/conf/m++conf;
+loadconf = mesh/conf/m++conf;
