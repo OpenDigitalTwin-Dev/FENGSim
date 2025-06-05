@@ -1,0 +1,54 @@
+# free_rotating_block.mbd
+
+begin: data;
+   problem: initial value;
+end: data;
+
+begin: initial value;
+   initial time:   0.;
+   final time:     5.;
+   time step:      1.e-2;
+   max iterations: 10;
+   tolerance:      1.e-6;
+end: initial value;
+
+begin: control data;
+   structural nodes: 1;
+   rigid bodies:     1;
+end: control data;
+
+# Design Variables
+set: real M   = 1.;   # [kg] Mass
+set: real Lx  = 0.15; # [m] Width
+set: real Ly  = 0.05; # [m] Thickness
+set: real Lz  = 0.3;  # [m] Height
+set: real Wx0 = 5.;   # [rad/s] Initial angular velocity along x axis
+set: real Wy0 = 0.;   # [rad/s] Initial angular velocity along y axis
+set: real Wz0 = 5.;   # [rad/s] Initial angular velocity along z axis
+
+set: real Ixx = 1./12.*M*(Ly^2+Lz^2); # [kgm^2] Moment of inertia about x axis
+set: real Iyy = 1./12.*M*(Lz^2+Lx^2); # [kgm^2] Moment of inertia about y axis
+set: real Izz = 1./12.*M*(Lx^2+Ly^2); # [kgm^2] Moment of inertia about z axis
+
+# Node Labels
+set: integer Node_Block = 1;
+
+# Body Labels
+set: integer Body_Block = 1;
+
+begin: nodes;
+   structural: Node_Block, dynamic,
+      0., 0., 0.,    # absolute position
+      eye,           # absolute orientation
+      null,          # absolute velocity
+      Wx0, Wy0, Wz0; # absolute angular velocity
+      
+end: nodes;
+
+begin: elements;
+   body: Body_Block, Node_Block,
+      M,                   # mass
+      null,                # relative center of mass
+      diag, Ixx, Iyy, Izz; # inertia matrix
+      
+end: elements;
