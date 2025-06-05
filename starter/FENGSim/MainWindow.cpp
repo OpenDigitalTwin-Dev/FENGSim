@@ -320,6 +320,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     // fem
     // connect(fem_dock->ui->pushButton_2, SIGNAL(clicked()), this, SLOT(FEMExampleCompute()));
 
+    // *******************************************************
+    // multibody dynamic
+    connect(vtk_dock->ui->pushButton_7, SIGNAL(clicked()), this, SLOT(mbdOpenFile()));
+    connect(vtk_dock->ui->pushButton_6, SIGNAL(clicked()), this, SLOT(mbdImportResults()));
 
 
     // *******************************************************
@@ -3544,7 +3548,15 @@ void MainWindow::FEMExampleCompute()
     }
 }
 
+// *******************************************************
+// *******************************************************
+//      multibody dynmaic
 
+void  MainWindow::mbdOpenFile () {
+    mbd_file_name = QFileDialog::getOpenFileName(this,tr("Open File"),"../../starter/mbdyn",
+                                                 tr("MBD Files (*.mov)")
+                                                 , 0 , QFileDialog::DontUseNativeDialog);
+}
 // *******************************************************
 // *******************************************************
 //      Machining

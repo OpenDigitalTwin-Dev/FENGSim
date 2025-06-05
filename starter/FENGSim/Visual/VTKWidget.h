@@ -412,6 +412,14 @@ public:
     void FEMImportResults2 (QString filename);
 
 
+    // *******************************************************
+    // multibody dynamic
+private:
+    vtkSmartPointer<vtkActor> mbd_simulation_actor;
+public:
+    void mbdImportResults (int n, QString file_name);
+
+
 
 
     // *******************************************************

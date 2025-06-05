@@ -3106,6 +3106,70 @@ void VTKWidget::FEMImportResults(QString filename)
     GetRenderWindow()->Render();
 }
 
+#include "vtkCubeSource.h"
+void VTKWidget::mbdImportResults(int n, QString file_name)
+{
+    std::ifstream is(file_name.toStdString());
+    const int len = 256;
+    char L[len];
+    for (int i=0; i<n; i++)
+        is.getline(L,len);
+
+    std::cout << L << std::endl;
+    double z[13];
+    sscanf(L,"%lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf"
+           , z, z+1, z+2, z+3, z+4, z+5, z+6, z+7, z+8, z+9, z+10, z+11, z+12);
+
+    // Create a cube.
+    vtkNew<vtkCubeSource> cube;
+    cube->SetXLength(0.15);
+    cube->SetYLength(0.15);
+    cube->SetZLength(0.15);
+    cube->Update();
+
+    // Mapper.
+    //vtkNew<vtkPolyDataMapper> cubeMapper;
+    //cubeMapper->SetInputData(cube->GetOutput());
+
+    vtkNew<vtkTransform> transform;
+    transform->Scale(1, 1, 1);
+    transform->Translate(z[1],z[2],z[3]);
+    transform->RotateX(z[4]);
+    transform->RotateY(z[5]);
+    transform->RotateZ(z[6]);
+    vtkNew<vtkTransformFilter> transformFilter;
+    transformFilter->SetInputConnection(cube->GetOutputPort());
+    transformFilter->SetTransform(transform);
+    vtkNew<vtkPolyDataMapper> mapper;
+    mapper->SetInputConnection(transformFilter->GetOutputPort());
+
+    // actor
+    renderer->RemoveActor(mbd_simulation_actor);
+    mbd_simulation_actor = vtkSmartPointer<vtkActor>::New();
+    //mbd_simulation_actor->SetMapper(cubeMapper);
+    mbd_simulation_actor->SetMapper(mapper);
+    mbd_simulation_actor->GetProperty()->EdgeVisibilityOn();
+    // actor->GetProperty()->SetFrontfaceCulling(1); // shit this is OK, check it for long time
+    mbd_simulation_actor->GetProperty()->SetLineWidth(1);
+    // renderer
+    renderer->AddActor(mbd_simulation_actor);
+    //renderer->ResetCamera();
+    // Automatically set up the camera based on the visible actors.
+    // The camera will reposition itself to view the center point of the actors,
+    // and move along its initial view plane normal (i.e., vector defined from camera position to focal point)
+    // so that all of the actors can be seen.
+    renderer->ResetCameraClippingRange();
+    // Reset the camera clipping range based on the bounds of the visible actors.
+    // This ensures that no props are cut off
+    // redraw
+    GetRenderWindow()->Render();
+
+
+
+
+    is.close();
+}
+
 
 // *******************************************************
 // machining
