@@ -3122,9 +3122,9 @@ void VTKWidget::mbdImportResults(int n, QString file_name)
 
     // Create a cube.
     vtkNew<vtkCubeSource> cube;
-    cube->SetXLength(0.15);
-    cube->SetYLength(0.15);
-    cube->SetZLength(0.15);
+    cube->SetXLength(1);
+    cube->SetYLength(0.1);
+    cube->SetZLength(0.1);
     cube->Update();
 
     // Mapper.
@@ -3144,26 +3144,48 @@ void VTKWidget::mbdImportResults(int n, QString file_name)
     mapper->SetInputConnection(transformFilter->GetOutputPort());
 
     // actor
-    renderer->RemoveActor(mbd_simulation_actor);
-    mbd_simulation_actor = vtkSmartPointer<vtkActor>::New();
-    //mbd_simulation_actor->SetMapper(cubeMapper);
-    mbd_simulation_actor->SetMapper(mapper);
-    mbd_simulation_actor->GetProperty()->EdgeVisibilityOn();
-    // actor->GetProperty()->SetFrontfaceCulling(1); // shit this is OK, check it for long time
-    mbd_simulation_actor->GetProperty()->SetLineWidth(1);
-    // renderer
-    renderer->AddActor(mbd_simulation_actor);
-    //renderer->ResetCamera();
-    // Automatically set up the camera based on the visible actors.
-    // The camera will reposition itself to view the center point of the actors,
-    // and move along its initial view plane normal (i.e., vector defined from camera position to focal point)
-    // so that all of the actors can be seen.
-    renderer->ResetCameraClippingRange();
-    // Reset the camera clipping range based on the bounds of the visible actors.
-    // This ensures that no props are cut off
-    // redraw
-    GetRenderWindow()->Render();
-
+    if (z[0]==1) {
+        renderer->RemoveActor(mbd_simulation_actor_1);
+        mbd_simulation_actor_1 = vtkSmartPointer<vtkActor>::New();
+        //mbd_simulation_actor->SetMapper(cubeMapper);
+        mbd_simulation_actor_1->SetMapper(mapper);
+        mbd_simulation_actor_1->GetProperty()->EdgeVisibilityOn();
+        // actor->GetProperty()->SetFrontfaceCulling(1); // shit this is OK, check it for long time
+        mbd_simulation_actor_1->GetProperty()->SetLineWidth(1);
+        // renderer
+        renderer->AddActor(mbd_simulation_actor_1);
+        //renderer->ResetCamera();
+        // Automatically set up the camera based on the visible actors.
+        // The camera will reposition itself to view the center point of the actors,
+        // and move along its initial view plane normal (i.e., vector defined from camera position to focal point)
+        // so that all of the actors can be seen.
+        renderer->ResetCameraClippingRange();
+        // Reset the camera clipping range based on the bounds of the visible actors.
+        // This ensures that no props are cut off
+        // redraw
+        GetRenderWindow()->Render();
+    }
+    else if (z[0]==2) {
+        renderer->RemoveActor(mbd_simulation_actor_2);
+        mbd_simulation_actor_2 = vtkSmartPointer<vtkActor>::New();
+        //mbd_simulation_actor->SetMapper(cubeMapper);
+        mbd_simulation_actor_2->SetMapper(mapper);
+        mbd_simulation_actor_2->GetProperty()->EdgeVisibilityOn();
+        // actor->GetProperty()->SetFrontfaceCulling(1); // shit this is OK, check it for long time
+        mbd_simulation_actor_2->GetProperty()->SetLineWidth(1);
+        // renderer
+        renderer->AddActor(mbd_simulation_actor_2);
+        //renderer->ResetCamera();
+        // Automatically set up the camera based on the visible actors.
+        // The camera will reposition itself to view the center point of the actors,
+        // and move along its initial view plane normal (i.e., vector defined from camera position to focal point)
+        // so that all of the actors can be seen.
+        renderer->ResetCameraClippingRange();
+        // Reset the camera clipping range based on the bounds of the visible actors.
+        // This ensures that no props are cut off
+        // redraw
+        GetRenderWindow()->Render();
+    }
 
 
 
