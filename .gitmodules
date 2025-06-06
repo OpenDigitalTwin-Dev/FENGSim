@@ -1,6 +1,3 @@
-[submodule "toolkit/MultiX"]
-	path = toolkit/MultiX
-	url = https://github.com/OpenDigitalTwin-Dev/MultiX.git
 [submodule "toolkit/CFD"]
 	path = toolkit/CFD
 	url = https://github.com/OpenDigitalTwin-Dev/CFD.git
