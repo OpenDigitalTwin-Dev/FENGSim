@@ -1,3 +1,24 @@
 [submodule "docs"]
 	path = docs
 	url = https://github.com/OpenDigitalTwin-Dev/docs.git
+[submodule "toolkit/MultiX"]
+	path = toolkit/MultiX
+	url = https://github.com/OpenDigitalTwin-Dev/MultiX.git
+[submodule "toolkit/CFD"]
+	path = toolkit/CFD
+	url = https://github.com/OpenDigitalTwin-Dev/CFD.git
+[submodule "toolkit/CEM"]
+	path = toolkit/CEM
+	url = https://github.com/OpenDigitalTwin-Dev/CEM.git
+[submodule "toolkit/DAE"]
+	path = toolkit/DAE
+	url = https://github.com/OpenDigitalTwin-Dev/DAE.git
+[submodule "toolkit/PS"]
+	path = toolkit/PS
+	url = https://github.com/OpenDigitalTwin-Dev/PS.git
+[submodule "toolkit/Particles"]
+	path = toolkit/Particles
+	url = https://github.com/OpenDigitalTwin-Dev/Particles.git
+[submodule "toolkit/NLA"]
+	path = toolkit/NLA
+	url = https://github.com/OpenDigitalTwin-Dev/NLA.git
