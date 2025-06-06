@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 project(cgal_api)
 
-set(CGAL_DIR ../../toolkit/install/cgal_install/lib/cmake/CGAL)
+set(CGAL_DIR ../../toolkit/Geometry/install/cgal_install/lib/cmake/CGAL)
 find_package(CGAL)
 if(CGAL_FOUND)
   message("CGAL FOUND")
