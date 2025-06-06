@@ -16,3 +16,6 @@
 [submodule "toolkit/Particles"]
 	path = toolkit/Particles
 	url = https://github.com/OpenDigitalTwin-Dev/Particles.git
+[submodule "docs"]
+	path = docs
+	url = https://github.com/OpenDigitalTwin-Dev/docs.git
