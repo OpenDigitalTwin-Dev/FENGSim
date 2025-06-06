@@ -10,12 +10,12 @@
 [submodule "toolkit/PS"]
 	path = toolkit/PS
 	url = https://github.com/OpenDigitalTwin-Dev/PS.git
-[submodule "toolkit/Particles"]
-	path = toolkit/Particles
-	url = https://github.com/OpenDigitalTwin-Dev/Particles.git
 [submodule "toolkit/NLA"]
 	path = toolkit/NLA
 	url = https://github.com/OpenDigitalTwin-Dev/NLA.git
 [submodule "docs"]
 	path = docs
 	url = https://github.com/OpenDigitalTwin-Dev/docs.git
+[submodule "toolkit/Particles"]
+	path = toolkit/Particles
+	url = https://github.com/OpenDigitalTwin-Dev/Particles.git
