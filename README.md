@@ -29,6 +29,7 @@ There exist various solvers designed for nonlinear solid mechanics, computationa
 
 ```
 	cd FENGSim/
+	git pull origin main
 	git submodule init
 	git submodule update docs
 	git submodule update toolkit/CFD
