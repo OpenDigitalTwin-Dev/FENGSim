@@ -1,6 +1,3 @@
-[submodule "docs"]
-	path = docs
-	url = https://github.com/OpenDigitalTwin-Dev/docs.git
 [submodule "toolkit/MultiX"]
 	path = toolkit/MultiX
 	url = https://github.com/OpenDigitalTwin-Dev/MultiX.git
@@ -22,3 +19,6 @@
 [submodule "toolkit/NLA"]
 	path = toolkit/NLA
 	url = https://github.com/OpenDigitalTwin-Dev/NLA.git
+[submodule "docs"]
+	path = docs
+	url = https://github.com/OpenDigitalTwin-Dev/docs.git
