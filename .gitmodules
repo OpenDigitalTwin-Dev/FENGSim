@@ -19,6 +19,3 @@
 [submodule "toolkit/Particles"]
 	path = toolkit/Particles
 	url = https://github.com/OpenDigitalTwin-Dev/Particles.git
-[submodule "toolkit/MultiX"]
-	path = toolkit/MultiX
-	url = https://github.com/OpenDigitalTwin-Dev/MultiX.git
