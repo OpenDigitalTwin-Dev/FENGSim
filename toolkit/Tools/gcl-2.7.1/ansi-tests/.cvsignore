@@ -1,0 +1,7 @@
+*.fn
+*.x86f
+*.fasl
+*.ufsl
+*.dfsl
+*.pfsl
+binary

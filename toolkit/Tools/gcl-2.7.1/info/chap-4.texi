@@ -1,0 +1,2805 @@
+
+
+@node Types and Classes, Data and Control Flow, Evaluation and Compilation, Top
+@chapter Types and Classes
+
+@menu
+* Introduction (Types and Classes)::  
+* Types::			
+* Classes::			
+* Types and Classes Dictionary::  
+@end menu
+
+@node Introduction (Types and Classes), Types, Types and Classes, Types and Classes
+@section Introduction
+
+@c including concept-type-intro
+
+A @i{type} is a (possibly infinite) set of @i{objects}.
+An @i{object} can belong to more than one @i{type}.  
+@i{Types} are never explicitly represented as @i{objects} by @r{Common Lisp}.
+Instead, they are referred to indirectly by the use of @i{type specifiers},
+which are @i{objects} that denote @i{types}.
+
+New @i{types} can be defined using @b{deftype}, @b{defstruct}, 
+@b{defclass}, and @b{define-condition}.
+
+The @i{function} @b{typep}, a set membership test, is used to determine
+whether a given @i{object} is of a given @i{type}.  The function
+@b{subtypep}, a subset test, is used to determine whether a
+given @i{type} is a @i{subtype} of another given @i{type}.  The
+function @b{type-of} returns a particular @i{type} to
+which a given @i{object} belongs, even though that @i{object}
+must belong to one or more other @i{types} as well.
+(For example, every @i{object} is of @i{type} @b{t}, 
+ but @b{type-of} always returns a @i{type specifier}
+ for a @i{type} more specific than @b{t}.)
+
+@i{Objects}, not @i{variables}, have @i{types}.
+Normally, any @i{variable} can have any @i{object} as its @i{value}.
+It is possible to declare that a @i{variable} takes on only 
+values of a given @i{type} by making an explicit @i{type declaration}.
+@i{Types} are arranged in a directed acyclic graph, except
+for the presence of equivalences. 
+
+@i{Declarations} can be made about @i{types} using @b{declare}, 
+@b{proclaim}, @b{declaim}, or @b{the}.
+For more information about @i{declarations},
+see @ref{Declarations}.
+
+Among the fundamental @i{objects} of the object system are @i{classes}.
+A @i{class} determines the structure and behavior of a set of
+other @i{objects}, which are called its @i{instances}. 
+Every @i{object} is a @i{direct instance} of a @i{class}.
+The @i{class} of an @i{object} determines the set of
+operations that can be performed on the @i{object}.
+For more information, see @ref{Classes}.
+
+It is possible to write @i{functions} that have behavior @i{specialized}
+to the class of the @i{objects} which are their @i{arguments}.
+For more information, see @ref{Generic Functions and Methods}.
+
+The @i{class} of the @i{class} of an @i{object} 
+is called its @i{metaclass}
+@IGindex metaclass
+.
+For more information about @i{metaclasses},
+see @ref{Meta-Objects}.
+
+@c end of including concept-type-intro
+
+@node Types, Classes, Introduction (Types and Classes), Types and Classes
+@section Types
+
+@c including concept-types
+
+@menu
+* Data Type Definition::	
+* Type Relationships::		
+* Type Specifiers::		
+@end menu
+
+@node Data Type Definition, Type Relationships, Types, Types
+@subsection Data Type Definition
+
+Information about @i{type} usage is located in 
+the sections specified in @i{Figure~4--1}. 
+@i{Figure~4--7} lists some @i{classes} 
+that are particularly relevant to the object system.
+@i{Figure~9--1} lists the defined @i{condition} @i{types}.
+
+@format
+@group
+@noindent
+@w{  @b{Section}                                Data Type                         }
+@w{  _________________________________________________________________________}
+@w{  @ref{Classes}                        Object System types               }
+@w{  @ref{Slots}                          Object System types               }
+@w{  @ref{Objects}                        Object System types               }
+@w{  @ref{Generic Functions and Methods}  Object System types               }
+@w{  @ref{Condition System Concepts}      Condition System types            }
+@w{  @ref{Types and Classes}              Miscellaneous types               }
+@w{  @ref{Syntax}                         All types---read and print syntax  }
+@w{  @ref{The Lisp Printer}               All types---print syntax           }
+@w{  @ref{Compilation}                    All types---compilation issues     }
+
+@noindent
+@w{           Figure 4--1: Cross-References to Data Type Information          }
+
+@end group
+@end format
+
+@node Type Relationships, Type Specifiers, Data Type Definition, Types
+@subsection Type Relationships
+
+@table @asis
+
+@item @t{*}  
+The @i{types} @b{cons}, @b{symbol}, @b{array}, @b{number},
+@b{character}, @b{hash-table}, 
+
+@b{function},
+
+@b{readtable}, @b{package}, @b{pathname}, @b{stream}, 
+@b{random-state}, @b{condition}, @b{restart},
+and any single other @i{type} created by @b{defstruct},
+
+@b{define-condition},
+
+or @b{defclass} are @i{pairwise} @i{disjoint}, 
+except for type relations explicitly established by specifying 
+@i{superclasses} in @b{defclass} 
+
+or @b{define-condition}
+
+or the @t{:include} option of @b{destruct}.
+
+@item @t{*}  
+Any two @i{types} created by @b{defstruct} are 
+@i{disjoint} unless
+one is a @i{supertype} of the other by virtue of
+the @b{defstruct} @t{:include} option.
+
+[Editorial Note by KMP: The comments in the source say gray suggested some change
+from ``common superclass'' to ``common subclass'' in the following, but the
+result looks suspicious to me.]
+
+@item @t{*}  
+Any two @i{distinct} @i{classes} created by @b{defclass} 
+or @b{define-condition}
+are @i{disjoint} unless they have a common @i{subclass} or
+one @i{class} is a @i{subclass} of the other.
+
+@item @t{*}  
+An implementation may be extended to add other @i{subtype}
+relationships between the specified @i{types}, as long as they do
+not violate the type relationships and disjointness requirements
+specified here.  An implementation may define additional @i{types}
+that are @i{subtypes} or @i{supertypes} of any
+specified @i{types}, as long as each additional @i{type} is
+a @i{subtype} of @i{type} @b{t} and a @i{supertype} of @i{type} @b{nil} and the disjointness requirements
+are not violated.
+
+At the discretion of the implementation, either @b{standard-object}
+or @b{structure-object} might appear in any class precedence list
+for a @i{system class} that does not already specify either 
+@b{standard-object} or @b{structure-object}.  If it does,
+it must precede the @i{class} @b{t} and follow all other @i{standardized} @i{classes}.
+
+@end table
+
+@node Type Specifiers,  , Type Relationships, Types
+@subsection Type Specifiers
+
+@i{Type specifiers} can be @i{symbols}, @i{classes}, or @i{lists}.
+@i{Figure~4--2} lists @i{symbols} that are
+  @i{standardized} @i{atomic type specifiers}, and
+@i{Figure~4--3} lists
+ @i{standardized} @i{compound type specifier} @i{names}.
+For syntax information, see the dictionary entry for the corresponding @i{type specifier}.
+It is possible to define new @i{type specifiers} using
+ @b{defclass},
+ @b{define-condition},
+ @b{defstruct}, 
+or
+ @b{deftype}.
+
+@format
+@group
+@noindent
+@w{ arithmetic-error                 function           simple-condition          }
+@w{ array                            generic-function   simple-error              }
+@w{ atom                             hash-table         simple-string             }
+@w{ base-char                        integer            simple-type-error         }
+@w{ base-string                      keyword            simple-vector             }
+@w{ bignum                           list               simple-warning            }
+@w{ bit                              logical-pathname   single-float              }
+@w{ bit-vector                       long-float         standard-char             }
+@w{ broadcast-stream                 method             standard-class            }
+@w{ built-in-class                   method-combination standard-generic-function }
+@w{ cell-error                       nil                standard-method           }
+@w{ character                        null               standard-object           }
+@w{ class                            number             storage-condition         }
+@w{ compiled-function                package            stream                    }
+@w{ complex                          package-error      stream-error              }
+@w{ concatenated-stream              parse-error        string                    }
+@w{ condition                        pathname           string-stream             }
+@w{ cons                             print-not-readable structure-class           }
+@w{ control-error                    program-error      structure-object          }
+@w{ division-by-zero                 random-state       style-warning             }
+@w{ double-float                     ratio              symbol                    }
+@w{ echo-stream                      rational           synonym-stream            }
+@w{ end-of-file                      reader-error       t                         }
+@w{ error                            readtable          two-way-stream            }
+@w{ extended-char                    real               type-error                }
+@w{ file-error                       restart            unbound-slot              }
+@w{ file-stream                      sequence           unbound-variable          }
+@w{ fixnum                           serious-condition  undefined-function        }
+@w{ float                            short-float        unsigned-byte             }
+@w{ floating-point-inexact           signed-byte        vector                    }
+@w{ floating-point-invalid-operation simple-array       warning                   }
+@w{ floating-point-overflow          simple-base-string                           }
+@w{ floating-point-underflow         simple-bit-vector                            }
+
+@noindent
+@w{                 Figure 4--2: Standardized Atomic Type Specifiers               }
+
+@end group
+@end format
+
+\indent               
+If a @i{type specifier} is a @i{list}, the @i{car} of the @i{list} 
+is a @i{symbol}, and the rest of the @i{list} is subsidiary
+@i{type} information.  Such a @i{type specifier} is called 
+a @i{compound type specifier}
+@IGindex compound type specifier
+.
+Except as explicitly stated otherwise,
+the subsidiary items can be unspecified.
+The unspecified subsidiary items are indicated
+by writing @t{*}.  For example, to completely specify
+a @i{vector}, the @i{type} of the elements
+and the length of the @i{vector} must be present.
+
+@example
+ (vector double-float 100)
+@end example
+
+The following leaves the length unspecified:
+
+@example
+ (vector double-float *)
+@end example
+
+The following leaves the element type unspecified:
+
+@example
+ (vector * 100)                                      
+@end example
+
+Suppose that two @i{type specifiers} are the same except that the first
+has a @t{*} where the second has a more explicit specification.
+Then the second denotes a @i{subtype} 
+of the @i{type} denoted by the first.
+
+If a @i{list} has one or more unspecified items at the end, 
+those items can be dropped.
+If dropping all occurrences of @t{*} results in a @i{singleton} @i{list},
+then the parentheses can be dropped as well (the list can be replaced
+by the @i{symbol} in its @i{car}).  
+For example,                       
+@t{(vector double-float *)}                    
+can be abbreviated to @t{(vector double-float)},               
+and @t{(vector * *)} can be abbreviated to @t{(vector)} 
+and then to 
+@t{vector}.
+
+@format
+@group
+@noindent
+@w{  and           long-float    simple-base-string  }
+@w{  array         member        simple-bit-vector   }
+@w{  base-string   mod           simple-string       }
+@w{  bit-vector    not           simple-vector       }
+@w{  complex       or            single-float        }
+@w{  cons          rational      string              }
+@w{  double-float  real          unsigned-byte       }
+@w{  eql           satisfies     values              }
+@w{  float         short-float   vector              }
+@w{  function      signed-byte                       }
+@w{  integer       simple-array                      }
+
+@noindent
+@w{  Figure 4--3: Standardized Compound Type Specifier Names}
+
+@end group
+@end format
+
+Figure 4--4 show the @i{defined names} that can be used as 
+@i{compound type specifier} @i{names}
+but that cannot be used as @i{atomic type specifiers}.
+
+@format
+@group
+@noindent
+@w{  and     mod  satisfies  }
+@w{  eql     not  values     }
+@w{  member  or              }
+
+@noindent
+@w{  Figure 4--4: Standardized Compound-Only Type Specifier Names}
+
+@end group
+@end format
+
+New @i{type specifiers} can come into existence in two ways.
+@table @asis
+
+@item @t{*}  
+Defining a structure by using @b{defstruct} without using
+ the @t{:type} specifier or defining a @i{class} by using 
+ @b{defclass} 
+ or @b{define-condition}
+ automatically causes the name of the structure 
+ or class to be a new @i{type specifier} @i{symbol}.
+@item @t{*}  
+@b{deftype} can be used to define @i{derived type specifiers}
+@IGindex derived type specifier
+,
+ which act as `abbreviations' for other @i{type specifiers}.
+@end table
+
+A @i{class} @i{object} can be used as a @i{type specifier}. 
+When used this way, it denotes the set of all members of that @i{class}.
+
+Figure 4--5 shows some @i{defined names} relating to 
+@i{types} and @i{declarations}.
+
+@format
+@group
+@noindent
+@w{  coerce            defstruct  subtypep  }
+@w{  declaim           deftype    the       }
+@w{  declare           ftype      type      }
+@w{  defclass          locally    type-of   }
+@w{  define-condition  proclaim   typep     }
+
+@noindent
+@w{  Figure 4--5: Defined names relating to types and declarations.}
+
+@end group
+@end format
+
+Figure 4--6 shows all @i{defined names} that are @i{type specifier} @i{names},
+whether for @i{atomic type specifiers} or @i{compound type specifiers};
+this list is the union of the lists in @i{Figure~4--2} 
+and @i{Figure~4--3}.
+
+@format
+@group
+@noindent
+@w{ and                              function           simple-array              }
+@w{ arithmetic-error                 generic-function   simple-base-string        }
+@w{ array                            hash-table         simple-bit-vector         }
+@w{ atom                             integer            simple-condition          }
+@w{ base-char                        keyword            simple-error              }
+@w{ base-string                      list               simple-string             }
+@w{ bignum                           logical-pathname   simple-type-error         }
+@w{ bit                              long-float         simple-vector             }
+@w{ bit-vector                       member             simple-warning            }
+@w{ broadcast-stream                 method             single-float              }
+@w{ built-in-class                   method-combination standard-char             }
+@w{ cell-error                       mod                standard-class            }
+@w{ character                        nil                standard-generic-function }
+@w{ class                            not                standard-method           }
+@w{ compiled-function                null               standard-object           }
+@w{ complex                          number             storage-condition         }
+@w{ concatenated-stream              or                 stream                    }
+@w{ condition                        package            stream-error              }
+@w{ cons                             package-error      string                    }
+@w{ control-error                    parse-error        string-stream             }
+@w{ division-by-zero                 pathname           structure-class           }
+@w{ double-float                     print-not-readable structure-object          }
+@w{ echo-stream                      program-error      style-warning             }
+@w{ end-of-file                      random-state       symbol                    }
+@w{ eql                              ratio              synonym-stream            }
+@w{ error                            rational           t                         }
+@w{ extended-char                    reader-error       two-way-stream            }
+@w{ file-error                       readtable          type-error                }
+@w{ file-stream                      real               unbound-slot              }
+@w{ fixnum                           restart            unbound-variable          }
+@w{ float                            satisfies          undefined-function        }
+@w{ floating-point-inexact           sequence           unsigned-byte             }
+@w{ floating-point-invalid-operation serious-condition  values                    }
+@w{ floating-point-overflow          short-float        vector                    }
+@w{ floating-point-underflow         signed-byte        warning                   }
+
+@noindent
+@w{                  Figure 4--6: Standardized Type Specifier Names                }
+
+@end group
+@end format
+
+@c end of including concept-types
+
+@node Classes, Types and Classes Dictionary, Types, Types and Classes
+@section Classes
+
+@c including concept-classes
+
+While the object system is general enough to describe all @i{standardized} @i{classes}
+(including, for example, @b{number}, @b{hash-table}, and
+@b{symbol}), Figure 4--7 contains a list of @i{classes} that are
+especially relevant to understanding the object system.
+
+@format
+@group
+@noindent
+@w{  built-in-class    method-combination         standard-object   }
+@w{  class             standard-class             structure-class   }
+@w{  generic-function  standard-generic-function  structure-object  }
+@w{  method            standard-method                              }
+
+@noindent
+@w{                Figure 4--7: Object System Classes               }
+
+@end group
+@end format
+
+@menu
+* Introduction to Classes::	
+* Defining Classes::		
+* Creating Instances of Classes::  
+* Inheritance::			
+* Determining the Class Precedence List::  
+* Redefining Classes::		
+* Integrating Types and Classes::  
+@end menu
+
+@node Introduction to Classes, Defining Classes, Classes, Classes
+@subsection Introduction to Classes
+
+A @i{class}
+@IGindex class
+ is an @i{object} that determines the structure and behavior 
+of a set of other @i{objects}, which are called its @i{instances}
+@IGindex instance
+.   
+
+A @i{class} can inherit structure and behavior from other @i{classes}.
+A @i{class} whose definition refers to other @i{classes} for the purpose 
+of inheriting from them is said to be a @i{subclass} of each of
+those @i{classes}. The @i{classes} that are designated for purposes of
+inheritance are said to be @i{superclasses} of the inheriting @i{class}.
+
+A @i{class} can have a @i{name}. The @i{function} @b{class-name} 
+takes a @i{class} @i{object} and returns its @i{name}. 
+The @i{name} of an anonymous @i{class} is @b{nil}.  A @i{symbol} 
+can @i{name} a @i{class}. The @i{function} @b{find-class} takes a
+@i{symbol} and returns the @i{class} that the @i{symbol} names.
+A @i{class} has a @i{proper name} if the @i{name} is a @i{symbol}
+and if the @i{name} of the @i{class} names that @i{class}.
+That is, a @i{class}~C has the @i{proper name}~S if S=
+@t{(class-name C)} and C= @t{(find-class S)}.
+Notice that it is possible for 
+@t{(find-class S_1)} = @t{(find-class S_2)}
+and S_1!= S_2.
+If C= @t{(find-class S)}, we say that C is the @i{class} @i{named} S.
+
+A @i{class} C_1 is 
+a @i{direct superclass}
+@IGindex direct superclass
+ of a @i{class} C_2
+if C_2 explicitly designates C_1 
+as a @i{superclass} in its definition.
+In this case C_2 is a @i{direct subclass}
+@IGindex direct subclass
+ of C_1.
+A @i{class} C_n is a @i{superclass}
+@IGindex superclass
+ of 
+a @i{class} C_1 if there exists a series of
+@i{classes} C_2,...,C_@{n-1@} such that 
+C_@{i+1@} is a @i{direct superclass} of C_i for 1 <= i<n.
+In this case, C_1 is a @i{subclass}
+@IGindex subclass
+ of C_n.
+A @i{class} is considered neither a @i{superclass} nor a @i{subclass} of itself.
+That is, if C_1 is a @i{superclass} of C_2, 
+then C_1 != C_2.
+The set of @i{classes} consisting of some given @i{class} C 
+along with all of its @i{superclasses} is called ``C and its superclasses.''
+
+Each @i{class} has a @i{class precedence list}
+@IGindex class precedence list
+,
+which is a total ordering on the set of the given @i{class} and its @i{superclasses}.
+The total ordering is expressed as a list ordered from most specific to least specific.
+The @i{class precedence list} is used in several ways.  In general, more
+specific @i{classes} can @i{shadow}
+@IGindex shadow
+_1 features that would
+otherwise be inherited from less specific @i{classes}.
+The @i{method} selection and combination process uses 
+the @i{class precedence list} to order @i{methods} 
+from most specific to least specific. 
+
+When a @i{class} is defined, the order in which its direct @i{superclasses}
+are mentioned in the defining form is important.  Each @i{class} has a
+@i{local precedence order}
+@IGindex local precedence order
+, which is a @i{list} consisting of the
+@i{class} followed by its @i{direct superclasses} in the order mentioned
+in the defining @i{form}.
+
+A @i{class precedence list} is always consistent with the
+@i{local precedence order} of each @i{class} in the list.  
+The @i{classes} in each @i{local precedence order} appear
+within the @i{class precedence list} in the same order.  
+If the @i{local precedence orders} are inconsistent with each other, 
+no @i{class precedence list} can be constructed, and an error is signaled.
+The @i{class precedence list} and its computation is discussed
+in @ref{Determining the Class Precedence List}.
+
+@i{classes} are organized into a directed acyclic graph.
+There are two distinguished @i{classes}, named @b{t} and @b{standard-object}.
+The @i{class} named @b{t} has no @i{superclasses}. 
+It is a @i{superclass} of every @i{class} except itself.  
+The @i{class} named @b{standard-object} is an @i{instance} of 
+the @i{class} @b{standard-class} and is a @i{superclass} of
+every @i{class} that is an @i{instance} of the @i{class} @b{standard-class} except itself.
+
+[Reviewer Note by Barmar: This or something like it needs to be said in the introduction.]
+There is a mapping from the object system @i{class} space into
+the @i{type} space.  Many of the standard @i{types} specified 
+in this document have a corresponding @i{class} that has the same 
+@i{name} as the @i{type}. Some @i{types} do not have a
+corresponding @i{class}. The integration of the @i{type} and @i{class}
+systems is discussed in @ref{Integrating Types and Classes}.
+
+@i{Classes} are represented by @i{objects} that are themselves
+@i{instances} of @i{classes}. 
+The @i{class} of the @i{class} of an @i{object} is termed
+the @i{metaclass}
+@IGindex metaclass
+ of that @i{object}. When no misinterpretation is
+possible, the term @i{metaclass} is used to refer to a @i{class}
+that has @i{instances} that are themselves @i{classes}. The @i{metaclass}
+determines the form of inheritance used by the @i{classes} that are its
+@i{instances} and the representation of the @i{instances} of those @i{classes}.
+The object system provides a default @i{metaclass}, @b{standard-class}, that is
+appropriate for most programs.
+
+Except where otherwise specified, all @i{classes} mentioned in this
+standard are @i{instances} of the @i{class} @b{standard-class},
+all @i{generic functions} are @i{instances} 
+of the @i{class} @b{standard-generic-function},
+and all @i{methods} are @i{instances} of the @i{class} @b{standard-method}.
+
+@menu
+* Standard Metaclasses::	
+@end menu
+
+@node Standard Metaclasses,  , Introduction to Classes, Introduction to Classes
+@subsubsection Standard Metaclasses
+
+The object system provides a number of predefined @i{metaclasses}. 
+These include the @i{classes} @b{standard-class}, 
+@b{built-in-class}, and @b{structure-class}:
+
+@table @asis
+
+@item @t{*}  
+The @i{class} @b{standard-class} is the default @i{class} of 
+@i{classes} defined by @b{defclass}.
+
+@item @t{*}  
+The @i{class} @b{built-in-class} is the @i{class} whose
+@i{instances} are @i{classes} that have special implementations with
+restricted capabilities.  Any @i{class} that corresponds to a standard
+@i{type} might be an @i{instance} of @b{built-in-class}.
+The predefined @i{type} specifiers that are required to have
+corresponding @i{classes} are listed in @i{Figure~4--8}.  
+It is @i{implementation-dependent} whether each of these @i{classes} 
+is implemented as a @i{built-in class}.
+
+@item @t{*}  
+All @i{classes} defined by means of @b{defstruct} are
+@i{instances} of the @i{class} @b{structure-class}.
+@end table
+
+@node Defining Classes, Creating Instances of Classes, Introduction to Classes, Classes
+@subsection Defining Classes
+
+The macro @b{defclass} is used to define a new named @i{class}.  
+
+The definition of a @i{class} includes:
+
+@table @asis
+
+@item @t{*}  
+The @i{name} of the new @i{class}. 
+  For newly-defined @i{classes} this @i{name} is a @i{proper name}.
+
+@item @t{*}  
+The list of the direct @i{superclasses} of the new @i{class}. 
+
+@item @t{*}  
+A set of @i{slot specifiers}
+@IGindex slot specifier
+.
+  Each @i{slot specifier} includes the @i{name} of the @i{slot} 
+  and zero or more @i{slot} options.  A @i{slot} option pertains 
+  only to a single @i{slot}.  If a @i{class} definition contains
+  two @i{slot specifiers} with the same @i{name}, an error is signaled.
+
+@item @t{*}  
+A set of @i{class} options.  
+  Each @i{class} option pertains to the @i{class} as a whole.  
+
+@end table
+
+The @i{slot} options and @i{class} options of 
+the @b{defclass} form provide mechanisms for the following:
+
+@table @asis
+
+@item @t{*}  
+Supplying a default initial value @i{form} 
+for a given @i{slot}.  
+
+@item @t{*}  
+Requesting that @i{methods} for @i{generic functions}
+be automatically generated for reading or writing @i{slots}. 
+
+@item @t{*}  
+Controlling whether a given @i{slot} is shared by 
+all @i{instances}
+of the @i{class} or whether each 
+@i{instance} of the @i{class} has its own @i{slot}.
+
+@item @t{*}  
+Supplying a set of initialization arguments and initialization
+argument defaults to be used in @i{instance} creation.
+
+@item @t{*}  
+Indicating that the @i{metaclass} is to be other 
+than the default.  The @t{:metaclass} option is reserved for future use; 
+an implementation can be extended to make use of the @t{:metaclass}
+option.
+
+@item @t{*}  
+Indicating the expected @i{type} for the value stored
+in the @i{slot}.
+
+@item @t{*}  
+Indicating the @i{documentation string} for the @i{slot}.
+
+@end table
+
+@node Creating Instances of Classes, Inheritance, Defining Classes, Classes
+@subsection Creating Instances of Classes
+
+The generic function @b{make-instance} creates and returns a new
+@i{instance} of a @i{class}.  
+The object system provides several mechanisms for
+specifying how a new @i{instance} is to be initialized.  For example, it
+is possible to specify the initial values for @i{slots} in newly created
+@i{instances} 
+either by giving arguments to @b{make-instance} or by
+providing default initial values.  Further initialization activities
+can be performed by @i{methods} written for @i{generic functions} 
+that are
+part of the initialization protocol.  The complete initialization
+protocol is described in @ref{Object Creation and Initialization}.
+
+@node Inheritance, Determining the Class Precedence List, Creating Instances of Classes, Classes
+@subsection Inheritance
+
+A @i{class} can inherit @i{methods}, @i{slots}, 
+and some @b{defclass} options from its @i{superclasses}.  
+Other sections describe the inheritance of @i{methods}, 
+the inheritance of @i{slots} and @i{slot} options, 
+and the inheritance of @i{class} options.
+
+@menu
+* Examples of Inheritance::	
+* Inheritance of Class Options::  
+@end menu
+
+@node Examples of Inheritance, Inheritance of Class Options, Inheritance, Inheritance
+@subsubsection Examples of Inheritance
+
+@example
+ (defclass C1 () 
+     ((S1 :initform 5.4 :type number) 
+      (S2 :allocation :class)))
+
+ (defclass C2 (C1) 
+     ((S1 :initform 5 :type integer)
+      (S2 :allocation :instance)
+      (S3 :accessor C2-S3)))
+@end example
+
+@i{Instances} of the class @t{C1} have a @i{local slot} named @t{S1},
+whose default initial value is 5.4 and
+whose @i{value} should always be a @i{number}.
+The class @t{C1} also has a @i{shared slot} named @t{S2}.
+
+There is a @i{local slot} named @t{S1} in @i{instances} of @t{C2}.
+The default initial value of @t{S1} is 5.
+The value of @t{S1} should always be of type @t{(and integer number)}.
+There are also @i{local slots} named @t{S2} and @t{S3} in @i{instances} of @t{C2}.
+The class @t{C2} has a @i{method} for @t{C2-S3} for reading the value of slot @t{S3};
+there is also a @i{method} for @t{(setf C2-S3)} that writes the value of @t{S3}.
+
+@node Inheritance of Class Options,  , Examples of Inheritance, Inheritance
+@subsubsection Inheritance of Class Options
+
+The @t{:default-initargs} class option is inherited.  The set of
+defaulted initialization arguments for a @i{class} is the union of the
+sets of initialization arguments supplied in
+the @t{:default-initargs} class options of the @i{class} and its @i{superclasses}.
+When more than one default initial value @i{form} is supplied for a given
+initialization argument, the default initial value @i{form} that is used
+is the one supplied by the @i{class} that is most specific according to
+the @i{class precedence list}.
+
+If a given @t{:default-initargs} class option specifies an
+initialization argument of the same @i{name} more than once, an
+error of @i{type} @b{program-error} is signaled.
+
+@node Determining the Class Precedence List, Redefining Classes, Inheritance, Classes
+@subsection Determining the Class Precedence List
+
+The @b{defclass} form for a @i{class} provides a total ordering
+on that @i{class} and its direct @i{superclasses}.  This ordering is
+called the @i{local precedence order}
+@IGindex local precedence order
+.  It is an ordered list of the
+@i{class} and its direct @i{superclasses}. The
+@i{class precedence list}
+@IGindex class precedence list
+ for a class C is a total ordering on
+C and its @i{superclasses} that is consistent with the
+@i{local precedence orders} for each of C and its @i{superclasses}.
+
+A @i{class} precedes its direct @i{superclasses}, 
+and a direct @i{superclass} precedes all other 
+direct @i{superclasses} specified to its right 
+in the @i{superclasses} list of the @b{defclass} form.  
+For every class C, define 
+@center R_C=@{(C,C_1),(C_1,C_2),...,(C_@{n-1@},C_n)@}
+where C_1,...,C_n are
+the direct @i{superclasses} of C in the order in which
+they are mentioned in the @b{defclass} form. These ordered pairs
+generate the total ordering on the class C and its direct
+@i{superclasses}.
+
+Let S_C be the set of C and its @i{superclasses}. Let R be
+
+@center R=\bigcup_@{c\in S_C @}R_c
+.
+
+[Reviewer Note by Barmar: ``Consistent'' needs to be defined, or maybe we should say
+``logically consistent''?]
+
+The set R might or might not generate a partial ordering, depending on
+whether the R_c, c\in S_C, are 
+consistent; it is assumed
+that they are consistent and that R generates a partial ordering.
+When the R_c are not consistent, it is said that R is inconsistent.
+
+To compute the @i{class precedence list} for~C,
+topologically sort the elements of S_C with respect to the
+partial ordering generated by R.  When the topological
+sort must select a @i{class} from a set of two or more 
+@i{classes}, none of
+which are preceded by other @i{classes} with respect to~R,
+the @i{class} selected is chosen deterministically, as described below.
+
+If R is inconsistent, an error is signaled.
+
+@menu
+* Topological Sorting::		
+* Examples of Class Precedence List Determination::  
+@end menu
+
+@node Topological Sorting, Examples of Class Precedence List Determination, Determining the Class Precedence List, Determining the Class Precedence List
+@subsubsection Topological Sorting
+
+Topological sorting proceeds by finding a class C in~S_C such
+that no other @i{class} precedes that element according to the elements
+in~R.  The class C is placed first in the result.
+Remove C from S_C, and remove all pairs of the form (C,D),
+D\in S_C, from R. Repeat the process, adding
+@i{classes} with no predecessors to the end of the result.  Stop when no
+element can be found that has no predecessor.
+
+If S_C is not empty and the process has stopped, the set R is
+inconsistent. If every @i{class} in the finite set of 
+@i{classes} is preceded
+by another, then R contains a loop. That is, there is a chain of
+classes C_1,...,C_n such that C_i precedes
+C_@{i+1@}, 1<= i<n, and C_n precedes C_1.
+
+Sometimes there are several @i{classes} from S_C with no
+predecessors.  In this case select the one that has a direct
+@i{subclass} rightmost in the @i{class precedence list} computed so far.
+(If there is no such candidate @i{class}, R does not generate 
+a partial ordering---the R_c, c\in S_C, are inconsistent.)
+
+In more precise terms, let @{N_1,...,N_m@}, m>= 2, be
+the @i{classes} from S_C with no predecessors.  Let (C_1... C_n), n>= 1, be the @i{class precedence list}
+constructed so far.  C_1 is the most specific @i{class}, and C_n is the least specific.  Let 1<= j<= n be the largest number
+such that there exists an i where 1<= i<= m and N_i
+is a direct @i{superclass} of C_j; N_i is placed next.
+
+The effect of this rule for selecting from a set of @i{classes} with no
+predecessors is that the @i{classes} in a simple @i{superclass} chain are
+adjacent in the @i{class precedence list} and that @i{classes} in each
+relatively separated subgraph are adjacent in the @i{class precedence list}.
+For example, let T_1 and T_2 be subgraphs whose only
+element in common is the class J.
+Suppose that no superclass of J appears in either T_1 or T_2,
+and that J is in the superclass chain of every class in both T_1 and T_2.
+    Let C_1 be the bottom of T_1; 
+and let C_2 be the bottom of T_2.
+Suppose C is a @i{class} whose direct @i{superclasses}
+are C_1 and C_2 in that order, then the @i{class precedence list}
+for C starts with C and is followed by
+all @i{classes} in T_1 except J. 
+All the @i{classes} of T_2 are next.
+The @i{class} J and its @i{superclasses} appear last.
+
+@node Examples of Class Precedence List Determination,  , Topological Sorting, Determining the Class Precedence List
+@subsubsection Examples of Class Precedence List Determination
+
+This example determines a @i{class precedence list} for the
+class @t{pie}.  The following @i{classes} are defined:
+
+@example
+ (defclass pie (apple cinnamon) ())
+
+ (defclass apple (fruit) ())
+
+ (defclass cinnamon (spice) ())
+
+ (defclass fruit (food) ())
+
+ (defclass spice (food) ())
+
+ (defclass food () ())
+@end example
+
+The set S_@{pie@}~= @{pie, apple, cinnamon, fruit, spice, food,
+standard-object, t @}. The set R~= @{ (pie, apple),
+(apple, cinnamon), (apple, fruit), (cinnamon, spice), \break
+(fruit, food), (spice, food), (food, standard-object), (standard-object,
+t) @}.
+
+The class @t{pie} is not preceded by anything, so it comes first;
+the result so far is @t{(pie)}.  Remove @t{pie} from S and pairs
+mentioning @t{pie} from R to get S~= @{apple, cinnamon,
+fruit, spice, food, standard-object, t @} and R~=~@{(apple, cinnamon), (apple, fruit), (cinnamon, spice),\break (fruit,
+food), (spice, food), (food, standard-object),
+(standard-object, t) @}.
+
+The class @t{apple} is not preceded by anything, so it is next; the
+result is @t{(pie apple)}. Removing @t{apple} and the relevant
+pairs results in S~= @{ cinnamon, fruit, spice, food,
+standard-object, t @} and R~= @{ (cinnamon, spice),
+(fruit, food), (spice, food), (food, standard-object),\break
+(standard-object, t) @}.
+
+The classes @t{cinnamon} and @t{fruit} are not preceded by
+anything, so the one with a direct @i{subclass} rightmost in the 
+@i{class precedence list} computed so far goes next.  The class @t{apple} is a
+direct @i{subclass} of @t{fruit}, and the class @t{pie} is a direct
+@i{subclass} of @t{cinnamon}.  Because @t{apple} appears to the right
+of @t{pie} in the @i{class precedence list}, 
+@t{fruit} goes next, and the
+result so far is @t{(pie apple fruit)}.  S~= @{ cinnamon,
+spice, food, standard-object, t @}; R~= @{(cinnamon,
+spice), (spice, food),\break (food, standard-object),
+(standard-object, t) @}.
+
+The class @t{cinnamon} is next, giving the result so far as @t{(pie apple fruit cinnamon)}.  At this point S~= @{ spice,
+food, standard-object, t @}; R~= @{ (spice, food), (food,
+standard-object), (standard-object, t) @}.
+
+The classes @t{spice}, @t{food}, @b{standard-object}, and 
+@b{t} are added in that order, and the @i{class precedence list} 
+is @t{(pie apple fruit cinnamon spice food standard-object t)}.
+
+It is possible to write a set of @i{class} definitions that cannot be 
+ordered.   For example: 
+
+@example
+ (defclass new-class (fruit apple) ())
+
+ (defclass apple (fruit) ())
+@end example
+
+The class @t{fruit} must precede @t{apple} 
+because the local ordering of @i{superclasses} must be preserved.
+The class @t{apple} must precede @t{fruit} 
+because a @i{class} always precedes its own @i{superclasses}.
+When this situation occurs, an error is signaled, as happens here
+when the system tries to compute the @i{class precedence list} 
+of @t{new-class}.
+
+The following might appear to be a conflicting set of definitions:
+
+@example
+ (defclass pie (apple cinnamon) ())
+
+ (defclass pastry (cinnamon apple) ())
+
+ (defclass apple () ())
+
+ (defclass cinnamon () ())
+@end example
+
+The @i{class precedence list} for @t{pie} is 
+@t{(pie apple cinnamon standard-object t)}.
+
+The @i{class precedence list} for @t{pastry} is  
+@t{(pastry cinnamon apple standard-object t)}.
+
+It is not a problem for @t{apple} to precede @t{cinnamon} in the
+ordering of the @i{superclasses} of @t{pie} but not in the ordering for
+@t{pastry}.  However, it is not possible to build a new @i{class} that
+has both @t{pie} and @t{pastry} as @i{superclasses}.
+
+@node Redefining Classes, Integrating Types and Classes, Determining the Class Precedence List, Classes
+@subsection Redefining Classes
+
+A @i{class} that is a @i{direct instance} of @b{standard-class} can
+be redefined if the new @i{class} is also
+a @i{direct instance} of @b{standard-class}.
+Redefining a @i{class} modifies the existing
+@i{class} @i{object} to reflect the new @i{class} definition; it does not
+create a new @i{class} @i{object} for the @i{class}.  
+Any @i{method} @i{object} created by a @t{:reader}, @t{:writer}, 
+or @t{:accessor} option specified by the old @b{defclass} form is
+removed from the corresponding @i{generic function}.
+@i{Methods} specified by the new @b{defclass} form are added.
+
+When the class C is redefined, changes are propagated to its @i{instances}
+and to @i{instances} of any of its @i{subclasses}.  Updating such an
+@i{instance} occurs at an @i{implementation-dependent} time, but no later than
+the next time a @i{slot} 
+of that @i{instance} is read or written.  Updating an
+@i{instance} 
+does not change its identity as defined by the @i{function} @b{eq}.
+The updating process may change the @i{slots} of that
+particular @i{instance}, 
+but it does not create a new @i{instance}.  Whether
+updating an @i{instance} consumes storage is @i{implementation-dependent}.
+
+Note that redefining a @i{class} may cause @i{slots} to be added or 
+deleted.  If a @i{class} is redefined in a way that changes the set of
+@i{local slots} @i{accessible} in @i{instances}, the @i{instances} 
+are updated.  It is @i{implementation-dependent} whether @i{instances} 
+are updated if a @i{class} is redefined in a way that does not change 
+the set of @i{local slots} @i{accessible} in @i{instances}.
+
+The value of a @i{slot} 
+that is specified as shared both in the old @i{class}
+and in the new @i{class} is retained.  
+If such a @i{shared slot} was unbound
+in the old @i{class}, it is unbound in the new @i{class}.  
+@i{Slots} that
+were local in the old @i{class} and that are shared in the new 
+@i{class} are
+initialized.  Newly added @i{shared slots} are initialized.
+
+Each newly added @i{shared slot} is set to the result of evaluating the
+@i{captured initialization form} for the @i{slot} that was specified 
+in the @b{defclass} @i{form} for the new @i{class}.  
+If there was no @i{initialization form}, the @i{slot} is unbound.
+
+If a @i{class} is redefined in such a way that the set of
+@i{local slots} @i{accessible} in an @i{instance} of the @i{class} 
+is changed, a two-step process of updating the @i{instances} of the
+@i{class} takes place.  The process may be explicitly started by 
+invoking the generic function @b{make-instances-obsolete}.  This
+two-step process can happen in other circumstances in some implementations.
+For example, in some implementations this two-step process is
+triggered if the order of @i{slots} in storage is changed.
+
+The first step modifies the structure of the @i{instance} by adding new
+@i{local slots} and discarding @i{local slots} that are not
+defined in the new version of the @i{class}.  The second step
+initializes the newly-added @i{local slots} and performs any other
+user-defined actions. These two steps are further specified
+in the next two sections.
+
+@menu
+* Modifying the Structure of Instances::  
+* Initializing Newly Added Local Slots (Redefining Classes)::  
+* Customizing Class Redefinition::  
+@end menu
+
+@node Modifying the Structure of Instances, Initializing Newly Added Local Slots (Redefining Classes), Redefining Classes, Redefining Classes
+@subsubsection Modifying the Structure of Instances
+
+[Reviewer Note by Barmar: What about shared slots that are deleted?]
+
+The first step modifies the structure of @i{instances} of the redefined
+@i{class} to conform to its new @i{class} definition.  
+@i{Local slots} specified
+by the new @i{class} definition that are not specified as either local or
+shared by the old @i{class} are added, and @i{slots} 
+not specified as either
+local or shared by the new @i{class} definition that are specified as
+local by the old @i{class} are discarded. 
+The @i{names} of these added and discarded
+@i{slots} are passed as arguments 
+to @b{update-instance-for-redefined-class}
+as described in the next section.
+
+The values of @i{local slots} specified by both the new and old
+@i{classes} are retained. If such a @i{local slot} was unbound,
+it remains unbound.
+
+The value of a @i{slot} that is specified as shared in the old 
+@i{class} and as local in the new @i{class} is retained.  If such 
+a @i{shared slot} was unbound, the @i{local slot} is unbound.
+
+@node Initializing Newly Added Local Slots (Redefining Classes), Customizing Class Redefinition, Modifying the Structure of Instances, Redefining Classes
+@subsubsection Initializing Newly Added Local Slots
+
+The second step initializes the newly added @i{local slots} and performs
+any other user-defined actions.  This step is implemented by the generic
+function @b{update-instance-for-redefined-class}, which is called after
+completion of the first step of modifying the structure of the
+@i{instance}.
+
+The generic function @b{update-instance-for-redefined-class} takes
+four required arguments: the @i{instance} being updated after it has
+undergone the first step, a list of the names of @i{local slots} that were
+added, a list of the names of @i{local slots} that were discarded, and a
+property list containing the @i{slot} names and values of 
+@i{slots} that were
+discarded and had values.  Included among the discarded @i{slots} are
+@i{slots} that were local in the old @i{class} and that are shared in the new
+@i{class}.
+
+The generic function @b{update-instance-for-redefined-class} also
+takes any number of initialization arguments.  When it is called by
+the system to update an @i{instance} whose @i{class} 
+has been redefined, no
+initialization arguments are provided.
+
+There is a system-supplied primary @i{method} for 
+@b{update-instance-for-redefined-class} whose @i{parameter specializer}
+for its @i{instance} argument is the @i{class} @b{standard-object}.  
+First this @i{method} checks the validity of initialization arguments and signals an
+error if an initialization argument is supplied that is not declared
+as valid.  (For more information, see @ref{Declaring the Validity of Initialization Arguments}.)
+Then it calls the generic function
+@b{shared-initialize} with the following arguments: the 
+@i{instance},
+the list of @i{names} of 
+the newly added @i{slots}, and the initialization
+arguments it received.
+
+@node Customizing Class Redefinition,  , Initializing Newly Added Local Slots (Redefining Classes), Redefining Classes
+@subsubsection Customizing Class Redefinition
+
+[Reviewer Note by Barmar: This description is hard to follow.]
+
+@i{Methods} for @b{update-instance-for-redefined-class} may be 
+defined to specify actions to be taken when an @i{instance} is updated.
+If only @i{after methods} for @b{update-instance-for-redefined-class} are
+defined, they will be run after the system-supplied primary @i{method} for
+initialization and therefore will not interfere with the default
+behavior of @b{update-instance-for-redefined-class}.  Because no
+initialization arguments are passed to @b{update-instance-for-redefined-class}
+when it is called by the system, the 
+@i{initialization forms} for @i{slots} 
+that are filled by @i{before methods} for @b{update-instance-for-redefined-class} 
+will not be evaluated by @b{shared-initialize}.
+
+@i{Methods} for @b{shared-initialize} may be defined to customize
+@i{class} redefinition.  For more information, see @ref{Shared-Initialize}.
+
+@node Integrating Types and Classes,  , Redefining Classes, Classes
+@subsection Integrating Types and Classes
+
+The object system maps the space of @i{classes} into the space of @i{types}.
+Every @i{class} that has a proper name has a corresponding @i{type} 
+with the same @i{name}.  
+
+The proper name of every @i{class} is a valid @i{type specifier}.  In
+addition, every @i{class} @i{object} is a valid @i{type specifier}.  
+Thus the expression @t{(typep @i{object} @i{class})} evaluates to 
+@i{true} if the @i{class} of @i{object} is @i{class} itself or 
+a @i{subclass} of @i{class}.  The evaluation of the expression
+@t{(subtypep class1 class2)} returns the values 
+@i{true} and @i{true} if @t{class1} is a subclass of @t{class2} or if they are the
+same @i{class}; otherwise it returns the values 
+@i{false} and @i{true}.
+If  I is an @i{instance} of some @i{class} C named S 
+and C is an @i{instance} of @b{standard-class}, 
+the evaluation of the expression @t{(type-of I\/)} returns S 
+if S is the @i{proper name} of C; 
+otherwise, it returns C.
+
+Because the names of @i{classes} 
+and @i{class} @i{objects} are @i{type specifiers}, they may
+be used in the special form @b{the} and in type declarations.
+
+Many but not all of the predefined @i{type specifiers} have a
+corresponding @i{class} with 
+the same proper name as the @i{type}.  These type
+specifiers are listed in @i{Figure~4--8}.
+For example, the @i{type} @b{array} has 
+a corresponding @i{class} named @b{array}.  
+No @i{type specifier} that is a
+list, such as @t{(vector double-float 100)}, has a corresponding @i{class}.
+The @i{operator} @b{deftype} does not create any @i{classes}.
+
+Each @i{class} that corresponds to a predefined @i{type specifier} can
+be implemented in one of three ways, at the discretion of each implementation.
+It can be a @i{standard class},
+a @i{structure class},
+
+or a @i{system class}.
+
+A @i{built-in class} is one whose @i{generalized instances} have restricted capabilities 
+or special representations.  Attempting to use @b{defclass} to define 
+@i{subclasses} of a @b{built-in-class} signals an error.
+Calling @b{make-instance} to create a @i{generalized instance} of a 
+@i{built-in class} signals an error.  Calling @b{slot-value} on a
+@i{generalized instance} of a @i{built-in class} signals an error.
+Redefining a @i{built-in class} or using @b{change-class} to change
+the @i{class} of an @i{object} to or from a @i{built-in class} signals an error.
+However, @i{built-in classes} can be used as @i{parameter specializers} 
+in @i{methods}.
+
+It is possible to determine whether a @i{class} is a @i{built-in class}
+by checking the @i{metaclass}.
+A @i{standard class}  is an @i{instance} of the @i{class} @b{standard-class},
+a @i{built-in class}  is an @i{instance} of the @i{class} @b{built-in-class}, and
+a @i{structure class} is an @i{instance} of the @i{class} @b{structure-class}.
+
+Each @i{structure} @i{type} created by @b{defstruct} without 
+using the @t{:type} option has a corresponding @i{class}.  
+This @i{class} is a @i{generalized instance} of the @i{class} @b{structure-class}.  
+The @t{:include} option of @b{defstruct} creates a direct
+@i{subclass} of the @i{class} 
+that corresponds to the included @i{structure} 
+@i{type}.
+
+It is @i{implementation-dependent} whether @i{slots} are involved in the
+operation of @i{functions} defined in this specification
+on @i{instances} of @i{classes} defined in this specification,
+except when @i{slots} are explicitly defined by this specification.
+
+If in a particular @i{implementation} a @i{class} defined in this specification
+has @i{slots} that are not defined by this specfication, the names of these @i{slots}
+must not be @i{external symbols} of @i{packages} defined in this specification nor
+otherwise @i{accessible} in the @t{CL-USER} @i{package}.
+
+The purpose of specifying that many of the standard @i{type specifiers} have a
+corresponding @i{class} is to enable users to write @i{methods} that
+discriminate on these @i{types}.  @i{Method} selection requires that a 
+@i{class precedence list} can be determined for each @i{class}. 
+
+The hierarchical relationships among the @i{type specifiers} are mirrored by
+relationships among the @i{classes} corresponding to those @i{types}.  
+
+@i{Figure~4--8} lists the set of @i{classes} 
+that correspond to predefined @i{type specifiers}.
+
+@format
+@group
+@noindent
+@w{ arithmetic-error                 generic-function   simple-error              }
+@w{ array                            hash-table         simple-type-error         }
+@w{ bit-vector                       integer            simple-warning            }
+@w{ broadcast-stream                 list               standard-class            }
+@w{ built-in-class                   logical-pathname   standard-generic-function }
+@w{ cell-error                       method             standard-method           }
+@w{ character                        method-combination standard-object           }
+@w{ class                            null               storage-condition         }
+@w{ complex                          number             stream                    }
+@w{ concatenated-stream              package            stream-error              }
+@w{ condition                        package-error      string                    }
+@w{ cons                             parse-error        string-stream             }
+@w{ control-error                    pathname           structure-class           }
+@w{ division-by-zero                 print-not-readable structure-object          }
+@w{ echo-stream                      program-error      style-warning             }
+@w{ end-of-file                      random-state       symbol                    }
+@w{ error                            ratio              synonym-stream            }
+@w{ file-error                       rational           t                         }
+@w{ file-stream                      reader-error       two-way-stream            }
+@w{ float                            readtable          type-error                }
+@w{ floating-point-inexact           real               unbound-slot              }
+@w{ floating-point-invalid-operation restart            unbound-variable          }
+@w{ floating-point-overflow          sequence           undefined-function        }
+@w{ floating-point-underflow         serious-condition  vector                    }
+@w{ function                         simple-condition   warning                   }
+
+@noindent
+@w{       Figure 4--8: Classes that correspond to pre-defined type specifiers      }
+
+@end group
+@end format
+
+The @i{class precedence list} information specified in the entries for
+each of these @i{classes} are those that are required by the object system.
+
+Individual implementations may be extended to define other type
+specifiers to have a corresponding @i{class}.  Individual implementations
+may be extended to add other @i{subclass} relationships and to add other
+@i{elements} to the @i{class precedence lists} as long as
+they do not violate the type relationships and disjointness
+requirements specified by this standard.
+A standard @i{class} defined with no direct @i{superclasses} is guaranteed to
+be disjoint from all of the @i{classes} in the table, except for the
+class named @b{t}.
+
+@c end of including concept-classes
+
+@node Types and Classes Dictionary,  , Classes, Types and Classes
+@section Types and Classes Dictionary
+
+@c including dict-types
+
+@menu
+* nil (Type)::			
+* boolean::			
+* function (System Class)::	
+* compiled-function::		
+* generic-function::		
+* standard-generic-function::	
+* class::			
+* built-in-class::		
+* structure-class::		
+* standard-class::		
+* method::			
+* standard-method::		
+* structure-object::		
+* standard-object::		
+* method-combination::		
+* t (System Class)::		
+* satisfies::			
+* member (Type Specifier)::			
+* not (Type Specifier)::	
+* and (Type Specifier)::	
+* or (Type Specifier)::		
+* values (Type Specifier)::	
+* eql (Type Specifier)::	
+* coerce::			
+* deftype::			
+* subtypep::			
+* type-of::			
+* typep::			
+* type-error::			
+* type-error-datum::		
+* simple-type-error::		
+@end menu
+
+@node nil (Type), boolean, Types and Classes Dictionary, Types and Classes Dictionary
+@subsection nil                                                                  [Type]
+
+@subsubheading  Supertypes::
+all @i{types}
+
+@subsubheading  Description::
+
+The @i{type} @b{nil} contains no @i{objects} and so is also
+called the @i{empty type}.
+The @i{type} @b{nil} is a @i{subtype} of every @i{type}.
+No @i{object} is of @i{type} @b{nil}.
+
+@subsubheading  Notes::
+
+The @i{type} containing the @i{object} @b{nil} is the @i{type} @b{null},
+not the @i{type} @b{nil}.
+
+@node boolean, function (System Class), nil (Type), Types and Classes Dictionary
+@subsection boolean                                                              [Type]
+
+@subsubheading  Supertypes::
+
+@b{boolean},
+@b{symbol},
+@b{t}
+
+@subsubheading  Description::
+
+The @i{type} @b{boolean} contains the @i{symbols} @b{t} and @b{nil},
+which represent true and false, respectively.
+
+@subsubheading  See Also::
+
+@b{t} (@i{constant variable}),
+@b{nil} (@i{constant variable}),
+@ref{if}
+,
+@ref{not}
+,
+@ref{complement}
+
+@subsubheading  Notes::
+
+Conditional operations, such as @b{if},
+permit the use of @i{generalized booleans},
+not just @i{booleans};
+any @i{non-nil} value,
+not just @b{t},
+counts as true for a @i{generalized boolean}.
+However, as a matter of convention, 
+the @i{symbol} @b{t} is considered the canonical value to use
+even for a @i{generalized boolean} when no better choice presents itself.
+
+@node function (System Class), compiled-function, boolean, Types and Classes Dictionary
+@subsection function                                                     [System Class]
+
+@subsubheading  Class Precedence List::
+@b{function},
+@b{t}
+
+@subsubheading  Description::
+
+A @i{function} is an @i{object} that represents code 
+to be executed when an appropriate number of arguments is supplied.
+A @i{function} is produced by 
+ the @b{function} @i{special form},
+ the @i{function} @b{coerce},
+
+or
+ the @i{function} @b{compile}.
+A @i{function} can be directly invoked by using it as the first argument to
+@b{funcall}, @b{apply}, or @b{multiple-value-call}.
+
+@subsubheading  Compound Type Specifier Kind::
+
+Specializing.
+
+@subsubheading  Compound Type Specifier Syntax::
+
+(@code{function}@{@i{@t{[}arg-typespec @r{[}value-typespec@r{]}@t{]}}@})
+
+@w{@i{arg-typespec} ::=@r{(}@{@i{typespec}@}* }
+@w{                  @t{[}@r{&optional} @{@i{typespec}@}*@t{]} }
+@w{                  @t{[}@r{&rest} @i{typespec}@t{]} }
+@w{                  @t{[}@r{&key} @{@r{(}keyword typespec @r{)}@}*@t{]}@r{)}}
+
+@subsubheading  Compound Type Specifier Arguments::
+
+@i{typespec}---a @i{type specifier}.
+
+@i{value-typespec}---a @i{type specifier}.
+
+@subsubheading  Compound Type Specifier Description::
+
+[Editorial Note by KMP: Isn't there some context info about ftype declarations to be merged here?]
+
+[Editorial Note by KMP: This could still use some cleaning up.]
+
+[Editorial Note by Sandra: Still need clarification about what happens if the
+number of arguments doesn't match the FUNCTION type declaration.]
+
+The list form of the @b{function} @i{type-specifier}
+can be used only for declaration and not for discrimination.
+Every element of this @i{type} is
+a @i{function} that accepts arguments of the
+types   
+specified by the  @i{argj-types} and returns values that are
+members of the @i{types} specified by @i{value-type}. The
+@b{&optional}, @b{&rest}, @b{&key}, 
+
+and @b{&allow-other-keys} 
+
+markers can appear in the list of argument types. 
+
+The @i{type specifier} provided
+with @b{&rest} is the @i{type} 
+of each actual argument, not the @i{type} of the
+corresponding variable.
+
+The @b{&key} parameters 
+should be supplied as lists of the form @t{(@i{keyword} @i{type})}.  
+The @i{keyword} must be a valid keyword-name symbol
+as must be supplied in the actual arguments of a
+call.
+
+This is usually a @i{symbol} in the @t{KEYWORD} @i{package} but can be any @i{symbol}.
+
+When @b{&key} is given in a
+@b{function} @i{type specifier} @i{lambda list},
+the @i{keyword parameters} given
+are exhaustive unless @b{&allow-other-keys} is also present. 
+@b{&allow-other-keys} is an indication 
+that other keyword arguments might actually be
+supplied and, if supplied, can be used. 
+For example,
+the @i{type} of the @i{function} @b{make-list} could be declared as follows:
+
+@example
+ (function ((integer 0) &key (:initial-element t)) list)
+@end example
+
+The @i{value-type} can be a @b{values} 
+@i{type specifier} in order to indicate the
+@i{types} of @i{multiple values}.
+
+Consider a declaration of the following form:
+
+@example
+ (ftype (function (arg0-type arg1-type ...) val-type) f))
+@end example
+
+Any @i{form}
+@t{(f arg0 arg1 ...)}
+within the scope of
+that declaration is equivalent to the following:
+
+@example
+ (the val-type (f (the arg0-type arg0) (the arg1-type arg1) ...))
+@end example
+
+That is, the consequences are undefined if any of the arguments are
+not of the specified @i{types} or the result is not of the
+specified @i{type}. In particular, if any argument is not of the
+correct @i{type}, the result is not guaranteed to be of the
+specified @i{type}.
+
+Thus, an @b{ftype} declaration for a @i{function}
+describes @i{calls} to the @i{function}, not the actual definition
+of the @i{function}.
+
+Consider a declaration of the following form:
+
+@example
+ (type (function (arg0-type arg1-type ...) val-type) fn-valued-variable)
+@end example
+
+This declaration has the interpretation that, within the scope of the
+declaration, the consequences are unspecified if the value of @t{fn-valued-variable} is called with arguments not of the specified
+@i{types}; the value resulting from a valid call will be of type
+@t{val-type}.
+
+As with variable type declarations, nested declarations
+imply intersections of @i{types}, as follows:
+@table @asis
+
+@item @t{*}  
+Consider the following two
+declarations of @b{ftype}:
+
+@example
+ (ftype (function (arg0-type1 arg1-type1 ...) val-type1) f))
+@end example
+
+and
+
+@example
+ (ftype (function (arg0-type2 arg1-type2 ...) val-type2) f))
+@end example
+
+If both these declarations are in effect,
+then within the shared scope of the declarations, calls to @t{f} can be
+treated as if @t{f} were declared as follows:
+
+@example
+ (ftype (function ((and arg0-type1 arg0-type2) (and arg1-type1 arg1-type2 ...) ...)
+                  (and val-type1 val-type2)) 
+        f))
+@end example
+
+It is permitted to ignore one or all of the @b{ftype} declarations in force.
+
+@item @t{*}  
+If two (or more) type declarations are in effect for a variable, and
+they are both @t{function} declarations, the declarations combine similarly.
+@end table
+
+@node compiled-function, generic-function, function (System Class), Types and Classes Dictionary
+@subsection compiled-function                                                    [Type]
+
+@subsubheading  Supertypes::
+
+@b{compiled-function},
+@b{function},
+@b{t}
+
+@subsubheading  Description::
+
+Any @i{function} may be considered by an @i{implementation} to be a 
+a @i{compiled function} if it contains no references to @i{macros} that
+must be expanded at run time, and it contains no unresolved references 
+to @i{load time values}.  See @ref{Compilation Semantics}.
+
+@i{Functions} whose definitions appear lexically within a
+@i{file} that has been @i{compiled} with @b{compile-file} and then
+@i{loaded} with @b{load} are of @i{type} @b{compiled-function}.
+
+@i{Functions} produced by the @b{compile} function
+are of @i{type} @b{compiled-function}.
+
+Other @i{functions} might also be of @i{type} @b{compiled-function}.
+
+@node generic-function, standard-generic-function, compiled-function, Types and Classes Dictionary
+@subsection generic-function                                             [System Class]
+
+@subsubheading  Class Precedence List::
+
+@b{generic-function},
+@b{function},
+@b{t}
+
+@subsubheading  Description::
+
+A @i{generic function}
+@IGindex generic function
+ is a @i{function} whose behavior
+depends on the @i{classes} or identities of the @i{arguments}
+supplied to it.  A generic function object contains a set of
+@i{methods}, a @i{lambda list}, a @i{method combination} @i{type}, 
+and other information.  The @i{methods}
+define the class-specific behavior and operations of the @i{generic function};
+a @i{method} is said to @i{specialize} a @i{generic function}.
+When invoked, a @i{generic function} executes a subset of its
+@i{methods} based on the @i{classes} or identities of its @i{arguments}.
+
+A @i{generic function} can be used in the same ways that an
+ordinary @i{function} can be used; specifically, a @i{generic function} can
+be used as an argument to @b{funcall} and @b{apply},
+and can be given a global or a local name.
+
+@node standard-generic-function, class, generic-function, Types and Classes Dictionary
+@subsection standard-generic-function                                    [System Class]
+
+@subsubheading  Class Precedence List::
+@b{standard-generic-function},
+@b{generic-function},
+@b{function},
+@b{t}
+
+@subsubheading  Description::
+
+The @i{class} @b{standard-generic-function} is the default @i{class} of
+@i{generic functions} @i{established} by
+@b{defmethod},
+@b{ensure-generic-function},
+@b{defgeneric},
+
+and
+@b{defclass} @i{forms}.
+
+@node class, built-in-class, standard-generic-function, Types and Classes Dictionary
+@subsection class                                                        [System Class]
+
+@subsubheading  Class Precedence List::
+@b{class},
+
+@b{standard-object},
+
+@b{t}
+
+@subsubheading  Description::
+
+The @i{type} @b{class} represents @i{objects} that determine the structure 
+and behavior of their @i{instances}. Associated with an @i{object}
+of @i{type} @b{class} is information describing its place in the 
+directed acyclic graph of @i{classes}, its @i{slots}, and its options.
+
+@node built-in-class, structure-class, class, Types and Classes Dictionary
+@subsection built-in-class                                               [System Class]
+
+@subsubheading  Class Precedence List::
+@b{built-in-class},
+@b{class},
+
+@b{standard-object},
+
+@b{t}
+
+@subsubheading  Description::
+
+A @i{built-in class} is a @i{class} whose @i{instances} have 
+restricted capabilities or special representations.
+Attempting to use
+@b{defclass} to define @i{subclasses} of a @i{built-in class}
+signals an error of @i{type} @b{error}.
+Calling @b{make-instance} to create an @i{instance} 
+of a @i{built-in class} signals an error of @i{type} @b{error}.
+Calling @b{slot-value} on an @i{instance} of a @i{built-in class}
+signals an error of @i{type} @b{error}.  Redefining a @i{built-in class}
+or using @b{change-class} to change the @i{class} of an @i{instance}
+to or from a @i{built-in class} signals an error of @i{type} @b{error}.
+However, @i{built-in classes} can be used as @i{parameter specializers}
+in @i{methods}.
+
+@node structure-class, standard-class, built-in-class, Types and Classes Dictionary
+@subsection structure-class                                              [System Class]
+
+@subsubheading  Class Precedence List::
+
+@b{structure-class},
+@b{class},
+
+@b{standard-object},
+
+@b{t}
+
+@subsubheading  Description::
+
+All @i{classes} defined by means of @b{defstruct} 
+are @i{instances} of the @i{class} @b{structure-class}.
+
+@node standard-class, method, structure-class, Types and Classes Dictionary
+@subsection standard-class                                               [System Class]
+
+@subsubheading  Class Precedence List::
+@b{standard-class},
+@b{class},
+
+@b{standard-object},
+
+@b{t}
+
+@subsubheading  Description::
+
+The @i{class} @b{standard-class} is the default @i{class} of @i{classes}
+defined by @b{defclass}.
+
+@node method, standard-method, standard-class, Types and Classes Dictionary
+@subsection method                                                       [System Class]
+
+@subsubheading  Class Precedence List::
+@b{method},
+@b{t}
+
+@subsubheading  Description::
+
+A @i{method} is an @i{object} that represents a modular part of the behavior
+of a @i{generic function}.
+
+A @i{method} contains @i{code} to implement the @i{method}'s
+behavior, a sequence of @i{parameter specializers} that specify when the
+given @i{method} is applicable, and a sequence of @i{qualifiers}
+that is used by the method combination facility to distinguish among
+@i{methods}.  Each required parameter of each 
+@i{method} has an associated @i{parameter specializer}, and the 
+@i{method} will be invoked only on arguments that satisfy its 
+@i{parameter specializers}.
+
+The method combination facility controls the selection of 
+@i{methods}, the order in which they are run, and the values that are
+returned by the generic function.  The object system offers a default method
+combination type and provides a facility for declaring new types of
+method combination.
+
+@subsubheading  See Also::
+
+@ref{Generic Functions and Methods}
+
+@node standard-method, structure-object, method, Types and Classes Dictionary
+@subsection standard-method                                              [System Class]
+
+@subsubheading  Class Precedence List::
+@b{standard-method},
+@b{method},
+
+@b{standard-object},
+
+@b{t}
+
+@subsubheading  Description::
+
+The @i{class} @b{standard-method} is the default @i{class} of 
+@i{methods} defined by the 
+ @b{defmethod} and
+ @b{defgeneric} @i{forms}.
+
+@node structure-object, standard-object, standard-method, Types and Classes Dictionary
+@subsection structure-object                                                    [Class]
+
+@subsubheading  Class Precedence List::
+
+@b{structure-object},
+@b{t}
+
+@subsubheading  Description::
+
+The @i{class} @b{structure-object} is an @i{instance} of @b{structure-class}
+and is a @i{superclass} of every @i{class} 
+that is an @i{instance} of @b{structure-class}
+except itself, and is a @i{superclass} of every @i{class} 
+that is defined by @b{defstruct}.
+
+@subsubheading  See Also::
+
+@ref{defstruct}
+,
+@ref{Sharpsign S},
+@ref{Printing Structures}
+
+@node standard-object, method-combination, structure-object, Types and Classes Dictionary
+@subsection standard-object                                                     [Class]
+
+@subsubheading  Class Precedence List::
+@b{standard-object},
+@b{t}
+
+@subsubheading  Description::
+
+The @i{class} @b{standard-object} is an @i{instance} of @b{standard-class}
+and is a @i{superclass} of every @i{class} that is an @i{instance} of
+@b{standard-class} except itself.
+
+@node method-combination, t (System Class), standard-object, Types and Classes Dictionary
+@subsection method-combination                                           [System Class]
+
+@subsubheading  Class Precedence List::
+@b{method-combination},
+@b{t}
+
+@subsubheading  Description::
+
+Every @i{method combination} @i{object} is an 
+@i{indirect instance} of the @i{class} @b{method-combination}.
+A @i{method combination} @i{object} represents the information about
+the @i{method combination} being used by a @i{generic function}.
+A @i{method combination} @i{object} contains information about
+both the type of @i{method combination} and the arguments being used
+with that @i{type}.
+
+@node t (System Class), satisfies, method-combination, Types and Classes Dictionary
+@subsection t                                                            [System Class]
+
+@subsubheading  Class Precedence List::
+@b{t}
+
+@subsubheading  Description::
+The set of all @i{objects}.  
+The @i{type} @b{t} is a @i{supertype} of every @i{type}, 
+including itself. Every @i{object} is of @i{type} @b{t}.
+
+@node satisfies, member (Type Specifier), t (System Class), Types and Classes Dictionary
+@subsection satisfies                                                  [Type Specifier]
+
+@subsubheading  Compound Type Specifier Kind::
+
+Predicating.
+
+@subsubheading  Compound Type Specifier Syntax::
+
+(@code{satisfies}@{@i{predicate-name}@})
+
+@subsubheading  Compound Type Specifier Arguments::
+
+@i{predicate-name}---a @i{symbol}.
+
+@subsubheading  Compound Type Specifier Description::
+
+This denotes the set of all @i{objects} that satisfy the
+@i{predicate} @i{predicate-name}, which must be a @i{symbol}
+whose global @i{function} definition is a one-argument
+predicate.  A name is required for @i{predicate-name}; 
+@i{lambda expressions} are not allowed.
+For example, the @i{type specifier} @t{(and integer (satisfies evenp))}
+denotes the set of all even integers.
+The form @t{(typep @i{x} '(satisfies @i{p}))} is equivalent to
+@t{(if (@i{p} @i{x}) t nil)}.
+
+The argument is required.
+The @i{symbol} @b{*} can be the argument, but it
+denotes itself (the @i{symbol} @b{*}),
+and does not represent an unspecified value.
+
+The symbol @b{satisfies} is not valid as a @i{type specifier}.
+
+@node member (Type Specifier), not (Type Specifier), satisfies, Types and Classes Dictionary
+@subsection member                                                     [Type Specifier]
+
+@subsubheading  Compound Type Specifier Kind::
+
+Combining.
+
+@subsubheading  Compound Type Specifier Syntax::
+
+(@code{member}@{@i{@{@i{object}@}*}@})
+
+@subsubheading  Compound Type Specifier Arguments::
+
+@i{object}---an @i{object}.
+
+@subsubheading  Compound Type Specifier Description::
+
+This denotes the set containing the named @i{objects}. An
+@i{object} is of this @i{type} if and only if it is @b{eql}
+to one of the specified @i{objects}.
+
+The @i{type specifiers} @t{(member)} and @b{nil} are equivalent.
+@b{*} can be among the @i{objects},
+but if so it denotes itself (the symbol @b{*}) 
+and does not represent an unspecified value.
+The symbol @b{member} is not valid as a @i{type specifier};
+and, specifically, it is not an abbreviation for either @t{(member)} or @t{(member *)}.
+
+@subsubheading  See Also::
+
+the @i{type} @b{eql}
+
+@node not (Type Specifier), and (Type Specifier), member (Type Specifier), Types and Classes Dictionary
+@subsection not                                                        [Type Specifier]
+
+@subsubheading  Compound Type Specifier Kind::
+
+Combining.
+
+@subsubheading  Compound Type Specifier Syntax::
+
+(@code{not}@{@i{typespec}@})
+
+@subsubheading  Compound Type Specifier Arguments::
+
+@i{typespec}---a @i{type specifier}.
+
+@subsubheading  Compound Type Specifier Description::
+
+This denotes the set of all @i{objects} that are not of the @i{type} @i{typespec}.
+
+The argument is required, and cannot be @b{*}.
+
+The symbol @b{not} is not valid as a @i{type specifier}.
+
+@node and (Type Specifier), or (Type Specifier), not (Type Specifier), Types and Classes Dictionary
+@subsection and                                                        [Type Specifier]
+
+@subsubheading  Compound Type Specifier Kind::
+
+Combining.
+
+@subsubheading  Compound Type Specifier Syntax::
+
+(@code{and}@{@i{@{@i{typespec}@}*}@})
+
+@subsubheading  Compound Type Specifier Arguments::
+
+@i{typespec}---a @i{type specifier}.
+
+@subsubheading  Compound Type Specifier Description::
+
+This denotes the set of all @i{objects} of the @i{type} 
+determined by the intersection of the @i{typespecs}.
+
+@b{*} is not permitted as an argument.
+
+The @i{type specifiers} @t{(and)} and @b{t} are equivalent.
+The symbol @b{and} is not valid as a @i{type specifier},
+and, specifically, it is not an abbreviation for @t{(and)}.
+
+@node or (Type Specifier), values (Type Specifier), and (Type Specifier), Types and Classes Dictionary
+@subsection or                                                         [Type Specifier]
+
+@subsubheading  Compound Type Specifier Kind::
+
+Combining.
+
+@subsubheading  Compound Type Specifier Syntax::
+
+(@code{or}@{@i{@{@i{typespec}@}*}@})
+
+@subsubheading  Compound Type Specifier Arguments::
+
+@i{typespec}---a @i{type specifier}.
+
+@subsubheading  Compound Type Specifier Description::
+
+This denotes the set of all @i{objects} of the
+@i{type} determined by the union of the @i{typespecs}.
+For example, the @i{type} @b{list} by definition is the same as @t{(or null cons)}.
+Also, the value returned by @b{position} is an @i{object} of @i{type} @t{(or null (integer 0 *))};
+@i{i.e.}, either @b{nil} or a non-negative @i{integer}.
+
+@b{*} is not permitted as an argument.
+
+The @i{type specifiers} @t{(or)} and @b{nil} are equivalent.
+The symbol @b{or} is not valid as a @i{type specifier};
+and, specifically, it is not an abbreviation for @t{(or)}.
+
+@node values (Type Specifier), eql (Type Specifier), or (Type Specifier), Types and Classes Dictionary
+@subsection values                                                     [Type Specifier]
+
+@subsubheading  Compound Type Specifier Kind::
+
+Specializing.
+
+@subsubheading  Compound Type Specifier Syntax::
+
+(@code{values}@{@i{!@i{value-typespec}}@})
+
+[Reviewer Note by Barmar: Missing @b{&key}]
+
+@w{@i{value-typespec} ::=@{@i{typespec}@}* @t{[}@r{&optional} @r{@{@i{typespec}@}*}@t{]} @t{[}@r{&rest} typespec @t{]} @t{[}@b{&allow-other-keys}@t{]}}
+
+@subsubheading  Compound Type Specifier Arguments::
+
+@i{typespec}---a @i{type specifier}.
+
+@subsubheading  Compound Type Specifier Description::
+
+This @i{type specifier} can be used only as the @i{value-type} in a
+@b{function} @i{type specifier} or a @b{the}
+@i{special form}.  It is used to specify individual @i{types} 
+when @i{multiple values} are involved.
+The @b{&optional} and @b{&rest} markers can appear in the @i{value-type} list;
+they indicate the parameter list of a @i{function} that, 
+when given to @b{multiple-value-call} along with the values,
+would correctly receive those values.
+
+The symbol @b{*} may not be among the @i{value-types}.
+
+The symbol @b{values} is not valid as a @i{type specifier};
+and, specifically, it is not an abbreviation for @t{(values)}.
+
+@node eql (Type Specifier), coerce, values (Type Specifier), Types and Classes Dictionary
+@subsection eql                                                        [Type Specifier]
+
+@subsubheading  Compound Type Specifier Kind::
+
+Combining.
+
+@subsubheading  Compound Type Specifier Syntax::
+
+(@code{eql}@{@i{object}@})
+
+@subsubheading  Compound Type Specifier Arguments::
+
+@i{object}---an @i{object}.
+
+@subsubheading  Compound Type Specifier Description::
+
+Represents the @i{type} whose only @i{element} is @i{object}.
+
+The argument @i{object} is required.  The @i{object} can be @b{*},
+but if so it denotes itself (the symbol @b{*}) 
+and does not represent an unspecified value.
+The @i{symbol} @b{eql} is not valid as an @i{atomic type specifier}.
+
+@node coerce, deftype, eql (Type Specifier), Types and Classes Dictionary
+@subsection coerce                                                           [Function]
+
+@code{coerce}  @i{object result-type} @result{}  @i{result}
+
+@subsubheading  Arguments and Values::
+
+@i{object}---an @i{object}.
+
+@i{result-type}---a @i{type specifier}.
+
+@i{result}---an @i{object}, of @i{type} @i{result-type}
+  except in situations described in @ref{Rule of Canonical Representation for Complex Rationals}.
+
+@subsubheading  Description::
+
+@i{Coerces} the @i{object} to @i{type} @i{result-type}.
+
+If @i{object} is already of @i{type} @i{result-type},
+the @i{object} itself is returned, regardless of whether it
+would have been possible in general to coerce an @i{object} of 
+some other @i{type} to @i{result-type}.
+
+Otherwise, the @i{object} is @i{coerced} to @i{type} @i{result-type}
+according to the following rules:
+
+@table @asis
+
+@item @b{sequence}  
+
+If the @i{result-type} is a @i{recognizable subtype} of @b{list},
+and the @i{object} is a @i{sequence},
+then the @i{result} is a @i{list} 
+that has the @i{same} @i{elements} as @i{object}.
+
+If the @i{result-type} is a @i{recognizable subtype} of @b{vector},
+and the @i{object} is a @i{sequence},
+then the @i{result} is a @i{vector} 
+that has the @i{same} @i{elements} as @i{object}.
+If @i{result-type} is a specialized @i{type}, 
+the @i{result} has an @i{actual array element type} that is the result of
+@i{upgrading} the element type part of that @i{specialized} @i{type}.
+If no element type is specified, the element type defaults to @b{t}.
+If the @i{implementation} cannot determine the element type, an error is signaled.
+
+@item @b{character}  
+If the @i{result-type} is @b{character}
+and the @i{object} is a @i{character designator},
+the @i{result} is the @i{character} it denotes.
+
+@item @b{complex}  
+If the @i{result-type} is @b{complex} 
+and the @i{object} is a @i{number},
+then the @i{result} is obtained by constructing a @i{complex}
+whose real part is the @i{object} and
+whose imaginary part is the result of @i{coercing} an @i{integer} zero
+to the @i{type} of the @i{object} (using @b{coerce}).
+(If the real part is a @i{rational}, however, 
+then the result must be represented as a @i{rational} rather
+than a @i{complex}; see @ref{Rule of Canonical Representation for Complex Rationals}.
+So, for example, @t{(coerce 3 'complex)} is permissible,
+but will return @t{3}, which is not a @i{complex}.)
+
+@item @b{float}  
+If the @i{result-type} is any of @b{float},
+ @b{short-float}, 
+ @b{single-float}, 
+ @b{double-float}, 
+ @b{long-float},
+and the @i{object} is a 
+
+@i{real},
+
+then the @i{result} is a @i{float} of @i{type} @i{result-type}
+which is equal in sign and magnitude to the @i{object} to whatever degree of
+representational precision is permitted by that @i{float} representation.
+(If the @i{result-type} is @b{float}
+and @i{object} is not already a @i{float}, 
+then the @i{result} is a @i{single float}.)
+
+@item @b{function}  
+If the @i{result-type} is @b{function},
+and @i{object} is any 
+
+@i{function name}
+
+that is @i{fbound} 
+but that is globally defined neither as a @i{macro name} nor as a @i{special operator},
+then the @i{result} is the @i{functional value} of @i{object}.
+
+If the @i{result-type} is @b{function},
+and @i{object} is a @i{lambda expression},
+then the @i{result} is a @i{closure} of @i{object}
+in the @i{null lexical environment}.
+
+@item @b{t}  
+Any @i{object} can be @i{coerced} to an @i{object} of @i{type} @b{t}.
+In this case, the @i{object} is simply returned.
+
+@end table
+
+@subsubheading  Examples::
+
+@example
+ (coerce '(a b c) 'vector) @result{}  #(A B C)
+ (coerce 'a 'character) @result{}  #\A
+ (coerce 4.56 'complex) @result{}  #C(4.56 0.0)
+ (coerce 4.5s0 'complex) @result{}  #C(4.5s0 0.0s0)
+ (coerce 7/2 'complex) @result{}  7/2
+ (coerce 0 'short-float) @result{}  0.0s0
+ (coerce 3.5L0 'float) @result{}  3.5L0
+ (coerce 7/2 'float) @result{}  3.5
+ (coerce (cons 1 2) t) @result{}  (1 . 2)
+@end example
+
+All the following @i{forms} should signal an error:
+
+@example
+ (coerce '(a b c) '(vector * 4))
+ (coerce #(a b c) '(vector * 4))
+ (coerce '(a b c) '(vector * 2))
+ (coerce #(a b c) '(vector * 2))
+ (coerce "foo" '(string 2))
+ (coerce #(#\a #\b #\c) '(string 2))
+ (coerce '(0 1) '(simple-bit-vector 3))
+@end example
+
+@subsubheading  Exceptional Situations::
+
+If a coercion is not possible, an error of @i{type} @b{type-error} is signaled.
+
+@t{(coerce x 'nil)} always signals an error of @i{type} @b{type-error}.
+
+An error
+of @i{type} @b{error} is signaled
+if the @i{result-type} is @b{function} but
+@i{object} is a @i{symbol} that is not @i{fbound} or
+if the @i{symbol} names a @i{macro} or a @i{special operator}.
+
+An error of @i{type} @b{type-error} should be signaled if @i{result-type}
+specifies the number of elements and @i{object} is of a different length.
+
+@subsubheading  See Also::
+
+@ref{rational (Function)}
+, 
+@ref{floor}
+, 
+@ref{char-code}
+, 
+@ref{char-int}
+
+@subsubheading  Notes::
+
+Coercions from @i{floats} to @i{rationals} 
+and from @i{ratios} to @i{integers} 
+are not provided because of rounding problems.  
+
+@example
+ (coerce x 't) @equiv{} (identity x) @equiv{} x
+@end example
+
+@node deftype, subtypep, coerce, Types and Classes Dictionary
+@subsection deftype                                                             [Macro]
+
+@code{deftype}  @i{name lambda-list @r{[[@{@i{declaration}@}* | @i{documentation}]]} @{@i{form}@}*} @result{}  @i{name}
+
+@subsubheading  Arguments and Values::
+
+@i{name}---a @i{symbol}.
+
+@i{lambda-list}---a @i{deftype lambda list}.
+
+@i{declaration}---a @b{declare} @i{expression}; not evaluated.
+
+@i{documentation}---a @i{string}; not evaluated.
+
+@i{form}---a @i{form}.
+
+@subsubheading  Description::
+
+@b{deftype} defines a @i{derived type specifier} named @i{name}.
+
+The meaning of the new @i{type specifier} is given in terms of
+a function which expands the @i{type specifier} into another
+@i{type specifier}, which itself will be expanded if it contains
+references to another @i{derived type specifier}.
+
+The newly defined @i{type specifier} may be referenced as a list of
+the form @t{(@i{name} @i{arg_1} @i{arg_2} ...)\/}.
+The number of arguments must be appropriate to the @i{lambda-list}.
+If the new @i{type specifier} takes no arguments, 
+or if all of its arguments are optional, 
+the @i{type specifier} may be used as an @i{atomic type specifier}.
+
+The @i{argument} @i{expressions} to the @i{type specifier},
+@i{arg_1} ... @i{arg_n}, are not @i{evaluated}.
+Instead, these @i{literal objects} become the @i{objects} to which
+corresponding @i{parameters} become @i{bound}.
+
+The body of the @b{deftype} @i{form} 
+
+(but not the @i{lambda-list})
+
+is
+
+implicitly enclosed in a @i{block} named @i{name},
+
+and is evaluated as an @i{implicit progn}, 
+returning a new @i{type specifier}.
+
+The @i{lexical environment} of the body is the one which was current
+at the time the @b{deftype} form was evaluated, augmented by the 
+@i{variables} in the @i{lambda-list}.
+
+Recursive expansion of the @i{type specifier} returned as the expansion
+must terminate, including the expansion of @i{type specifiers} which
+are nested within the expansion.
+
+The consequences are undefined if the result of fully expanding a
+@i{type specifier} contains any circular structure, except within
+the @i{objects} referred to by @b{member} and @b{eql}
+@i{type specifiers}.
+
+@i{Documentation} is attached to @i{name} as a @i{documentation string}
+of kind @b{type}.
+
+If a @b{deftype} @i{form} appears as a @i{top level form},
+the @i{compiler} must ensure that the @i{name} is recognized
+in subsequent @i{type} declarations.  
+The @i{programmer} must ensure that the body of a @b{deftype} form 
+can be @i{evaluated} at compile time if the @i{name} is
+referenced in subsequent @i{type} declarations.  
+If the expansion of a @i{type specifier} is not defined fully at compile time
+(perhaps because it expands into an unknown @i{type specifier} or a
+@b{satisfies} of a named @i{function} that isn't defined in the
+compile-time environment), an @i{implementation} may ignore any references to
+this @i{type} in declarations and/or signal a warning.
+
+@subsubheading  Examples::
+@example
+ (defun equidimensional (a)
+   (or (< (array-rank a) 2)
+       (apply #'= (array-dimensions a)))) @result{}  EQUIDIMENSIONAL
+ (deftype square-matrix (&optional type size)
+   `(and (array ,type (,size ,size))
+         (satisfies equidimensional))) @result{}  SQUARE-MATRIX
+@end example
+
+@subsubheading  See Also::
+
+@b{declare},
+@ref{defmacro}
+,
+@ref{documentation}
+,
+@ref{Type Specifiers},
+@ref{Syntactic Interaction of Documentation Strings and Declarations}
+
+@node subtypep, type-of, deftype, Types and Classes Dictionary
+@subsection subtypep                                                         [Function]
+
+@code{subtypep}  @i{type-1 type-2 @r{&optional} environment} @result{}  @i{subtype-p, valid-p}
+
+@subsubheading  Arguments and Values:: 
+
+@i{type-1}---a @i{type specifier}.
+
+@i{type-2}---a @i{type specifier}.
+
+@i{environment}---an @i{environment} @i{object}.
+  The default is @b{nil}, denoting the @i{null lexical environment}
+	   and the current @i{global environment}.
+
+@i{subtype-p}---a @i{generalized boolean}.
+
+@i{valid-p}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+If @i{type-1} is a @i{recognizable subtype} of @i{type-2}, 
+the first @i{value} is @i{true}.
+Otherwise, the first @i{value} is @i{false},
+indicating that either
+ @i{type-1} is not a @i{subtype} of @i{type-2}, or else
+ @i{type-1} is a @i{subtype} of @i{type-2} 
+  but is not a @i{recognizable subtype}.
+
+A second @i{value} is also returned indicating the `certainty' of 
+the first @i{value}.  If this value is @i{true}, then the first
+value is an accurate indication of the @i{subtype} relationship.
+(The second @i{value} is always @i{true} when the first @i{value}
+ is @i{true}.)
+
+Figure 4--9 summarizes the possible combinations of @i{values}
+that might result.
+
+@format
+@group
+@noindent
+@w{  Value 1  Value 2  Meaning                                               }
+@w{  @i{true}     @i{true}     @i{type-1} is definitely a @i{subtype} of @i{type-2}.             }
+@w{  @i{false}    @i{true}     @i{type-1} is definitely not a @i{subtype} of @i{type-2}.         }
+@w{  @i{false}    @i{false}    @b{subtypep} could not determine the relationship,        }
+@w{                    so @i{type-1} might or might not be a @i{subtype} of @i{type-2}.  }
+
+@noindent
+@w{               Figure 4--9: Result possibilities for subtypep             }
+
+@end group
+@end format
+
+@b{subtypep} is permitted to return the 
+@i{values} @i{false} and @i{false} only when at least
+one argument involves one of these @i{type specifiers}:
+  @b{and},
+  @b{eql},
+  the list form of @b{function},
+  @b{member},
+  @b{not},
+  @b{or},
+  @b{satisfies},
+or
+  @b{values}.
+(A @i{type specifier} `involves' such a @i{symbol} if, 
+ after being @i{type expanded},
+ it contains that @i{symbol} in a position that would call for
+ its meaning as a @i{type specifier} to be used.)
+One consequence of this is that if neither @i{type-1} nor @i{type-2}
+involves any of these @i{type specifiers}, then @b{subtypep} is obliged
+to determine the relationship accurately.  In particular, @b{subtypep} 
+returns the @i{values} @i{true} and @i{true}
+if the arguments are @b{equal} and do not involve
+any of these @i{type specifiers}.
+
+@b{subtypep} never returns a second value of @b{nil} when both
+@i{type-1} and @i{type-2} involve only
+ the names in @i{Figure~4--2}, or
+ names of @i{types} defined by @b{defstruct},
+@b{define-condition},
+ or @b{defclass}, or
+ @i{derived types} that expand into only those names.
+While @i{type specifiers} listed in @i{Figure~4--2} and 
+names of @b{defclass} and @b{defstruct} can in some cases be
+implemented as @i{derived types}, @b{subtypep} regards them as primitive.
+
+The relationships between @i{types} reflected by @b{subtypep}
+are those specific to the particular implementation.  For example, if
+an implementation supports only a single type of floating-point numbers,
+in that implementation @t{(subtypep 'float 'long-float)} 
+returns the @i{values} @i{true} and @i{true} 
+(since the two @i{types} are identical).
+
+For all @i{T1} and @i{T2} other than @t{*}, 
+@t{(array @i{T1})} and @t{(array @i{T2})} 
+are two different @i{type specifiers} that always refer to the same sets of
+things if and only if they refer to @i{arrays}
+of exactly the same specialized representation, @i{i.e.}, if @t{(upgraded-array-element-type '@i{T1})}  and
+   @t{(upgraded-array-element-type '@i{T2})} 
+return two different @i{type specifiers} that always refer to the same sets of
+@i{objects}.
+This is another way of saying that 
+@t{`(array @i{type-specifier})}
+and
+@t{`(array ,(upgraded-array-element-type '@i{type-specifier}))} 
+refer to the same
+set of specialized @i{array} representations.
+For all @i{T1} and @i{T2} other than @t{*}, 
+the intersection of
+    @t{(array @i{T1})}
+and @t{(array @i{T2})} is the empty set
+if and only if they refer to @i{arrays} of different,
+distinct specialized representations.  
+
+Therefore,
+
+@example
+ (subtypep '(array T1) '(array T2)) @result{}  @i{true}
+@end example
+
+if and only if
+
+@example
+ (upgraded-array-element-type 'T1)  and
+ (upgraded-array-element-type 'T2)  
+@end example
+
+return two different @i{type specifiers} that always refer to the same sets of
+@i{objects}.
+
+For all type-specifiers @i{T1} and @i{T2} other than @t{*}, 
+
+@example
+ (subtypep '(complex T1) '(complex T2)) @result{}  @i{true}, @i{true}
+@end example
+
+if:
+@table @asis
+
+@item 1.  
+@t{T1} is a @i{subtype} of @t{T2}, or
+@item 2.  
+@t{(upgraded-complex-part-type '@i{T1})} and
+	      @t{(upgraded-complex-part-type '@i{T2})} 
+   return two different @i{type specifiers} that always refer to the 
+   same sets of @i{objects}; in this case,
+    @t{(complex @i{T1})} and 
+    @t{(complex @i{T2})} both refer to the 
+   same specialized representation.
+@end table
+
+The @i{values} are @i{false} and @i{true} otherwise.
+
+The form
+
+@example
+ (subtypep '(complex single-float) '(complex float))
+@end example
+
+ must return @i{true} in all implementations, but
+
+@example
+ (subtypep '(array single-float) '(array float))
+@end example
+
+returns @i{true} only in implementations that do not have a specialized @i{array}
+representation for @i{single floats} distinct from that for other @i{floats}.
+
+@subsubheading  Examples::
+
+@example
+ (subtypep 'compiled-function 'function) @result{}  @i{true}, @i{true}
+ (subtypep 'null 'list) @result{}  @i{true}, @i{true}
+ (subtypep 'null 'symbol) @result{}  @i{true}, @i{true}
+ (subtypep 'integer 'string) @result{}  @i{false}, @i{true}
+ (subtypep '(satisfies dummy) nil) @result{}  @i{false}, @i{implementation-dependent}
+ (subtypep '(integer 1 3) '(integer 1 4)) @result{}  @i{true}, @i{true}
+ (subtypep '(integer (0) (0)) 'nil) @result{}  @i{true}, @i{true}
+ (subtypep 'nil '(integer (0) (0))) @result{}  @i{true}, @i{true}
+ (subtypep '(integer (0) (0)) '(member)) @result{}  @i{true}, @i{true} ;or @i{false}, @i{false}
+ (subtypep '(member) 'nil) @result{}  @i{true}, @i{true} ;or @i{false}, @i{false}
+ (subtypep 'nil '(member)) @result{}  @i{true}, @i{true} ;or @i{false}, @i{false}
+@end example
+
+ Let @t{<aet-x>} and @t{<aet-y>} be two distinct @i{type specifiers} that 
+do not always refer to the same sets of
+@i{objects}
+in a given implementation, but for which
+@b{make-array}, will return an 
+@i{object} of the same @i{array} @i{type}.
+
+Thus, in each case, 
+
+@example
+  (subtypep (array-element-type (make-array 0 :element-type '<aet-x>))
+            (array-element-type (make-array 0 :element-type '<aet-y>)))
+@result{}  @i{true}, @i{true}
+
+  (subtypep (array-element-type (make-array 0 :element-type '<aet-y>))
+            (array-element-type (make-array 0 :element-type '<aet-x>)))
+@result{}  @i{true}, @i{true}
+@end example
+
+If  @t{(array <aet-x>)} 
+and @t{(array <aet-y>)} are different names for
+exactly the same set of @i{objects}, 
+these names should always refer to the same sets of
+@i{objects}.
+ That implies that the following set of tests are also true:
+
+@example
+ (subtypep '(array <aet-x>) '(array <aet-y>)) @result{}  @i{true}, @i{true}
+ (subtypep '(array <aet-y>) '(array <aet-x>)) @result{}  @i{true}, @i{true}
+@end example
+
+@subsubheading  See Also::
+
+@ref{Types}
+
+@subsubheading  Notes::
+
+The small differences between the @b{subtypep} specification for
+the @b{array} and @b{complex} types are necessary because there 
+is no creation function for @i{complexes} which allows 
+the specification of the resultant part type independently of
+the actual types of the parts.  Thus in the case of the @i{type} @b{complex},
+the actual type of the parts is referred to, although a @i{number} 
+can be a member of more than one @i{type}.
+For example, @t{17} is of @i{type} @t{(mod 18)} 
+as well as @i{type} @t{(mod 256)} and @i{type} @b{integer};
+and @t{2.3f5} is of @i{type} @b{single-float} 
+as well as @i{type} @b{float}.
+
+@node type-of, typep, subtypep, Types and Classes Dictionary
+@subsection type-of                                                          [Function]
+
+@code{type-of}  @i{object} @result{}  @i{typespec}
+
+@subsubheading  Arguments and Values::
+
+@i{object}---an @i{object}.
+
+@i{typespec}---a @i{type specifier}.
+
+@subsubheading  Description::
+
+Returns a @i{type specifier}, @i{typespec}, for a @i{type} 
+that has the @i{object} as an @i{element}.
+The @i{typespec} satisfies the following:
+
+@table @asis
+
+@item 1.  
+For any @i{object} that is an @i{element} of some @i{built-in type}:
+
+@table @asis
+
+@item a.  
+the @i{type} returned is a @i{recognizable subtype} of that @i{built-in type}.
+
+@item b.  
+the @i{type} returned does not involve 
+     @t{and},
+     @t{eql},
+     @t{member},
+     @t{not},
+     @t{or}, 
+     @t{satisfies},
+  or @t{values}.
+@end table
+
+@item 2.  
+For all @i{objects}, @t{(typep @i{object} (type-of @i{object}))} 
+returns @i{true}.
+Implicit in this is that @i{type specifiers} which are
+not valid for use with @b{typep}, such as the @i{list} form of the
+@b{function} @i{type specifier}, are never returned by @b{type-of}.
+
+@item 3.  
+The @i{type} returned by @b{type-of} is always a @i{recognizable subtype}
+of the @i{class} returned by @b{class-of}.  That is,
+
+@example
+ (subtypep (type-of @i{object}) (class-of @i{object})) @result{}  @i{true}, @i{true}
+@end example
+
+@item 4.  
+For @i{objects} of metaclass @b{structure-class} or @b{standard-class},
+
+and for @i{conditions},
+
+@b{type-of} returns the @i{proper name} of the @i{class} returned 
+by @b{class-of} if it has a @i{proper name},
+and otherwise returns the @i{class} itself.
+In particular, for @i{objects} created by the constructor function
+of a structure defined with @b{defstruct} without a @t{:type} option,
+@b{type-of} returns the structure name; and for @i{objects} created 
+by @b{make-condition}, the @i{typespec} is the @i{name} of the
+@i{condition} @i{type}.
+
+@item 5.  
+For each of the @i{types}
+     @b{short-float}, 
+     @b{single-float},
+     @b{double-float},
+  or @b{long-float}
+of which the @i{object} is an @i{element},
+the @i{typespec} is a @i{recognizable subtype} of that @i{type}.
+
+@end table
+
+@subsubheading  Examples::
+
+@example
+@end example
+
+@example
+ (type-of 'a) @result{}  SYMBOL          
+ (type-of '(1 . 2))
+@result{}  CONS
+@i{OR}@result{} (CONS FIXNUM FIXNUM)
+ (type-of #c(0 1))
+@result{}  COMPLEX
+@i{OR}@result{} (COMPLEX INTEGER)
+ (defstruct temp-struct x y z) @result{}  TEMP-STRUCT
+ (type-of (make-temp-struct)) @result{}  TEMP-STRUCT
+ (type-of "abc")
+@result{}  STRING
+@i{OR}@result{} (STRING 3)
+ (subtypep (type-of "abc") 'string) @result{}  @i{true}, @i{true}
+ (type-of (expt 2 40))
+@result{}  BIGNUM
+@i{OR}@result{} INTEGER
+@i{OR}@result{} (INTEGER 1099511627776 1099511627776)
+@i{OR}@result{} SYSTEM::TWO-WORD-BIGNUM
+@i{OR}@result{} FIXNUM
+ (subtypep (type-of 112312) 'integer) @result{}  @i{true}, @i{true}
+ (defvar *foo* (make-array 5 :element-type t)) @result{}  *FOO*
+ (class-name (class-of *foo*)) @result{}  VECTOR
+ (type-of *foo*)
+@result{}  VECTOR
+@i{OR}@result{} (VECTOR T 5)
+@end example
+
+@subsubheading  See Also::
+
+@ref{array-element-type}
+,
+@ref{class-of}
+,
+@ref{defstruct}
+,
+@ref{typecase}
+,
+@ref{typep}
+,
+@ref{Types}
+
+@subsubheading  Notes::
+
+Implementors are encouraged to arrange for @b{type-of} to return
+
+a portable value.
+
+@node typep, type-error, type-of, Types and Classes Dictionary
+@subsection typep                                                            [Function]
+
+@code{typep}  @i{object type-specifier @r{&optional} environment} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{object}---an @i{object}.
+
+@i{type-specifier}---any @i{type specifier} except 
+
+@b{values}, or a @i{type specifier} list
+whose first element is either @b{function} or @b{values}.
+
+@i{environment}---an @i{environment} @i{object}.
+  The default is @b{nil}, denoting the @i{null lexical environment}
+	   and the and current @i{global environment}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{object} is of the @i{type} specified by @i{type-specifier};
+otherwise, returns @i{false}.
+
+A @i{type-specifier} of the form @t{(satisfies fn)} 
+is handled by applying the function @t{fn} to @i{object}.
+
+@t{(typep @i{object} '(array @i{type-specifier}))}, 
+where @i{type-specifier} is not @t{*},   
+returns @i{true} if and only if @i{object} is an @i{array} 
+that could be the result 
+of supplying @i{type-specifier} 
+as the @t{:element-type} argument to @b{make-array}.
+@t{(array *)} refers to all @i{arrays} 
+regardless of element type, while @t{(array @i{type-specifier})}
+refers only to those @i{arrays} 
+that can result from giving @i{type-specifier} as the
+@t{:element-type} argument to @b{make-array}.  
+A similar interpretation applies to @t{(simple-array @i{type-specifier})} 
+and @t{(vector @i{type-specifier})}.
+See @ref{Array Upgrading}.
+
+@t{(typep @i{object} '(complex @i{type-specifier}))}
+returns @i{true} for all @i{complex} numbers that can result from 
+giving @i{numbers} of type @i{type-specifier}
+to the @i{function} @b{complex}, plus all other @i{complex} numbers 
+of the same specialized representation.      
+Both the real and the imaginary parts of any such 
+@i{complex} number must satisfy:
+
+@example
+ (typep realpart 'type-specifier)
+ (typep imagpart 'type-specifier)
+@end example
+
+See the @i{function} @b{upgraded-complex-part-type}.
+
+@subsubheading  Examples::
+
+@example
+ (typep 12 'integer) @result{}  @i{true}
+ (typep (1+ most-positive-fixnum) 'fixnum) @result{}  @i{false}
+ (typep nil t) @result{}  @i{true}
+ (typep nil nil) @result{}  @i{false}
+ (typep 1 '(mod 2)) @result{}  @i{true}
+ (typep #c(1 1) '(complex (eql 1))) @result{}  @i{true}
+;; To understand this next example, you might need to refer to
+;; @ref{Rule of Canonical Representation for Complex Rationals}.
+ (typep #c(0 0) '(complex (eql 0))) @result{}  @i{false}
+@end example
+
+Let @t{A_x} and @t{A_y} be two @i{type specifiers} that 
+denote different @i{types}, but for which
+
+@example
+ (upgraded-array-element-type 'A_x)
+@end example
+
+and
+
+@example
+ (upgraded-array-element-type 'A_y)
+@end example
+
+denote the same @i{type}.  Notice that
+
+@example
+ (typep (make-array 0 :element-type 'A_x) '(array A_x)) @result{}  @i{true}
+ (typep (make-array 0 :element-type 'A_y) '(array A_y)) @result{}  @i{true}
+ (typep (make-array 0 :element-type 'A_x) '(array A_y)) @result{}  @i{true}
+ (typep (make-array 0 :element-type 'A_y) '(array A_x)) @result{}  @i{true}
+@end example
+
+@subsubheading  Exceptional Situations::
+
+An error of @i{type} @b{error} is signaled if @i{type-specifier} is @t{values}, 
+or a @i{type specifier} list whose first element is either
+@b{function} or @b{values}.
+
+The consequences are undefined if
+the @i{type-specifier} is not a @i{type specifier}.
+
+@subsubheading  See Also::
+
+@ref{type-of}
+,
+@ref{upgraded-array-element-type}
+,
+@ref{upgraded-complex-part-type}
+,
+@ref{Type Specifiers}
+
+@subsubheading  Notes::
+
+@i{Implementations} are encouraged to recognize and optimize the case of 
+@t{(typep @i{x} (the class @i{y}))},
+since it does not involve any need for expansion 
+of @b{deftype} information at runtime.
+
+@example
+
+@end example
+
+@node type-error, type-error-datum, typep, Types and Classes Dictionary
+@subsection type-error                                                 [Condition Type]
+
+@subsubheading  Class Precedence List::
+@b{type-error},
+@b{error},
+@b{serious-condition},
+@b{condition},
+@b{t}
+
+@subsubheading  Description::
+
+The @i{type} @b{type-error} represents a situation in which an @i{object} is not
+of the expected type.  The ``offending datum'' and ``expected type'' are initialized 
+by the initialization arguments named @t{:datum} and @t{:expected-type} to @b{make-condition},
+and are @i{accessed} by the functions 
+@b{type-error-datum} and @b{type-error-expected-type}.
+
+@subsubheading  See Also::
+
+@ref{type-error-datum}
+, @b{type-error-expected-type}
+
+@node type-error-datum, simple-type-error, type-error, Types and Classes Dictionary
+@subsection type-error-datum, type-error-expected-type                       [Function]
+
+@code{type-error-datum}  @i{condition} @result{}  @i{datum}
+
+@code{type-error-expected-type}  @i{condition} @result{}  @i{expected-type}
+
+@subsubheading  Arguments and Values:: 
+
+@i{condition}---a @i{condition} of @i{type} @b{type-error}.
+
+@i{datum}---an @i{object}.
+
+@i{expected-type}---a @i{type specifier}.
+
+@subsubheading  Description::
+
+@b{type-error-datum} returns the offending datum in the @i{situation}
+represented by the @i{condition}.
+
+@b{type-error-expected-type} returns the expected type of the
+offending datum in the @i{situation} represented by the @i{condition}.
+
+@subsubheading  Examples::
+
+@example
+ (defun fix-digits (condition)
+   (check-type condition type-error)
+   (let* ((digits '(zero one two three four
+                   five six seven eight nine))
+         (val (position (type-error-datum condition) digits)))
+     (if (and val (subtypep 'fixnum (type-error-expected-type condition)))
+         (store-value 7))))
+
+ (defun foo (x)
+   (handler-bind ((type-error #'fix-digits))
+     (check-type x number)
+     (+ x 3)))
+
+ (foo 'seven)
+@result{}  10
+@end example
+
+@subsubheading  See Also::
+
+@b{type-error},
+@ref{Conditions}
+
+@node simple-type-error,  , type-error-datum, Types and Classes Dictionary
+@subsection simple-type-error                                          [Condition Type]
+
+@subsubheading  Class Precedence List::
+
+@b{simple-type-error},
+@b{simple-condition},
+@b{type-error},
+@b{error},
+@b{serious-condition},
+@b{condition},
+@b{t}
+
+@subsubheading  Description::
+
+@i{Conditions} of @i{type} @b{simple-type-error} 
+are like @i{conditions} of @i{type} @b{type-error}, 
+except that they provide an alternate mechanism for specifying
+how the @i{condition} is to be @i{reported};
+see the @i{type} @b{simple-condition}.
+
+@subsubheading  See Also::
+
+@b{simple-condition},
+
+@ref{simple-condition-format-control}
+,
+
+@b{simple-condition-format-arguments}, 
+@ref{type-error-datum}
+,
+@b{type-error-expected-type}
+
+@c end of including dict-types
+
+@c %**end of chapter
+

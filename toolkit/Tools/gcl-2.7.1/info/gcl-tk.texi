@@ -1,0 +1,108 @@
+\input texinfo
+@c -*-texinfo-*-
+@c @smallbook
+@settitle GCL TK Manual
+@setfilename gcl-tk.info
+
+@c to update the menus do: 
+@c (texinfo-multiple-files-update "gcl-tk.texi" t t)
+
+
+@setchapternewpage odd
+@ifinfo
+This is a Texinfo GCL TK Manual
+
+Copyright 1994 William F. Schelter
+
+@format
+INFO-DIR-SECTION GNU Common Lisp
+START-INFO-DIR-ENTRY
+* gcl-tk: (gcl-tk.info). GNU Common Lisp Tk Manual
+END-INFO-DIR-ENTRY
+@end format
+@end ifinfo
+
+@titlepage
+@sp 10
+@comment The title is printed in a large font.
+@center @titlefont{GCL TK Manual}
+@end titlepage
+
+@node Top, General, (dir), (dir)
+@top
+
+@menu
+* General::                     
+* Widgets::                     
+* Control::                     
+
+ --- The Detailed Node Listing ---
+
+General
+
+* Introduction::		
+* Getting Started::		
+* Common Features of Widgets::	
+* Return Values::		
+* Argument Lists::		
+* Lisp Functions Invoked from Graphics::  
+* Linked Variables::		
+* tkconnect::			
+
+Widgets
+
+* button::			
+* listbox::			
+* scale::			
+* canvas::			
+* menu::			
+* scrollbar::			
+* checkbutton::			
+* menubutton::			
+* text::			
+* entry::			
+* message::			
+* frame::			
+* label::			
+* radiobutton::			
+* toplevel::			
+
+Control
+
+* after::			
+* bind::			
+* destroy::			
+* tk-dialog::			
+* exit::			
+* focus::			
+* grab::			
+* tk-listbox-single-select::	
+* lower::			
+* tk-menu-bar::			
+* option::			
+* options::			
+* pack-old::			
+* pack::			
+* place::			
+* raise::			
+* selection::			
+* send::			
+* tk::				
+* tkerror::			
+* tkvars::			
+* tkwait::			
+* update::			
+* winfo::			
+* wm::				
+@end menu
+
+@include general.texi
+
+@include widgets.texi
+
+@include control.texi
+
+@summarycontents
+@contents
+@bye
+

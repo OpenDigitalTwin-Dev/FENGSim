@@ -1,0 +1,20 @@
+#!/bin/bash
+#set -x
+FLAGS=$1
+shift
+ARCHIVE=$1
+shift
+
+TMPDIR=$(mktemp -d)
+while [ $# -gt 0 ] ; do
+    case $(basename $1) in
+	*.o) cp $1 $TMPDIR;;
+	*.go) cp $1 $TMPDIR/$(echo $(basename $1)|sed 's,\.go,.o,g');;
+	*.a) ar x $1 --output $TMPDIR;;
+	recompile);;
+	*) echo Bad arg $1 ; exit 1 ;;
+    esac
+    shift
+done
+ar $FLAGS $ARCHIVE $TMPDIR/*.o
+rm -rf $TMPDIR

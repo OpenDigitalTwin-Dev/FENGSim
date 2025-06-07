@@ -1,0 +1,3859 @@
+
+
+@node Conses, Arrays, Characters, Top
+@chapter Conses
+
+@menu
+* Cons Concepts::		
+* Conses Dictionary::		
+@end menu
+
+@node Cons Concepts, Conses Dictionary, Conses, Conses
+@section Cons Concepts
+
+@c including concept-conses
+
+A @i{cons}
+@IGindex cons
+ is a compound data @i{object} 
+having two components called the @i{car} and the @i{cdr}.
+
+@format
+@group
+@noindent
+@w{  car  cons    rplacd  }
+@w{  cdr  rplaca          }
+
+@noindent
+@w{  Figure 14--1: Some defined names relating to conses.}
+
+@end group
+@end format
+
+Depending on context, a group of connected @i{conses} can be viewed
+in a variety of different ways.  A variety of operations is provided to
+support each of these various views.
+
+@menu
+* Conses as Trees::		
+* Conses as Lists::		
+@end menu
+
+@node Conses as Trees, Conses as Lists, Cons Concepts, Cons Concepts
+@subsection Conses as Trees
+
+A @i{tree}
+@IGindex tree
+ is a binary recursive data structure made up of
+@i{conses} and @i{atoms}:
+the @i{conses} are themselves also @i{trees}
+(sometimes called ``subtrees'' or ``branches''), and the @i{atoms}
+are terminal nodes (sometimes called @i{leaves}
+@IGindex leaves
+). 
+Typically, the @i{leaves} represent data while the branches 
+establish some relationship among that data.
+
+@format
+@group
+@noindent
+@w{  caaaar  caddar  cdar       nsubst         }
+@w{  caaadr  cadddr  cddaar     nsubst-if      }
+@w{  caaar   caddr   cddadr     nsubst-if-not  }
+@w{  caadar  cadr    cddar      nthcdr         }
+@w{  caaddr  cdaaar  cdddar     sublis         }
+@w{  caadr   cdaadr  cddddr     subst          }
+@w{  caar    cdaar   cdddr      subst-if       }
+@w{  cadaar  cdadar  cddr       subst-if-not   }
+@w{  cadadr  cdaddr  copy-tree  tree-equal     }
+@w{  cadar   cdadr   nsublis                   }
+
+@noindent
+@w{  Figure 14--2: Some defined names relating to trees.}
+
+@end group
+@end format
+
+@menu
+* General Restrictions on Parameters that must be Trees::  
+@end menu
+
+@node General Restrictions on Parameters that must be Trees,  , Conses as Trees, Conses as Trees
+@subsubsection General Restrictions on Parameters that must be Trees
+
+Except as explicitly stated otherwise,
+for any @i{standardized} @i{function} that takes a @i{parameter}
+that is required to be a @i{tree},
+the consequences are undefined
+if that @i{tree} is circular.
+
+@node Conses as Lists,  , Conses as Trees, Cons Concepts
+@subsection Conses as Lists
+
+A @i{list}
+@IGindex list
+ is a chain of @i{conses} in which the @i{car} of each
+@i{cons} is an @i{element} of the @i{list}, 
+and the @i{cdr} of each @i{cons} is either the next
+link in the chain or a terminating @i{atom}.  
+
+A @i{proper list}
+@IGindex proper list
+ is a @i{list} terminated by the @i{empty list}.
+The @i{empty list} is a @i{proper list}, but is not a @i{cons}.
+
+An @i{improper list}
+@IGindex improper list
+ is a @i{list} that is not a @i{proper list};
+that is, it is a @i{circular list} or a @i{dotted list}.
+
+A @i{dotted list}
+@IGindex dotted list
+ is a @i{list} that has a terminating @i{atom}
+that is not the @i{empty list}.  A @i{non-nil} @i{atom} by itself
+is not considered to be a @i{list} of any kind---not even a @i{dotted list}.
+
+A @i{circular list}
+@IGindex circular list
+ is a chain of @i{conses} that has no termination 
+because some @i{cons} in the chain is the @i{cdr} of a later @i{cons}.
+
+@format
+@group
+@noindent
+@w{  append      last           nbutlast  rest       }
+@w{  butlast     ldiff          nconc     revappend  }
+@w{  copy-alist  list           ninth     second     }
+@w{  copy-list   list*          nreconc   seventh    }
+@w{  eighth      list-length    nth       sixth      }
+@w{  endp        make-list      nthcdr    tailp      }
+@w{  fifth       member         pop       tenth      }
+@w{  first       member-if      push      third      }
+@w{  fourth      member-if-not  pushnew              }
+
+@noindent
+@w{  Figure 14--3: Some defined names relating to lists.}
+
+@end group
+@end format
+
+@menu
+* Lists as Association Lists::	
+* Lists as Sets::		
+* General Restrictions on Parameters that must be Lists::  
+@end menu
+
+@node Lists as Association Lists, Lists as Sets, Conses as Lists, Conses as Lists
+@subsubsection Lists as Association Lists
+
+An @i{association list}
+@IGindex association list
+ is a @i{list} of @i{conses} 
+representing an association of @i{keys} with @i{values}, 
+where the @i{car} of each @i{cons} is the @i{key} 
+and the @i{cdr} is the @i{value} associated with that @i{key}.
+
+@format
+@group
+@noindent
+@w{  acons  assoc-if      pairlis  rassoc-if      }
+@w{  assoc  assoc-if-not  rassoc   rassoc-if-not  }
+
+@noindent
+@w{  Figure 14--4: Some defined names related to association lists.}
+
+@end group
+@end format
+
+@node Lists as Sets, General Restrictions on Parameters that must be Lists, Lists as Association Lists, Conses as Lists
+@subsubsection Lists as Sets
+
+@i{Lists} are sometimes viewed as sets by considering their elements
+unordered and by assuming there is no duplication of elements.
+
+@format
+@group
+@noindent
+@w{  adjoin         nset-difference    set-difference    union  }
+@w{  intersection   nset-exclusive-or  set-exclusive-or         }
+@w{  nintersection  nunion             subsetp                  }
+
+@noindent
+@w{       Figure 14--5: Some defined names related to sets.     }
+
+@end group
+@end format
+
+@node General Restrictions on Parameters that must be Lists,  , Lists as Sets, Conses as Lists
+@subsubsection General Restrictions on Parameters that must be Lists
+
+Except as explicitly specified otherwise,
+any @i{standardized} @i{function} that takes a @i{parameter}
+that is required to be a @i{list} should be prepared to signal 
+an error of @i{type} @b{type-error} if the @i{value} received is a @i{dotted list}.
+
+Except as explicitly specified otherwise,
+for any @i{standardized} @i{function} that takes a @i{parameter}
+that is required to be a @i{list}, 
+the consequences are undefined 
+if that @i{list} is @i{circular}.
+
+@c end of including concept-conses
+
+@node Conses Dictionary,  , Cons Concepts, Conses
+@section Conses Dictionary
+
+@c including dict-conses
+
+@menu
+* list (System Class)::			
+* null (System Class)::		
+* cons (System Class)::		
+* atom (Type)::			
+* cons::			
+* consp::			
+* atom::			
+* rplaca::			
+* car::				
+* copy-tree::			
+* sublis::			
+* subst::			
+* tree-equal::			
+* copy-list::			
+* list (Function)::			
+* list-length::			
+* listp::			
+* make-list::			
+* push::			
+* pop::				
+* first::			
+* nth::				
+* endp::			
+* null::			
+* nconc::			
+* append::			
+* revappend::			
+* butlast::			
+* last::			
+* ldiff::			
+* nthcdr::			
+* rest::			
+* member (Function)::			
+* mapc::			
+* acons::			
+* assoc::			
+* copy-alist::			
+* pairlis::			
+* rassoc::			
+* get-properties::		
+* getf::			
+* remf::			
+* intersection::		
+* adjoin::			
+* pushnew::			
+* set-difference::		
+* set-exclusive-or::		
+* subsetp::			
+* union::			
+@end menu
+
+@node list (System Class), null (System Class), Conses Dictionary, Conses Dictionary
+@subsection list                                                         [System Class]
+
+@subsubheading  Class Precedence List::
+
+@b{list},
+@b{sequence},
+@b{t}
+
+@subsubheading  Description::
+
+A @i{list}
+@IGindex list
+ is a chain of @i{conses} in which the @i{car} of each
+@i{cons} is an @i{element} of the @i{list}, and the @i{cdr} of
+each @i{cons} is either the next link in the chain or a terminating
+@i{atom}.
+
+A @i{proper list}
+@IGindex proper list
+ is a chain of @i{conses} terminated by 
+the @i{empty list}
+@IGindex empty list
+, @t{()}, which is  itself a @i{proper list}.
+A @i{dotted list}
+@IGindex dotted list
+ is a @i{list} which has a terminating @i{atom} 
+that is not the @i{empty list}.
+A @i{circular list}
+@IGindex circular list
+ is a chain of @i{conses} that has no termination
+because some @i{cons} in the chain is the @i{cdr} of a later @i{cons}.
+
+@i{Dotted lists} and @i{circular lists} are also @i{lists}, but usually
+the unqualified term ``list'' within this specification means @i{proper list}.
+Nevertheless, the @i{type} @b{list} unambiguously includes @i{dotted lists} 
+and @i{circular lists}.
+
+For each @i{element} of a @i{list} there is a @i{cons}.
+The @i{empty list} has no @i{elements} and is not a @i{cons}.
+
+The @i{types} @b{cons} and @b{null} form an @i{exhaustive partition} 
+of the @i{type} @b{list}.
+
+@subsubheading  See Also::
+
+@ref{Left-Parenthesis},
+@ref{Printing Lists and Conses}
+
+@node null (System Class), cons (System Class), list (System Class), Conses Dictionary
+@subsection null                                                         [System Class]
+
+@subsubheading  Class Precedence List::
+@b{null},
+@b{symbol},
+@b{list},
+@b{sequence},
+@b{t}
+
+@subsubheading  Description::
+
+The only @i{object} of @i{type} @b{null} is @b{nil}, 
+which represents the @i{empty list} and can also be notated @t{()}.
+
+@subsubheading  See Also::
+
+@ref{Symbols as Tokens},
+@ref{Left-Parenthesis},
+@ref{Printing Symbols}
+
+@node cons (System Class), atom (Type), null (System Class), Conses Dictionary
+@subsection cons                                                         [System Class]
+
+@subsubheading  Class Precedence List::
+@b{cons},
+@b{list},
+@b{sequence},
+@b{t}
+
+@subsubheading  Description::
+
+A @i{cons} is a compound @i{object} having two components,
+called the @i{car} and @i{cdr}. These form a @i{dotted pair}.
+Each component can be any @i{object}.
+
+@subsubheading  Compound Type Specifier Kind::
+
+Specializing.
+
+@subsubheading  Compound Type Specifier Syntax::
+
+(@code{cons}@{@i{@t{[}car-typespec @r{[}cdr-typespec@r{]}@t{]}}@})
+
+@subsubheading  Compound Type Specifier Arguments::
+
+@i{car-typespec}---a @i{type specifier},
+		    or the @i{symbol} @b{*}.
+  The default is the @i{symbol} @b{*}.
+
+@i{cdr-typespec}---a @i{type specifier},
+		    or the @i{symbol} @b{*}.
+  The default is the @i{symbol} @b{*}.
+
+@subsubheading  Compound Type Specifier Description::
+
+This denotes the set of @i{conses} 
+whose @i{car} is constrained to be of @i{type} @i{car-typespec} and
+whose @i{cdr} is constrained to be of @i{type} @i{cdr-typespec}.
+(If either @i{car-typespec} or @i{cdr-typespec} is @b{*},
+ it is as if the @i{type} @b{t} had been denoted.)
+
+@subsubheading  See Also::
+
+@ref{Left-Parenthesis},
+@ref{Printing Lists and Conses}
+
+@node atom (Type), cons, cons (System Class), Conses Dictionary
+@subsection atom                                                                 [Type]
+
+@subsubheading  Supertypes:: 
+
+@b{atom},
+@b{t}
+
+@subsubheading  Description::
+
+It is equivalent to @t{(not cons)}.  
+
+@node cons, consp, atom (Type), Conses Dictionary
+@subsection cons                                                             [Function]
+
+@code{cons}  @i{object-1 object-2} @result{}  @i{cons}
+
+@subsubheading  Arguments and Values::
+
+@i{object-1}---an @i{object}.
+
+@i{object-2}---an @i{object}.
+
+@i{cons}---a @i{cons}.
+
+@subsubheading  Description::
+
+Creates a @i{fresh} @i{cons}, the @i{car} of which is @i{object-1}
+and the @i{cdr} of which is @i{object-2}.
+
+@subsubheading  Examples::
+
+@example
+ (cons 1 2) @result{}  (1 . 2)
+ (cons 1 nil) @result{}  (1)
+ (cons nil 2) @result{}  (NIL . 2)
+ (cons nil nil) @result{}  (NIL)
+ (cons 1 (cons 2 (cons 3 (cons 4 nil)))) @result{}  (1 2 3 4)
+ (cons 'a 'b) @result{}  (A . B)
+ (cons 'a (cons 'b (cons 'c '@t{()}))) @result{}  (A B C)
+ (cons 'a '(b c d)) @result{}  (A B C D)
+@end example
+
+@subsubheading  See Also::
+
+@ref{list (Function)}
+
+@subsubheading  Notes::
+If @i{object-2} is a @i{list}, @b{cons} can be thought of as
+producing a new @i{list} which is like it but has @i{object-1} prepended.
+
+@node consp, atom, cons, Conses Dictionary
+@subsection consp                                                            [Function]
+
+@code{consp}  @i{object} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{object}---an @i{object}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{object} is of @i{type} @b{cons};
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::
+@example
+ (consp nil) @result{}  @i{false}
+ (consp (cons 1 2)) @result{}  @i{true}
+@end example
+
+The @i{empty list} is not a @i{cons}, so
+
+@example
+ (consp '()) @equiv{} (consp 'nil) @result{}  @i{false}
+@end example
+
+@subsubheading  See Also::
+
+@ref{listp}
+
+@subsubheading  Notes::
+
+@example
+ (consp @i{object}) @equiv{} (typep @i{object} 'cons) @equiv{} (not (typep @i{object} 'atom)) @equiv{} (typep @i{object} '(not atom))
+@end example
+
+@node atom, rplaca, consp, Conses Dictionary
+@subsection atom                                                             [Function]
+
+@code{atom}  @i{object} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{object}---an @i{object}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{object} is of @i{type} @b{atom};
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::
+@example
+ (atom 'sss) @result{}  @i{true}
+ (atom (cons 1 2)) @result{}  @i{false}
+ (atom nil) @result{}  @i{true}
+ (atom '()) @result{}  @i{true}
+ (atom 3) @result{}  @i{true}
+@end example
+
+@subsubheading  Notes::
+
+@example
+ (atom @i{object}) @equiv{} (typep @i{object} 'atom) @equiv{} (not (consp @i{object}))
+ @equiv{} (not (typep @i{object} 'cons)) @equiv{} (typep @i{object} '(not cons))
+@end example
+
+@node rplaca, car, atom, Conses Dictionary
+@subsection rplaca, rplacd                                                   [Function]
+
+@code{rplaca}  @i{cons object} @result{}  @i{cons}
+
+@code{rplacd}  @i{cons object} @result{}  @i{cons}
+
+@subsubheading  Pronunciation::
+
+@b{rplaca}: pronounced ,r\=e 'plak e
+	      or pronounced ,re 'plak e
+
+@b{rplacd}: pronounced ,r\=e 'plak de
+	      or pronounced ,re 'plak de
+	      or pronounced ,r\=e 'plak d\=e
+	      or pronounced ,re 'plak d\=e
+
+@subsubheading  Arguments and Values::
+
+@i{cons}---a @i{cons}.
+
+@i{object}---an @i{object}.
+
+@subsubheading  Description::
+
+@b{rplaca} replaces the @i{car} of the @i{cons} with @i{object}.
+
+@b{rplacd} replaces the @i{cdr} of the @i{cons} with @i{object}.
+
+@subsubheading  Examples::
+@example
+ (defparameter *some-list* (list* 'one 'two 'three 'four)) @result{}  *some-list*
+ *some-list* @result{}  (ONE TWO THREE . FOUR)
+ (rplaca *some-list* 'uno) @result{}  (UNO TWO THREE . FOUR)
+ *some-list* @result{}  (UNO TWO THREE . FOUR)
+ (rplacd (last *some-list*) (list 'IV)) @result{}  (THREE IV)
+ *some-list* @result{}  (UNO TWO THREE IV)
+@end example
+
+@subsubheading  Side Effects::
+
+The @i{cons} is modified. 
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{cons} is not a @i{cons}.
+
+@node car, copy-tree, rplaca, Conses Dictionary
+@subsection car,    cdr,
+@subheading caar,   cadr,   cdar,   cddr,
+@subheading caaar,  caadr,  cadar,  caddr,  cdaar,  cdadr,  cddar,  cdddr,
+@subheading caaaar, caaadr, caadar, caaddr, cadaar, cadadr, caddar, cadddr,
+@subheading cdaaar, cdaadr, cdadar, cdaddr, cddaar, cddadr, cdddar, cddddr
+@flushright
+@i{[Accessor]}
+@end flushright
+
+@code{car}  @i{x} @result{}  @i{object}
+(setf (@code{car} @i{x}) new-object)@*
+
+@code{cdr}  @i{x} @result{}  @i{object}
+(setf (@code{cdr} @i{x}) new-object)@*
+
+@code{\vksip 5pt}  @i{x} @result{}  @i{object}
+(setf (@code{\vksip 5pt} @i{x}) new-object)@*
+
+@code{caar}  @i{x} @result{}  @i{object}
+(setf (@code{caar} @i{x}) new-object)@*
+
+@code{cadr}  @i{x} @result{}  @i{object}
+(setf (@code{cadr} @i{x}) new-object)@*
+
+@code{cdar}  @i{x} @result{}  @i{object}
+(setf (@code{cdar} @i{x}) new-object)@*
+
+@code{cddr}  @i{x} @result{}  @i{object}
+(setf (@code{cddr} @i{x}) new-object)@*
+
+@code{\vksip 5pt}  @i{x} @result{}  @i{object}
+(setf (@code{\vksip 5pt} @i{x}) new-object)@*
+
+@code{caaar}  @i{x} @result{}  @i{object}
+(setf (@code{caaar} @i{x}) new-object)@*
+
+@code{caadr}  @i{x} @result{}  @i{object}
+(setf (@code{caadr} @i{x}) new-object)@*
+
+@code{cadar}  @i{x} @result{}  @i{object}
+(setf (@code{cadar} @i{x}) new-object)@*
+
+@code{caddr}  @i{x} @result{}  @i{object}
+(setf (@code{caddr} @i{x}) new-object)@*
+
+@code{cdaar}  @i{x} @result{}  @i{object}
+(setf (@code{cdaar} @i{x}) new-object)@*
+
+@code{cdadr}  @i{x} @result{}  @i{object}
+(setf (@code{cdadr} @i{x}) new-object)@*
+
+@code{cddar}  @i{x} @result{}  @i{object}
+(setf (@code{cddar} @i{x}) new-object)@*
+
+@code{cdddr}  @i{x} @result{}  @i{object}
+(setf (@code{cdddr} @i{x}) new-object)@*
+
+@code{\vksip 5pt}  @i{x} @result{}  @i{object}
+(setf (@code{\vksip 5pt} @i{x}) new-object)@*
+
+@code{caaaar}  @i{x} @result{}  @i{object}
+(setf (@code{caaaar} @i{x}) new-object)@*
+
+@code{caaadr}  @i{x} @result{}  @i{object}
+(setf (@code{caaadr} @i{x}) new-object)@*
+
+@code{caadar}  @i{x} @result{}  @i{object}
+(setf (@code{caadar} @i{x}) new-object)@*
+
+@code{caaddr}  @i{x} @result{}  @i{object}
+(setf (@code{caaddr} @i{x}) new-object)@*
+
+@code{cadaar}  @i{x} @result{}  @i{object}
+(setf (@code{cadaar} @i{x}) new-object)@*
+
+@code{cadadr}  @i{x} @result{}  @i{object}
+(setf (@code{cadadr} @i{x}) new-object)@*
+
+@code{caddar}  @i{x} @result{}  @i{object}
+(setf (@code{caddar} @i{x}) new-object)@*
+
+@code{cadddr}  @i{x} @result{}  @i{object}
+(setf (@code{cadddr} @i{x}) new-object)@*
+
+@code{cdaaar}  @i{x} @result{}  @i{object}
+(setf (@code{cdaaar} @i{x}) new-object)@*
+
+@code{cdaadr}  @i{x} @result{}  @i{object}
+(setf (@code{cdaadr} @i{x}) new-object)@*
+
+@code{cdadar}  @i{x} @result{}  @i{object}
+(setf (@code{cdadar} @i{x}) new-object)@*
+
+@code{cdaddr}  @i{x} @result{}  @i{object}
+(setf (@code{cdaddr} @i{x}) new-object)@*
+
+@code{cddaar}  @i{x} @result{}  @i{object}
+(setf (@code{cddaar} @i{x}) new-object)@*
+
+@code{cddadr}  @i{x} @result{}  @i{object}
+(setf (@code{cddadr} @i{x}) new-object)@*
+
+@code{cdddar}  @i{x} @result{}  @i{object}
+(setf (@code{cdddar} @i{x}) new-object)@*
+
+@code{cddddr}  @i{x} @result{}  @i{object}
+(setf (@code{cddddr} @i{x}) new-object)@*
+
+@subsubheading  Pronunciation::
+
+@b{cadr}: pronounced 'ka ,de r 
+
+@b{caddr}: pronounced 'kad e ,de r 
+  	     or pronounced 'ka ,dude r 
+
+@b{cdr}: pronounced 'ku ,de r 
+
+@b{cddr}: pronounced 'kud e ,de r 
+  	    or pronounced 'ke ,dude r 
+
+@subsubheading  Arguments and Values::
+
+@i{x}---a @i{list}.
+
+@i{object}---an @i{object}.
+
+@i{new-object}---an @i{object}.
+
+@subsubheading  Description::
+
+If @i{x} is a @i{cons}, @b{car} returns the @i{car} 
+of that @i{cons}.  If @i{x} is @b{nil}, @b{car} returns @b{nil}.
+
+If @i{x} is a @i{cons}, @b{cdr} returns the @i{cdr} 
+of that @i{cons}.  If @i{x} is @b{nil}, @b{cdr} returns @b{nil}.
+
+@i{Functions} are provided which perform compositions of up to four
+@b{car} and @b{cdr} operations.  Their @i{names} consist of 
+a @t{C}, followed by two, three, or four occurrences of @t{A} or @t{D}, 
+and finally an @t{R}.  The series of @t{A}'s and @t{D}'s in each
+@i{function}'s @i{name} is chosen to identify the series of 
+@b{car} and @b{cdr} operations that is performed by the function.
+The order in which the @t{A}'s and @t{D}'s appear is the inverse of the
+order in which the corresponding operations are performed.  Figure 14--6 
+defines the relationships precisely.
+
+@format
+@group
+@noindent
+@w{  This @i{place} ...  Is equivalent to this @i{place} ...  }
+@w{  @t{(caar @i{x})}        @t{(car (car @i{x}))}                    }
+@w{  @t{(cadr @i{x})}        @t{(car (cdr @i{x}))}                    }
+@w{  @t{(cdar @i{x})}        @t{(cdr (car @i{x}))}                    }
+@w{  @t{(cddr @i{x})}        @t{(cdr (cdr @i{x}))}                    }
+@w{  @t{(caaar @i{x})}       @t{(car (car (car @i{x})))}              }
+@w{  @t{(caadr @i{x})}       @t{(car (car (cdr @i{x})))}              }
+@w{  @t{(cadar @i{x})}       @t{(car (cdr (car @i{x})))}              }
+@w{  @t{(caddr @i{x})}       @t{(car (cdr (cdr @i{x})))}              }
+@w{  @t{(cdaar @i{x})}       @t{(cdr (car (car @i{x})))}              }
+@w{  @t{(cdadr @i{x})}       @t{(cdr (car (cdr @i{x})))}              }
+@w{  @t{(cddar @i{x})}       @t{(cdr (cdr (car @i{x})))}              }
+@w{  @t{(cdddr @i{x})}       @t{(cdr (cdr (cdr @i{x})))}              }
+@w{  @t{(caaaar @i{x})}      @t{(car (car (car (car @i{x}))))}        }
+@w{  @t{(caaadr @i{x})}      @t{(car (car (car (cdr @i{x}))))}        }
+@w{  @t{(caadar @i{x})}      @t{(car (car (cdr (car @i{x}))))}        }
+@w{  @t{(caaddr @i{x})}      @t{(car (car (cdr (cdr @i{x}))))}        }
+@w{  @t{(cadaar @i{x})}      @t{(car (cdr (car (car @i{x}))))}        }
+@w{  @t{(cadadr @i{x})}      @t{(car (cdr (car (cdr @i{x}))))}        }
+@w{  @t{(caddar @i{x})}      @t{(car (cdr (cdr (car @i{x}))))}        }
+@w{  @t{(cadddr @i{x})}      @t{(car (cdr (cdr (cdr @i{x}))))}        }
+@w{  @t{(cdaaar @i{x})}      @t{(cdr (car (car (car @i{x}))))}        }
+@w{  @t{(cdaadr @i{x})}      @t{(cdr (car (car (cdr @i{x}))))}        }
+@w{  @t{(cdadar @i{x})}      @t{(cdr (car (cdr (car @i{x}))))}        }
+@w{  @t{(cdaddr @i{x})}      @t{(cdr (car (cdr (cdr @i{x}))))}        }
+@w{  @t{(cddaar @i{x})}      @t{(cdr (cdr (car (car @i{x}))))}        }
+@w{  @t{(cddadr @i{x})}      @t{(cdr (cdr (car (cdr @i{x}))))}        }
+@w{  @t{(cdddar @i{x})}      @t{(cdr (cdr (cdr (car @i{x}))))}        }
+@w{  @t{(cddddr @i{x})}      @t{(cdr (cdr (cdr (cdr @i{x}))))}        }
+
+@noindent
+@w{         Figure 14--6: CAR and CDR variants        }
+
+@end group
+@end format
+
+@b{setf} can also be used with any of these functions to change an
+existing component of @i{x}, but @b{setf} will not make new
+components.  So, for example, the @i{car} of a @i{cons} 
+can be assigned with @b{setf} of @b{car},
+but the @i{car} of @b{nil} cannot be assigned with @b{setf} of @b{car}.
+Similarly, the @i{car} of the @i{car} of a @i{cons} whose @i{car}
+is a @i{cons} can be assigned with @b{setf} of @b{caar},
+but neither @b{nil} nor a @i{cons} whose car is @b{nil} can be assigned
+with @b{setf} of @b{caar}.
+
+The argument @i{x} is permitted to be a @i{dotted list} 
+or a @i{circular list}.
+
+@subsubheading  Examples::
+
+@example
+ (car nil) @result{}  NIL  
+ (cdr '(1 . 2)) @result{}  2
+ (cdr '(1 2)) @result{}  (2)
+ (cadr '(1 2)) @result{}  2 
+ (car '(a b c)) @result{}  A
+ (cdr '(a b c)) @result{}  (B C)
+@end example
+
+@subsubheading  Exceptional Situations::
+
+The functions @b{car} and @b{cdr} 
+should signal @b{type-error} if they receive an argument which is not a
+@i{list}.  The other functions (@b{caar}, @b{cadr},
+... @b{cddddr}) should behave for the purpose of
+error checking as if defined by appropriate calls to @b{car} and
+@b{cdr}.
+
+@subsubheading  See Also::
+
+@ref{rplaca}
+, 
+@ref{first}
+, 
+@ref{rest}
+
+@subsubheading  Notes::
+
+The @i{car} of a @i{cons} can also be altered by using @b{rplaca},
+and the @i{cdr} of a @i{cons} can be altered by using @b{rplacd}.
+
+@example
+(car @i{x})    @equiv{} (first @i{x})
+(cadr @i{x})   @equiv{} (second @i{x}) @equiv{} (car (cdr @i{x}))
+(caddr @i{x})  @equiv{} (third @i{x})  @equiv{} (car (cdr (cdr @i{x})))
+(cadddr @i{x}) @equiv{} (fourth @i{x}) @equiv{} (car (cdr (cdr (cdr @i{x}))))
+@end example
+
+@node copy-tree, sublis, car, Conses Dictionary
+@subsection copy-tree                                                        [Function]
+
+@code{copy-tree}  @i{tree} @result{}  @i{new-tree}
+
+@subsubheading  Arguments and Values::
+
+@i{tree}---a @i{tree}.
+
+@i{new-tree}---a @i{tree}.
+
+@subsubheading  Description::
+
+Creates a @i{copy} of a @i{tree} of @i{conses}.
+
+If @i{tree} is not a @i{cons}, it is returned; 
+otherwise, the result is a new @i{cons} of the results of calling @b{copy-tree} 
+on the @i{car} and @i{cdr} of @i{tree}.
+In other words, all @i{conses} in the @i{tree} represented by @i{tree}
+are copied recursively, stopping only when non-@i{conses} are encountered.
+
+@b{copy-tree} does not preserve circularities and the sharing of substructure.
+
+@subsubheading  Examples::
+
+@example
+ (setq object (list (cons 1 "one")
+                    (cons 2 (list 'a 'b 'c))))
+@result{}  ((1 . "one") (2 A B C))
+ (setq object-too object) @result{}  ((1 . "one") (2 A B C))
+ (setq copy-as-list (copy-list object))
+ (setq copy-as-alist (copy-alist object))
+ (setq copy-as-tree (copy-tree object))
+ (eq object object-too) @result{}  @i{true}
+ (eq copy-as-tree object) @result{}  @i{false}
+ (eql copy-as-tree object) @result{}  @i{false}
+ (equal copy-as-tree object) @result{}  @i{true}
+ (setf (first (cdr (second object))) "a"
+       (car (second object)) "two"
+       (car object) '(one . 1)) @result{}  (ONE . 1)
+ object @result{}  ((ONE . 1) ("two" "a" B C))
+ object-too @result{}  ((ONE . 1) ("two" "a" B C))
+ copy-as-list @result{}  ((1 . "one") ("two" "a" B C))
+ copy-as-alist @result{}  ((1 . "one") (2 "a" B C))
+ copy-as-tree @result{}  ((1 . "one") (2 A B C)) 
+@end example
+
+@subsubheading  See Also::
+
+@ref{tree-equal}
+
+@node sublis, subst, copy-tree, Conses Dictionary
+@subsection sublis, nsublis                                                  [Function]
+
+@code{sublis}  @i{alist tree @r{&key} key test test-not} @result{}  @i{new-tree}
+
+@code{nsublis}  @i{alist tree @r{&key} key test test-not} @result{}  @i{new-tree}
+
+@subsubheading  Arguments and Values::
+
+@i{alist}---an @i{association list}.
+
+@i{tree}---a @i{tree}.
+
+@i{test}---a @i{designator} for a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{test-not}---a @i{designator} for 
+  a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{key}---a @i{designator} for a @i{function} of one argument,
+  or @b{nil}.
+
+@i{new-tree}---a @i{tree}.
+
+@subsubheading  Description::
+
+@b{sublis} makes substitutions for @i{objects} in @i{tree}
+(a structure of @i{conses}).
+@b{nsublis} is like @b{sublis} 
+but destructively modifies the relevant
+parts of the @i{tree}.
+
+@b{sublis} looks at all subtrees and leaves of @i{tree};
+if a subtree or leaf appears as a key in @i{alist}
+(that is, the key and the subtree or leaf @i{satisfy the test}),
+it is replaced by the @i{object} with which that key is associated.
+This operation is non-destructive.  In effect, @b{sublis} can
+perform several @b{subst} operations simultaneously.
+
+If @b{sublis} succeeds, a new copy of @i{tree} is returned in
+which each occurrence of such a subtree or leaf is replaced by the
+@i{object} with which it is associated.   If no changes are made, the
+original tree is returned.  The original @i{tree} is left unchanged,
+but the result tree may share cells with it.
+
+@b{nsublis} is permitted to modify @i{tree} 
+but otherwise returns the same values as @b{sublis}.
+
+@subsubheading  Examples::
+
+@example
+ (sublis '((x . 100) (z . zprime))
+         '(plus x (minus g z x p) 4 . x))
+@result{}  (PLUS 100 (MINUS G ZPRIME 100 P) 4 . 100)
+ (sublis '(((+ x y) . (- x y)) ((- x y) . (+ x y)))
+         '(* (/ (+ x y) (+ x p)) (- x y))
+         :test #'equal)
+@result{}  (* (/ (- X Y) (+ X P)) (+ X Y))
+ (setq tree1 '(1 (1 2) ((1 2 3)) (((1 2 3 4)))))
+@result{}  (1 (1 2) ((1 2 3)) (((1 2 3 4))))
+ (sublis '((3 . "three")) tree1) 
+@result{}  (1 (1 2) ((1 2 "three")) (((1 2 "three" 4))))
+ (sublis '((t . "string"))
+          (sublis '((1 . "") (4 . 44)) tree1)
+          :key #'stringp)
+@result{}  ("string" ("string" 2) (("string" 2 3)) ((("string" 2 3 44))))
+ tree1 @result{}  (1 (1 2) ((1 2 3)) (((1 2 3 4))))
+ (setq tree2 '("one" ("one" "two") (("one" "Two" "three"))))
+@result{}  ("one" ("one" "two") (("one" "Two" "three"))) 
+ (sublis '(("two" . 2)) tree2) 
+@result{}  ("one" ("one" "two") (("one" "Two" "three"))) 
+ tree2 @result{}  ("one" ("one" "two") (("one" "Two" "three"))) 
+ (sublis '(("two" . 2)) tree2 :test 'equal) 
+@result{}  ("one" ("one" 2) (("one" "Two" "three"))) 
+
+ (nsublis '((t . 'temp))
+           tree1
+           :key #'(lambda (x) (or (atom x) (< (list-length x) 3))))
+@result{}  ((QUOTE TEMP) (QUOTE TEMP) QUOTE TEMP) 
+@end example
+
+@subsubheading  Side Effects::
+
+@b{nsublis} modifies @i{tree}.
+
+@subsubheading  See Also::
+
+@ref{subst}
+,
+
+@ref{Compiler Terminology},
+
+@ref{Traversal Rules and Side Effects}
+
+@subsubheading  Notes::
+
+The @t{:test-not} parameter is deprecated.
+
+Because the side-effecting variants (@i{e.g.}, @b{nsublis}) potentially
+change the path that is being traversed, their effects in the presence
+of shared or circular structure structure may vary in surprising ways
+when compared to their non-side-effecting alternatives.  To see this,
+consider the following side-effect behavior, which might be exhibited by
+some implementations:
+
+@example
+ (defun test-it (fn)
+   (let* ((shared-piece (list 'a 'b))
+          (data (list shared-piece shared-piece)))
+     (funcall fn '((a . b) (b . a)) data)))
+ (test-it #'sublis) @result{}  ((B A) (B A))
+ (test-it #'nsublis) @result{}  ((A B) (A B))
+@end example
+
+@node subst, tree-equal, sublis, Conses Dictionary
+@subsection subst, subst-if, subst-if-not, nsubst, nsubst-if, nsubst-if-not
+@flushright
+@i{[Function]}
+@end flushright
+
+@code{subst}  @i{new old  tree @r{&key} key test test-not} @result{}  @i{new-tree}
+
+@code{subst-if}  @i{new predicate tree @r{&key} key} @result{}  @i{new-tree}
+
+@code{subst-if-not}  @i{new predicate tree @r{&key} key} @result{}  @i{new-tree}
+
+@code{nsubst}  @i{new old  tree @r{&key} key test test-not} @result{}  @i{new-tree}
+
+@code{nsubst-if}  @i{new predicate tree @r{&key} key} @result{}  @i{new-tree}
+
+@code{nsubst-if-not}  @i{new predicate tree @r{&key} key} @result{}  @i{new-tree}
+
+@subsubheading  Arguments and Values:: 
+
+@i{new}---an @i{object}.
+
+@i{old}---an @i{object}.
+
+@i{predicate}---a @i{symbol} that names a @i{function},
+   or a @i{function} of one argument 
+      that returns a @i{generalized boolean} value.
+
+@i{tree}---a @i{tree}.
+
+@i{test}---a @i{designator} for a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{test-not}---a @i{designator} for 
+  a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{key}---a @i{designator} for a @i{function} of one argument,
+  or @b{nil}.
+
+@i{new-tree}---a @i{tree}.
+
+@subsubheading  Description::
+
+@b{subst}, @b{subst-if}, and @b{subst-if-not} perform
+substitution operations on @i{tree}.  
+Each function searches @i{tree} for occurrences of a 
+particular @i{old} item of an element or subexpression that 
+@i{satisfies the test}.
+
+@b{nsubst}, @b{nsubst-if}, and @b{nsubst-if-not} are 
+like @b{subst},
+@b{subst-if}, and @b{subst-if-not} respectively, except that the 
+original @i{tree} is  modified.
+
+@b{subst} makes a copy of @i{tree},
+substituting @i{new} for every subtree or leaf of @i{tree}
+(whether the subtree or leaf is a @i{car} or a @i{cdr} of its parent)
+such that @i{old} and the subtree or leaf @i{satisfy the test}.  
+
+@b{nsubst} is a destructive version of @b{subst}.  
+The list structure of
+@i{tree} is altered by destructively replacing with @i{new}
+each leaf of the @i{tree} such that @i{old} and the leaf
+@i{satisfy the test}.
+
+For @b{subst}, @b{subst-if}, 
+and @b{subst-if-not},
+if the functions succeed, a new
+copy of the tree is returned in which each  occurrence of such an
+element is replaced by the
+@i{new} element or subexpression.  If no changes are made, the original 
+@i{tree} may be returned.
+The original @i{tree} is left unchanged, but the result tree 
+may share storage with it.           
+
+For @b{nsubst}, @b{nsubst-if}, 
+and @b{nsubst-if-not}
+the original @i{tree} is  modified and returned as the function result,
+but the result may not be @b{eq} to @i{tree}.
+
+@subsubheading  Examples::
+
+@example
+ (setq tree1 '(1 (1 2) (1 2 3) (1 2 3 4))) @result{}  (1 (1 2) (1 2 3) (1 2 3 4))
+ (subst "two" 2 tree1) @result{}  (1 (1 "two") (1 "two" 3) (1 "two" 3 4))
+ (subst "five" 5 tree1) @result{}  (1 (1 2) (1 2 3) (1 2 3 4))
+ (eq tree1 (subst "five" 5 tree1)) @result{}  @i{implementation-dependent}
+ (subst 'tempest 'hurricane
+        '(shakespeare wrote (the hurricane)))
+@result{}  (SHAKESPEARE WROTE (THE TEMPEST))
+ (subst 'foo 'nil '(shakespeare wrote (twelfth night)))
+@result{}  (SHAKESPEARE WROTE (TWELFTH NIGHT . FOO) . FOO)
+ (subst '(a . cons) '(old . pair)
+        '((old . spice) ((old . shoes) old . pair) (old . pair))
+        :test #'equal)
+@result{}  ((OLD . SPICE) ((OLD . SHOES) A . CONS) (A . CONS))
+
+ (subst-if 5 #'listp tree1) @result{}  5
+ (subst-if-not '(x) #'consp tree1) 
+@result{}  (1 X)
+
+ tree1 @result{}  (1 (1 2) (1 2 3) (1 2 3 4))
+ (nsubst 'x 3 tree1 :key #'(lambda (y) (and (listp y) (third y)))) 
+@result{}  (1 (1 2) X X)
+ tree1 @result{}  (1 (1 2) X X)
+@end example
+
+@subsubheading  Side Effects::
+
+@b{nsubst}, @b{nsubst-if}, and @b{nsubst-if-not} 
+might alter the @i{tree structure} of @i{tree}.
+
+@subsubheading  See Also::
+
+@ref{substitute}
+,
+@b{nsubstitute},
+
+@ref{Compiler Terminology},
+
+@ref{Traversal Rules and Side Effects}
+
+@subsubheading  Notes::
+
+The @t{:test-not} parameter is deprecated.
+
+The functions @b{subst-if-not} and @b{nsubst-if-not} are deprecated.
+
+One possible definition of @b{subst}:
+
+@example
+ (defun subst (old new tree &rest x &key test test-not key)
+   (cond ((satisfies-the-test old tree :test test
+                                 :test-not test-not :key key)
+         new)
+        ((atom tree) tree)
+        (t (let ((a (apply #'subst old new (car tree) x))
+                 (d (apply #'subst old new (cdr tree) x)))
+             (if (and (eql a (car tree))
+                      (eql d (cdr tree)))
+                 tree
+                 (cons a d))))))
+@end example
+
+@node tree-equal, copy-list, subst, Conses Dictionary
+@subsection tree-equal                                                       [Function]
+
+@code{tree-equal}  @i{tree-1 tree-2 @r{&key} test test-not} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values:: 
+
+@i{tree-1}---a @i{tree}.
+
+@i{tree-2}---a @i{tree}.
+
+@i{test}---a @i{designator} for a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{test-not}---a @i{designator} for 
+  a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+@b{tree-equal} tests whether two trees are of the same shape
+and have the same leaves.  
+@b{tree-equal} returns @i{true} if @i{tree-1} and @i{tree-2}  are 
+both @i{atoms} and @i{satisfy the test},
+or if they are both @i{conses} and
+the @i{car} of @i{tree-1} is @b{tree-equal} to
+the @i{car} of @i{tree-2} and
+the @i{cdr} of @i{tree-1} is @b{tree-equal} to
+the @i{cdr} of @i{tree-2}.  
+Otherwise, @b{tree-equal} returns @i{false}.
+
+@b{tree-equal} recursively compares @i{conses} but not any 
+other @i{objects} that have components.  
+
+The first argument to the @t{:test} or @t{:test-not} 
+function is @i{tree-1} or a @i{car} or @i{cdr} of @i{tree-1};
+the second argument is @i{tree-2} or a @i{car} 
+or @i{cdr} of @i{tree-2}.
+
+@subsubheading  Examples::
+
+@example
+ (setq tree1 '(1 (1 2))
+       tree2 '(1 (1 2))) @result{}  (1 (1 2))
+ (tree-equal tree1 tree2) @result{}  @i{true}
+ (eql tree1 tree2) @result{}  @i{false}
+ (setq tree1 '('a ('b 'c))
+       tree2 '('a ('b 'c))) @result{}  ('a ('b 'c)) 
+@result{}  ((QUOTE A) ((QUOTE B) (QUOTE C)))
+ (tree-equal tree1 tree2 :test 'eq) @result{}  @i{true}
+@end example
+
+@subsubheading  Exceptional Situations::
+
+The consequences are undefined 
+if both @i{tree-1} and @i{tree-2} are circular.
+
+@subsubheading  See Also::
+
+@ref{equal}
+,
+
+@ref{Traversal Rules and Side Effects}
+
+@subsubheading  Notes::
+
+The @t{:test-not} parameter is deprecated.
+
+@node copy-list, list (Function), tree-equal, Conses Dictionary
+@subsection copy-list                                                        [Function]
+
+@code{copy-list}  @i{list} @result{}  @i{copy}
+
+@subsubheading  Arguments and Values::
+
+@i{list}---a @i{proper list} or a @i{dotted list}.
+
+@i{copy}---a @i{list}.
+
+@subsubheading  Description::
+
+Returns a @i{copy} of @i{list}.
+If @i{list} is a @i{dotted list},
+the resulting @i{list} will also be a @i{dotted list}.
+
+Only the @i{list structure} of @i{list} is copied; 
+the @i{elements} of the resulting list are 
+the @i{same} as the corresponding @i{elements} of the given @i{list}.
+
+@subsubheading  Examples::    
+
+@example
+ (setq lst (list 1 (list 2 3))) @result{}  (1 (2 3))
+ (setq slst lst) @result{}  (1 (2 3))
+ (setq clst (copy-list lst)) @result{}  (1 (2 3))
+ (eq slst lst) @result{}  @i{true}
+ (eq clst lst) @result{}  @i{false}
+ (equal clst lst) @result{}  @i{true}
+ (rplaca lst "one") @result{}  ("one" (2 3))
+ slst @result{}  ("one" (2 3))
+ clst @result{}  (1 (2 3))
+ (setf (caadr lst) "two") @result{}  "two"
+ lst @result{}  ("one" ("two" 3))
+ slst @result{}  ("one" ("two" 3))
+ clst @result{}  (1 ("two" 3))
+@end example
+
+@subsubheading  Exceptional Situations::
+
+The consequences are undefined if @i{list} is a @i{circular list}.
+
+@subsubheading  See Also::
+
+@ref{copy-alist}
+,
+@ref{copy-seq}
+,
+@ref{copy-tree}
+
+@subsubheading  Notes::
+
+The copy created is @b{equal} to @i{list}, but not @b{eq}.
+
+@node list (Function), list-length, copy-list, Conses Dictionary
+@subsection list, list*                                                      [Function]
+
+@code{list}  @i{@r{&rest} objects} @result{}  @i{list}
+
+@code{list*}  @i{@r{&rest} objects^+} @result{}  @i{result}
+
+@subsubheading  Arguments and Values:: 
+
+@i{object}---an @i{object}.
+
+@i{list}---a @i{list}.
+
+@i{result}---an @i{object}.
+
+@subsubheading  Description::
+
+@b{list} returns a @i{list} containing the supplied @i{objects}.  
+
+@b{list*} is like @b{list} except that 
+the last @i{argument} to @b{list} becomes 
+the @i{car} of the last @i{cons} constructed, while
+the last @i{argument} to @b{list*} becomes 
+the @i{cdr} of the last @i{cons} constructed.
+Hence, any given call to @b{list*} always produces one fewer @i{conses}
+than a call to @b{list} with the same number of arguments.
+
+If the last @i{argument} to @b{list*} is a @i{list}, 
+the effect is to construct a new @i{list} which is similar, but
+which has additional elements added to the front corresponding to
+the preceding @i{arguments} of @b{list*}.
+
+If @b{list*} receives only one @i{object},
+that @i{object} is returned, regardless of whether or not it is a @i{list}.
+
+@subsubheading  Examples::
+
+@example
+ (list 1) @result{}  (1)
+ (list* 1) @result{}  1
+ (setq a 1) @result{}  1
+ (list a 2) @result{}  (1 2)
+ '(a 2) @result{}  (A 2)
+ (list 'a 2) @result{}  (A 2)
+ (list* a 2) @result{}  (1 . 2)
+ (list) @result{}  NIL ;@i{i.e.}, ()
+ (setq a '(1 2)) @result{}  (1 2)
+ (eq a (list* a)) @result{}  @i{true}
+ (list 3 4 'a (car '(b . c)) (+ 6 -2)) @result{}  (3 4 A B 4)
+ (list* 'a 'b 'c 'd) @equiv{} (cons 'a (cons 'b (cons 'c 'd))) @result{}  (A B C . D)
+ (list* 'a 'b 'c '(d e f)) @result{}  (A B C D E F)
+@end example
+
+@subsubheading  See Also::
+
+@ref{cons}
+
+@subsubheading  Notes::
+
+@example
+ (list* @i{x}) @equiv{} @i{x}
+@end example
+
+@node list-length, listp, list (Function), Conses Dictionary
+@subsection list-length                                                      [Function]
+
+@code{list-length}  @i{list} @result{}  @i{length}
+
+@subsubheading  Arguments and Values::
+
+@i{list}---a @i{proper list} or a @i{circular list}.
+
+@i{length}---a non-negative @i{integer}, or @b{nil}.
+
+@subsubheading  Description::
+
+Returns the @i{length} of @i{list} if @i{list} is a @i{proper list}.
+Returns @b{nil} if @i{list} is a @i{circular list}.
+
+@subsubheading  Examples::
+
+@example
+ (list-length '(a b c d)) @result{}  4
+ (list-length '(a (b c) d)) @result{}  3
+ (list-length '()) @result{}  0
+ (list-length nil) @result{}  0
+ (defun circular-list (&rest elements)
+   (let ((cycle (copy-list elements))) 
+     (nconc cycle cycle)))
+ (list-length (circular-list 'a 'b)) @result{}  NIL
+ (list-length (circular-list 'a)) @result{}  NIL
+ (list-length (circular-list)) @result{}  0
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{list} is not a @i{proper list} or a @i{circular list}.
+
+@subsubheading  See Also::
+
+@ref{length}
+
+@subsubheading  Notes::
+
+@b{list-length} could be implemented as follows:
+
+@example
+ (defun list-length (x)  
+   (do ((n 0 (+ n 2))           ;Counter.
+        (fast x (cddr fast))    ;Fast pointer: leaps by 2.
+        (slow x (cdr slow)))    ;Slow pointer: leaps by 1.
+       (nil)
+     ;; If fast pointer hits the end, return the count.
+     (when (endp fast) (return n))
+     (when (endp (cdr fast)) (return (+ n 1)))
+     ;; If fast pointer eventually equals slow pointer,
+     ;;  then we must be stuck in a circular list.
+     ;; (A deeper property is the converse: if we are
+     ;;  stuck in a circular list, then eventually the
+     ;;  fast pointer will equal the slow pointer.
+     ;;  That fact justifies this implementation.)
+     (when (and (eq fast slow) (> n 0)) (return nil))))
+
+@end example
+
+@node listp, make-list, list-length, Conses Dictionary
+@subsection listp                                                            [Function]
+
+@code{listp}  @i{object} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{object}---an @i{object}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{object} is of @i{type} @b{list};
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::
+@example
+ (listp nil) @result{}  @i{true}
+ (listp (cons 1 2)) @result{}  @i{true}
+ (listp (make-array 6)) @result{}  @i{false}
+ (listp t) @result{}  @i{false}
+@end example
+
+@subsubheading  See Also::
+
+@ref{consp}
+
+@subsubheading  Notes::
+
+If @i{object} is a @i{cons},
+@b{listp} does not check whether @i{object} is a @i{proper list};
+it returns @i{true} for any kind of @i{list}.
+
+@example
+ (listp @i{object}) @equiv{} (typep @i{object} 'list) @equiv{} (typep @i{object} '(or cons null))
+@end example
+
+@node make-list, push, listp, Conses Dictionary
+@subsection make-list                                                        [Function]
+
+@code{make-list}  @i{size @r{&key} initial-element} @result{}  @i{list}
+
+@subsubheading  Arguments and Values::
+
+@i{size}---a non-negative @i{integer}.
+
+@i{initial-element}---an @i{object}.
+  The default is @b{nil}.
+
+@i{list}---a @i{list}.
+
+@subsubheading  Description::
+
+Returns a @i{list} of @i{length} given by @i{size},
+each of the @i{elements} of which is @i{initial-element}.
+
+@subsubheading  Examples::
+@example
+ (make-list 5) @result{}  (NIL NIL NIL NIL NIL)
+ (make-list 3 :initial-element 'rah) @result{}  (RAH RAH RAH)
+ (make-list 2 :initial-element '(1 2 3)) @result{}  ((1 2 3) (1 2 3))
+ (make-list 0) @result{}  NIL ;@i{i.e.}, ()
+ (make-list 0 :initial-element 'new-element) @result{}  NIL 
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{size} is not a non-negative @i{integer}.
+
+@subsubheading  See Also::
+
+@ref{cons}
+,
+@ref{list (Function)}
+
+@node push, pop, make-list, Conses Dictionary
+@subsection push                                                                [Macro]
+
+@code{push}  @i{item place} @result{}  @i{new-place-value}
+
+@subsubheading  Arguments and Values::
+
+@i{item}---an @i{object}. 
+
+@i{place}---a @i{place}, the @i{value} of which may be any @i{object}.  
+
+@i{new-place-value}---a @i{list} (the new @i{value} of @i{place}).
+
+@subsubheading  Description::
+
+@b{push} prepends @i{item} to the @i{list} that is stored
+in @i{place}, stores the resulting @i{list} in @i{place}, 
+and returns the @i{list}.
+
+For information about the @i{evaluation} of @i{subforms} of @i{place},
+see @ref{Evaluation of Subforms to Places}.
+
+@subsubheading  Examples::
+@example
+ (setq llst '(nil)) @result{}  (NIL)
+ (push 1 (car llst)) @result{}  (1)
+ llst @result{}  ((1))
+ (push 1 (car llst)) @result{}  (1 1)
+ llst @result{}  ((1 1))
+ (setq x '(a (b c) d)) @result{}  (A (B C) D)
+ (push 5 (cadr x)) @result{}  (5 B C)  
+ x @result{}  (A (5 B C) D)
+@end example
+
+@subsubheading  Side Effects::
+
+The contents of @i{place} are modified.
+
+@subsubheading  See Also::
+
+@ref{pop}
+,
+@ref{pushnew}
+,
+@ref{Generalized Reference}
+
+@subsubheading  Notes::
+The effect of @t{(push @i{item} @i{place})}
+is equivalent to
+
+@example
+ (setf place (cons @i{item} @i{place}))
+@end example
+
+except that the @i{subforms} of @i{place} 
+are evaluated only once, and @i{item} is evaluated
+before @i{place}.
+
+@node pop, first, push, Conses Dictionary
+@subsection pop                                                                 [Macro]
+
+@code{pop}  @i{place} @result{}  @i{element}
+
+@subsubheading  Arguments and Values:: 
+
+@i{place}---a @i{place}, the @i{value} of which is a @i{list}
+   (possibly, but necessarily, a @i{dotted list} or @i{circular list}).
+
+@i{element}---an @i{object} (the @i{car} of the contents of @i{place}).
+
+@subsubheading  Description::
+
+@b{pop} @i{reads} the @i{value} of @i{place},
+remembers the @i{car} of the @i{list} which was retrieved,
+@i{writes} the @i{cdr} of the @i{list} back into the @i{place},
+and finally @i{yields} the @i{car} of the originally retrieved @i{list}.
+
+For information about the @i{evaluation} of @i{subforms} of @i{place},
+see @ref{Evaluation of Subforms to Places}.
+
+@subsubheading  Examples::
+
+@example
+ (setq stack '(a b c)) @result{}  (A B C)
+ (pop stack) @result{}  A  
+ stack @result{}  (B C)
+ (setq llst '((1 2 3 4))) @result{}  ((1 2 3 4))
+ (pop (car llst)) @result{}  1
+ llst @result{}  ((2 3 4))
+@end example
+
+@subsubheading  Side Effects::
+
+The contents of @i{place} are modified.
+
+@subsubheading  See Also::
+
+@ref{push}
+,
+@ref{pushnew}
+,
+@ref{Generalized Reference}
+
+@subsubheading  Notes::
+
+The effect of @t{(pop @i{place})} is roughly equivalent to
+
+@example
+ (prog1 (car @i{place}) (setf @i{place} (cdr @i{place})))
+@end example
+
+except that the latter would evaluate any @i{subforms} of @i{place}
+three times, while @b{pop} evaluates them only once.
+
+@node first, nth, pop, Conses Dictionary
+@subsection first, second, third, fourth, fifth, 
+@subheading sixth, seventh, eighth, ninth, tenth
+@flushright
+@i{[Accessor]}
+@end flushright
+
+@code{first}  @i{list} @result{}  @i{object}
+(setf (@code{first} @i{list}) new-object)@*
+
+@code{second}  @i{list} @result{}  @i{object}
+(setf (@code{second} @i{list}) new-object)@*
+
+@code{third}  @i{list} @result{}  @i{object}
+(setf (@code{third} @i{list}) new-object)@*
+
+@code{fourth}  @i{list} @result{}  @i{object}
+(setf (@code{fourth} @i{list}) new-object)@*
+
+@code{fifth}  @i{list} @result{}  @i{object}
+(setf (@code{fifth} @i{list}) new-object)@*
+
+@code{sixth}  @i{list} @result{}  @i{object}
+(setf (@code{sixth} @i{list}) new-object)@*
+
+@code{seventh}  @i{list} @result{}  @i{object}
+(setf (@code{seventh} @i{list}) new-object)@*
+
+@code{eighth}  @i{list} @result{}  @i{object}
+(setf (@code{eighth} @i{list}) new-object)@*
+
+@code{ninth}  @i{list} @result{}  @i{object}
+(setf (@code{ninth} @i{list}) new-object)@*
+
+@code{tenth}  @i{list} @result{}  @i{object}
+(setf (@code{tenth} @i{list}) new-object)@*
+
+@subsubheading  Arguments and Values::
+
+@i{list}---a @i{list}, 
+
+	       which might be a @i{dotted list} or a @i{circular list}.
+
+@i{object}, @i{new-object}---an @i{object}.
+
+@subsubheading  Description::
+
+The functions
+@b{first},
+@b{second},
+@b{third}, 
+@b{fourth}, 
+@b{fifth},
+@b{sixth},
+@b{seventh},
+@b{eighth}, 
+@b{ninth},
+and
+@b{tenth}
+@i{access} the first, second, third, fourth, fifth, sixth, seventh, eighth,
+ninth, and tenth @i{elements} of @i{list}, respectively.
+Specifically,
+
+@example
+ (first @i{list})    @equiv{}  (car @i{list})
+ (second @i{list})   @equiv{}  (car (cdr @i{list}))
+ (third @i{list})    @equiv{}  (car (cddr @i{list}))
+ (fourth @i{list})   @equiv{}  (car (cdddr @i{list}))
+ (fifth @i{list})    @equiv{}  (car (cddddr @i{list}))
+ (sixth @i{list})    @equiv{}  (car (cdr (cddddr @i{list})))
+ (seventh @i{list})  @equiv{}  (car (cddr (cddddr @i{list})))
+ (eighth @i{list})   @equiv{}  (car (cdddr (cddddr @i{list})))
+ (ninth @i{list})    @equiv{}  (car (cddddr (cddddr @i{list})))
+ (tenth @i{list})    @equiv{}  (car (cdr (cddddr (cddddr @i{list}))))
+@end example
+
+@b{setf} can also be used with any of these functions to change an
+existing component.  The same equivalences apply.  For example:
+
+@example
+ (setf (fifth @i{list}) @i{new-object}) @equiv{} (setf (car (cddddr @i{list})) @i{new-object})
+@end example
+
+@subsubheading  Examples::
+
+@example
+ (setq lst '(1 2 3 (4 5 6) ((V)) vi 7 8 9 10)) 
+@result{}  (1 2 3 (4 5 6) ((V)) VI 7 8 9 10)
+ (first lst) @result{}  1
+ (tenth lst) @result{}  10
+ (fifth lst) @result{}  ((V))
+ (second (fourth lst)) @result{}  5
+ (sixth '(1 2 3)) @result{}  NIL
+ (setf (fourth lst) "four") @result{}  "four"
+ lst @result{}  (1 2 3 "four" ((V)) VI 7 8 9 10)
+@end example
+
+@subsubheading  See Also::
+
+@ref{car}
+, 
+@ref{nth}
+
+@subsubheading  Notes::
+
+@b{first}  is functionally equivalent to @b{car},
+@b{second} is functionally equivalent to @b{cadr},
+@b{third}  is functionally equivalent to @b{caddr}, and 
+@b{fourth} is functionally equivalent to @b{cadddr}.
+
+The ordinal numbering used here is one-origin,
+as opposed to the zero-origin numbering used by @b{nth}:
+
+@example
+ (fifth x) @equiv{} (nth 4 x)
+@end example
+
+@node nth, endp, first, Conses Dictionary
+@subsection nth                                                              [Accessor]
+
+@code{nth}  @i{n list} @result{}  @i{object}
+
+(setf (@code{         nth} @i{n list}) new-object)@*
+
+@subsubheading  Arguments and Values::
+
+@i{n}---a non-negative @i{integer}.
+
+@i{list}---a @i{list},
+
+	       which might be a @i{dotted list} or a @i{circular list}.
+
+@i{object}---an @i{object}.
+
+@i{new-object}---an @i{object}.
+
+@subsubheading  Description::
+
+@b{nth} locates the @i{n}th element of @i{list},
+where the @i{car} of the @i{list} is the ``zeroth'' element.
+
+Specifically,
+
+@example
+ (nth @i{n} @i{list}) @equiv{} (car (nthcdr @i{n} @i{list}))
+@end example
+
+@b{nth} may be used to specify a @i{place} to @b{setf}.
+
+Specifically,
+
+@example
+ (setf (nth @i{n} @i{list}) @i{new-object}) @equiv{} (setf (car (nthcdr @i{n} @i{list})) @i{new-object})
+@end example
+
+@subsubheading  Examples::
+
+@example
+ (nth 0 '(foo bar baz)) @result{}  FOO
+ (nth 1 '(foo bar baz)) @result{}  BAR
+ (nth 3 '(foo bar baz)) @result{}  NIL
+ (setq 0-to-3 (list 0 1 2 3)) @result{}  (0 1 2 3)
+ (setf (nth 2 0-to-3) "two") @result{}  "two"
+ 0-to-3 @result{}  (0 1 "two" 3)
+@end example
+
+@subsubheading  See Also::
+
+@ref{elt}
+,
+@ref{first}
+,
+@ref{nthcdr}
+
+@node endp, null, nth, Conses Dictionary
+@subsection endp                                                             [Function]
+
+@code{endp}  @i{list} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{list}---a @i{list},
+
+	       which might be a @i{dotted list} or a @i{circular list}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true}  if @i{list} is the @i{empty list}.
+Returns @i{false} if @i{list} is a @i{cons}.
+
+@subsubheading  Examples::
+
+@example
+ (endp nil) @result{}  @i{true}
+ (endp '(1 2)) @result{}  @i{false}
+ (endp (cddr '(1 2))) @result{}  @i{true}
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{list} is not a @i{list}.
+
+@subsubheading  Notes::
+
+The purpose of @b{endp} is to test for the end of @i{proper list}.
+Since @b{endp} does not descend into a @i{cons}, 
+it is well-defined to pass it a @i{dotted list}.
+However, if shorter ``lists'' are iteratively produced 
+by calling @b{cdr} on such a @i{dotted list} 
+and those ``lists'' are tested with @b{endp},
+a situation that has undefined consequences will eventually result 
+when the @i{non-nil} @i{atom} (which is not in fact a @i{list})
+finally becomes the argument to @b{endp}.
+Since this is the usual way in which @b{endp} is used,
+it is conservative programming style 
+and consistent with the intent of @b{endp}
+to treat @b{endp} as simply a function on @i{proper lists} 
+which happens not to enforce an argument type of @i{proper list} except
+when the argument is @i{atomic}.
+
+@node null, nconc, endp, Conses Dictionary
+@subsection null                                                             [Function]
+
+@code{null}  @i{object} @result{}  @i{boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{object}---an @i{object}.
+
+@i{boolean}---a @i{boolean}.
+
+@subsubheading  Description::
+
+Returns @b{t} if @i{object} is the @i{empty list};
+otherwise, returns @b{nil}.
+
+@subsubheading  Examples::   
+
+@example
+ (null '()) @result{}  T
+ (null nil) @result{}  T
+ (null t) @result{}  NIL
+ (null 1) @result{}  NIL
+@end example
+
+@subsubheading  See Also::
+
+@ref{not}
+
+@subsubheading  Notes::
+
+@b{null} is intended to be used to test for the @i{empty list}
+whereas @b{not} is intended to be used to invert a @i{boolean}
+(or @i{generalized boolean}).
+Operationally, @b{null} and @b{not} compute the same result;
+which to use is a matter of style.
+
+@example
+ (null @i{object}) @equiv{} (typep @i{object} 'null) @equiv{} (eq @i{object} '@t{()})
+@end example
+
+@node nconc, append, null, Conses Dictionary
+@subsection nconc                                                            [Function]
+
+@code{nconc}  @i{@r{&rest} lists} @result{}  @i{concatenated-list}
+
+@subsubheading  Arguments and Values::
+
+@i{list}---each but the last must be a @i{list} 
+	(which might be a @i{dotted list} but must not be a @i{circular list});
+        the last @i{list} may be any @i{object}.
+
+@i{concatenated-list}---a @i{list}.
+
+@subsubheading  Description::
+
+Returns a @i{list} that is the concatenation of @i{lists}.
+If no @i{lists} are supplied, @t{(nconc)} returns @b{nil}.
+
+@b{nconc} is defined using the following recursive relationship:
+
+@example
+ (nconc) @result{}  ()
+ (nconc nil . @i{lists}) @equiv{} (nconc . @i{lists})
+ (nconc @i{list}) @result{}  @i{list}
+ (nconc @i{list-1} @i{list-2}) @equiv{} (progn (rplacd (last @i{list-1}) @i{list-2}) @i{list-1})
+ (nconc @i{list-1} @i{list-2} . @i{lists}) @equiv{} (nconc (nconc @i{list-1} @i{list-2}) . @i{lists})
+@end example
+
+@subsubheading  Examples::
+
+@example
+ (nconc) @result{}  NIL
+ (setq x '(a b c)) @result{}  (A B C)
+ (setq y '(d e f)) @result{}  (D E F)
+ (nconc x y) @result{}  (A B C D E F)
+ x @result{}  (A B C D E F)
+@end example
+
+Note, in the example, that the value of @t{x} is now different,
+since its last @i{cons} 
+has been @b{rplacd}'d to the value of @t{y}.
+If @t{(nconc x y)} were evaluated again,
+it would yield a piece of a @i{circular list},
+whose printed representation would be
+@t{(A B C D E F D E F D E F ...)}, repeating forever;
+if the @b{*print-circle*} switch were @i{non-nil},
+it would be printed as @t{(A B C . #1=(D E F . #1#))}.
+
+@example
+ (setq foo (list 'a 'b 'c 'd 'e)
+       bar (list 'f 'g 'h 'i 'j)
+       baz (list 'k 'l 'm)) @result{}  (K L M)
+ (setq foo (nconc foo bar baz)) @result{}  (A B C D E F G H I J K L M)
+ foo @result{}  (A B C D E F G H I J K L M)
+ bar @result{}  (F G H I J K L M)
+ baz @result{}  (K L M)
+
+ (setq foo (list 'a 'b 'c 'd 'e)
+       bar (list 'f 'g 'h 'i 'j)
+       baz (list 'k 'l 'm)) @result{}  (K L M)
+ (setq foo (nconc nil foo bar nil baz)) @result{}  (A B C D E F G H I J K L M) 
+ foo @result{}  (A B C D E F G H I J K L M)
+ bar @result{}  (F G H I J K L M)
+ baz @result{}  (K L M)
+@end example
+
+@subsubheading  Side Effects::
+
+The @i{lists} are modified rather than copied.
+
+@subsubheading  See Also::
+
+@ref{append}
+, 
+@ref{concatenate}
+
+@node append, revappend, nconc, Conses Dictionary
+@subsection append                                                           [Function]
+
+@code{append}  @i{@r{&rest} lists} @result{}  @i{result}
+
+@subsubheading  Arguments and Values:: 
+
+@i{list}---each must be a @i{proper list} except the last,
+	       which may be any @i{object}.
+
+@i{result}---an @i{object}.  This will be a @i{list}
+		 unless the last @i{list} was not a @i{list}
+        	    and all preceding @i{lists} were @i{null}.
+
+@subsubheading  Description::
+
+@b{append} returns a new @i{list} that is the concatenation of
+the copies.  @i{lists} are left unchanged; the @i{list structure} 
+of each of @i{lists} except the last is copied.
+The last argument is not copied; it becomes the @i{cdr} of the 
+final @i{dotted pair} of the concatenation of the preceding @i{lists},
+or is returned directly if there are no preceding
+@i{non-empty} 
+@i{lists}.
+
+@subsubheading  Examples::
+
+@example
+ (append '(a b c) '(d e f) '() '(g)) @result{}  (A B C D E F G)
+ (append '(a b c) 'd) @result{}  (A B C . D)
+ (setq lst '(a b c)) @result{}  (A B C)
+ (append lst '(d)) @result{}  (A B C D)
+ lst @result{}  (A B C)
+ (append) @result{}  NIL
+ (append 'a) @result{}  A
+@end example
+
+@subsubheading  See Also::
+
+@ref{nconc}
+, 
+@ref{concatenate}
+
+@node revappend, butlast, append, Conses Dictionary
+@subsection revappend, nreconc                                               [Function]
+
+@code{revappend}  @i{list tail} @result{}  @i{result-list}
+
+@code{nreconc}  @i{list tail} @result{}  @i{result-list}
+
+@subsubheading  Arguments and Values::
+
+@i{list}---a @i{proper list}.
+
+@i{tail}---an @i{object}. 
+
+@i{result-list}---an @i{object}.
+
+@subsubheading  Description::
+
+@b{revappend} constructs a @i{copy}_2 of @i{list},
+but with the @i{elements} in reverse order.  It then appends (as if
+by @b{nconc}) the @i{tail} to that reversed list and returns the result.
+
+@b{nreconc} reverses the order of @i{elements} in @i{list}
+(as if by @b{nreverse}).  It then appends (as if by @b{nconc})
+the @i{tail} to that reversed list and returns the result.
+
+The resulting @i{list} shares @i{list structure} with @i{tail}.
+
+@subsubheading  Examples::
+
+@example
+ (let ((list-1 (list 1 2 3))
+       (list-2 (list 'a 'b 'c)))
+   (print (revappend list-1 list-2))
+   (print (equal list-1 '(1 2 3)))
+   (print (equal list-2 '(a b c))))
+@t{ |> } (3 2 1 A B C) 
+@t{ |> } T
+@t{ |> } T
+@result{}  T
+
+ (revappend '(1 2 3) '()) @result{}  (3 2 1)
+ (revappend '(1 2 3) '(a . b)) @result{}  (3 2 1 A . B)
+ (revappend '() '(a b c)) @result{}  (A B C)
+ (revappend '(1 2 3) 'a) @result{}  (3 2 1 . A)
+ (revappend '() 'a) @result{}  A   ;degenerate case
+
+ (let ((list-1 '(1 2 3))
+       (list-2 '(a b c)))
+   (print (nreconc list-1 list-2))
+   (print (equal list-1 '(1 2 3)))
+   (print (equal list-2 '(a b c))))
+@t{ |> } (3 2 1 A B C) 
+@t{ |> } NIL
+@t{ |> } T
+@result{}  T
+
+@end example
+
+@subsubheading  Side Effects::
+
+@b{revappend} does not modify either of its @i{arguments}.
+@b{nreconc} is permitted to modify @i{list} but not @i{tail}.
+
+Although it might be implemented differently,
+@b{nreconc} is constrained to have side-effect behavior equivalent to:
+
+@example
+ (nconc (nreverse @i{list}) @i{tail})
+@end example
+
+@subsubheading  See Also::
+
+@ref{reverse}
+,
+@b{nreverse},
+@ref{nconc}
+
+@subsubheading  Notes::
+
+The following functional equivalences are true, 
+although good @i{implementations} will typically use a faster algorithm for
+achieving the same effect:
+
+@example
+ (revappend @i{list} @i{tail}) @equiv{} (nconc (reverse @i{list}) @i{tail})
+ (nreconc @i{list} @i{tail}) @equiv{} (nconc (nreverse @i{list}) @i{tail})
+@end example
+
+@node butlast, last, revappend, Conses Dictionary
+@subsection butlast, nbutlast                                                [Function]
+
+@code{butlast}  @i{list @r{&optional} n} @result{}  @i{result-list}
+
+@code{nbutlast}  @i{list @r{&optional} n} @result{}  @i{result-list}
+
+@subsubheading  Arguments and Values::
+
+@i{list}---a @i{list}, 
+
+	       which might be a @i{dotted list} but must not be a @i{circular list}.
+
+@i{n}---a non-negative @i{integer}.
+
+@i{result-list}---a @i{list}.
+
+@subsubheading  Description::
+
+@b{butlast} returns a copy of @i{list} from which the last
+@i{n}
+
+conses
+
+have been omitted.
+If @i{n} is not supplied, its value is 1.  
+If there are fewer than @i{n} 
+
+conses
+
+in @i{list},
+@b{nil} is returned and, in the case of @b{nbutlast},
+@i{list} is not modified.  
+
+@b{nbutlast} is like @b{butlast}, but @b{nbutlast} 
+may modify @i{list}.
+It changes the @i{cdr} of
+the @i{cons} @i{n}+1 from the end of the @i{list} to @b{nil}.  
+
+@subsubheading  Examples::
+@example
+ (setq lst '(1 2 3 4 5 6 7 8 9)) @result{}  (1 2 3 4 5 6 7 8 9)
+ (butlast lst) @result{}  (1 2 3 4 5 6 7 8)
+ (butlast lst 5) @result{}  (1 2 3 4)
+ (butlast lst (+ 5 5)) @result{}  NIL
+ lst @result{}  (1 2 3 4 5 6 7 8 9)
+ (nbutlast lst 3) @result{}  (1 2 3 4 5 6)
+ lst @result{}  (1 2 3 4 5 6)
+ (nbutlast lst 99) @result{}  NIL
+ lst @result{}  (1 2 3 4 5 6)
+ (butlast '(a b c d)) @result{}  (A B C)
+ (butlast '((a b) (c d))) @result{}  ((A B))
+ (butlast '(a)) @result{}  NIL
+ (butlast nil) @result{}  NIL
+ (setq foo (list 'a 'b 'c 'd)) @result{}  (A B C D)
+ (nbutlast foo) @result{}  (A B C)
+ foo @result{}  (A B C)
+ (nbutlast (list 'a)) @result{}  NIL
+ (nbutlast '()) @result{}  NIL
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{list} is not a @i{proper list} or a @i{dotted list}.
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{n} is not a non-negative @i{integer}.
+
+@subsubheading  Notes::
+
+@example
+ (butlast @i{list} @i{n}) @equiv{} (ldiff @i{list} (last @i{list} @i{n}))
+@end example
+
+@node last, ldiff, butlast, Conses Dictionary
+@subsection last                                                             [Function]
+
+@code{last}  @i{list @r{&optional} n} @result{}  @i{tail}
+
+@subsubheading  Arguments and Values::
+
+@i{list}---a @i{list},
+
+               which might be a @i{dotted list} but must not be a @i{circular list}.
+
+@i{n}---a non-negative @i{integer}.
+ The default is @t{1}.
+
+@i{tail}---an @i{object}.
+
+@subsubheading  Description::
+
+@b{last} returns the last @i{n} @i{conses} 
+ (not the last @i{n} elements) of @i{list}).
+If @i{list} is @t{()}, @b{last} returns @t{()}.
+
+If @i{n} is zero,
+  the atom that terminates @i{list} is returned.
+If @i{n} is greater than or equal to the number of @i{cons} cells in @i{list},
+  the result is @i{list}.
+
+@subsubheading  Examples::
+
+@example
+ (last nil) @result{}  NIL
+ (last '(1 2 3)) @result{}  (3)
+ (last '(1 2 . 3)) @result{}  (2 . 3)
+ (setq x (list 'a 'b 'c 'd)) @result{}  (A B C D)
+ (last x) @result{}  (D)
+ (rplacd (last x) (list 'e 'f)) x @result{}  (A B C D E F)
+ (last x) @result{}  (F)
+
+ (last '(a b c))   @result{}  (C)
+
+ (last '(a b c) 0) @result{}  ()
+ (last '(a b c) 1) @result{}  (C)
+ (last '(a b c) 2) @result{}  (B C)
+ (last '(a b c) 3) @result{}  (A B C)
+ (last '(a b c) 4) @result{}  (A B C)
+
+ (last '(a . b) 0) @result{}  B
+ (last '(a . b) 1) @result{}  (A . B)
+ (last '(a . b) 2) @result{}  (A . B)
+@end example
+
+@subsubheading  Exceptional Situations::
+
+The consequences are undefined if @i{list} is a @i{circular list}.
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{n} is not a non-negative @i{integer}.
+
+@subsubheading  See Also::
+
+@ref{butlast}
+,
+@ref{nth}
+
+@subsubheading  Notes::                                             
+
+The following code could be used to define @b{last}.
+
+@example
+ (defun last (list &optional (n 1))
+   (check-type n (integer 0))
+   (do ((l list (cdr l))
+        (r list)
+        (i 0 (+ i 1)))
+       ((atom l) r)
+     (if (>= i n) (pop r))))
+@end example
+
+@node ldiff, nthcdr, last, Conses Dictionary
+@subsection ldiff, tailp                                                     [Function]
+
+@code{ldiff}  @i{list object} @result{}  @i{result-list}
+
+@code{tailp}  @i{object list} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{list}---a @i{list},
+
+                   which might be a @i{dotted list}.
+
+@i{object}---an @i{object}.
+
+@i{result-list}---a @i{list}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+If @i{object} is the @i{same} as some @i{tail} of @i{list},
+@b{tailp} returns @i{true};
+otherwise, it returns @i{false}.
+
+If @i{object} is the @i{same} as some @i{tail} of @i{list},
+@b{ldiff} returns a @i{fresh} @i{list} 
+of the @i{elements} of @i{list} 
+that precede @b{object} in the @i{list structure} of @i{list};
+otherwise, it returns a @i{copy}_2 of @i{list}.
+
+@subsubheading  Examples::
+
+@example
+ (let ((lists '#((a b c) (a b c . d))))
+   (dotimes (i (length lists)) ()
+     (let ((list (aref lists i)))
+       (format t "~2&list=~S ~21T(tailp object list)~
+                  ~44T(ldiff list object)~
+         (let ((objects (vector list (cddr list) (copy-list (cddr list))
+                                '(f g h) '() 'd 'x)))
+           (dotimes (j (length objects)) ()
+             (let ((object (aref objects j)))
+               (format t "~& object=~S ~21T~S ~44T~S"
+                       object (tailp object list) (ldiff list object))))))))
+@t{ |> } 
+@t{ |> } list=(A B C)         (tailp object list)    (ldiff list object)
+@t{ |> }  object=(A B C)      T                      NIL
+@t{ |> }  object=(C)          T                      (A B)
+@t{ |> }  object=(C)          NIL                    (A B C)
+@t{ |> }  object=(F G H)      NIL                    (A B C)
+@t{ |> }  object=NIL          T                      (A B C)
+@t{ |> }  object=D            NIL                    (A B C)
+@t{ |> }  object=X            NIL                    (A B C)
+@t{ |> } 
+@t{ |> } list=(A B C . D)     (tailp object list)    (ldiff list object)
+@t{ |> }  object=(A B C . D)  T                      NIL
+@t{ |> }  object=(C . D)      T                      (A B)
+@t{ |> }  object=(C . D)      NIL                    (A B C . D)
+@t{ |> }  object=(F G H)      NIL                    (A B C . D)
+@t{ |> }  object=NIL          NIL                    (A B C . D)
+@t{ |> }  object=D            T                      (A B C)
+@t{ |> }  object=X            NIL                    (A B C . D)
+@result{}  NIL
+@end example
+
+@subsubheading  Side Effects::
+
+Neither @b{ldiff} nor @b{tailp} modifies either of its @i{arguments}.
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{list} is not a @i{proper list} or a @i{dotted list}.
+
+@subsubheading  See Also::
+
+@ref{set-difference}
+
+@subsubheading  Notes::
+
+If the @i{list} is a @i{circular list},
+@b{tailp} will reliably @i{yield} a @i{value} 
+only if the given @i{object} is in fact a @i{tail} of @i{list}.
+Otherwise, the consequences are unspecified:
+a given @i{implementation} which detects the circularity must return @i{false},
+but since an @i{implementation} is not obliged to detect such a @i{situation},
+@b{tailp} might just loop indefinitely without returning in that case.
+
+@b{tailp} could be defined as follows:
+
+@example
+ (defun tailp (object list)
+   (do ((list list (cdr list)))
+       ((atom list) (eql list object))
+      (if (eql object list)
+          (return t))))
+@end example
+
+and @b{ldiff} could be defined by:
+
+@example
+(defun ldiff (list object)
+  (do ((list list (cdr list))
+       (r '() (cons (car list) r)))
+      ((atom list)
+       (if (eql list object) (nreverse r) (nreconc r list)))
+    (when (eql object list)
+      (return (nreverse r)))))
+@end example
+
+@node nthcdr, rest, ldiff, Conses Dictionary
+@subsection nthcdr                                                           [Function]
+
+@code{nthcdr}  @i{n list} @result{}  @i{tail}
+
+@subsubheading  Arguments and Values::
+
+@i{n}---a non-negative @i{integer}.
+
+@i{list}---a @i{list},
+
+	       which might be a @i{dotted list} or a @i{circular list}.
+
+@i{tail}---an @i{object}.
+
+@subsubheading  Description::
+
+Returns the @i{tail} of @i{list} that would be obtained by calling @b{cdr}
+@i{n} times in succession.
+
+@subsubheading  Examples::
+
+@example
+ (nthcdr 0 '()) @result{}  NIL
+ (nthcdr 3 '()) @result{}  NIL
+ (nthcdr 0 '(a b c)) @result{}  (A B C)
+ (nthcdr 2 '(a b c)) @result{}  (C)
+ (nthcdr 4 '(a b c)) @result{}  ()
+ (nthcdr 1 '(0 . 1)) @result{}  1
+
+ (locally (declare (optimize (safety 3)))
+   (nthcdr 3 '(0 . 1)))
+ Error: Attempted to take CDR of 1.
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{n} is not a non-negative @i{integer}.
+
+For @i{n} being an integer greater than @t{1},
+the error checking done by @t{(nthcdr @i{n} @i{list})}
+is the same as for @t{(nthcdr (- @i{n} 1) (cdr @i{list}))};
+see the @i{function} @b{cdr}.
+
+@subsubheading  See Also::
+
+@b{cdr},
+@ref{nth}
+,
+@ref{rest}
+
+@node rest, member (Function), nthcdr, Conses Dictionary
+@subsection rest                                                             [Accessor]
+
+@code{rest}  @i{list} @result{}  @i{tail}
+
+(setf (@code{         rest} @i{list}) new-tail)@*
+
+@subsubheading  Arguments and Values::
+
+@i{list}---a @i{list},
+
+	       which might be a @i{dotted list} or a @i{circular list}.
+
+@i{tail}---an @i{object}.
+
+@subsubheading  Description::
+
+@b{rest} performs the same operation as @b{cdr},
+but mnemonically complements @b{first}.
+Specifically,
+
+@example
+ (rest @i{list}) @equiv{} (cdr @i{list})
+ (setf (rest @i{list}) @i{new-tail}) @equiv{} (setf (cdr @i{list}) @i{new-tail})
+@end example
+
+@subsubheading  Examples::
+
+@example
+ (rest '(1 2)) @result{}  (2)
+ (rest '(1 . 2)) @result{}  2
+ (rest '(1)) @result{}  NIL
+ (setq *cons* '(1 . 2)) @result{}  (1 . 2)
+ (setf (rest *cons*) "two") @result{}  "two"
+ *cons* @result{}  (1 . "two")
+@end example
+
+@subsubheading  See Also::
+
+@b{cdr},
+@ref{nthcdr}
+
+@subsubheading  Notes::
+
+@b{rest} is often preferred stylistically over @b{cdr}
+when the argument is to being subjectively viewed as a @i{list} 
+rather than as a @i{cons}.
+
+@node member (Function), mapc, rest, Conses Dictionary
+@subsection member, member-if, member-if-not                                 [Function]
+
+@code{member}  @i{item      list @r{&key} key test test-not} @result{}  @i{tail}
+
+@code{member-if}  @i{predicate list @r{&key} key} @result{}  @i{tail}
+
+@code{member-if-not}  @i{predicate list @r{&key} key} @result{}  @i{tail}
+
+@subsubheading  Arguments and Values:: 
+
+@i{item}---an @i{object}.
+
+@i{list}---a @i{proper list}.
+
+@i{predicate}---a @i{designator} for 
+		    a @i{function} of one @i{argument}
+		    that returns a @i{generalized boolean}.
+
+@i{test}---a @i{designator} for a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{test-not}---a @i{designator} for 
+  a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{key}---a @i{designator} for a @i{function} of one argument,
+  or @b{nil}.
+
+@i{tail}---a @i{list}.
+
+@subsubheading  Description::
+
+@b{member}, @b{member-if}, and @b{member-if-not} each
+search @i{list} for @i{item} or for a top-level element that 
+@i{satisfies the test}.  The argument to the @i{predicate} function 
+is an element of @i{list}.
+
+If some element @i{satisfies the test},
+the tail of @i{list} beginning
+with this element is returned; otherwise @b{nil} is returned.
+
+@i{list} is searched on the top level only. 
+
+@subsubheading  Examples::
+
+@example
+ (member 2 '(1 2 3)) @result{}  (2 3)                                 
+ (member 2 '((1 . 2) (3 . 4)) :test-not #'= :key #'cdr) @result{}  ((3 . 4))
+ (member 'e '(a b c d)) @result{}  NIL
+@end example
+
+@example
+ (member-if #'listp '(a b nil c d)) @result{}  (NIL C D)
+ (member-if #'numberp '(a #\Space 5/3 foo)) @result{}  (5/3 FOO)
+ (member-if-not #'zerop 
+                 '(3 6 9 11 . 12)
+                 :key #'(lambda (x) (mod x 3))) @result{}  (11 . 12)
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{list} is not a @i{proper list}.
+
+@subsubheading  See Also::
+
+@ref{find}
+,
+@ref{position}
+,
+
+@ref{Traversal Rules and Side Effects}
+
+@subsubheading  Notes::
+
+The @t{:test-not} parameter is deprecated.
+
+The @i{function} @b{member-if-not} is deprecated.
+
+In the following
+
+@example
+ (member 'a '(g (a y) c a d e a f)) @result{}  (A D E A F)
+@end example
+
+the value returned by @b{member} is @i{identical} to the portion
+of the @i{list} beginning with @t{a}.  Thus @b{rplaca} on the
+result of @b{member} can be used to alter the part of the @i{list}
+where @t{a} was found (assuming a check has been made that @b{member}
+did not return @b{nil}).
+
+@node mapc, acons, member (Function), Conses Dictionary
+@subsection mapc, mapcar, mapcan, mapl, maplist, mapcon                      [Function]
+
+@code{mapc}  @i{function @r{&rest} lists^+} @result{}  @i{list-1}
+
+@code{mapcar}  @i{function @r{&rest} lists^+} @result{}  @i{result-list}
+
+@code{mapcan}  @i{function @r{&rest} lists^+} @result{}  @i{concatenated-results}
+
+@code{mapl}  @i{function @r{&rest} lists^+} @result{}  @i{list-1}
+
+@code{maplist}  @i{function @r{&rest} lists^+} @result{}  @i{result-list}
+
+@code{mapcon}  @i{function @r{&rest} lists^+} @result{}  @i{concatenated-results}
+
+@subsubheading  Arguments and Values:: 
+
+@i{function}---a @i{designator} for a @i{function} 
+  that must take as many @i{arguments} as there are @i{lists}.
+
+@i{list}---a @i{proper list}.
+
+@i{list-1}---the first @i{list} (which must be a @i{proper list}).
+
+@i{result-list}---a @i{list}.
+
+@i{concatenated-results}---a @i{list}.
+
+@subsubheading  Description::
+
+The mapping operation involves applying @i{function} to
+successive sets of arguments in which
+one argument is obtained from each @i{sequence}.
+Except for @b{mapc} and @b{mapl},
+the result contains the results returned by @i{function}.
+In the cases of @b{mapc} and @b{mapl},
+the resulting @i{sequence} is @i{list}.
+
+@i{function} is called
+first on all the elements with index @t{0}, then on all those
+with index @t{1}, and so on.
+@i{result-type} specifies the @i{type} of
+the 
+resulting @i{sequence}.
+
+If @i{function} is a @i{symbol}, it is @b{coerce}d
+to a @i{function} as if by @b{symbol-function}.
+
+@b{mapcar} operates on successive @i{elements} of the @i{lists}.
+@i{function} is applied to the first @i{element} of each @i{list},
+then to the second @i{element} of each @i{list}, and so on.
+The iteration terminates when the shortest @i{list} runs out,
+and excess elements in other lists are ignored.
+The value returned by @b{mapcar} is a @i{list}
+of the results of successive calls to @i{function}.
+
+@b{mapc} is like @b{mapcar} except that the results of 
+applying @i{function} are not accumulated.
+The @i{list} argument is returned.
+
+@b{maplist} is like @b{mapcar} except that
+@i{function} is applied to successive sublists of the @i{lists}.
+@i{function} 
+is first applied to the @i{lists} themselves, 
+and then to the @i{cdr} of each
+@i{list}, and then to the @i{cdr} of the @i{cdr}
+of each @i{list}, and so on.  
+
+@b{mapl} is like @b{maplist} except that the results of 
+applying @i{function} are not accumulated;
+@i{list-1} is returned.
+
+@b{mapcan} and @b{mapcon} are like @b{mapcar} and
+@b{maplist} respectively, except that the results of
+applying @i{function} are combined 
+into a @i{list} by the use of @b{nconc}
+rather than @b{list}.
+That is,
+
+@example
+ (mapcon f x1 ... xn)
+   @equiv{} (apply #'nconc (maplist f x1 ... xn))
+@end example
+
+and similarly for the relationship between @b{mapcan} 
+and @b{mapcar}.
+
+@subsubheading  Examples::
+
+@example
+ (mapcar #'car '((1 a) (2 b) (3 c))) @result{}  (1 2 3) 
+ (mapcar #'abs '(3 -4 2 -5 -6)) @result{}  (3 4 2 5 6)
+ (mapcar #'cons '(a b c) '(1 2 3)) @result{}  ((A . 1) (B . 2) (C . 3))
+
+ (maplist #'append '(1 2 3 4) '(1 2) '(1 2 3)) 
+@result{}  ((1 2 3 4 1 2 1 2 3) (2 3 4 2 2 3)) 
+ (maplist #'(lambda (x) (cons 'foo x)) '(a b c d))
+@result{}  ((FOO A B C D) (FOO B C D) (FOO C D) (FOO D))
+ (maplist #'(lambda (x) (if (member (car x) (cdr x)) 0 1)) '(a b a c d b c))
+@result{}  (0 0 1 0 1 1 1)
+;An entry is 1 if the corresponding element of the input
+;  list was the last instance of that element in the input list.
+
+ (setq dummy nil) @result{}  NIL 
+ (mapc #'(lambda (&rest x) (setq dummy (append dummy x)))
+        '(1 2 3 4)
+        '(a b c d e)
+        '(x y z)) @result{}  (1 2 3 4) 
+ dummy @result{}  (1 A X 2 B Y 3 C Z)                   
+
+ (setq dummy nil) @result{}  NIL 
+ (mapl #'(lambda (x) (push x dummy)) '(1 2 3 4)) @result{}  (1 2 3 4) 
+ dummy @result{}  ((4) (3 4) (2 3 4) (1 2 3 4)) 
+
+ (mapcan #'(lambda (x y) (if (null x) nil (list x y)))
+          '(nil nil nil d e)
+          '(1 2 3 4 5 6)) @result{}  (D 4 E 5) 
+ (mapcan #'(lambda (x) (and (numberp x) (list x)))
+          '(a 1 b c 3 4 d 5))
+@result{}  (1 3 4 5)
+@end example
+
+In this case the function serves as a filter; 
+this is a standard @r{Lisp} idiom using @b{mapcan}.
+
+@example
+ (mapcon #'list '(1 2 3 4)) @result{}  ((1 2 3 4) (2 3 4) (3 4) (4)) 
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			    if any @i{list} is not a @i{proper list}.
+
+@subsubheading  See Also::
+
+@ref{dolist}
+,
+@ref{map}
+,
+
+@ref{Traversal Rules and Side Effects}
+
+@node acons, assoc, mapc, Conses Dictionary
+@subsection acons                                                            [Function]
+
+@code{acons}  @i{key datum alist} @result{}  @i{new-alist}
+
+@subsubheading  Arguments and Values:: 
+
+@i{key}---an @i{object}.
+
+@i{datum}---an @i{object}.
+
+@i{alist}---an @i{association list}.
+
+@i{new-alist}---an @i{association list}.
+
+@subsubheading  Description::
+
+Creates a @i{fresh} @i{cons},
+the @i{cdr} of which is @i{alist} and
+the @i{car} of which is another @i{fresh} @i{cons},
+ the @i{car} of which is @i{key} and
+ the @i{cdr} of which is @i{datum}.
+
+@subsubheading  Examples::
+
+@example
+ (setq alist '()) @result{}  NIL
+ (acons 1 "one" alist) @result{}  ((1 . "one"))
+ alist @result{}  NIL
+ (setq alist (acons 1 "one" (acons 2 "two" alist))) @result{}  ((1 . "one") (2 . "two"))
+ (assoc 1 alist) @result{}  (1 . "one")
+ (setq alist (acons 1 "uno" alist)) @result{}  ((1 . "uno") (1 . "one") (2 . "two"))
+ (assoc 1 alist) @result{}  (1 . "uno")
+@end example
+
+@subsubheading  See Also::
+
+@ref{assoc}
+, 
+@ref{pairlis}
+
+@subsubheading  Notes::
+
+@example
+(acons @i{key} @i{datum} @i{alist}) @equiv{} (cons (cons @i{key} @i{datum}) @i{alist})
+@end example
+
+@node assoc, copy-alist, acons, Conses Dictionary
+@subsection assoc, assoc-if, assoc-if-not                                    [Function]
+
+@code{assoc}  @i{item      alist @r{&key} key test test-not} @result{}  @i{entry}
+
+@code{assoc-if}  @i{predicate alist @r{&key} key} @result{}  @i{entry}
+
+@code{assoc-if-not}  @i{predicate alist @r{&key} key} @result{}  @i{entry}
+
+@subsubheading  Arguments and Values::
+
+@i{item}---an @i{object}.
+
+@i{alist}---an @i{association list}.
+
+@i{predicate}---a @i{designator} for 
+		    a @i{function} of one @i{argument}
+		    that returns a @i{generalized boolean}.
+
+@i{test}---a @i{designator} for a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{test-not}---a @i{designator} for 
+  a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{key}---a @i{designator} for a @i{function} of one argument,
+  or @b{nil}.
+
+@i{entry}---a @i{cons} that is an @i{element} of @i{alist},
+	        or @b{nil}.
+
+@subsubheading  Description::
+
+@b{assoc}, @b{assoc-if}, and @b{assoc-if-not}
+return the first @i{cons} in @i{alist} whose @i{car} @i{satisfies the test},
+or @b{nil} if no such @i{cons} is found.
+
+For @b{assoc}, @b{assoc-if}, and @b{assoc-if-not}, if @b{nil} appears
+in @i{alist} in place of a pair, it is ignored.
+
+@subsubheading  Examples::
+
+@example
+ (setq values '((x . 100) (y . 200) (z . 50))) @result{}  ((X . 100) (Y . 200) (Z . 50))
+ (assoc 'y values) @result{}  (Y . 200)
+ (rplacd (assoc 'y values) 201) @result{}  (Y . 201)
+ (assoc 'y values) @result{}  (Y . 201)
+ (setq alist '((1 . "one")(2 . "two")(3 . "three"))) 
+@result{}  ((1 . "one") (2 . "two") (3 . "three"))
+ (assoc 2 alist) @result{}  (2 . "two")
+ (assoc-if #'evenp alist) @result{}  (2 . "two")
+ (assoc-if-not #'(lambda(x) (< x 3)) alist) @result{}  (3 . "three")
+ (setq alist '(("one" . 1)("two" . 2))) @result{}  (("one" . 1) ("two" . 2))
+ (assoc "one" alist) @result{}  NIL
+ (assoc "one" alist :test #'equalp) @result{}  ("one" . 1)
+ (assoc "two" alist :key #'(lambda(x) (char x 2))) @result{}  NIL 
+ (assoc #\o alist :key #'(lambda(x) (char x 2))) @result{}  ("two" . 2)
+ (assoc 'r '((a . b) (c . d) (r . x) (s . y) (r . z))) @result{}   (R . X)
+ (assoc 'goo '((foo . bar) (zoo . goo))) @result{}  NIL
+ (assoc '2 '((1 a b c) (2 b c d) (-7 x y z))) @result{}  (2 B C D)
+ (setq alist '(("one" . 1) ("2" . 2) ("three" . 3)))
+@result{}  (("one" . 1) ("2" . 2) ("three" . 3))
+ (assoc-if-not #'alpha-char-p alist
+               :key #'(lambda (x) (char x 0))) @result{}  ("2" . 2)
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{alist} is not an @i{association list}.
+
+@subsubheading  See Also::
+
+@ref{rassoc}
+,
+@ref{find}
+,
+@ref{member (Function)}
+,
+@ref{position}
+,
+
+@ref{Traversal Rules and Side Effects}
+
+@subsubheading  Notes::
+
+The @t{:test-not} parameter is deprecated.
+
+The @i{function} @b{assoc-if-not} is deprecated.
+
+It is possible to @b{rplacd} the result of @b{assoc}, provided
+that it is not @b{nil},
+in order to ``update'' @i{alist}. 
+
+The two expressions
+
+@example
+ (assoc item list :test fn)
+@end example
+
+and
+
+@example
+ (find item list :test fn :key #'car)
+@end example
+
+are equivalent in meaning with one exception:
+if @b{nil} appears in @i{alist} in place of a pair,
+and @i{item} is @b{nil},
+@b{find} will compute the @i{car} of the @b{nil} in @i{alist},
+find that it is equal to @i{item}, and return @b{nil},
+whereas @b{assoc} will ignore the @b{nil} in @i{alist} and continue
+to search for an actual @i{cons} whose @i{car} is @b{nil}.
+
+@node copy-alist, pairlis, assoc, Conses Dictionary
+@subsection copy-alist                                                       [Function]
+
+@code{copy-alist}  @i{alist} @result{}  @i{new-alist}
+
+@subsubheading  Arguments and Values::
+
+@i{alist}---an @i{association list}.
+
+@i{new-alist}---an @i{association list}.
+
+@subsubheading  Description::
+
+@b{copy-alist} returns a @i{copy} of @i{alist}.
+
+The @i{list structure} of @i{alist} is copied,
+and the @i{elements} of @i{alist} which are @i{conses} are
+also copied (as @i{conses} only). 
+Any other @i{objects} which are referred to, 
+whether directly or indirectly,
+by the @i{alist} continue to be shared.
+
+@subsubheading  Examples::
+
+@example
+(defparameter *alist* (acons 1 "one" (acons 2 "two" '())))
+*alist* @result{}  ((1 . "one") (2 . "two"))
+(defparameter *list-copy* (copy-list *alist*))
+*list-copy* @result{}  ((1 . "one") (2 . "two"))
+(defparameter *alist-copy* (copy-alist *alist*))
+*alist-copy* @result{}  ((1 . "one") (2 . "two"))
+(setf (cdr (assoc 2 *alist-copy*)) "deux") @result{}  "deux"
+*alist-copy* @result{}  ((1 . "one") (2 . "deux"))
+*alist* @result{}  ((1 . "one") (2 . "two"))
+(setf (cdr (assoc 1 *list-copy*)) "uno") @result{}  "uno"
+*list-copy* @result{}  ((1 . "uno") (2 . "two"))
+*alist* @result{}  ((1 . "uno") (2 . "two"))
+@end example
+
+@subsubheading  See Also::
+
+@ref{copy-list}
+
+@node pairlis, rassoc, copy-alist, Conses Dictionary
+@subsection pairlis                                                          [Function]
+
+@code{pairlis}  @i{keys data @r{&optional} alist} @result{}  @i{new-alist}
+
+@subsubheading  Arguments and Values::
+
+@i{keys}---a @i{proper list}.
+
+@i{data}---a @i{proper list}.
+
+@i{alist}---an @i{association list}.
+  The default is the @i{empty list}.
+
+@i{new-alist}---an @i{association list}.
+
+@subsubheading  Description::
+
+Returns an @i{association list} that associates
+elements of @i{keys} to corresponding elements of @i{data}.
+The consequences are undefined if @i{keys} and @i{data} are 
+not of the same @i{length}.  
+
+If @i{alist} is supplied, @b{pairlis} returns
+a modified @i{alist} with the
+new pairs prepended to it.
+The new pairs may appear in the resulting @i{association list} in 
+either forward or backward order.
+The result of 
+
+@example
+ (pairlis '(one two) '(1 2) '((three . 3) (four . 19)))
+@end example
+
+might be
+
+@example
+ ((one . 1) (two . 2) (three . 3) (four . 19))
+@end example
+
+or
+
+@example
+ ((two . 2) (one . 1) (three . 3) (four . 19))
+@end example
+
+@subsubheading  Examples::
+@example
+ (setq keys '(1 2 3)
+        data '("one" "two" "three")
+        alist '((4 . "four"))) @result{}  ((4 . "four"))
+ (pairlis keys data) @result{}  ((3 . "three") (2 . "two") (1 . "one"))
+ (pairlis keys data alist)
+@result{}  ((3 . "three") (2 . "two") (1 . "one") (4 . "four"))
+ alist @result{}  ((4 . "four"))
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{keys} and @i{data} are not @i{proper lists}.
+
+@subsubheading  See Also::
+
+@ref{acons}
+
+@node rassoc, get-properties, pairlis, Conses Dictionary
+@subsection rassoc, rassoc-if, rassoc-if-not                                 [Function]
+
+@code{rassoc}  @i{item      alist  @r{&key} key test test-not} @result{}  @i{entry}
+
+@code{rassoc-if}  @i{predicate alist @r{&key} key} @result{}  @i{entry}
+
+@code{rassoc-if-not}  @i{predicate alist @r{&key} key} @result{}  @i{entry}
+
+@subsubheading  Arguments and Values:: 
+
+@i{item}---an @i{object}.
+
+@i{alist}---an @i{association list}.
+
+@i{predicate}---a @i{designator} for
+		    a @i{function} of one @i{argument}
+		    that returns a @i{generalized boolean}.
+
+@i{test}---a @i{designator} for a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{test-not}---a @i{designator} for 
+  a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{key}---a @i{designator} for a @i{function} of one argument,
+  or @b{nil}.
+
+@i{entry}---a @i{cons} that is an @i{element} of the @i{alist},
+		or @b{nil}.
+
+@subsubheading  Description::
+
+@b{rassoc}, @b{rassoc-if}, and @b{rassoc-if-not}
+return the first @i{cons} whose @i{cdr} 
+@i{satisfies the test}.
+If no such @i{cons} is found, @b{nil}
+is returned.
+
+If @b{nil} appears in @i{alist} in place of a pair, it is  ignored.
+
+@subsubheading  Examples::
+
+@example
+ (setq alist '((1 . "one") (2 . "two") (3 . 3))) 
+@result{}  ((1 . "one") (2 . "two") (3 . 3))
+ (rassoc 3 alist) @result{}  (3 . 3)
+ (rassoc "two" alist) @result{}  NIL
+ (rassoc "two" alist :test 'equal) @result{}  (2 . "two")
+ (rassoc 1 alist :key #'(lambda (x) (if (numberp x) (/ x 3)))) @result{}  (3 . 3)
+ (rassoc 'a '((a . b) (b . c) (c . a) (z . a))) @result{}  (C . A)
+ (rassoc-if #'stringp alist) @result{}  (1 . "one")
+ (rassoc-if-not #'vectorp alist) @result{}  (3 . 3)
+@end example
+
+@subsubheading  See Also::
+
+@ref{assoc}
+,
+
+@ref{Traversal Rules and Side Effects}
+
+@subsubheading  Notes::
+
+The @t{:test-not} parameter is deprecated.
+
+The @i{function} @b{rassoc-if-not} is deprecated.
+
+It is possible to @b{rplaca} the result of @b{rassoc}, 
+provided that it is not @b{nil}, in order to ``update'' @i{alist}. 
+
+The expressions
+
+@example
+ (rassoc item list :test fn)
+@end example
+
+and
+
+@example
+ (find item list :test fn :key #'cdr)
+@end example
+
+are equivalent in meaning, except when the @t{item} is @b{nil}
+and @b{nil} appears in place of a pair in the @i{alist}.
+See the @i{function} @b{assoc}. 
+
+@node get-properties, getf, rassoc, Conses Dictionary
+@subsection get-properties                                                   [Function]
+
+@code{get-properties}  @i{plist indicator-list} @result{}  @i{indicator, value, tail}
+
+@subsubheading  Arguments and Values:: 
+
+@i{plist}---a @i{property list}.
+
+@i{indicator-list}---a @i{proper list} (of @i{indicators}).
+
+@i{indicator}---an @i{object} that is an @i{element} of @i{indicator-list}.
+
+@i{value}---an @i{object}.
+
+@i{tail}---a @i{list}.
+
+@subsubheading  Description::
+
+@b{get-properties} is used to look up any of several
+@i{property list} entries all at once.
+
+It searches the @i{plist} for the first entry whose @i{indicator} 
+is @i{identical} to one of the @i{objects} in @i{indicator-list}.
+If such an entry is found, the @i{indicator} and @i{value} returned
+are the @i{property indicator} and its associated @i{property value},
+and the @i{tail} returned is the @i{tail} of the @i{plist}
+that begins with the found entry (@i{i.e.}, whose @i{car} is the @i{indicator}).
+If no such entry is found, the @i{indicator}, @i{value}, and @i{tail} 
+are all @b{nil}.
+
+@subsubheading  Examples::
+
+@example
+ (setq x '()) @result{}  NIL
+ (setq *indicator-list* '(prop1 prop2)) @result{}  (PROP1 PROP2)
+ (getf x 'prop1) @result{}  NIL
+ (setf (getf x 'prop1) 'val1) @result{}  VAL1
+ (eq (getf x 'prop1) 'val1) @result{}  @i{true}
+ (get-properties x *indicator-list*) @result{}  PROP1, VAL1, (PROP1 VAL1)
+ x @result{}  (PROP1 VAL1)
+@end example
+
+@subsubheading  See Also::
+
+@ref{get}
+, 
+@ref{getf}
+
+@node getf, remf, get-properties, Conses Dictionary
+@subsection getf                                                             [Accessor]
+
+@code{getf}  @i{plist indicator @r{&optional} default} @result{}  @i{value}
+
+(setf (@code{         getf} @i{place indicator @r{&optional} default}) new-value)@*
+
+@subsubheading  Arguments and Values::
+
+@i{plist}---a @i{property list}.
+
+@i{place}---a @i{place}, the @i{value} of which is a @i{property list}.
+
+@i{indicator}---an @i{object}.
+
+@i{default}---an @i{object}.
+ The default is @b{nil}.
+
+@i{value}---an @i{object}.
+
+@i{new-value}---an @i{object}.
+
+@subsubheading  Description::
+
+@b{getf} finds a @i{property} on the @i{plist}
+whose @i{property indicator} is @i{identical} to @i{indicator},
+and returns its corresponding @i{property value}.
+
+If there are multiple @i{properties}_1 with that @i{property indicator},
+@b{getf} uses the first such @i{property}.
+
+If there is no @i{property} with that @i{property indicator},
+@i{default} is returned.
+
+@b{setf} of @b{getf} may be used to associate a new @i{object}
+with an existing indicator in the @i{property list} held by @i{place},
+or to create a new association if none exists.
+
+If there are multiple @i{properties}_1 with that @i{property indicator},
+@b{setf} of @b{getf} associates the @i{new-value} 
+with the first such @i{property}.
+
+When a @b{getf} @i{form} is used as a @b{setf} @i{place},
+any @i{default} which is supplied is evaluated according to normal
+left-to-right evaluation rules, but its @i{value} is ignored.
+
+@b{setf} of @b{getf} is permitted to either
+    @i{write} the @i{value} of @i{place} itself,
+ or modify of any part, @i{car} or @i{cdr}, 
+     of the @i{list structure} held by @i{place}.
+
+@subsubheading  Examples::
+
+@example
+ (setq x '()) @result{}  NIL
+ (getf x 'prop1) @result{}  NIL
+ (getf x 'prop1 7) @result{}  7
+ (getf x 'prop1) @result{}  NIL
+ (setf (getf x 'prop1) 'val1) @result{}  VAL1
+ (eq (getf x 'prop1) 'val1) @result{}  @i{true}
+ (getf x 'prop1) @result{}  VAL1
+ (getf x 'prop1 7) @result{}  VAL1
+ x @result{}  (PROP1 VAL1)
+
+;; Examples of implementation variation permitted.
+ (setq foo (list 'a 'b 'c 'd 'e 'f)) @result{}  (A B C D E F)
+ (setq bar (cddr foo)) @result{}  (C D E F)
+ (remf foo 'c) @result{}  @i{true}
+ foo @result{}  (A B E F)
+ bar
+@result{}  (C D E F)
+@i{OR}@result{} (C)
+@i{OR}@result{} (NIL)
+@i{OR}@result{} (C NIL)
+@i{OR}@result{} (C D)
+@end example
+
+@subsubheading  See Also::
+
+@ref{get}
+,
+@ref{get-properties}
+,
+@ref{setf}
+,
+@ref{Function Call Forms as Places}
+
+@subsubheading  Notes::
+
+There is no way (using @b{getf}) to distinguish an absent property
+from one whose value is @i{default}; but see @b{get-properties}.
+
+Note that while supplying a @i{default} argument to @b{getf}
+in a @b{setf} situation is sometimes not very interesting,
+it is still important because some macros, such as @b{push} and
+@b{incf}, require a @i{place} argument which data is both @i{read}
+from and @i{written} to.  In such a context, if a @i{default} 
+argument is to be supplied for the @i{read} situation, it must be
+syntactically valid for the @i{write} situation as well. For example,
+
+@example
+ (let ((plist '()))
+   (incf (getf plist 'count 0))
+   plist) @result{}  (COUNT 1)
+@end example
+
+@node remf, intersection, getf, Conses Dictionary
+@subsection remf                                                                [Macro]
+
+@code{remf}  @i{place indicator} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{place}---a @i{place}.
+
+@i{indicator}---an @i{object}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+@b{remf} removes from the @i{property list} stored in @i{place}
+a @i{property}_1 with a @i{property indicator}
+@i{identical} to @i{indicator}.
+
+If there are multiple @i{properties}_1 with the @i{identical} key,
+@b{remf} only removes the first such @i{property}.
+
+@b{remf} returns @i{false} if no such @i{property} was found,
+or @i{true} if a property was found.
+
+The @i{property indicator} 
+and the corresponding @i{property value} 
+are removed in an undefined order
+by destructively splicing the property list.  
+
+@b{remf} is permitted to either @b{setf} @i{place} or to 
+@b{setf} any part, @b{car} or @b{cdr}, 
+of the @i{list structure} held by that @i{place}.
+
+For information about the @i{evaluation} of @i{subforms} of @i{place},
+see @ref{Evaluation of Subforms to Places}.
+
+@subsubheading  Examples::
+
+@example
+ (setq x (cons () ())) @result{}  (NIL)
+ (setf (getf (car x) 'prop1) 'val1) @result{}  VAL1
+ (remf (car x) 'prop1) @result{}  @i{true}
+ (remf (car x) 'prop1) @result{}  @i{false}
+@end example
+
+@subsubheading  Side Effects::
+
+The property list stored in @i{place} is modified.
+
+@subsubheading  See Also::
+
+@ref{remprop}
+, 
+@ref{getf}
+
+@node intersection, adjoin, remf, Conses Dictionary
+@subsection intersection, nintersection                                      [Function]
+
+@code{intersection}  @i{list-1 list-2 @r{&key} key test test-not} @result{}  @i{result-list}
+
+@code{nintersection}  @i{list-1 list-2 @r{&key} key test test-not} @result{}  @i{result-list}
+
+@subsubheading  Arguments and Values:: 
+
+@i{list-1}---a @i{proper list}.
+
+@i{list-2}---a @i{proper list}.
+
+@i{test}---a @i{designator} for a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{test-not}---a @i{designator} for 
+  a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{key}---a @i{designator} for a @i{function} of one argument,
+  or @b{nil}.
+
+@i{result-list}---a @i{list}.
+
+@subsubheading  Description::
+
+@b{intersection} and @b{nintersection} return a @i{list}
+that contains every element that occurs in both @i{list-1} and @i{list-2}.
+
+@b{nintersection} is the destructive version of @b{intersection}.
+It performs the same operation,
+but may destroy @i{list-1} using its cells to construct the result.
+
+@i{list-2} is not destroyed.
+
+The intersection operation is described as follows.
+For all possible ordered pairs consisting of 
+    one @i{element} from @i{list-1} 
+and one @i{element} from @i{list-2},
+@t{:test} or @t{:test-not} are used 
+to determine whether they @i{satisfy the test}.  
+The first argument to the @t{:test} or @t{:test-not}
+function is an element of @i{list-1}; the second argument is an
+element of @i{list-2}.
+If @t{:test} or @t{:test-not} is not supplied, @b{eql}
+is used.
+It is an error if @t{:test} and @t{:test-not} are supplied in
+the same function call.
+
+If @t{:key} is supplied (and not @b{nil}), it is used to
+extract the part to be tested from the @i{list} element. 
+The argument to the @t{:key} function
+is an element of either @i{list-1} or @i{list-2};
+the @t{:key} function typically returns part of the supplied element.
+If @t{:key} is not supplied or @b{nil}, the @i{list-1} and
+@i{list-2} elements are used.
+
+For every pair that @i{satifies the test},
+exactly one of the two elements of the pair will be put in the result.
+No element from either @i{list} appears in the result that does not 
+@i{satisfy the test} for
+an element from the other @i{list}.
+If one of the @i{lists} contains duplicate
+elements, there may be duplication in the result.
+
+There is no guarantee that the order of elements in the result will
+reflect the ordering of the arguments in any particular way.
+The result @i{list} may share cells with, 
+or be @b{eq} to, either @i{list-1} or @i{list-2}
+if appropriate.
+
+@subsubheading  Examples::
+
+@example
+ (setq list1 (list 1 1 2 3 4 a b c "A" "B" "C" "d")
+       list2 (list 1 4 5 b c d "a" "B" "c" "D")) 
+  @result{}  (1 4 5 B C D "a" "B" "c" "D")
+ (intersection list1 list2) @result{}  (C B 4 1 1)
+ (intersection list1 list2 :test 'equal) @result{}  ("B" C B 4 1 1)
+ (intersection list1 list2 :test #'equalp) @result{}  ("d" "C" "B" "A" C B 4 1 1) 
+ (nintersection list1 list2) @result{}  (1 1 4 B C)
+ list1 @result{}  @i{implementation-dependent} ;@i{e.g.}, (1 1 4 B C)
+ list2 @result{}  @i{implementation-dependent} ;@i{e.g.}, (1 4 5 B C D "a" "B" "c" "D")
+ (setq list1 (copy-list '((1 . 2) (2 . 3) (3 . 4) (4 . 5))))
+@result{}  ((1 . 2) (2 . 3) (3 . 4) (4 . 5)) 
+ (setq list2 (copy-list '((1 . 3) (2 . 4) (3 . 6) (4 . 8))))
+@result{}  ((1 . 3) (2 . 4) (3 . 6) (4 . 8)) 
+ (nintersection list1 list2 :key #'cdr) @result{}  ((2 . 3) (3 . 4)) 
+ list1 @result{}  @i{implementation-dependent} ;@i{e.g.}, ((1 . 2) (2 . 3) (3 . 4)) 
+ list2 @result{}  @i{implementation-dependent} ;@i{e.g.}, ((1 . 3) (2 . 4) (3 . 6) (4 . 8)) 
+@end example
+
+@subsubheading  Side Effects::
+
+@b{nintersection} can modify @i{list-1}, 
+
+but not @i{list-2}.
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{list-1} and @i{list-2} are not @i{proper lists}.
+
+@subsubheading  See Also::
+
+@ref{union}
+,
+
+@ref{Compiler Terminology},
+
+@ref{Traversal Rules and Side Effects}
+
+@subsubheading  Notes::
+
+The @t{:test-not} parameter is deprecated.
+
+Since the @b{nintersection} side effect is not required,
+it should not be used in for-effect-only
+  positions in portable code.
+
+@node adjoin, pushnew, intersection, Conses Dictionary
+@subsection adjoin                                                           [Function]
+
+@code{adjoin}  @i{item list @r{&key} key test test-not} @result{}  @i{new-list}
+
+@subsubheading  Arguments and Values:: 
+
+@i{item}---an @i{object}.
+
+@i{list}---a @i{proper list}.
+
+@i{test}---a @i{designator} for a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{test-not}---a @i{designator} for 
+  a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{key}---a @i{designator} for a @i{function} of one argument,
+  or @b{nil}.
+
+@i{new-list}---a @i{list}.
+
+@subsubheading  Description::
+
+Tests whether @i{item} is the same as an existing element of @i{list}.
+If the @i{item} is not an existing element,
+@b{adjoin} adds it to @i{list} (as if by @b{cons})
+and returns the resulting @i{list}; 
+otherwise, nothing is added and the original @i{list} is returned.
+
+The @i{test}, @i{test-not}, and @i{key} 
+affect how it is determined whether @i{item} is the same as an @i{element} of @i{list}.
+For details, see @ref{Satisfying a Two-Argument Test}.\ifvmode\else\endgraf
+\ifdim \prevdepth>-1000pt 
+\NIS\parskip \normalparskip\relax\fi
+
+@subsubheading  Examples::
+
+@example
+ (setq slist '()) @result{}  NIL 
+ (adjoin 'a slist) @result{}  (A) 
+ slist @result{}  NIL 
+ (setq slist (adjoin '(test-item 1) slist)) @result{}  ((TEST-ITEM 1)) 
+ (adjoin '(test-item 1) slist) @result{}  ((TEST-ITEM 1) (TEST-ITEM 1)) 
+ (adjoin '(test-item 1) slist :test 'equal) @result{}  ((TEST-ITEM 1)) 
+ (adjoin '(new-test-item 1) slist :key #'cadr) @result{}  ((TEST-ITEM 1)) 
+ (adjoin '(new-test-item 1) slist) @result{}  ((NEW-TEST-ITEM 1) (TEST-ITEM 1)) 
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{list} is not a @i{proper list}.
+
+@subsubheading  See Also::
+
+@ref{pushnew}
+,
+
+@ref{Traversal Rules and Side Effects}
+
+@subsubheading  Notes::
+
+The @t{:test-not} parameter is deprecated.
+
+@example
+ (adjoin item list :key fn)
+   @equiv{} (if (member (fn item) list :key fn) list (cons item list))
+@end example
+
+@node pushnew, set-difference, adjoin, Conses Dictionary
+@subsection pushnew                                                             [Macro]
+
+@code{pushnew}  @i{item place @r{&key} key test test-not}@*
+   @result{}  @i{new-place-value}
+
+@subsubheading  Arguments and Values:: 
+
+@i{item}---an @i{object}.  
+
+@i{place}---a @i{place}, the @i{value} of which is a @i{proper list}. 
+
+@i{test}---a @i{designator} for a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{test-not}---a @i{designator} for 
+  a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{key}---a @i{designator} for a @i{function} of one argument,
+  or @b{nil}.
+
+@i{new-place-value}---a @i{list} (the new @i{value} of @i{place}).
+
+@subsubheading  Description::
+
+@b{pushnew} tests whether  @i{item} is the same as any existing
+element of the @i{list} stored in @i{place}.  If @i{item} is not,
+it is prepended to the @i{list}, and the new @i{list} is stored in
+@i{place}.
+
+@b{pushnew} returns the new @i{list} that is stored in @i{place}.
+
+Whether or not @i{item} is already a member of the @i{list} that is
+in @i{place} is determined by comparisons using @t{:test} or @t{:test-not}.
+The first argument to the @t{:test} or @t{:test-not}
+function is @i{item}; the second argument is
+an element of the @i{list} in @i{place} as returned by
+the @t{:key} function (if supplied).
+
+If @t{:key} is supplied, it is used to extract the part to be tested from
+both @i{item} and the @i{list} element,
+as for @b{adjoin}.
+
+The argument to the @t{:key} function 
+is an element of the @i{list} stored in 
+@i{place}. The @t{:key} function typically returns part
+part of the element of the @i{list}.
+If @t{:key} is not supplied or @b{nil}, the @i{list} 
+element is used.
+
+For information about the @i{evaluation} of @i{subforms} of @i{place},
+see @ref{Evaluation of Subforms to Places}.
+
+It is @i{implementation-dependent} whether or not @b{pushnew} 
+actually executes the storing form for its @i{place} in the
+situation where the @i{item} is already a member of the @i{list}
+held by @i{place}.
+
+@subsubheading  Examples::
+@example
+ (setq x '(a (b c) d)) @result{}  (A (B C) D)
+ (pushnew 5 (cadr x)) @result{}  (5 B C)   
+ x @result{}  (A (5 B C) D)
+ (pushnew 'b (cadr x)) @result{}  (5 B C)  
+ x @result{}  (A (5 B C) D)
+ (setq lst '((1) (1 2) (1 2 3))) @result{}  ((1) (1 2) (1 2 3))
+ (pushnew '(2) lst) @result{}  ((2) (1) (1 2) (1 2 3))
+ (pushnew '(1) lst) @result{}  ((1) (2) (1) (1 2) (1 2 3))
+ (pushnew '(1) lst :test 'equal) @result{}  ((1) (2) (1) (1 2) (1 2 3))
+ (pushnew '(1) lst :key #'car) @result{}  ((1) (2) (1) (1 2) (1 2 3)) 
+@end example
+
+@subsubheading  Side Effects::
+
+The contents of @i{place} may be modified.
+
+@subsubheading  See Also::
+
+@ref{push}
+,
+@ref{adjoin}
+,
+@ref{Generalized Reference}
+
+@subsubheading  Notes::
+
+The effect of
+@example
+ (pushnew item place :test p)
+@end example
+
+is roughly equivalent to
+@example
+ (setf place (adjoin item place :test p))
+@end example
+
+except that the @i{subforms} of @t{place} are evaluated only once, 
+and @t{item} is evaluated before @t{place}.
+
+@node set-difference, set-exclusive-or, pushnew, Conses Dictionary
+@subsection set-difference, nset-difference                                  [Function]
+
+@code{set-difference}  @i{list-1 list-2 @r{&key} key test test-not} @result{}  @i{result-list}
+
+@code{nset-difference}  @i{list-1 list-2 @r{&key} key test test-not} @result{}  @i{result-list}
+
+@subsubheading  Arguments and Values:: 
+
+@i{list-1}---a @i{proper list}.
+
+@i{list-2}---a @i{proper list}.
+
+@i{test}---a @i{designator} for a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{test-not}---a @i{designator} for 
+  a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{key}---a @i{designator} for a @i{function} of one argument,
+  or @b{nil}.
+
+@i{result-list}---a @i{list}.
+
+@subsubheading  Description::
+@b{set-difference} returns a @i{list} 
+of elements of @i{list-1}
+that do not appear in @i{list-2}.  
+
+@b{nset-difference} is the destructive 
+version of @b{set-difference}.
+It may destroy @i{list-1}.
+
+For all possible ordered pairs consisting of
+one element from @i{list-1} and one element from @i{list-2}, the 
+@t{:test} or @t{:test-not} function is
+used to determine whether they @i{satisfy the test}.  
+The first argument to the @t{:test} or @t{:test-not} function 
+is the part of an element of @i{list-1} that is returned by 
+the @t{:key} function (if supplied); the second argument is the part of 
+an element of @i{list-2} that is 
+returned by the @t{:key} function (if supplied).
+
+If @t{:key} is supplied, its argument is a @i{list-1} or
+@i{list-2} element. The @t{:key} function 
+typically returns part of 
+the supplied element.
+If @t{:key} is not supplied, the @i{list-1} or @i{list-2}
+element is used.
+
+An element of @i{list-1}
+appears in the result if and only if it does not match any element
+of @i{list-2}.  
+
+There is no guarantee that the order of elements in the result will
+reflect the ordering of the arguments in any particular way.
+The result @i{list} 
+may share cells with, or be @b{eq} to, either of @i{list-1}
+or @i{list-2},
+if appropriate.
+
+@subsubheading  Examples::
+
+@example
+ (setq lst1 (list "A" "b" "C" "d")
+       lst2 (list "a" "B" "C" "d")) @result{}  ("a" "B" "C" "d")
+ (set-difference lst1 lst2) @result{}  ("d" "C" "b" "A")
+ (set-difference lst1 lst2 :test 'equal) @result{}  ("b" "A")
+ (set-difference lst1 lst2 :test #'equalp) @result{}  NIL 
+ (nset-difference lst1 lst2 :test #'string=) @result{}  ("A" "b")
+ (setq lst1 '(("a" . "b") ("c" . "d") ("e" . "f")))
+@result{}  (("a" . "b") ("c" . "d") ("e" . "f")) 
+ (setq lst2 '(("c" . "a") ("e" . "b") ("d" . "a")))
+@result{}  (("c" . "a") ("e" . "b") ("d" . "a")) 
+ (nset-difference lst1 lst2 :test #'string= :key #'cdr)
+@result{}  (("c" . "d") ("e" . "f")) 
+ lst1 @result{}  (("a" . "b") ("c" . "d") ("e" . "f")) 
+ lst2 @result{}  (("c" . "a") ("e" . "b") ("d" . "a")) 
+@end example
+
+@example
+;; Remove all flavor names that contain "c" or "w".
+ (set-difference '("strawberry" "chocolate" "banana"
+                  "lemon" "pistachio" "rhubarb")
+          '(#\c #\w)
+          :test #'(lambda (s c) (find c s)))
+@result{}  ("banana" "rhubarb" "lemon")    ;One possible ordering.
+@end example
+
+@subsubheading  Side Effects::
+
+@b{nset-difference} may destroy @i{list-1}.
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{list-1} and @i{list-2} are not @i{proper lists}.
+
+@subsubheading  See Also::
+
+@ref{Compiler Terminology},
+
+@ref{Traversal Rules and Side Effects}
+
+@subsubheading  Notes::
+
+The @t{:test-not} parameter is deprecated.
+
+@node set-exclusive-or, subsetp, set-difference, Conses Dictionary
+@subsection set-exclusive-or, nset-exclusive-or                              [Function]
+
+@code{set-exclusive-or}  @i{list-1 list-2 @r{&key} key test test-not} @result{}  @i{result-list}
+
+@code{nset-exclusive-or}  @i{list-1 list-2 @r{&key} key test test-not} @result{}  @i{result-list}
+
+@subsubheading  Arguments and Values:: 
+
+@i{list-1}---a @i{proper list}.
+
+@i{list-2}---a @i{proper list}.
+
+@i{test}---a @i{designator} for a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{test-not}---a @i{designator} for 
+  a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{key}---a @i{designator} for a @i{function} of one argument,
+  or @b{nil}.
+
+@i{result-list}---a @i{list}.
+
+@subsubheading  Description::
+@b{set-exclusive-or} returns a @i{list} of elements that appear
+in exactly one of @i{list-1} and @i{list-2}.
+
+@b{nset-exclusive-or} 
+is the @i{destructive} version of @b{set-exclusive-or}.
+
+For all possible ordered pairs consisting of
+one element from @i{list-1} and one element from @i{list-2}, the 
+@t{:test} or @t{:test-not} function is
+used to determine whether they @i{satisfy the test}.  
+
+If @t{:key} is supplied, it is used to
+extract the part to be tested from the @i{list-1} or @i{list-2} element. 
+The first argument to the @t{:test} or @t{:test-not} function 
+is the part of an element of @i{list-1} extracted by the @t{:key}
+function (if supplied); the second argument  is the part of an 
+element of @i{list-2} extracted by the @t{:key} function (if supplied).
+If @t{:key} is not supplied or @b{nil}, the @i{list-1} or
+@i{list-2} element is used.
+
+The result contains precisely
+those elements of @i{list-1} and @i{list-2} 
+that appear in no matching pair.
+
+The result @i{list} of @b{set-exclusive-or} 
+might share storage with one of @i{list-1} or @i{list-2}.
+
+@subsubheading  Examples::
+
+@example
+ (setq lst1 (list 1 "a" "b")
+       lst2 (list 1 "A" "b")) @result{}  (1 "A" "b")
+ (set-exclusive-or lst1 lst2) @result{}  ("b" "A" "b" "a")
+ (set-exclusive-or lst1 lst2 :test #'equal) @result{}  ("A" "a")
+ (set-exclusive-or lst1 lst2 :test 'equalp) @result{}  NIL 
+ (nset-exclusive-or lst1 lst2) @result{}  ("a" "b" "A" "b") 
+ (setq lst1 (list (("a" . "b") ("c" . "d") ("e" . "f"))))
+@result{}  (("a" . "b") ("c" . "d") ("e" . "f"))
+ (setq lst2 (list (("c" . "a") ("e" . "b") ("d" . "a"))))
+@result{}  (("c" . "a") ("e" . "b") ("d" . "a")) 
+ (nset-exclusive-or lst1 lst2 :test #'string= :key #'cdr)
+@result{}  (("c" . "d") ("e" . "f") ("c" . "a") ("d" . "a")) 
+ lst1 @result{}  (("a" . "b") ("c" . "d") ("e" . "f"))
+ lst2 @result{}  (("c" . "a") ("d" . "a")) 
+@end example
+
+@subsubheading  Side Effects::
+
+@b{nset-exclusive-or} is permitted to modify any part,
+@i{car} or @i{cdr}, of the @i{list structure} of @i{list-1} or @i{list-2}.
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{list-1} and @i{list-2} are not @i{proper lists}.
+
+@subsubheading  See Also::
+
+@ref{Compiler Terminology},
+
+@ref{Traversal Rules and Side Effects}
+
+@subsubheading  Notes::
+
+The @t{:test-not} parameter is deprecated.
+
+Since the @b{nset-exclusive-or} side effect is not required,
+it should not be used in for-effect-only
+  positions in portable code.
+
+@node subsetp, union, set-exclusive-or, Conses Dictionary
+@subsection subsetp                                                          [Function]
+
+@code{subsetp}  @i{list-1 list-2 @r{&key} key test test-not} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{list-1}---a @i{proper list}.
+
+@i{list-2}---a @i{proper list}.
+
+@i{test}---a @i{designator} for a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{test-not}---a @i{designator} for 
+  a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{key}---a @i{designator} for a @i{function} of one argument,
+  or @b{nil}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+@b{subsetp} returns @i{true} if every element of @i{list-1}
+matches some element of @i{list-2},
+and @i{false} otherwise.
+
+Whether a list element is the same as another list element is
+determined by the functions specified by the keyword arguments.  
+The first argument to the @t{:test} or @t{:test-not} 
+function is 
+typically
+part of an element of @i{list-1} extracted by
+the @t{:key} function; the second argument is  typically part of 
+an element of @i{list-2} extracted by
+the @t{:key} function.
+
+The argument to the @t{:key} function is an element of either
+@i{list-1} or @i{list-2}; the return value is part of the element
+of the supplied list element.
+If @t{:key} is not supplied or @b{nil}, 
+the @i{list-1} or @i{list-2}
+element itself is supplied to the @t{:test} or @t{:test-not} 
+function.
+
+@subsubheading  Examples::
+
+@example
+ (setq cosmos '(1 "a" (1 2))) @result{}  (1 "a" (1 2))
+ (subsetp '(1) cosmos) @result{}  @i{true}
+ (subsetp '((1 2)) cosmos) @result{}  @i{false}
+ (subsetp '((1 2)) cosmos :test 'equal) @result{}  @i{true}
+ (subsetp '(1 "A") cosmos :test #'equalp) @result{}  @i{true}
+ (subsetp '((1) (2)) '((1) (2))) @result{}  @i{false}
+ (subsetp '((1) (2)) '((1) (2)) :key #'car) @result{}  @i{true}
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{list-1} and @i{list-2} are not @i{proper lists}.
+
+@subsubheading  See Also::
+
+@ref{Traversal Rules and Side Effects}
+
+@subsubheading  Notes::
+
+The @t{:test-not} parameter is deprecated.
+
+@node union,  , subsetp, Conses Dictionary
+@subsection union, nunion                                                    [Function]
+
+@code{union}  @i{list-1 list-2 @r{&key} key test test-not} @result{}  @i{result-list}
+
+@code{nunion}  @i{list-1 list-2 @r{&key} key test test-not} @result{}  @i{result-list}
+
+@subsubheading  Arguments and Values:: 
+
+@i{list-1}---a @i{proper list}.
+
+@i{list-2}---a @i{proper list}.
+
+@i{test}---a @i{designator} for a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{test-not}---a @i{designator} for 
+  a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{key}---a @i{designator} for a @i{function} of one argument,
+  or @b{nil}.
+
+@i{result-list}---a @i{list}.
+
+@subsubheading  Description::
+
+@b{union} and @b{nunion} return a @i{list}
+that contains every element that occurs in either @i{list-1} 
+or @i{list-2}.                                 
+
+For all possible ordered pairs consisting of one
+element from @i{list-1} 
+and one element from @i{list-2}, @t{:test} or  @t{:test-not} is used
+to determine whether they @i{satisfy the test}. 
+The first argument to the @t{:test} or @t{:test-not} 
+function is the part of the element of @i{list-1} extracted by the
+@t{:key} function (if supplied); the second argument  
+is the part of the element of @i{list-2} extracted by the
+@t{:key} function (if supplied).
+
+The argument to the @t{:key} function is an element of
+@i{list-1} or @i{list-2}; the return value is part of the supplied
+element.  
+If @t{:key} is not supplied or @b{nil}, 
+the element of @i{list-1} or @i{list-2}
+itself is supplied to the @t{:test} or @t{:test-not} function. 
+
+For every matching pair, 
+one of the two elements of the pair will be in the result.  Any
+element from either @i{list-1} or @i{list-2}
+that matches no element of the other will appear
+in the result.  
+
+If there is a duplication between @i{list-1} 
+and @i{list-2},
+only one of the duplicate instances will be in the result.
+If either @i{list-1} 
+or @i{list-2} has duplicate entries within it,
+the redundant entries
+might or might not appear in the result.
+
+The order of elements in the result do not have to
+reflect the ordering of @i{list-1} or @i{list-2} in any way.
+The result @i{list} may be @b{eq} to either
+@i{list-1} or @i{list-2} if appropriate.
+
+@subsubheading  Examples::
+
+@example
+ (union '(a b c) '(f a d))
+@result{}  (A B C F D)
+@i{OR}@result{} (B C F A D)
+@i{OR}@result{} (D F A B C)
+ (union '((x 5) (y 6)) '((z 2) (x 4)) :key #'car)
+@result{}  ((X 5) (Y 6) (Z 2))
+@i{OR}@result{} ((X 4) (Y 6) (Z 2))
+
+ (setq lst1 (list 1 2 '(1 2) "a" "b")
+       lst2 (list 2 3 '(2 3) "B" "C"))
+@result{}  (2 3 (2 3) "B" "C")
+ (nunion lst1 lst2)
+@result{}  (1 (1 2) "a" "b" 2 3 (2 3) "B" "C") 
+@i{OR}@result{} (1 2 (1 2) "a" "b" "C" "B" (2 3) 3)
+@end example
+
+@subsubheading  Side Effects::
+
+@b{nunion} is permitted to modify any part, @i{car} or @i{cdr}, 
+of the @i{list structure} of @i{list-1} or @i{list-2}.
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{list-1} and @i{list-2} are not @i{proper lists}.
+
+@subsubheading  See Also::
+
+@ref{intersection}
+,
+
+@ref{Compiler Terminology},
+
+@ref{Traversal Rules and Side Effects}
+
+@subsubheading  Notes::
+
+The @t{:test-not} parameter is deprecated.
+
+Since the @b{nunion} side effect is not required,
+it should not be used in for-effect-only positions in portable code.
+
+@c end of including dict-conses
+
+@c %**end of chapter
+

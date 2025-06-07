@@ -1,0 +1,193 @@
+
+@node Compiler Definitions, JAPI GUI Library Binding, Miscellaneous, Top
+@chapter Compiler Definitions
+
+@defun EMIT-FN (turn-on)
+Package:COMPILER
+
+If TURN-ON is t, the subsequent calls to  COMPILE-FILE will
+cause compilation of foo.lisp to emit a foo.fn as well as foo.o.
+The .fn file contains cross referencing information as well as
+information useful to the collection utilities in cmpnew/collectfn
+This latter file must be manually loaded to call emit-fn.
+
+
+@end defun
+@defvar *CMPINCLUDE-STRING* 
+Package:COMPILER
+If it is a string it holds the text of the cmpinclude.h file appropriate for
+this version.  Otherwise the usual #include of *cmpinclude* will be used.  To
+disable this feature set *cmpinclude-string* to NIL in the init-form.
+
+
+@end defvar
+@defun EMIT-FN (turn-on)
+Package:COMPILER
+
+
+If TURN-ON is t, then subsequent calls to compile-file on a file foo.lisp
+cause output of a file foo.fn.  This .fn file contains lisp structures
+describing the functions in foo.lisp.  Some tools for analyzing this data base
+are WHO-CALLS, LIST-UNDEFINED-FUNCTIONS, LIST-UNCALLED-FUNCTIONS, and
+MAKE-PROCLAIMS.
+
+Usage:
+(compiler::emit-fn t)
+(compile-file "foo1.lisp")
+(compile-file "foo2.lisp")
+
+This would create foo1.fn and foo2.fn.  These may be loaded using LOAD.  Each
+time compile-file is called the data base is cleared.  Immediately after the
+compilation, the data base consists of data from the compilation.  Thus if you
+wished to find functions called but not defined in the current file, you could
+do (list-undefined-functions), immediately following the compilation.  If you
+have a large system, you would load all the .fn files before using the above
+tools.
+
+
+@end defun
+@defun MAKE-ALL-PROCLAIMS (&rest directories)
+Package:COMPILER
+
+
+For each D in DIRECTORIES all files in (directory D) are loaded.
+
+For example 
+(make-all-proclaims "lsp/*.fn" "cmpnew/*.fn")
+would load any files in lsp/*.fn and cmpnew/*.fn.
+
+[See EMIT-FN for details on creation of .fn files] 
+
+Then calculations on the newly loaded .fn files are made, to determine
+function proclamations.  If number of values of a function cannot be
+determined [for example because of a final funcall, or call of a function
+totally unknown at this time] then return type * is assigned.
+
+Finally a file sys-proclaim.lisp is written out.  This file contains function
+proclamations.
+
+(load "sys-proclaim.lisp")
+(compile-file "foo1.lisp")
+(compile-file "foo2.lisp")
+
+
+
+
+@end defun
+@defun MAKE-PROCLAIMS (&optional (stream *standard-output*))
+Package:COMPILER
+
+
+Write to STREAM the function proclaims from the current data base.  Usually a
+number of .fn files are loaded prior to running this.  See EMIT-FN for details
+on how to collect this.  Simply use LOAD to load in .fn files.
+
+
+@end defun
+@defun LIST-UNDEFINED-FUNCTIONS ()
+Package:COMPILER
+
+
+Return a list of all functions called but not defined, in the current data
+base (see EMIT-FN).
+
+@example
+Sample:
+(compiler::emit-fn t)
+(compile-file "foo1.lisp")
+(compiler::list-undefined-functions)
+or
+(mapcar 'load (directory "*.fn")) (compiler::list-undefined-functions)
+
+@end example
+
+@end defun
+@defun COMPILER-DEFAULT-TYPE  (pathname)
+Package:COMPILER
+
+Allows you to set the default file extension for compiler source files.
+The argument can either be a pathname or a string.  For example, imagine 
+you have two files, ``foo.lisp'' and ``foo1.lsp'' in your working 
+directory.  (Note the different extensions.)  Then:
+
+@example
+
+>(compile-file "foo")
+
+The source file foo.lsp is not found.
+NIL
+
+>(compile-file "foo1")
+
+Compiling foo1.lsp.
+End of Pass 1.
+End of Pass 2.
+OPTIMIZE levels: Safety=0 (No runtime error checking), Space=0, Speed=3
+Finished compiling foo1.
+#p"foo1.o"
+
+>(compiler::COMPILER-default-TYPE "lisp")
+
+#p".lisp"
+
+>(compile-file "foo")
+
+Compiling foo.lisp.
+End of Pass 1.
+End of Pass 2.
+OPTIMIZE levels: Safety=0 (No runtime error checking), Space=0, Speed=3
+Finished compiling foo.
+#p"foo.o"
+
+>(compile-file "foo1")
+
+The source file foo1.lisp is not found.
+NIL
+
+>
+
+@end example
+
+
+@end defun
+@defun  COMPILER-RESET-TYPE ()
+Package:COMPILER
+
+Resets the default compiler input file extension to the GCL historical
+value of #''.lsp''.
+
+@end defun
+@defvar *CC* 
+Package:COMPILER
+Has value a string which controls which C compiler is used by GCL.
+Usually this string is obtained from the machine.defs file, but
+may be reset by the user, to change compilers or add an include path.
+
+
+@end defvar
+@defvar *SPLIT-FILES* 
+Package:COMPILER
+This affects the behaviour of compile-file, and is useful for cases where
+the C compiler cannot handle large C files resulting from lisp compilation.
+This scheme should allow arbitrarily long lisp files to be compiled.
+
+If the  value [default NIL] is a positive integer, then the source file will
+be compiled into several object files whose names have 0,1,2,.. prepended,
+and which will be loaded by the main object file.     File 0 will
+contain compilation of top level forms thru position *split-files* in the
+lisp source file, and file 1 the next forms, etc.   Thus a 180k file
+would probably result in three object files (plus the master object file
+of the same name) if *split-files* was set to 60000.
+The package information will be inserted in each file.
+
+
+@end defvar
+@defvar *COMPILE-ORDINARIES* 
+Package:COMPILER
+If this has a non nil value [default = nil], then all top level
+forms will be compiled into machine instructions.    Otherwise
+only defun's, defmacro's, and top level forms beginning
+with (progn 'compile ...) will do so.
+
+
+@end defvar

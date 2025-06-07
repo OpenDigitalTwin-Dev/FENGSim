@@ -1,0 +1,929 @@
+\input texinfo
+@c -*-texinfo-*-
+@c IMPORTANT....
+@c some versions of texinfo.tex cause an error message 'unmatched paren
+@c for:
+@c @defun foo (a &optional (b 3))
+@c ! unbalanced parens in @def arguments.
+@c ignore these by using 's' to scroll error messages in tex.
+
+
+@c @smallbook
+@setfilename gcl-dwdoc.info
+@settitle GCL DWDOC Manual
+@c @synindex vr fn
+
+@c to update the menus do: 
+@c (texinfo-multiple-files-update "gcl-si.texi" t t)
+
+
+
+@setchapternewpage odd
+@ifinfo
+This is a Texinfo GCL DWDOC Manual
+
+Copyright 1994 William F. Schelter
+Copyright 08 Oct 92; 08 Oct 93; 16 Nov 94; 05 Jan 95; 25 Jan 06; 26 Jan 06; 08 Dec 08 Gordon S. Novak Jr.
+Copyright 2024 Camm Maguire
+
+@format
+INFO-DIR-SECTION GNU Common Lisp
+START-INFO-DIR-ENTRY
+* gcl-dwdoc: (gcl-dwdoc.info). GNU Common Lisp Dwdoc
+END-INFO-DIR-ENTRY
+@end format
+@end ifinfo
+
+@titlepage
+@sp 10
+@comment The title is printed in a large font.
+@center @titlefont{GCL DWDOC Manual}
+@end titlepage
+
+@node Top
+@top Top
+
+@strong{Interface from GCL to X Windows}@*
+Gordon S. Novak Jr.@*
+Department of Computer Sciences@*
+University of Texas at Austin@*
+Austin, TX 78712@*
+Software copyright © by Gordon S. Novak Jr. and The University of Texas
+at Austin. Distribution and use are allowed under the Gnu Public
+License. Also see the copyright section at the end of this document for
+the copyright on X Consortium software.
+
+@menu
+* Introduction::
+* Examples and Utilities::
+* Menus::
+* Windows::
+* Drawing Functions::
+* Fonts Operations Colors::
+* Mouse Interaction::
+* Miscellaneous Functions::
+* Examples::
+* Web Interface::
+* Files::
+* Data Types::
+* Copyright::
+@end menu
+
+@node Introduction
+@chapter Introduction
+@anchor{#introduction}
+This document describes a relatively easy-to-use interface between XGCL
+(X version of Gnu Common Lisp) and X windows. The interface consists of
+several parts:
+
+@enumerate 
+@item
+Hiep Huu Nguyen has written (and adapted from X Consortium software) an
+interface between GCL and Xlib, the X library in C. Xlib functions can
+be called directly if desired, but most users will find the
+@code{dwindow} functions easier to use. There is little documentation of
+these functions, but the Xlib documentation can be consulted, and the
+@code{dwindow} functions can be examined as examples.
+
+@item
+The @code{dwindow} functions described in this document, which call the
+Xlib functions and provide an easier interface for Lisp programs.
+
+@item
+It is possible to make an interactive graphical interface within a web
+page; this is described in a section below.
+
+@end enumerate
+
+The source file for the interface (written in GLISP) is
+@code{dwindow.lsp}; this file is compiled into a file in plain Lisp,
+@code{dwtrans.lsp}. @code{dwtrans.lsp} is compiled as part of XGCL.
+
+The functions in this package use the convention that the coordinate
+@code{(0 0)} is the lower-left corner of a window, with positive
+@code{y} being upward. This is different from the convention used by X,
+which assumes that @code{(0 0)} is the upper left corner and that
+positive @code{y} is downward.
+
+In the descriptions below, some function arguments are shown with a
+type, e.g. @code{arg:type}, to indicate the expected type of the
+argument. The type @code{vector} is a list @code{(x y)} of integers. The
+argument @code{w} that is used with many functions is of type
+@code{window} (@code{window} is a Lisp data structure used by the
+@code{dwindow} functions).
+
+Both the Xlib and @code{dwindow} functions are in the package
+@code{xlib:}. In order to use these functions, the Lisp command
+@code{(use-package 'xlib)} should be used to import the @code{dwindow}
+symbols.
+
+@node Examples and Utilities
+@chapter Examples and Utilities
+@anchor{#examples-and-utilities}
+
+@menu
+* dwtest::
+* pcalc::
+* draw::
+* editors::
+@end menu
+
+@node dwtest
+@section @code{dwtest}
+@anchor{#dwtest}
+The file @code{dwtest.lsp} contains example functions that illustrate
+the use of the @code{dwindow} package. The function call @code{(wtesta)}
+creates a small window for testing. @code{(wtestb)} through
+@code{(wtestk)} perform drawing and mouse interaction tests using the
+window. These functions may be consulted as examples of the use of
+commonly used @code{dwindow} functions.
+
+@node pcalc
+@section @code{pcalc}
+@anchor{#pcalc}
+The file @code{pcalc.lsp} implements a pocket calculator as a
+@code{picmenu}; its entry is @code{(pcalc)}.
+
+@node draw
+@section @code{draw}
+@anchor{#draw}
+The file @code{drawtrans.lsp} contains an interactive drawing program;
+its entry is @code{(draw 'foo)} where @code{foo} is the name of the
+drawing. The file @code{ice-cream.lsp} can be loaded, followed by
+@code{(draw 'ice-cream)} to examine an example drawing. @code{draw} can
+produce a Lisp program or a set of LaTeX@ commands to recreate the
+drawing; use @code{origin to zero} before making a program.
+@code{(draw-out file names)} will write definitions of drawings in the
+list @code{names} to the file @code{file}.
+
+@node editors
+@section @code{editors}
+@anchor{#editors}
+The file @code{editorstrans.lsp} contains some interactive editing
+programs; it is a translation of the file @code{editors.lsp} . One
+useful editor is the color editor; after entering @code{(wtesta)} (in
+file @code{dwtest.lsp}), enter @code{(edit-color myw)} to edit a color.
+The result is an @code{rgb} list as used in @code{window-set-color}.
+
+A simple line editor and an Emacs-like text editor are described in
+sections @ref{#texted,6.2} and @ref{#emacsed,6.3} below.
+
+@node Menus
+@chapter Menus
+@anchor{#menus}
+The function @code{menu} provides an easy interface to make a pop-up
+menu, get a selection from it, and destroy it:@*
+@code{ (menu items &optional title)}@*
+Example: @code{(menu '(red white blue))}
+
+This simple call is all that is needed in most cases. More sophisticated
+menu features are described below.
+
+The @code{items} in a menu is a list; each item may be a symbol, a
+@code{cons} of a symbol or string and the corresponding value, or a
+@code{cons} of a function name and the corresponding value. In the
+latter case, the function is expected to draw the corresponding menu
+item.
+
+If a function name is specified as the first element of a menu item, the
+drawing function should have arguments @code{(fn w x y)}, where @code{w}
+is the window and @code{x} and @code{y} are the lower-left corner of the
+drawing area. The property list of the function name should have the
+property @code{display-size}, which should be a list
+@code{(width height)} in pixels of the displayed symbol.
+
+Menus can be associated with a particular window; if no window is
+specified, the menu is associated with the window where the mouse cursor
+is located when the menu is initialized (which might not be a Lisp
+user's window). If a menu is associated with a user window, it may be
+@emph{permanent} (left displayed after a selection is made) and may be
+@emph{flat} (drawn directly on the containing window, rather than having
+its own window).
+
+A menu can be created by @code{menu-create} :@*
+@code{ (menu-create items &optional title w:window x y perm flat font)}@*
+@code{title}, if specified, is displayed over the menu. @code{w} is an
+existing @code{window}; if specified, the menu is put within this window
+at the @code{x y} offsets specified (adjusted if necessary to keep the
+menu inside the window). If no @code{w} is specified, or if @code{x} is
+@code{nil}, the menu is put where the cursor is the first time the menu
+is displayed. @code{perm} is non-@code{nil} if the menu is to be
+permanent, @emph{i.e.}, is to be left displayed after a selection has
+been made. @code{flat} is non-@code{nil} if the menu is to be drawn
+directly on the containing window. @code{font} is a symbol or string
+that names the font to be used; the default is a @code{9x15} typewriter
+font.
+
+The menu is returned as the value of @code{menu-create}. Such a menu can
+be saved; selections can be made from a menu @code{m} as follows:@*
+@code{ (menu-select m &optional inside)} @ @ @ @ @ or
+@code{ (menu-select! m)}@*
+@code{menu-select} will return @code{nil} if the mouse is clicked
+outside the menu, or is moved outside after it has been inside (or if
+@code{inside} is not @code{nil}), provided that the menu is contained
+within a user-created window. @code{menu-select!} requires that a choice
+be made.
+
+In order to avoid wasting storage, unused menus should be destroyed:
+@code{(menu-destroy m)}. The simple @code{menu} function destroys its
+menu after it is used.
+
+@code{ (menu-size m)}@*
+@code{ (menu-moveto-xy m x y)}@*
+@code{ (menu-reposition m)} @ 
+
+@code{menu-reposition} will reposition a @code{flat} menu within its
+parent window by allowing the user to position a ghost box using the
+mouse. @code{menu-size} returns the size of the menu as a vector,
+@code{(x y)}. @code{menu-moveto-xy} adjusts the offsets to move a
+@code{flat} menu to the specified position within its parent window.
+These functions and @code{menu-destroy} work for picmenus and barmenus
+as well.
+
+@code{ (menu-item-position m name &optional location)}@*
+@code{menu-item-position} returns a vector @code{(x y)} that gives the
+coordinates of the menu item whose name is @code{name}. @code{location}
+may be @code{center}, @code{left}, @code{right}, @code{top}, or
+@code{bottom}; the default is the lower-left corner of the menu item.
+@code{center} specifies the center of the box containing the menu item;
+the other @code{location} values are at the center of the specified edge
+of the box.
+
+@menu
+* Picmenus::
+* Barmenus::
+* Menu Sets and Menu Conns::
+@end menu
+
+@node Picmenus
+@section Picmenus
+@anchor{#picmenus}
+A @code{picmenu} (picture menu) is analogous to a menu, but involves a
+user-defined picture containing sensitive spots or ``buttons''. The test
+function @code{(wteste)} shows an example of a @code{picmenu}. A
+@code{picmenu} is created by:@*
+@code{ (picmenu-create buttons width height drawfn}@*
+@code{&optional title dotflg w:window x y perm flat font boxflg)}@*
+
+If a picmenu is to be used more than once, the common parts can be made
+into a @code{picmenu-spec} and reused:
+
+@code{ (picmenu-create-spec buttons width height drawfn}@*
+@code{&optional dotflg font)}@*
+@code{ (picmenu-create-from-spec spec:picmenu-spec}@*
+@code{&optional title w:window x y perm flat boxflg)}@*
+@code{width} and @code{height} are the size of the area occupied by the
+picture. @code{(drawfn w x y)} should draw the picture at the offset
+@code{x y}. Note that the @code{draw} utility can be used to make the
+drawing function, including @code{picmenu} buttons. @code{dotflg} is
+non-@code{nil} if it is desired that small boxes be automatically added
+to the sensitive points when the picture is drawn. @code{boxflg} is
+non-@code{nil} if a box is to be drawn around the picmenu when the
+picture is drawn (this is only needed for flat picmenus). If @code{perm}
+is non-nil, the drawing program is not called when a selection is to be
+made, so that an external program must draw the @code{picmenu}; this
+avoids the need to redraw a complex picture. The remaining arguments are
+as described for menus.
+
+Each of the @code{buttons} in a picmenu is a list:@*
+@code{ (buttonname offset size highlightfn unhighlightfn)}@*
+@code{buttonname} is the name of the button; it is the value returned
+when that button is selected. @code{offset} is a vector @code{(x y)}
+that gives the offset of the center of the button from the lower-left
+corner of the picture. The remainder of the button list may be omitted.
+@code{size} is an optional list @code{(width height)} that gives the
+size of the sensitive area of the button; the default size is
+@code{(12@ 12)}. @code{(highlightfn w x y)} and
+@code{(unhighlightfn w x y)} (where @code{(x y)} is the center of the
+button in the coordinates of @code{w}) are optional functions to
+highlight the button area when the cursor is moved into it and
+unhighlight the button when the cursor is moved out; the default is to
+display a box of the specified @code{size}.
+
+@code{ (picmenu-select m &optional inside)}@*
+If the @code{picmenu} is not @code{flat}, its window should be destroyed
+following the selection using @code{menu-destroy}.
+
+@code{ (picmenu-item-position m name &optional location)}@*
+@code{ (picmenu-delete-named-button m name:symbol)}@*
+This deletes a button from a displayed @code{picmenu}. The set of
+deleted buttons is reset to @code{nil} when the picmenu is drawn.
+
+@node Barmenus
+@section Barmenus
+@anchor{#barmenus}
+A @code{barmenu} displays a bar graph whose size can be adjusted using
+the mouse.
+
+@code{ (barmenu-create maxval initval barwidth}@*
+@code{&optional title horizontal subtrackfn subtrackparms}@*
+@code{parentw x y perm flat color)}
+
+A value is selected by:
+@code{(barmenu-select m:barmenu &optional inside)}@*
+If the @code{barmenu} is not @code{flat}, its window should be destroyed
+following the selection using @code{menu-destroy}.
+
+The user must first click the mouse in the bar area; then the size of
+the displayed bar is adjusted as the user moves the mouse pointer. In
+addition, the @code{subtrackfn} is called with arguments of the size of
+the bar followed by the @code{subtrackparms}; this can be used, for
+example, to display a numeric value in addition to the bar size.
+
+@node Menu Sets and Menu Conns
+@section Menu Sets and Menu Conns
+@anchor{#menu-sets-and-menu-conns}
+A @code{menu-set} is a set of multiple menus, picmenus, or barmenus that
+are simultaneously active within the same window. Menu-sets can be used
+to implement graphical user interfaces. A @code{menu-conns} is a
+menu-set that includes connections between menus; this can be used to
+implement interfaces that allow the user to construct a network from
+components.
+
+The source file for menu-sets is the GLISP file @code{menu-set.lsp};
+this file is translated as part of the file @code{drawtrans.lsp} in
+plain Lisp. Examples of the use of menu sets are given at the top of the
+file @code{menu-set.lsp}. In the following descriptions, @code{ms} is a
+@code{menu-set} and @code{mc} is a @code{menu-conns}.
+
+@code{ (menu-set-create w)} creates a menu set to be displayed in the
+window @code{w}.
+
+@code{ (menu-set-name symbol)} makes a @code{gensym} name that begins
+with @code{symbol}.
+
+@code{ (menu-set-add-menu ms name:symbol sym title items}@*
+@code{&optional offset:vector)}
+
+This function adds a menu to a menu-set. @code{sym} is arbitrary
+information that is saved with the menu.
+
+@code{ (menu-set-add-picmenu ms name sym title spec:picmenu-spec}@*
+@code{&optional offset:vector nobox)}
+
+@code{ (menu-set-add-component ms name &optional offset:vector)}
+
+This adds a component that has a @code{picmenu-spec} defined on the
+property list of @code{name}.
+
+@code{ (menu-set-add-barmenu ms name sym barmenu title}@*
+@code{&optional offset:vector)}
+
+@code{ (menu-set-draw ms)} draws all the menus.
+
+@code{ (menu-set-select ms &optional redraw enabled)}
+
+@code{menu-set-select} gets a selection from a menu-set. If
+@code{redraw} is non-@code{nil}, the menu-set is drawn. @code{enabled}
+may be a list of names of menus that are enabled for selection. The
+result is @code{(selection menu-name)}, or
+@code{((x y) BACKGROUND button)} for a click outside any menu.
+
+@code{ (menu-conns-create ms)} creates a @code{menu-conns} from a
+@code{menu-set}.
+
+@code{ (menu-conns-add-conn mc)}
+
+This function allows the user to select two ports from menus of the
+@code{menu-conns}. It then draws a line between the ports and adds the
+connection to the @code{connections} of the @code{menu-conns}.
+
+@code{ (menu-conns-move mc)}
+
+This function allows the user to select a menu and move it. The
+@code{menu-set} and connections are redrawn afterwards.
+
+@code{ (menu-conns-find-conn mc pt:vector)}@*
+This finds the connection selected by the point @code{pt}, if any. This
+is useful to allow the user to delete a connection:
+
+@code{ (menu-conns-delete-conn mc conn)}
+
+@code{ (menu-conns-find-conns mc menuname port)}@*
+This returns all the connections from the specified @code{port}
+(selection) of the menu whose name is @code{menuname}.
+
+@node Windows
+@chapter Windows
+@anchor{#windows}
+@code{ (window-create width height &optional title parentw x y font)}@*
+@code{window-create} makes a new window of the specified @code{width}
+and @code{height}. @code{title}, if specified, becomes the displayed
+title of the window. If @code{parentw} is specified, it should be the
+@code{window-parent} property of an existing window, which becomes the
+parent window of the new window. @code{x} and @code{y} are the offset of
+the new window from the parent window. @code{font} is the font to be
+used for printing in the window; the default is given by
+@code{window-default-font-name*}, initially @code{courier-bold-12}.
+
+@code{ (window-open w)} causes a window to be displayed on the screen.
+
+@code{ (window-close w)} removes the window from the display; it can be
+re-opened.
+
+@code{ (window-destroy w)}
+
+@code{ (window-moveto-xy w x y)}
+
+@code{ (window-geometry w)} queries X for the window geometry. The
+result is a list, @code{(x y width height border-width)} .
+
+@code{ (window-size w)} returns a list @code{(width height)} .
+
+Note that the width and height are cached within the structure so that
+no call to X is needed to examine them. However, if the window is
+resized, it is necessary to call @code{(window-reset-geometry@ w)} to
+reset the local parameters to their correct values.
+
+The following functions provide access to the parts of the @code{window}
+data structure; most applications will not need to use them.@*
+@code{ (window-gcontext w)}@*
+@code{ (window-parent w)}@*
+@code{ (window-drawable-height w)}@*
+@code{ (window-drawable-width w)}@*
+@code{ (window-label w)}@*
+@code{ (window-font w)}@*
+@code{ (window-screen-height)}@*
+
+@node Drawing Functions
+@chapter Drawing Functions
+@anchor{#drawing-functions}
+@code{ (window-clear w)} clears the window to the background color.
+
+@code{ (window-force-output &optional w)}
+
+Communication between the running program and X windows is done through
+a stream; actual drawing on the display is done asynchronously.
+@code{window-force-output} causes the current drawing commands, if any,
+to be sent to X. Without this, commands may be left in the stream buffer
+and may appear not to have been executed. The argument @code{w} is not
+used.
+
+In all of the drawing functions, the @code{linewidth} argument is
+optional and defaults to @code{1}.
+
+@code{ (window-draw-line w from:vector to:vector linewidth)}@*
+@code{ (window-draw-line-xy w x1 y1 x2 y2 &optional linewidth op)}@*
+@code{op} may be @code{xor} or @code{erase}.
+
+@code{ (window-draw-arrow-xy w x1 y1 x2 y2 &optional linewidth size)}@*
+@code{ (window-draw-arrow2-xy w x1 y1 x2 y2 &optional linewidth size)}@*
+@code{ (window-draw-arrowhead-xy w x1 y1 x2 y2 &optional linewidth size)}
+
+These draw a line with an arrowhead at the second point, a line with an
+arrowhead at both points, or an arrowhead alone at the second point,
+respectively. @code{size} is the arrowhead size; the default is
+@code{(+ 20 (* linewidth 5))}.
+
+@code{ (window-draw-box-xy w x y width height linewidth)}@*
+@code{ (window-xor-box-xy w x y width height linewidth)}@*
+@code{ (window-draw-box w offset:vector size:vector linewidth)}@*
+@code{ (window-draw-box-corners w x1 y1 x2 y2 linewidth)}@*
+where @code{(x1 y1)} and @code{(x2 y2)} are opposite corners.@*
+@code{ (window-draw-rcbox-xy w x y width height radius linewidth)}@*
+draws a box with rounded corners.
+
+@code{ (window-draw-arc-xy w x y radiusx radiusy anglea angleb linewidth)}
+
+@code{anglea} is the angle, in degrees, at which the arc is started.
+@code{angleb} is the angle, in degrees, that specifies the amount of arc
+to be drawn, counterclockwise from the starting position.
+
+@code{ (window-draw-circle-xy w x y radius linewidth)}@*
+@code{ (window-draw-circle w center:vector radius linewidth)}@*
+@code{ (window-draw-ellipse-xy w x y radiusx radiusy linewidth)}@*
+@code{ (window-draw-dot-xy w x y)}
+
+@code{ (window-erase-area-xy w left bottom width height)}@*
+@code{ (window-erase-area w offset:vector size:vector)}@*
+@code{ (window-copy-area-xy w fromx fromy tox toy width height)}@*
+@code{ (window-invert-area w offset:vector size:vector)}@*
+@code{ (window-invert-area-xy w left bottom width height)}
+
+@code{ (window-printat-xy w s x y)}@*
+@code{ (window-printat w s at:vector)}@*
+@code{ (window-prettyprintat-xy w s x y)}@*
+@code{ (window-prettyprintat w s at:vector)}@*
+The argument @code{s} is printed at the specified position. @code{s} is
+stringified if necessary. Currently, the pretty-print versions are the
+same as the plain versions.
+
+@code{ (window-draw-border w)} draws a border just inside a window.
+
+@node Fonts Operations Colors
+@chapter Fonts, Operations, Colors
+@anchor{#fonts-operations-colors}
+@code{ (window-set-font w font)}
+
+The font symbols that are currently defined are @code{courier-bold-12},
+@code{8x10}, and @code{9x15} . The global variable @code{window-fonts*}
+contains correspondences between font symbols and font strings. A font
+string may also be specified instead of a font symbol.
+
+@code{ (window-string-width w s)}@*
+@code{ (window-string-extents w s)}@*
+These give the width and the vertical size @code{(ascent descent)} in
+pixels of the specified string @code{s} using the font of the specified
+window. @code{s} is stringified if necessary.
+
+Operations on a window other than direct drawing are performed by
+setting a condition for the window, performing the operation, and then
+unsetting the condition with @code{window-unset}. @code{window-reset}
+will reset a window to its ``standard'' setting; it is useful primarily
+for cases in which a program bug causes window settings to be in an
+undesired state.
+
+@code{ (window-set-xor w)}@*
+@code{ (window-set-erase w)}@*
+@code{ (window-set-copy w)}@*
+@code{ (window-set-invert w)}@*
+@code{ (window-unset w)}@*
+@code{ (window-reset w)}@*
+@code{ (window-set-line-width w width)}@*
+@code{ (window-set-line-attr w width &optional line-style cap-style join-style)}@*
+@code{ (window-std-line-attr w)}@*
+@code{ (window-foreground w)}@*
+@code{ (window-set-foreground w fg-color)}@*
+@code{ (window-background w)}@*
+@code{ (window-set-background w bg-color)}@*
+
+@menu
+* Color::
+* Character Input::
+* Emacs-like Editing::
+@end menu
+
+@node Color
+@section Color
+@anchor{#color}
+The color of the foreground (things that are drawn, such as lines or
+characters) is set by:
+
+@code{ (window-set-color w rgb &optional background)}@*
+@code{ (window-set-color-rgb w r g b &optional background)}@*
+@code{rgb} is a list @code{(red green blue)} of 16-bit unsigned integers
+in the range @code{0} to @code{65535}. @code{background} is
+non-@code{nil} to set the background color rather than the foreground
+color.
+
+@code{ (window-reset-color w)}@*
+@code{window-reset-color} resets a window's colors to the default
+values.
+
+Colors are a scarce resource; there is only a finite number of available
+colors, such as 256 colors. If you only use a small, fixed set of
+colors, the finite set of colors will not be a problem. However, if you
+create a lot of colors that are used only briefly, it will be necessary
+to release them after they are no longer needed. @code{window-set-color}
+will leave the global variable @code{window-xcolor*} set to an integer
+value that denotes an X color; this value should be saved and used as
+the argument to @code{window-free-color} to release the color after it
+is no longer needed.
+
+@code{ (window-free-color w &optional xcolor)}@*
+@code{window-free-color} frees either the last color used, as given by
+@code{window-xcolor*}, or the specified color.
+
+@node Character Input
+@section Character Input
+@anchor{#texted}
+Characters can be input within a window by the call:
+
+@code{ (window-input-string w str x y &optional size)}@*
+@code{window-input-string} will print the initial string @code{str}, if
+non-@code{nil}, at the specified position in the window; @code{str}, if
+not modified by the user, will also be the initial part of the result. A
+caret is displayed showing the location of the next input character.
+Characters are echoed as they are typed; backspacing erases characters,
+including those from the initial string @code{str}. An area of width
+@code{size} (default 100) is erased to the right of the initial caret.
+
+@node Emacs-like Editing
+@section Emacs-like Editing
+@anchor{#emacsed}
+@code{window-edit} allows editing of text using an Emacs-subset editor.
+Only a few simple Emacs commands are implemented.
+
+@verbatim
+   (window-edit w x y width height &optional strings boxflg scroll endp)
+@end verbatim
+
+@code{x y width height} specify the offset and size of the editing area;
+it is a good idea to draw a box around this area first. @code{strings}
+is an initial list of strings; the return value is a list of strings.
+@code{scroll} is number of lines to scroll down before displaying text,
+or @code{T} to have one line only and terminate on return. @code{endp}
+is @code{T} to begin editing at the end of the first line. Example:
+
+@verbatim
+  (window-draw-box-xy myw 48 48 204 204)
+  (window-edit myw 50 50 200 200 '("Now is the time" "for all" "good"))
+@end verbatim
+
+@node Mouse Interaction
+@chapter Mouse Interaction
+@anchor{#mouse-interaction}
+@code{ (window-get-point w)}@*
+@code{ (window-get-crosshairs w)}@*
+@code{ (window-get-cross w)}@*
+These functions get a point position by mouse click; they return
+@code{(x y)} .
+
+The following function gets a point position by mouse click. It returns
+@code{(button (x y))} where @code{button} is @code{1} for the left
+button, @code{2} for middle, @code{3} for right.
+
+@code{ (window-get-click w)}@*
+The following function gets a point position by mouse click within a
+specified region. It returns @code{(button (x y))} or @code{NIL} if the
+mouse leaves the region. If @code{boxflg} is @code{t}, a box will be
+drawn outside the region while the mouse is being tracked.
+
+@code{ (window-track-mouse-in-region w x y sizex sizey &optional boxflg)}@*
+The following functions get a point position indicated by drawing a line
+from a specified origin position to the cursor position; they return
+@code{(x y)} at the cursor position when a mouse button is clicked. The
+@code{latex} version restricts the slope of the line to be a slope that
+LaTeX@ can draw; if @code{flg} is non-@code{nil}, the slope is
+restricted to be a LaTeX@ @code{vector} slope.
+
+@code{ (window-get-line-position w orgx orgy)}@*
+@code{ (window-get-latex-position w orgx orgy flg)}@*
+The following function gets a position by moving a ``ghost'' icon,
+defined by the icon drawing function @code{fn}. This allows exact
+positioning of an object by the user.
+
+@code{ (window-get-icon-position w fn args &optional (dx 0) (dy 0))}@*
+The function @code{fn} has arguments @code{(fn w x y . args)} , where
+@code{x} and @code{y} are the offset within the window @code{w} at which
+the icon is to be drawn, and @code{args} is a list of arbitrary
+arguments, e.g., the size of the icon, that are passed through to the
+drawing function. The icon is drawn in @code{xor} mode, so it must be
+drawn using only ``plain'' drawing functions, without resetting window
+attributes. The returned value is @code{(x y)} at the cursor position
+when a button is clicked. @code{dx} and @code{dy}, if specified, are
+offsets of @code{x} and @code{y} from the cursor position.
+
+The following function gets a position by moving a ``ghost'' box icon.
+
+@code{ (window-get-box-position w width height &optional (dx 0) (dy 0))}@*
+By default, the lower-left corner of the box is placed at the cursor
+position; @code{dx} and @code{dy} may be used to offset the box from the
+cursor, e.g., to move the box by a different corner. The returned value
+is @code{(x y)} at the cursor position when a button is clicked.
+
+The following function gets coordinates of a box of arbitrary size and
+position.
+
+@code{ (window-get-region w)}@*
+The user first clicks for one corner of the box, moves the mouse and
+clicks again for the opposite corner, then moves the box into the
+desired position. The returned value is @code{((x y) (width height))},
+where @code{(x y)} is the lower-left corner of the box.
+
+The following function gets the size of a box by mouse selection,
+echoing the size in pixels below the box. @code{offsety} should be at
+least @code{30} to leave room to display the size of the box.
+
+@code{ (window-get-box-size w offsetx offsety)}@*
+The following function adjusts one side of a box.
+
+@code{ (window-adjust-box-side w x y width height side)}@*
+@code{side} specifies the side of the box to be adjusted: @code{left},
+@code{right}, @code{top}, or @code{bottom}. The result is
+@code{((x y) (width height))} for the resulting box.
+
+@code{ (window-get-circle w &optional center:vector)}@*
+@code{ (window-get-ellipse w &optional center:vector)}@*
+These functions interactively get a circle or ellipse. For an ellipse, a
+circle is gotten first for the horizontal size; then the vertical size
+of the ellipse is adjusted. @code{window-get-circle} returns
+@code{((x y) radius)}. @code{window-get-ellipse} returns
+@code{((x y) (xradius yradius))}.
+
+@code{window-track-mouse} is the basic function for following the mouse
+and performing some action as it moves. This function is used in the
+implementation of menus and the mouse-interaction functions described in
+this section.
+
+@code{ (window-track-mouse w fn &optional outflg)}
+
+Each time the mouse position changes or a mouse button is pressed, the
+function @code{fn} is called with arguments @code{(x y code)} where
+@code{x} and @code{y} are the cursor position, @code{code} is a button
+code (@code{0} if no button, @code{1} for the left button, @code{2} for
+the middle button, or @code{3} for the right button).
+@code{window-track-mouse} continues to track the mouse until @code{fn}
+returns a value other than @code{nil}, at which time
+@code{window-track-mouse} returns that value. Usually, it is a good idea
+for @code{fn} to return a value other than @code{nil} upon a mouse
+click. If the argument @code{outflg} is non-@code{nil}, the function
+@code{fn} will be called for button clicks outside the window @code{w};
+note, however, that such clicks will not be seen if the containing
+window intercepts them, so that this feature will work only if the
+window @code{w} is inside another Lisp user window.
+
+@node Miscellaneous Functions
+@chapter Miscellaneous Functions
+@anchor{#miscellaneous-functions}
+@code{ (stringify x)} makes its argument into a string.
+
+@code{ (window-destroy-selected-window)} waits 3 seconds, then destroys
+the window containing the mouse cursor. This function should be used
+with care; it can destroy a non-user window, causing processes
+associated with the window to be destroyed. It is useful primarily in
+debugging, to get rid of a window that is left on the screen due to an
+error.
+
+@node Examples
+@chapter Examples
+@anchor{#examples}
+Several interactive programs using this software for their graphical
+interface can be found at @code{http://www.cs.utexas.edu/users/novak/}
+under the heading Software Demos.
+
+@node Web Interface
+@chapter Web Interface
+@anchor{#web-interface}
+This software allows a Lisp program to be used interactively within a
+web page. There are two approaches, either using an X server on the
+computer of the person viewing the web page, or using WeirdX, a Java
+program that emulates an X server. Details can be found at:
+@code{http://www.cs.utexas.edu/users/novak/dwindow.html}
+
+@node Files
+@chapter Files
+@anchor{#files}
+@multitable {@code{lispservertrans.lsp}} {Drawing of an ice cream cone made with @code{draw}} 
+@item 
+@code{dec.copyright}
+ @tab Copyright and license for DEC/MIT files
+@item 
+@code{draw.lsp}
+ @tab GLISP source code for interactive drawing utility
+@item 
+@code{drawtrans.lsp}
+ @tab @code{draw.lsp} translated into plain Lisp
+@item 
+@code{draw-gates.lsp}
+ @tab Code to draw @code{nand} gates etc.
+@item 
+@code{dwdoc.tex}
+ @tab LaTeX@ source for this document
+@item 
+@code{dwexports.lsp}
+ @tab exported symbols
+@item 
+@code{dwimportsb.lsp}
+ @tab imported symbols
+@item 
+@code{dwindow.lsp}
+ @tab GLISP source code for @code{dwindow} functions
+@item 
+@code{dwtest.lsp}
+ @tab Examples of use of @code{dwindow} functions
+@item 
+@code{dwtrans.lsp}
+ @tab @code{dwindow.lsp} translated into plain Lisp
+@item 
+@code{editors.lsp}
+ @tab Editors for colors etc.
+@item 
+@code{editorstrans.lsp}
+ @tab translation of @code{editors.lsp}
+@item 
+@code{gnu.license}
+ @tab GNU General Public License
+@item 
+@code{ice-cream.lsp}
+ @tab Drawing of an ice cream cone made with @code{draw}
+@item 
+@code{lispserver.lsp}
+ @tab Example web demo: a Lisp server
+@item 
+@code{lispservertrans.lsp}
+ @tab translation of @code{lispserver.lsp}
+@item 
+@code{menu-set.lsp}
+ @tab GLISP source code for menu-set functions
+@item 
+@code{menu-settrans.lsp}
+ @tab translation of @code{menu-set.lsp}
+@item 
+@code{pcalc.lsp}
+ @tab Pocket calculator implemented as a @code{picmenu}
+@end multitable
+
+@node Data Types
+@chapter Data Types
+@anchor{#data-types}
+
+@verbatim
+(window (listobject  (parent          drawable)
+                     (gcontext        anything)
+                     (drawable-height integer)
+                     (drawable-width  integer)
+                     (label           string)
+                     (font            anything) )
+@end verbatim
+
+@verbatim
+(menu (listobject (menu-window     window)
+                  (flat            boolean)
+                  (parent-window   drawable)
+                  (parent-offset-x integer)
+                  (parent-offset-y integer)
+                  (picture-width   integer)
+                  (picture-height  integer)
+                  (title           string)
+                  (permanent       boolean)
+                  (menu-font       symbol)
+                  (item-width      integer)
+                  (item-height     integer)
+                  (items           (listof symbol)) )
+@end verbatim
+
+@verbatim
+(picmenu (listobject (menu-window     window)
+                     (flat            boolean)
+                     (parent-window   drawable)
+                     (parent-offset-x integer)
+                     (parent-offset-y integer)
+                     (picture-width   integer)
+                     (picture-height  integer)
+                     (title           string)
+                     (permanent       boolean)
+                     (spec            (transparent picmenu-spec))
+                     (boxflg          boolean)
+                     (deleted-buttons (listof symbol)) )
+@end verbatim
+
+@verbatim
+(picmenu-spec (listobject (drawing-width   integer)
+                          (drawing-height  integer)
+                          (buttons         (listof picmenu-button))
+                          (dotflg          boolean)
+                          (drawfn          anything)
+                          (menu-font       symbol) ))
+@end verbatim
+
+@verbatim
+(picmenu-button (list (buttonname     symbol)
+                      (offset         vector)
+                      (size           vector)
+                      (highlightfn    anything)
+                      (unhighlightfn  anything))
+@end verbatim
+
+@verbatim
+(barmenu (listobject (menu-window     window)
+                     (flat            boolean)
+                     (parent-window   drawable)
+                     (parent-offset-x integer)
+                     (parent-offset-y integer)
+                     (picture-width   integer)
+                     (picture-height  integer)
+                     (title           string)
+                     (permanent       boolean)
+                     (color           rgb)
+                     (value           integer)
+                     (maxval          integer)
+                     (barwidth        integer)
+                     (horizontal      boolean)
+                     (subtrackfn      anything)
+                     (subtrackparms   (listof anything)))
+@end verbatim
+
+@node Copyright
+@chapter Copyright
+@anchor{#copyright}
+The following copyright notice applies to the portions of the software
+that were adapted from X Consortium software:
+
+@verbatim
+;;**********************************************************
+;;Copyright 1987 by Digital Equipment Corporation, Maynard, Massachusetts,
+;;and the Massachusetts Institute of Technology, Cambridge, Massachusetts.
+
+;;                        All Rights Reserved
+
+;;Permission to use, copy, modify, and distribute this software and its 
+;;documentation for any purpose and without fee is hereby granted, 
+;;provided that the above copyright notice appear in all copies and that
+;;both that copyright notice and this permission notice appear in 
+;;supporting documentation, and that the names of Digital or MIT not be
+;;used in advertising or publicity pertaining to distribution of the
+;;software without specific, written prior permission.  
+
+;;DIGITAL DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING
+;;ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL
+;;DIGITAL BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR
+;;ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+;;WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
+;;ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
+;;SOFTWARE.
+
+;;*****************************************************************
+@end verbatim
+
+@bye

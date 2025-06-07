@@ -1,0 +1,2778 @@
+
+
+@node Introduction (Introduction), Syntax, Top, Top
+@chapter Introduction
+
+@menu
+* Scope::			
+* Organization of the Document::  
+* Referenced Publications::	
+* Definitions::			
+* Conformance::			
+* Language Extensions::		
+* Language Subsets::		
+* Deprecated Language Features::  
+* Symbols in the COMMON-LISP Package::	
+@end menu
+
+@node Scope, Organization of the Document, Introduction (Introduction), Introduction (Introduction)
+@section Scope, Purpose, and History
+
+@c including concept-history
+
+@menu
+* Scope and Purpose::		
+* History::			
+@end menu
+
+@node Scope and Purpose, History, Scope, Scope
+@subsection Scope and Purpose
+
+The specification set forth in this document is designed to promote
+the portability of @r{Common Lisp} programs among a variety of data processing
+systems. It is a language specification aimed at an audience of
+implementors and knowledgeable programmers. It is neither a tutorial nor
+an implementation guide.
+
+@node History,  , Scope and Purpose, Scope
+@subsection History
+
+Lisp is a family of languages with a long history.  Early key ideas in
+Lisp were developed by John McCarthy during the 1956 Dartmouth Summer
+Research Project on Artificial Intelligence.  McCarthy's motivation
+was to develop an algebraic list processing language for artificial
+intelligence work.
+Implementation efforts for early dialects of Lisp were undertaken on
+the IBM~704, the IBM~7090, the Digital Equipment Corporation (DEC) PDP-1,
+the DEC~PDP-6, and the PDP-10. The primary dialect of Lisp between
+1960 and 1965 was Lisp~1.5. By the early 1970's there were two
+predominant dialects of Lisp, both arising from these early efforts:
+MacLisp and Interlisp.
+For further information about very early Lisp dialects, 
+see @b{The Anatomy of Lisp} or @b{Lisp 1.5 Programmer's Manual}.
+
+MacLisp improved on the Lisp~1.5 notion of special variables and error
+handling. MacLisp also introduced the concept of functions that could take
+a variable number of arguments, macros, arrays, non-local dynamic
+exits, fast arithmetic, the first good Lisp compiler, and an emphasis
+on execution speed. 
+By the end of the 1970's, MacLisp was in use at over 50 sites.
+For further information about Maclisp, 
+see @b{Maclisp Reference Manual, Revision~0} or @b{The Revised Maclisp Manual}.
+
+Interlisp introduced many ideas into Lisp programming environments and
+methodology. One of the Interlisp ideas that influenced @r{Common Lisp} was an iteration
+construct implemented by Warren Teitelman that inspired the @b{loop}
+macro used both on the Lisp Machines and in MacLisp, and now in @r{Common Lisp}.
+For further information about Interlisp,
+see @b{Interlisp Reference Manual}.
+
+Although the first implementations of Lisp were on the IBM~704 and the
+IBM~7090, later work focussed on the DEC
+PDP-6 and, later, PDP-10 computers, the latter being the mainstay of
+Lisp and artificial intelligence work at such places as 
+Massachusetts Institute of Technology (MIT), Stanford University,
+and 
+Carnegie Mellon University (CMU) from the mid-1960's through much of the 1970's.
+The PDP-10 computer and its predecessor the PDP-6 computer were, by
+design, especially well-suited to Lisp because they had 36-bit words
+and 18-bit addresses. This architecture allowed a @i{cons} cell to be
+stored in one word; single instructions could extract the 
+@i{car} and @i{cdr}
+parts.  The PDP-6 and PDP-10 had fast, powerful stack instructions
+that enabled fast function calling.
+But the limitations of the PDP-10 were evident by 1973: it supported a
+small number of researchers using Lisp, and the small, 18-bit address
+space (2^18 = 262,144 words) limited the size of a single
+program.
+One response to the address space problem was the Lisp Machine, a
+special-purpose computer designed to run Lisp programs.  The other
+response was to use general-purpose computers with address spaces
+larger than 18~bits, such as the DEC VAX and
+the S-1~Mark~IIA.
+For further information about S-1 Common Lisp, see @b{S-1 Common Lisp Implementation}.
+
+The Lisp machine concept was developed in the late 1960's.  In the
+early 1970's, Peter Deutsch, working with 
+Daniel Bobrow, implemented a Lisp on the
+Alto, a single-user minicomputer, using microcode to interpret a
+byte-code implementation language. Shortly thereafter, Richard
+Greenblatt began work on a different hardware and instruction set
+design at MIT.
+Although the Alto was not a total success as a Lisp machine, a dialect
+of Interlisp known as Interlisp-D became available on the D-series
+machines manufactured by Xerox---the Dorado, Dandelion,
+Dandetiger, and Dove (or Daybreak).
+An upward-compatible extension of MacLisp called Lisp
+Machine Lisp became available on the early MIT Lisp Machines.
+Commercial Lisp machines from Xerox, Lisp Machines (LMI), and
+Symbolics were on the market by 1981.
+For further information about Lisp Machine Lisp, see @b{Lisp Machine Manual}.
+
+During the late 1970's, Lisp Machine Lisp began to expand towards a
+much fuller language.  Sophisticated lambda lists, 
+@t{setf}, multiple values, and structures
+like those in @r{Common Lisp} are the results of early
+experimentation with programming styles by the Lisp Machine group.
+Jonl White and others migrated these features to MacLisp.
+Around 1980, Scott Fahlman and others at CMU began work on a Lisp to
+run on the Scientific Personal Integrated Computing
+Environment (SPICE) workstation.  One of the goals of the project was to
+design a simpler dialect than Lisp Machine Lisp.
+
+The Macsyma group at MIT began a project during the late 1970's called
+the New Implementation of Lisp (NIL) for the VAX, which was headed by
+White.  One of the stated goals of the NIL project was to fix many of
+the historic, but annoying, problems with Lisp while retaining significant 
+compatibility with MacLisp.  At about the same time, a research group at
+Stanford University and Lawrence Livermore National Laboratory headed
+by Richard P. Gabriel began the design of a Lisp to run on the
+S-1~Mark~IIA supercomputer.  S-1~Lisp, never completely
+functional, was the test bed for adapting advanced compiler techniques
+to Lisp implementation.  Eventually the S-1 and NIL groups
+collaborated.
+For further information about the NIL project,
+see @b{NIL---A Perspective}.
+
+The first effort towards Lisp standardization was made in 1969, 
+when Anthony Hearn and Martin Griss at the University of Utah 
+defined Standard Lisp---a subset of Lisp~1.5 and other dialects---to 
+transport REDUCE, a symbolic algebra system.
+During the 1970's, the Utah group implemented first a retargetable
+optimizing compiler for Standard Lisp,
+and then an extended implementation known as Portable Standard Lisp (PSL).
+By the mid 1980's, PSL ran on about a dozen kinds of computers.
+For further information about Standard Lisp, see @b{Standard LISP Report}.
+
+PSL and Franz Lisp---a MacLisp-like dialect for Unix machines---were 
+the first examples of widely available Lisp dialects on multiple 
+hardware platforms. 
+
+One of the most important developments in Lisp occurred during the
+second half of the 1970's: Scheme. Scheme, designed by Gerald J.
+Sussman and Guy L. Steele Jr., is a simple dialect of Lisp whose
+design brought to Lisp some of the ideas from programming language
+semantics developed in the 1960's.  Sussman was one of the prime
+innovators behind many other advances in Lisp technology from the late
+1960's through the 1970's.
+The major contributions of Scheme were lexical scoping, lexical
+closures, first-class continuations, and simplified syntax (no
+separation of value cells and function cells). Some of these contributions made
+a large impact on the design of @r{Common Lisp}.
+For further information about Scheme, see @b{IEEE Standard for the Scheme Programming Language} 
+or @b{Revised^3 Report on the Algorithmic Language Scheme}.
+
+In the late 1970's object-oriented programming concepts started to
+make a strong impact on Lisp. 
+At MIT, certain ideas from Smalltalk made their way into several
+widely used programming systems.
+Flavors, an object-oriented programming system with multiple inheritance, 
+was developed at MIT for the Lisp machine community by Howard Cannon and others.
+At Xerox, the experience with Smalltalk and 
+Knowledge Representation Language (KRL) led to the development of 
+Lisp Object Oriented Programming System (LOOPS) and later Common LOOPS.
+For further information on Smalltalk, see @b{Smalltalk-80: The Language and its Implementation}.
+For further information on Flavors, see @b{Flavors: A Non-Hierarchical Approach to Object-Oriented Programming}.
+
+These systems influenced the design of the Common Lisp Object System (CLOS).
+CLOS was developed specifically for this standardization effort,
+and was separately written up in @b{Common Lisp Object System Specification}.  
+However, minor details
+of its design have changed slightly since that publication, and that paper 
+should not be taken as an authoritative reference to the semantics of the
+object system as described in this document.
+
+In 1980 Symbolics and LMI were developing Lisp Machine Lisp; stock-hardware
+implementation groups were developing NIL, Franz Lisp, and PSL; Xerox
+was developing Interlisp; and the SPICE project at CMU was developing
+a MacLisp-like dialect of Lisp called SpiceLisp.
+
+In April 1981, after a DARPA-sponsored meeting concerning the
+splintered Lisp community, Symbolics, the SPICE project, the NIL
+project, and the S-1~Lisp project joined together to define
+@r{Common Lisp}.  Initially spearheaded by White and Gabriel, the
+driving force behind this grassroots effort was provided by Fahlman,
+Daniel Weinreb, David Moon, Steele,  and Gabriel.
+@r{Common Lisp} was designed as a description of a family of languages.  The
+primary influences on @r{Common Lisp} were Lisp Machine Lisp, MacLisp, NIL,
+S-1~Lisp, Spice Lisp, and Scheme.
+@i{Common Lisp: The Language} is a description of that design.  Its
+semantics were intentionally underspecified in places where it was
+felt that a tight specification would overly constrain @r{Common Lisp}
+research and use.
+
+In 1986 X3J13 was formed as a technical working group to
+produce a draft for an ANSI @r{Common Lisp} standard. Because of the
+acceptance of @r{Common Lisp}, the goals of this group differed from those of
+the original designers. These new goals included stricter
+standardization for portability, an object-oriented programming
+system, a condition system, iteration facilities, and a way to handle
+large character sets.  To accommodate those
+goals, a new language specification, this
+document, was developed.
+
+@c end of including concept-history
+
+@node Organization of the Document, Referenced Publications, Scope, Introduction (Introduction)
+@section Organization of the Document
+
+@c including concept-organization
+
+This is a reference document, not a tutorial document.  Where possible
+and convenient, the order of presentation has been chosen so that the
+more primitive topics precede those that build upon them;  however,
+linear readability has not been a priority.
+
+This document is divided into chapters by topic.
+Any given chapter might contain conceptual material, dictionary entries, or both.
+
+@i{Defined names} within the dictionary portion of a chapter are
+grouped in a way that brings related topics into physical proximity.
+Many such groupings were possible,
+and no deep significance should be inferred from the particular grouping that was chosen.
+To see @i{defined names} grouped alphabetically, consult the index.
+For a complete list of @i{defined names}, see @ref{Symbols in the COMMON-LISP Package}.
+
+In order to compensate for the sometimes-unordered portions of this document, 
+a glossary has been provided; see @ref{Glossary}.
+The glossary provides connectivity by providing easy access to 
+definitions of terms, and in some cases by providing examples or 
+cross references to additional conceptual material.
+
+For information about notational conventions used in this document,
+see @ref{Definitions}.
+
+For information about conformance, see @ref{Conformance}. 
+
+For information about extensions and subsets, see @ref{Language Extensions}
+and @ref{Language Subsets}.
+
+For information about how @i{programs} in the language are parsed by the
+@i{Lisp reader}, see @ref{Syntax}.
+
+For information about how @i{programs} in the language are @i{compiled}
+and @i{executed}, see @ref{Evaluation and Compilation}.
+
+For information about data types, see @ref{Types and Classes}.
+Not all @i{types} and @i{classes} are defined in this chapter;
+many are defined in chapter corresponding to their topic--for example,
+the numeric types are defined in @ref{Numbers (Numbers)}.
+For a complete list of @i{standardized} @i{types}, 
+see @i{Figure~4--2}.
+
+For information about general purpose control and data flow,
+see @ref{Data and Control Flow} or @ref{Iteration}.
+
+@c end of including concept-organization
+
+@node Referenced Publications, Definitions, Organization of the Document, Introduction (Introduction)
+@section Referenced Publications
+
+@c including concept-references
+
+@table @asis
+
+@item @t{*}  
+@b{The Anatomy of Lisp},
+        John Allen, McGraw-Hill, Inc., 1978.
+
+@item @t{*}  
+@b{The Art of Computer Programming, Volume 3},
+             Donald E. Knuth, Addison-Wesley Company (Reading, MA), 1973.
+
+@item @t{*}  
+@b{The Art of the Metaobject Protocol},
+	Kiczales et al., MIT Press (Cambridge, MA), 1991.
+
+@item @t{*}  
+@b{Common Lisp Object System Specification},
+        D. Bobrow, L. DiMichiel, R.P. Gabriel, S. Keene, G. Kiczales, D. Moon,
+        @i{SIGPLAN Notices} V23, September, 1988.
+
+@item @t{*}  
+@b{Common Lisp: The Language},
+        Guy L. Steele Jr., Digital Press (Burlington, MA), 1984.
+
+@item @t{*}  
+@b{Common Lisp: The Language, Second Edition},
+        Guy L. Steele Jr., Digital Press (Bedford, MA), 1990.
+
+@item @t{*}  
+@b{Exceptional Situations in Lisp},
+	Kent M. Pitman,
+	@i{Proceedings of the First European Conference
+	     on the Practical Application of LISP\/}
+        (EUROPAL '90),
+	Churchill College, Cambridge, England,
+	March 27-29, 1990.
+
+@item @t{*}  
+@b{Flavors: A Non-Hierarchical Approach to Object-Oriented Programming},
+	Howard I. Cannon, 1982.
+
+@item @t{*}  
+@b{IEEE Standard for Binary Floating-Point Arithmetic},
+        ANSI/IEEE Std 754-1985,
+        Institute of Electrical and Electronics Engineers, Inc. (New York), 1985.
+
+@item @t{*}  
+@b{IEEE Standard for the Scheme Programming Language},
+	IEEE Std 1178-1990,
+	Institute of Electrical and Electronic Engineers, Inc. (New York), 1991.
+
+@item @t{*}  
+@b{Interlisp Reference Manual}, Third Revision,
+	Teitelman, Warren, et al,
+	Xerox Palo Alto Research Center (Palo Alto, CA), 1978.
+
+@item @t{*}  
+@r{ISO 6937/2},
+	@i{Information processing---Coded character sets 
+           for text communication---Part 2: Latin alphabetic and non-alphabetic
+           graphic characters}, 
+	ISO, 1983.
+
+@item @t{*}  
+@b{Lisp 1.5 Programmer's Manual},
+	John McCarthy, MIT Press (Cambridge, MA), August, 1962.
+
+@item @t{*}  
+@b{Lisp Machine Manual},
+	D.L. Weinreb and D.A. Moon,
+	Artificial Intelligence Laboratory, MIT (Cambridge, MA), July, 1981.
+
+@item @t{*}  
+@b{Maclisp Reference Manual, Revision~0},
+	David A. Moon, Project MAC (Laboratory for Computer Science),
+        MIT (Cambridge, MA), March, 1974.
+
+@item @t{*}  
+@b{NIL---A Perspective}, 
+        JonL White, @i{Macsyma User's Conference}, 1979.
+
+@item @t{*}  
+@b{Performance and Evaluation of Lisp Programs},
+	Richard P. Gabriel, MIT Press (Cambridge, MA), 1985.
+
+@item @t{*}  
+@b{Principal Values and Branch Cuts in Complex APL}, 
+        Paul Penfield Jr., @i{APL 81 Conference Proceedings},
+        ACM SIGAPL (San Francisco, September 1981), 248-256.
+        Proceedings published as @i{APL Quote Quad 12}, 1 (September 1981).
+
+@item @t{*}  
+@b{The Revised Maclisp Manual},
+	Kent M. Pitman, 
+	Technical Report 295,
+	Laboratory for Computer Science, MIT (Cambridge, MA), May 1983.
+
+@item @t{*}  
+@b{Revised^3 Report on the Algorithmic Language Scheme},
+        Jonathan Rees and William Clinger (editors), 
+        @i{SIGPLAN Notices} V21, #12, December, 1986.
+
+@item @t{*}  
+@b{S-1 Common Lisp Implementation},
+	R.A. Brooks, R.P. Gabriel, and G.L. Steele,
+	@i{Conference Record of the 1982 ACM Symposium on Lisp and Functional Programming},
+	108-113, 1982.
+
+@item @t{*}  
+@b{Smalltalk-80: The Language and its Implementation},
+        A. Goldberg and D. Robson, Addison-Wesley, 1983.
+
+@item @t{*}  
+@b{Standard LISP Report},
+        J.B. Marti, A.C. Hearn, M.L. Griss, and C. Griss,
+        @i{SIGPLAN Notices} V14, #10, October, 1979.
+
+@item @t{*}  
+@b{Webster's Third New International Dictionary
+ the English Language, Unabridged},
+	Merriam Webster (Springfield, MA), 1986.
+
+@item @t{*}  
+@b{XP: A Common Lisp Pretty Printing System},
+        R.C. Waters,
+	Memo 1102a,
+	Artificial Intelligence Laboratory, MIT (Cambridge, MA), September 1989.
+
+@end table
+
+@c end of including concept-references
+
+@node Definitions, Conformance, Referenced Publications, Introduction (Introduction)
+@section Definitions
+
+@c including concept-definitions
+
+This section contains notational conventions and definitions of terms
+used in this manual.
+
+@menu
+* Notational Conventions::	
+* Error Terminology::		
+* Sections Not Formally Part Of This Standard::	 
+* Interpreting Dictionary Entries::  
+@end menu
+
+@node Notational Conventions, Error Terminology, Definitions, Definitions
+@subsection Notational Conventions
+
+@ITindex notation
+
+The following notational conventions are used throughout this document.
+
+@menu
+* Font Key::			
+* Modified BNF Syntax::		
+* Splicing in Modified BNF Syntax::  
+* Indirection in Modified BNF Syntax::	
+* Additional Uses for Indirect Definitions in Modified BNF Syntax::  
+* Special Symbols::		
+* Objects with Multiple Notations::  
+* Case in Symbols::		
+* Numbers (Objects with Multiple Notations)::  
+* Use of the Dot Character::	
+* NIL::				
+* Designators::			
+* Nonsense Words::		
+@end menu
+
+@node Font Key, Modified BNF Syntax, Notational Conventions, Notational Conventions
+@subsubsection Font Key
+
+@ITindex font key
+
+Fonts are used in this document to convey information.
+
+@table @asis
+
+@item @i{name}  
+Denotes a formal term whose meaning is defined in the Glossary.
+When this font is used, the Glossary definition takes precedence 
+over normal English usage.
+
+Sometimes a glossary term appears subscripted, 
+as in ``@i{whitespace}_2.''  
+Such a notation selects one particular Glossary definition out of several,
+in this case the second.
+The subscript notation for Glossary terms is generally used where the
+context might be insufficient to disambiguate among the available definitions.
+
+@item @i{name}
+@IGindex name
+
+Denotes the introduction of a formal term locally to the current text.
+There is still a corresponding glossary entry, and is formally equivalent
+to a use of ``@i{name},'' but the hope is that making such uses 
+conspicuous will save the reader a trip to the glossary in some cases.
+
+@item @b{name}  
+Denotes a symbol in the @t{COMMON-LISP} @i{package}.
+For information about @i{case} conventions,
+see @ref{Case in Symbols}.
+
+@item @t{name}  
+Denotes a sample @i{name} or piece of @i{code} that a programmer
+might write in @r{Common Lisp}.
+
+This font is also used for certain @i{standardized} names that are not
+names of @i{external symbols} of the @t{COMMON-LISP} @i{package}, 
+such as @i{keywords}_1,
+        @i{package} @i{names},
+    and @i{loop keywords}.
+
+@item @i{name}  
+Denotes the name of a @i{parameter} or @i{value}.
+
+In some situations the notation ``<<@i{name}>>'' (@i{i.e.}, the same font,
+but with surrounding ``angle brackets'') is used instead in order to
+provide better visual separation from surrounding characters.  These
+``angle brackets'' are metasyntactic, and never actually appear in program
+input or output.
+
+@end table
+
+@node Modified BNF Syntax, Splicing in Modified BNF Syntax, Font Key, Notational Conventions
+@subsubsection Modified BNF Syntax
+
+@ITindex bnf key
+
+This specification uses an extended Backus Normal Form (BNF) to
+describe the syntax of @r{Common Lisp} @i{macro forms} and @i{special forms}.
+This section discusses the syntax of BNF expressions.
+
+@node Splicing in Modified BNF Syntax, Indirection in Modified BNF Syntax, Modified BNF Syntax, Notational Conventions
+@subsubsection Splicing in Modified BNF Syntax
+
+The primary extension used is the following:
+
+@center [[O]]
+
+An expression of this form appears whenever a list of elements is
+to be spliced into a larger structure and the elements can appear in
+any order. The symbol O represents a description of the syntax of
+some number of syntactic elements to be spliced; that description must
+be of the form
+
+@center O_1 | ... | O_l
+
+@noindent
+where each O_i can be of the form S or of
+the form S@r{*} or of the form S^1.
+
+The expression [[O]] means that a list of the form
+
+@center (O_@{i_1@}... O_@{i_j@})  1<= j
+
+@noindent
+is spliced into the enclosing expression,
+such that if n != m and 1<= n,m<= j,
+then either O_@{i_n@}!= O_@{i_m@}
+         or O_@{i_n@} = O_@{i_m@} = Q_k, 
+where for some 1<= k <= n, O_k is of the form Q_k@r{*}.
+
+Furthermore, for each O_@{i_n@} that is of the form Q_k^1,
+that element is required to appear somewhere in the list to be spliced.
+
+For example, the expression
+
+@t{(x [[A | B@r{*} | C]] y)}
+
+@noindent
+means that at most one @t{A}, any number of @t{B}'s, and
+at most one @t{C} can occur in any order.
+It is a description of any of these:
+
+@example
+ (x y)
+ (x B A C y)
+ (x A B B B B B C y)
+ (x C B A B B B y)
+@end example
+
+@noindent
+but not any of these:
+
+@example
+ (x B B A A C C y)
+ (x C B C y)
+@end example
+
+@noindent
+In the first case, both @t{A} and @t{C} appear too often,
+and in the second case @t{C} appears too often.
+
+The notation [[O_1 | O_2 | ...]]^+ 
+adds the additional restriction that at least one item from among the possible
+choices must be used.  For example:
+
+@t{(x [[A | B@r{*} | C]]^+ y)}
+
+@noindent
+means that at most one @t{A}, any number of @t{B}'s, and
+at most one @t{C} can occur in any order, but that in any case at least
+one of these options must be selected.
+It is a description of any of these:
+
+@example
+ (x B y)
+ (x B A C y)
+ (x A B B B B B C y)
+ (x C B A B B B y)
+@end example
+
+@noindent
+but not any of these:
+
+@example
+ (x y)
+ (x B B A A C C y)
+ (x C B C y)
+@end example
+
+@noindent
+In the first case, no item was used;
+in the second case, both @t{A} and @t{C} appear too often;
+and in the third case @t{C} appears too often.
+
+Also, the expression:
+
+@t{(x [[A^1 | B^1 | C]] y)}
+
+@noindent
+can generate exactly these and no others:
+
+@example
+ (x A B C y)
+ (x A C B y)
+ (x A B y)
+ (x B A C y)
+ (x B C A y)
+ (x B A y)
+ (x C A B y)
+ (x C B A y)
+@end example
+
+@node Indirection in Modified BNF Syntax, Additional Uses for Indirect Definitions in Modified BNF Syntax, Splicing in Modified BNF Syntax, Notational Conventions
+@subsubsection Indirection in Modified BNF Syntax
+
+An indirection extension is introduced in order to make this
+new syntax more readable:
+
+@center !@i{O}
+
+@noindent
+If @i{O} is a non-terminal symbol, the right-hand side
+of its definition is substituted for the entire expression 
+!@i{O}.  For example, the following BNF is equivalent to
+the BNF in the previous example:
+
+@t{(x [[!@i{O}]] y)}
+
+@w{@i{O} ::=@t{A} | @t{B}@r{*} | @t{C}}
+
+@node Additional Uses for Indirect Definitions in Modified BNF Syntax, Special Symbols, Indirection in Modified BNF Syntax, Notational Conventions
+@subsubsection Additional Uses for Indirect Definitions in Modified BNF Syntax
+
+In some cases, an auxiliary definition in the BNF might appear to be unused
+within the BNF, but might still be useful elsewhere.  For example, consider the
+following definitions:
+
+@code{case}  @i{keyform  @{!@i{normal-clause}@}* @r{[}!@i{otherwise-clause}@r{]}} @result{}  @i{@{@i{result}@}*}
+
+@code{ccase}  @i{keyplace @{!@i{normal-clause}@}*} @result{}  @i{@{@i{result}@}*}
+
+@code{ecase}  @i{keyform  @{!@i{normal-clause}@}*} @result{}  @i{@{@i{result}@}*}
+
+@w{@i{normal-clause} ::=@r{(}keys @{@i{form}@}*@r{)}}
+
+@w{@i{otherwise-clause} ::=@r{(}@{otherwise | t@} @{@i{form}@}*@r{)}}
+
+@w{@i{clause} ::=normal-clause | otherwise-clause}
+
+Here the term ``@i{clause}'' might appear to be ``dead'' in that it
+is not used in the BNF.  However, the purpose of the BNF is not just to guide parsing,
+but also to define useful terms for reference in the descriptive text which follows.
+As such, the term ``@i{clause}'' might appear in text that follows,
+as shorthand for ``@i{normal-clause} or @i{otherwise-clause}.''
+
+@node Special Symbols, Objects with Multiple Notations, Additional Uses for Indirect Definitions in Modified BNF Syntax, Notational Conventions
+@subsubsection Special Symbols
+
+The special symbols described here are used as a notational convenience
+within this document, and are part of neither the @r{Common Lisp} language nor
+its environment.
+
+@table @asis
+
+@item @result{}   
+This indicates evaluation.
+For example:
+
+@example
+ (+ 4 5) @result{}  9 
+@end example
+
+This means that the result of
+evaluating the @i{form} @t{(+ 4 5)} is @t{9}.
+
+If a @i{form} returns @i{multiple values}, those values might
+be shown separated by spaces, line breaks, or commas.
+For example:
+
+@example
+ (truncate 7 5)
+@result{}  1 2
+ (truncate 7 5) 
+@result{}  1
+   2
+ (truncate 7 5)
+@result{}  1, 2
+@end example
+
+Each of the above three examples is equivalent, and specifies
+that @t{(truncate 7 5)} returns two values, which are @t{1} and @t{2}.
+
+Some @i{conforming implementations} actually type an arrow (or some
+other indicator) before showing return values, while others do not.
+
+@item @i{OR}@result{}  
+The notation ``@i{OR}@result{}'' is used to denote one of several possible
+alternate results.  The example
+
+@example
+ (char-name #\a)
+@result{}  NIL
+@i{OR}@result{} "LOWERCASE-a"
+@i{OR}@result{} "Small-A"
+@i{OR}@result{} "LA01"
+@end example
+
+indicates that @b{nil}, @t{"LOWERCASE-a"}, @t{"Small-A"}, @t{"LA01"} are
+among the possible results of @t{(char-name #\a)}---each with equal preference.
+Unless explicitly specified otherwise, it should not be assumed that the set of possible 
+results shown is exhaustive.
+Formally, the above example is equivalent to
+
+@example
+ (char-name #\a) @result{}  @i{implementation-dependent}
+@end example
+
+but it is intended to provide additional information to illustrate some
+of the ways in which it is permitted for implementations to diverge.
+
+@item @i{NOT}@result{}  
+The notation ``@i{NOT}@result{}'' is used to denote a result which is not possible.
+This might be used, for example, in order to emphasize a situation where
+some anticipated misconception might lead the reader to falsely believe
+that the result might be possible.  For example,
+
+@example
+ (function-lambda-expression 
+    (funcall #'(lambda (x) #'(lambda () x)) nil))
+@result{}  NIL, @i{true}, NIL
+@i{OR}@result{} (LAMBDA () X), @i{true}, NIL
+@i{NOT}@result{} NIL, @i{false}, NIL
+@i{NOT}@result{} (LAMBDA () X), @i{false}, NIL
+@end example
+
+@item @equiv{}  
+This indicates code equivalence. For example:
+
+@example
+ (gcd x (gcd y z)) @equiv{} (gcd (gcd x y) z)
+@end example
+
+This means that the results and observable side-effects of evaluating
+the @i{form}
+@t{(gcd x (gcd y z))}  are always the same as the results
+and observable side-effects of
+@t{(gcd (gcd x y) z)}  for any 
+@t{x}, @t{y}, and @t{z}.
+
+@item @t{ |> }  
+@r{Common Lisp} specifies input and output with respect to a non-interactive stream model.
+The specific details of how interactive input and output are mapped onto that
+non-interactive model are @i{implementation-defined}.
+
+For example, @i{conforming implementations} are permitted to differ in issues 
+of how interactive input is terminated.  For example, the @i{function} @b{read}
+terminates when the final delimiter is typed on a non-interactive stream.
+In some @i{implementations}, an interactive call to @b{read} returns
+as soon as the final delimiter is typed, even if that delimiter is not a @i{newline}.
+In other @i{implementations}, a final @i{newline} is always required.
+In still other @i{implementations}, there might be a command which ``activates''
+a buffer full of input without the command itself being visible on the program's
+input stream.
+
+In the examples in this document, the notation ``@t{ |> }'' precedes 
+lines where interactive input and output occurs.  Within such a scenario,
+``@b{|>>}@t{this notation}@b{<<|}'' notates user input.
+
+For example, the notation
+
+@example
+ (+ 1 (print (+ (sqrt (read)) (sqrt (read)))))
+@t{ |> } @b{|>>}@t{9 16 }@b{<<|}
+@t{ |> } 7
+@result{}  8
+@end example
+
+shows an interaction in which
+  ``@t{(+ 1 (print (+ (sqrt (read)) (sqrt (read)))))}''
+    is a @i{form} to be @i{evaluated},
+  ``@t{9 16 }'' is interactive input,
+  ``@t{7}'' is interactive output, and 
+  ``@t{8}'' is the @i{value} @i{yielded} from the @i{evaluation}.
+
+The use of this notation is intended to disguise small differences 
+in interactive input and output behavior between @i{implementations}.
+
+Sometimes, the non-interactive stream model calls for a @i{newline}.
+How that @i{newline} character is interactively entered is an 
+@i{implementation-defined} detail of the user interface, but in that
+case, either the notation ``<@i{Newline}>'' or ``@i{[<--}~]'' might be used.
+
+@example
+ (progn (format t "~&Who? ") (read-line))
+@t{ |> } Who? @b{|>>}@t{Fred, Mary, and Sally @i{[<--}~]}@b{<<|}
+@result{}  "Fred, Mary, and Sally", @i{false}
+@end example
+
+@end table
+
+@node Objects with Multiple Notations, Case in Symbols, Special Symbols, Notational Conventions
+@subsubsection Objects with Multiple Notations
+
+Some @i{objects} in @r{Common Lisp} can be notated in more than one way.
+In such situations, the choice of which notation to use is technically arbitrary,
+but conventions may exist which convey a ``point of view'' or ``sense of intent.''
+
+@node Case in Symbols, Numbers (Objects with Multiple Notations), Objects with Multiple Notations, Notational Conventions
+@subsubsection Case in Symbols
+
+@ITindex case in symbol names
+
+While @i{case} is significant in the process of @i{interning} a @i{symbol},
+the @i{Lisp reader}, by default, attempts to canonicalize the case of a
+@i{symbol} prior to interning; see @ref{Effect of Readtable Case on the Lisp Reader}.
+As such, case in @i{symbols} is not, by default, significant.
+Throughout this document, except as explicitly noted otherwise,
+the case in which a @i{symbol} appears is not significant; 
+that is, @t{HELLO}, @t{Hello}, @t{hElLo}, and @t{hello} are
+all equivalent ways to denote a symbol whose name is @t{"HELLO"}.
+
+The characters @i{backslash} and @i{vertical-bar} are used to explicitly
+quote the @i{case} and other parsing-related 
+aspects
+of characters.  As such,
+the notations @t{|hello|} and @t{\h\e\l\l\o} are equivalent ways
+to refer to a symbol whose name is @t{"hello"}, and which is @i{distinct} from
+any symbol whose name is @t{"HELLO"}.
+
+The @i{symbols} that correspond to @r{Common Lisp} @i{defined names}
+have @i{uppercase} names even though their names generally appear
+in @i{lowercase} in this document.
+
+@node Numbers (Objects with Multiple Notations), Use of the Dot Character, Case in Symbols, Notational Conventions
+@subsubsection Numbers
+
+Although @r{Common Lisp} provides a variety of ways for programs to manipulate the
+input and output radix for rational numbers, all numbers in this document
+are in decimal notation unless explicitly noted otherwise.
+
+@node Use of the Dot Character, NIL, Numbers (Objects with Multiple Notations), Notational Conventions
+@subsubsection Use of the Dot Character
+
+The dot appearing by itself in an @i{expression} such as
+
+@t{(@i{item1} @i{item2} @t{.} @i{tail})}
+
+means that @i{tail} represents a @i{list} of @i{objects} 
+at the end of a list.  For example,
+
+@t{(A B C @t{.} (D E F))}
+
+is notationally equivalent to:
+
+@t{(A B C D E F)}
+
+Although @i{dot} is a valid constituent character in a symbol, no 
+@i{standardized} @i{symbols} contain the character @i{dot},
+so a period that follows a reference to a @i{symbol} at the end of
+a sentence in this document should always be interpreted as a period
+and never as part of the @i{symbol}'s @i{name}.
+For example, within this document, a sentence such as
+ ``This sample sentence refers to the symbol @b{car}.'' 
+refers to a symbol whose name is @t{"CAR"} (with three letters),
+and never to a four-letter symbol @t{"CAR."}
+
+@node NIL, Designators, Use of the Dot Character, Notational Conventions
+@subsubsection NIL
+
+@IGindex nil
+
+@IGindex ()
+
+@IRindex nil
+
+@b{nil} has a variety of meanings.
+It is a @i{symbol} in the @t{COMMON-LISP} @i{package} with the @i{name} @t{"NIL"},
+it is @i{boolean} (and @i{generalized boolean}) @i{false},
+it is the @i{empty list},
+and it is the @i{name} of the @i{empty type} (a @i{subtype} of all @i{types}).
+
+Within @r{Common Lisp}, @b{nil} can be notated interchangeably as either @t{NIL} or @t{()}.
+By convention, the choice of notation offers a hint as to which of its many
+roles it is playing.
+
+@format
+@group
+@noindent
+@w{  @b{For Evaluation?}  @b{Notation}  @b{Typically Implied Role}       }
+@w{  ________________________________________________________}
+@w{  Yes              @t{nil}       use as a @i{boolean}.            }
+@w{  Yes              @t{'nil}      use as a @i{symbol}.             }
+@w{  Yes              @t{'()}       use as an @i{empty list}         }
+@w{  No               @t{nil}       use as a @i{symbol} or @i{boolean}.  }
+@w{  No               @t{()}        use as an @i{empty list}.        }
+
+@noindent
+@w{               Figure 1--1: Notations for NIL             }
+
+@end group
+@end format
+
+Within this document only, @b{nil} is also sometimes notated as @i{false} to
+emphasize its role as a @i{boolean}.
+
+For example:
+
+@example
+ (print ())                          ;avoided
+ (defun three nil 3)                 ;avoided 
+ '(nil nil)                          ;list of two symbols
+ '(() ())                            ;list of empty lists
+ (defun three () 3)                  ;Emphasize empty parameter list.
+ (append '() '()) @result{}  ()              ;Emphasize use of empty lists
+ (not nil) @result{}  @i{true}                   ;Emphasize use as Boolean false
+ (get 'nil 'color)                   ;Emphasize use as a symbol
+@end example
+
+A @i{function} is sometimes said to ``be @i{false}'' or ``be @i{true}''
+in some circumstance.
+Since no @i{function} object can be the same as @b{nil} 
+and all @i{function} @i{objects} represent @i{true} when viewed as @i{booleans},
+it would be meaningless to say that the @i{function} was literally @i{false} 
+and uninteresting to say that it was literally @i{true}.
+Instead, these phrases are just traditional alternative ways of saying that the
+@i{function} ``returns @i{false}'' or ``returns @i{true},'' respectively.
+
+@node Designators, Nonsense Words, NIL, Notational Conventions
+@subsubsection Designators
+
+A @i{designator}
+@IGindex designator
+ is an @i{object} that denotes another @i{object}.
+
+Where a @i{parameter} of an @i{operator} is described as a @i{designator},
+the description of the @i{operator} is written in a way that assumes that
+the value of the @i{parameter} is the denoted @i{object};
+that is, that the @i{parameter} is already of the denoted @i{type}.
+(The specific nature of the @i{object} denoted by
+   a ``<<@i{type}>> @i{designator}''
+or a ``@i{designator} for a <<@i{type}>>'' 
+can be found in the Glossary entry for ``<<@i{type}>> @i{designator}.'')
+
+For example, ``@b{nil}'' and ``the @i{value} of @b{*standard-output*}'' are operationally
+indistinguishable as @i{stream designators}.  Similarly, 
+the @i{symbol} @t{foo} and the @i{string} @t{"FOO"} 
+are operationally indistinguishable as @i{string designators}.  
+
+Except as otherwise noted, in a situation where the denoted @i{object} 
+might be used multiple times, it is @i{implementation-dependent}
+whether the @i{object} is coerced only once or whether the coercion occurs
+each time the @i{object} must be used.
+
+For example, @b{mapcar} receives a @i{function designator} as an argument,
+and its description is written as if this were simply a function.  In fact, it
+is @i{implementation-dependent} whether the @i{function designator} is 
+coerced right away or whether it is carried around internally in the form that
+it was given as an @i{argument} and re-coerced each time it is needed.  In most
+cases, @i{conforming programs} cannot detect the distinction, but there are some 
+pathological situations (particularly those involving self-redefining or 
+mutually-redefining functions) which do conform and which can detect this difference.
+The following program is a @i{conforming program}, but might or might not have
+portably correct results, depending on whether its correctness depends on one or
+the other of the results:
+
+@example
+ (defun add-some (x) 
+   (defun add-some (x) (+ x 2))
+   (+ x 1)) @result{}  ADD-SOME
+ (mapcar 'add-some '(1 2 3 4))
+@result{}  (2 3 4 5)
+@i{OR}@result{} (2 4 5 6)
+@end example
+
+In a few rare situations, there may be a need in a dictionary entry
+to refer to the @i{object} that was the original @i{designator}
+for a @i{parameter}.
+Since naming the @i{parameter} would refer to the denoted @i{object},
+the phrase ``the <<@i{parameter-name}>> @i{designator}'' 
+can be used to refer to the @i{designator} which was the @i{argument}
+from which the @i{value} of <<@i{parameter-name}>> was computed.
+
+@node Nonsense Words,  , Designators, Notational Conventions
+@subsubsection Nonsense Words
+
+@ICindex foo
+
+@ICindex bar
+
+@ICindex baz
+
+@ICindex quux
+
+When a word having no pre-attached semantics is required (@i{e.g.}, in an
+example), it is common in the Lisp community to use one of the words
+``foo,'' ``bar,'' ``baz,'' and ``quux.''  For example, in
+
+@example
+ (defun foo (x) (+ x 1))
+@end example
+
+the use of the name @t{foo} is just a shorthand way of saying 
+``please substitute your favorite name here.''
+
+These nonsense words have gained such prevalance of usage, that it is
+commonplace for newcomers to the community to begin to wonder if there
+is an attached semantics which they are overlooking---there is not.
+
+@node Error Terminology, Sections Not Formally Part Of This Standard, Notational Conventions, Definitions
+@subsection Error Terminology
+
+@IGindex error terminology
+
+Situations in which errors might, should, or must be signaled are described
+in the standard.  The wording used to describe such situations is intended
+to have precise meaning. The following list is a glossary of those meanings.
+
+@table @asis
+
+@item @b{Safe code}  
+
+@IGindex safe
+
+This is @i{code} processed with the @b{safety} optimization 
+at its highest setting (@t{3}).  @b{safety} is a lexical property
+of code.  The phrase ``the function @t{F} should signal an error'' 
+means that if @t{F} is invoked from code processed with the highest
+@b{safety} optimization, an error is signaled.
+It is @i{implementation-dependent} whether @t{F} or the calling 
+code signals the error.
+
+@item @b{Unsafe code}  
+
+@IGindex unsafe
+
+This is code processed with lower safety levels.
+
+Unsafe code might do error checking.  Implementations are permitted to
+treat all code as safe code all the time.
+
+@item @b{An error is signaled}  
+
+@IGindex signal
+
+@ITindex is signaled
+
+@ITindex must signal
+
+This means that an error is signaled in both safe and unsafe code.
+@i{Conforming code} may rely on the fact that the error is signaled
+in both safe and unsafe code.  Every implementation is required to
+detect the error in both safe and unsafe code. For example, ``an error
+is signaled if @b{unexport} is given a @i{symbol}
+not @i{accessible} in the @i{current package}.''
+
+If an explicit error type is not specified, the default is @b{error}.
+
+@item @b{An error should be signaled}  
+
+@IGindex signal
+
+@ITindex should signal
+
+This means that an error is signaled in safe code, and an error
+might be signaled in unsafe code.  @i{Conforming code} may rely on the
+fact that the error is signaled in safe code.  Every
+implementation is required to detect the error at least in safe code.
+When the error is not signaled, the ``consequences are undefined''
+(see below).  For example, ``@b{+} should signal an error of @i{type} @b{type-error}
+if any argument is not of @i{type} @b{number}.''
+
+@item @b{Should be prepared to signal an error}  
+
+@IGindex signal
+
+@ITindex prepared to signal
+
+This is similar to ``should be signaled'' except that it does not
+imply that `extra effort' has to be taken on the part of an @i{operator}
+to discover an erroneous situation if the normal action of that @i{operator}
+can be performed successfully with only `lazy' checking.
+An @i{implementation} is always permitted to signal an error,
+but even in @i{safe} @i{code}, it is only required to signal the error
+when failing to signal it might lead to incorrect results.
+In @i{unsafe} @i{code}, the consequences are undefined.
+
+For example, defining that 
+ ``@b{find} should be prepared to signal an error of @i{type} @b{type-error}
+   if its second @i{argument} is not a @i{proper list}''
+does not imply that an error is always signaled.  The @i{form}
+
+@example
+ (find 'a '(a b . c))
+@end example
+
+must either signal an error of @i{type} @b{type-error} in @i{safe} @i{code},
+else return @t{A}.
+In @i{unsafe} @i{code}, the consequences are undefined.
+By contrast,
+
+@example
+ (find 'd '(a b . c))
+@end example
+
+must signal an error of @i{type} @b{type-error} in @i{safe} @i{code}.
+In @i{unsafe} @i{code}, the consequences are undefined.
+Also,
+
+@example
+ (find 'd '#1=(a b . #1#))
+@end example
+
+in @i{safe code}
+   might return @b{nil} (as an @i{implementation-defined} extension),
+   might never return,
+or might signal an error of @i{type} @b{type-error}.
+In @i{unsafe} @i{code}, the consequences are undefined.
+
+Typically, the ``should be prepared to signal'' terminology is used in
+type checking situations where there are efficiency considerations that
+make it impractical to detect errors that are not relevant to the
+correct operation of the @i{operator}.
+
+@item @b{The consequences are unspecified}  
+
+@ITindex consequences
+
+@ITindex unspecified consequences
+
+This means that the consequences are unpredictable but harmless.
+Implementations are permitted to specify the consequences of this
+situation. No @i{conforming code} may depend on the results or effects of
+this situation, and all @i{conforming code} is required to treat the
+results and effects of this situation as unpredictable but harmless.
+For example, ``if the second argument to @b{shared-initialize}
+specifies a name that does not correspond to any @i{slots}
+@i{accessible} in the @i{object}, the results are unspecified.''
+
+@item @b{The consequences are undefined}  
+
+@ITindex consequences
+
+@ITindex undefined consequences
+
+This means that the consequences are unpredictable. The consequences
+may range from harmless to fatal.  No @i{conforming code} may depend on
+the results or effects. @i{Conforming code} must treat the consequences as
+unpredictable.  In places where the words ``must,'' ``must not,'' or
+``may not'' are used, then ``the consequences are undefined'' if the
+stated requirement is not met and no specific consequence is
+explicitly stated.  An implementation is permitted to signal an error
+in this case.
+
+For example: ``Once a name has been declared by @b{defconstant}
+to be constant, any further assignment or binding of that
+variable has undefined consequences.''
+
+@item @b{An error might be signaled}  
+
+@IGindex signal
+
+@ITindex might signal
+
+This means that the situation has undefined consequences;
+however, if an error is signaled, it is of the specified @i{type}.
+For example, ``@b{open} might signal an error of @i{type} @b{file-error}.''
+
+@item @b{The return values are unspecified}  
+
+@ITindex unspecified values
+
+This means that only the number and nature of the return values of a
+@i{form} are not specified.  However, the issue of whether or not
+any side-effects or transfer of control occurs is still well-specified.
+
+A program can be well-specified even if it uses a function whose
+returns values are unspecified.  For example, even if the return
+values of some function @t{F} are unspecified, an expression such as
+@t{(length (list (F)))} is still well-specified because it does not
+rely on any particular aspect of the value or values returned by @t{F}.
+
+@item @b{Implementations may be extended to cover this situation}  
+
+@ITindex extensions
+
+This means that the @i{situation} has undefined consequences;
+however, a @i{conforming implementation} is free to treat
+the situation in a more specific way.  
+For example, an @i{implementation} might define 
+    that      an error is signaled,
+ or that      an error should be signaled,
+ or even that a certain well-defined non-error behavior occurs.
+
+No @i{conforming code} may depend on the consequences of such a @i{situation};
+all @i{conforming code} must treat the consequences of the situation
+as undefined. @i{Implementations} are required to document how the
+situation is treated.
+
+For example, ``implementations may be extended to define other type
+specifiers to have a corresponding @i{class}.''
+
+@item @b{Implementations are free to extend the syntax}  
+
+@ITindex extensions
+
+This means that in this situation implementations are permitted to
+define unambiguous extensions to the syntax of the @i{form} being
+described.  No @i{conforming code} may depend on this extension.
+Implementations are required to document each such extension. All
+@i{conforming code} is required to treat the syntax as meaningless. The
+standard might disallow certain extensions while allowing others. For
+example, ``no implementation is free to extend the syntax of
+@b{defclass}.''
+
+@item @b{A warning might be issued}  
+
+@ITindex warning
+
+This means that @i{implementations} are encouraged to issue a warning
+if the context is appropriate (@i{e.g.}, when compiling).  However, a
+@i{conforming implementation} is not required to issue a warning.
+
+@end table
+
+@node Sections Not Formally Part Of This Standard, Interpreting Dictionary Entries, Error Terminology, Definitions
+@subsection Sections Not Formally Part Of This Standard
+
+Front matter and back matter, such as the ``Table of Contents,'' 
+``Index,'' ``Figures,'' ``Credits,'' and ``Appendix'' are not considered formally 
+part of this standard, so that we retain the flexibility needed to update
+these sections even at the last minute without fear of needing a formal 
+vote to change those parts of the document.  These items are quite short 
+and very useful, however, and it is not recommended that they be removed 
+even in an abridged version of this document.
+
+Within the concept sections, subsections whose names begin with 
+the words ``Note'' or ``Notes'' or ``Example'' or ``Examples'' 
+are provided for illustration purposes only, and are not considered
+part of the standard.
+
+An attempt has been made to place these sections last in their parent section,
+so that they could be removed without disturbing the contiguous numbering of the 
+surrounding sections in order to produce a document of smaller size.
+
+Likewise, the ``Examples'' and ``Notes'' sections in a dictionary entry
+are not considered part of the standard and could be removed if necessary.
+
+Nevertheless, the examples provide important clarifications and consistency 
+checks for the rest of the material, and such abridging is not recommended
+unless absolutely unavoidable.
+
+@node Interpreting Dictionary Entries,  , Sections Not Formally Part Of This Standard, Definitions
+@subsection Interpreting Dictionary Entries
+
+The dictionary entry for each @i{defined name} is partitioned into
+sections.  Except as explicitly indicated otherwise below, each section
+is introduced by a label identifying that section.  The omission of a
+section implies that the section is either not applicable, or would
+provide no interesting information.
+
+This section defines the significance of each potential section in a
+dictionary entry.
+
+@menu
+* The "Affected By" Section of a Dictionary Entry::  
+* The "Arguments" Section of a Dictionary Entry::  
+* The "Arguments and Values" Section of a Dictionary Entry::	
+* The "Binding Types Affected" Section of a Dictionary Entry::  
+* The "Class Precedence List" Section of a Dictionary Entry::	 
+* Dictionary Entries for Type Specifiers::  
+* The "Compound Type Specifier Kind" Section of a Dictionary Entry::	
+* The "Compound Type Specifier Syntax" Section of a Dictionary Entry::  
+* The "Compound Type Specifier Arguments" Section of a Dictionary Entry::  
+* The "Compound Type Specifier Description" Section of a Dictionary Entry::  
+* The "Constant Value" Section of a Dictionary Entry::  
+* The "Description" Section of a Dictionary Entry::  
+* The "Examples" Section of a Dictionary Entry::  
+* The "Exceptional Situations" Section of a Dictionary Entry::  
+* The "Initial Value" Section of a Dictionary Entry::	 
+* The "Argument Precedence Order" Section of a Dictionary Entry::  
+* The "Method Signature" Section of a Dictionary Entry::  
+* The "Name" Section of a Dictionary Entry::	
+* The "Notes" Section of a Dictionary Entry::	 
+* The "Pronunciation" Section of a Dictionary Entry::	 
+* The "See Also" Section of a Dictionary Entry::  
+* The "Side Effects" Section of a Dictionary Entry::	
+* The "Supertypes" Section of a Dictionary Entry::  
+* The "Syntax" Section of a Dictionary Entry::  
+* Special "Syntax" Notations for Overloaded Operators::  
+* Naming Conventions for Rest Parameters::  
+* Requiring Non-Null Rest Parameters in The "Syntax" Section::  
+* Return values in The "Syntax" Section::  
+* No Arguments or Values in The "Syntax" Section::  
+* Unconditional Transfer of Control in The "Syntax" Section::	 
+* The "Valid Context" Section of a Dictionary Entry::	 
+* The "Value Type" Section of a Dictionary Entry::  
+@end menu
+
+@node The "Affected By" Section of a Dictionary Entry, The "Arguments" Section of a Dictionary Entry, Interpreting Dictionary Entries, Interpreting Dictionary Entries
+@subsubsection The "Affected By" Section of a Dictionary Entry
+
+For an @i{operator}, anything that can affect the side effects of
+or @i{values} returned by the @i{operator}.
+
+For a @i{variable}, anything that can affect the @i{value} of the @i{variable}
+including @i{functions} that bind or assign it.
+
+@node The "Arguments" Section of a Dictionary Entry, The "Arguments and Values" Section of a Dictionary Entry, The "Affected By" Section of a Dictionary Entry, Interpreting Dictionary Entries
+@subsubsection The "Arguments" Section of a Dictionary Entry
+
+This information describes the syntax information of entries such as those for
+@i{declarations} and special @i{expressions} which are never @i{evaluated}
+as @i{forms}, and so do not return @i{values}.
+
+@node The "Arguments and Values" Section of a Dictionary Entry, The "Binding Types Affected" Section of a Dictionary Entry, The "Arguments" Section of a Dictionary Entry, Interpreting Dictionary Entries
+@subsubsection The "Arguments and Values" Section of a Dictionary Entry
+
+An English language description of what @i{arguments} the @i{operator} accepts
+and what @i{values} it returns, including information about defaults for @i{parameters}
+corresponding to omittable @i{arguments}
+(such as @i{optional parameters} and @i{keyword parameters}).
+For @i{special operators} and @i{macros},
+their @i{arguments} are not @i{evaluated} unless it is explicitly stated in their
+descriptions that they are @i{evaluated}.
+
+@node The "Binding Types Affected" Section of a Dictionary Entry, The "Class Precedence List" Section of a Dictionary Entry, The "Arguments and Values" Section of a Dictionary Entry, Interpreting Dictionary Entries
+@subsubsection The "Binding Types Affected" Section of a Dictionary Entry
+
+This information alerts the reader to the kinds of @i{bindings} that might 
+potentially be affected by a declaration.  Whether in fact any particular such
+@i{binding} is actually affected is dependent on additional factors as well.
+See The "Description" Section of the declaration in question for details.
+
+@node The "Class Precedence List" Section of a Dictionary Entry, Dictionary Entries for Type Specifiers, The "Binding Types Affected" Section of a Dictionary Entry, Interpreting Dictionary Entries
+@subsubsection The "Class Precedence List" Section of a Dictionary Entry
+
+This appears in the dictionary entry for a @i{class},
+and contains an ordered list of the @i{classes} defined 
+by @r{Common Lisp} that must be in the @i{class precedence list} of this @i{class}.
+
+It is permissible for other (@i{implementation-defined}) @i{classes}
+to appear in the @i{implementation}'s @i{class precedence list} for the @i{class}.
+
+It is permissible for 
+  either @b{standard-object}
+      or @b{structure-object}
+to appear in the @i{implementation}'s @i{class precedence list};
+for details, see @ref{Type Relationships}.
+
+Except as explicitly indicated otherwise somewhere in this specification,
+no additional @i{standardized} @i{classes} may appear in 
+the @i{implementation}'s @i{class precedence list}.
+
+By definition of the relationship between @i{classes} and @i{types},
+the @i{classes} listed in this section are also @i{supertypes} of 
+the @i{type} denoted by the @i{class}.
+
+@node Dictionary Entries for Type Specifiers, The "Compound Type Specifier Kind" Section of a Dictionary Entry, The "Class Precedence List" Section of a Dictionary Entry, Interpreting Dictionary Entries
+@subsubsection Dictionary Entries for Type Specifiers
+
+The @i{atomic type specifiers} are those @i{defined names} 
+listed in @i{Figure~4--2}.
+Such dictionary entries are of kind 
+``Class,'' ``Condition Type,'' ``System Class,'' or ``Type.''
+A description of how to interpret 
+a @i{symbol} naming one of these @i{types} or @i{classes} 
+as an @i{atomic type specifier}
+is found in The "Description" Section of such dictionary entries.
+
+The @i{compound type specifiers} are those @i{defined names} 
+listed in @i{Figure~4--3}.
+Such dictionary entries are of kind ``Class,'' ``System Class,''
+``Type,'' or ``Type Specifier.''
+A description of how to interpret as a @i{compound type specifier}
+a @i{list} whose @i{car} is such a @i{symbol}
+is found in the 
+     ``Compound Type Specifier Kind,''
+     ``Compound Type Specifier Syntax,''
+     ``Compound Type Specifier Arguments,''
+ and ``Compound Type Specifier Description''
+sections of such dictionary entries.
+
+@node The "Compound Type Specifier Kind" Section of a Dictionary Entry, The "Compound Type Specifier Syntax" Section of a Dictionary Entry, Dictionary Entries for Type Specifiers, Interpreting Dictionary Entries
+@subsubsection The "Compound Type Specifier Kind" Section of a Dictionary Entry
+
+An ``abbreviating'' @i{type specifier} is one that describes a @i{subtype}
+for which it is in principle possible to enumerate the @i{elements},
+but for which in practice it is impractical to do so.
+
+A ``specializing'' @i{type specifier} is one that describes a @i{subtype}
+by restricting the @i{type} of one or more components of the @i{type},
+such as @i{element type} or @i{complex part type}.
+
+A ``predicating'' @i{type specifier} is one that describes a @i{subtype}
+containing only those @i{objects} that satisfy a given @i{predicate}.
+
+A ``combining'' @i{type specifier} is one that describes a @i{subtype}
+in a compositional way, using combining operations (such as ``and,'' ``or,'' and
+``not'') on other @i{types}.
+
+@node The "Compound Type Specifier Syntax" Section of a Dictionary Entry, The "Compound Type Specifier Arguments" Section of a Dictionary Entry, The "Compound Type Specifier Kind" Section of a Dictionary Entry, Interpreting Dictionary Entries
+@subsubsection The "Compound Type Specifier Syntax" Section of a Dictionary Entry
+
+This information about a @i{type} describes the syntax of a 
+@i{compound type specifier} for that @i{type}.
+
+Whether or not the @i{type} is acceptable as an @i{atomic type specifier}
+is not represented here; see @ref{Dictionary Entries for Type Specifiers}.
+
+@node The "Compound Type Specifier Arguments" Section of a Dictionary Entry, The "Compound Type Specifier Description" Section of a Dictionary Entry, The "Compound Type Specifier Syntax" Section of a Dictionary Entry, Interpreting Dictionary Entries
+@subsubsection The "Compound Type Specifier Arguments" Section of a Dictionary Entry
+
+This information describes @i{type} information for the structures defined in
+The "Compound Type Specifier Syntax" Section.
+
+@node The "Compound Type Specifier Description" Section of a Dictionary Entry, The "Constant Value" Section of a Dictionary Entry, The "Compound Type Specifier Arguments" Section of a Dictionary Entry, Interpreting Dictionary Entries
+@subsubsection The "Compound Type Specifier Description" Section of a Dictionary Entry
+
+This information describes the meaning of the structures defined in
+The "Compound Type Specifier Syntax" Section.
+
+@node The "Constant Value" Section of a Dictionary Entry, The "Description" Section of a Dictionary Entry, The "Compound Type Specifier Description" Section of a Dictionary Entry, Interpreting Dictionary Entries
+@subsubsection The "Constant Value" Section of a Dictionary Entry
+
+This information describes the unchanging @i{type} and @i{value} of 
+a @i{constant variable}.
+
+@node The "Description" Section of a Dictionary Entry, The "Examples" Section of a Dictionary Entry, The "Constant Value" Section of a Dictionary Entry, Interpreting Dictionary Entries
+@subsubsection The "Description" Section of a Dictionary Entry
+
+A summary of the @i{operator} and all intended aspects of the @i{operator}, 
+but does not necessarily include all the fields referenced below it 
+(``Side Effects,'' ``Exceptional Situations,'' @i{etc.})
+
+@node The "Examples" Section of a Dictionary Entry, The "Exceptional Situations" Section of a Dictionary Entry, The "Description" Section of a Dictionary Entry, Interpreting Dictionary Entries
+@subsubsection The "Examples" Section of a Dictionary Entry
+
+Examples of use of the @i{operator}.
+These examples are not considered part of the standard;
+see @ref{Sections Not Formally Part Of This Standard}.
+
+@node The "Exceptional Situations" Section of a Dictionary Entry, The "Initial Value" Section of a Dictionary Entry, The "Examples" Section of a Dictionary Entry, Interpreting Dictionary Entries
+@subsubsection The "Exceptional Situations" Section of a Dictionary Entry
+
+  Three kinds of information may appear here:
+@table @asis
+
+@item @t{*}  
+Situations that are detected by the @i{function} and formally signaled.
+@item @t{*}  
+Situations that are handled by the @i{function}.
+@item @t{*}  
+Situations that may be detected by the @i{function}.
+@end table
+
+This field does not include conditions that could
+be signaled by @i{functions} passed to and called by this @i{operator}
+as arguments or through dynamic variables, nor by executing subforms of this
+operator if it is a @i{macro} or @i{special operator}.
+
+@node The "Initial Value" Section of a Dictionary Entry, The "Argument Precedence Order" Section of a Dictionary Entry, The "Exceptional Situations" Section of a Dictionary Entry, Interpreting Dictionary Entries
+@subsubsection The "Initial Value" Section of a Dictionary Entry
+
+This information describes the initial @i{value} of a @i{dynamic variable}.
+Since this variable might change, see @i{type} restrictions in The "Value Type" Section.
+
+@node The "Argument Precedence Order" Section of a Dictionary Entry, The "Method Signature" Section of a Dictionary Entry, The "Initial Value" Section of a Dictionary Entry, Interpreting Dictionary Entries
+@subsubsection The "Argument Precedence Order" Section of a Dictionary Entry
+
+This information describes the argument precedence order.
+If it is omitted, the argument precedence order is the default (left to right).
+
+@node The "Method Signature" Section of a Dictionary Entry, The "Name" Section of a Dictionary Entry, The "Argument Precedence Order" Section of a Dictionary Entry, Interpreting Dictionary Entries
+@subsubsection The "Method Signature" Section of a Dictionary Entry
+
+The description of a @i{generic function} includes descriptions of the
+@i{methods} that are defined on that @i{generic function} by the standard.  
+A method signature is used to describe the @i{parameters} and 
+@i{parameter specializers} for each @i{method}. 
+@i{Methods} defined for the @i{generic function} must be of the form described
+by the @i{method} @i{signature}. 
+
+@code{F}  @i{@r{(}@i{x} @i{class}@r{)}
+	      @r{(}@i{y} t@r{)}
+	      @r{&optional} @i{z} @r{&key} @i{k}}
+
+@noindent
+This @i{signature} indicates that this method on the @i{generic function}
+@b{F} has two @i{required parameters}:
+     @i{x}, which must be a @i{generalized instance} of the @i{class} @i{class};
+ and @i{y}, which can  be any @i{object} 
+       (@i{i.e.}, a @i{generalized instance} of the @i{class} @b{t}).
+In addition, there is an @i{optional parameter} @i{z} and a
+@i{keyword parameter} @i{k}.  This @i{signature} also indicates that this
+method on @t{F} is a @i{primary method} and has no @i{qualifiers}.
+
+For each @i{parameter}, the @i{argument} supplied must be in the
+intersection of the @i{type} specified in the description of the
+corresponding @i{generic function} and the @i{type} given in 
+the @i{signature} of some @i{method} (including not only those 
+@i{methods} defined in this specification, but also
+@i{implementation-defined} or user-defined @i{methods} in situations
+where the definition of such @i{methods} is permitted).
+
+@node The "Name" Section of a Dictionary Entry, The "Notes" Section of a Dictionary Entry, The "Method Signature" Section of a Dictionary Entry, Interpreting Dictionary Entries
+@subsubsection The "Name" Section of a Dictionary Entry
+
+This section introduces the dictionary entry.  It is not explicitly labeled.
+It appears preceded and followed by a horizontal bar.
+
+In large print at left, the @i{defined name} appears; if more than one
+@i{defined name} is to be described by the entry, all such @i{names} 
+are shown separated by commas.
+
+In somewhat smaller italic print at right is an indication of what kind
+of dictionary entry this is.  Possible values are:
+
+@table @asis
+
+@item @i{Accessor}  
+This is an @i{accessor} @i{function}.
+
+@item @i{Class}  
+This is a @i{class}.
+
+@item @i{Condition Type}  
+This is a @i{subtype} of @i{type} @b{condition}.
+
+@item @i{Constant Variable}  
+This is a @i{constant variable}.
+
+@item @i{Declaration}  
+This is a @i{declaration identifier}.
+
+@item @i{Function}  
+This is a @i{function}.
+
+@item @i{Local Function}  
+This is a @i{function} that is defined only lexically within the scope of some
+other @i{macro form}.
+
+@item @i{Local Macro}  
+This is a @i{macro} that is defined only lexically within the scope of some
+other @i{macro form}.
+
+@item @i{Macro}  
+This is a @i{macro}.
+
+@item @i{Restart}  
+This is a @i{restart}.
+
+@item @i{Special Operator}  
+This is a @i{special operator}.
+
+@item @i{Standard Generic Function}  
+This is a @i{standard generic function}.
+
+@item @i{Symbol}  
+This is a @i{symbol} that is specially recognized in some particular situation,
+such as the syntax of a @i{macro}.
+
+@item @i{System Class}  
+This is like @i{class}, but it identifies a @i{class} that is potentially
+a @i{built-in class}.  (No @i{class} is actually required to be a
+@i{built-in class}.)
+
+@item @i{Type}  
+This is an @i{atomic type specifier},
+and depending on information for each particular entry,
+may subject to form other @i{type specifiers}.
+
+@item @i{Type Specifier}  
+This is a @i{defined name} that is not an @i{atomic type specifier},
+but that can be used in constructing valid @i{type specifiers}.
+
+@item @i{Variable}  
+This is a @i{dynamic variable}.
+
+@end table
+
+@node The "Notes" Section of a Dictionary Entry, The "Pronunciation" Section of a Dictionary Entry, The "Name" Section of a Dictionary Entry, Interpreting Dictionary Entries
+@subsubsection The "Notes" Section of a Dictionary Entry
+
+Information not found elsewhere in this description
+which pertains to this @i{operator}.
+Among other things, this might include 
+ cross reference information,
+ code equivalences, 
+ stylistic hints,
+ implementation hints,
+ typical uses.
+This information is not considered part of the standard;
+any @i{conforming implementation} or @i{conforming program}
+is permitted to ignore the presence of this information.
+
+@node The "Pronunciation" Section of a Dictionary Entry, The "See Also" Section of a Dictionary Entry, The "Notes" Section of a Dictionary Entry, Interpreting Dictionary Entries
+@subsubsection The "Pronunciation" Section of a Dictionary Entry
+
+This offers a suggested pronunciation for @i{defined names} 
+so that people not in verbal communication with the original designers
+can figure out how to pronounce words that are not in normal English usage.
+This information is advisory only, and is not considered part of the standard.
+For brevity, it is only provided for entries with names that are specific to
+@r{Common Lisp} and would not be found in @b{Webster's Third New International Dictionary
+ the English Language, Unabridged}.
+
+@node The "See Also" Section of a Dictionary Entry, The "Side Effects" Section of a Dictionary Entry, The "Pronunciation" Section of a Dictionary Entry, Interpreting Dictionary Entries
+@subsubsection The "See Also" Section of a Dictionary Entry
+
+List of references to other parts of this standard
+that offer information relevant to this @i{operator}. 
+This list is not part of the standard.
+
+@node The "Side Effects" Section of a Dictionary Entry, The "Supertypes" Section of a Dictionary Entry, The "See Also" Section of a Dictionary Entry, Interpreting Dictionary Entries
+@subsubsection The "Side Effects" Section of a Dictionary Entry
+
+Anything that is changed as a result of the
+evaluation of the @i{form} containing this @i{operator}.
+
+@node The "Supertypes" Section of a Dictionary Entry, The "Syntax" Section of a Dictionary Entry, The "Side Effects" Section of a Dictionary Entry, Interpreting Dictionary Entries
+@subsubsection The "Supertypes" Section of a Dictionary Entry
+
+This appears in the dictionary entry for a @i{type},
+and contains a list of the @i{standardized} @i{types} 
+that must be @i{supertypes} of this @i{type}.
+
+In @i{implementations} where there is a corresponding @i{class},
+the order of the @i{classes} in the @i{class precedence list} 
+is consistent with the order presented in this section.
+
+@node The "Syntax" Section of a Dictionary Entry, Special "Syntax" Notations for Overloaded Operators, The "Supertypes" Section of a Dictionary Entry, Interpreting Dictionary Entries
+@subsubsection The "Syntax" Section of a Dictionary Entry
+
+This section describes how to use the @i{defined name} in code.
+The "Syntax'' description for a @i{generic function} 
+describes the @i{lambda list} of the @i{generic function} itself, 
+while The "Method Signatures'' describe the @i{lambda lists} 
+of the defined @i{methods}.
+The "Syntax'' description for 
+     an @i{ordinary function},
+     a @i{macro},
+  or a @i{special operator}
+describes its @i{parameters}.
+
+For example, an @i{operator} description might say:
+
+@code{F}  @i{x y @r{&optional} z @r{&key} k}
+
+@noindent
+This description indicates that the function @b{F} 
+has two required parameters, @i{x} and @i{y}.  In addition,
+there is an optional parameter @i{z} and a keyword parameter @i{k}.
+
+For @i{macros} and @i{special operators}, syntax is given 
+in modified BNF notation; see @ref{Modified BNF Syntax}.
+For @i{functions} a @i{lambda list} is given.
+In both cases, however, the outermost parentheses are omitted,
+and default value information is omitted.
+
+@node Special "Syntax" Notations for Overloaded Operators, Naming Conventions for Rest Parameters, The "Syntax" Section of a Dictionary Entry, Interpreting Dictionary Entries
+@subsubsection Special "Syntax" Notations for Overloaded Operators
+
+If two descriptions exist for the same operation but with different numbers of
+arguments, then the extra arguments are to be treated as optional.  For example,
+this pair of lines:
+
+@code{file-position}  @i{stream} @result{}  @i{position}
+
+@code{file-position}  @i{stream position-spec} @result{}  @i{success-p}
+
+@noindent
+is operationally equivalent to this line:
+
+@code{file-position}  @i{stream @r{&optional} position-spec} @result{}  @i{result}
+
+@noindent
+and differs only in that it provides on opportunity to introduce different
+names for @i{parameter} and @i{values} for each case.
+The separated (multi-line) notation is used when an @i{operator} is overloaded in
+such a way that the @i{parameters} are used in different ways
+depending on how many @i{arguments} are supplied (@i{e.g.}, for the @i{function} @b{/})
+or the return values are different in the two cases (@i{e.g.}, for the @i{function} @b{file-position}).
+
+@node Naming Conventions for Rest Parameters, Requiring Non-Null Rest Parameters in The "Syntax" Section, Special "Syntax" Notations for Overloaded Operators, Interpreting Dictionary Entries
+@subsubsection Naming Conventions for Rest Parameters
+
+Within this specification, 
+if the name of a @i{rest parameter} is chosen to be a plural noun,
+use of that name in @i{parameter} font refers
+to the @i{list} to which the @i{rest parameter} is bound.
+Use of the singular form of that name in @i{parameter} font refers 
+to an @i{element} of that @i{list}.
+
+For example, given a syntax description such as:
+
+@code{F}  @i{@r{&rest} @i{arguments}}
+
+@noindent
+it is appropriate to refer either to the @i{rest parameter} named
+@i{arguments} by name, or to one of its elements by speaking of ``an @i{argument},''
+``some @i{argument},'' ``each @i{argument}'' @i{etc.}
+
+@node Requiring Non-Null Rest Parameters in The "Syntax" Section, Return values in The "Syntax" Section, Naming Conventions for Rest Parameters, Interpreting Dictionary Entries
+@subsubsection Requiring Non-Null Rest Parameters in The "Syntax" Section
+
+In some cases it is useful to refer to all arguments equally as a single
+aggregation using a @i{rest parameter} while at the same time
+requiring at least one argument.  A variety of imperative and
+declarative means are available in @i{code} for expressing such a
+restriction, however they generally do not manifest themselves in a
+@i{lambda list}.  For descriptive purposes within this specification,
+
+@code{F}  @i{@r{&rest} arguments^+}
+
+@noindent
+means the same as
+
+@code{F}  @i{@r{&rest} arguments}
+
+@noindent
+but introduces the additional requirement that there be 
+at least one @i{argument}.
+
+@node Return values in The "Syntax" Section, No Arguments or Values in The "Syntax" Section, Requiring Non-Null Rest Parameters in The "Syntax" Section, Interpreting Dictionary Entries
+@subsubsection Return values in The "Syntax" Section
+
+An evaluation arrow ``@result{}'' precedes a list of @i{values} to be returned.
+For example:
+
+@code{F}  @i{a b c} @result{}  @i{x}
+
+@noindent
+indicates that @t{F} is an operator that has three @i{required parameters}
+(@i{i.e.}, @i{a}, @i{b}, and @i{c}) and that returns one @i{value} (@i{i.e.}, @i{x}).
+If more than one @i{value} is returned by an operator, the @i{names} of the
+@i{values} are separated by commas, as in:
+
+@code{F}  @i{a b c} @result{}  @i{x, y, z}
+
+@node No Arguments or Values in The "Syntax" Section, Unconditional Transfer of Control in The "Syntax" Section, Return values in The "Syntax" Section, Interpreting Dictionary Entries
+@subsubsection No Arguments or Values in The "Syntax" Section
+
+If no @i{arguments} are permitted, or no @i{values} are returned, 
+a special notation is used to make this more visually apparent.  For example,
+
+@code{F}  @i{<@i{no @i{arguments}}>} @result{}  @i{<@i{no @i{values}}>}
+
+indicates that @t{F} is an operator that accepts no @i{arguments} and returns
+no @i{values}.
+
+@node Unconditional Transfer of Control in The "Syntax" Section, The "Valid Context" Section of a Dictionary Entry, No Arguments or Values in The "Syntax" Section, Interpreting Dictionary Entries
+@subsubsection Unconditional Transfer of Control in The "Syntax" Section
+
+Some @i{operators} perform an unconditional transfer of control, and
+so never have any return values.  Such @i{operators} are notated using
+a notation such as the following:
+
+@code{F}  @i{a b c} 
+       @result{}  #<NoValue>
+
+@node The "Valid Context" Section of a Dictionary Entry, The "Value Type" Section of a Dictionary Entry, Unconditional Transfer of Control in The "Syntax" Section, Interpreting Dictionary Entries
+@subsubsection The "Valid Context" Section of a Dictionary Entry
+
+This information is used by dictionary entries such as ``Declarations''
+in order to restrict the context in which the declaration may appear.
+
+A given ``Declaration'' might appear in 
+     a @i{declaration} (@i{i.e.}, a @b{declare} @i{expression}),
+     a @i{proclamation} (@i{i.e.}, a @b{declaim} or @b{proclaim} @i{form}),
+  or both.
+
+@node The "Value Type" Section of a Dictionary Entry,  , The "Valid Context" Section of a Dictionary Entry, Interpreting Dictionary Entries
+@subsubsection The "Value Type" Section of a Dictionary Entry
+
+This information describes any @i{type} restrictions on a @i{dynamic variable}.
+
+@c end of including concept-definitions
+
+@node Conformance, Language Extensions, Definitions, Introduction (Introduction)
+@section Conformance
+
+@c including concept-conformance
+
+This standard presents the syntax and semantics to be implemented by a
+@i{conforming implementation} (and its accompanying documentation).
+In addition, it imposes requirements on @i{conforming programs}.
+
+@menu
+* Conforming Implementations::	
+* Conforming Programs::		
+@end menu
+
+@node Conforming Implementations, Conforming Programs, Conformance, Conformance
+@subsection Conforming Implementations
+
+A @i{conforming implementation}
+@IGindex conforming implementation
+ shall adhere to the requirements outlined
+in this section.
+
+@menu
+* Required Language Features::	
+* Documentation of Implementation-Dependent Features::	
+* Documentation of Extensions::	 
+* Treatment of Exceptional Situations::	 
+* Resolution of Apparent Conflicts in Exceptional Situations::	
+* Examples of Resolution of Apparent Conflict in Exceptional Situations::  
+* Conformance Statement::	
+@end menu
+
+@node Required Language Features, Documentation of Implementation-Dependent Features, Conforming Implementations, Conforming Implementations
+@subsubsection Required Language Features
+
+A @i{conforming implementation} shall accept all features 
+(including deprecated features)
+of the language specified in this standard,
+with the meanings defined in this standard.
+
+A @i{conforming implementation} shall not require the inclusion of substitute
+or additional language elements in code in order to accomplish a feature of
+the language that is specified in this standard.
+
+@node Documentation of Implementation-Dependent Features, Documentation of Extensions, Required Language Features, Conforming Implementations
+@subsubsection Documentation of Implementation-Dependent Features
+
+A @i{conforming implementation} shall be accompanied by a document
+that provides a definition of all @i{implementation-defined}
+aspects of the language defined by this specification.
+
+In addition, a @i{conforming implementation} is encouraged (but not required) 
+to document items in this standard that are identified as
+@i{implementation-dependent}, although in some cases
+such documentation might simply identify the item as ``undefined.''
+
+@node Documentation of Extensions, Treatment of Exceptional Situations, Documentation of Implementation-Dependent Features, Conforming Implementations
+@subsubsection Documentation of Extensions
+
+A @i{conforming implementation} shall be accompanied by a
+document that separately describes any features accepted by the
+@i{implementation} that are not specified in this standard, but that do not
+cause any ambiguity or contradiction when added to the language
+standard.  Such extensions shall be described as being ``extensions to
+@r{Common Lisp} as specified by ANSI <<@i{standard number}>>.''
+
+@node Treatment of Exceptional Situations, Resolution of Apparent Conflicts in Exceptional Situations, Documentation of Extensions, Conforming Implementations
+@subsubsection Treatment of Exceptional Situations
+
+A @i{conforming implementation} shall treat exceptional situations 
+in a manner consistent with this specification.
+
+@node Resolution of Apparent Conflicts in Exceptional Situations, Examples of Resolution of Apparent Conflict in Exceptional Situations, Treatment of Exceptional Situations, Conforming Implementations
+@subsubsection Resolution of Apparent Conflicts in Exceptional Situations
+
+If more than one passage in this specification appears to apply to the
+same situation but in conflicting ways, the passage that appears
+to describe the situation in the most specific way (not necessarily the
+passage that provides the most constrained kind of error detection) 
+takes precedence.
+
+@node Examples of Resolution of Apparent Conflict in Exceptional Situations, Conformance Statement, Resolution of Apparent Conflicts in Exceptional Situations, Conforming Implementations
+@subsubsection Examples of Resolution of Apparent Conflict in Exceptional Situations
+
+Suppose that function @t{foo} is a member of a set S of @i{functions} that
+operate on numbers.  Suppose that one passage states that an error must be
+signaled if any @i{function} in S is ever given an argument of @t{17}.
+Suppose that an apparently conflicting passage states that the consequences 
+are undefined if @t{foo} receives an argument of @t{17}.  Then the second passage
+(the one specifically about @t{foo}) would dominate because the description of
+the situational context is the most specific, and it would not be required that
+@t{foo} signal an error on an argument of @t{17} even though other functions in 
+the set S would be required to do so.
+
+@node Conformance Statement,  , Examples of Resolution of Apparent Conflict in Exceptional Situations, Conforming Implementations
+@subsubsection Conformance Statement
+
+A @i{conforming implementation} shall produce a conformance statement 
+as a consequence of using the implementation, or that statement
+shall be included in the accompanying documentation.  If the implementation
+conforms in all respects with this standard, the conformance statement
+shall be
+
+@table @asis
+
+@item @t{}  
+``<<@i{Implementation}>> conforms with the requirements 
+	  of ANSI <<@i{standard number}>>''
+@end table
+
+If the @i{implementation} conforms with some but not all of the requirements of this
+standard, then the conformance statement shall be
+
+@table @asis
+
+@item @t{}  
+``<<@i{Implementation}>> conforms with the requirements of
+	  ANSI <<@i{standard number}>> with the following exceptions: 
+	  <<@i{reference to or complete list of the requirements of
+		   the standard with which the implementation does not conform}>>.''
+@end table
+
+@node Conforming Programs,  , Conforming Implementations, Conformance
+@subsection Conforming Programs
+
+@IGindex conforming program
+
+@IGindex conforming code
+
+Code conforming with the requirements of this standard shall adhere to the
+following:
+
+@table @asis
+
+@item 1.  
+@i{Conforming code} shall use only those features of the
+               language syntax and semantics that are 
+	       either specified in this standard
+		   or defined using the extension mechanisms 
+		      specified in the standard.
+
+@item 2.  
+@i{Conforming code} shall not rely on any particular
+              interpretation of @i{implementation-dependent} features.
+
+@item 3.  
+@i{Conforming code} shall not depend on the consequences
+	      of undefined or unspecified situations.
+
+@item 4.  
+@i{Conforming code} does not use any constructions 
+	      that are prohibited by the standard.
+
+@item 5.  
+@i{Conforming code} does not depend on extensions 
+	      included in an implementation.
+@end table
+
+@menu
+* Use of Implementation-Defined Language Features::  
+* Use of Read-Time Conditionals::  
+@end menu
+
+@node Use of Implementation-Defined Language Features, Use of Read-Time Conditionals, Conforming Programs, Conforming Programs
+@subsubsection Use of Implementation-Defined Language Features
+
+Note that @i{conforming code} may rely on particular
+@i{implementation-defined} values or features. Also note that the
+requirements for @i{conforming code} and @i{conforming implementations} do not
+require that the results produced by conforming code always be the
+same when processed by a @i{conforming implementation}. The results may be the
+same, or they may differ.
+
+@i{Portable code} is written using only @i{standard characters}.
+
+Conforming code may run in all conforming implementations, but might
+have allowable @i{implementation-defined} behavior that makes it
+non-portable code.
+For example, the following are examples of @i{forms} that are conforming, but
+that might return different @i{values} in different implementations:
+
+@example
+ (evenp most-positive-fixnum) @result{}  @i{implementation-dependent}
+ (random) @result{}  @i{implementation-dependent}
+ (> lambda-parameters-limit 93) @result{}  @i{implementation-dependent}
+ (char-name #\A) @result{}  @i{implementation-dependent}
+@end example
+
+@node Use of Read-Time Conditionals,  , Use of Implementation-Defined Language Features, Conforming Programs
+@subsubsection Use of Read-Time Conditionals
+
+Use of @t{#+} and @t{#-} does not automatically disqualify a program
+from being conforming.  A program which uses @t{#+} and @t{#-} is 
+considered conforming if there is no set of @i{features} in which the
+program would not be conforming.  Of course, @i{conforming programs} are
+not necessarily working programs.  The following program is conforming:
+
+@example
+(defun foo ()
+  #+ACME (acme:initialize-something)
+  (print 'hello-there))
+@end example
+
+However, this program might or might not work, depending on whether the
+presence of the feature @t{ACME} really implies that a function named
+@t{acme:initialize-something} is present in the environment.  In effect,
+using @t{#+} or @t{#-} in a @i{conforming program} means that the variable
+@b{*features*}
+@IRindex *features*
+
+becomes just one more piece of input data to that 
+program.  Like any other data coming into a program, the programmer
+is responsible for assuring that the program does not make unwarranted
+assumptions on the basis of input data.
+
+@c end of including concept-conformance
+
+@node Language Extensions, Language Subsets, Conformance, Introduction (Introduction)
+@section Language Extensions
+
+@c including concept-extensions
+
+A language extension is any documented @i{implementation-defined} behavior
+of a @i{defined name} in this standard that varies from the
+behavior described in this standard, or a documented consequence of a
+situation that the standard specifies as undefined, unspecified, or
+extendable by the implementation.  For example, if this standard says
+that ``the results are unspecified,'' an extension would be to specify
+the results.
+
+[Reviewer Note by Barmar: This contradicts previous definitions of conforming code.]
+If the correct behavior of a program depends on the results provided
+by an extension, only implementations with the same extension will
+execute the program correctly.  Note that such a program might be
+non-conforming.  Also, if this standard says that ``an implementation
+may be extended,'' a conforming, but possibly non-portable, program
+can be written using an extension.
+
+An implementation can have extensions, provided they do not alter the
+behavior of conforming code and provided they are not explicitly
+prohibited by this standard.
+
+The term ``extension'' refers only to extensions available upon
+startup.  An implementation is free to allow or prohibit redefinition
+of an extension.
+
+The following list contains specific guidance to implementations 
+concerning certain types of extensions.
+@table @asis
+
+@item @b{Extra return values}  
+
+An implementation must return exactly
+the number of return values specified by this standard unless the
+standard specifically indicates otherwise.
+
+@item @b{Unsolicited messages}  
+
+No output can be produced by a function other than that specified in
+the standard or due to the signaling of @i{conditions}
+detected by the function.
+
+Unsolicited output, such as garbage collection notifications and
+autoload heralds, should not go directly to the @i{stream}
+that is the value of a @i{stream} variable defined in this
+standard, but can go indirectly to @i{terminal I/O} by using a
+@i{synonym stream} to @b{*terminal-io*}.
+
+Progress reports from such functions as @b{load} and
+@b{compile} are considered solicited, and are not covered by
+this prohibition.
+
+@item @b{Implementation of macros and special forms}  
+
+@i{Macros} and @i{special operators} defined in this standard
+must not be @i{functions}.
+
+@end table
+
+@c end of including concept-extensions
+
+@node Language Subsets, Deprecated Language Features, Language Extensions, Introduction (Introduction)
+@section Language Subsets
+
+@c including concept-subsets
+
+The language described in this standard contains no subsets,
+though subsets are not forbidden.
+
+For a language to be considered a subset,
+it must have the property that any valid @i{program} in that language
+has equivalent semantics and will run directly
+(with no extralingual pre-processing, and no special compatibility packages)
+in any @i{conforming implementation} of the full language.
+
+A language that conforms to this requirement shall be described
+as being a ``subset of @r{Common Lisp} as specified by ANSI <<@i{standard number}>>.''
+
+@c end of including concept-subsets
+
+@node Deprecated Language Features, Symbols in the COMMON-LISP Package, Language Subsets, Introduction (Introduction)
+@section Deprecated Language Features
+
+@c including concept-deprecated
+
+Deprecated language features are not expected to appear in future @r{Common Lisp}
+standards, but are required to be implemented for conformance with this
+standard; see @ref{Required Language Features}.
+
+@i{Conforming programs} can use deprecated features;
+however, it is considered good programming style to avoid them.
+It is permissible for the compiler to produce @i{style warnings} 
+about the use of such features at compile time, 
+but there should be no such warnings at program execution time.
+
+@menu
+* Deprecated Functions::	
+* Deprecated Argument Conventions::  
+* Deprecated Variables::	
+* Deprecated Reader Syntax::	
+@end menu
+
+@node Deprecated Functions, Deprecated Argument Conventions, Deprecated Language Features, Deprecated Language Features
+@subsection Deprecated Functions
+
+The @i{functions} in Figure 1--2 are deprecated.
+@format
+@group
+@noindent
+@w{  assoc-if-not   nsubst-if-not       require            }
+@w{  count-if-not   nsubstitute-if-not  set                }
+@w{  delete-if-not  position-if-not     subst-if-not       }
+@w{  find-if-not    provide             substitute-if-not  }
+@w{  gentemp        rassoc-if-not                          }
+@w{  member-if-not  remove-if-not                          }
+
+@noindent
+@w{            Figure 1--2: Deprecated Functions           }
+
+@end group
+@end format
+
+@node Deprecated Argument Conventions, Deprecated Variables, Deprecated Functions, Deprecated Language Features
+@subsection Deprecated Argument Conventions
+
+The ability to pass a numeric @i{argument} to @b{gensym} has been deprecated.
+
+The @t{:test-not} @i{argument} to the @i{functions} in Figure 1--3 are deprecated.
+
+@format
+@group
+@noindent
+@w{  adjoin             nset-difference    search            }
+@w{  assoc              nset-exclusive-or  set-difference    }
+@w{  count              nsublis            set-exclusive-or  }
+@w{  delete             nsubst             sublis            }
+@w{  delete-duplicates  nsubstitute        subsetp           }
+@w{  find               nunion             subst             }
+@w{  intersection       position           substitute        }
+@w{  member             rassoc             tree-equal        }
+@w{  mismatch           remove             union             }
+@w{  nintersection      remove-duplicates                    }
+
+@noindent
+@w{  Figure 1--3: Functions with Deprecated :TEST-NOT Arguments}
+
+@end group
+@end format
+
+The use of the situation names @b{compile}, @b{load}, and @b{eval}
+in @b{eval-when} is deprecated.
+
+@node Deprecated Variables, Deprecated Reader Syntax, Deprecated Argument Conventions, Deprecated Language Features
+@subsection Deprecated Variables
+
+The @i{variable} @b{*modules*} is deprecated.
+
+@node Deprecated Reader Syntax,  , Deprecated Variables, Deprecated Language Features
+@subsection Deprecated Reader Syntax
+
+The @t{#S} @i{reader macro} forces keyword names into the @t{KEYWORD} @i{package};
+see @ref{Sharpsign S}.
+This feature is deprecated;
+in the future, keyword names will be taken in the package they are read in,
+so @i{symbols} that are actually in the @t{KEYWORD} @i{package}
+should be used if that is what is desired.
+
+@c end of including concept-deprecated
+
+@node Symbols in the COMMON-LISP Package,  , Deprecated Language Features, Introduction (Introduction)
+@section Symbols in the COMMON-LISP Package
+
+@c including concept-cl-symbols
+
+The figures on the next twelve pages contain a complete enumeration
+of the 978 @i{external} @i{symbols} in the @t{COMMON-LISP} @i{package}.
+@IPindex common-lisp
+
+@format
+@group
+@noindent
+@w{  &allow-other-keys            *print-miser-width*          }
+@w{  &aux                         *print-pprint-dispatch*      }
+@w{  &body                        *print-pretty*               }
+@w{  &environment                 *print-radix*                }
+@w{  &key                         *print-readably*             }
+@w{  &optional                    *print-right-margin*         }
+@w{  &rest                        *query-io*                   }
+@w{  &whole                       *random-state*               }
+@w{  *                            *read-base*                  }
+@w{  **                           *read-default-float-format*  }
+@w{  ***                          *read-eval*                  }
+@w{  *break-on-signals*           *read-suppress*              }
+@w{  *compile-file-pathname*      *readtable*                  }
+@w{  *compile-file-truename*      *standard-input*             }
+@w{  *compile-print*              *standard-output*            }
+@w{  *compile-verbose*            *terminal-io*                }
+@w{  *debug-io*                   *trace-output*               }
+@w{  *debugger-hook*              +                            }
+@w{  *default-pathname-defaults*  ++                           }
+@w{  *error-output*               +++                          }
+@w{  *features*                   -                            }
+@w{  *gensym-counter*             /                            }
+@w{  *load-pathname*              //                           }
+@w{  *load-print*                 ///                          }
+@w{  *load-truename*              /=                           }
+@w{  *load-verbose*               1+                           }
+@w{  *macroexpand-hook*           1-                           }
+@w{  *modules*                    <                            }
+@w{  *package*                    <=                           }
+@w{  *print-array*                =                            }
+@w{  *print-base*                 >                            }
+@w{  *print-case*                 >=                           }
+@w{  *print-circle*               abort                        }
+@w{  *print-escape*               abs                          }
+@w{  *print-gensym*               acons                        }
+@w{  *print-length*               acos                         }
+@w{  *print-level*                acosh                        }
+@w{  *print-lines*                add-method                   }
+
+@noindent
+@w{  Figure 1--4: Symbols in the COMMON-LISP package (part one of twelve).}
+
+@end group
+@end format
+
+@page
+
+@format
+@group
+@noindent
+@w{  adjoin                      atom          boundp                    }
+@w{  adjust-array                base-char     break                     }
+@w{  adjustable-array-p          base-string   broadcast-stream          }
+@w{  allocate-instance           bignum        broadcast-stream-streams  }
+@w{  alpha-char-p                bit           built-in-class            }
+@w{  alphanumericp               bit-and       butlast                   }
+@w{  and                         bit-andc1     byte                      }
+@w{  append                      bit-andc2     byte-position             }
+@w{  apply                       bit-eqv       byte-size                 }
+@w{  apropos                     bit-ior       caaaar                    }
+@w{  apropos-list                bit-nand      caaadr                    }
+@w{  aref                        bit-nor       caaar                     }
+@w{  arithmetic-error            bit-not       caadar                    }
+@w{  arithmetic-error-operands   bit-orc1      caaddr                    }
+@w{  arithmetic-error-operation  bit-orc2      caadr                     }
+@w{  array                       bit-vector    caar                      }
+@w{  array-dimension             bit-vector-p  cadaar                    }
+@w{  array-dimension-limit       bit-xor       cadadr                    }
+@w{  array-dimensions            block         cadar                     }
+@w{  array-displacement          boole         caddar                    }
+@w{  array-element-type          boole-1       cadddr                    }
+@w{  array-has-fill-pointer-p    boole-2       caddr                     }
+@w{  array-in-bounds-p           boole-and     cadr                      }
+@w{  array-rank                  boole-andc1   call-arguments-limit      }
+@w{  array-rank-limit            boole-andc2   call-method               }
+@w{  array-row-major-index       boole-c1      call-next-method          }
+@w{  array-total-size            boole-c2      car                       }
+@w{  array-total-size-limit      boole-clr     case                      }
+@w{  arrayp                      boole-eqv     catch                     }
+@w{  ash                         boole-ior     ccase                     }
+@w{  asin                        boole-nand    cdaaar                    }
+@w{  asinh                       boole-nor     cdaadr                    }
+@w{  assert                      boole-orc1    cdaar                     }
+@w{  assoc                       boole-orc2    cdadar                    }
+@w{  assoc-if                    boole-set     cdaddr                    }
+@w{  assoc-if-not                boole-xor     cdadr                     }
+@w{  atan                        boolean       cdar                      }
+@w{  atanh                       both-case-p   cddaar                    }
+
+@noindent
+@w{  Figure 1--5: Symbols in the COMMON-LISP package (part two of twelve).}
+
+@end group
+@end format
+
+@page
+
+@format
+@group
+@noindent
+@w{  cddadr             clear-input                  copy-tree                  }
+@w{  cddar              clear-output                 cos                        }
+@w{  cdddar             close                        cosh                       }
+@w{  cddddr             clrhash                      count                      }
+@w{  cdddr              code-char                    count-if                   }
+@w{  cddr               coerce                       count-if-not               }
+@w{  cdr                compilation-speed            ctypecase                  }
+@w{  ceiling            compile                      debug                      }
+@w{  cell-error         compile-file                 decf                       }
+@w{  cell-error-name    compile-file-pathname        declaim                    }
+@w{  cerror             compiled-function            declaration                }
+@w{  change-class       compiled-function-p          declare                    }
+@w{  char               compiler-macro               decode-float               }
+@w{  char-code          compiler-macro-function      decode-universal-time      }
+@w{  char-code-limit    complement                   defclass                   }
+@w{  char-downcase      complex                      defconstant                }
+@w{  char-equal         complexp                     defgeneric                 }
+@w{  char-greaterp      compute-applicable-methods   define-compiler-macro      }
+@w{  char-int           compute-restarts             define-condition           }
+@w{  char-lessp         concatenate                  define-method-combination  }
+@w{  char-name          concatenated-stream          define-modify-macro        }
+@w{  char-not-equal     concatenated-stream-streams  define-setf-expander       }
+@w{  char-not-greaterp  cond                         define-symbol-macro        }
+@w{  char-not-lessp     condition                    defmacro                   }
+@w{  char-upcase        conjugate                    defmethod                  }
+@w{  char/=             cons                         defpackage                 }
+@w{  char<              consp                        defparameter               }
+@w{  char<=             constantly                   defsetf                    }
+@w{  char=              constantp                    defstruct                  }
+@w{  char>              continue                     deftype                    }
+@w{  char>=             control-error                defun                      }
+@w{  character          copy-alist                   defvar                     }
+@w{  characterp         copy-list                    delete                     }
+@w{  check-type         copy-pprint-dispatch         delete-duplicates          }
+@w{  cis                copy-readtable               delete-file                }
+@w{  class              copy-seq                     delete-if                  }
+@w{  class-name         copy-structure               delete-if-not              }
+@w{  class-of           copy-symbol                  delete-package             }
+
+@noindent
+@w{    Figure 1--6: Symbols in the COMMON-LISP package (part three of twelve).  }
+
+@end group
+@end format
+
+@page
+
+@format
+@group
+@noindent
+@w{  denominator                    eq                   }
+@w{  deposit-field                  eql                  }
+@w{  describe                       equal                }
+@w{  describe-object                equalp               }
+@w{  destructuring-bind             error                }
+@w{  digit-char                     etypecase            }
+@w{  digit-char-p                   eval                 }
+@w{  directory                      eval-when            }
+@w{  directory-namestring           evenp                }
+@w{  disassemble                    every                }
+@w{  division-by-zero               exp                  }
+@w{  do                             export               }
+@w{  do*                            expt                 }
+@w{  do-all-symbols                 extended-char        }
+@w{  do-external-symbols            fboundp              }
+@w{  do-symbols                     fceiling             }
+@w{  documentation                  fdefinition          }
+@w{  dolist                         ffloor               }
+@w{  dotimes                        fifth                }
+@w{  double-float                   file-author          }
+@w{  double-float-epsilon           file-error           }
+@w{  double-float-negative-epsilon  file-error-pathname  }
+@w{  dpb                            file-length          }
+@w{  dribble                        file-namestring      }
+@w{  dynamic-extent                 file-position        }
+@w{  ecase                          file-stream          }
+@w{  echo-stream                    file-string-length   }
+@w{  echo-stream-input-stream       file-write-date      }
+@w{  echo-stream-output-stream      fill                 }
+@w{  ed                             fill-pointer         }
+@w{  eighth                         find                 }
+@w{  elt                            find-all-symbols     }
+@w{  encode-universal-time          find-class           }
+@w{  end-of-file                    find-if              }
+@w{  endp                           find-if-not          }
+@w{  enough-namestring              find-method          }
+@w{  ensure-directories-exist       find-package         }
+@w{  ensure-generic-function        find-restart         }
+
+@noindent
+@w{  Figure 1--7: Symbols in the COMMON-LISP package (part four of twelve).}
+
+@end group
+@end format
+
+@page
+
+@format
+@group
+@noindent
+@w{  find-symbol                       get-internal-run-time        }
+@w{  finish-output                     get-macro-character          }
+@w{  first                             get-output-stream-string     }
+@w{  fixnum                            get-properties               }
+@w{  flet                              get-setf-expansion           }
+@w{  float                             get-universal-time           }
+@w{  float-digits                      getf                         }
+@w{  float-precision                   gethash                      }
+@w{  float-radix                       go                           }
+@w{  float-sign                        graphic-char-p               }
+@w{  floating-point-inexact            handler-bind                 }
+@w{  floating-point-invalid-operation  handler-case                 }
+@w{  floating-point-overflow           hash-table                   }
+@w{  floating-point-underflow          hash-table-count             }
+@w{  floatp                            hash-table-p                 }
+@w{  floor                             hash-table-rehash-size       }
+@w{  fmakunbound                       hash-table-rehash-threshold  }
+@w{  force-output                      hash-table-size              }
+@w{  format                            hash-table-test              }
+@w{  formatter                         host-namestring              }
+@w{  fourth                            identity                     }
+@w{  fresh-line                        if                           }
+@w{  fround                            ignorable                    }
+@w{  ftruncate                         ignore                       }
+@w{  ftype                             ignore-errors                }
+@w{  funcall                           imagpart                     }
+@w{  function                          import                       }
+@w{  function-keywords                 in-package                   }
+@w{  function-lambda-expression        incf                         }
+@w{  functionp                         initialize-instance          }
+@w{  gcd                               inline                       }
+@w{  generic-function                  input-stream-p               }
+@w{  gensym                            inspect                      }
+@w{  gentemp                           integer                      }
+@w{  get                               integer-decode-float         }
+@w{  get-decoded-time                  integer-length               }
+@w{  get-dispatch-macro-character      integerp                     }
+@w{  get-internal-real-time            interactive-stream-p         }
+
+@noindent
+@w{  Figure 1--8: Symbols in the COMMON-LISP package (part five of twelve).}
+
+@end group
+@end format
+
+@page
+
+@format
+@group
+@noindent
+@w{  intern                                  lisp-implementation-type            }
+@w{  internal-time-units-per-second          lisp-implementation-version         }
+@w{  intersection                            list                                }
+@w{  invalid-method-error                    list*                               }
+@w{  invoke-debugger                         list-all-packages                   }
+@w{  invoke-restart                          list-length                         }
+@w{  invoke-restart-interactively            listen                              }
+@w{  isqrt                                   listp                               }
+@w{  keyword                                 load                                }
+@w{  keywordp                                load-logical-pathname-translations  }
+@w{  labels                                  load-time-value                     }
+@w{  lambda                                  locally                             }
+@w{  lambda-list-keywords                    log                                 }
+@w{  lambda-parameters-limit                 logand                              }
+@w{  last                                    logandc1                            }
+@w{  lcm                                     logandc2                            }
+@w{  ldb                                     logbitp                             }
+@w{  ldb-test                                logcount                            }
+@w{  ldiff                                   logeqv                              }
+@w{  least-negative-double-float             logical-pathname                    }
+@w{  least-negative-long-float               logical-pathname-translations       }
+@w{  least-negative-normalized-double-float  logior                              }
+@w{  least-negative-normalized-long-float    lognand                             }
+@w{  least-negative-normalized-short-float   lognor                              }
+@w{  least-negative-normalized-single-float  lognot                              }
+@w{  least-negative-short-float              logorc1                             }
+@w{  least-negative-single-float             logorc2                             }
+@w{  least-positive-double-float             logtest                             }
+@w{  least-positive-long-float               logxor                              }
+@w{  least-positive-normalized-double-float  long-float                          }
+@w{  least-positive-normalized-long-float    long-float-epsilon                  }
+@w{  least-positive-normalized-short-float   long-float-negative-epsilon         }
+@w{  least-positive-normalized-single-float  long-site-name                      }
+@w{  least-positive-short-float              loop                                }
+@w{  least-positive-single-float             loop-finish                         }
+@w{  length                                  lower-case-p                        }
+@w{  let                                     machine-instance                    }
+@w{  let*                                    machine-type                        }
+
+@noindent
+@w{     Figure 1--9: Symbols in the COMMON-LISP package (part six of twelve).    }
+
+@end group
+@end format
+
+@page
+
+@format
+@group
+@noindent
+@w{  machine-version                mask-field                  }
+@w{  macro-function                 max                         }
+@w{  macroexpand                    member                      }
+@w{  macroexpand-1                  member-if                   }
+@w{  macrolet                       member-if-not               }
+@w{  make-array                     merge                       }
+@w{  make-broadcast-stream          merge-pathnames             }
+@w{  make-concatenated-stream       method                      }
+@w{  make-condition                 method-combination          }
+@w{  make-dispatch-macro-character  method-combination-error    }
+@w{  make-echo-stream               method-qualifiers           }
+@w{  make-hash-table                min                         }
+@w{  make-instance                  minusp                      }
+@w{  make-instances-obsolete        mismatch                    }
+@w{  make-list                      mod                         }
+@w{  make-load-form                 most-negative-double-float  }
+@w{  make-load-form-saving-slots    most-negative-fixnum        }
+@w{  make-method                    most-negative-long-float    }
+@w{  make-package                   most-negative-short-float   }
+@w{  make-pathname                  most-negative-single-float  }
+@w{  make-random-state              most-positive-double-float  }
+@w{  make-sequence                  most-positive-fixnum        }
+@w{  make-string                    most-positive-long-float    }
+@w{  make-string-input-stream       most-positive-short-float   }
+@w{  make-string-output-stream      most-positive-single-float  }
+@w{  make-symbol                    muffle-warning              }
+@w{  make-synonym-stream            multiple-value-bind         }
+@w{  make-two-way-stream            multiple-value-call         }
+@w{  makunbound                     multiple-value-list         }
+@w{  map                            multiple-value-prog1        }
+@w{  map-into                       multiple-value-setq         }
+@w{  mapc                           multiple-values-limit       }
+@w{  mapcan                         name-char                   }
+@w{  mapcar                         namestring                  }
+@w{  mapcon                         nbutlast                    }
+@w{  maphash                        nconc                       }
+@w{  mapl                           next-method-p               }
+@w{  maplist                        nil                         }
+
+@noindent
+@w{  Figure 1--10: Symbols in the COMMON-LISP package (part seven of twelve).}
+
+@end group
+@end format
+
+@page
+
+@format
+@group
+@noindent
+@w{  nintersection         package-error                  }
+@w{  ninth                 package-error-package          }
+@w{  no-applicable-method  package-name                   }
+@w{  no-next-method        package-nicknames              }
+@w{  not                   package-shadowing-symbols      }
+@w{  notany                package-use-list               }
+@w{  notevery              package-used-by-list           }
+@w{  notinline             packagep                       }
+@w{  nreconc               pairlis                        }
+@w{  nreverse              parse-error                    }
+@w{  nset-difference       parse-integer                  }
+@w{  nset-exclusive-or     parse-namestring               }
+@w{  nstring-capitalize    pathname                       }
+@w{  nstring-downcase      pathname-device                }
+@w{  nstring-upcase        pathname-directory             }
+@w{  nsublis               pathname-host                  }
+@w{  nsubst                pathname-match-p               }
+@w{  nsubst-if             pathname-name                  }
+@w{  nsubst-if-not         pathname-type                  }
+@w{  nsubstitute           pathname-version               }
+@w{  nsubstitute-if        pathnamep                      }
+@w{  nsubstitute-if-not    peek-char                      }
+@w{  nth                   phase                          }
+@w{  nth-value             pi                             }
+@w{  nthcdr                plusp                          }
+@w{  null                  pop                            }
+@w{  number                position                       }
+@w{  numberp               position-if                    }
+@w{  numerator             position-if-not                }
+@w{  nunion                pprint                         }
+@w{  oddp                  pprint-dispatch                }
+@w{  open                  pprint-exit-if-list-exhausted  }
+@w{  open-stream-p         pprint-fill                    }
+@w{  optimize              pprint-indent                  }
+@w{  or                    pprint-linear                  }
+@w{  otherwise             pprint-logical-block           }
+@w{  output-stream-p       pprint-newline                 }
+@w{  package               pprint-pop                     }
+
+@noindent
+@w{  Figure 1--11: Symbols in the COMMON-LISP package (part eight of twelve).}
+
+@end group
+@end format
+
+@page
+
+@format
+@group
+@noindent
+@w{  pprint-tab                 read-char                   }
+@w{  pprint-tabular             read-char-no-hang           }
+@w{  prin1                      read-delimited-list         }
+@w{  prin1-to-string            read-from-string            }
+@w{  princ                      read-line                   }
+@w{  princ-to-string            read-preserving-whitespace  }
+@w{  print                      read-sequence               }
+@w{  print-not-readable         reader-error                }
+@w{  print-not-readable-object  readtable                   }
+@w{  print-object               readtable-case              }
+@w{  print-unreadable-object    readtablep                  }
+@w{  probe-file                 real                        }
+@w{  proclaim                   realp                       }
+@w{  prog                       realpart                    }
+@w{  prog*                      reduce                      }
+@w{  prog1                      reinitialize-instance       }
+@w{  prog2                      rem                         }
+@w{  progn                      remf                        }
+@w{  program-error              remhash                     }
+@w{  progv                      remove                      }
+@w{  provide                    remove-duplicates           }
+@w{  psetf                      remove-if                   }
+@w{  psetq                      remove-if-not               }
+@w{  push                       remove-method               }
+@w{  pushnew                    remprop                     }
+@w{  quote                      rename-file                 }
+@w{  random                     rename-package              }
+@w{  random-state               replace                     }
+@w{  random-state-p             require                     }
+@w{  rassoc                     rest                        }
+@w{  rassoc-if                  restart                     }
+@w{  rassoc-if-not              restart-bind                }
+@w{  ratio                      restart-case                }
+@w{  rational                   restart-name                }
+@w{  rationalize                return                      }
+@w{  rationalp                  return-from                 }
+@w{  read                       revappend                   }
+@w{  read-byte                  reverse                     }
+
+@noindent
+@w{  Figure 1--12: Symbols in the COMMON-LISP package (part nine of twelve).}
+
+@end group
+@end format
+
+@page
+
+@format
+@group
+@noindent
+@w{  room                          simple-bit-vector                  }
+@w{  rotatef                       simple-bit-vector-p                }
+@w{  round                         simple-condition                   }
+@w{  row-major-aref                simple-condition-format-arguments  }
+@w{  rplaca                        simple-condition-format-control    }
+@w{  rplacd                        simple-error                       }
+@w{  safety                        simple-string                      }
+@w{  satisfies                     simple-string-p                    }
+@w{  sbit                          simple-type-error                  }
+@w{  scale-float                   simple-vector                      }
+@w{  schar                         simple-vector-p                    }
+@w{  search                        simple-warning                     }
+@w{  second                        sin                                }
+@w{  sequence                      single-float                       }
+@w{  serious-condition             single-float-epsilon               }
+@w{  set                           single-float-negative-epsilon      }
+@w{  set-difference                sinh                               }
+@w{  set-dispatch-macro-character  sixth                              }
+@w{  set-exclusive-or              sleep                              }
+@w{  set-macro-character           slot-boundp                        }
+@w{  set-pprint-dispatch           slot-exists-p                      }
+@w{  set-syntax-from-char          slot-makunbound                    }
+@w{  setf                          slot-missing                       }
+@w{  setq                          slot-unbound                       }
+@w{  seventh                       slot-value                         }
+@w{  shadow                        software-type                      }
+@w{  shadowing-import              software-version                   }
+@w{  shared-initialize             some                               }
+@w{  shiftf                        sort                               }
+@w{  short-float                   space                              }
+@w{  short-float-epsilon           special                            }
+@w{  short-float-negative-epsilon  special-operator-p                 }
+@w{  short-site-name               speed                              }
+@w{  signal                        sqrt                               }
+@w{  signed-byte                   stable-sort                        }
+@w{  signum                        standard                           }
+@w{  simple-array                  standard-char                      }
+@w{  simple-base-string            standard-char-p                    }
+
+@noindent
+@w{  Figure 1--13: Symbols in the COMMON-LISP package (part ten of twelve).}
+
+@end group
+@end format
+
+@page
+
+@format
+@group
+@noindent
+@w{  standard-class             sublis                      }
+@w{  standard-generic-function  subseq                      }
+@w{  standard-method            subsetp                     }
+@w{  standard-object            subst                       }
+@w{  step                       subst-if                    }
+@w{  storage-condition          subst-if-not                }
+@w{  store-value                substitute                  }
+@w{  stream                     substitute-if               }
+@w{  stream-element-type        substitute-if-not           }
+@w{  stream-error               subtypep                    }
+@w{  stream-error-stream        svref                       }
+@w{  stream-external-format     sxhash                      }
+@w{  streamp                    symbol                      }
+@w{  string                     symbol-function             }
+@w{  string-capitalize          symbol-macrolet             }
+@w{  string-downcase            symbol-name                 }
+@w{  string-equal               symbol-package              }
+@w{  string-greaterp            symbol-plist                }
+@w{  string-left-trim           symbol-value                }
+@w{  string-lessp               symbolp                     }
+@w{  string-not-equal           synonym-stream              }
+@w{  string-not-greaterp        synonym-stream-symbol       }
+@w{  string-not-lessp           t                           }
+@w{  string-right-trim          tagbody                     }
+@w{  string-stream              tailp                       }
+@w{  string-trim                tan                         }
+@w{  string-upcase              tanh                        }
+@w{  string/=                   tenth                       }
+@w{  string<                    terpri                      }
+@w{  string<=                   the                         }
+@w{  string=                    third                       }
+@w{  string>                    throw                       }
+@w{  string>=                   time                        }
+@w{  stringp                    trace                       }
+@w{  structure                  translate-logical-pathname  }
+@w{  structure-class            translate-pathname          }
+@w{  structure-object           tree-equal                  }
+@w{  style-warning              truename                    }
+
+@noindent
+@w{  Figure 1--14: Symbols in the COMMON-LISP package (part eleven of twelve).}
+
+@end group
+@end format
+
+@page
+
+@format
+@group
+@noindent
+@w{  truncate                             values-list               }
+@w{  two-way-stream                       variable                  }
+@w{  two-way-stream-input-stream          vector                    }
+@w{  two-way-stream-output-stream         vector-pop                }
+@w{  type                                 vector-push               }
+@w{  type-error                           vector-push-extend        }
+@w{  type-error-datum                     vectorp                   }
+@w{  type-error-expected-type             warn                      }
+@w{  type-of                              warning                   }
+@w{  typecase                             when                      }
+@w{  typep                                wild-pathname-p           }
+@w{  unbound-slot                         with-accessors            }
+@w{  unbound-slot-instance                with-compilation-unit     }
+@w{  unbound-variable                     with-condition-restarts   }
+@w{  undefined-function                   with-hash-table-iterator  }
+@w{  unexport                             with-input-from-string    }
+@w{  unintern                             with-open-file            }
+@w{  union                                with-open-stream          }
+@w{  unless                               with-output-to-string     }
+@w{  unread-char                          with-package-iterator     }
+@w{  unsigned-byte                        with-simple-restart       }
+@w{  untrace                              with-slots                }
+@w{  unuse-package                        with-standard-io-syntax   }
+@w{  unwind-protect                       write                     }
+@w{  update-instance-for-different-class  write-byte                }
+@w{  update-instance-for-redefined-class  write-char                }
+@w{  upgraded-array-element-type          write-line                }
+@w{  upgraded-complex-part-type           write-sequence            }
+@w{  upper-case-p                         write-string              }
+@w{  use-package                          write-to-string           }
+@w{  use-value                            y-or-n-p                  }
+@w{  user-homedir-pathname                yes-or-no-p               }
+@w{  values                               zerop                     }
+
+@noindent
+@w{  Figure 1--15: Symbols in the COMMON-LISP package (part twelve of twelve).}
+
+@end group
+@end format
+
+@c end of including concept-cl-symbols
+
+@c %**end of chapter
+

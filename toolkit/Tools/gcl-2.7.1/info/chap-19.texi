@@ -1,0 +1,2456 @@
+
+
+@node Filenames, Files, Hash Tables, Top
+@chapter Filenames
+
+@menu
+* Overview of Filenames::	
+* Pathnames::			
+* Logical Pathnames::		
+* Filenames Dictionary::	
+@end menu
+
+@node Overview of Filenames, Pathnames, Filenames, Filenames
+@section Overview of Filenames
+
+@c including concept-filenames
+
+There are many kinds of @i{file systems},
+varying widely both in their superficial syntactic details,
+		and in their underlying power and structure.
+The facilities provided by @r{Common Lisp} for referring to and manipulating @i{files}
+has been chosen to be compatible with many kinds of @i{file systems},
+while at the same time minimizing the program-visible differences 
+between kinds of @i{file systems}.
+
+Since @i{file systems} vary in their conventions for naming @i{files},
+there are two distinct ways to represent @i{filenames}:
+as @i{namestrings} and as @i{pathnames}.
+
+@menu
+* Namestrings as Filenames::	
+* Pathnames as Filenames::	
+* Parsing Namestrings Into Pathnames::	
+@end menu
+
+@node Namestrings as Filenames, Pathnames as Filenames, Overview of Filenames, Overview of Filenames
+@subsection Namestrings as Filenames
+
+A @i{namestring}
+@IGindex namestring
+ is a @i{string} that represents a @i{filename}.
+
+In general, the syntax of @i{namestrings} involves the use of 
+@i{implementation-defined} conventions, 
+usually those customary for the @i{file system} in which the named @i{file} resides.
+The only exception is the syntax of a @i{logical pathname} @i{namestring},
+which is defined in this specification; see @ref{Syntax of Logical Pathname Namestrings}.
+
+A @i{conforming program} must never unconditionally use a
+@i{literal} @i{namestring} other than a @i{logical pathname} @i{namestring}
+because @r{Common Lisp} does not define any @i{namestring} syntax 
+other than that for @i{logical pathnames}
+that would be guaranteed to be portable.
+However, a @i{conforming program} can, if it is careful, 
+successfully manipulate user-supplied data 
+which contains or refers to non-portable @i{namestrings}.
+
+A @i{namestring} can be @i{coerced} to a @i{pathname} by the @i{functions} @b{pathname}
+or @b{parse-namestring}.
+
+@node Pathnames as Filenames, Parsing Namestrings Into Pathnames, Namestrings as Filenames, Overview of Filenames
+@subsection Pathnames as Filenames
+
+@i{Pathnames}
+@IGindex pathname
+ are structured @i{objects} that can represent,
+in an @i{implementation-independent} way,
+the @i{filenames} that are used natively by an underlying @i{file system}.
+
+In addition, @i{pathnames} can also represent certain partially composed 
+@i{filenames} for which an underlying @i{file system} 
+might not have a specific @i{namestring} representation.
+
+A @i{pathname} need not correspond to any file that actually exists, 
+and more than one @i{pathname} can refer to the same file.
+For example, the @i{pathname} with a version of @t{:newest} 
+might refer to the same file as a @i{pathname} 
+with the same components except a certain number as the version.
+Indeed, a @i{pathname} with version @t{:newest} might refer to
+different files as time passes, because the meaning of such a @i{pathname}
+depends on the state of the file system.  
+
+Some @i{file systems} naturally use a structural model for their
+@i{filenames}, while others do not.  Within the @r{Common Lisp} @i{pathname} model, 
+all @i{filenames} are seen as having a particular structure,
+even if that structure is not reflected in the underlying @i{file system}.
+The nature of the mapping between structure imposed by @i{pathnames}
+and the structure, if any, that is used by the underlying @i{file system}
+is @i{implementation-defined}.
+
+Every @i{pathname} has six components:
+     a host,
+     a device,
+     a directory,
+     a name,
+     a type,
+ and a version.
+By naming @i{files} with @i{pathnames}, 
+@r{Common Lisp} programs can work in essentially the same way even in @i{file systems}
+that seem superficially quite different.
+For a detailed description of these components, see @ref{Pathname Components}.
+
+The mapping of the @i{pathname} components into the concepts peculiar to
+each @i{file system} is @i{implementation-defined}.
+There exist conceivable @i{pathnames}
+for which there is no mapping to a syntactically valid @i{filename}
+in a particular @i{implementation}.
+An @i{implementation} may use various strategies in an attempt to find a mapping;
+for example, 
+an @i{implementation} may quietly truncate @i{filenames}
+that exceed length limitations imposed by the underlying @i{file system},
+or ignore certain @i{pathname} components
+for which the @i{file system} provides no support.
+If such a mapping cannot be found,
+an error of @i{type} @b{file-error} is signaled.
+
+The time at which this mapping and associated error signaling 
+occurs is @i{implementation-dependent}.
+Specifically, it may occur 
+    at the time the @i{pathname} is constructed,
+    when coercing a @i{pathname} to a @i{namestring},
+ or when an attempt is made to @i{open} or otherwise access the @i{file} 
+     designated by the @i{pathname}.
+
+Figure 19--1 lists some @i{defined names} that are applicable to @i{pathnames}.
+
+@format
+@group
+@noindent
+@w{  *default-pathname-defaults*  namestring          pathname-name          }
+@w{  directory-namestring         open                pathname-type          }
+@w{  enough-namestring            parse-namestring    pathname-version       }
+@w{  file-namestring              pathname            pathnamep              }
+@w{  file-string-length           pathname-device     translate-pathname     }
+@w{  host-namestring              pathname-directory  truename               }
+@w{  make-pathname                pathname-host       user-homedir-pathname  }
+@w{  merge-pathnames              pathname-match-p    wild-pathname-p        }
+
+@noindent
+@w{                     Figure 19--1: Pathname Operations                    }
+
+@end group
+@end format
+
+@node Parsing Namestrings Into Pathnames,  , Pathnames as Filenames, Overview of Filenames
+@subsection Parsing Namestrings Into Pathnames
+
+Parsing is the operation used to convert a @i{namestring} into a @i{pathname}.
+
+Except in the case of parsing @i{logical pathname} @i{namestrings},
+
+this operation is @i{implementation-dependent},
+because the format of @i{namestrings} is @i{implementation-dependent}.
+
+A @i{conforming implementation} is free to accommodate other @i{file system}
+features in its @i{pathname} representation and provides a parser that can process 
+such specifications in @i{namestrings}.  
+@i{Conforming programs} must not depend on any such features, 
+since those features will not be portable.
+
+@c end of including concept-filenames
+
+@node Pathnames, Logical Pathnames, Overview of Filenames, Filenames
+@section Pathnames
+
+@c including concept-pathnames
+
+@menu
+* Pathname Components::		
+* Interpreting Pathname Component Values::  
+* Merging Pathnames::		
+@end menu
+
+@node Pathname Components, Interpreting Pathname Component Values, Pathnames, Pathnames
+@subsection Pathname Components
+
+A @i{pathname} has six components:
+     a host,
+     a device,
+     a directory,
+     a name,
+     a type,
+ and a version.
+
+@menu
+* The Pathname Host Component::	 
+* The Pathname Device Component::  
+* The Pathname Directory Component::  
+* The Pathname Name Component::	 
+* The Pathname Type Component::	 
+* The Pathname Version Component::  
+@end menu
+
+@node The Pathname Host Component, The Pathname Device Component, Pathname Components, Pathname Components
+@subsubsection The Pathname Host Component
+
+The name of the file system on which the file resides,
+or the name of a @i{logical host}.
+
+@node The Pathname Device Component, The Pathname Directory Component, The Pathname Host Component, Pathname Components
+@subsubsection The Pathname Device Component
+
+Corresponds to the ``device'' or ``file structure'' concept in many
+host file systems: the name of a logical or physical device containing files.
+
+@node The Pathname Directory Component, The Pathname Name Component, The Pathname Device Component, Pathname Components
+@subsubsection The Pathname Directory Component
+
+Corresponds to the ``directory'' concept in many host file systems:
+the name of a group of related files.
+
+@node The Pathname Name Component, The Pathname Type Component, The Pathname Directory Component, Pathname Components
+@subsubsection The Pathname Name Component
+
+The ``name'' part of a group of @i{files} that can be thought of
+as conceptually related.
+
+@node The Pathname Type Component, The Pathname Version Component, The Pathname Name Component, Pathname Components
+@subsubsection The Pathname Type Component
+
+Corresponds to the ``filetype'' or ``extension'' concept in many host
+file systems.  This says what kind of file this is.  
+This component is always a @i{string}, @b{nil}, @t{:wild}, or @t{:unspecific}.
+
+@node The Pathname Version Component,  , The Pathname Type Component, Pathname Components
+@subsubsection The Pathname Version Component
+
+Corresponds to the ``version number'' concept in many host file systems.
+
+The version is either a positive @i{integer} 
+or a @i{symbol} from the following list:
+@b{nil}, @t{:wild}, @t{:unspecific}, or @t{:newest}
+(refers to the largest version number that already exists in 
+the file system when reading a file, or to
+a version number
+greater than any already existing in the file system
+when writing a new file).  Implementations 
+can define other special version @i{symbols}.
+
+@node Interpreting Pathname Component Values, Merging Pathnames, Pathname Components, Pathnames
+@subsection Interpreting Pathname Component Values
+
+@menu
+* Strings in Component Values::	 
+* Special Characters in Pathname Components::  
+* Case in Pathname Components::	 
+* Local Case in Pathname Components::  
+* Common Case in Pathname Components::	
+* Special Pathname Component Values::  
+* NIL as a Component Value::	
+* ->WILD as a Component Value::	 
+* ->UNSPECIFIC as a Component Value::  
+* Relation between component values NIL and ->UNSPECIFIC::  
+* Restrictions on Wildcard Pathnames::	
+* Restrictions on Examining Pathname Components::  
+* Restrictions on Examining a Pathname Host Component::	 
+* Restrictions on Examining a Pathname Device Component::  
+* Restrictions on Examining a Pathname Directory Component::  
+* Directory Components in Non-Hierarchical File Systems::  
+* Restrictions on Examining a Pathname Name Component::	 
+* Restrictions on Examining a Pathname Type Component::	 
+* Restrictions on Examining a Pathname Version Component::  
+* Notes about the Pathname Version Component::	
+* Restrictions on Constructing Pathnames::  
+@end menu
+
+@node Strings in Component Values, Special Characters in Pathname Components, Interpreting Pathname Component Values, Interpreting Pathname Component Values
+@subsubsection Strings in Component Values
+
+@node Special Characters in Pathname Components, Case in Pathname Components, Strings in Component Values, Interpreting Pathname Component Values
+@subsubsection Special Characters in Pathname Components
+
+@i{Strings} in @i{pathname} component values 
+never contain special @i{characters} that represent
+separation between @i{pathname} fields, 
+such as @i{slash} in @r{Unix} @i{filenames}.
+Whether separator @i{characters} are permitted as 
+part of a @i{string} in a @i{pathname} component
+is @i{implementation-defined}; 
+however, if the @i{implementation} does permit it, 
+it must arrange to properly ``quote'' the character for the 
+@i{file system} when constructing a @i{namestring}.
+For example,
+
+@example
+ ;; In a TOPS-20 implementation, which uses @t{^}V to quote 
+ (NAMESTRING (MAKE-PATHNAME :HOST "OZ" :NAME "<TEST>"))
+@result{}  #P"OZ:PS:@t{^}V<TEST@t{^}V>"
+@i{NOT}@result{} #P"OZ:PS:<TEST>"
+@end example
+
+@node Case in Pathname Components, Local Case in Pathname Components, Special Characters in Pathname Components, Interpreting Pathname Component Values
+@subsubsection Case in Pathname Components
+
+@i{Namestrings} always use local file system @i{case} conventions, 
+but @r{Common Lisp} @i{functions} that manipulate @i{pathname} components
+allow the caller to select either of two conventions for representing
+@i{case} in component values by supplying a value for the
+@t{:case} keyword argument.
+Figure 19--2 lists the functions 
+relating to @i{pathnames} that permit a @t{:case} argument:
+
+@format
+@group
+@noindent
+@w{  make-pathname    pathname-directory  pathname-name  }
+@w{  pathname-device  pathname-host       pathname-type  }
+
+@noindent
+@w{  Figure 19--2: Pathname functions using a :CASE argument}
+
+@end group
+@end format
+
+@node Local Case in Pathname Components, Common Case in Pathname Components, Case in Pathname Components, Interpreting Pathname Component Values
+@subsubsection Local Case in Pathname Components
+
+For the functions in @i{Figure~19--2},
+a value of @t{:local}
+@c @IKindex{local}
+ for the @t{:case} argument 
+(the default for these functions)
+indicates that the functions should receive and yield @i{strings} in component values
+as if they were already represented according to the host @i{file system}'s 
+convention for @i{case}.
+
+If the @i{file system} supports both @i{cases}, @i{strings} given or received
+as @i{pathname} component values under this protocol are to be used exactly
+as written.  If the file system only supports one @i{case}, 
+the @i{strings} will be translated to that @i{case}.
+
+@node Common Case in Pathname Components, Special Pathname Component Values, Local Case in Pathname Components, Interpreting Pathname Component Values
+@subsubsection Common Case in Pathname Components
+
+For the functions in @i{Figure~19--2},
+a value of @t{:common}
+@c @IKindex{common}
+ for the @t{:case} argument 
+that these @i{functions} should receive 
+and yield @i{strings} in component values according to the following conventions:
+
+@table @asis
+
+@item @t{*}  
+All @i{uppercase} means to use a file system's customary @i{case}.
+@item @t{*}  
+All @i{lowercase} means to use the opposite of the customary @i{case}.
+@item @t{*}  
+Mixed @i{case} represents itself.
+@end table
+
+Note that these conventions have been chosen in such a way that translation
+from @t{:local} to @t{:common} and back to @t{:local} is information-preserving.
+
+@node Special Pathname Component Values, NIL as a Component Value, Common Case in Pathname Components, Interpreting Pathname Component Values
+@subsubsection Special Pathname Component Values
+
+@node NIL as a Component Value, ->WILD as a Component Value, Special Pathname Component Values, Interpreting Pathname Component Values
+@subsubsection NIL as a Component Value
+
+As a @i{pathname} component value,
+@b{nil} represents that the component is ``unfilled'';
+see @ref{Merging Pathnames}.
+
+The value of any @i{pathname} component can be @b{nil}.
+
+When constructing a @i{pathname},
+@b{nil} in the host component might mean a default host
+rather than an actual @b{nil} in some @i{implementations}.
+
+@node ->WILD as a Component Value, ->UNSPECIFIC as a Component Value, NIL as a Component Value, Interpreting Pathname Component Values
+@subsubsection :WILD as a Component Value
+
+If @t{:wild}
+@c @IKindex{wild}
+ is the value of a @i{pathname} component,
+that component is considered to be a wildcard, which matches anything.
+
+A @i{conforming program} must be prepared to encounter a value of @t{:wild}
+as the value of any @i{pathname} component,
+or as an @i{element} of a @i{list} that is the value of the directory component.
+
+When constructing a @i{pathname},
+a @i{conforming program} may use @t{:wild} as the value of any or all of
+the directory, name, type, 
+or version component, but must not use @t{:wild} as the value of the host,
+or device component.
+
+If @t{:wild} is used as the value of the directory component in the construction
+of a @i{pathname}, the effect is equivalent to specifying the list
+@t{(:absolute :wild-inferiors)},
+or the same as @t{(:absolute :wild)} in a @i{file system} that does not support
+@t{:wild-inferiors}.
+@c @IKindex{wild-inferiors}
+
+@node ->UNSPECIFIC as a Component Value, Relation between component values NIL and ->UNSPECIFIC, ->WILD as a Component Value, Interpreting Pathname Component Values
+@subsubsection :UNSPECIFIC as a Component Value
+
+If @t{:unspecific}
+@c @IKindex{unspecific}
+ is the value of a @i{pathname} component,
+the component is considered to be ``absent'' 
+or to ``have no meaning''
+in the @i{filename} being represented by the @i{pathname}.
+
+Whether a value of @t{:unspecific} is permitted for any component
+on any given @i{file system} accessible to the @i{implementation}
+is @i{implementation-defined}.
+A @i{conforming program} must never unconditionally use a
+@t{:unspecific} as the value of a @i{pathname} component because
+such a value is not guaranteed to be permissible in all implementations.
+However, a @i{conforming program} can, if it is careful, 
+successfully manipulate user-supplied data 
+which contains or refers to non-portable @i{pathname} components.
+And certainly a @i{conforming program} should be prepared for the
+possibility that any components of a @i{pathname} could be @t{:unspecific}.
+
+When @i{reading}_1 the value of any @i{pathname} component,
+@i{conforming programs} should be prepared for the value to be @t{:unspecific}.
+
+When @i{writing}_1 the value of any @i{pathname} component,
+the consequences are undefined if @t{:unspecific} is given 
+for a @i{pathname} in a @i{file system} for which it does not make sense.
+
+@node Relation between component values NIL and ->UNSPECIFIC, Restrictions on Wildcard Pathnames, ->UNSPECIFIC as a Component Value, Interpreting Pathname Component Values
+@subsubsection Relation between component values NIL and :UNSPECIFIC
+
+If a @i{pathname} is converted to a @i{namestring}, 
+the @i{symbols} @b{nil} and @t{:unspecific}
+cause the field to be treated as if it were empty.
+That is,
+both @b{nil} and @t{:unspecific} 
+cause the component not to appear in the @i{namestring}.
+
+However, when merging a @i{pathname} with a set of defaults,
+only a @b{nil} value for a component 
+will be replaced with the default for that component, 
+while a value of @t{:unspecific}
+will be left alone as if the field were ``filled'';
+see the @i{function} @b{merge-pathnames} and @ref{Merging Pathnames}.
+
+@node Restrictions on Wildcard Pathnames, Restrictions on Examining Pathname Components, Relation between component values NIL and ->UNSPECIFIC, Interpreting Pathname Component Values
+@subsubsection Restrictions on Wildcard Pathnames
+
+  Wildcard @i{pathnames} can be used with @b{directory} but not with 
+  @b{open},
+  and return true from @b{wild-pathname-p}. When examining
+  wildcard components of a wildcard @i{pathname}, conforming programs
+  must be prepared to encounter any of the following additional values
+  in any component or any element of a @i{list} that is the directory component:
+
+@table @asis
+
+@item @t{*}  
+The @i{symbol} @t{:wild}, which matches anything.
+
+@item @t{*}  
+A @i{string} containing @i{implementation-dependent} 
+		 special wildcard @i{characters}.
+
+@item @t{*}  
+Any @i{object},
+		 representing an @i{implementation-dependent} wildcard pattern.
+
+@end table
+
+@node Restrictions on Examining Pathname Components, Restrictions on Examining a Pathname Host Component, Restrictions on Wildcard Pathnames, Interpreting Pathname Component Values
+@subsubsection Restrictions on Examining Pathname Components
+
+The space of possible @i{objects} that a @i{conforming program} 
+must be prepared to @i{read}_1 
+as the value of a @i{pathname} component
+is substantially larger than the space of possible @i{objects} 
+that a @i{conforming program} is permitted to @i{write}_1
+into such a component.
+
+While the values discussed 
+    in the subsections of this section,
+    in @ref{Special Pathname Component Values},
+and in @ref{Restrictions on Wildcard Pathnames} 
+apply to values that might be seen when 
+reading the component values,
+substantially more restrictive rules apply to constructing pathnames;
+see @ref{Restrictions on Constructing Pathnames}.
+
+When examining @i{pathname} components,
+@i{conforming programs} should be aware of the following restrictions.
+
+@node Restrictions on Examining a Pathname Host Component, Restrictions on Examining a Pathname Device Component, Restrictions on Examining Pathname Components, Interpreting Pathname Component Values
+@subsubsection Restrictions on Examining a Pathname Host Component
+
+It is @i{implementation-dependent} what @i{object} is used to represent the host. 
+
+@node Restrictions on Examining a Pathname Device Component, Restrictions on Examining a Pathname Directory Component, Restrictions on Examining a Pathname Host Component, Interpreting Pathname Component Values
+@subsubsection Restrictions on Examining a Pathname Device Component
+
+The device might be a @i{string},
+@t{:wild}, @t{:unspecific}, or @b{nil}.
+
+Note that @t{:wild} might result from an attempt to @i{read}_1
+the @i{pathname} component, even though portable programs are restricted
+from @i{writing}_1 such a component value; 
+see @ref{Restrictions on Wildcard Pathnames} and @ref{Restrictions on Constructing Pathnames}.
+
+@node Restrictions on Examining a Pathname Directory Component, Directory Components in Non-Hierarchical File Systems, Restrictions on Examining a Pathname Device Component, Interpreting Pathname Component Values
+@subsubsection Restrictions on Examining a Pathname Directory Component
+
+The directory might be a @i{string},
+@t{:wild}, @t{:unspecific}, or @b{nil}.
+
+The directory can be a @i{list} of @i{strings} and @i{symbols}. 
+
+The @i{car} of the @i{list} is one of the symbols @t{:absolute}
+@c @IKindex{absolute}
+ or 
+@t{:relative}
+@c @IKindex{relative}
+, meaning:
+
+@table @asis
+
+@item @t{:absolute}  
+A @i{list} whose @i{car} is the symbol @t{:absolute} represents 
+  a directory path starting from the root directory.  The list 
+  @t{(:absolute)} represents the root directory.  The list 
+  @t{(:absolute "foo" "bar" "baz")} represents the directory called
+  @t{"/foo/bar/baz"} in Unix (except possibly for @i{case}).
+
+@item @t{:relative}  
+A @i{list} whose @i{car} is the symbol @t{:relative} represents 
+  a directory path starting from a default directory.  
+  The list @t{(:relative)} has the same meaning as @b{nil} and hence is not used.
+  The list @t{(:relative "foo" "bar")} represents the directory named @t{"bar"} 
+  in the directory named @t{"foo"} in the default directory.
+
+@end table
+
+Each remaining element of the @i{list} is a @i{string} or a @i{symbol}.
+
+Each @i{string} names a single level of directory structure.
+The @i{strings} should contain only the directory names 
+themselves---no punctuation characters.
+
+In place of a @i{string}, at any point in the @i{list}, @i{symbols} 
+can occur to indicate special file notations.
+Figure 19--3 lists the @i{symbols} that have standard meanings.
+Implementations are permitted to add additional @i{objects} 
+of any @i{type} that is disjoint from @b{string}
+if necessary to represent features of their file systems that cannot be
+represented with the standard @i{strings} and @i{symbols}.
+
+Supplying any non-@i{string}, including any of the @i{symbols} listed below, 
+to a file system for which it does not make sense
+signals an error of @i{type} @b{file-error}.
+For example, Unix does not support @t{:wild-inferiors} in most implementations.
+
+@c @IKindex{wild}
+
+@c @IKindex{wild-inferiors}
+
+@c @IKindex{up}
+
+@c @IKindex{back}
+
+@format
+@group
+@noindent
+@w{  Symbol           Meaning                                             }
+@w{  @t{:wild}            Wildcard match of one level of directory structure  }
+@w{  @t{:wild-inferiors}  Wildcard match of any number of directory levels    }
+@w{  @t{:up}              Go upward in directory structure (semantic)         }
+@w{  @t{:back}            Go upward in directory structure (syntactic)        }
+
+@noindent
+@w{          Figure 19--3: Special Markers In Directory Component         }
+
+@end group
+@end format
+
+The following notes apply to the previous figure:
+
+@table @asis
+
+@item Invalid Combinations  
+Using @t{:absolute} or @t{:wild-inferiors} 
+immediately followed by @t{:up} or @t{:back}
+signals an error of @i{type} @b{file-error}.
+
+@item Syntactic vs Semantic  
+``Syntactic'' means that the action of @t{:back} 
+depends only on the @i{pathname}
+and not on the contents of the file system.  
+
+``Semantic'' means that the action of @t{:up} 
+depends on the contents of the file system; 
+to resolve a @i{pathname} containing 
+@t{:up} to a @i{pathname} whose directory component
+contains only @t{:absolute} and 
+@i{strings} requires probing the file system.
+
+@t{:up} differs from 
+@t{:back} only in file systems that support multiple
+  names for directories, perhaps via symbolic links.  For example,
+  suppose that there is a directory
+@t{(:absolute "X" "Y" "Z")}
+  linked to 
+@t{(:absolute "A" "B" "C")}
+  and there also exist directories
+@t{(:absolute "A" "B" "Q")} and 
+@t{(:absolute "X" "Y" "Q")}.
+Then
+@t{(:absolute "X" "Y" "Z" :up "Q")}
+  designates
+@t{(:absolute "A" "B" "Q")}
+  while
+@t{(:absolute "X" "Y" "Z" :back "Q")}
+  designates
+@t{(:absolute "X" "Y" "Q")}
+@end table
+
+@node Directory Components in Non-Hierarchical File Systems, Restrictions on Examining a Pathname Name Component, Restrictions on Examining a Pathname Directory Component, Interpreting Pathname Component Values
+@subsubsection Directory Components in Non-Hierarchical File Systems
+
+In non-hierarchical @i{file systems},
+the only valid @i{list} values for the directory component of a @i{pathname}
+are @t{(:absolute @i{string})} and @t{(:absolute :wild)}.
+@t{:relative} directories and the keywords
+@t{:wild-inferiors}, @t{:up}, and @t{:back} are not used 
+in non-hierarchical @i{file systems}.
+
+@node Restrictions on Examining a Pathname Name Component, Restrictions on Examining a Pathname Type Component, Directory Components in Non-Hierarchical File Systems, Interpreting Pathname Component Values
+@subsubsection Restrictions on Examining a Pathname Name Component
+
+The name might be a @i{string},
+@t{:wild}, @t{:unspecific}, or @b{nil}.
+
+@node Restrictions on Examining a Pathname Type Component, Restrictions on Examining a Pathname Version Component, Restrictions on Examining a Pathname Name Component, Interpreting Pathname Component Values
+@subsubsection Restrictions on Examining a Pathname Type Component
+
+The type might be a @i{string},
+@t{:wild}, @t{:unspecific}, or @b{nil}.
+
+@node Restrictions on Examining a Pathname Version Component, Notes about the Pathname Version Component, Restrictions on Examining a Pathname Type Component, Interpreting Pathname Component Values
+@subsubsection Restrictions on Examining a Pathname Version Component
+
+The version can be any @i{symbol} or any @i{integer}.  
+
+The symbol @t{:newest} refers to the largest version number 
+that already exists in the @i{file system}
+when reading, overwriting, appending, superseding, or directory listing 
+an existing @i{file}.
+The symbol @t{:newest} refers to the smallest version number
+greater than any existing version number when creating a new file.
+
+The symbols @b{nil}, @t{:unspecific}, and @t{:wild} have special meanings and
+restrictions; see @ref{Special Pathname Component Values} and @ref{Restrictions on Constructing Pathnames}.
+
+Other @i{symbols} and @i{integers}
+have @i{implementation-defined} meaning.
+
+@node Notes about the Pathname Version Component, Restrictions on Constructing Pathnames, Restrictions on Examining a Pathname Version Component, Interpreting Pathname Component Values
+@subsubsection Notes about the Pathname Version Component
+
+It is suggested, but not required, that implementations do the following:
+
+@table @asis
+
+@item @t{*}  
+Use positive @i{integers} starting at 1 as version numbers.
+
+@item @t{*}  
+Recognize the symbol @t{:oldest}
+		 to designate the smallest existing version number.
+
+@item @t{*}  
+Use @i{keywords} for other special versions.
+
+@end table
+
+@node Restrictions on Constructing Pathnames,  , Notes about the Pathname Version Component, Interpreting Pathname Component Values
+@subsubsection Restrictions on Constructing Pathnames
+
+  When constructing a @i{pathname} from components, conforming programs
+  must follow these rules:
+
+@table @asis
+
+@item @t{*}  
+Any component can be @b{nil}.
+  @b{nil} in the host might mean a default host 
+  rather than an actual @b{nil} in some implementations.
+
+@item @t{*}  
+The host, device, directory, name, and type can be @i{strings}.  There
+  are @i{implementation-dependent} limits on the number and type of
+  @i{characters} in these @i{strings}.
+
+@item @t{*}  
+The directory can be a @i{list} of @i{strings} and @i{symbols}.
+  There are @i{implementation-dependent} limits on the @i{list}'s
+  length and contents.
+
+@item @t{*}  
+The version can be @t{:newest}.
+
+@item @t{*}  
+Any component can be taken 
+  from the corresponding component of another @i{pathname}.
+  When the two @i{pathnames} are for different file systems
+    (in implementations that support multiple file systems),
+  an appropriate translation occurs.
+  If no meaningful translation is possible,
+  an error is signaled.
+  The definitions of ``appropriate'' and ``meaningful'' 
+  are @i{implementation-dependent}.
+
+@item @t{*}  
+An implementation might support other values for some components,
+  but a portable program cannot use those values.
+  A conforming program can use @i{implementation-dependent} values
+  but this can make it non-portable;
+  for example, it might work only with @r{Unix} file systems.
+@end table
+
+@node Merging Pathnames,  , Interpreting Pathname Component Values, Pathnames
+@subsection Merging Pathnames
+
+Merging takes a @i{pathname} with unfilled components
+and supplies values for those components from a source of defaults.
+
+If a component's value is @b{nil}, that component is considered to be unfilled.
+If a component's value is any @i{non-nil} @i{object}, 
+including @t{:unspecific}, that component is considered to be filled.
+
+Except as explicitly specified otherwise,
+for functions that manipulate or inquire about @i{files} in the @i{file system},
+the pathname argument to such a function
+is merged with @b{*default-pathname-defaults*} before accessing the @i{file system}
+(as if by @b{merge-pathnames}).
+
+@menu
+* Examples of Merging Pathnames::  
+@end menu
+
+@node Examples of Merging Pathnames,  , Merging Pathnames, Merging Pathnames
+@subsubsection Examples of Merging Pathnames
+
+Although the following examples are possible to execute only in
+@i{implementations} which permit @t{:unspecific} in the indicated
+position andwhich permit four-letter type components, they serve to illustrate
+the basic concept of @i{pathname} merging.
+
+@example
+ (pathname-type 
+   (merge-pathnames (make-pathname :type "LISP")
+                    (make-pathname :type "TEXT")))
+@result{}  "LISP"
+
+ (pathname-type 
+   (merge-pathnames (make-pathname :type nil)
+                    (make-pathname :type "LISP")))
+@result{}  "LISP"
+
+ (pathname-type 
+   (merge-pathnames (make-pathname :type :unspecific)
+                    (make-pathname :type "LISP")))
+@result{}  :UNSPECIFIC
+@end example
+
+@c end of including concept-pathnames
+
+@node Logical Pathnames, Filenames Dictionary, Pathnames, Filenames
+@section Logical Pathnames
+
+@c including concept-logical-pathnames
+
+@menu
+* Syntax of Logical Pathname Namestrings::  
+* Logical Pathname Components::	 
+@end menu
+
+@node Syntax of Logical Pathname Namestrings, Logical Pathname Components, Logical Pathnames, Logical Pathnames
+@subsection Syntax of Logical Pathname Namestrings
+
+The syntax of a @i{logical pathname} @i{namestring} is as follows.
+(Note that unlike many notational descriptions in this document,
+ this is a syntactic description of character sequences,
+ not a structural description of @i{objects}.)
+
+@w{@i{logical-pathname} ::=@r{[}!@i{host} @i{host-marker}@r{]} }
+@w{                     @r{[}!@i{@i{relative-directory-marker}}@r{]} @{!@i{directory} @i{directory-marker}@}* }
+@w{                     @r{[}!@i{name}@r{]} @r{[}@i{type-marker} !@i{type} @r{[}@i{version-marker} !@i{version}@r{]}@r{]}}
+
+@w{@i{host} ::=!@i{word}}
+
+@w{@i{directory} ::=!@i{word} | !@i{wildcard-word} | !@i{wild-inferiors-word}}
+
+@w{@i{name} ::=!@i{word} | !@i{wildcard-word}}
+
+@w{@i{type} ::=!@i{word} | !@i{wildcard-word}}
+
+@w{@i{version} ::=!@i{pos-int} | @i{newest-word} | @i{wildcard-version}}
+
+@i{host-marker}---a @i{colon}.
+
+@i{relative-directory-marker}---a @i{semicolon}.
+
+@i{directory-marker}---a @i{semicolon}.
+
+@i{type-marker}---a @i{dot}.
+
+@i{version-marker}---a @i{dot}.
+
+@i{wild-inferiors-word}---The two character sequence ``@t{**}'' (two @i{asterisks}).
+
+@i{newest-word}---The six character sequence ``@t{newest}'' 
+		   or the six character sequence ``@t{NEWEST}''.
+
+@i{wildcard-version}---an @i{asterisk}.
+
+@i{wildcard-word}---one or more @i{asterisks}, uppercase letters,
+   digits, and hyphens, including at least one @i{asterisk}, 
+   with no two @i{asterisks} adjacent.
+
+@i{word}---one or more uppercase letters, digits, and hyphens.
+
+@i{pos-int}---a positive @i{integer}.
+
+@menu
+* Additional Information about Parsing Logical Pathname Namestrings::  
+* The Host part of a Logical Pathname Namestring::  
+* The Device part of a Logical Pathname Namestring::  
+* The Directory part of a Logical Pathname Namestring::	 
+* The Type part of a Logical Pathname Namestring::  
+* The Version part of a Logical Pathname Namestring::  
+* Wildcard Words in a Logical Pathname Namestring::  
+* Lowercase Letters in a Logical Pathname Namestring::	
+* Other Syntax in a Logical Pathname Namestring::  
+@end menu
+
+@node Additional Information about Parsing Logical Pathname Namestrings, The Host part of a Logical Pathname Namestring, Syntax of Logical Pathname Namestrings, Syntax of Logical Pathname Namestrings
+@subsubsection Additional Information about Parsing Logical Pathname Namestrings
+
+@node The Host part of a Logical Pathname Namestring, The Device part of a Logical Pathname Namestring, Additional Information about Parsing Logical Pathname Namestrings, Syntax of Logical Pathname Namestrings
+@subsubsection The Host part of a Logical Pathname Namestring
+
+The @i{host} must have been defined as a @i{logical pathname} host;
+this can be done by using @b{setf} of @b{logical-pathname-translations}.
+
+The @i{logical pathname} host name @t{"SYS"} is reserved for the implementation.
+The existence and meaning of @t{SYS:} @i{logical pathnames} 
+is @i{implementation-defined}.
+
+@node The Device part of a Logical Pathname Namestring, The Directory part of a Logical Pathname Namestring, The Host part of a Logical Pathname Namestring, Syntax of Logical Pathname Namestrings
+@subsubsection The Device part of a Logical Pathname Namestring
+
+There is no syntax for a @i{logical pathname} device since
+the device component of a @i{logical pathname} is always @t{:unspecific};
+see @ref{Unspecific Components of a Logical Pathname}.
+
+@node The Directory part of a Logical Pathname Namestring, The Type part of a Logical Pathname Namestring, The Device part of a Logical Pathname Namestring, Syntax of Logical Pathname Namestrings
+@subsubsection The Directory part of a Logical Pathname Namestring
+
+If a @i{relative-directory-marker} precedes the @i{directories},
+the directory component parsed is as @i{relative};
+otherwise, the directory component is parsed as @i{absolute}.
+
+If a @i{wild-inferiors-marker} is specified,
+it parses into @t{:wild-inferiors}.
+
+@node The Type part of a Logical Pathname Namestring, The Version part of a Logical Pathname Namestring, The Directory part of a Logical Pathname Namestring, Syntax of Logical Pathname Namestrings
+@subsubsection The Type part of a Logical Pathname Namestring
+
+The @i{type} of a @i{logical pathname} for a @i{source file}
+is @t{"LISP"}.   This should be translated into whatever type is 
+appropriate in a physical pathname.
+
+@node The Version part of a Logical Pathname Namestring, Wildcard Words in a Logical Pathname Namestring, The Type part of a Logical Pathname Namestring, Syntax of Logical Pathname Namestrings
+@subsubsection The Version part of a Logical Pathname Namestring
+
+Some @i{file systems} do not have @i{versions}. 
+@i{Logical pathname} translation to such a @i{file system}
+ignores the @i{version}.
+This implies that a program cannot rely on being able to store
+more than one version of a file named by a @i{logical pathname}.
+
+If a @i{wildcard-version} is specified,
+it parses into @t{:wild}.
+
+@node Wildcard Words in a Logical Pathname Namestring, Lowercase Letters in a Logical Pathname Namestring, The Version part of a Logical Pathname Namestring, Syntax of Logical Pathname Namestrings
+@subsubsection Wildcard Words in a Logical Pathname Namestring
+
+Each @i{asterisk} in a @i{wildcard-word} matches a sequence of 
+zero or more characters.  The @i{wildcard-word} ``@t{*}'' 
+parses into @t{:wild}; other @i{wildcard-words} parse into @i{strings}.
+
+@node Lowercase Letters in a Logical Pathname Namestring, Other Syntax in a Logical Pathname Namestring, Wildcard Words in a Logical Pathname Namestring, Syntax of Logical Pathname Namestrings
+@subsubsection Lowercase Letters in a Logical Pathname Namestring
+
+When parsing @i{words} and @i{wildcard-words},
+lowercase letters are translated to uppercase.
+
+@node Other Syntax in a Logical Pathname Namestring,  , Lowercase Letters in a Logical Pathname Namestring, Syntax of Logical Pathname Namestrings
+@subsubsection Other Syntax in a Logical Pathname Namestring
+
+The consequences of using characters other than those specified here
+in a @i{logical pathname} @i{namestring} are unspecified.
+
+The consequences of using any value not specified here as a 
+@i{logical pathname} component are unspecified.
+
+@node Logical Pathname Components,  , Syntax of Logical Pathname Namestrings, Logical Pathnames
+@subsection Logical Pathname Components
+
+@menu
+* Unspecific Components of a Logical Pathname::	 
+* Null Strings as Components of a Logical Pathname::  
+@end menu
+
+@node Unspecific Components of a Logical Pathname, Null Strings as Components of a Logical Pathname, Logical Pathname Components, Logical Pathname Components
+@subsubsection Unspecific Components of a Logical Pathname
+
+The device component of a @i{logical pathname} is always @t{:unspecific};
+no other component of a @i{logical pathname} can be @t{:unspecific}.  
+
+@node Null Strings as Components of a Logical Pathname,  , Unspecific Components of a Logical Pathname, Logical Pathname Components
+@subsubsection Null Strings as Components of a Logical Pathname
+
+The null string, @t{""}, is not a valid value for any component of a @i{logical pathname}.
+
+@c end of including concept-logical-pathnames
+
+@node Filenames Dictionary,  , Logical Pathnames, Filenames
+@section Filenames Dictionary
+
+@c including dict-pathnames
+
+@menu
+* pathname (System Class)::	
+* logical-pathname (System Class)::  
+* pathname::			
+* make-pathname::		
+* pathnamep::			
+* pathname-host::		
+* load-logical-pathname-translations::	
+* logical-pathname-translations::  
+* logical-pathname::		
+* *default-pathname-defaults*::	 
+* namestring::			
+* parse-namestring::		
+* wild-pathname-p::		
+* pathname-match-p::		
+* translate-logical-pathname::	
+* translate-pathname::		
+* merge-pathnames::		
+@end menu
+
+@node pathname (System Class), logical-pathname (System Class), Filenames Dictionary, Filenames Dictionary
+@subsection pathname                                                     [System Class]
+
+@subsubheading  Class Precedence List::
+@b{pathname},
+@b{t}
+
+@subsubheading  Description::
+
+A @i{pathname} is a structured @i{object} which represents a @i{filename}.
+
+There are two kinds of @i{pathnames}---@i{physical pathnames} and
+@i{logical pathnames}.
+
+@node logical-pathname (System Class), pathname, pathname (System Class), Filenames Dictionary
+@subsection logical-pathname                                             [System Class]
+
+@subsubheading  Class Precedence List::
+
+@b{logical-pathname},
+@b{pathname},
+@b{t}
+
+@subsubheading  Description::
+
+A @i{pathname} that uses a @i{namestring} syntax that is 
+@i{implementation-independent}, 
+and that has component values that are @i{implementation-independent}.
+@i{Logical pathnames} do not refer directly to @i{filenames}
+
+@subsubheading  See Also::
+
+@ref{File System Concepts},
+@ref{Sharpsign P},
+@ref{Printing Pathnames}
+
+@node pathname, make-pathname, logical-pathname (System Class), Filenames Dictionary
+@subsection pathname                                                         [Function]
+
+@code{pathname}  @i{pathspec} @result{}  @i{pathname}
+
+@subsubheading  Arguments and Values::
+
+@i{pathspec}---a @i{pathname designator}.
+
+@i{pathname}---a @i{pathname}.
+
+@subsubheading  Description::
+
+Returns the @i{pathname} denoted by @i{pathspec}.
+
+If the @i{pathspec} @i{designator} is a @i{stream},
+the @i{stream} can be either open or closed;
+in both cases, the @b{pathname} returned 
+corresponds to the @i{filename} used to open the @i{file}.
+@b{pathname} returns the same @i{pathname} for a @i{file stream}
+after it is closed as it did when it was open.
+
+If the @i{pathspec} @i{designator} is
+a @i{file stream} created by opening a @i{logical pathname},
+a @i{logical pathname} is returned.
+
+@subsubheading  Examples::
+
+@example
+ ;; There is a great degree of variability permitted here.  The next
+ ;; several examples are intended to illustrate just a few of the many
+ ;; possibilities.  Whether the name is canonicalized to a particular
+ ;; case (either upper or lower) depends on both the file system and the
+ ;; implementation since two different implementations using the same
+ ;; file system might differ on many issues.  How information is stored
+ ;; internally (and possibly presented in #S notation) might vary,
+ ;; possibly requiring `accessors' such as PATHNAME-NAME to perform case
+ ;; conversion upon access.  The format of a namestring is dependent both
+ ;; on the file system and the implementation since, for example, one
+ ;; implementation might include the host name in a namestring, and
+ ;; another might not.  #S notation would generally only be used in a
+ ;; situation where no appropriate namestring could be constructed for use
+ ;; with #P.
+ (setq p1 (pathname "test"))
+@result{}  #P"CHOCOLATE:TEST" ; with case canonicalization (e.g., VMS)
+@i{OR}@result{} #P"VANILLA:test"   ; without case canonicalization (e.g., Unix)
+@i{OR}@result{} #P"test"
+@i{OR}@result{} #S(PATHNAME :HOST "STRAWBERRY" :NAME "TEST")
+@i{OR}@result{} #S(PATHNAME :HOST "BELGIAN-CHOCOLATE" :NAME "test")
+ (setq p2 (pathname "test"))
+@result{}  #P"CHOCOLATE:TEST"
+@i{OR}@result{} #P"VANILLA:test"
+@i{OR}@result{} #P"test"
+@i{OR}@result{} #S(PATHNAME :HOST "STRAWBERRY" :NAME "TEST")
+@i{OR}@result{} #S(PATHNAME :HOST "BELGIAN-CHOCOLATE" :NAME "test")
+ (pathnamep p1) @result{}  @i{true}
+ (eq p1 (pathname p1)) @result{}  @i{true}
+ (eq p1 p2)
+@result{}  @i{true}
+@i{OR}@result{} @i{false}
+ (with-open-file (stream "test" :direction :output)
+   (pathname stream))
+@result{}  #P"ORANGE-CHOCOLATE:>Gus>test.lisp.newest"
+@end example
+
+@subsubheading  See Also::
+
+@b{pathname},
+@b{logical-pathname},
+@ref{File System Concepts},
+
+@ref{Pathnames as Filenames}
+
+@node make-pathname, pathnamep, pathname, Filenames Dictionary
+@subsection make-pathname                                                    [Function]
+
+@code{make-pathname}  @i{@r{&key} host device directory name type version defaults case}@*
+   @result{}  @i{pathname}
+
+@subsubheading  Arguments and Values::
+
+@i{host}---a @i{valid physical pathname host}.
+ Complicated defaulting behavior; see below.
+
+@i{device}---a @i{valid pathname device}.
+ Complicated defaulting behavior; see below.
+
+@i{directory}---a @i{valid pathname directory}.
+ Complicated defaulting behavior; see below.
+
+@i{name}---a @i{valid pathname name}.
+ Complicated defaulting behavior; see below.
+
+@i{type}---a @i{valid pathname type}.
+ Complicated defaulting behavior; see below.
+
+@i{version}---a @i{valid pathname version}.
+ Complicated defaulting behavior; see below.
+
+@i{defaults}---a @i{pathname designator}.
+ The default is a @i{pathname} whose host component is the same as the
+          host component of the @i{value} of @b{*default-pathname-defaults*},
+	  and whose other components are all @b{nil}.
+
+@i{case}---one of @t{:common} or @t{:local}.
+ The default is @t{:local}.
+
+@i{pathname}---a @i{pathname}.
+
+@subsubheading  Description::
+
+Constructs and returns a @i{pathname} from the supplied keyword arguments.
+
+After the components supplied explicitly by
+       @i{host},
+       @i{device}, 
+       @i{directory},
+       @i{name},
+       @i{type},
+   and @i{version} 
+are filled in, 
+the merging rules used by @b{merge-pathnames} 
+are used to fill in any 
+unsupplied
+components
+from the defaults supplied by @i{defaults}.
+
+Whenever a @i{pathname} is constructed the components may be 
+canonicalized if appropriate.
+For the explanation of the arguments that can be supplied for each component,
+see @ref{Pathname Components}.
+
+If @i{case} is supplied,
+it is treated as described in @ref{Case in Pathname Components}.
+
+The resulting @i{pathname} is a @i{logical pathname} 
+if and only its host component 
+is
+a @i{logical host} 
+or a @i{string} that names a defined @i{logical host}.
+
+If the @i{directory} is a @i{string},
+it should be the name of a top level directory,
+and should not contain any punctuation characters; that is,
+specifying a @i{string}, @i{str}, is
+equivalent to specifying the list @t{(:absolute @i{str})}.
+Specifying the symbol @t{:wild} is equivalent to specifying the list 
+@t{(:absolute :wild-inferiors)}, or @t{(:absolute :wild)} 
+in a file system that does not support @t{:wild-inferiors}.
+
+@subsubheading  Examples::
+
+@example
+ ;; Implementation A -- an implementation with access to a single
+ ;;  Unix file system.  This implementation happens to never display
+ ;;  the `host' information in a namestring, since there is only one host. 
+ (make-pathname :directory '(:absolute "public" "games")
+                :name "chess" :type "db")
+@result{}  #P"/public/games/chess.db" 
+
+ ;; Implementation B -- an implementation with access to one or more
+ ;;  VMS file systems.  This implementation displays `host' information
+ ;;  in the namestring only when the host is not the local host.
+ ;;  It uses a double colon to separate a host name from the host's local
+ ;;  file name.
+ (make-pathname :directory '(:absolute "PUBLIC" "GAMES")
+                :name "CHESS" :type "DB")
+@result{}  #P"SYS$DISK:[PUBLIC.GAMES]CHESS.DB" 
+ (make-pathname :host "BOBBY"
+                :directory '(:absolute "PUBLIC" "GAMES")
+                :name "CHESS" :type "DB")
+@result{}  #P"BOBBY::SYS$DISK:[PUBLIC.GAMES]CHESS.DB" 
+
+ ;; Implementation C -- an implementation with simultaneous access to
+ ;;  multiple file systems from the same Lisp image.  In this 
+ ;;  implementation, there is a convention that any text preceding the
+ ;;  first colon in a pathname namestring is a host name.
+ (dolist (case '(:common :local))
+   (dolist (host '("MY-LISPM" "MY-VAX" "MY-UNIX"))
+     (print (make-pathname :host host :case case
+                           :directory '(:absolute "PUBLIC" "GAMES")
+                           :name "CHESS" :type "DB"))))
+@t{ |> } #P"MY-LISPM:>public>games>chess.db"
+@t{ |> } #P"MY-VAX:SYS$DISK:[PUBLIC.GAMES]CHESS.DB"
+@t{ |> } #P"MY-UNIX:/public/games/chess.db"
+@t{ |> } #P"MY-LISPM:>public>games>chess.db" 
+@t{ |> } #P"MY-VAX:SYS$DISK:[PUBLIC.GAMES]CHESS.DB" 
+@t{ |> } #P"MY-UNIX:/PUBLIC/GAMES/CHESS.DB" 
+@result{}  NIL
+@end example
+
+@subsubheading  Affected By::
+
+The @i{file system}.
+
+@subsubheading  See Also::
+
+@ref{merge-pathnames}
+,
+@b{pathname},
+@b{logical-pathname},
+@ref{File System Concepts},
+
+@ref{Pathnames as Filenames}
+
+@subsubheading  Notes::
+
+Portable programs should not supply @t{:unspecific} for any component.
+See @ref{->UNSPECIFIC as a Component Value}.
+
+@node pathnamep, pathname-host, make-pathname, Filenames Dictionary
+@subsection pathnamep                                                        [Function]
+
+@code{pathnamep}  @i{object} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{object}---an @i{object}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{object} is of @i{type} @b{pathname};
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::
+
+@example
+ (setq q "test")  @result{}  "test"
+ (pathnamep q) @result{}  @i{false}
+ (setq q (pathname "test"))
+@result{}  #S(PATHNAME :HOST NIL :DEVICE NIL :DIRECTORY NIL :NAME "test" :TYPE NIL
+       :VERSION NIL)
+ (pathnamep q) @result{}  @i{true} 
+ (setq q (logical-pathname "SYS:SITE;FOO.SYSTEM"))
+@result{}  #P"SYS:SITE;FOO.SYSTEM"
+ (pathnamep q) @result{}  @i{true}
+@end example
+
+@subsubheading  Notes::
+
+@example
+ (pathnamep @i{object}) @equiv{} (typep @i{object} 'pathname)
+@end example
+
+@node pathname-host, load-logical-pathname-translations, pathnamep, Filenames Dictionary
+@subsection pathname-host, pathname-device, pathname-directory,
+@subheading pathname-name, pathname-type,   pathname-version
+@flushright
+@i{[Function]}
+@end flushright
+
+@code{pathname-host}  @i{pathname @r{&key} case} @result{}  @i{host}
+
+@code{pathname-device}  @i{pathname @r{&key} case} @result{}  @i{device}
+
+@code{pathname-directory}  @i{pathname @r{&key} case} @result{}  @i{directory}
+
+@code{pathname-name}  @i{pathname @r{&key} case} @result{}  @i{name}
+
+@code{pathname-type}  @i{pathname @r{&key} case} @result{}  @i{type}
+
+@code{pathname-version}  @i{pathname} @result{}  @i{version}
+
+@subsubheading  Arguments and Values::
+
+@i{pathname}---a @i{pathname designator}.
+
+@i{case}---one of @t{:local} or @t{:common}.
+ The default is @t{:local}.
+
+@i{host}---a @i{valid pathname host}.
+
+@i{device}---a @i{valid pathname device}.
+
+@i{directory}---a @i{valid pathname directory}.
+
+@i{name}---a @i{valid pathname name}.
+
+@i{type}---a @i{valid pathname type}.
+
+@i{version}---a @i{valid pathname version}.
+
+@subsubheading  Description::
+
+These functions return the components of @i{pathname}.
+
+If the @i{pathname} @i{designator} is a @i{pathname},
+it represents the name used to open the file. This may be, but is
+not required to be, the actual name of the file. 
+
+If @i{case} is supplied,
+it is treated as described in @ref{Case in Pathname Components}.
+
+@subsubheading  Examples::
+
+@example
+ (setq q (make-pathname :host "KATHY"
+                        :directory "CHAPMAN" 
+                        :name "LOGIN" :type "COM"))
+@result{}  #P"KATHY::[CHAPMAN]LOGIN.COM"
+ (pathname-host q) @result{}  "KATHY"
+ (pathname-name q) @result{}  "LOGIN"
+ (pathname-type q) @result{}  "COM"
+
+ ;; Because namestrings are used, the results shown in the remaining
+ ;; examples are not necessarily the only possible results.  Mappings
+ ;; from namestring representation to pathname representation are 
+ ;; dependent both on the file system involved and on the implementation
+ ;; (since there may be several implementations which can manipulate the
+ ;; the same file system, and those implementations are not constrained
+ ;; to agree on all details). Consult the documentation for each
+ ;; implementation for specific information on how namestrings are treated
+ ;; that implementation.
+
+ ;; VMS
+ (pathname-directory (parse-namestring "[FOO.*.BAR]BAZ.LSP"))
+@result{}  (:ABSOLUTE "FOO" "BAR")
+ (pathname-directory (parse-namestring "[FOO.*.BAR]BAZ.LSP") :case :common)
+@result{}  (:ABSOLUTE "FOO" "BAR")
+
+ ;; Unix
+ (pathname-directory "foo.l") @result{}  NIL
+ (pathname-device "foo.l") @result{}  :UNSPECIFIC
+ (pathname-name "foo.l") @result{}  "foo"
+ (pathname-name "foo.l" :case :local) @result{}  "foo"
+ (pathname-name "foo.l" :case :common) @result{}  "FOO"
+ (pathname-type "foo.l") @result{}  "l"
+ (pathname-type "foo.l" :case :local) @result{}  "l"
+ (pathname-type "foo.l" :case :common) @result{}  "L"
+ (pathname-type "foo") @result{}  :UNSPECIFIC
+ (pathname-type "foo" :case :common) @result{}  :UNSPECIFIC
+ (pathname-type "foo.") @result{}  ""
+ (pathname-type "foo." :case :common) @result{}  ""
+ (pathname-directory (parse-namestring "/foo/bar/baz.lisp") :case :local)
+@result{}  (:ABSOLUTE "foo" "bar")
+ (pathname-directory (parse-namestring "/foo/bar/baz.lisp") :case :local)
+@result{}  (:ABSOLUTE "FOO" "BAR")
+ (pathname-directory (parse-namestring "../baz.lisp"))
+@result{}  (:RELATIVE :UP)
+ (PATHNAME-DIRECTORY (PARSE-NAMESTRING "/foo/BAR/../Mum/baz"))
+@result{}  (:ABSOLUTE "foo" "BAR" :UP "Mum")
+ (PATHNAME-DIRECTORY (PARSE-NAMESTRING "/foo/BAR/../Mum/baz") :case :common)
+@result{}  (:ABSOLUTE "FOO" "bar" :UP "Mum")
+ (PATHNAME-DIRECTORY (PARSE-NAMESTRING "/foo/*/bar/baz.l"))
+@result{}  (:ABSOLUTE "foo" :WILD "bar")
+ (PATHNAME-DIRECTORY (PARSE-NAMESTRING "/foo/*/bar/baz.l") :case :common)
+@result{}  (:ABSOLUTE "FOO" :WILD "BAR")
+
+ ;; Symbolics LMFS
+ (pathname-directory (parse-namestring ">foo>**>bar>baz.lisp"))
+@result{}  (:ABSOLUTE "foo" :WILD-INFERIORS "bar")
+ (pathname-directory (parse-namestring ">foo>*>bar>baz.lisp"))
+@result{}  (:ABSOLUTE "foo" :WILD "bar")
+ (pathname-directory (parse-namestring ">foo>*>bar>baz.lisp") :case :common)
+@result{}  (:ABSOLUTE "FOO" :WILD "BAR")
+ (pathname-device (parse-namestring ">foo>baz.lisp")) @result{}  :UNSPECIFIC
+@end example
+
+@subsubheading  Affected By::
+
+The @i{implementation} and the host @i{file system}.
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error} if its first argument is not a @i{pathname}.
+
+@subsubheading  See Also::
+
+@b{pathname},
+@b{logical-pathname},
+@ref{File System Concepts},
+
+@ref{Pathnames as Filenames}
+
+@node load-logical-pathname-translations, logical-pathname-translations, pathname-host, Filenames Dictionary
+@subsection load-logical-pathname-translations                               [Function]
+
+@code{load-logical-pathname-translations}  @i{host} @result{}  @i{just-loaded}
+
+@subsubheading  Arguments and Values::
+
+@i{host}---a @i{string}.
+
+@i{just-loaded}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Searches for and loads the definition of a @i{logical host} named @i{host},
+if it is not already defined.
+The specific nature of the search is @i{implementation-defined}.
+
+If the @i{host} is already defined, 
+no attempt to find or load a definition is attempted,
+and @i{false} is returned.
+If the @i{host} is not already defined,
+but a definition is successfully found and loaded,
+@i{true} is returned.
+Otherwise, an error is signaled.
+
+@subsubheading  Examples::
+
+@example
+ (translate-logical-pathname "hacks:weather;barometer.lisp.newest")
+@t{ |> } Error: The logical host HACKS is not defined.
+ (load-logical-pathname-translations "HACKS")
+@t{ |> } ;; Loading SYS:SITE;HACKS.TRANSLATIONS
+@t{ |> } ;; Loading done.
+@result{}  @i{true}
+ (translate-logical-pathname "hacks:weather;barometer.lisp.newest")
+@result{}  #P"HELIUM:[SHARED.HACKS.WEATHER]BAROMETER.LSP;0"
+ (load-logical-pathname-translations "HACKS")
+@result{}  @i{false}
+@end example
+
+@subsubheading  Exceptional Situations::
+
+If no definition is found, an error of @i{type} @b{error} is signaled.
+
+@subsubheading  See Also::
+
+@b{logical-pathname}
+
+@subsubheading  Notes::
+
+@i{Logical pathname} definitions will be created not just by 
+@i{implementors} but also by @i{programmers}.  As such,
+it is important that the search strategy be documented.
+For example, an @i{implementation} might define that the
+definition of a @i{host} is to be found in a file called
+``@i{host}.translations'' in some specifically named directory.
+
+@node logical-pathname-translations, logical-pathname, load-logical-pathname-translations, Filenames Dictionary
+@subsection logical-pathname-translations                                    [Accessor]
+
+@code{logical-pathname-translations}  @i{host} @result{}  @i{translations}
+
+(setf (@code{         logical-pathname-translations} @i{host}) new-translations)@*
+
+@subsubheading  Arguments and Values::
+
+@i{host}--a @i{logical host designator}.
+
+@i{translations}, @i{new-translations}---a @i{list}.
+
+@subsubheading  Description::
+
+Returns the host's @i{list} of translations.
+Each translation is a @i{list} of at least two elements: 
+@i{from-wildcard} and @i{to-wildcard}.  Any
+    additional elements are @i{implementation-defined}.  
+@i{From-wildcard} is a
+    @i{logical pathname} whose host is @i{host}.  
+@i{To-wildcard} is a @i{pathname}.    
+
+[Reviewer Note by Laddaga: Can this be a logical pathname?]
+
+@t{(setf (logical-pathname-translations @i{host}) @i{translations})} sets a 
+@i{logical pathname} host's
+@i{list} of @i{translations}.  If @i{host} 
+is a @i{string} that has
+    not been previously used as 
+a @i{logical pathname} host, a new 
+@i{logical pathname} host is defined; 
+otherwise an existing host's translations are
+    replaced.  @i{logical pathname} host names are compared with @b{string-equal}.
+
+    When setting the translations list, each @i{from-wildcard} 
+can be a @i{logical pathname} whose
+host is @i{host} or a @i{logical pathname} namestring
+    parseable by @t{(parse-namestring @i{string} @i{host})}, 
+where @i{host}
+    represents the appropriate @i{object} as defined 
+by @b{parse-namestring}. Each
+    @i{to-wildcard} can be anything coercible to a 
+@i{pathname} by
+    @t{(pathname @i{to-wildcard})}.  
+If @i{to-wildcard} coerces to a @i{logical pathname},
+@b{translate-logical-pathname} 
+will perform repeated translation steps when
+    it uses it.
+
+@i{host} is either the host component of a 
+@i{logical pathname} or a
+    @i{string} that has been defined 
+as a @i{logical pathname} host name by @b{setf} of
+@b{logical-pathname-translations}. 
+
+@subsubheading  Examples::
+
+[Reviewer Note by Laddaga: Shouldn't there be some @t{*.*}'s in the list
+		   of translations for @t{PROG} below?]
+
+@example
+ ;;;A very simple example of setting up a logical pathname host.  No
+ ;;;translations are necessary to get around file system restrictions, so
+ ;;;all that is necessary is to specify the root of the physical directory
+ ;;;tree that contains the logical file system.
+ ;;;The namestring syntax on the right-hand side is implementation-dependent.
+ (setf (logical-pathname-translations "foo")
+       '(("**;*.*.*"              "MY-LISPM:>library>foo>**>")))
+
+ ;;;Sample use of that logical pathname.  The return value
+ ;;;is implementation-dependent.          
+ (translate-logical-pathname "foo:bar;baz;mum.quux.3")
+@result{}  #P"MY-LISPM:>library>foo>bar>baz>mum.quux.3"
+
+ ;;;A more complex example, dividing the files among two file servers
+ ;;;and several different directories.  This Unix doesn't support
+ ;;;:WILD-INFERIORS in the directory, so each directory level must
+ ;;;be translated individually.  No file name or type translations
+ ;;;are required except for .MAIL to .MBX.
+ ;;;The namestring syntax on the right-hand side is implementation-dependent.
+ (setf (logical-pathname-translations "prog")
+       '(("RELEASED;*.*.*"        "MY-UNIX:/sys/bin/my-prog/")
+         ("RELEASED;*;*.*.*"      "MY-UNIX:/sys/bin/my-prog/*/")
+         ("EXPERIMENTAL;*.*.*"    "MY-UNIX:/usr/Joe/development/prog/")
+         ("EXPERIMENTAL;DOCUMENTATION;*.*.*"
+                                  "MY-VAX:SYS$DISK:[JOE.DOC]")
+         ("EXPERIMENTAL;*;*.*.*"  "MY-UNIX:/usr/Joe/development/prog/*/")
+         ("MAIL;**;*.MAIL"        "MY-VAX:SYS$DISK:[JOE.MAIL.PROG...]*.MBX")))
+
+ ;;;Sample use of that logical pathname.  The return value
+ ;;;is implementation-dependent.          
+ (translate-logical-pathname "prog:mail;save;ideas.mail.3")
+@result{}  #P"MY-VAX:SYS$DISK:[JOE.MAIL.PROG.SAVE]IDEAS.MBX.3"
+
+ ;;;Example translations for a program that uses three files main.lisp,
+ ;;;auxiliary.lisp, and documentation.lisp.  These translations might be
+ ;;;supplied by a software supplier as examples.
+
+ ;;;For Unix with long file names
+ (setf (logical-pathname-translations "prog")
+       '(("CODE;*.*.*"             "/lib/prog/")))
+
+ ;;;Sample use of that logical pathname.  The return value
+ ;;;is implementation-dependent.          
+ (translate-logical-pathname "prog:code;documentation.lisp")
+@result{}  #P"/lib/prog/documentation.lisp"
+
+ ;;;For Unix with 14-character file names, using .lisp as the type
+ (setf (logical-pathname-translations "prog")
+       '(("CODE;DOCUMENTATION.*.*" "/lib/prog/docum.*")
+         ("CODE;*.*.*"             "/lib/prog/")))
+
+ ;;;Sample use of that logical pathname.  The return value
+ ;;;is implementation-dependent.          
+ (translate-logical-pathname "prog:code;documentation.lisp")
+@result{}  #P"/lib/prog/docum.lisp"
+
+ ;;;For Unix with 14-character file names, using .l as the type
+ ;;;The second translation shortens the compiled file type to .b
+ (setf (logical-pathname-translations "prog")
+       `(("**;*.LISP.*"            ,(logical-pathname "PROG:**;*.L.*"))
+         (,(compile-file-pathname (logical-pathname "PROG:**;*.LISP.*"))
+                                   ,(logical-pathname "PROG:**;*.B.*"))
+         ("CODE;DOCUMENTATION.*.*" "/lib/prog/documentatio.*")
+         ("CODE;*.*.*"             "/lib/prog/")))
+
+ ;;;Sample use of that logical pathname.  The return value
+ ;;;is implementation-dependent.          
+ (translate-logical-pathname "prog:code;documentation.lisp")
+@result{}  #P"/lib/prog/documentatio.l"
+
+ ;;;For a Cray with 6 character names and no directories, types, or versions.
+ (setf (logical-pathname-translations "prog")
+       (let ((l '(("MAIN" "PGMN")
+                  ("AUXILIARY" "PGAUX")
+                  ("DOCUMENTATION" "PGDOC")))
+             (logpath (logical-pathname "prog:code;"))
+             (phypath (pathname "XXX")))
+         (append
+           ;; Translations for source files
+           (mapcar #'(lambda (x)
+                       (let ((log (first x))
+                             (phy (second x)))
+                         (list (make-pathname :name log
+                                              :type "LISP"
+                                              :version :wild
+                                              :defaults logpath)
+                               (make-pathname :name phy
+                                              :defaults phypath))))
+                   l)
+           ;; Translations for compiled files
+           (mapcar #'(lambda (x)
+                       (let* ((log (first x))
+                              (phy (second x))
+                              (com (compile-file-pathname
+                                     (make-pathname :name log
+                                                    :type "LISP"
+                                                    :version :wild
+                                                    :defaults logpath))))
+                         (setq phy (concatenate 'string phy "B"))
+                         (list com
+                               (make-pathname :name phy
+                                              :defaults phypath))))
+                   l))))
+
+ ;;;Sample use of that logical pathname.  The return value
+ ;;;is implementation-dependent.          
+ (translate-logical-pathname "prog:code;documentation.lisp")
+@result{}  #P"PGDOC"
+@end example
+
+@subsubheading  Exceptional Situations::
+
+If @i{host} is incorrectly supplied, 
+an error of @i{type} @b{type-error} is signaled.
+
+@subsubheading  See Also::
+
+@b{logical-pathname},
+
+@ref{Pathnames as Filenames}
+
+@subsubheading  Notes::
+
+Implementations can define additional @i{functions}
+that operate on @i{logical pathname} hosts,
+for example to specify additional translation rules or options.
+
+@node logical-pathname, *default-pathname-defaults*, logical-pathname-translations, Filenames Dictionary
+@subsection logical-pathname                                                 [Function]
+
+@code{logical-pathname}  @i{pathspec} @result{}  @i{logical-pathname}
+
+@subsubheading  Arguments and Values::
+
+@i{pathspec}---a @i{logical pathname}, 
+		   a @i{logical pathname} @i{namestring},
+		or a @i{stream}.
+
+@i{logical-pathname}---a @i{logical pathname}.
+
+@subsubheading  Description::
+
+@b{logical-pathname} converts @i{pathspec} to a
+@i{logical pathname} and returns the new @i{logical pathname}.
+If @i{pathspec} is a @i{logical pathname} @i{namestring},
+it should contain a host component and its following @i{colon}.
+If @i{pathspec} is a @i{stream}, it should be one
+for which @b{pathname} returns a @i{logical pathname}.  
+
+If @i{pathspec} is a @i{stream}, the @i{stream} can be either open or closed.
+@b{logical-pathname} returns the same @i{logical pathname} after a
+file is closed as it did when the file was open.
+
+It is an error if @i{pathspec} is a @i{stream} that is 
+created with
+  @b{make-two-way-stream}, 
+  @b{make-echo-stream},             
+  @b{make-broadcast-stream}, 
+  @b{make-concatenated-stream},
+  @b{make-string-input-stream},
+or
+  @b{make-string-output-stream}.
+
+@subsubheading  Exceptional Situations::
+
+Signals an error of @i{type} @b{type-error} if @i{pathspec} isn't supplied correctly.
+
+@subsubheading  See Also::
+
+@b{logical-pathname},
+@ref{translate-logical-pathname}
+,
+@ref{Logical Pathnames}
+
+@node *default-pathname-defaults*, namestring, logical-pathname, Filenames Dictionary
+@subsection *default-pathname-defaults*                                      [Variable]
+
+@subsubheading  Value Type::
+
+a @i{pathname} @i{object}.
+
+@subsubheading  Initial Value::
+
+An @i{implementation-dependent} @i{pathname}, 
+typically in the working directory that was current when @r{Common Lisp} was started up.
+
+@subsubheading  Description::
+
+a @i{pathname}, used as the default whenever a @i{function}
+needs a default @i{pathname} and one is not supplied.
+
+@subsubheading  Examples::                                                   
+@example
+ ;; This example illustrates a possible usage for a hypothetical Lisp running on a
+ ;; DEC TOPS-20 file system.  Since pathname conventions vary between Lisp 
+ ;; implementations and host file system types, it is not possible to provide a
+ ;; general-purpose, conforming example.
+ *default-pathname-defaults* @result{}  #P"PS:<FRED>"
+ (merge-pathnames (make-pathname :name "CALENDAR"))
+@result{}  #P"PS:<FRED>CALENDAR"
+ (let ((*default-pathname-defaults* (pathname "<MARY>")))
+   (merge-pathnames (make-pathname :name "CALENDAR")))
+@result{}  #P"<MARY>CALENDAR"
+@end example
+
+@subsubheading  Affected By::
+
+The @i{implementation}.
+
+@node namestring, parse-namestring, *default-pathname-defaults*, Filenames Dictionary
+@subsection namestring, file-namestring, directory-namestring, 
+@subheading host-namestring, enough-namestring
+@flushright
+@i{[Function]}
+@end flushright
+
+@code{namestring}  @i{pathname} @result{}  @i{namestring}
+
+@code{file-namestring}  @i{pathname} @result{}  @i{namestring}
+
+@code{directory-namestring}  @i{pathname} @result{}  @i{namestring}
+
+@code{host-namestring}  @i{pathname} @result{}  @i{namestring}
+
+@code{enough-namestring}  @i{pathname @r{&optional} defaults} @result{}  @i{namestring}
+
+@subsubheading  Arguments and Values::
+
+@i{pathname}---a @i{pathname designator}.
+
+@i{defaults}---a @i{pathname designator}.
+
+ The default is the @i{value} of @b{*default-pathname-defaults*}.
+
+@i{namestring}---a @i{string} or @b{nil}.
+
+[Editorial Note by KMP: Under what circumstances can NIL be returned??]
+
+@subsubheading  Description::
+
+These functions convert @i{pathname} into a namestring.
+The name represented by @i{pathname} is returned as a @i{namestring}
+in an @i{implementation-dependent} canonical form.
+
+@b{namestring} returns the full form of @i{pathname}.
+
+@b{file-namestring} returns just the name, type, and version
+ components of @i{pathname}.
+
+@b{directory-namestring} returns the directory name portion.
+
+@b{host-namestring} returns the host name. 
+
+@b{enough-namestring} returns an abbreviated namestring 
+ that is just sufficient to identify the file named by @i{pathname}
+ when considered relative to the @i{defaults}.
+ It is required that
+
+@example
+ (merge-pathnames (enough-namestring pathname defaults) defaults)
+@equiv{} (merge-pathnames (parse-namestring pathname nil defaults) defaults)
+@end example
+
+in all cases, and the result of @b{enough-namestring} is
+the shortest reasonable @i{string} that will satisfy this criterion.
+
+It is not necessarily possible to construct a valid @i{namestring} 
+by concatenating some of the three shorter @i{namestrings} in some order.
+
+@subsubheading  Examples::
+
+@example
+ (namestring "getty")            
+@result{}  "getty"
+ (setq q (make-pathname :host "kathy" 
+                         :directory 
+                           (pathname-directory *default-pathname-defaults*)
+                         :name "getty")) 
+@result{}  #S(PATHNAME :HOST "kathy" :DEVICE NIL :DIRECTORY @i{directory-name} 
+       :NAME "getty" :TYPE NIL :VERSION NIL)
+ (file-namestring q) @result{}  "getty"
+ (directory-namestring q) @result{}  @i{directory-name}
+ (host-namestring q) @result{}  "kathy" 
+@end example
+
+@example
+ ;;;Using Unix syntax and the wildcard conventions used by the
+ ;;;particular version of Unix on which this example was created:
+ (namestring
+   (translate-pathname "/usr/dmr/hacks/frob.l"
+                       "/usr/d*/hacks/*.l"
+                       "/usr/d*/backup/hacks/backup-*.*"))
+@result{}  "/usr/dmr/backup/hacks/backup-frob.l"
+ (namestring
+   (translate-pathname "/usr/dmr/hacks/frob.l"
+                       "/usr/d*/hacks/fr*.l"
+                       "/usr/d*/backup/hacks/backup-*.*"))
+@result{}  "/usr/dmr/backup/hacks/backup-ob.l"
+
+ ;;;This is similar to the above example but uses two different hosts,
+ ;;;U: which is a Unix and V: which is a VMS.  Note the translation
+ ;;;of file type and alphabetic case conventions.
+ (namestring
+   (translate-pathname "U:/usr/dmr/hacks/frob.l"
+                       "U:/usr/d*/hacks/*.l"
+                       "V:SYS$DISK:[D*.BACKUP.HACKS]BACKUP-*.*"))
+@result{}  "V:SYS$DISK:[DMR.BACKUP.HACKS]BACKUP-FROB.LSP"
+ (namestring
+   (translate-pathname "U:/usr/dmr/hacks/frob.l"
+                       "U:/usr/d*/hacks/fr*.l"
+                       "V:SYS$DISK:[D*.BACKUP.HACKS]BACKUP-*.*"))
+@result{}  "V:SYS$DISK:[DMR.BACKUP.HACKS]BACKUP-OB.LSP"
+@end example
+
+@subsubheading  See Also::
+
+@ref{truename}
+,
+@ref{merge-pathnames}
+,
+@b{pathname},
+@b{logical-pathname},
+@ref{File System Concepts},
+
+@ref{Pathnames as Filenames}
+
+@node parse-namestring, wild-pathname-p, namestring, Filenames Dictionary
+@subsection parse-namestring                                                 [Function]
+
+@code{parse-namestring}  @i{thing @r{&optional} host default-pathname @r{&key} start end junk-allowed}@*
+   @result{}  @i{pathname, position}
+
+@subsubheading  Arguments and Values::
+
+@i{thing}---a @i{string},
+	        a @i{pathname},
+	     or a @i{stream associated with a file}.
+
+@i{host}---a @i{valid pathname host}, a @i{logical host}, or @b{nil}.
+
+@i{default-pathname}---a @i{pathname designator}.
+ The default is the @i{value} of @b{*default-pathname-defaults*}.
+
+@i{start}, @i{end}---@i{bounding index designators} of @i{thing}.
+ The defaults for @i{start} and @i{end} are @t{0} and @b{nil}, respectively.
+
+@i{junk-allowed}---a @i{generalized boolean}.
+  The default is @i{false}.
+
+@i{pathname}---a @i{pathname}, or @b{nil}.
+
+@i{position}---a @i{bounding index designator} for @i{thing}.
+
+@subsubheading  Description::
+
+Converts @i{thing} into a @i{pathname}.
+
+The @i{host} supplies a host name with respect to which the parsing occurs.
+
+If @i{thing} is a @i{stream associated with a file},
+processing proceeds as if the @i{pathname} used to open that @i{file}
+had been supplied instead.
+
+If @i{thing} is a @i{pathname},
+the @i{host} and the host component of @i{thing} are compared.
+If they match, 
+two values are immediately returned: @i{thing} and @i{start};
+otherwise (if they do not match), an error is signaled.
+
+Otherwise (if @i{thing} is a @i{string}),
+@b{parse-namestring} parses the name of a @i{file} within
+the substring of @i{thing} bounded by @i{start} and @i{end}.
+
+If @i{thing} is a @i{string} then 
+the substring of @i{thing} @i{bounded} by @i{start} and @i{end}
+is parsed into a @i{pathname} 
+as follows:
+
+@table @asis
+
+@item @t{*}  
+If @i{host} is a @i{logical host} then @i{thing} is parsed
+  as a @i{logical pathname} @i{namestring} 
+  on the @i{host}.
+
+@item @t{*}  
+If @i{host} is @b{nil} and @i{thing} is a syntactically valid 
+  @i{logical pathname} @i{namestring} containing an explicit host,
+  then it is parsed as a @i{logical pathname} @i{namestring}.
+
+@item @t{*}  
+If  @i{host} is @b{nil},
+      @i{default-pathname} is a @i{logical pathname},
+  and @i{thing} is a syntactically valid @i{logical pathname} @i{namestring}
+       without an explicit host,
+  then it is parsed as a @i{logical pathname} @i{namestring}
+        on the host that is the host component of @i{default-pathname}.
+
+@item @t{*}  
+Otherwise, the parsing of @i{thing} is @i{implementation-defined}.
+
+@end table
+
+In the first 
+of these
+cases,
+the host portion of the @i{logical pathname} namestring
+and its following @i{colon} are optional.
+
+If the host portion of the namestring and @i{host} 
+are both present and do not match,
+an error is signaled.               
+
+If @i{junk-allowed} is @i{true},
+then the @i{primary value} is the @i{pathname} parsed 
+or, if no syntactically correct @i{pathname} was seen, @b{nil}.
+If @i{junk-allowed} is @i{false},
+then the entire substring is scanned, 
+and the @i{primary value} is the @i{pathname} parsed.
+
+In either case, the @i{secondary value}
+is the index into @i{thing} of the delimiter that terminated the parse,
+or the index beyond the substring if the parse terminated at the end of the substring
+  (as will always be the case if @i{junk-allowed} is @i{false}).
+
+Parsing a @i{null} @i{string} always succeeds,
+producing a @i{pathname} with all components (except the host) equal to @b{nil}.
+
+If @i{thing} contains an explicit host name and no explicit device name,
+then it is @i{implementation-defined} whether @b{parse-namestring}
+will supply the standard default device for that host as the device component
+of the resulting @i{pathname}.
+
+@subsubheading  Examples::
+
+@example
+ (setq q (parse-namestring "test"))  
+@result{}  #S(PATHNAME :HOST NIL :DEVICE NIL :DIRECTORY NIL :NAME "test" 
+       :TYPE NIL :VERSION NIL)
+ (pathnamep q) @result{}  @i{true}
+ (parse-namestring "test") 
+@result{}  #S(PATHNAME :HOST NIL :DEVICE NIL :DIRECTORY NIL :NAME "test"
+       :TYPE NIL :VERSION NIL), 4
+ (setq s (open @i{xxx})) @result{}  #<Input File Stream...>
+ (parse-namestring s) 
+@result{}  #S(PATHNAME :HOST NIL :DEVICE NIL :DIRECTORY NIL :NAME @i{xxx} 
+       :TYPE NIL :VERSION NIL), 0
+ (parse-namestring "test" nil nil :start 2 :end 4 )
+ @result{}  #S(PATHNAME ...), 15
+ (parse-namestring "foo.lisp")
+@result{}  #P"foo.lisp"
+@end example
+
+@subsubheading  Exceptional Situations::           
+
+If @i{junk-allowed} is @i{false},
+an error of @i{type} @b{parse-error} is signaled if @i{thing} 
+does not consist entirely of the representation of a @i{pathname}, 
+possibly surrounded on either side by @i{whitespace}_1 characters if that is
+appropriate to the cultural conventions of the implementation.
+
+If @i{host} is supplied and not @b{nil},
+and @i{thing} contains a manifest host name, 
+an error of @i{type} @b{error} is signaled if the hosts do not match.
+
+If @i{thing} is a @i{logical pathname} namestring
+and if the host portion of the namestring and @i{host} 
+are both present and do not match,
+an error of @i{type} @b{error} is signaled.               
+
+@subsubheading  See Also::
+
+@b{pathname},
+@b{logical-pathname},
+@ref{File System Concepts},
+
+@ref{->UNSPECIFIC as a Component Value},
+
+@ref{Pathnames as Filenames}
+
+@node wild-pathname-p, pathname-match-p, parse-namestring, Filenames Dictionary
+@subsection wild-pathname-p                                                  [Function]
+
+@code{wild-pathname-p}  @i{pathname @r{&optional} field-key} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{pathname}---a @i{pathname designator}.
+
+@i{Field-key}---one of @t{:host},
+			   @t{:device}
+			   @t{:directory},
+			   @t{:name},
+			   @t{:type},
+		 	   @t{:version},
+			or @b{nil}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+@b{wild-pathname-p} tests @i{pathname} for the presence of wildcard components.  
+
+If @i{pathname} is a @i{pathname} (as returned by @b{pathname})
+it represents the name used to open the file. This may be, but is
+not required to be, the actual name of the file. 
+
+If @i{field-key} is not supplied or @b{nil}, @b{wild-pathname-p}    
+returns true if @i{pathname} has any wildcard components, @b{nil} 
+if @i{pathname} has none.
+If @i{field-key} is @i{non-nil}, @b{wild-pathname-p}    
+returns true if the indicated component of @i{pathname} is a wildcard, 
+@b{nil} if the component is not a wildcard.  
+
+@subsubheading  Examples::
+@example
+ ;;;The following examples are not portable.  They are written to run
+ ;;;with particular file systems and particular wildcard conventions.
+ ;;;Other implementations will behave differently.  These examples are
+ ;;;intended to be illustrative, not to be prescriptive.
+
+ (wild-pathname-p (make-pathname :name :wild)) @result{}  @i{true}
+ (wild-pathname-p (make-pathname :name :wild) :name) @result{}  @i{true}
+ (wild-pathname-p (make-pathname :name :wild) :type) @result{}  @i{false}
+ (wild-pathname-p (pathname "s:>foo>**>")) @result{}  @i{true} ;Lispm
+ (wild-pathname-p (pathname :name "F*O")) @result{}  @i{true} ;Most places
+@end example
+
+@subsubheading  Exceptional Situations::
+
+If @i{pathname} is not a @i{pathname}, a @i{string}, 
+or a @i{stream associated with a file} an error of @i{type} @b{type-error} is signaled.
+
+@subsubheading  See Also::
+
+@b{pathname},
+@b{logical-pathname},
+@ref{File System Concepts},
+
+@ref{Pathnames as Filenames}
+
+@subsubheading  Notes::
+
+Not all implementations support wildcards in all fields.
+See @ref{->WILD as a Component Value} and @ref{Restrictions on Wildcard Pathnames}.
+
+@node pathname-match-p, translate-logical-pathname, wild-pathname-p, Filenames Dictionary
+@subsection pathname-match-p                                                 [Function]
+
+@code{pathname-match-p}  @i{pathname wildcard} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values:: 
+
+@i{pathname}---a @i{pathname designator}.
+
+@i{wildcard}---a @i{designator} for a @i{wild} @i{pathname}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+@b{pathname-match-p} returns true if 
+@i{pathname} matches @i{wildcard}, otherwise @b{nil}.  The 
+matching rules are @i{implementation-defined} but should be consistent with 
+@b{directory}. Missing components of @i{wildcard} default to @t{:wild}.
+
+It is valid for @i{pathname} to be a wild @i{pathname}; 
+a wildcard field in @i{pathname} only matches a
+wildcard field in @i{wildcard} (@i{i.e.}, @b{pathname-match-p} is not commutative).
+It is valid for @i{wildcard} to be a non-wild @i{pathname}.
+
+@subsubheading  Exceptional Situations::
+
+If @i{pathname} or @i{wildcard} is not a @i{pathname}, @i{string}, 
+or @i{stream associated with a file} an error of @i{type} @b{type-error} is signaled.
+
+@subsubheading  See Also::
+
+@ref{directory}
+,
+@b{pathname},
+@b{logical-pathname},
+@ref{File System Concepts},
+
+@ref{Pathnames as Filenames}
+
+@node translate-logical-pathname, translate-pathname, pathname-match-p, Filenames Dictionary
+@subsection translate-logical-pathname                                       [Function]
+
+@code{translate-logical-pathname}  @i{pathname @r{&key}} @result{}  @i{physical-pathname}
+
+@subsubheading  Arguments and Values:: 
+
+@i{pathname}---a @i{pathname designator},
+		or a @i{logical pathname} @i{namestring}.
+
+@i{physical-pathname}---a @i{physical pathname}.
+
+@subsubheading  Description::
+
+Translates @i{pathname} to a @i{physical pathname}, which it returns.
+
+If @i{pathname} is a @i{stream}, the
+@i{stream} can be either open or closed.
+@b{translate-logical-pathname} returns the same 
+physical pathname after a
+    file is closed as it did when the file was open.
+
+It is an error if @i{pathname} is a @i{stream} that is 
+created with @b{make-two-way-stream}, 
+@b{make-echo-stream},             
+@b{make-broadcast-stream}, 
+@b{make-concatenated-stream}, @b{make-string-input-stream},
+@b{make-string-output-stream}.
+
+If @i{pathname} is a @i{logical pathname} namestring,
+the host portion of the 
+@i{logical pathname} namestring and its following @i{colon} are required.
+
+@i{Pathname} is first coerced to a @i{pathname}.
+If the coerced @i{pathname} is a physical pathname, it is returned.
+If the coerced @i{pathname} is a @i{logical pathname},
+the first matching translation (according to @b{pathname-match-p})
+of the @i{logical pathname} host is applied, as if by calling 
+@b{translate-pathname}.  If the result is
+    a @i{logical pathname}, this process is repeated.  
+When the result is
+    finally a physical pathname, it is returned.
+    If no translation matches, an error 
+is signaled.
+
+@b{translate-logical-pathname} might perform additional translations,
+    typically to provide translation of file types to local naming
+    conventions, to accommodate physical file systems with limited length
+    names, or to deal with special character requirements such as
+    translating hyphens to underscores or uppercase letters to lowercase.
+    Any such additional translations are @i{implementation-defined}.  Some
+    implementations do no additional translations.
+
+    There are no specified keyword arguments for
+@b{translate-logical-pathname}, 
+but implementations are permitted to extend
+    it by adding keyword arguments.  
+
+@subsubheading  Examples::
+
+See @b{logical-pathname-translations}.
+
+@subsubheading  Exceptional Situations::
+
+If @i{pathname} is incorrectly supplied, an error of @i{type} @b{type-error} is signaled.
+
+If no translation matches, an error of @i{type} @b{file-error} is signaled.
+
+[Editorial Note by KMP: Is file-error really right, or should it be pathname-error?]
+
+@subsubheading  See Also::
+
+@ref{logical-pathname}
+,
+@ref{logical-pathname-translations}
+, 
+@b{logical-pathname},
+@ref{File System Concepts},
+
+@ref{Pathnames as Filenames}
+
+@node translate-pathname, merge-pathnames, translate-logical-pathname, Filenames Dictionary
+@subsection translate-pathname                                               [Function]
+
+@code{translate-pathname}  @i{source from-wildcard to-wildcard @r{&key}}@*
+   @result{}  @i{translated-pathname}
+
+@subsubheading  Arguments and Values:: 
+
+@i{source}---a @i{pathname designator}.
+
+@i{from-wildcard}---a @i{pathname designator}.
+
+@i{to-wildcard}---a @i{pathname designator}.
+
+@i{translated-pathname}---a @i{pathname}.
+
+@subsubheading  Description::
+
+@b{translate-pathname} translates @i{source} 
+(that matches @i{from-wildcard}) into a corresponding @i{pathname} 
+that matches @i{to-wildcard}, and returns the corresponding @i{pathname}.
+
+The resulting @i{pathname} is @i{to-wildcard} with each wildcard or missing
+field replaced by a portion of @i{source}.  A ``wildcard field'' is a
+@i{pathname} component with a value of @t{:wild}, a @t{:wild} element of a
+@i{list}-valued directory component, or an @i{implementation-defined} portion
+of a component, such as the @t{"*"} in the complex wildcard string
+@t{"foo*bar"} that some implementations support.  An implementation that
+adds other wildcard features, such as regular expressions, must define
+how @b{translate-pathname} extends to those features.  
+A ``missing field'' is a @i{pathname} component with a value of @b{nil}.
+
+    The portion of @i{source} 
+that is copied into the resulting @i{pathname} is 
+@i{implementation-defined}.  Typically 
+it is determined by the user interface conventions
+    of the file systems involved.  Usually it is the portion of @i{source}
+    that matches a wildcard field of 
+@i{from-wildcard} that is in the same
+    position as the wildcard or missing field of 
+@i{to-wildcard}.  If there
+    is no wildcard field in 
+@i{from-wildcard} at that position, then usually
+    it is the entire corresponding 
+@i{pathname} component of @i{source}, or in
+    the case of a 
+@i{list}-valued directory component, the entire corresponding
+    @i{list} element.  
+
+    During the copying of a portion of @i{source} into 
+the resulting @i{pathname}, additional
+    @i{implementation-defined} translations of @i{case} or file naming
+    conventions might occur, especially when 
+@i{from-wildcard} and
+    @i{to-wildcard} are for different hosts.
+
+It is valid for
+    @i{source} to be a wild 
+@i{pathname}; in general this will produce a wild
+    result.  It 
+is valid for @i{from-wildcard} and/or @i{to-wildcard} to be
+    non-wild @i{pathnames}.  
+
+    There are no specified keyword arguments for 
+@b{translate-pathname}, but
+    implementations are permitted to extend it by adding keyword arguments.
+
+@b{translate-pathname} maps customary case in
+@i{source} into customary case in the output @i{pathname}.
+
+@subsubheading  Examples::
+
+@example
+ ;; The results of the following five forms are all implementation-dependent.
+ ;; The second item in particular is shown with multiple results just to 
+ ;; emphasize one of many particular variations which commonly occurs.
+ (pathname-name (translate-pathname "foobar" "foo*" "*baz")) @result{}  "barbaz"
+ (pathname-name (translate-pathname "foobar" "foo*" "*"))
+@result{}  "foobar"
+@i{OR}@result{} "bar"
+ (pathname-name (translate-pathname "foobar" "*"    "foo*")) @result{}  "foofoobar"
+ (pathname-name (translate-pathname "bar"    "*"    "foo*")) @result{}  "foobar"
+ (pathname-name (translate-pathname "foobar" "foo*" "baz*")) @result{}  "bazbar"
+
+ (defun translate-logical-pathname-1 (pathname rules)
+   (let ((rule (assoc pathname rules :test #'pathname-match-p)))
+     (unless rule (error "No translation rule for ~A" pathname))
+     (translate-pathname pathname (first rule) (second rule))))
+ (translate-logical-pathname-1 "FOO:CODE;BASIC.LISP"
+                       '(("FOO:DOCUMENTATION;" "MY-UNIX:/doc/foo/")
+                         ("FOO:CODE;"          "MY-UNIX:/lib/foo/")
+                         ("FOO:PATCHES;*;"     "MY-UNIX:/lib/foo/patch/*/")))
+@result{}  #P"MY-UNIX:/lib/foo/basic.l"
+
+;;;This example assumes one particular set of wildcard conventions
+;;;Not all file systems will run this example exactly as written
+ (defun rename-files (from to)
+   (dolist (file (directory from))
+     (rename-file file (translate-pathname file from to))))
+ (rename-files "/usr/me/*.lisp" "/dev/her/*.l")
+   ;Renames /usr/me/init.lisp to /dev/her/init.l
+ (rename-files "/usr/me/pcl*/*" "/sys/pcl/*/")
+   ;Renames /usr/me/pcl-5-may/low.lisp to /sys/pcl/pcl-5-may/low.lisp
+   ;In some file systems the result might be /sys/pcl/5-may/low.lisp
+ (rename-files "/usr/me/pcl*/*" "/sys/library/*/")
+   ;Renames /usr/me/pcl-5-may/low.lisp to /sys/library/pcl-5-may/low.lisp
+   ;In some file systems the result might be /sys/library/5-may/low.lisp
+ (rename-files "/usr/me/foo.bar" "/usr/me2/")
+   ;Renames /usr/me/foo.bar to /usr/me2/foo.bar
+ (rename-files "/usr/joe/*-recipes.text" "/usr/jim/cookbook/joe's-*-rec.text")
+   ;Renames /usr/joe/lamb-recipes.text to /usr/jim/cookbook/joe's-lamb-rec.text
+   ;Renames /usr/joe/pork-recipes.text to /usr/jim/cookbook/joe's-pork-rec.text
+   ;Renames /usr/joe/veg-recipes.text to /usr/jim/cookbook/joe's-veg-rec.text
+@end example
+
+@subsubheading  Exceptional Situations::
+
+If any of @i{source}, @i{from-wildcard}, or @i{to-wildcard}
+is not a @i{pathname}, a @i{string}, or a @i{stream associated with a file}
+an error of @i{type} @b{type-error} is signaled.  
+
+@t{(pathname-match-p @i{source from-wildcard})} must
+be true or an error of @i{type} @b{error} is signaled.
+
+@subsubheading  See Also::
+
+@ref{namestring}
+,
+@ref{pathname-host}
+,
+
+@b{pathname},
+@b{logical-pathname},
+@ref{File System Concepts},
+
+@ref{Pathnames as Filenames}
+
+@subsubheading  Notes::
+
+The exact behavior of @b{translate-pathname} cannot be dictated
+by the @r{Common Lisp} language and must be allowed to vary, depending on the
+user interface conventions of the file systems involved.
+
+The following is an implementation guideline.
+One file system performs this operation by
+    examining each piece of the three 
+@i{pathnames} in turn, where a piece is a
+    @i{pathname} component or a 
+@i{list} element of a structured component such as
+    a hierarchical directory.  Hierarchical directory elements in
+    @i{from-wildcard} and 
+@i{to-wildcard} are matched by whether they are
+    wildcards, not by depth in the directory hierarchy.  If the piece in
+@i{to-wildcard} is present and not wild, it is copied into the result.
+    If the piece in @i{to-wildcard} is 
+@t{:wild} or @b{nil}, the piece in @i{source} is
+    copied into the result.  Otherwise, the piece in
+@i{to-wildcard} might be
+    a complex wildcard such as @t{"foo*bar"} and the piece in 
+@i{from-wildcard}
+    should be wild; the portion of the piece in 
+@i{source} that matches the
+    wildcard portion of the piece in 
+@i{from-wildcard} replaces the wildcard
+    portion of the piece in 
+@i{to-wildcard} and the value produced is used in
+    the result.
+
+@node merge-pathnames,  , translate-pathname, Filenames Dictionary
+@subsection merge-pathnames                                                  [Function]
+
+@code{merge-pathnames}  @i{pathname @r{&optional} default-pathname default-version}@*
+   @result{}  @i{merged-pathname}
+
+@subsubheading  Arguments and Values::
+
+@i{pathname}---a @i{pathname designator}.
+
+@i{default-pathname}---a @i{pathname designator}.
+
+ The default is the @i{value} of @b{*default-pathname-defaults*}.
+
+@i{default-version}---a @i{valid pathname version}.
+
+ The default is @t{:newest}.
+
+@i{merged-pathname}---a @i{pathname}.
+
+@subsubheading  Description::
+
+Constructs a @i{pathname} from @i{pathname} 
+by filling in any unsupplied components with the corresponding values
+from @i{default-pathname} and @i{default-version}. 
+
+Defaulting of pathname components 
+is done by filling in components taken from another @i{pathname}.
+
+This is especially useful for cases such as 
+a program that has an input file and an output file.
+Unspecified components of the output pathname will come from the input pathname,
+except that the type should not default
+to the type of the input pathname
+but rather to the appropriate default type for output from the program;
+for example, see the @i{function} @b{compile-file-pathname}.
+
+If no version is supplied, @i{default-version} is used.
+If @i{default-version} is @b{nil}, the version component will remain unchanged.
+
+If @i{pathname} explicitly specifies a host and not a device, and 
+if the host component of @i{default-pathname} matches the host component
+of @i{pathname}, then the device is taken from the @i{default-pathname};
+otherwise the device will be the default file device for that host.  If
+@i{pathname} does not specify a host, device, directory, name,
+or type, each such component is copied from @i{default-pathname}.
+If @i{pathname} does not specify a name, then the version, if not provided, will
+come from @i{default-pathname}, just like the other components.  If
+@i{pathname} does specify a name, then the version is not affected
+by @i{default-pathname}. If this process leaves the
+version missing, the @i{default-version} is used.
+If the host's file name syntax provides a way
+to input a version without a name or type, the user can let the name
+and type default but supply a version different from the one in @i{default-pathname}.
+
+If @i{pathname} is a @i{stream}, @i{pathname} effectively
+becomes @t{(pathname @i{pathname})}. @b{merge-pathnames}
+can be used on either an open or a closed @i{stream}.
+
+If @i{pathname} is a @i{pathname}
+it represents the name used to open the file. This may be, but is
+not required to be, the actual name of the file. 
+
+@b{merge-pathnames} recognizes a @i{logical pathname} @i{namestring}
+   when @i{default-pathname} is a @i{logical pathname},
+
+or when the @i{namestring} begins with 
+    the name of a defined @i{logical host} followed by a @i{colon}.
+In the first of these two cases,
+
+the host portion of the @i{logical pathname} @i{namestring}
+and its following @i{colon} are optional.
+
+@b{merge-pathnames} returns a 
+@i{logical pathname} if and only if
+   its first argument is a @i{logical pathname},
+
+or its first argument is a @i{logical pathname} @i{namestring} with an explicit host,
+or its first argument does not specify a host 
+    and the @i{default-pathname} is a @i{logical pathname}.
+
+@i{Pathname} merging treats a relative directory specially.  
+If @t{(pathname-directory @i{pathname})} is a @i{list} whose
+@i{car} is @t{:relative}, and 
+@t{(pathname-directory @i{default-pathname})} is a @i{list}, then
+the merged directory is the value of
+
+@example
+ (append (pathname-directory @i{default-pathname})
+         (cdr  ;remove :relative from the front
+           (pathname-directory @i{pathname})))
+@end example
+
+except that if the resulting @i{list} contains a @i{string} or @t{:wild}
+immediately followed by @t{:back}, both of them are removed.  This removal of 
+redundant @t{:back} @i{keywords} is repeated as many times as possible.
+If @t{(pathname-directory @i{default-pathname})} is not a @i{list} or
+@t{(pathname-directory @i{pathname})} is not a @i{list} 
+whose @i{car} is @t{:relative}, the merged directory is
+@t{(or (pathname-directory @i{pathname}) (pathname-directory @i{default-pathname}))}
+
+@b{merge-pathnames} maps customary case in @i{pathname} 
+into customary case in the output @i{pathname}.
+
+@subsubheading  Examples::
+@example
+ (merge-pathnames "CMUC::FORMAT"
+                  "CMUC::PS:<LISPIO>.FASL")
+@result{}  #P"CMUC::PS:<LISPIO>FORMAT.FASL.0"
+@end example
+
+@subsubheading  See Also::
+
+@b{*default-pathname-defaults*},
+@b{pathname},
+@b{logical-pathname},
+@ref{File System Concepts},
+
+@ref{Pathnames as Filenames}
+
+@subsubheading  Notes::
+
+The net effect 
+is that if just a name is supplied, 
+the host, device, directory, and type will come from @i{default-pathname}, 
+but the version will come from @i{default-version}.
+If nothing or just a directory is supplied,
+the name, type, and version will come from @i{default-pathname} together.
+
+@c end of including dict-pathnames
+
+@c %**end of chapter
+

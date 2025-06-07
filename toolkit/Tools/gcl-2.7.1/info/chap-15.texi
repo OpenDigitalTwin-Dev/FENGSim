@@ -1,0 +1,2496 @@
+
+
+@node Arrays, Strings, Conses, Top
+@chapter Arrays
+
+@menu
+* Array Concepts::		
+* Arrays Dictionary::		
+@end menu
+
+@node Array Concepts, Arrays Dictionary, Arrays, Arrays
+@section Array Concepts
+
+@c including concept-arrays
+
+@menu
+* Array Elements::		
+* Specialized Arrays::		
+@end menu
+
+@node Array Elements, Specialized Arrays, Array Concepts, Array Concepts
+@subsection Array Elements
+
+An @i{array} contains a set of @i{objects} called @i{elements}
+that can be referenced individually according to a rectilinear coordinate system.
+
+@menu
+* Array Indices::		
+* Array Dimensions::		
+* Implementation Limits on Individual Array Dimensions::  
+* Array Rank::			
+* Vectors::			
+* Fill Pointers::		
+* Multidimensional Arrays::	
+* Storage Layout for Multidimensional Arrays::	
+* Implementation Limits on Array Rank::	 
+@end menu
+
+@node Array Indices, Array Dimensions, Array Elements, Array Elements
+@subsubsection Array Indices
+
+An @i{array} @i{element} is referred to by a (possibly empty) series of indices.
+The length of the series must equal the @i{rank} of the @i{array}.
+
+Each index must be a non-negative @i{fixnum} 
+
+less than the corresponding @i{array} @i{dimension}.
+@i{Array} indexing is zero-origin.
+
+@node Array Dimensions, Implementation Limits on Individual Array Dimensions, Array Indices, Array Elements
+@subsubsection Array Dimensions
+
+An axis of an @i{array} is called a @i{dimension}
+@IGindex dimension
+.
+
+Each @i{dimension} is a non-negative 
+
+@i{fixnum};
+
+ if any dimension of an @i{array} is zero, the @i{array} has no elements.
+It is permissible for a @i{dimension} to be zero, 
+in which case the @i{array} has no elements, 
+and any attempt to @i{access} an @i{element}
+is an error.  However, other properties of the @i{array},  
+such as the @i{dimensions} themselves, may be used.
+
+@node Implementation Limits on Individual Array Dimensions, Array Rank, Array Dimensions, Array Elements
+@subsubsection Implementation Limits on Individual Array Dimensions
+
+An @i{implementation} may impose a limit on @i{dimensions} of an @i{array},
+but there is a minimum requirement on that limit.  See the @i{variable} @b{array-dimension-limit}.
+
+@node Array Rank, Vectors, Implementation Limits on Individual Array Dimensions, Array Elements
+@subsubsection Array Rank
+
+An @i{array} can have any number of @i{dimensions} (including zero).
+The number of @i{dimensions} is called the @i{rank}
+@IGindex rank
+.
+
+If the rank of an @i{array} is zero then the @i{array} is said to have
+no @i{dimensions}, and the product of the dimensions (see @b{array-total-size})
+is then 1; a zero-rank @i{array} therefore has a single element.
+
+@node Vectors, Fill Pointers, Array Rank, Array Elements
+@subsubsection Vectors
+
+An @i{array} of @i{rank} one (@i{i.e.}, a one-dimensional @i{array})
+is called a @i{vector}
+@IGindex vector
+.
+
+@node Fill Pointers, Multidimensional Arrays, Vectors, Array Elements
+@subsubsection Fill Pointers
+
+A @i{fill pointer}
+@IGindex fill pointer
+ is a non-negative @i{integer} no
+larger than the total number of @i{elements} in a @i{vector}.
+Not all @i{vectors} have @i{fill pointers}.
+See the @i{functions} @b{make-array} and @b{adjust-array}.
+
+An @i{element} of a @i{vector} is said to be @i{active}
+@IGindex active
+ if it has
+an index that is greater than or equal to zero, 
+but less than the @i{fill pointer} (if any).
+For an @i{array} that has no @i{fill pointer},
+all @i{elements} are considered @i{active}.
+
+Only @i{vectors} may have @i{fill pointers}; 
+multidimensional @i{arrays} may not.
+A multidimensional @i{array} that is displaced to a @i{vector} 
+that has a @i{fill pointer} can be created.
+
+@node Multidimensional Arrays, Storage Layout for Multidimensional Arrays, Fill Pointers, Array Elements
+@subsubsection Multidimensional Arrays
+
+@node Storage Layout for Multidimensional Arrays, Implementation Limits on Array Rank, Multidimensional Arrays, Array Elements
+@subsubsection Storage Layout for Multidimensional Arrays
+
+Multidimensional @i{arrays} store their components in row-major order;
+that is, internally a multidimensional @i{array} is stored as a
+one-dimensional @i{array}, with the multidimensional index sets
+ordered lexicographically, last index varying fastest.  
+
+@node Implementation Limits on Array Rank,  , Storage Layout for Multidimensional Arrays, Array Elements
+@subsubsection Implementation Limits on Array Rank
+
+An @i{implementation} may impose a limit on the @i{rank} of an @i{array},
+but there is a minimum requirement on that limit.  See the @i{variable} @b{array-rank-limit}.
+
+@node Specialized Arrays,  , Array Elements, Array Concepts
+@subsection Specialized Arrays
+
+An @i{array} can be a @i{general} @i{array}, 
+    meaning each @i{element} may be any @i{object},
+or it may be a @i{specialized} @i{array},
+    meaning that each @i{element} must be of a restricted @i{type}.
+
+The phrasing ``an @i{array} @i{specialized} to @i{type} <<@i{type}>>''
+is sometimes used to emphasize the @i{element type} of an @i{array}.
+This phrasing is tolerated even when the <<@i{type}>> is @b{t},
+even though an @i{array} @i{specialized} to @i{type} @i{t}
+is a @i{general} @i{array}, not a @i{specialized} @i{array}.
+
+Figure 15--1 lists some @i{defined names} that are applicable to @i{array} 
+creation, @i{access}, and information operations.
+
+@format
+@group
+@noindent
+@w{ adjust-array             array-in-bounds-p      svref                       }
+@w{ adjustable-array-p       array-rank             upgraded-array-element-type }
+@w{ aref                     array-rank-limit       upgraded-complex-part-type  }
+@w{ array-dimension          array-row-major-index  vector                      }
+@w{ array-dimension-limit    array-total-size       vector-pop                  }
+@w{ array-dimensions         array-total-size-limit vector-push                 }
+@w{ array-element-type       fill-pointer           vector-push-extend          }
+@w{ array-has-fill-pointer-p make-array                                         }
+
+@noindent
+@w{           Figure 15--1: General Purpose Array-Related Defined Names          }
+
+@end group
+@end format
+
+@menu
+* Array Upgrading::		
+* Required Kinds of Specialized Arrays::  
+@end menu
+
+@node Array Upgrading, Required Kinds of Specialized Arrays, Specialized Arrays, Specialized Arrays
+@subsubsection Array Upgrading
+
+The @i{upgraded array element type}
+@IGindex upgraded array element type
+ of a @i{type} T_1
+is a @i{type} T_2 that is a @i{supertype} of T_1
+and that is used instead of T_1 whenever T_1
+is used as an @i{array element type} 
+for object creation or type discrimination.
+
+During creation of an @i{array},
+the @i{element type} that was requested 
+is called the @i{expressed array element type}
+@IGindex expressed array element type
+.
+The @i{upgraded array element type} of the @i{expressed array element type}
+becomes the @i{actual array element type}
+@IGindex actual array element type
+ of the @i{array} that is created.
+
+@i{Type} @i{upgrading} implies a movement upwards in the type hierarchy lattice.
+A @i{type} is always a @i{subtype} of its @i{upgraded array element type}.
+Also, if a @i{type} T_x is a @i{subtype} of another @i{type} T_y,
+then
+the @i{upgraded array element type} of T_x 
+must be a @i{subtype} of
+the @i{upgraded array element type} of T_y.
+Two @i{disjoint} @i{types} can be @i{upgraded} to the same @i{type}.
+
+The @i{upgraded array element type} T_2 of a @i{type} T_1
+is a function only of T_1 itself;
+that is, it is independent of any other property of the @i{array} 
+for which T_2 will be used,
+such as @i{rank}, @i{adjustability}, @i{fill pointers}, or displacement.
+The @i{function} @b{upgraded-array-element-type} 
+can be used by @i{conforming programs} to predict how the @i{implementation}
+will @i{upgrade} a given @i{type}.
+
+@node Required Kinds of Specialized Arrays,  , Array Upgrading, Specialized Arrays
+@subsubsection Required Kinds of Specialized Arrays
+
+@i{Vectors} whose @i{elements} are restricted to @i{type}
+
+@b{character} or a @i{subtype} of @b{character}
+
+are called @i{strings}
+@IGindex string
+. 
+@i{Strings} are of @i{type} @b{string}.
+Figure 15--2 lists some @i{defined names} related to @i{strings}.
+
+@i{Strings} are @i{specialized} @i{arrays} 
+and might logically have been included in this chapter.
+However, for purposes of readability
+most information about @i{strings} does not appear in this chapter;
+see instead @ref{Strings}.
+
+@format
+@group
+@noindent
+@w{  char                string-equal         string-upcase  }
+@w{  make-string         string-greaterp      string@t{/=}       }
+@w{  nstring-capitalize  string-left-trim     string@t{<}        }
+@w{  nstring-downcase    string-lessp         string@t{<=}       }
+@w{  nstring-upcase      string-not-equal     string@t{=}        }
+@w{  schar               string-not-greaterp  string@t{>}        }
+@w{  string              string-not-lessp     string@t{>=}       }
+@w{  string-capitalize   string-right-trim                   }
+@w{  string-downcase     string-trim                         }
+
+@noindent
+@w{      Figure 15--2: Operators that Manipulate Strings     }
+
+@end group
+@end format
+
+@i{Vectors} whose @i{elements} are restricted to @i{type}
+@b{bit} are called @i{bit vectors}
+@IGindex bit vector
+.
+@i{Bit vectors} are of @i{type} @b{bit-vector}.
+Figure 15--3 lists some @i{defined names} for operations on @i{bit arrays}.
+
+@format
+@group
+@noindent
+@w{  bit        bit-ior   bit-orc2  }
+@w{  bit-and    bit-nand  bit-xor   }
+@w{  bit-andc1  bit-nor   sbit      }
+@w{  bit-andc2  bit-not             }
+@w{  bit-eqv    bit-orc1            }
+
+@noindent
+@w{  Figure 15--3: Operators that Manipulate Bit Arrays}
+
+@end group
+@end format
+
+@c end of including concept-arrays
+
+@node Arrays Dictionary,  , Array Concepts, Arrays
+@section Arrays Dictionary
+
+@c including dict-arrays
+
+@menu
+* array::			
+* simple-array::		
+* vector (System Class)::	
+* simple-vector::		
+* bit-vector::			
+* simple-bit-vector::		
+* make-array::			
+* adjust-array::		
+* adjustable-array-p::		
+* aref::			
+* array-dimension::		
+* array-dimensions::		
+* array-element-type::		
+* array-has-fill-pointer-p::	
+* array-displacement::		
+* array-in-bounds-p::		
+* array-rank::			
+* array-row-major-index::	
+* array-total-size::		
+* arrayp::			
+* fill-pointer::		
+* row-major-aref::		
+* upgraded-array-element-type::	 
+* array-dimension-limit::	
+* array-rank-limit::		
+* array-total-size-limit::	
+* simple-vector-p::		
+* svref::			
+* vector::			
+* vector-pop::			
+* vector-push::			
+* vectorp::			
+* bit (Array)::				
+* bit-and::			
+* bit-vector-p::		
+* simple-bit-vector-p::		
+@end menu
+
+@node array, simple-array, Arrays Dictionary, Arrays Dictionary
+@subsection array                                                        [System Class]
+
+@subsubheading  Class Precedence List::
+@b{array},
+@b{t}
+
+@subsubheading  Description::
+
+An @i{array} contains @i{objects} arranged according to a
+Cartesian coordinate system.
+An @i{array} provides mappings from a set of
+
+@i{fixnums}
+
+\left@{i_0,i_1,\dots,i_@{r-1@}\right@} to corresponding @i{elements}
+of the @i{array}, 
+where 0 \le i_j < d_j,
+r is the rank of the array, and d_j is the size of @i{dimension} j of
+the array.
+
+When an @i{array} is created, the program requesting its creation may
+declare that all @i{elements} are of a particular @i{type}, 
+called the @i{expressed array element type}.
+The implementation is permitted to @i{upgrade} this type in order to 
+produce the @i{actual array element type},
+which is the @i{element type} for the @i{array} is actually @i{specialized}.
+See the @i{function} @b{upgraded-array-element-type}.
+
+@subsubheading  Compound Type Specifier Kind::
+
+Specializing.
+
+@subsubheading  Compound Type Specifier Syntax::
+
+(@code{array}@{@i{@t{[}@{element-type | @b{*}@} @r{[}dimension-spec@r{]}@t{]}}@})
+
+@w{@i{dimension-spec} ::=rank | @b{*} | @r{(}@{dimension | @b{*}@}*@r{)}}
+
+@subsubheading  Compound Type Specifier Arguments::
+
+@i{dimension}---a @i{valid array dimension}.
+
+@i{element-type}---a @i{type specifier}.
+
+@i{rank}---a non-negative @i{fixnum}.
+
+@subsubheading  Compound Type Specifier Description::
+
+This denotes the set of @i{arrays} whose
+  @i{element type},  @i{rank},  and @i{dimensions}
+match any given
+  @i{element-type}, @i{rank}, and @i{dimensions}.
+Specifically:
+
+If @i{element-type} is the @i{symbol} @b{*},
+@i{arrays} are not excluded on the basis of their @i{element type}.
+Otherwise, only those @i{arrays} are included whose @i{actual array element type}
+
+is the result of @i{upgrading} @i{element-type};
+see @ref{Array Upgrading}.
+
+If the @i{dimension-spec} is a @i{rank},
+the set includes only those @i{arrays} having that @i{rank}.
+If the @i{dimension-spec} is a @i{list} of @i{dimensions},
+the set includes only those @i{arrays} having a @i{rank}
+given by the @i{length} of the @i{dimensions},
+and having the indicated @i{dimensions}; 
+in this case, @b{*} matches any value for the corresponding @i{dimension}.
+If the @i{dimension-spec} is the @i{symbol} @b{*},
+the set is not restricted on the basis of @i{rank} or @i{dimension}.
+
+@subsubheading  See Also::
+
+@b{*print-array*},
+@ref{aref}
+,
+@ref{make-array}
+,
+@b{vector},
+@ref{Sharpsign A},
+@ref{Printing Other Arrays}
+
+@subsubheading  Notes::
+
+Note that the type @t{(array t)}     
+is a proper @i{subtype} of the type @t{(array *)}.
+The reason is that the type @t{(array t)} is the set of @i{arrays} 
+that can
+hold any @i{object} (the @i{elements} are of @i{type} @b{t},  which includes
+all @i{objects}).
+On the other hand, the type @t{(array *)}
+is the set of all @i{arrays} whatsoever, including for example
+@i{arrays} that can hold only @i{characters}. 
+The type @t{(array character)} 
+is not a @i{subtype} of the type @t{(array t)}; 
+the two sets                                              
+are @i{disjoint} because the type @t{(array character)} is not the
+set of all @i{arrays} that can hold 
+@i{characters}, but rather the set of
+@i{arrays} 
+that are specialized to hold precisely @i{characters} and no
+other @i{objects}. 
+
+@node simple-array, vector (System Class), array, Arrays Dictionary
+@subsection simple-array                                                         [Type]
+
+@subsubheading  Supertypes:: 
+
+@b{simple-array},
+@b{array},
+@b{t}
+
+@subsubheading  Description::
+
+The @i{type} of an @i{array} that is not displaced 
+to another @i{array}, has no @i{fill pointer}, and is
+not
+@i{expressly adjustable} is a @i{subtype} of @i{type} @b{simple-array}.
+The concept of a @i{simple array}
+exists to allow the implementation to use a specialized representation
+and to allow the user to declare that certain values will always be
+@i{simple arrays}. 
+
+The @i{types} @b{simple-vector},
+		 @b{simple-string},
+             and @b{simple-bit-vector}
+are @i{disjoint} @i{subtypes} of @i{type} @b{simple-array}, 
+for they respectively mean @t{(simple-array t (*))},
+		           the union of all @t{(simple-array @i{c} (*))} 
+ 			    for any @i{c} being a @i{subtype} of @i{type} @b{character},
+			and @t{(simple-array bit (*))}.
+
+@subsubheading  Compound Type Specifier Kind::
+
+Specializing.
+
+@subsubheading  Compound Type Specifier Syntax::
+
+(@code{simple-array}@{@i{@t{[}@{element-type | @b{*}@} @r{[}dimension-spec@r{]}@t{]}}@})
+
+@w{@i{dimension-spec} ::=rank | @b{*} | @r{(}@{dimension | @b{*}@}*@r{)}}
+
+@subsubheading  Compound Type Specifier Arguments::
+
+@i{dimension}---a @i{valid array dimension}.
+
+@i{element-type}---a @i{type specifier}.
+
+@i{rank}---a non-negative @i{fixnum}.
+
+@subsubheading  Compound Type Specifier Description::
+
+This @i{compound type specifier} is treated exactly as the corresponding
+@i{compound type specifier} for @i{type} @b{array} would be treated,
+except that the set is further constrained to include only @i{simple arrays}.
+
+@subsubheading  Notes::
+
+It is @i{implementation-dependent} 
+whether @i{displaced arrays},
+        @i{vectors} with @i{fill pointers},
+     or arrays that are @i{actually adjustable}
+  are @i{simple arrays}.
+
+@t{(simple-array *)} refers to all @i{simple arrays} 
+regardless of element type, @t{(simple-array @i{type-specifier})}
+refers only to those @i{simple arrays}
+that can result from giving @i{type-specifier} as the
+@t{:element-type} argument to @b{make-array}.  
+
+@node vector (System Class), simple-vector, simple-array, Arrays Dictionary
+@subsection vector                                                       [System Class]
+
+@subsubheading  Class Precedence List::
+@b{vector},
+@b{array},
+@b{sequence},
+@b{t}
+
+@subsubheading  Description::
+
+Any one-dimensional @i{array} is a @i{vector}.
+
+The @i{type} @b{vector} is a @i{subtype} of @i{type} @b{array}; 
+for all @i{types} @t{x}, @t{(vector x)} is the same as @t{(array x (*))}.
+
+The @i{type} @t{(vector t)}, the @i{type} @b{string}, and the @i{type} @b{bit-vector}
+are @i{disjoint} @i{subtypes} of @i{type} @b{vector}.
+
+@subsubheading  Compound Type Specifier Kind::
+
+Specializing.
+
+@subsubheading  Compound Type Specifier Syntax::
+
+(@code{vector}@{@i{@t{[}@{element-type | @b{*}@} @r{[}@{size | @b{*}@}@r{]}@t{]}}@})
+
+@subsubheading  Compound Type Specifier Arguments::
+
+@i{size}---a non-negative @i{fixnum}.
+
+@i{element-type}---a @i{type specifier}.
+
+@subsubheading  Compound Type Specifier Description::
+
+This denotes the set of specialized @i{vectors}
+whose @i{element type} and @i{dimension} match the specified values.
+Specifically:
+
+If @i{element-type} is the @i{symbol} @b{*},
+@i{vectors} are not excluded on the basis of their @i{element type}.
+Otherwise, only those @i{vectors} are included whose @i{actual array element type}
+
+is the result of @i{upgrading} @i{element-type};
+see @ref{Array Upgrading}.
+
+If a @i{size} is specified,
+the set includes only those @i{vectors} whose only @i{dimension}
+is @i{size}.
+If the @i{symbol} @b{*} is specified instead of a @i{size},
+the set is not restricted on the basis of @i{dimension}.
+
+@subsubheading  See Also::
+
+@ref{Required Kinds of Specialized Arrays},
+@ref{Sharpsign Left-Parenthesis},
+@ref{Printing Other Vectors},
+@ref{Sharpsign A}
+
+@subsubheading  Notes::
+
+The @i{type} @t{(vector @i{e} @i{s})} 
+is equivalent to the @i{type} @t{(array @i{e} (@i{s}))}.
+
+The type @t{(vector bit)} has the name @b{bit-vector}.
+
+The union of all @i{types} @t{(vector C)}, 
+where C is any @i{subtype} of @b{character},
+has the name @b{string}.
+
+@t{(vector *)} refers to all @i{vectors} 
+regardless of element type, @t{(vector @i{type-specifier})}
+refers only to those @i{vectors} 
+that can result from giving @i{type-specifier} as the
+@t{:element-type} argument to @b{make-array}.  
+
+@node simple-vector, bit-vector, vector (System Class), Arrays Dictionary
+@subsection simple-vector                                                        [Type]
+
+@subsubheading  Supertypes::
+
+@b{simple-vector},
+@b{vector},
+@b{simple-array},
+@b{array},
+@b{sequence},
+@b{t}
+
+@subsubheading  Description::
+
+The @i{type} of a @i{vector} that is not displaced to another
+@i{array}, has no @i{fill pointer}, is not 
+@i{expressly adjustable}
+and is able to hold 
+elements of any @i{type} is a @i{subtype} of @i{type} @b{simple-vector}.
+
+The @i{type} @b{simple-vector} is a @i{subtype} of @i{type} @b{vector},
+and is a @i{subtype} of @i{type} @t{(vector t)}.
+
+@subsubheading  Compound Type Specifier Kind::
+
+Specializing.
+
+@subsubheading  Compound Type Specifier Syntax::
+
+(@code{simple-vector}@{@i{@t{[}size@t{]}}@})
+
+@subsubheading  Compound Type Specifier Arguments::
+
+@i{size}---a non-negative @i{fixnum},
+	    or the @i{symbol} @b{*}.
+  The default is the @i{symbol} @b{*}.
+
+@subsubheading  Compound Type Specifier Description::
+
+This is the same as @t{(simple-array t (@i{size}))}.
+
+@node bit-vector, simple-bit-vector, simple-vector, Arrays Dictionary
+@subsection bit-vector                                                   [System Class]
+
+@subsubheading  Class Precedence List::
+@b{bit-vector},
+@b{vector},
+@b{array},
+@b{sequence},
+@b{t}
+
+@subsubheading  Description::
+
+A @i{bit vector} is a @i{vector} the @i{element type} of which is @i{bit}.
+
+The @i{type} @b{bit-vector} is a @i{subtype} of @i{type} @b{vector}, 
+for @b{bit-vector} means @t{(vector bit)}.
+
+@subsubheading  Compound Type Specifier Kind::
+
+Abbreviating.
+
+@subsubheading  Compound Type Specifier Syntax::
+
+(@code{bit-vector}@{@i{@t{[}size@t{]}}@})
+
+@subsubheading  Compound Type Specifier Arguments::
+
+@i{size}---a non-negative @i{fixnum},
+	    or the @i{symbol} @b{*}.
+
+@subsubheading  Compound Type Specifier Description::
+
+This denotes the same @i{type} as the @i{type} @t{(array bit (@i{size}))};
+that is, the set of @i{bit vectors} of size @i{size}.
+
+@subsubheading  See Also::
+
+@ref{Sharpsign Asterisk},
+@ref{Printing Bit Vectors},
+@ref{Required Kinds of Specialized Arrays}
+
+@node simple-bit-vector, make-array, bit-vector, Arrays Dictionary
+@subsection simple-bit-vector                                                    [Type]
+
+@subsubheading  Supertypes:: 
+
+@b{simple-bit-vector},
+@b{bit-vector},
+@b{vector},
+@b{simple-array},
+@b{array},
+@b{sequence},
+@b{t}
+
+@subsubheading  Description::
+
+The @i{type} of a @i{bit vector} that is not displaced
+to another @i{array}, has no @i{fill pointer}, and is 
+not
+@i{expressly adjustable}
+is a
+@i{subtype} of @i{type} @b{simple-bit-vector}.
+
+@subsubheading  Compound Type Specifier Kind::
+
+Abbreviating.
+
+@subsubheading  Compound Type Specifier Syntax::
+
+(@code{simple-bit-vector}@{@i{@t{[}size@t{]}}@})
+
+@subsubheading  Compound Type Specifier Arguments::
+
+@i{size}---a non-negative @i{fixnum},
+	    or the @i{symbol} @b{*}.
+  The default is the @i{symbol} @b{*}.
+
+@subsubheading  Compound Type Specifier Description::
+
+This denotes the same type as the @i{type}
+@t{(simple-array bit (@i{size}))}; 
+that is, the set of @i{simple bit vectors} of size @i{size}.
+
+@node make-array, adjust-array, simple-bit-vector, Arrays Dictionary
+@subsection make-array                                                       [Function]
+
+@code{make-array}  @i{dimensions @r{&key} element-type
+                                                 initial-element
+                                                 initial-contents
+                                                 adjustable
+                                                 fill-pointer
+                                                 displaced-to
+                                                 displaced-index-offset}@*
+   @result{}  @i{new-array}
+
+@subsubheading  Arguments and Values::
+
+@i{dimensions}---a @i{designator} for a @i{list} of @i{valid array dimensions}.
+
+@i{element-type}---a @i{type specifier}. 
+ The default is @b{t}.
+
+@i{initial-element}---an @i{object}.
+
+@i{initial-contents}---an @i{object}.
+
+@i{adjustable}---a @i{generalized boolean}.
+ The default is @b{nil}.
+
+@i{fill-pointer}---a @i{valid fill pointer} for the @i{array} to be created,
+		       or @b{t} or @b{nil}.
+ The default is @b{nil}.
+
+@i{displaced-to}---an @i{array} or @b{nil}.
+ The default is @b{nil}.
+ This option must not be supplied if either @i{initial-element}
+ or @i{initial-contents} is supplied.
+
+@i{displaced-index-offset}---a @i{valid array row-major index} 
+ for @i{displaced-to}. The default is @t{0}.
+ This option must not be supplied unless a @i{non-nil} @i{displaced-to} is supplied.
+
+@i{new-array}---an @i{array}.
+
+@subsubheading  Description::
+
+Creates and returns an @i{array} constructed of the most @i{specialized}
+@i{type} that can accommodate elements of @i{type} given by @i{element-type}.
+If @i{dimensions} is @b{nil} then a zero-dimensional @i{array} is created.
+
+@i{Dimensions} represents the dimensionality of the new @i{array}.
+
+@i{element-type} indicates the @i{type} of the elements intended to be stored
+in the @i{new-array}.  The @i{new-array} can actually store any @i{objects}
+of the @i{type} which results from @i{upgrading} @i{element-type};
+see @ref{Array Upgrading}.
+
+If @i{initial-element} is supplied, 
+it is used to initialize each @i{element} of @i{new-array}. 
+If @i{initial-element} is supplied,
+it must be of the @i{type} given by @i{element-type}.
+@i{initial-element} cannot be supplied if either the @t{:initial-contents} option
+is supplied or @i{displaced-to} is @i{non-nil}.
+If @i{initial-element} is not supplied,
+
+the consequences of later reading an uninitialized @i{element} of @i{new-array}
+are undefined
+
+unless either @i{initial-contents} is supplied 
+or @i{displaced-to} is @i{non-nil}.
+
+@i{initial-contents} is used to initialize the contents of @i{array}.
+For example:
+
+@example
+ (make-array '(4 2 3) :initial-contents
+             '(((a b c) (1 2 3))
+              ((d e f) (3 1 2))
+              ((g h i) (2 3 1))
+              ((j k l) (0 0 0))))
+@end example
+
+@i{initial-contents} is composed of a nested structure of @i{sequences}. 
+The numbers of levels in the structure must equal the rank of @i{array}.
+Each leaf of the nested structure must be of the @i{type} given by @i{element-type}. 
+If @i{array} is zero-dimensional, then @i{initial-contents} specifies the single
+@i{element}.  Otherwise, @i{initial-contents} must be a @i{sequence}
+whose length is equal to the first dimension; each element must be a nested 
+structure for an @i{array} whose dimensions are the remaining dimensions, 
+and so on.
+@i{Initial-contents} cannot be supplied if either 
+@i{initial-element} is supplied
+or @i{displaced-to} is @i{non-nil}.
+If @i{initial-contents} is not supplied,
+
+the consequences of later reading an uninitialized @i{element} of @i{new-array}
+are undefined
+
+unless either @i{initial-element} is supplied
+or @i{displaced-to} is @i{non-nil}.
+
+If @i{adjustable} is @i{non-nil},
+the array is @i{expressly adjustable} 
+	      (and so @i{actually adjustable});
+otherwise, the array is not @i{expressly adjustable} 
+       (and it is @i{implementation-dependent} whether 
+	    the array is @i{actually adjustable}).
+
+If @i{fill-pointer} is @i{non-nil},
+the @i{array} must be one-dimensional;
+that is, the @i{array} must be a @i{vector}.
+If @i{fill-pointer} is @b{t},
+the length of the @i{vector} is used to initialize the @i{fill pointer}.
+If @i{fill-pointer} is an @i{integer},
+it becomes the initial @i{fill pointer} for the @i{vector}.
+
+If @i{displaced-to} is @i{non-nil},
+@b{make-array} will create a @i{displaced array} 
+and @i{displaced-to} is the @i{target} of that @i{displaced array}. 
+In that case, the consequences are undefined if the @i{actual array element type} of 
+@i{displaced-to} is not @i{type equivalent} to the @i{actual array element type}
+of the @i{array} being created.
+If @i{displaced-to} is @b{nil}, the @i{array} is not a @i{displaced array}.
+
+The @i{displaced-index-offset} is made to be the index offset of the @i{array}.
+When an array A is given as
+the @t{:displaced-to} @i{argument} to @b{make-array} 
+when creating array B,
+then array B is said to be displaced to array A.  The
+total number of elements in an @i{array}, 
+called the total size of the @i{array},
+is calculated as the product of all the dimensions.
+It is required that the total size of A be no smaller than the sum
+of the total size of B plus the offset @t{n} supplied by
+the @i{displaced-index-offset}.
+The effect of displacing is that array B does not have any
+elements of its own, but instead maps @i{accesses} to itself into
+@i{accesses} to array A.  The mapping treats both @i{arrays} as if they
+were one-dimensional by taking the elements in row-major order,
+and then maps an @i{access} to element @t{k} of array B to an @i{access} to element
+@t{k}+@t{n} of array A.
+
+If @b{make-array} is called with @i{adjustable}, @i{fill-pointer},
+and @i{displaced-to} each @b{nil}, 
+then the result is a @i{simple array}.
+
+If @b{make-array} is called with one or more of @i{adjustable},
+@i{fill-pointer}, or @i{displaced-to} being @i{true}, whether the
+resulting @i{array} is a @i{simple array} is @i{implementation-dependent}.
+
+  When an array A is given as the @t{:displaced-to} @i{argument} to
+  @b{make-array} when creating array B, then array B is said to
+  be displaced to array A.  The total number of elements in an @i{array}, 
+  called the total size of the @i{array}, is calculated as the product
+  of all the dimensions.
+The consequences are unspecified if
+the total size of A is smaller than the sum
+of the total size of B plus the offset @t{n} supplied by
+the @i{displaced-index-offset}.
+The effect of displacing is that array B does not have any
+elements of its own, but instead maps @i{accesses} to itself into
+@i{accesses} to array A.  The mapping treats both @i{arrays} as if they
+were one-dimensional by taking the elements in row-major order,
+and then maps an @i{access} to element @t{k} of array B to an @i{access} 
+to @i{element} @t{k}+@t{n} of array A.
+
+@subsubheading  Examples::
+@example
+
+ (make-array 5) ;; Creates a one-dimensional array of five elements.
+ (make-array '(3 4) :element-type '(mod 16)) ;; Creates a 
+                ;;two-dimensional array, 3 by 4, with four-bit elements.
+ (make-array 5 :element-type 'single-float) ;; Creates an array of single-floats.
+@end example
+
+@example
+ (make-array nil :initial-element nil) @result{}  #0ANIL
+ (make-array 4 :initial-element nil) @result{}  #(NIL NIL NIL NIL)
+ (make-array '(2 4) 
+              :element-type '(unsigned-byte 2) 
+              :initial-contents '((0 1 2 3) (3 2 1 0)))
+@result{}  #2A((0 1 2 3) (3 2 1 0))
+ (make-array 6
+              :element-type 'character 
+              :initial-element #\a 
+              :fill-pointer 3) @result{}  "aaa"
+@end example
+
+The following is an example of making a @i{displaced array}.
+
+@example
+ (setq a (make-array '(4 3))) 
+@result{}  #<ARRAY 4x3 simple 32546632>
+ (dotimes (i 4)
+   (dotimes (j 3)
+     (setf (aref a i j) (list i 'x j '= (* i j)))))
+@result{}  NIL
+ (setq b (make-array 8 :displaced-to a
+                       :displaced-index-offset 2))
+@result{}  #<ARRAY 8 indirect 32550757>
+ (dotimes (i 8)
+   (print (list i (aref b i))))
+@t{ |> } (0 (0 X 2 = 0)) 
+@t{ |> } (1 (1 X 0 = 0)) 
+@t{ |> } (2 (1 X 1 = 1)) 
+@t{ |> } (3 (1 X 2 = 2)) 
+@t{ |> } (4 (2 X 0 = 0)) 
+@t{ |> } (5 (2 X 1 = 2)) 
+@t{ |> } (6 (2 X 2 = 4)) 
+@t{ |> } (7 (3 X 0 = 0)) 
+@result{}  NIL
+@end example
+
+The last example depends on the fact that @i{arrays} are, in effect,
+stored in row-major order. 
+
+@example
+ (setq a1 (make-array 50))
+@result{}  #<ARRAY 50 simple 32562043>
+ (setq b1 (make-array 20 :displaced-to a1 :displaced-index-offset 10))
+@result{}  #<ARRAY 20 indirect 32563346>
+ (length b1) @result{}  20
+
+ (setq a2 (make-array 50 :fill-pointer 10))
+@result{}  #<ARRAY 50 fill-pointer 10 46100216>
+ (setq b2 (make-array 20 :displaced-to a2 :displaced-index-offset 10))
+@result{}  #<ARRAY 20 indirect 46104010>
+ (length a2) @result{}  10
+ (length b2) @result{}  20
+
+ (setq a3 (make-array 50 :fill-pointer 10))
+@result{}  #<ARRAY 50 fill-pointer 10 46105663>
+ (setq b3 (make-array 20 :displaced-to a3 :displaced-index-offset 10
+                         :fill-pointer 5))
+@result{}  #<ARRAY 20 indirect, fill-pointer 5 46107432>
+ (length a3) @result{}  10
+ (length b3) @result{}  5
+@end example
+
+@subsubheading  See Also::
+
+@ref{adjustable-array-p}
+,
+@ref{aref}
+,
+@ref{arrayp}
+,
+@ref{array-element-type}
+,
+@ref{array-rank-limit}
+,
+@ref{array-dimension-limit}
+,
+@ref{fill-pointer}
+,
+@ref{upgraded-array-element-type}
+
+@subsubheading  Notes::
+
+There is no specified way to create an @i{array} 
+for which @b{adjustable-array-p} definitely
+returns @i{false}.
+There is no specified way to create an @i{array} 
+that is not a @i{simple array}.
+
+@node adjust-array, adjustable-array-p, make-array, Arrays Dictionary
+@subsection adjust-array                                                     [Function]
+
+@code{adjust-array}  @i{array new-dimensions @r{&key} element-type
+                                                           initial-element
+                                                           initial-contents
+                                                           fill-pointer
+                                                           displaced-to
+                                                           displaced-index-offset}@*
+   @result{}  @i{adjusted-array}
+
+@subsubheading  Arguments and Values:: 
+
+@i{array}---an @i{array}.
+
+@i{new-dimensions}---a @i{valid array dimension} 
+   		      or a @i{list} of @i{valid array dimensions}.
+
+@i{element-type}---a @i{type specifier}.
+
+@i{initial-element}---an @i{object}.
+  @i{Initial-element} must not be supplied if either 
+  @i{initial-contents} or @i{displaced-to} is supplied.
+
+@i{initial-contents}---an @i{object}.
+ If @i{array} has rank greater than zero, then @i{initial-contents}
+ is composed of nested @i{sequences}, the depth of which must equal
+ the rank of @i{array}.  Otherwise, @i{array} is zero-dimensional and
+ @i{initial-contents} supplies the single element.
+ @i{initial-contents} must not be supplied if either 
+ @i{initial-element} or @i{displaced-to} is given.
+
+@i{fill-pointer}---a @i{valid fill pointer} for the
+ @i{array} to be created, or @b{t}, or @b{nil}.
+ The default is @b{nil}.
+
+@i{displaced-to}---an @i{array} or @b{nil}.
+ @i{initial-elements} and @i{initial-contents} must not be supplied
+ if @i{displaced-to} is supplied.
+
+@i{displaced-index-offset}---an @i{object} of @i{type} @t{(fixnum 0 @i{n})} 
+ where @i{n} is @t{(array-total-size @i{displaced-to})}.
+ @i{displaced-index-offset} may be supplied only if @i{displaced-to} is supplied.
+
+@i{adjusted-array}---an @i{array}.
+
+@subsubheading  Description::
+
+@b{adjust-array} changes the dimensions or elements of @i{array}.
+The result is an @i{array} of the same @i{type} and rank as @i{array},
+that is either the modified @i{array},
+or a newly created @i{array} to which
+@i{array} can be displaced, and that has 
+the given @i{new-dimensions}.
+
+@i{New-dimensions} specify the size of each @i{dimension} of @i{array}. 
+
+@i{Element-type} specifies the @i{type} of the @i{elements}
+of the resulting @i{array}.  If @i{element-type} is supplied,
+the consequences are unspecified if
+the @i{upgraded array element type} of @i{element-type}
+is not the same as the @i{actual array element type} of @i{array}.
+
+If @i{initial-contents} is supplied, it is treated as for
+@b{make-array}.  In this case none of the original contents of
+@i{array} appears in the resulting @i{array}.
+
+If @i{fill-pointer} is an @i{integer},
+it becomes the @i{fill pointer} for the resulting @i{array}.
+If @i{fill-pointer} is the symbol @b{t},
+it indicates that the size of the resulting @i{array} 
+should be used as the @i{fill pointer}.
+If @i{fill-pointer} is @b{nil},
+it indicates that the @i{fill pointer} should be left as it is.
+
+If @i{displaced-to}
+@i{non-nil}, a @i{displaced array}
+is created. The resulting @i{array} shares its contents with the @i{array} given by
+@i{displaced-to}.
+The resulting @i{array} cannot contain more elements than the @i{array}
+it is displaced to.  
+If @i{displaced-to} is not supplied or @b{nil},
+the resulting @i{array} is not a @i{displaced array}.
+If array A is created displaced to array B and subsequently
+array B is given to @b{adjust-array}, array A will still be
+displaced to array B.
+Although @i{array} might be a @i{displaced array}, 
+the resulting @i{array} is not a @i{displaced array} unless
+@i{displaced-to} is supplied and not @b{nil}.
+
+The interaction between @b{adjust-array} and 
+displaced @i{arrays} 
+is as follows given three @i{arrays}, @t{A}, @t{B}, and~@t{C}:
+
+@table @asis
+
+@item @t{A} is not displaced before or after the call  
+@example
+ (adjust-array A ...)
+@end example
+
+The dimensions of @t{A} are altered, and the
+contents rearranged as appropriate.  
+Additional elements of @t{A} are taken from
+@i{initial-element}.  
+The use of @i{initial-contents} causes all old contents to be
+discarded.
+
+@item @t{A} is not displaced before, but is displaced to 
+@t{C} after the call  
+@example
+ (adjust-array A ... :displaced-to C)
+@end example
+
+None of the original contents of @t{A} appears in 
+@t{A} afterwards; @t{A} now contains
+the contents of @t{C}, without any rearrangement of @t{C}.
+
+@item @t{A} is displaced to @t{B} 
+before the call, and is displaced to @t{C} after 
+the call  
+@example
+ (adjust-array A ... :displaced-to B)
+ (adjust-array A ... :displaced-to C)
+@end example
+
+@t{B} and @t{C} might be the same. The contents of @t{B} do not appear in 
+@t{A} afterward unless such contents also happen to be in @t{C}  If
+@i{displaced-index-offset} 
+is not supplied in the @b{adjust-array} call, it defaults
+to zero; the old offset into @t{B} is not retained.
+
+@item @t{A} is displaced to @t{B} before the call, but not displaced
+afterward.  
+@example
+ (adjust-array A ... :displaced-to B)
+ (adjust-array A ... :displaced-to nil)
+@end example
+
+@t{A} gets a
+new ``data region,'' and contents of @t{B} are copied into it as appropriate to
+maintain the existing old contents; additional elements of @t{A} 
+are taken from
+@i{initial-element} if supplied.  However, 
+the use of @i{initial-contents} causes all old contents
+to be discarded.
+@end table
+
+If @i{displaced-index-offset} is supplied,
+it specifies the offset
+of the resulting @i{array} from the beginning of 
+the @i{array} that it is displaced to.           
+If @i{displaced-index-offset} is not supplied, the offset is~0.  
+The size of the resulting @i{array} plus the 
+offset value cannot exceed the size of
+the @i{array} that it is displaced to.
+
+If only @i{new-dimensions}
+and an @i{initial-element} argument are supplied,
+those elements of @i{array} that
+are still in bounds appear in the resulting @i{array}. The elements of
+the resulting @i{array} that are not in the bounds of 
+@i{array} are initialized
+to @i{initial-element}; if @i{initial-element} is not provided,
+
+the consequences of later reading any such new @i{element} of @i{new-array}
+before it has been initialized
+are undefined.
+
+If @i{initial-contents} or @i{displaced-to} is supplied,
+then none of the original contents of @i{array} appears in the new @i{array}.
+
+The consequences are unspecified if @i{array} is adjusted 
+to a size smaller than its @i{fill pointer} without supplying
+the @i{fill-pointer} argument so that its @i{fill-pointer}
+is properly adjusted in the process.
+
+If @t{A} is displaced to @t{B}, the consequences are unspecified 
+if @t{B} is adjusted in such a way that it no longer has enough elements
+to satisfy @t{A}.  
+
+If @b{adjust-array} is applied to an @i{array} that is @i{actually adjustable},
+the @i{array} returned is @i{identical} to @i{array}.
+If the @i{array} returned by @b{adjust-array} 
+is @i{distinct} from @i{array}, then the argument @i{array} is unchanged.
+
+Note that if an @i{array} A is displaced to another @i{array} B,
+and B is displaced to another @i{array} C, and B is altered by
+@b{adjust-array}, A must now refer to the adjust contents of B.
+This means that an implementation cannot collapse the chain to make A
+refer to C directly and forget that the chain of reference passes through
+B.  However, caching techniques are permitted as long as they preserve the 
+semantics specified here.
+
+@subsubheading  Examples::
+
+@example
+ (adjustable-array-p
+  (setq ada (adjust-array
+              (make-array '(2 3)
+                          :adjustable t
+                          :initial-contents '((a b c) (1 2 3)))
+              '(4 6)))) @result{}  T 
+ (array-dimensions ada) @result{}  (4 6) 
+ (aref ada 1 1) @result{}  2 
+ (setq beta (make-array '(2 3) :adjustable t))
+@result{}  #2A((NIL NIL NIL) (NIL NIL NIL)) 
+ (adjust-array beta '(4 6) :displaced-to ada)
+@result{}  #2A((A B C NIL NIL NIL)
+       (1 2 3 NIL NIL NIL)
+       (NIL NIL NIL NIL NIL NIL) 
+       (NIL NIL NIL NIL NIL NIL))
+ (array-dimensions beta) @result{}  (4 6)
+ (aref beta 1 1) @result{}  2 
+@end example
+
+Suppose that the 4-by-4 array in @t{m} looks like this:
+
+@example
+#2A(( alpha     beta      gamma     delta )
+    ( epsilon   zeta      eta       theta )
+    ( iota      kappa     lambda    mu    )
+    ( nu        xi        omicron   pi    ))
+@end example
+
+Then the result of
+
+@example
+ (adjust-array m '(3 5) :initial-element 'baz)
+@end example
+
+is a 3-by-5 array with contents       
+
+@example
+#2A(( alpha     beta      gamma     delta     baz )
+    ( epsilon   zeta      eta       theta     baz )
+    ( iota      kappa     lambda    mu        baz ))
+@end example
+
+@subsubheading  Exceptional Situations::
+
+An error of @i{type} @b{error} is signaled if @i{fill-pointer} is supplied
+and @i{non-nil} but @i{array} has no @i{fill pointer}.
+
+@subsubheading  See Also::
+
+@ref{adjustable-array-p}
+,    
+@ref{make-array}
+,
+@ref{array-dimension-limit}
+, 
+@ref{array-total-size-limit}
+,
+@b{array}
+
+@node adjustable-array-p, aref, adjust-array, Arrays Dictionary
+@subsection adjustable-array-p                                               [Function]
+
+@code{adjustable-array-p}  @i{array} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{array}---an @i{array}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns true if and only if @b{adjust-array} could return a @i{value}
+which is @i{identical} to @i{array} when given that @i{array} as its
+first @i{argument}.
+
+@subsubheading  Examples::
+
+@example
+ (adjustable-array-p 
+   (make-array 5
+               :element-type 'character 
+               :adjustable t 
+               :fill-pointer 3)) @result{}  @i{true}
+ (adjustable-array-p (make-array 4)) @result{}  @i{implementation-dependent}
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error} if its argument is not an @i{array}.
+
+@subsubheading  See Also::
+
+@ref{adjust-array}
+, 
+@ref{make-array}
+
+@node aref, array-dimension, adjustable-array-p, Arrays Dictionary
+@subsection aref                                                             [Accessor]
+
+@code{aref}  @i{array @r{&rest} subscripts} @result{}  @i{element}
+
+(setf (@code{         aref} @i{array @r{&rest} subscripts}) new-element)@*
+
+@subsubheading  Arguments and Values::
+
+@i{array}---an @i{array}.
+
+@i{subscripts}---a @i{list} of @i{valid array indices} for the @i{array}.
+
+@i{element}, @i{new-element}---an @i{object}.
+
+@subsubheading  Description::
+
+@i{Accesses} the @i{array} @i{element} specified by the @i{subscripts}.
+If no @i{subscripts} are supplied and @i{array} is zero rank,
+@b{aref} @i{accesses} the sole element of @i{array}.
+
+@b{aref} ignores @i{fill pointers}.
+It is permissible to use @b{aref} 
+to @i{access} any @i{array} @i{element},
+whether @i{active} or not.
+
+@subsubheading  Examples::
+
+If the variable @t{foo} names a 3-by-5 array,
+then the first index could be 0, 1, or 2, and then second index
+could be 0, 1, 2, 3, or 4.  The array elements can be referred to by using
+the @i{function} @b{aref}; for example, @t{(aref foo 2 1)}
+refers to element (2, 1) of the array.  
+
+@example
+ (aref (setq alpha (make-array 4)) 3) @result{}  @i{implementation-dependent}
+ (setf (aref alpha 3) 'sirens) @result{}  SIRENS
+ (aref alpha 3) @result{}  SIRENS
+ (aref (setq beta (make-array '(2 4) 
+                    :element-type '(unsigned-byte 2)
+                    :initial-contents '((0 1 2 3) (3 2 1 0))))
+        1 2) @result{}  1
+ (setq gamma '(0 2))
+ (apply #'aref beta gamma) @result{}  2
+ (setf (apply #'aref beta gamma) 3) @result{}  3
+ (apply #'aref beta gamma) @result{}  3
+ (aref beta 0 2) @result{}  3
+@end example
+
+@subsubheading  See Also::
+
+@ref{bit (Array)}
+,
+@ref{char}
+,
+@ref{elt}
+,
+@ref{row-major-aref}
+,
+@ref{svref}
+,
+
+@ref{Compiler Terminology}
+
+@node array-dimension, array-dimensions, aref, Arrays Dictionary
+@subsection array-dimension                                                  [Function]
+
+@code{array-dimension}  @i{array axis-number} @result{}  @i{dimension}
+
+@subsubheading  Arguments and Values::
+
+@i{array}---an @i{array}.
+
+@i{axis-number}---an @i{integer} greater than or equal to zero
+		      and less than the @i{rank} of the @i{array}.
+
+@i{dimension}---a non-negative @i{integer}.
+
+@subsubheading  Description::
+
+@b{array-dimension} returns the @i{axis-number} 
+@i{dimension}_1 of @i{array}.
+(Any @i{fill pointer} is ignored.)
+
+@subsubheading  Examples::
+
+@example
+ (array-dimension (make-array 4) 0) @result{}  4
+ (array-dimension (make-array '(2 3)) 1) @result{}  3
+@end example
+
+@subsubheading  Affected By::    
+None.
+
+@subsubheading  See Also::
+
+@ref{array-dimensions}
+, 
+@ref{length}
+
+@subsubheading  Notes::
+@example
+ (array-dimension array n) @equiv{} (nth n (array-dimensions array))
+@end example
+
+@node array-dimensions, array-element-type, array-dimension, Arrays Dictionary
+@subsection array-dimensions                                                 [Function]
+
+@code{array-dimensions}  @i{array} @result{}  @i{dimensions}
+
+@subsubheading  Arguments and Values::
+
+@i{array}---an @i{array}.
+
+@i{dimensions}---a @i{list} of @i{integers}.
+
+@subsubheading  Description::                    
+
+Returns a @i{list} of the @i{dimensions} of @i{array}.
+(If @i{array} is a @i{vector} with a @i{fill pointer}, 
+ that @i{fill pointer} is ignored.)
+
+@subsubheading  Examples::
+
+@example
+ (array-dimensions (make-array 4)) @result{}  (4)
+ (array-dimensions (make-array '(2 3))) @result{}  (2 3)
+ (array-dimensions (make-array 4 :fill-pointer 2)) @result{}  (4)
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error} if its argument is not an @i{array}.
+
+@subsubheading  See Also::
+
+@ref{array-dimension}
+
+@node array-element-type, array-has-fill-pointer-p, array-dimensions, Arrays Dictionary
+@subsection array-element-type                                               [Function]
+
+@code{array-element-type}  @i{array} @result{}  @i{typespec}
+
+@subsubheading  Arguments and Values::
+
+@i{array}---an @i{array}.
+
+@i{typespec}---a @i{type specifier}.
+
+@subsubheading  Description::
+
+Returns a @i{type specifier} which represents the @i{actual array element type}
+of the array, which is the set of @i{objects} that such an @i{array} can hold.
+(Because of @i{array} @i{upgrading}, this @i{type specifier} can in
+some cases denote a @i{supertype} of the @i{expressed array element type}
+of the @i{array}.)
+
+@subsubheading  Examples::
+
+@example
+ (array-element-type (make-array 4)) @result{}  T
+ (array-element-type (make-array 12 :element-type '(unsigned-byte 8))) 
+@result{}  @i{implementation-dependent}
+ (array-element-type (make-array 12 :element-type '(unsigned-byte 5)))
+@result{}  @i{implementation-dependent}
+@end example
+
+@example
+ (array-element-type (make-array 5 :element-type '(mod 5)))
+@end example
+
+could be @t{(mod 5)}, @t{(mod 8)}, @t{fixnum}, @t{t}, or any other
+type of which @t{(mod 5)} is a @i{subtype}.
+
+@subsubheading  Affected By::
+
+The @i{implementation}.
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error} if its argument is not an @i{array}.
+
+@subsubheading  See Also::
+
+@b{array},
+@ref{make-array}
+,
+@ref{subtypep}
+,
+@ref{upgraded-array-element-type}
+
+@node array-has-fill-pointer-p, array-displacement, array-element-type, Arrays Dictionary
+@subsection array-has-fill-pointer-p                                         [Function]
+
+@code{array-has-fill-pointer-p}  @i{array} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{array}---an @i{array}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{array} has a @i{fill pointer};
+otherwise returns @i{false}.
+
+@subsubheading  Examples::
+
+@example
+ (array-has-fill-pointer-p (make-array 4)) @result{}  @i{implementation-dependent}
+ (array-has-fill-pointer-p (make-array '(2 3))) @result{}  @i{false}
+ (array-has-fill-pointer-p
+   (make-array 8 
+               :fill-pointer 2 
+               :initial-element 'filler)) @result{}  @i{true}
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error} if its argument is not an @i{array}.
+
+@subsubheading  See Also::
+
+@ref{make-array}
+, 
+@ref{fill-pointer}
+
+@subsubheading  Notes::
+
+Since @i{arrays} of @i{rank} other than one cannot have a @i{fill pointer},
+@b{array-has-fill-pointer-p} always returns @b{nil} when its argument
+is such an array.
+
+@node array-displacement, array-in-bounds-p, array-has-fill-pointer-p, Arrays Dictionary
+@subsection array-displacement                                               [Function]
+
+@code{array-displacement}  @i{array} @result{}  @i{displaced-to, displaced-index-offset}
+
+@subsubheading  Arguments and Values::
+
+@i{array}---an @i{array}.
+
+@i{displaced-to}---an @i{array} or @b{nil}.
+
+@i{displaced-index-offset}---a non-negative @i{fixnum}.
+
+@subsubheading  Description::
+
+If the @i{array} is a @i{displaced array},
+returns the @i{values} of the @t{:displaced-to} and @t{:displaced-index-offset}
+options
+for the @i{array} (see the @i{functions} @b{make-array} and @b{adjust-array}).
+If the @i{array} is not a @i{displaced array},
+@b{nil} and @t{0} are returned.
+
+If @b{array-displacement} is called on an @i{array}
+for which a @i{non-nil} @i{object} was provided as the
+@t{:displaced-to} @i{argument} to @b{make-array} 
+or @b{adjust-array}, it must return that @i{object}
+as its first value. It is @i{implementation-dependent}
+whether @b{array-displacement} returns a @i{non-nil}
+@i{primary value} for any other @i{array}.
+
+@subsubheading  Examples::
+
+@example
+ (setq a1 (make-array 5)) @result{}  #<ARRAY 5 simple 46115576>
+ (setq a2 (make-array 4 :displaced-to a1
+                        :displaced-index-offset 1))
+@result{}  #<ARRAY 4 indirect 46117134>
+ (array-displacement a2)
+@result{}  #<ARRAY 5 simple 46115576>, 1
+ (setq a3 (make-array 2 :displaced-to a2
+                        :displaced-index-offset 2))
+@result{}  #<ARRAY 2 indirect 46122527>
+ (array-displacement a3)
+@result{}  #<ARRAY 4 indirect 46117134>, 2
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{array} is not an @i{array}.
+
+@subsubheading  See Also::
+
+@ref{make-array}
+
+@node array-in-bounds-p, array-rank, array-displacement, Arrays Dictionary
+@subsection array-in-bounds-p                                                [Function]
+
+@code{array-in-bounds-p}  @i{array @r{&rest} subscripts} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{array}---an @i{array}.
+
+@i{subscripts}---a list of @i{integers} 
+		     of length equal to the @i{rank} of the @i{array}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if the @i{subscripts} are all in bounds for @i{array};
+otherwise returns @i{false}.
+(If @i{array} is a @i{vector} with a @i{fill pointer}, 
+ that @i{fill pointer} is ignored.)
+
+@subsubheading  Examples::
+@example
+ (setq a (make-array '(7 11) :element-type 'string-char))
+ (array-in-bounds-p a 0  0) @result{}  @i{true}
+ (array-in-bounds-p a 6 10) @result{}  @i{true}
+ (array-in-bounds-p a 0 -1) @result{}  @i{false}
+ (array-in-bounds-p a 0 11) @result{}  @i{false}
+ (array-in-bounds-p a 7  0) @result{}  @i{false}
+@end example
+
+@subsubheading  See Also::
+
+@ref{array-dimensions}
+
+@subsubheading  Notes::
+@example
+ (array-in-bounds-p array subscripts)   
+ @equiv{} (and (not (some #'minusp (list subscripts)))
+         (every #'< (list subscripts) (array-dimensions array)))
+@end example
+
+@node array-rank, array-row-major-index, array-in-bounds-p, Arrays Dictionary
+@subsection array-rank                                                       [Function]
+
+@code{array-rank}  @i{array} @result{}  @i{rank}
+
+@subsubheading  Arguments and Values::
+
+@i{array}---an @i{array}.
+
+@i{rank}---a non-negative @i{integer}.
+
+@subsubheading  Description::
+
+Returns the number of @i{dimensions} of @i{array}.
+
+@subsubheading  Examples::
+
+@example
+ (array-rank (make-array '())) @result{}  0
+ (array-rank (make-array 4)) @result{}  1
+ (array-rank (make-array '(4))) @result{}  1
+ (array-rank (make-array '(2 3))) @result{}  2
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error} if its argument is not an @i{array}.
+
+@subsubheading  See Also::
+
+@ref{array-rank-limit}
+, 
+@ref{make-array}
+
+@node array-row-major-index, array-total-size, array-rank, Arrays Dictionary
+@subsection array-row-major-index                                            [Function]
+
+@code{array-row-major-index}  @i{array @r{&rest} subscripts} @result{}  @i{index}
+
+@subsubheading  Arguments and Values::
+
+@i{array}---an @i{array}.
+
+@i{subscripts}---a @i{list} of @i{valid array indices} for the @i{array}.
+
+@i{index}---a @i{valid array row-major index} for the @i{array}.
+
+@subsubheading  Description::
+
+Computes the position according to the row-major ordering of @i{array}
+for the element that is specified by @i{subscripts}, and returns the
+offset of the element in the computed position from the beginning of @i{array}.
+
+For a one-dimensional @i{array}, 
+the result of @b{array-row-major-index}
+equals @i{subscript}.
+
+@b{array-row-major-index} ignores @i{fill pointers}.
+
+@subsubheading  Examples::
+
+@example
+ (setq a (make-array '(4 7) :element-type '(unsigned-byte 8)))
+ (array-row-major-index a 1 2) @result{}  9
+ (array-row-major-index 
+    (make-array '(2 3 4) 
+                :element-type '(unsigned-byte 8)
+                :displaced-to a
+                :displaced-index-offset 4)
+    0 2 1) @result{}  9
+@end example
+
+@subsubheading  Notes::
+
+A possible definition of @b{array-row-major-index}, 
+with no error-checking, is
+
+@example
+ (defun array-row-major-index (a &rest subscripts)
+   (apply #'+ (maplist #'(lambda (x y)
+                            (* (car x) (apply #'* (cdr y))))
+                       subscripts
+                       (array-dimensions a))))
+@end example
+
+@node array-total-size, arrayp, array-row-major-index, Arrays Dictionary
+@subsection array-total-size                                                 [Function]
+
+@code{array-total-size}  @i{array} @result{}  @i{size}
+
+@subsubheading  Arguments and Values::
+
+@i{array}---an @i{array}.
+
+@i{size}---a non-negative @i{integer}.
+
+@subsubheading  Description::
+
+Returns the @i{array total size} of the @i{array}.
+
+@subsubheading  Examples::
+
+@example
+ (array-total-size (make-array 4)) @result{}  4
+ (array-total-size (make-array 4 :fill-pointer 2)) @result{}  4
+ (array-total-size (make-array 0)) @result{}  0
+ (array-total-size (make-array '(4 2))) @result{}  8
+ (array-total-size (make-array '(4 0))) @result{}  0
+ (array-total-size (make-array '())) @result{}  1
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error} if its argument is not an @i{array}.
+
+@subsubheading  See Also::
+
+@ref{make-array}
+, 
+@ref{array-dimensions}
+
+@subsubheading  Notes::
+
+If the @i{array} is a @i{vector} with a @i{fill pointer},
+the @i{fill pointer} is ignored when calculating the @i{array total size}.
+
+Since the product of no arguments is one, the @i{array total size} of a
+zero-dimensional @i{array} is one.
+
+@example
+ (array-total-size x)
+    @equiv{} (apply #'* (array-dimensions x))
+    @equiv{} (reduce #'* (array-dimensions x))
+@end example
+
+@node arrayp, fill-pointer, array-total-size, Arrays Dictionary
+@subsection arrayp                                                           [Function]
+
+@code{arrayp}  @i{object} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{object}---an @i{object}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{object} is of @i{type} @b{array};
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::
+
+@example
+ (arrayp (make-array '(2 3 4) :adjustable t)) @result{}  @i{true}
+ (arrayp (make-array 6)) @result{}  @i{true}
+ (arrayp #*1011) @result{}  @i{true}
+ (arrayp "hi") @result{}  @i{true}
+ (arrayp 'hi) @result{}  @i{false}
+ (arrayp 12) @result{}  @i{false}
+@end example
+
+@subsubheading  See Also::
+
+@ref{typep}
+
+@subsubheading  Notes::
+
+@example
+ (arrayp @i{object}) @equiv{} (typep @i{object} 'array)
+@end example
+
+@node fill-pointer, row-major-aref, arrayp, Arrays Dictionary
+@subsection fill-pointer                                                     [Accessor]
+
+@code{fill-pointer}  @i{vector} @result{}  @i{fill-pointer}
+
+(setf (@code{         fill-pointer} @i{vector}) new-fill-pointer)@*
+
+@subsubheading  Arguments and Values::
+
+@i{vector}---a @i{vector} with a @i{fill pointer}.
+
+@i{fill-pointer}, @i{new-fill-pointer}---a @i{valid fill pointer} 
+  for the @i{vector}.
+
+@subsubheading  Description::
+
+@i{Accesses} the @i{fill pointer} of @i{vector}.
+
+@subsubheading  Examples::
+
+@example
+ (setq a (make-array 8 :fill-pointer 4)) @result{}  #(NIL NIL NIL NIL)
+ (fill-pointer a) @result{}  4
+ (dotimes (i (length a)) (setf (aref a i) (* i i))) @result{}  NIL
+ a @result{}  #(0 1 4 9)
+ (setf (fill-pointer a) 3) @result{}  3
+ (fill-pointer a) @result{}  3
+ a @result{}  #(0 1 4)
+ (setf (fill-pointer a) 8) @result{}  8
+ a @result{}  #(0 1 4 9 NIL NIL NIL NIL)
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{vector} is not a @i{vector} with a @i{fill pointer}.
+
+@subsubheading  See Also::
+
+@ref{make-array}
+, 
+@ref{length}
+
+@subsubheading  Notes::
+
+There is no @i{operator} that will remove a @i{vector}'s @i{fill pointer}.
+
+@node row-major-aref, upgraded-array-element-type, fill-pointer, Arrays Dictionary
+@subsection row-major-aref                                                   [Accessor]
+
+@code{row-major-aref}  @i{array index} @result{}  @i{element}
+
+(setf (@code{         row-major-aref} @i{array index}) new-element)@*
+
+@subsubheading  Arguments and Values::
+
+@i{array}---an @i{array}.
+
+@i{index}---a @i{valid array row-major index} for the @i{array}.
+
+@i{element}, @i{new-element}---an @i{object}.
+
+@subsubheading  Description::
+
+Considers @i{array} as a @i{vector} by viewing its @i{elements}
+in row-major order, and returns the @i{element} of that @i{vector} 
+which is referred to by the given @i{index}.
+
+@b{row-major-aref} is valid for use with @b{setf}.
+
+@subsubheading  See Also::
+
+@ref{aref}
+,
+@ref{array-row-major-index}
+
+@subsubheading  Notes::
+
+@example
+ (row-major-aref array index) @equiv{}
+   (aref (make-array (array-total-size array)
+                     :displaced-to array
+                     :element-type (array-element-type array))
+         index)
+
+ (aref array i1 i2 ...) @equiv{}
+     (row-major-aref array (array-row-major-index array i1 i2))
+@end example
+
+@node upgraded-array-element-type, array-dimension-limit, row-major-aref, Arrays Dictionary
+@subsection upgraded-array-element-type                                      [Function]
+
+@code{upgraded-array-element-type}  @i{typespec @r{&optional} environment} @result{}  @i{upgraded-typespec}
+
+@subsubheading  Arguments and Values::
+
+@i{typespec}---a @i{type specifier}.
+
+@i{environment}---an @i{environment} @i{object}.
+  The default is @b{nil}, denoting the @i{null lexical environment}
+	   and the current @i{global environment}.
+
+@i{upgraded-typespec}---a @i{type specifier}.
+
+@subsubheading  Description::
+
+Returns the @i{element type} of 
+the most @i{specialized} @i{array} representation capable of 
+holding items of the @i{type} denoted by @i{typespec}.
+
+The @i{typespec} is a @i{subtype} of 
+(and possibly @i{type equivalent} to)
+the @i{upgraded-typespec}.
+
+If @i{typespec} is @b{bit},
+ the result is @i{type equivalent} to @t{bit}.
+
+If @i{typespec} is @b{base-char},
+ the result is @i{type equivalent} to @t{base-char}.
+
+If @i{typespec} is @b{character},
+ the result is @i{type equivalent} to @t{character}.
+
+The purpose of @b{upgraded-array-element-type} is to reveal how
+an implementation does its @i{upgrading}.
+
+The @i{environment} is used to expand any @i{derived type specifiers}
+that are mentioned in the @i{typespec}.
+
+@subsubheading  See Also::
+
+@ref{array-element-type}
+,
+@ref{make-array}
+
+@subsubheading  Notes::
+
+Except for storage allocation consequences and dealing correctly with the
+optional @i{environment} @i{argument},
+@b{upgraded-array-element-type} could be defined as:
+
+@example
+ (defun upgraded-array-element-type (type &optional environment)
+   (array-element-type (make-array 0 :element-type type)))
+@end example
+
+@node array-dimension-limit, array-rank-limit, upgraded-array-element-type, Arrays Dictionary
+@subsection array-dimension-limit                                   [Constant Variable]
+
+@subsubheading  Constant Value::
+
+A positive
+
+@i{fixnum},
+
+the exact magnitude of which is @i{implementation-dependent},
+but which is not less than @t{1024}.
+
+@subsubheading  Description::
+
+The upper exclusive bound on each individual @i{dimension} of an @i{array}.
+
+@subsubheading  See Also::
+
+@ref{make-array}
+
+@node array-rank-limit, array-total-size-limit, array-dimension-limit, Arrays Dictionary
+@subsection array-rank-limit                                        [Constant Variable]
+
+@subsubheading  Constant Value::
+
+A positive
+
+@i{fixnum},
+
+the exact magnitude of which is @i{implementation-dependent},
+but which is not less than @t{8}.
+
+@subsubheading  Description::
+
+The upper exclusive bound on the @i{rank} of an @i{array}.
+
+@subsubheading  See Also::
+
+@ref{make-array}
+
+@node array-total-size-limit, simple-vector-p, array-rank-limit, Arrays Dictionary
+@subsection array-total-size-limit                                  [Constant Variable]
+
+@subsubheading  Constant Value::
+
+A positive
+
+@i{fixnum},
+
+the exact magnitude of which is @i{implementation-dependent},
+but which is not less than @t{1024}.
+
+@subsubheading  Description::
+
+The upper exclusive bound on the @i{array total size} of an @i{array}.
+
+The actual limit on the @i{array total size} 
+imposed by the @i{implementation}
+might vary according the @i{element type} of the @i{array};
+in this case, the value of @b{array-total-size-limit} 
+will be the smallest of these possible limits.
+
+@subsubheading  See Also::
+
+@ref{make-array}
+, 
+@ref{array-element-type}
+
+@node simple-vector-p, svref, array-total-size-limit, Arrays Dictionary
+@subsection simple-vector-p                                                  [Function]
+
+@code{simple-vector-p}  @i{object} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{object}---an @i{object}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{object} is of @i{type} @b{simple-vector};
+otherwise, returns @i{false}..
+
+@subsubheading  Examples::        
+
+@example
+ (simple-vector-p (make-array 6)) @result{}  @i{true}
+ (simple-vector-p "aaaaaa") @result{}  @i{false}
+ (simple-vector-p (make-array 6 :fill-pointer t)) @result{}  @i{false}
+@end example
+
+@subsubheading  See Also:: 
+
+@b{simple-vector}
+
+@subsubheading  Notes::
+
+@example
+ (simple-vector-p @i{object}) @equiv{} (typep @i{object} 'simple-vector)
+@end example
+
+@node svref, vector, simple-vector-p, Arrays Dictionary
+@subsection svref                                                            [Accessor]
+
+@code{svref}  @i{simple-vector index} @result{}  @i{element}
+
+(setf (@code{         svref} @i{simple-vector index}) new-element)@*
+
+@subsubheading  Arguments and Values::
+
+@i{simple-vector}---a @i{simple vector}.
+
+@i{index}---a @i{valid array index} for the @i{simple-vector}.
+
+@i{element}, @i{new-element}---an @i{object}
+  (whose @i{type} is a @i{subtype} 
+   of the @i{array element type} of the @i{simple-vector}).
+
+@subsubheading  Description::
+
+@i{Accesses} the @i{element} of @i{simple-vector} specified by @i{index}.
+
+@subsubheading  Examples::
+
+@example
+ (simple-vector-p (setq v (vector 1 2 'sirens))) @result{}  @i{true}
+ (svref v 0) @result{}  1
+ (svref v 2) @result{}  SIRENS
+ (setf (svref v 1) 'newcomer) @result{}  NEWCOMER               
+ v @result{}  #(1 NEWCOMER SIRENS)
+@end example
+
+@subsubheading  See Also::
+
+@ref{aref}
+,
+@b{sbit},
+@b{schar},
+@ref{vector}
+,
+
+@ref{Compiler Terminology}
+
+@subsubheading  Notes::
+
+@b{svref} is identical to @b{aref} 
+except that it requires its first argument to be a @i{simple vector}.  
+
+@example
+ (svref @i{v} @i{i}) @equiv{} (aref (the simple-vector @i{v}) @i{i})
+@end example
+
+@node vector, vector-pop, svref, Arrays Dictionary
+@subsection vector                                                           [Function]
+
+@code{vector}  @i{@r{&rest} objects} @result{}  @i{vector}
+
+@subsubheading  Arguments and Values:: 
+
+@i{object}---an @i{object}.
+
+@i{vector}---a @i{vector} of @i{type} @t{(vector t @t{*})}.
+
+@subsubheading  Description::
+
+Creates a @i{fresh} @i{simple general vector} whose size
+corresponds to the number of @i{objects}. 
+
+The @i{vector} is initialized to contain the @i{objects}.
+
+@subsubheading  Examples::
+
+@example
+ (arrayp (setq v (vector 1 2 'sirens))) @result{}  @i{true}
+ (vectorp v) @result{}  @i{true}
+ (simple-vector-p v) @result{}  @i{true}         
+ (length v) @result{}  3
+@end example
+
+@subsubheading  See Also::
+
+@ref{make-array}
+
+@subsubheading  Notes::
+
+@b{vector} is analogous to @b{list}.
+
+@example
+ (vector a_1 a_2 ... a_n)
+  @equiv{} (make-array (list @i{n}) :element-type t
+                          :initial-contents 
+                            (list a_1 a_2 ... a_n))
+@end example
+
+@node vector-pop, vector-push, vector, Arrays Dictionary
+@subsection vector-pop                                                       [Function]
+
+@code{vector-pop}  @i{vector} @result{}  @i{element}
+
+@subsubheading  Arguments and Values::
+
+@i{vector}---a @i{vector} with a @i{fill pointer}.
+
+@i{element}---an @i{object}.
+
+@subsubheading  Description::
+
+Decreases the @i{fill pointer} of @i{vector} by one, 
+and retrieves the @i{element} of @i{vector} that is
+designated by the new @i{fill pointer}.
+
+@subsubheading  Examples::
+
+@example
+ (vector-push (setq fable (list 'fable))
+              (setq fa (make-array 8
+                                   :fill-pointer 2
+                                   :initial-element 'sisyphus))) @result{}  2 
+ (fill-pointer fa) @result{}  3 
+ (eq (vector-pop fa) fable) @result{}  @i{true}
+ (vector-pop fa) @result{}  SISYPHUS 
+ (fill-pointer fa) @result{}  1 
+@end example
+
+@subsubheading  Side Effects::
+
+The @i{fill pointer} is decreased by one.
+
+@subsubheading  Affected By::
+
+The value of the @i{fill pointer}.
+
+@subsubheading  Exceptional Situations::
+
+An error of @i{type} @b{type-error} is signaled if @i{vector} does not have a @i{fill pointer}.
+
+If the @i{fill pointer} is zero, @b{vector-pop} signals an error of @i{type} @b{error}.
+
+@subsubheading  See Also::
+
+@ref{vector-push}
+, @b{vector-push-extend}, 
+@ref{fill-pointer}
+
+@node vector-push, vectorp, vector-pop, Arrays Dictionary
+@subsection vector-push, vector-push-extend                                  [Function]
+
+@code{vector-push}  @i{new-element vector} @result{}  @i{new-index-p}
+
+@code{vector-push-extend}  @i{new-element vector @r{&optional} extension} @result{}  @i{new-index}
+
+@subsubheading  Arguments and Values::
+
+@i{new-element}---an @i{object}.
+
+@i{vector}---a @i{vector} with a @i{fill pointer}.
+
+@i{extension}---a positive @i{integer}.
+ The default is @i{implementation-dependent}.
+
+@i{new-index-p}---a @i{valid array index} for @i{vector}, or @b{nil}.
+
+@i{new-index}---a @i{valid array index} for @i{vector}.
+
+@subsubheading  Description::
+
+@b{vector-push} and @b{vector-push-extend} store 
+@i{new-element} in @i{vector}.
+@b{vector-push} attempts to store
+@i{new-element} 
+in the element of @i{vector} designated by the @i{fill pointer},
+and to increase the @i{fill pointer} by one.  If the 
+@t{(>= (fill-pointer @i{vector}) (array-dimension @i{vector} 0))},
+neither @i{vector} nor its @i{fill pointer} are affected.
+Otherwise, the store and increment take
+place and @b{vector-push} 
+returns the former value of the @i{fill pointer}
+which is one less than the one it leaves in @i{vector}.
+
+@b{vector-push-extend} is just like @b{vector-push} except
+that if the @i{fill pointer} gets too large, @i{vector} is extended using
+@b{adjust-array} so that it can contain more elements.
+@i{Extension}
+is the minimum number of elements to be added to @i{vector} if it
+must be extended.
+
+@b{vector-push} and 
+@b{vector-push-extend} return the index of @i{new-element} in @i{vector}.
+If @t{(>= (fill-pointer @i{vector}) (array-dimension @i{vector} 0))},
+@b{vector-push} returns @b{nil}.
+
+@subsubheading  Examples::
+
+@example
+ (vector-push (setq fable (list 'fable))
+              (setq fa (make-array 8 
+                                   :fill-pointer 2
+                                   :initial-element 'first-one))) @result{}  2 
+ (fill-pointer fa) @result{}  3 
+ (eq (aref fa 2) fable) @result{}  @i{true}
+ (vector-push-extend #\X
+                    (setq aa 
+                          (make-array 5
+                                      :element-type 'character
+                                      :adjustable t
+                                      :fill-pointer 3))) @result{}  3 
+ (fill-pointer aa) @result{}  4 
+ (vector-push-extend #\Y aa 4) @result{}  4 
+ (array-total-size aa) @result{}  at least 5 
+ (vector-push-extend #\Z aa 4) @result{}  5 
+ (array-total-size aa) @result{}  9 ;(or more)
+@end example
+
+@subsubheading  Affected By::
+The value of the @i{fill pointer}.
+
+How @i{vector} was created.
+
+@subsubheading  Exceptional Situations::         
+
+An error of @i{type} @b{error} is signaled by @b{vector-push-extend}
+if it tries to extend @i{vector} and @i{vector} is not @i{actually adjustable}.
+
+An error of @i{type} @b{error} is signaled if @i{vector} does not 
+have a @i{fill pointer}.
+
+@subsubheading  See Also::
+
+@ref{adjustable-array-p}
+, 
+@ref{fill-pointer}
+, 
+@ref{vector-pop}
+
+@node vectorp, bit (Array), vector-push, Arrays Dictionary
+@subsection vectorp                                                          [Function]
+
+@code{vectorp}  @i{object} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{object}---an @i{object}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{object} is of @i{type} @b{vector};
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::
+
+@example
+ (vectorp "aaaaaa") @result{}  @i{true}
+ (vectorp (make-array 6 :fill-pointer t)) @result{}  @i{true}
+ (vectorp (make-array '(2 3 4))) @result{}  @i{false}
+ (vectorp #*11) @result{}  @i{true}
+ (vectorp #b11) @result{}  @i{false}
+@end example
+
+@subsubheading  Notes::
+@example
+ (vectorp @i{object}) @equiv{} (typep @i{object} 'vector)
+@end example
+
+@node bit (Array), bit-and, vectorp, Arrays Dictionary
+@subsection bit, sbit                                                        [Accessor]
+
+@code{bit}  @i{bit-array @r{&rest} subscripts} @result{}  @i{bit}
+
+@code{sbit}  @i{bit-array @r{&rest} subscripts} @result{}  @i{bit}
+
+(setf (@code{bit} @i{bit-array @r{&rest} subscripts}) new-bit)@*(setf (@code{sbit} @i{bit-array @r{&rest} subscripts}) new-bit)@*
+
+@subsubheading  Arguments and Values::
+
+@i{bit-array}---for @b{bit},  a @i{bit array};
+		    for @b{sbit}, a @i{simple bit array}.
+
+@i{subscripts}---a @i{list} of @i{valid array indices} 
+		     for the @i{bit-array}.
+
+@i{bit}---a @i{bit}.
+
+@subsubheading  Description::
+
+@b{bit} and @b{sbit} @i{access} the @i{bit-array} 
+@i{element} specified by @i{subscripts}.
+
+These @i{functions} ignore the @i{fill pointer} when @i{accessing} @i{elements}.
+
+@subsubheading  Examples::
+
+@example
+ (bit (setq ba (make-array 8 
+                            :element-type 'bit 
+                            :initial-element 1))
+       3) @result{}  1
+ (setf (bit ba 3) 0) @result{}  0
+ (bit ba 3) @result{}  0
+ (sbit ba 5) @result{}  1
+ (setf (sbit ba 5) 1) @result{}  1
+ (sbit ba 5) @result{}  1
+@end example
+
+@subsubheading  See Also::
+
+@ref{aref}
+,
+
+@ref{Compiler Terminology}
+
+@subsubheading  Notes::
+
+@b{bit} and @b{sbit} are like @b{aref}
+except that they require @i{arrays} to be
+a @i{bit array} and a @i{simple bit array}, respectively.
+
+@b{bit} and @b{sbit}, unlike @b{char} and @b{schar},
+allow the first argument to be an @i{array} of any @i{rank}.
+
+@node bit-and, bit-vector-p, bit (Array), Arrays Dictionary
+@subsection bit-and, bit-andc1, bit-andc2, bit-eqv,
+@subheading bit-ior, bit-nand, bit-nor, bit-not, bit-orc1, bit-orc2, bit-xor
+@flushright
+@i{[Function]}
+@end flushright
+
+@code{bit-and}  @i{bit-array1 bit-array2 @r{&optional} opt-arg} @result{}  @i{resulting-bit-array}
+
+@code{bit-andc1}  @i{bit-array1 bit-array2 @r{&optional} opt-arg} @result{}  @i{resulting-bit-array}
+
+@code{bit-andc2}  @i{bit-array1 bit-array2 @r{&optional} opt-arg} @result{}  @i{resulting-bit-array}
+
+@code{bit-eqv}  @i{bit-array1 bit-array2 @r{&optional} opt-arg} @result{}  @i{resulting-bit-array}
+
+@code{bit-ior}  @i{bit-array1 bit-array2 @r{&optional} opt-arg} @result{}  @i{resulting-bit-array}
+
+@code{bit-nand}  @i{bit-array1 bit-array2 @r{&optional} opt-arg} @result{}  @i{resulting-bit-array}
+
+@code{bit-nor}  @i{bit-array1 bit-array2 @r{&optional} opt-arg} @result{}  @i{resulting-bit-array}
+
+@code{bit-orc1}  @i{bit-array1 bit-array2 @r{&optional} opt-arg} @result{}  @i{resulting-bit-array}
+
+@code{bit-orc2}  @i{bit-array1 bit-array2 @r{&optional} opt-arg} @result{}  @i{resulting-bit-array}
+
+@code{bit-xor}  @i{bit-array1 bit-array2 @r{&optional} opt-arg} @result{}  @i{resulting-bit-array}
+
+@code{bit-not}  @i{bit-array @r{&optional} opt-arg} @result{}  @i{resulting-bit-array}
+
+@subsubheading  Arguments and Values::
+
+@i{bit-array}, @i{bit-array1}, @i{bit-array2}---a @i{bit array}.
+
+@i{Opt-arg}---a @i{bit array}, or @b{t}, or @b{nil}.
+ The default is @b{nil}.
+
+@i{Bit-array}, @i{bit-array1}, @i{bit-array2}, and @i{opt-arg}
+(if an @i{array}) must all be of the same @i{rank} and @i{dimensions}.  
+
+@i{resulting-bit-array}---a @i{bit array}.
+
+@subsubheading  Description::
+
+These functions perform 
+bit-wise logical operations on @i{bit-array1} and @i{bit-array2}
+and return an @i{array} 
+of matching @i{rank} and @i{dimensions},
+such that any given bit of the result
+is produced by operating on corresponding bits from each of the arguments.
+
+In the case of @b{bit-not}, an @i{array}
+of @i{rank} and @i{dimensions} matching @i{bit-array}
+is returned that contains a copy of @i{bit-array} 
+with all the bits inverted.
+
+If @i{opt-arg} is of type @t{(array bit)} the contents of the 
+result are destructively placed into @i{opt-arg}.
+If @i{opt-arg} is the symbol @b{t},
+@i{bit-array} or @i{bit-array1} is replaced with the result; 
+if @i{opt-arg} is @b{nil} or omitted, a new @i{array} is created
+to contain the result.  
+
+Figure 15--4 indicates the logical operation
+performed by each of the @i{functions}.
+
+ 2
+@format
+@group
+@noindent
+@w{@b{Function}                                                   @b{Operation}                                   }
+@w{_______________________________________________________________________________________________________}
+@w{                                                           }
+@w{@b{bit-and}                                                    and                                         }
+@w{@b{bit-eqv}                                                    equivalence (exclusive nor)                 }
+@w{@b{bit-not}                                                    complement                                  }
+@w{@b{bit-ior}                                                    inclusive or                                }
+@w{@b{bit-xor}                                                    exclusive or                                }
+@w{@b{bit-nand}                                                   complement of @i{bit-array1} and @i{bit-array2}     }
+@w{@b{bit-nor}                                                    complement of @i{bit-array1} or @i{bit-array2}      }
+@w{@b{bit-andc1}                                                  and complement of @i{bit-array1} with @i{bit-array2}}
+@w{@b{bit-andc2}                                                  and @i{bit-array1} with complement of @i{bit-array2}}
+@w{@b{bit-orc1}                                                   or complement of @i{bit-array1} with @i{bit-array2} }
+@w{@b{bit-orc2}                                                   or @i{bit-array1} with complement of @i{bit-array2} }
+@w{@w{  Figure 15--3: Bit-wise Logical Operations on Bit Arrays}
+}
+@end group
+@end format
+
+@subsubheading  Examples::
+@example
+ (bit-and (setq ba #*11101010) #*01101011) @result{}  #*01101010
+ (bit-and #*1100 #*1010) @result{}  #*1000      
+ (bit-andc1 #*1100 #*1010) @result{}  #*0010
+ (setq rba (bit-andc2 ba #*00110011 t)) @result{}  #*11001000
+ (eq rba ba) @result{}  @i{true}
+ (bit-not (setq ba #*11101010)) @result{}  #*00010101
+ (setq rba (bit-not ba 
+                     (setq tba (make-array 8 
+                                           :element-type 'bit))))
+@result{}  #*00010101
+ (equal rba tba) @result{}  @i{true}
+ (bit-xor #*1100 #*1010) @result{}  #*0110
+@end example
+
+@subsubheading  See Also::
+
+@b{lognot}, 
+@ref{logand}
+
+@node bit-vector-p, simple-bit-vector-p, bit-and, Arrays Dictionary
+@subsection bit-vector-p                                                     [Function]
+
+@code{bit-vector-p}  @i{object} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{object}---an @i{object}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{object} is of @i{type} @b{bit-vector};
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::
+
+@example
+ (bit-vector-p (make-array 6 
+                           :element-type 'bit 
+                           :fill-pointer t)) @result{}  @i{true}
+ (bit-vector-p #*) @result{}  @i{true}
+ (bit-vector-p (make-array 6)) @result{}  @i{false}
+@end example
+
+@subsubheading  See Also::                  
+
+@ref{typep}
+
+@subsubheading  Notes::
+
+@example
+ (bit-vector-p @i{object}) @equiv{} (typep @i{object} 'bit-vector)
+@end example
+
+@node simple-bit-vector-p,  , bit-vector-p, Arrays Dictionary
+@subsection simple-bit-vector-p                                              [Function]
+
+@code{simple-bit-vector-p}  @i{object} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::             
+
+@i{object}---an @i{object}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{object} is of @i{type} @b{simple-bit-vector};
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::           
+@example
+ (simple-bit-vector-p (make-array 6)) @result{}  @i{false}
+ (simple-bit-vector-p #*) @result{}  @i{true}
+@end example
+
+@subsubheading  See Also:: 
+
+@ref{simple-vector-p}
+
+@subsubheading  Notes::
+@example
+ (simple-bit-vector-p @i{object}) @equiv{} (typep @i{object} 'simple-bit-vector)
+@end example
+
+@c end of including dict-arrays
+
+@c %**end of chapter
+

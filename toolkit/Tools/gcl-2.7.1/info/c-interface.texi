@@ -1,0 +1,547 @@
+@c  Copyright (c) 1994 William Schelter.
+
+@node C Interface, System Definitions, GCL Specific, Top
+@chapter C Interface
+
+@menu
+* Available Symbols::		
+* External Shared Libraries::
+@end menu
+
+@node Available Symbols,  , C Interface, C Interface
+@section Available Symbols
+
+When GCL is built, those symbols in the system libraries which
+are referenced by functions linked in in the list of objects
+given in @file{unixport/makefile}, become available for reference
+by GCL code.
+
+On some systems it is possible with @code{faslink} to load @file{.o} files
+which reference other libraries, but in general this practice is not
+portable.
+
+
+@node External Shared Libraries,  , C Interface, C Interface
+@section External Shared Libraries
+
+@deffn {Macro} DEFDLFUN
+Package:SYSTEM
+
+Syntax:
+@example
+(compile (DEFDLFUN @{RETURN NAME &optional LIBNAME) ARGS*))
+@end example
+
+GCL specific:  Produces an entry function to function NAME in external shared
+library LIBNAME with the specified args/return signature.  This
+function must be compiled to run.  When inlined, the function
+call collapses to a single reference to a pointer which is
+automatically updated to the location of the external function at
+image startup.  The connection to the external library is persistent
+across image saves and re-executions.  The RETURN and ARGS specifiers
+are keywords from the following list corresponding to the accompanying
+C programming types:
+
+    :char :short :int :long :float :double
+
+Unsigned versions available are:
+
+    :uchar :ushort :uint
+
+Complex float and complex double types can be access via:
+
+    :fcomplex :dcomples
+
+Pointers to types available are
+
+     :void* :char* :long* :float* :double*
+
+Example usage:
+
+@example
+
+@verbatim
+
+
+GCL (GNU Common Lisp)  2.7.0 Thu Oct 26 12:00:01 PM EDT 2023  CLtL1    git: Version_2_7_0pre38
+Source License: LGPL(gcl,gmp), GPL(unexec,bfd,xgcl)
+Binary License:  GPL due to GPL'ed components: (XGCL READLINE UNEXEC)
+Modifications of this banner must retain notice of a compatible license
+Dedicated to the memory of W. Schelter
+
+Use (help) to get some basic information on how to use GCL.
+Temporary directory for compiler files set to /tmp/
+
+>(do-symbols (s :lib) (print s))
+
+LIB:|libm|
+LIB:|libc|
+NIL
+
+>(compile (si::defdlfun (:double "cblas_ddot" "libblas.so") :uint :double* :uint :double* :uint))
+
+;; Compiling /tmp/gazonk_653784_0.lsp.
+;; End of Pass 1.
+;; End of Pass 2.
+OPTIMIZE levels: Safety=0 (No runtime error checking), Space=0, Speed=3
+;; Finished compiling /tmp/gazonk_653784_0.o.
+;; Loading #P"/tmp/gazonk_653784_0.o"
+;; start address for /tmp/gazonk_653784_0.o 0x2700860
+;; Finished loading #P"/tmp/gazonk_653784_0.o"
+#<function 0000000001a4a860>
+NIL
+NIL
+
+>(do-symbols (s :lib) (print s))
+
+LIB:|libblas|
+LIB:|libm|
+LIB:|libc|
+NIL
+
+>(do-symbols (s 'lib::|libblas|) (unless (find-symbol (symbol-name s) :user) (print s)))
+
+|libblas|:|cblas_ddot|
+NIL
+NIL
+
+>(setq a (make-array 3 :element-type 'long-float) b (make-array 3 :element-type 'long-float))
+
+#(0.0 0.0 0.0)
+
+>(setf (aref a 1) 1.2 (aref b 1) 2.3)
+
+2.3
+
+>(|libblas|:|cblas_ddot| 3 a 1 b 1)
+
+2.76
+
+>(compile (defun foo (a b) (declare ((vector long-float) a b)) (|libblas|:|cblas_ddot| (length a) a 1 b 1)))
+
+;; Compiling /tmp/gazonk_653784_0.lsp.
+;; End of Pass 1.
+;; End of Pass 2.
+OPTIMIZE levels: Safety=0 (No runtime error checking), Space=0, Speed=3
+;; Finished compiling /tmp/gazonk_653784_0.o.
+;; Loading #P"/tmp/gazonk_653784_0.o"
+;; start address for /tmp/gazonk_653784_0.o 0x2715050
+;; Finished loading #P"/tmp/gazonk_653784_0.o"
+#<function 0000000001a62140>
+NIL
+NIL
+
+>(compile (defun bar (a b) (declare (inline |libblas|:|cblas_ddot|) ((vector long-float) a b)) (|libblas|:|cblas_ddot| (length a) a 1 b 1)))
+
+;; Compiling /tmp/gazonk_653784_0.lsp.
+;; End of Pass 1.
+;; End of Pass 2.
+OPTIMIZE levels: Safety=0 (No runtime error checking), Space=0, Speed=3
+;; Finished compiling /tmp/gazonk_653784_0.o.
+;; Loading #P"/tmp/gazonk_653784_0.o"
+;; start address for /tmp/gazonk_653784_0.o 0x2729570
+;; Finished loading #P"/tmp/gazonk_653784_0.o"
+#<function 0000000001a62740>
+NIL
+NIL
+
+>(foo a b)
+
+2.76
+
+>(bar a b)
+
+2.76
+
+>(setq compiler::*disassemble-objdump* nil)
+
+NIL
+
+>(disassemble '|libblas|:|cblas_ddot|)
+
+;; Compiling /tmp/gazonk_653784_0.lsp.
+;; End of Pass 1.
+;; End of Pass 2.
+OPTIMIZE levels: Safety=0 (No runtime error checking), Space=0, Speed=3
+;; Finished compiling /tmp/gazonk_653784_0.o.
+
+#include "gazonk_653784_0.h"
+void init_code(){do_init((void *)VV);}
+/*	local entry for function libblas::cblas_ddot	*/
+
+static object LI1__cblas_ddot___gazonk_653784_0(fixnum V6,object V7,fixnum V8,object V9,fixnum V10)
+{	 VMB1 VMS1 VMV1
+	if(!(((char)tp0(make_fixnum(V6)))==(1))){
+	goto T8;
+	}
+	if(!((0)<=(V6))){
+	goto T13;
+	}
+	if(!((V6)<=((fixnum)4294967295))){
+	goto T11;
+	}
+	goto T12;
+
+	goto T13;
+T13:;
+	goto T11;
+
+	goto T12;
+T12:;
+	goto T7;
+
+	goto T11;
+T11:;
+	goto T6;
+
+	goto T8;
+T8:;
+	goto T6;
+
+	goto T7;
+T7:;
+	goto T5;
+
+	goto T6;
+T6:;
+	goto T3;
+
+	goto T5;
+T5:;
+	goto T2;
+
+	goto T3;
+T3:;
+	V11= CMPmake_fixnum(V6);
+	V6= fixint((fcall.argd=4,/* SYSTEM::CHECK-TYPE-SYMBOL */(object )(*LnkLI2)(((object)VV[1]),(V11),((object)VV[2]),Cnil)));
+	goto T2;
+T2:;
+	switch(tp6(V7)){
+	case 428:
+	goto T27;
+T27:;
+	case 492:
+	goto T28;
+T28:;
+	goto T25;
+
+	default:
+	goto T29;
+T29:;
+	goto T24;
+
+	goto T24;
+	}
+	goto T24;
+
+	goto T25;
+T25:;
+	goto T23;
+
+	goto T24;
+T24:;
+	goto T22;
+
+	goto T23;
+T23:;
+	goto T21;
+
+	goto T22;
+T22:;
+	goto T19;
+
+	goto T21;
+T21:;
+	goto T18;
+
+	goto T19;
+T19:;
+	V7= (fcall.argd=4,/* SYSTEM::CHECK-TYPE-SYMBOL */(object )(*LnkLI2)(((object)VV[3]),(V7),((object)VV[4]),Cnil));
+	goto T18;
+T18:;
+	if(!(((char)tp0(make_fixnum(V8)))==(1))){
+	goto T39;
+	}
+	if(!((0)<=(V8))){
+	goto T44;
+	}
+	if(!((V8)<=((fixnum)4294967295))){
+	goto T42;
+	}
+	goto T43;
+
+	goto T44;
+T44:;
+	goto T42;
+
+	goto T43;
+T43:;
+	goto T38;
+
+	goto T42;
+T42:;
+	goto T37;
+
+	goto T39;
+T39:;
+	goto T37;
+
+	goto T38;
+T38:;
+	goto T36;
+
+	goto T37;
+T37:;
+	goto T34;
+
+	goto T36;
+T36:;
+	goto T33;
+
+	goto T34;
+T34:;
+	V12= CMPmake_fixnum(V8);
+	V8= fixint((fcall.argd=4,/* SYSTEM::CHECK-TYPE-SYMBOL */(object )(*LnkLI2)(((object)VV[5]),(V12),((object)VV[2]),Cnil)));
+	goto T33;
+T33:;
+	switch(tp6(V9)){
+	case 428:
+	goto T58;
+T58:;
+	case 492:
+	goto T59;
+T59:;
+	goto T56;
+
+	default:
+	goto T60;
+T60:;
+	goto T55;
+
+	goto T55;
+	}
+	goto T55;
+
+	goto T56;
+T56:;
+	goto T54;
+
+	goto T55;
+T55:;
+	goto T53;
+
+	goto T54;
+T54:;
+	goto T52;
+
+	goto T53;
+T53:;
+	goto T50;
+
+	goto T52;
+T52:;
+	goto T49;
+
+	goto T50;
+T50:;
+	V9= (fcall.argd=4,/* SYSTEM::CHECK-TYPE-SYMBOL */(object )(*LnkLI2)(((object)VV[6]),(V9),((object)VV[4]),Cnil));
+	goto T49;
+T49:;
+	if(!(((char)tp0(make_fixnum(V10)))==(1))){
+	goto T70;
+	}
+	if(!((0)<=(V10))){
+	goto T75;
+	}
+	if(!((V10)<=((fixnum)4294967295))){
+	goto T73;
+	}
+	goto T74;
+
+	goto T75;
+T75:;
+	goto T73;
+
+	goto T74;
+T74:;
+	goto T69;
+
+	goto T73;
+T73:;
+	goto T68;
+
+	goto T70;
+T70:;
+	goto T68;
+
+	goto T69;
+T69:;
+	goto T67;
+
+	goto T68;
+T68:;
+	goto T65;
+
+	goto T67;
+T67:;
+	goto T64;
+
+	goto T65;
+T65:;
+	V13= CMPmake_fixnum(V10);
+	V10= fixint((fcall.argd=4,/* SYSTEM::CHECK-TYPE-SYMBOL */(object )(*LnkLI2)(((object)VV[7]),(V13),((object)VV[2]),Cnil)));
+	goto T64;
+T64:;
+	{object V14 = make_longfloat(((double(*)(uint,double*,uint,double*,uint))(dlcblas_ddot))((uint)V6,(double*)V7->v.v_self,(uint)V8,(double*)V9->v.v_self,(uint)V10));
+	VMR1(V14);}
+}
+static object  LnkTLI2(object first,...){object V1;va_list ap;va_start(ap,first);V1=(object )call_proc_new(((object)VV[0]),0,262147,(void **)(void *)&LnkLI2,0,first,ap);va_end(ap);return V1;} /* SYSTEM::CHECK-TYPE-SYMBOL */
+(9 (MAPC 'EVAL *COMPILER-COMPILE-DATA*))
+static object LI1__cblas_ddot___gazonk_653784_0(fixnum V6,object V7,fixnum V8,object V9,fixnum V10)
+;
+static void *dlcblas_ddot;
+#define VMB1  object  V13 ,V12 ,V11;
+#define VMS1
+#define VMV1
+#define VMRV1(a_,b_) return((object )a_);
+#define VMR1(a_) VMRV1(a_,0);
+#define VM1 0
+static void * VVi[9]={
+#define Cdata VV[8]
+(void *)(&dlcblas_ddot),
+(void *)(LI1__cblas_ddot___gazonk_653784_0)
+};
+#define VV (VVi)
+static object  LnkTLI2(object,...);
+static object  (*LnkLI2)() = (object (*)()) LnkTLI2;
+NIL
+
+>(disassemble 'foo)
+
+;; Compiling /tmp/gazonk_653784_0.lsp.
+;; End of Pass 1.
+;; End of Pass 2.
+OPTIMIZE levels: Safety=0 (No runtime error checking), Space=0, Speed=3
+;; Finished compiling /tmp/gazonk_653784_0.o.
+
+#include "gazonk_653784_0.h"
+void init_code(){do_init((void *)VV);}
+/*	local entry for function COMMON-LISP-USER::FOO	*/
+
+static object LI1__FOO___gazonk_653784_0(object V3,object V4)
+{	 VMB1 VMS1 VMV1
+	if(!(((char)((fixnum)((uchar*)((fixnum)V3))[(fixnum)2]&(fixnum)1))==(0))){
+	goto T5;
+	}
+	goto T2;
+
+	goto T5;
+T5:;
+	V5= ((fixnum)((uint*)((fixnum)V3))[(fixnum)4]&268435455);
+	goto T1;
+
+	goto T2;
+T2:;
+	V5= (((fixnum)((uint*)((fixnum)V3))[(fixnum)1]>>(fixnum)3)&268435455);
+	goto T1;
+T1:;
+	{object V6 = (/* libblas::cblas_ddot */(object )(*LnkLI2)(V5,(V3),(fixnum)1,(V4),(fixnum)1));
+	VMR1(V6);}
+}
+static object  LnkTLI2(object first,...){object V1;va_list ap;va_start(ap,first);V1=(object )call_proc_new(((object)VV[0]),0,5,(void **)(void *)&LnkLI2,1092,first,ap);va_end(ap);return V1;} /* libblas::cblas_ddot */
+(2 (MAPC 'EVAL *COMPILER-COMPILE-DATA*))
+static object LI1__FOO___gazonk_653784_0(object V3,object V4)
+;
+#define VMB1  fixnum  V5;
+#define VMS1
+#define VMV1
+#define VMRV1(a_,b_) return((object )a_);
+#define VMR1(a_) VMRV1(a_,0);
+#define VM1 0
+static void * VVi[2]={
+#define Cdata VV[1]
+(void *)(LI1__FOO___gazonk_653784_0)
+};
+#define VV (VVi)
+static object  LnkTLI2(object,...);
+static object  (*LnkLI2)() = (object (*)()) LnkTLI2;
+NIL
+
+>(disassemble 'bar)
+
+;; Compiling /tmp/gazonk_653784_0.lsp.
+;; End of Pass 1.
+;; End of Pass 2.
+OPTIMIZE levels: Safety=0 (No runtime error checking), Space=0, Speed=3
+;; Finished compiling /tmp/gazonk_653784_0.o.
+
+#include "gazonk_653784_0.h"
+void init_code(){do_init((void *)VV);}
+/*	local entry for function COMMON-LISP-USER::BAR	*/
+
+static object LI1__BAR___gazonk_653784_0(object V3,object V4)
+{	 VMB1 VMS1 VMV1
+	{fixnum V5;
+	if(!(((char)((fixnum)((uchar*)((fixnum)V3))[(fixnum)2]&(fixnum)1))==(0))){
+	goto T5;
+	}
+	goto T2;
+
+	goto T5;
+T5:;
+	V5= ((fixnum)((uint*)((fixnum)V3))[(fixnum)4]&268435455);
+	goto T1;
+
+	goto T2;
+T2:;
+	V5= (((fixnum)((uint*)((fixnum)V3))[(fixnum)1]>>(fixnum)3)&268435455);
+	goto T1;
+T1:;
+	{object V6 = make_longfloat(((double(*)(uint,double*,uint,double*,uint))(dlcblas_ddot))((uint)V5,(double*)V3->v.v_self,(uint)1,(double*)V4->v.v_self,(uint)1));
+	VMR1(V6);}}
+}
+(2 (MAPC 'EVAL *COMPILER-COMPILE-DATA*))
+static object LI1__BAR___gazonk_653784_0(object V3,object V4)
+;
+static void *dlcblas_ddot;
+#define VMB1
+#define VMS1
+#define VMV1
+#define VMRV1(a_,b_) return((object )a_);
+#define VMR1(a_) VMRV1(a_,0);
+#define VM1 0
+static void * VVi[2]={
+#define Cdata VV[1]
+(void *)(&dlcblas_ddot),
+(void *)(LI1__BAR___gazonk_653784_0)
+};
+#define VV (VVi)
+NIL
+
+>(si::save-system "ff")
+$ ./ff
+GCL (GNU Common Lisp)  2.7.0 Thu Oct 26 12:00:01 PM EDT 2023  CLtL1    git: Version_2_7_0pre38
+Source License: LGPL(gcl,gmp), GPL(unexec,bfd,xgcl)
+Binary License:  GPL due to GPL'ed components: (XGCL READLINE UNEXEC)
+Modifications of this banner must retain notice of a compatible license
+Dedicated to the memory of W. Schelter
+
+Use (help) to get some basic information on how to use GCL.
+Temporary directory for compiler files set to /tmp/
+
+>(foo a b)
+
+2.76
+
+>(bar a b)
+
+2.76
+
+>
+
+@end verbatim
+
+@end example
+
+@end deffn
+

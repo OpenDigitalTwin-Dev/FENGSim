@@ -1,0 +1,3424 @@
+@c  Copyright (c) 1994 William Schelter.
+
+@c  Copyright (c) 1990 The Regents of the University of California.
+@c  All rights reserved.
+@c 
+@c  Permission is hereby granted, without written agreement and without
+@c  license or royalty fees, to use, copy, modify, and distribute this
+@c  documentation for any purpose, provided that the above copyright
+@c  notice and the following two paragraphs appear in all copies.
+@c 
+@c  IN NO EVENT SHALL THE UNIVERSITY OF CALIFORNIA BE LIABLE TO ANY PARTY
+@c  FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES
+@c  ARISING OUT OF THE USE OF THIS DOCUMENTATION, EVEN IF THE UNIVERSITY OF
+@c  CALIFORNIA HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+@c 
+@c  THE UNIVERSITY OF CALIFORNIA SPECIFICALLY DISCLAIMS ANY WARRANTIES,
+@c  INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY
+@c  AND FITNESS FOR A PARTICULAR PURPOSE.  THE SOFTWARE PROVIDED HEREUNDER IS
+@c  ON AN "AS IS" BASIS, AND THE UNIVERSITY OF CALIFORNIA HAS NO OBLIGATION TO
+@c  PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
+
+
+@node Control, , Widgets, Top
+@chapter Control
+
+@menu
+* after::			
+* bind::			
+* destroy::			
+* tk-dialog::			
+* exit::			
+* focus::			
+* grab::			
+* tk-listbox-single-select::	
+* lower::			
+* tk-menu-bar::			
+* option::			
+* options::			
+* pack-old::			
+* pack::			
+* place::			
+* raise::			
+* selection::			
+* send::			
+* tk::				
+* tkerror::			
+* tkvars::			
+* tkwait::			
+* update::			
+* winfo::			
+* wm::				
+@end menu
+
+@node after, bind, Control, Control
+@section after
+@c @cartouche
+
+after - Execute a command after a time delay
+@unnumberedsubsec Synopsis
+@b{after }@i{ms }@r{?}@i{arg1 arg2 arg3 ...}?
+@c @end cartouche
+
+@unnumberedsubsec Description
+
+This command is used to delay execution of the program or to execute
+a command in background after a delay.  The @i{ms} argument gives
+a time in milliseconds.
+If @i{ms}@r{ is the only argument to }@b{after}
+then the command sleeps for @i{ms} milliseconds and returns.
+While the command is sleeping the application does not respond to
+X events and other events.
+
+If additional arguments are
+present after @i{ms}, then a Tcl command is formed by concatenating
+all the additional arguments in the same fashion as the @b{concat}
+command.  @b{After} returns immediately but arranges for the command
+to be executed @i{ms} milliseconds later in background.
+The command will be executed at global level (outside the context
+of any Tcl procedure).
+If an error occurs while executing the delayed command then the
+@b{tkerror} mechanism is used to report the error.
+
+The @b{after} command always returns an empty string.
+
+@xref{tkerror}.
+
+@unnumberedsubsec Keywords
+delay, sleep, time
+@node bind, destroy, after, Control
+@section bind
+@c @cartouche
+
+bind \- Arrange for X events to invoke Tcl commands
+@unnumberedsubsec Synopsis
+@*@w{@b{bind}@i{ windowSpec}}@*
+@*@w{@b{bind}@i{ windowSpec sequence}}@*
+@*@w{@b{bind}@i{ windowSpec sequence command}}@*
+@b{bind}@i{ windowSpec sequence }@b{+}@i{command}
+@c @end cartouche
+
+@unnumberedsubsec Description
+
+If all three arguments are specified, @b{bind} will
+arrange for @i{command} (a Tcl
+command) to be executed whenever the sequence of events given
+by @i{sequence}@r{ occurs in the window(s) identified by }@i{windowSpec}.
+If @i{command} is prefixed with a ``+'', then it is appended to
+any existing binding for @i{sequence}@r{;  otherwise }@i{command} replaces
+the existing binding, if any.  If @i{command}
+is an empty string then the current binding for @i{sequence}
+is destroyed, leaving @i{sequence} unbound.  In all of the cases
+where a @i{command}@r{ argument is provided, }@b{bind} returns
+an empty string.
+
+If @i{sequence}@r{ is specified without a }@i{command}, then the
+command currently bound to @i{sequence} is returned, or
+an empty string if there is no binding for @i{sequence}.  If
+neither @i{sequence}@r{ nor }@i{command} is specified, then the
+return value is a list whose elements are all the sequences
+for which there exist bindings for @i{windowSpec}.
+
+The @i{windowSpec} argument selects which window(s) the binding
+applies to.
+It may have one of three forms.
+If @i{windowSpec} is the path name for a window, then the binding
+applies to that particular window.
+If @i{windowSpec} is the name of a class of widgets, then the
+binding applies to all widgets in that class.
+Lastly, @i{windowSpec}@r{ may have the value }@b{all}, in which case
+the binding applies to all windows in the application.
+
+The @i{sequence} argument specifies a sequence of one or more
+event patterns, with optional white space between the patterns.  Each
+event pattern may
+take either of two forms.  In the simplest case it is a single
+printing ASCII character, such as @b{a}@r{ or }@b{[}.  The character
+may not be a space character or the character @b{<}.  This form of
+pattern matches a @b{KeyPress} event for the particular
+character.  The second form of pattern is longer but more general.
+It has the following syntax:
+
+@example
+@b{<}@i{modifier-modifier-type-detail}@b{>}
+@end example
+
+The entire event pattern is surrounded by angle brackets.
+Inside the angle brackets are zero or more modifiers, an event
+type, and an extra piece of information (@i{detail}) identifying
+a particular button or keysym.  Any of the fields may be omitted,
+as long as at least one of @i{type}@r{ and }@i{detail} is present.
+The fields must be separated by white space or dashes.
+
+
+Modifiers may consist of any of the values in the following list:
+
+@example
+Control                  Any                            
+Shift                    Double                         
+Lock                     Triple                         
+Button1, B1              Mod1, M1, Meta, M              
+Button2, B2              Mod2, M2, Alt                  
+Button3, B3              Mod3, M3                       
+Button4, B4              Mod4, M4                       
+Button5, B5              Mod5, M5                       
+@end example
+
+Where more than one value is listed, separated by commas, the values
+are equivalent.   All of the modifiers except @b{Any},
+@b{Double}@r{, and }@b{Triple} have
+the obvious X meanings.  For example, @b{Button1} requires that
+button 1 be depressed when the event occurs.  Under normal conditions
+the button and modifier state at the time of the event must
+match exactly those specified in the @b{bind} command.  If
+no modifiers are specified, then events will match only if no modifiers
+are present.  If the @b{Any} modifier is specified, then additional
+modifiers may be present besides those specified explicitly.  For
+example, if button 1 is pressed while the shift and control keys
+are down, the specifier @b{<Any-Control-Button-1>} will match
+the event, but the specifier @b{<Control-Button-1>} will not.
+
+
+The @b{Double}@r{ and }@b{Triple} modifiers are a convenience
+for specifying double mouse clicks and other repeated
+events. They cause a particular event pattern to be
+repeated 2 or 3 times, and also place a time and space requirement
+on the sequence:  for a sequence of events to match a @b{Double}
+or @b{Triple} pattern, all of the events must occur close together
+in time and without substantial mouse motion in between.
+For example, @b{<Double-Button-1>}
+is equivalent to @b{<Button-1><Button-1>} with the extra
+time and space requirement.
+
+
+The @i{type} field may be any of the standard X event types, with a
+few extra abbreviations.  Below is a list of all the valid types;
+where two name appear together, they are synonyms.
+
+@example
+ButtonPress, Button      Expose             Leave              
+ButtonRelease            FocusIn            Map                
+Circulate                FocusOut           Property           
+CirculateRequest         Gravity            Reparent           
+Colormap                 Keymap             ResizeRequest      
+Configure                KeyPress, Key      Unmap              
+ConfigureRequest         KeyRelease         Visibility         
+Destroy                  MapRequest         
+Enter                    Motion             
+@end example
+
+
+
+The last part of a long event specification is @i{detail}.  In the
+case of a @b{ButtonPress}@r{ or }@b{ButtonRelease} event, it is the
+number of a button (1-5).  If a button number is given, then only an
+event on that particular button will match;  if no button number is
+given, then an event on any button will match.  Note:  giving a
+specific button number is different than specifying a button modifier;
+in the first case, it refers to a button being pressed or released,
+while in the second it refers to some other button that is already
+depressed when the matching event occurs.  If a button
+number is given then @i{type} may be omitted:  if will default
+to @b{ButtonPress}@r{.  For example, the specifier }@b{<1>}
+is equivalent to @b{<ButtonPress-1>}.
+
+
+If the event type is @b{KeyPress}@r{ or }@b{KeyRelease}, then
+@i{detail} may be specified in the form of an X keysym.  Keysyms
+are textual specifications for particular keys on the keyboard;
+they include all the alphanumeric ASCII characters (e.g. ``a'' is
+the keysym for the ASCII character ``a''), plus descriptions for
+non-alphanumeric characters (``comma'' is the keysym for the comma
+character), plus descriptions for all the non-ASCII keys on the
+keyboard (``Shift_L'' is the keysm for the left shift key, and
+``F1'' is the keysym for the F1 function key, if it exists).  The
+complete list of keysyms is not presented here;  it should be
+available in other X documentation.  If necessary, you can use the
+@b{%K} notation described below to print out the keysym name for
+an arbitrary key.  If a keysym @i{detail} is given, then the
+@i{type}@r{ field may be omitted;  it will default to }@b{KeyPress}.
+For example, @b{<Control-comma>} is equivalent to
+@b{<Control-KeyPress-comma>}@r{.  If a keysym }@i{detail} is specified
+then the @b{Shift} modifier need not be specified and will be
+ignored if specified:  each keysym already implies a particular
+state for the shift key.
+
+
+The @i{command}@r{ argument to }@b{bind} is a Tcl command string,
+which will be executed whenever the given event sequence occurs.
+@i{Command} will be executed in the same interpreter that the
+@b{bind}@r{ command was executed in.  If }@i{command} contains
+any @b{%} characters, then the command string will not be
+executed directly.  Instead, a new command string will be
+generated by replacing each @b{%}, and the character following
+it, with information from the current event.  The replacement
+depends on the character following the @b{%}, as defined in the
+list below.  Unless otherwise indicated, the
+replacement string is the decimal value of the given field from
+the current event.
+Some of the substitutions are only valid for
+certain types of events;  if they are used for other types of events
+the value substituted is undefined.
+
+@table @asis{}
+@item @b{%%}
+Replaced with a single percent.
+@item @b{|%#|}
+The number of the last client request processed by the server
+(the @i{serial} field from the event).  Valid for all event
+types.
+@item @b{|%a|}
+The @i{above} field from the event.
+Valid only for @b{ConfigureNotify} events.
+@item @b{|%b|}
+The number of the button that was pressed or released.  Valid only
+for @b{ButtonPress}@r{ and }@b{ButtonRelease} events.
+@item @b{|%c|}
+The @i{count}@r{ field from the event.  Valid only for }@b{Expose},
+@b{GraphicsExpose}@r{, and }@b{MappingNotify} events.
+@item @b{|%d|}
+The @i{detail}@r{ field from the event.  The }@b{|%d|} is replaced by
+a string identifying the detail.  For @b{EnterNotify},
+@b{LeaveNotify}@r{, }@b{FocusIn}@r{, and }@b{FocusOut} events,
+the string will be one of the following:
+
+@example
+NotifyAncestor            NotifyNonlinearVirtual          
+NotifyDetailNone          NotifyPointer                   
+NotifyInferior            NotifyPointerRoot               
+NotifyNonlinear           NotifyVirtual                   
+@end example
+
+For @b{ConfigureRequest} events, the substituted string will be
+one of the following:
+
+@example
+Above                     Opposite                  
+Below                     TopIf                     
+BottomIf                  
+@end example
+
+For events other than these, the substituted string is undefined.
+.RE
+@item @b{|%f|}
+The @i{focus}@r{ field from the event (}@b{0}@r{ or }@b{1}).  Valid only
+for @b{EnterNotify}@r{ and }@b{LeaveNotify} events.
+@item @b{|%h|}
+The @i{height}@r{ field from the event.  Valid only for }@b{Configure},
+@b{ConfigureNotify}@r{, }@b{Expose}@r{, }@b{GraphicsExpose}, and
+@b{ResizeRequest} events.
+@item @b{|%k|}
+The @i{keycode}@r{ field from the event.  Valid only for }@b{KeyPress}
+and @b{KeyRelease} events.
+@item @b{|%m|}
+The @i{mode} field from the event.  The substituted string is one of
+@b{NotifyNormal}@r{, }@b{NotifyGrab}@r{, }@b{NotifyUngrab}, or
+@b{NotifyWhileGrabbed}@r{.  Valid only for }@b{EnterWindow},
+@b{FocusIn}@r{, }@b{FocusOut}@r{, and }@b{LeaveWindow} events.
+@item @b{|%o|}
+The @i{override_redirect} field from the event.  Valid only for
+@b{CreateNotify}@r{, }@b{MapNotify}@r{, }@b{ReparentNotify},
+and @b{ConfigureNotify} events.
+@item @b{|%p|}
+The @i{place} field from the event, substituted as one of the
+strings @b{PlaceOnTop}@r{ or }@b{PlaceOnBottom}.  Valid only
+for @b{CirculateNotify}@r{ and }@b{CirculateRequest} events.
+@item @b{|%s|}
+The @i{state}@r{ field from the event.  For }@b{ButtonPress},
+@b{ButtonRelease}@r{, }@b{EnterNotify}@r{, }@b{KeyPress}@r{, }@b{KeyRelease},
+@b{LeaveNotify}@r{, and }@b{MotionNotify} events,
+a decimal string
+is substituted.  For @b{VisibilityNotify}, one of the strings
+@b{VisibilityUnobscured}@r{, }@b{VisibilityPartiallyObscured},
+and @b{VisibilityFullyObscured} is substituted.
+@item @b{|%t|}
+The @i{time} field from the event.  Valid only for events that
+contain a @i{time} field.
+@item @b{|%v|}
+The @i{value_mask} field from the event.  Valid only for
+@b{ConfigureRequest} events.
+@item @b{|%w|}
+The @i{width} field from the event.  Valid only for
+@b{Configure}@r{, }@b{ConfigureRequest}@r{, }@b{Expose},
+@b{GraphicsExpose}@r{, and }@b{ResizeRequest} events.
+@item @b{|%x|}
+The @i{x} field from the event.  Valid only for events containing
+an @i{x} field.
+@item @b{|%y|}
+The @i{y} field from the event.  Valid only for events containing
+a @i{y} field.
+@item @b{%A}
+Substitutes the ASCII character corresponding to the event, or
+the empty string if the event doesn't correspond to an ASCII character
+(e.g. the shift key was pressed).  @b{XLookupString} does all the
+work of translating from the event to an ASCII character.
+Valid only for @b{KeyPress}@r{ and }@b{KeyRelease} events.
+@item @b{%B}
+The @i{border_width} field from the event.  Valid only for
+@b{ConfigureNotify}@r{ and }@b{CreateWindow} events.
+@item @b{%D}
+The @i{display} field from the event.  Valid for all event types.
+@item @b{%E}
+The @i{send_event} field from the event.  Valid for all event types.
+@item @b{%K}
+The keysym corresponding to the event, substituted as a textual
+string.  Valid only for @b{KeyPress}@r{ and }@b{KeyRelease} events.
+@item @b{%N}
+The keysym corresponding to the event, substituted as
+a decimal
+number.  Valid only for @b{KeyPress}@r{ and }@b{KeyRelease} events.
+@item @b{%R}
+The @i{root} window identifier from the event.  Valid only for
+events containing a @i{root} field.
+@item @b{%S}
+The @i{subwindow} window identifier from the event.  Valid only for
+events containing a @i{subwindow} field.
+@item @b{%T}
+The @i{type} field from the event.  Valid for all event types.
+@item @b{%W}
+The path name of the window to which the event was reported (the
+@i{window} field from the event).  Valid for all event types.
+@item @b{%X}
+The @i{x_root} field from the event.
+If a virtual-root window manager is being used then the substituted
+value is the corresponding x-coordinate in the virtual root.
+Valid only for
+@b{ButtonPress}@r{, }@b{ButtonRelease}@r{, }@b{KeyPress}@r{, }@b{KeyRelease},
+and @b{MotionNotify} events.
+@item @b{%Y}
+The @i{y_root} field from the event.
+If a virtual-root window manager is being used then the substituted
+value is the corresponding y-coordinate in the virtual root.
+Valid only for
+@b{ButtonPress}@r{, }@b{ButtonRelease}@r{, }@b{KeyPress}@r{, }@b{KeyRelease},
+and @b{MotionNotify} events.
+@end table
+
+
+If the replacement string
+for a %-replacement contains characters that are interpreted
+specially by the Tcl parser (such as backslashes or square
+brackets or spaces) additional backslashes are added
+during replacement so that the result after parsing is the original
+replacement string.
+For example, if @i{command} is
+
+@example
+insert %A
+@end example
+@noindent
+
+and the character typed is an open square bracket, then the command
+actually executed will be
+
+@example
+insert \e[
+@end example
+
+This will cause the @b{insert} to receive the original replacement
+string (open square bracket) as its first argument.
+If the extra backslash hadn't been added, Tcl would not have been
+able to parse the command correctly.
+
+
+At most one binding will trigger for any given X event.
+If several bindings match the recent events, the most specific binding
+is chosen and its command will be executed.
+The following tests are applied, in order, to determine which of
+several matching sequences is more specific:
+(a) a binding whose @i{windowSpec} names a particular window is
+more specific than a binding for a class,
+which is more specific than a binding whose @i{windowSpec} is
+@b{all};
+(b) a longer sequence (in terms of number
+of events matched) is more specific than a shorter sequence;
+(c) an event pattern that specifies a specific button or key is more specific
+than one that doesn't;  (e) an event pattern that requires a particular
+modifier is more specific than one that doesn't require the modifier;
+(e) an event pattern specifying the @b{Any} modifier is less specific
+than one that doesn't.  If the matching sequences contain more than
+one event, then tests (c)-(e) are applied in order from the most
+recent event to the least recent event in the sequences.  If these
+tests fail to determine a winner, then the most recently registered
+sequence is the winner.
+
+
+If an X event does not match any of the existing bindings, then the
+event is ignored (an unbound event is not considered to be an error).
+
+
+When a @i{sequence}@r{ specified in a }@b{bind} command contains
+more than one event pattern, then its command is executed whenever
+the recent events (leading up to and including the current event)
+match the given sequence.  This means, for example, that if button 1 is
+clicked repeatedly the sequence @b{<Double-ButtonPress-1>} will match
+each button press but the first.
+If extraneous events that would prevent a match occur in the middle
+of an event sequence then the extraneous events are
+ignored unless they are @b{KeyPress}@r{ or }@b{ButtonPress} events.
+For example, @b{<Double-ButtonPress-1>} will match a sequence of
+presses of button 1, even though there will be @b{ButtonRelease}
+events (and possibly @b{MotionNotify} events) between the
+@b{ButtonPress} events.
+Furthermore, a @b{KeyPress} event may be preceded by any number
+of other @b{KeyPress} events for modifier keys without the
+modifier keys preventing a match.
+For example, the event sequence @b{aB} will match a press of the
+@b{a}@r{ key, a release of the }@b{a}@r{ key, a press of the }@b{Shift}
+key, and a press of the @b{b}@r{ key:  the press of }@b{Shift} is
+ignored because it is a modifier key.
+Finally, if several @b{MotionNotify} events occur in a row, only
+the last one is used for purposes of matching binding sequences.
+
+
+If an error occurs in executing the command for a binding then the
+@b{tkerror} mechanism is used to report the error.
+The command will be executed at global level (outside the context
+of any Tcl procedure).
+
+@xref{tkerror}.
+
+@unnumberedsubsec Keywords
+form, manual
+@node destroy, tk-dialog, bind, Control
+@section destroy
+@c @cartouche
+
+destroy \- Destroy one or more windows
+@unnumberedsubsec Synopsis
+@b{destroy }@r{?}@i{window window ...}?
+@c @end cartouche
+
+@unnumberedsubsec Description
+
+This command deletes the windows given by the
+@i{window} arguments, plus all of their descendants.
+If a @i{window} ``.'' is deleted then the entire application
+will be destroyed.
+The @i{window}s are destroyed in order, and if an error occurs
+in destroying a window the command aborts without destroying the
+remaining windows.
+
+@unnumberedsubsec Keywords
+application, destroy, window
+@node tk-dialog, exit, destroy, Control
+@section tk-dialog
+@c @cartouche
+
+tk-dialog \- Create modal dialog and wait for response
+@unnumberedsubsec Synopsis
+@b{tk-dialog }@i{window title text bitmap default string string ...}
+@c @end cartouche
+
+@unnumberedsubsec Description
+
+This procedure is part of the Tk script library.
+Its arguments describe a dialog box:
+
+@table @asis{}
+@item @i{window}
+Name of top-level window to use for dialog.  Any existing window
+by this name is destroyed.
+@item @i{title}
+Text to appear in the window manager's title bar for the dialog.
+@item @i{text}
+Message to appear in the top portion of the dialog box.
+@item @i{bitmap}
+If non-empty, specifies a bitmap to display in the top portion of
+the dialog, to the left of the text.
+If this is an empty string then no bitmap is displayed in the dialog.
+@item @i{default}
+If this is an integer greater than or equal to zero, then it gives
+the index of the button that is to be the default button for the dialog
+(0 for the leftmost button, and so on).
+If less than zero or an empty string then there won't be any default
+button.
+@item @i{string}
+There will be one button for each of these arguments.
+Each @i{string} specifies text to display in a button,
+in order from left to right.
+
+After creating a dialog box, @b{tk-dialog} waits for the user to
+select one of the buttons either by clicking on the button with the
+mouse or by typing return to invoke the default button (if any).
+Then it returns the index of the selected button:  0 for the leftmost
+button, 1 for the button next to it, and so on.
+
+While waiting for the user to respond, @b{tk-dialog} sets a local
+grab.  This prevents the user from interacting with the application
+in any way except to invoke the dialog box.
+
+@end table
+@unnumberedsubsec Keywords
+bitmap, dialog, modal
+@node exit, focus, tk-dialog, Control
+@section exit
+@c @cartouche
+
+exit \- Exit the process
+@unnumberedsubsec Synopsis
+@b{exit }@r{?}@i{returnCode}?
+@c @end cartouche
+
+@unnumberedsubsec Description
+
+Terminate the process, returning @i{returnCode} (an integer) to the
+system as the exit status.
+If @i{returnCode} isn't specified then it defaults
+to 0.
+This command replaces the Tcl command by the same name.
+It is identical to Tcl's @b{exit} command except that
+before exiting it destroys all the windows managed by
+the process.
+This allows various cleanup operations to be performed, such
+as removing application names from the global registry of applications.
+
+@unnumberedsubsec Keywords
+exit, process
+@node focus, grab, exit, Control
+@section focus
+@c @cartouche
+
+focus \- Direct keyboard events to a particular window
+@unnumberedsubsec Synopsis
+@*@w{@b{focus}}@*
+@*@w{@b{focus }@i{window}}@*
+@b{focus }@i{option}@r{ ?}@i{arg arg ...}?
+@c @end cartouche
+
+@unnumberedsubsec Description
+
+The @b{focus} command is used to manage the Tk input focus.
+At any given time, one window in an application is designated as
+the focus window for that application;  any key press or key release
+events directed to any window in the application will be redirected
+instead to the focus window.  If there is no focus window for an
+application then keyboard events are discarded.
+Typically, windows that are prepared to deal with the focus
+(e.g. entries and other widgets that display editable text) will
+claim the focus when mouse button 1 is pressed in them.
+When an application is created its main window is initially given
+the focus.
+
+The @b{focus} command can take any of the following forms:
+
+@table @asis{}
+@item @b{focus}
+If invoked with no arguments, @b{focus} returns the path name of
+the current focus window, or @b{none} if there is no focus window.
+@item @b{focus }@i{window}
+If invoked with a single argument consisting of a window's path
+name, @b{focus} sets the input focus to that window.
+The return value is an empty string.
+@item @b{focus :default }@r{?}@i{window}?
+If @i{window} is specified, it becomes the default focus window
+(the window that receives the focus whenever the focus window is
+deleted) and the command returns an empty string.
+If @i{window} isn't specified, the command returns the path name
+of the current default focus window, or @b{none} if there is no
+default.
+@i{Window}@r{ may be specified as }@b{none} to clear its existing
+value.
+The default window is initially @b{none}.
+@item @b{focus :none}
+Clears the focus window, so that keyboard input to this application
+will be discarded.
+
+@end table
+@unnumberedsubsec "Focus Events"
+
+Tk's model of the input focus is different than X's model, and the
+focus window set with the @b{focus} command is not usually the
+same as the X focus window.
+Tk never explicitly changes the official X focus window.
+It waits for the window manager to direct the X input focus to
+and from the application's top-level windows, and it intercepts
+@b{FocusIn}@r{ and }@b{FocusOut} events coming from the X
+server to detect these changes.
+All of the focus events received from X are discarded by Tk;  they
+never reach the application.
+Instead, Tk generates a different stream of @b{FocusIn} and
+@b{FocusOut} for the application.
+This means that @b{FocusIn} and
+and @b{FocusOut} events seen by the application will not obey the
+conventions described in the documentation for Xlib.
+
+Tk applications receive two kinds of @b{FocusIn}@r{ and }@b{FocusOut}
+events, which can be distinguished by their @i{detail} fields.
+Events with a @i{detail}@r{ of }@b{NotifyAncestor} are directed
+to the current focus window when it becomes active or inactive.
+A window is the active focus whenever two conditions are
+simultaneously true: (a) the window is the focus window for its
+application, and (b) some top-level window in the application has
+received the X focus.
+When this happens Tk generates a @b{FocusIn} event for the focus
+window with detail @b{NotifyAncestor}.
+When a window loses the active focus (either because the window manager
+removed the focus from the application or because the focus window changed
+within the application) then it receives a @b{FocusOut} event
+with detail @b{NotifyAncestor}.
+
+The events described above are directed to the application's focus
+window regardless of which top-level window within the application
+has received the focus.
+The second kind of focus event is provided for applications that
+need to know which particular top-level window has the X focus.
+Tk generates @b{FocusIn}@r{ and }@b{FocusOut} events with detail
+@b{NotifyVirtual} for top-level windows whenever they receive or
+lose the X focus.
+These events are generated regardless of which window in the
+application has the Tk input focus.
+They do not imply that keystrokes will be directed to the window
+that receives the event;  they simply indicate which top-level
+window is active as far as the window manager is concerned.
+If a top-level window is also the application's focus window,
+then it will receive both @b{NotifyVirtual}@r{ and }@b{NotifyAncestor}
+events when it receives or loses the X focus.
+
+Tk does not generate the hierarchical chains of @b{FocusIn} and
+@b{FocusOut} events described in the Xlib documentation (e.g.
+a window can get a @b{FocusIn}@r{ or }@b{FocusOut} event without
+all of its ancestors getting events too).
+Furthermore, the @i{mode} field in focus events is always
+@b{NotifyNormal} and the only values ever present in the
+@i{detail}@r{ field are }@b{NotifyAncestor}@r{ and }@b{NotifyVirtual}.
+
+@unnumberedsubsec Keywords
+events, focus, keyboard, top-level, window manager
+@node grab, tk-listbox-single-select, focus, Control
+@section grab
+@c @cartouche
+
+grab \- Confine pointer and keyboard events to a window sub-tree
+@unnumberedsubsec Synopsis
+@*@w{@b{grab }@r{?}@b{:global}@r{? }@i{window}}@*
+@b{grab }@i{option }@r{?arg arg }...?
+@c @end cartouche
+
+@unnumberedsubsec Description
+
+This command implements simple pointer and keyboard grabs for Tk.
+Tk's grabs are different than the grabs
+described in the Xlib documentation.
+When a grab is set for a particular window, Tk restricts all pointer
+events to the grab window and its descendants in Tk's window hierarchy.
+Whenever the pointer is within the grab window's subtree, the pointer
+will behave exactly the same as if there had been no grab at all
+and all events will be reported in the normal fashion.
+When the pointer is outside @i{window}'s tree, button presses and
+releases and
+mouse motion events are reported to @i{window}, and window entry
+and window exit events are ignored.
+The grab subtree ``owns'' the pointer:
+windows outside the grab subtree will be visible on the screen
+but they will be insensitive until the grab is released.
+The tree of windows underneath the grab window can include top-level
+windows, in which case all of those top-level windows
+and their descendants will continue to receive mouse events
+during the grab.
+
+Two forms of grabs are possible:  local and global.
+A local grab affects only the grabbing application:  events will
+be reported to other applications as if the grab had never occurred.
+Grabs are local by default.
+A global grab locks out all applications on the screen,
+so that only the given subtree of the grabbing application will be
+sensitive to pointer events (mouse button presses, mouse button releases,
+pointer motions, window entries, and window exits).
+During global grabs the window manager will not receive pointer
+events either.
+
+During local grabs, keyboard events (key presses and key releases)
+are delivered as usual:  the window
+manager controls which application receives keyboard events, and
+if they are sent to any window in the grabbing application then they are
+redirected to the focus window.
+During a global grab Tk grabs the keyboard so that all keyboard events
+are always sent to the grabbing application.
+The @b{focus} command is still used to determine which window in the
+application receives the keyboard events.
+The keyboard grab is released when the grab is released.
+
+Grabs apply to particular displays.  If an application has windows
+on multiple displays then it can establish a separate grab on each
+display.
+The grab on a particular display affects only the windows on
+that display.
+It is possible for different applications on a single display to have
+simultaneous local grabs, but only one application can have a global
+grab on a given display at once.
+
+The @b{grab} command can take any of the following forms:
+
+@table @asis{}
+@item @b{grab }@r{?}@b{:global}@r{? }@i{window}
+Same as @b{grab :set}, described below.
+@item @b{grab :current }@r{?}@i{window}?
+If @i{window} is specified, returns the name of the current grab
+window in this application for @i{window}'s display, or an empty
+string if there is no such window.
+If @i{window} is omitted, the command returns a list whose elements
+are all of the windows grabbed by this application for all displays,
+or an empty string if the application has no grabs.
+@item @b{grab :release }@i{window}
+Releases the grab on @i{window} if there is one, otherwise does
+nothing.  Returns an empty string.
+@item @b{grab :set }@r{?}@b{:global}@r{? }@i{window}
+Sets a grab on @i{window}@r{.  If }@b{:global} is specified then the
+grab is global, otherwise it is local.
+If a grab was already in effect for this application on
+@i{window}'s display then it is automatically released.
+If there is already a grab on @i{window} and it has the same
+global/local form as the requested grab, then the command
+does nothing.  Returns an empty string.
+@item @b{grab :status }@i{window}
+Returns @b{none}@r{ if no grab is currently set on }@i{window},
+@b{local}@r{ if a local grab is set on }@i{window}, and
+@b{global} if a global grab is set.
+
+@end table
+@unnumberedsubsec Bugs
+
+It took an incredibly complex and gross implementation to produce
+the simple grab effect described above.
+Given the current implementation, it isn't safe for applications
+to use the Xlib grab facilities at all except through the Tk grab
+procedures.
+If applications try to manipulate X's grab mechanisms directly,
+things will probably break.
+
+If a single process is managing several different Tk applications,
+only one of those applications can have a local grab for a given
+display at any given time.  If the applications are in different
+processes, this restriction doesn't exist.
+
+@unnumberedsubsec Keywords
+grab, keyboard events, pointer events, window
+@node tk-listbox-single-select, lower, grab, Control
+@section tk-listbox-single-select
+@c @cartouche
+
+tk-listbox-single-select \- Allow only one selected element in listbox(es)
+@unnumberedsubsec Synopsis
+@b{tk-listbox-single-select }@i{arg }@r{?}@i{arg arg ...}?
+@c @end cartouche
+
+@unnumberedsubsec Description
+
+This command is a Tcl procedure provided as part of the Tk script library.
+It takes as arguments the path names of one or more listbox widgets,
+or the value @b{Listbox}.
+For each named widget, @b{tk-listbox-single-select} modifies the
+bindings of the widget so that only a single element may be selected
+at a time (the normal configuration allows multiple elements to be
+selected).
+If the keyword @b{Listbox}@r{ is among the }@i{window} arguments,
+then the class bindings for listboxes are changed so that all
+listboxes have the one-selection-at-a-time behavior.
+
+@unnumberedsubsec Keywords
+listbox, selection
+@node lower, tk-menu-bar, tk-listbox-single-select, Control
+@section lower
+@c @cartouche
+
+lower \- Change a window's position in the stacking order
+@unnumberedsubsec Synopsis
+@b{lower }@i{window }@r{?}@i{belowThis}?
+@c @end cartouche
+
+@unnumberedsubsec Description
+
+If the @i{belowThis} argument is omitted then the command lowers
+@i{window} so that it is below all of its siblings in the stacking
+order (it will be obscured by any siblings that overlap it and
+will not obscure any siblings).
+If @i{belowThis} is specified then it must be the path name of
+a window that is either a sibling of @i{window} or the descendant
+of a sibling of @i{window}.
+In this case the @b{lower} command will insert
+@i{window}@r{ into the stacking order just below }@i{belowThis}
+(or the ancestor of @i{belowThis}@r{ that is a sibling of }@i{window});
+this could end up either raising or lowering @i{window}.
+
+@unnumberedsubsec Keywords
+lower, obscure, stacking order
+@node tk-menu-bar, option, lower, Control
+@section tk-menu-bar
+@c @cartouche
+
+tk-menu-bar, tk_bindForTraversal \- Support for menu bars
+@unnumberedsubsec Synopsis
+@b{tk-menu-bar }@i{frame }@r{?}@i{menu menu ...}?
+@sp 1
+@b{tk_bindForTraversal }@i{arg arg ... }
+@c @end cartouche
+
+@unnumberedsubsec Description
+
+These two commands are Tcl procedures in the Tk script library.
+They provide support for menu bars.
+A menu bar is a frame that contains a collection of menu buttons that
+work together, so that the user can scan from one menu to another with
+the mouse: if the mouse button is pressed over one menubutton (causing it
+to post its menu) and the mouse is moved over another menubutton
+in the same menu bar without releasing the mouse button, then the
+menu of the first menubutton is unposted and the menu of the
+new menubutton is posted instead.
+Menus in a menu bar can also be accessed using keyboard traversal (i.e.
+by typing keystrokes instead of using the mouse).
+In order for an application to use these procedures, it must do three
+things, which are described in the paragraphs below.
+
+First, each application must call @b{tk-menu-bar} to provide information
+about the menubar.
+The @i{frame} argument gives the path name of the frame that contains
+all of the menu buttons, and the @i{menu} arguments give path names
+for all of the menu buttons associated with the menu bar.
+Normally @i{frame}@r{ is the parent of each of the }@i{menu}'s.
+This need not be the case, but @i{frame} must be an ancestor of
+each of the @i{menu}'s in order for grabs to work correctly when
+the mouse is used to pull down menus.
+The order of the @i{menu} arguments determines the traversal order
+for the menu buttons.
+If @b{tk-menu-bar}@r{ is called without any }@i{menu} arguments, it
+returns a list containing the current menu buttons for @i{frame},
+or an empty string if @i{frame} isn't currently set up as a menu bar.
+If @b{tk-menu-bar}@r{ is called with a single }@i{menu} argument
+consisting of an empty string, any menubar information for @i{frame}
+is removed;  from now on the menu buttons will function independently
+without keyboard traversal.
+Only one menu bar may be defined at a time within each top-level window.
+
+The second thing an application must do is to identify the traversal
+characters for menu buttons and menu entries.
+This is done by underlining those characters using the
+@b{:underline} options for the widgets.
+The menu traversal system uses this information to traverse the
+menus under keyboard control (see below).
+
+The third thing that an application must do
+is to make sure that the input focus is always in a window that
+has been configured to support menu traversal.
+If the input focus is @b{none} then input characters will
+be discarded and no menu traversal will be possible.
+If you have no other place to set the focus, set it to the menubar
+widget:  @b{tk-menu-bar}@r{ creates bindings for its }@i{frame} argument to
+support menu traversal.
+
+The Tk startup scripts configure all the Tk widget classes with
+bindings to support menu traversal, so menu traversal will be possible
+regardless of which widget has the focus.
+If your application defines new classes of widgets that support the
+input focus, then you should call @b{tk_bindForTraversal} for
+each of these classes.
+@b{Tk_bindForTraversal} takes any number of arguments, each of
+which is a widget path name or widget class name.
+It sets up bindings for all the named widgets and
+classes so that the menu traversal system will be invoked when
+appropriate keystrokes are typed in those widgets or classes.
+
+@unnumberedsubsec "Menu Traversal Bindings"
+
+Once an application has made the three arrangements described
+above, menu traversal will be available.
+At any given time, the only menus available for traversal
+are those associated with the top-level window containing the
+input focus.
+Menu traversal is initiated by one of the following actions:
+@itemize @asis{}
+@item
+[1]
+If <F10> is typed, then the first menu button in the list for the
+top-level window is posted and the first entry within that
+menu is selected.
+@item
+[2]
+If <Alt-@i{key}@r{> is pressed, then the menu button that has }@i{key}
+as its underlined character is posted
+and the first entry within that menu is selected.
+The comparison between @i{key} and the underlined characters
+ignores case differences.
+If no menu button matches @i{key} then the keystroke has no
+effect.
+@item
+[3]
+Clicking mouse button 1 on a menu button posts that menu and selects
+its first entry.
+@end itemize
+
+
+Once a menu has been posted, the input focus is switched to that
+menu and the following actions are possible:
+@itemize @asis{}
+@item
+[1]
+Typing <ESC> or clicking mouse button 1 outside the menu button or
+its menu will abort the menu traversal.
+@item
+[2]
+If <Alt-@i{key}> is pressed, then the entry in the posted menu
+whose underlined character is @i{key} is invoked.
+This causes the menu to be unposted, the entry's action to be
+taken, and the menu traversal to end.
+The comparison between @i{key} and underlined characters ignores
+case differences.
+If no menu entry matches @i{key} then the keystroke is ignored.
+@item
+[3]
+The arrow keys may be used to move among entries and menus.
+The left and right arrow keys move circularly among the available
+menus and the up and down arrow keys move circularly among the
+entries in the current menu.
+@item
+[4]
+If <Return> is pressed, the selected entry in the posted menu is
+invoked, which causes the menu to be unposted, the entry's action
+to be taken, and the menu traversal to end.
+@end itemize
+
+When a menu traversal completes, the input focus reverts to the
+window that contained it when the traversal started.
+
+@unnumberedsubsec Keywords
+keyboard traversal, menu, menu bar, post
+@node option, options, tk-menu-bar, Control
+@section option
+@c @cartouche
+
+option \- Add/retrieve window options to/from the option database
+@unnumberedsubsec Synopsis
+@b{option :add }@i{pattern value }@r{?}@i{priority}?
+@sp 1
+@b{option :clear}
+@sp 1
+@b{option :get }@i{window name class}
+@sp 1
+@b{option :readfile }@i{fileName }@r{?}@i{priority}?
+@c @end cartouche
+
+@unnumberedsubsec Description
+
+The @b{option} command allows you to add entries to the Tk option
+database or to retrieve options from the database.  The @b{add}
+form of the command adds a new option to the database.
+@i{Pattern} contains
+the option being specified, and consists of names and/or classes
+separated by asterisks or dots, in the usual X format.  @i{Value}
+contains a text string to associate with @i{pattern};  this is the
+value that will be returned in calls to @b{Tk_GetOption} or by
+invocations of the @b{option :get}@r{ command.  If }@i{priority}
+is specified, it indicates the priority level for this option (see
+below for legal values);  it defaults to @b{interactive}.
+This command always returns an empty string.
+
+The @b{option :clear} command clears the option database.  Default
+options (in the
+@b{RESOURCE_MANAGER}@r{ property or the }@b{.Xdefaults}
+file) will be reloaded automatically the next time an
+option is added to the database or removed from it.  This command
+always returns an empty string.
+
+The @b{option :get} command returns the value of the option
+specified for @i{window}
+under @i{name}@r{ and }@i{class}.  If several entries in the option
+database match @i{window}@r{, }@i{name}@r{, and }@i{class}, then
+the command returns whichever was created with highest
+@i{priority} level.  If there are several matching
+entries at the same priority level, then it returns whichever entry
+was most recently entered into the option database.  If there are
+no matching entries, then the empty string is returned.
+
+The @b{readfile}@r{ form of the command reads }@i{fileName},
+which should have the standard format for an
+X resource database such as @b{.Xdefaults}, and adds all the
+options specified in that file to the option database.  If @i{priority}
+is specified, it indicates the priority level at which to enter the
+options;  @i{priority}@r{ defaults to }@b{interactive}.
+
+The @i{priority}@r{ arguments to the }@b{option} command are
+normally specified symbolically using one of the following values:
+
+@table @asis{}
+@item @b{widgetDefault}
+Level 20.  Used for default values hard-coded into widgets.
+@item @b{startupFile}
+Level 40.  Used for options specified in application-specific
+startup files.
+@item @b{userDefault}
+Level 60.  Used for options specified in user-specific defaults
+files, such as @b{.Xdefaults}, resource databases loaded into
+the X server, or user-specific startup files.
+@item @b{interactive}
+Level 80.  Used for options specified interactively after the application
+starts running.  If @i{priority} isn't specified, it defaults to
+this level.
+@end table
+
+
+Any of the above keywords may be abbreviated.  In addition, priorities
+may be specified numerically using integers between 0 and 100,
+inclusive.  The numeric form is probably a bad idea except for new priority
+levels other than the ones given above.
+
+@unnumberedsubsec Keywords
+database, option, priority, retrieve
+@node options, pack-old, option, Control
+@section options
+@c @cartouche
+
+options \- Standard options supported by widgets
+@c @end cartouche
+
+@unnumberedsubsec Description
+This manual entry describes the common configuration options supported
+by widgets in the Tk toolkit.  Every widget does not necessarily support
+every option (see the manual entries for individual widgets for a list
+of the standard options supported by that widget), but if a widget does
+support an option with one of the names listed below, then the option
+has exactly the effect described below.
+
+In the descriptions below,
+``Name'' refers to the option's name in the option database (e.g.
+in .Xdefaults files).  ``Class'' refers to the option's class value
+in the option database.  ``Command-Line Switch'' refers to the
+switch used in widget-creation and @b{configure} widget commands to
+set this value.  For example, if an option's command-line switch is
+@b{:foreground}@r{ and there exists a widget }@b{.a.b.c}, then the
+command
+
+@example
+@*@w{(.a.b.c  :configure  :foreground "black")}
+@end example
+@noindent
+
+may be used to specify the value @b{black} for the option in the
+the widget @b{.a.b.c}.  Command-line switches may be abbreviated,
+as long as the abbreviation is unambiguous.
+
+
+@table @asis{}
+@item @code{@b{:activebackground}}
+@flushright
+Name=@code{"@b{activeBackground}@r{"} Class=@code{"}@b{Foreground}"}
+@end flushright
+@sp 1
+
+Specifies background color to use when drawing active elements.
+An element (a widget or portion of a widget) is active if the
+mouse cursor is positioned over the element and pressing a mouse button
+will cause some action to occur.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:activeborderwidth}}
+@flushright
+Name=@code{"@b{activeBorderWidth}@r{"} Class=@code{"}@b{BorderWidth}"}
+@end flushright
+@sp 1
+
+Specifies a non-negative value indicating
+the width of the 3-D border drawn around active elements.  See above for
+definition of active elements.
+The value may have any of the forms acceptable to @b{Tk_GetPixels}.
+This option is typically only available in widgets displaying more
+than one element at a time (e.g. menus but not buttons).
+@end table
+
+
+@table @asis{}
+@item @code{@b{:activeforeground}}
+@flushright
+Name=@code{"@b{activeForeground}@r{"} Class=@code{"}@b{Background}"}
+@end flushright
+@sp 1
+
+Specifies foreground color to use when drawing active elements.
+See above for definition of active elements.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:anchor}}
+@flushright
+Name=@code{"@b{anchor}@r{"} Class=@code{"}@b{Anchor}"}
+@end flushright
+@sp 1
+
+Specifies how the information in a widget (e.g. text or a bitmap)
+is to be displayed in the widget.
+Must be one of the values @b{n}@r{, }@b{ne}@r{, }@b{e}@r{, }@b{se},
+@b{s}@r{, }@b{sw}@r{, }@b{w}@r{, }@b{nw}@r{, or }@b{center}.
+For example, @b{nw} means display the information such that its
+top-left corner is at the top-left corner of the widget.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:background or :bg}}
+@flushright
+Name=@code{"@b{background}@r{"} Class=@code{"}@b{Background}"}
+@end flushright
+@sp 1
+
+Specifies the normal background color to use when displaying the
+widget.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:bitmap}}
+@flushright
+Name=@code{"@b{bitmap}@r{"} Class=@code{"}@b{Bitmap}"}
+@end flushright
+@sp 1
+
+Specifies a bitmap to display in the widget, in any of the forms
+acceptable to @b{Tk_GetBitmap}.
+The exact way in which the bitmap is displayed may be affected by
+other options such as @b{anchor}@r{ or }@b{justify}.
+Typically, if this option is specified then it overrides other
+options that specify a textual value to display in the widget;
+the @b{bitmap} option may be reset to an empty string to re-enable
+a text display.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:borderwidth or :bd}}
+@flushright
+Name=@code{"@b{borderWidth}@r{"} Class=@code{"}@b{BorderWidth}"}
+@end flushright
+@sp 1
+
+Specifies a non-negative value indicating the width
+of the 3-D border to draw around the outside of the widget (if such a
+border is being drawn;  the @b{relief} option typically determines
+this).  The value may also be used when drawing 3-D effects in the
+interior of the widget.
+The value may have any of the forms acceptable to @b{Tk_GetPixels}.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:cursor}}
+@flushright
+Name=@code{"@b{cursor}@r{"} Class=@code{"}@b{Cursor}"}
+@end flushright
+@sp 1
+
+Specifies the mouse cursor to be used for the widget.
+The value may have any of the forms acceptable to @b{Tk_GetCursor}.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:cursorbackground}}
+@flushright
+Name=@code{"@b{cursorBackground}@r{"} Class=@code{"}@b{Foreground}"}
+@end flushright
+@sp 1
+
+Specifies the color to use as background in the area covered by the
+insertion cursor.  This color will normally override either the normal
+background for the widget (or the selection background if the insertion
+cursor happens to fall in the selection).
+\fIThis option is obsolete and is gradually being replaced by
+the @b{insertBackground}@r{ option.}
+@end table
+
+
+@table @asis{}
+@item @code{@b{:cursorborderwidth}}
+@flushright
+Name=@code{"@b{cursorBorderWidth}@r{"} Class=@code{"}@b{BorderWidth}"}
+@end flushright
+@sp 1
+
+Specifies a non-negative value indicating the width
+of the 3-D border to draw around the insertion cursor.
+The value may have any of the forms acceptable to @b{Tk_GetPixels}.
+\fIThis option is obsolete and is gradually being replaced by
+the @b{insertBorderWidth}@r{ option.}
+@end table
+
+
+@table @asis{}
+@item @code{@b{:cursorofftime}}
+@flushright
+Name=@code{"@b{cursorOffTime}@r{"} Class=@code{"}@b{OffTime}"}
+@end flushright
+@sp 1
+
+Specifies a non-negative integer value indicating the number of
+milliseconds the cursor should remain ``off'' in each blink cycle.
+If this option is zero then the cursor doesn't blink:  it is on
+all the time.
+\fIThis option is obsolete and is gradually being replaced by
+the @b{insertOffTime}@r{ option.}
+@end table
+
+
+@table @asis{}
+@item @code{@b{:cursorontime}}
+@flushright
+Name=@code{"@b{cursorOnTime}@r{"} Class=@code{"}@b{OnTime}"}
+@end flushright
+@sp 1
+
+Specifies a non-negative integer value indicating the number of
+milliseconds the cursor should remain ``on'' in each blink cycle.
+\fIThis option is obsolete and is gradually being replaced by
+the @b{insertOnTime}@r{ option.}
+@end table
+
+
+@table @asis{}
+@item @code{@b{:cursorwidth}}
+@flushright
+Name=@code{"@b{cursorWidth}@r{"} Class=@code{"}@b{CursorWidth}"}
+@end flushright
+@sp 1
+
+Specifies a  value indicating the total width of the insertion cursor.
+The value may have any of the forms acceptable to @b{Tk_GetPixels}.
+If a border has been specified for
+the cursor (using the @b{cursorBorderWidth} option), the border
+will be drawn inside the width specified by the @b{cursorWidth}
+option.
+\fIThis option is obsolete and is gradually being replaced by
+the @b{insertWidth}@r{ option.}
+@end table
+
+
+@table @asis{}
+@item @code{@b{:disabledforeground}}
+@flushright
+Name=@code{"@b{disabledForeground}@r{"} Class=@code{"}@b{DisabledForeground}"}
+@end flushright
+@sp 1
+
+Specifies foreground color to use when drawing a disabled element.
+If the option is specified as an empty string (which is typically the
+case on monochrome displays), disabled elements are drawn with the
+normal fooreground color but they are dimmed by drawing them
+with a stippled fill pattern.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:exportselection}}
+@flushright
+Name=@code{"@b{exportSelection}@r{"} Class=@code{"}@b{ExportSelection}"}
+@end flushright
+@sp 1
+
+Specifies whether or not a selection in the widget should also be
+the X selection.
+The value may have any of the forms accepted by @b{Tcl_GetBoolean},
+such as @b{true}@r{, }@b{false}@r{, }@b{0}@r{, }@b{1}@r{, }@b{yes}@r{, or }@b{no}.
+If the selection is exported, then selecting in the widget deselects
+the current X selection, selecting outside the widget deselects any
+widget selection, and the widget will respond to selection retrieval
+requests when it has a selection.  The default is usually for widgets
+to export selections.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:font}}
+@flushright
+Name=@code{"@b{font}@r{"} Class=@code{"}@b{Font}"}
+@end flushright
+@sp 1
+
+Specifies the font to use when drawing text inside the widget.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:foreground or :fg}}
+@flushright
+Name=@code{"@b{foreground}@r{"} Class=@code{"}@b{Foreground}"}
+@end flushright
+@sp 1
+
+Specifies the normal foreground color to use when displaying the widget.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:geometry}}
+@flushright
+Name=@code{"@b{geometry}@r{"} Class=@code{"}@b{Geometry}"}
+@end flushright
+@sp 1
+
+Specifies the desired geometry for the widget's window, in the
+form @i{width}@b{x}@i{height}@r{, where }@i{width} is the desired
+width of the window and @i{height} is the desired height.  The
+units for @i{width}@r{ and }@i{height} depend on the particular
+widget.  For widgets displaying text the units are usually the
+size of the characters in the font being displayed;  for other
+widgets the units are usually pixels.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:insertbackground}}
+@flushright
+Name=@code{"@b{insertBackground}@r{"} Class=@code{"}@b{Foreground}"}
+@end flushright
+@sp 1
+
+Specifies the color to use as background in the area covered by the
+insertion cursor.  This color will normally override either the normal
+background for the widget (or the selection background if the insertion
+cursor happens to fall in the selection).
+@end table
+
+
+@table @asis{}
+@item @code{@b{:insertborderwidth}}
+@flushright
+Name=@code{"@b{insertBorderWidth}@r{"} Class=@code{"}@b{BorderWidth}"}
+@end flushright
+@sp 1
+
+Specifies a non-negative value indicating the width
+of the 3-D border to draw around the insertion cursor.
+The value may have any of the forms acceptable to @b{Tk_GetPixels}.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:insertofftime}}
+@flushright
+Name=@code{"@b{insertOffTime}@r{"} Class=@code{"}@b{OffTime}"}
+@end flushright
+@sp 1
+
+Specifies a non-negative integer value indicating the number of
+milliseconds the insertion cursor should remain ``off'' in each blink cycle.
+If this option is zero then the cursor doesn't blink:  it is on
+all the time.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:insertontime}}
+@flushright
+Name=@code{"@b{insertOnTime}@r{"} Class=@code{"}@b{OnTime}"}
+@end flushright
+@sp 1
+
+Specifies a non-negative integer value indicating the number of
+milliseconds the insertion cursor should remain ``on'' in each blink cycle.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:insertwidth}}
+@flushright
+Name=@code{"@b{insertWidth}@r{"} Class=@code{"}@b{InsertWidth}"}
+@end flushright
+@sp 1
+
+Specifies a  value indicating the total width of the insertion cursor.
+The value may have any of the forms acceptable to @b{Tk_GetPixels}.
+If a border has been specified for the insertion
+cursor (using the @b{insertBorderWidth} option), the border
+will be drawn inside the width specified by the @b{insertWidth}
+option.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:orient}}
+@flushright
+Name=@code{"@b{orient}@r{"} Class=@code{"}@b{Orient}"}
+@end flushright
+@sp 1
+
+For widgets that can lay themselves out with either a horizontal
+or vertical orientation, such as scrollbars, this option specifies
+which orientation should be used.  Must be either @b{horizontal}
+or @b{vertical} or an abbreviation of one of these.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:padx}}
+@flushright
+Name=@code{"@b{padX}@r{"} Class=@code{"}@b{Pad}"}
+@end flushright
+@sp 1
+
+Specifies a non-negative value indicating how much extra space
+to request for the widget in the X-direction.
+The value may have any of the forms acceptable to @b{Tk_GetPixels}.
+When computing how large a window it needs, the widget will
+add this amount to the width it would normally need (as determined
+by the width of the things displayed in the widget);  if the geometry
+manager can satisfy this request, the widget will end up with extra
+internal space to the left and/or right of what it displays inside.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:pady}}
+@flushright
+Name=@code{"@b{padY}@r{"} Class=@code{"}@b{Pad}"}
+@end flushright
+@sp 1
+
+Specifies a non-negative value indicating how much extra space
+to request for the widget in the Y-direction.
+The value may have any of the forms acceptable to @b{Tk_GetPixels}.
+When computing how large a window it needs, the widget will add
+this amount to the height it would normally need (as determined by
+the height of the things displayed in the widget);  if the geometry
+manager can satisfy this request, the widget will end up with extra
+internal space above and/or below what it displays inside.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:relief}}
+@flushright
+Name=@code{"@b{relief}@r{"} Class=@code{"}@b{Relief}"}
+@end flushright
+@sp 1
+
+Specifies the 3-D effect desired for the widget.  Acceptable
+values are @b{raised}@r{, }@b{sunken}@r{, }@b{flat}@r{, }@b{ridge},
+and @b{groove}.
+The value
+indicates how the interior of the widget should appear relative
+to its exterior;  for example, @b{raised} means the interior of
+the widget should appear to protrude from the screen, relative to
+the exterior of the widget.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:repeatdelay}}
+@flushright
+Name=@code{"@b{repeatDelay}@r{"} Class=@code{"}@b{RepeatDelay}"}
+@end flushright
+@sp 1
+
+Specifies the number of milliseconds a button or key must be held
+down before it begins to auto-repeat.  Used, for example, on the
+up- and down-arrows in scrollbars.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:repeatinterval}}
+@flushright
+Name=@code{"@b{repeatInterval}@r{"} Class=@code{"}@b{RepeatInterval}"}
+@end flushright
+@sp 1
+
+Used in conjunction with @b{repeatDelay}:  once auto-repeat
+begins, this option determines the number of milliseconds between
+auto-repeats.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:scrollcommand}}
+@flushright
+Name=@code{"@b{scrollCommand}@r{"} Class=@code{"}@b{ScrollCommand}"}
+@end flushright
+@sp 1
+
+Specifies the prefix for a command used to communicate with scrollbar
+widgets.  When the view in the widget's window changes (or
+whenever anything else occurs that could change the display in a
+scrollbar, such as a change in the total size of the widget's
+contents), the widget will
+generate a Tcl command by concatenating the scroll command and four
+numbers.  The four numbers are, in order:  the total size of the
+widget's contents, in unspecified units
+(``unit'' is a widget-specific term;  for widgets
+displaying text, the unit is a line);  the maximum number of units that
+may be displayed at once in the widget's window, given its current size;  the
+index of the top-most or left-most unit currently visible in the window
+(index 0 corresponds to the first unit); and the index of the bottom-most
+or right-most unit currently visible in the window.  This command is
+then passed to the Tcl interpreter for execution.  Typically the
+@b{scrollCommand} option consists of the path name of a scrollbar
+widget followed by ``set'', e.g. ``.x.scrollbar set'':  this will cause
+the scrollbar to be updated whenever the view in the window changes.
+If this option is not specified, then no command will be executed.
+
+The @b{scrollCommand} option is used for widgets that support scrolling
+in only one direction.
+For widgets that support scrolling in both directions, this
+option is replaced with the @b{xScrollCommand}@r{ and }@b{yScrollCommand}
+options.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:selectbackground}}
+@flushright
+Name=@code{"@b{selectBackground}@r{"} Class=@code{"}@b{Foreground}"}
+@end flushright
+@sp 1
+
+Specifies the background color to use when displaying selected
+items.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:selectborderwidth}}
+@flushright
+Name=@code{"@b{selectBorderWidth}@r{"} Class=@code{"}@b{BorderWidth}"}
+@end flushright
+@sp 1
+
+Specifies a non-negative value indicating the width
+of the 3-D border to draw around selected items.
+The value may have any of the forms acceptable to @b{Tk_GetPixels}.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:selectforeground}}
+@flushright
+Name=@code{"@b{selectForeground}@r{"} Class=@code{"}@b{Background}"}
+@end flushright
+@sp 1
+
+Specifies the foreground color to use when displaying selected
+items.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:setgrid}}
+@flushright
+Name=@code{"@b{setGrid}@r{"} Class=@code{"}@b{SetGrid}"}
+@end flushright
+@sp 1
+
+Specifies a boolean value that determines whether this widget controls the
+resizing grid for its top-level window.
+This option is typically used in text widgets, where the information
+in the widget has a natural size (the size of a character) and it makes
+sense for the window's dimensions to be integral numbers of these units.
+These natural window sizes form a grid.
+If the @b{setGrid} option is set to true then the widget will
+communicate with the window manager so that when the user interactively
+resizes the top-level window that contains the widget, the dimensions of
+the window will be displayed to the user in grid units and the window
+size will be constrained to integral numbers of grid units.
+See the section GRIDDED GEOMETRY MANAGEMENT in the @b{wm} manual
+entry for more details.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:text}}
+@flushright
+Name=@code{"@b{text}@r{"} Class=@code{"}@b{Text}"}
+@end flushright
+@sp 1
+
+Specifies a string to be displayed inside the widget.  The way in which
+the string is displayed depends on the particular widget and may be
+determined by other options, such as @b{anchor}@r{ or }@b{justify}.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:textvariable}}
+@flushright
+Name=@code{"@b{textVariable}@r{"} Class=@code{"}@b{Variable}"}
+@end flushright
+@sp 1
+
+Specifies the name of a variable.  The value of the variable is a text
+string to be displayed inside the widget;  if the variable value changes
+then the widget will automatically update itself to reflect the new value.
+The way in which the string is displayed in the widget depends on the
+particular widget and may be determined by other options, such as
+@b{anchor}@r{ or }@b{justify}.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:underline}}
+@flushright
+Name=@code{"@b{underline}@r{"} Class=@code{"}@b{Underline}"}
+@end flushright
+@sp 1
+
+Specifies the integer index of a character to underline in the widget.
+This option is typically used to indicate keyboard traversal characters
+in menu buttons and menu entries.  0 corresponds to the first character
+of the text displayed in the widget, 1 to the next character, and so
+on.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:xscrollcommand}}
+@flushright
+Name=@code{"@b{xScrollCommand}@r{"} Class=@code{"}@b{ScrollCommand}"}
+@end flushright
+@sp 1
+
+Specifies the prefix for a command used to communicate with horizontal
+scrollbars.  This option is treated in the same way as the
+@b{scrollCommand} option, except that it is used for horizontal
+scrollbars associated with widgets that support both horizontal
+and vertical scrolling.
+See the description of @b{scrollCommand} for complete details
+on how this option is used.
+@end table
+
+
+@table @asis{}
+@item @code{@b{:yscrollcommand}}
+@flushright
+Name=@code{"@b{yScrollCommand}@r{"} Class=@code{"}@b{ScrollCommand}"}
+@end flushright
+@sp 1
+
+Specifies the prefix for a command used to communicate with vertical
+scrollbars.  This option is treated in the same way as the
+@b{scrollCommand} option, except that it is used for vertical
+scrollbars associated with widgets that support both horizontal
+and vertical scrolling.
+See the description of @b{scrollCommand} for complete details
+on how this option is used.
+
+@end table
+@unnumberedsubsec Keywords
+class, name, standard option, switch
+@node pack-old, pack, options, Control
+@section pack-old
+@c @cartouche
+
+pack \- Obsolete syntax for packer geometry manager
+@unnumberedsubsec Synopsis
+@b{pack after }@i{sibling }@i{window options}@r{ ?}@i{window options }...?
+@sp 1
+@b{pack append }@i{parent }@i{window options}@r{ ?}@i{window options }...?
+@sp 1
+@b{pack before }@i{sibling }@i{window options}@r{ ?}@i{window options }...?
+@sp 1
+@b{pack info }@i{parent}
+@sp 1
+@b{pack unpack }@i{window}
+@c @end cartouche
+
+@unnumberedsubsec Description
+
+@i{Note: this manual entry describes the syntax for the }@b{pack}\fI
+command as it before Tk version 3.3.
+Although this syntax continues to be supported for backward
+compatibility, it is obsolete and should not be used anymore.
+At some point in the future it may cease to be supported.
+
+The packer is a geometry manager that arranges the
+children of a parent by packing them in order around the edges of
+the parent.  The first child is placed against one side of
+the window, occupying the entire span of the window along that
+side.  This reduces the space remaining for other children as
+if the side had been moved in by the size of the first child.
+Then the next child is placed against one side of the remaining
+cavity, and so on until all children have been placed or there
+is no space left in the cavity.
+
+The @b{before}@r{, }@b{after}@r{, and }@b{append}@r{ forms of the }@b{pack}
+command are used to insert one or more children into the packing order
+for their parent.  The @b{before} form inserts the children before
+window @i{sibling} in the order;  all of the other windows must be
+siblings of @i{sibling}@r{.  The }@b{after} form inserts the windows
+after @i{sibling}@r{, and the }@b{append} form appends one or more
+windows to the end of the packing order for @i{parent}.  If a
+@i{window} named in any of these commands is already packed in
+its parent, it is removed from its current position in the packing
+order and repositioned as indicated by the command.  All of these
+commands return an empty string as result.
+
+The @b{unpack}@r{ form of the }@b{pack}@r{ command removes }@i{window}
+from the packing order of its parent and unmaps it.  After the
+execution of this command the packer will no longer manage
+@i{window}'s geometry.
+
+The placement of each child is actually a four-step process;
+the @i{options}@r{ argument following each }@i{window} consists of
+a list of one or more fields that govern the placement of that
+window.  In the discussion below, the term @i{cavity} refers
+to the space left in a parent when a particular child is placed
+(i.e. all the space that wasn't claimed by earlier children in
+the packing order).  The term @i{parcel} refers to the space
+allocated to a particular child;  this is not necessarily the
+same as the child window's final geometry.
+
+The first step in placing a child is to determine which side of
+the cavity it will lie against.  Any one of the following options
+may be used to specify a side:
+
+@table @asis{}
+@item @b{top}
+Position the child's parcel against the top of the cavity,
+occupying the full width of the cavity.
+@item @b{bottom}
+Position the child's parcel against the bottom of the cavity,
+occupying the full width of the cavity.
+@item @b{left}
+Position the child's parcel against the left side of the cavity,
+occupying the full height of the cavity.
+@item @b{right}
+Position the child's parcel against the right side of the cavity,
+occupying the full height of the cavity.
+@end table
+
+
+At most one of these options should be specified for any given window.
+If no side is specified, then the default is @b{top}.
+
+The second step is to decide on a parcel for the child.  For @b{top}
+and @b{bottom} windows, the desired parcel width is normally the cavity
+width and the desired parcel height is the window's requested height,
+as passed to @b{Tk_GeometryRequest}@r{. For }@b{left}@r{ and }@b{right}
+windows, the desired parcel height is normally the cavity height and the
+desired width is the window's requested width.  However, extra
+space may be requested for the window using any of the following
+options:
+
+@table @asis{}
+@item @b{padx }@i{num}
+Add @i{num} pixels to the window's requested width before computing
+the parcel size as described above.
+@item @b{pady }@i{num}
+Add @i{num} pixels to the window's requested height before computing
+the parcel size as described above.
+@item @b{expand}
+This option requests that the window's parcel absorb any extra space left over
+in the parent's cavity after packing all the children.
+The amount of space left over depends on the sizes requested by the
+other children, and may be zero.  If several windows have all specified
+@b{expand} then the extra width will be divided equally among all the
+@b{left}@r{ and }@b{right}@r{ windows that specified }@b{expand} and
+the extra height will be divided equally among all the @b{top} and
+@b{bottom}@r{ windows that specified }@b{expand}.
+@end table
+
+
+If the desired width or height for a parcel is larger than the corresponding
+dimension of the cavity, then the cavity's dimension is used instead.
+
+The third step in placing the window is to decide on the window's
+width and height.  The default is for the window to receive either
+its requested width and height or the those of the parcel, whichever
+is smaller.  If the parcel is larger than the window's requested
+size, then the following options may be used to expand the
+window to partially or completely fill the parcel:
+
+@table @asis{}
+@item @b{fill}
+Set the window's size to equal the parcel size.
+@item @b{fillx}
+Increase the window's width to equal the parcel's width, but retain
+the window's requested height.
+@item @b{filly}
+Increase the window's height to equal the parcel's height, but retain
+the window's requested width.
+
+The last step is to decide the window's location within its parcel.
+If the window's size equals the parcel's size, then the window simply
+fills the entire parcel.  If the parcel is larger than the window,
+then one of
+the following options may be used to specify where the window should
+be positioned within its parcel:
+@item @b{frame center}
+Center the window in its parcel.  This is the default if no framing
+option is specified.
+@item @b{frame n}
+Position the window with its top edge centered on the top edge of
+the parcel.
+@item @b{frame ne}
+Position the window with its upper-right corner at the upper-right corner
+of the parcel.
+@item @b{frame e}
+Position the window with its right edge centered on the right edge of
+the parcel.
+@item @b{frame se}
+Position the window with its lower-right corner at the lower-right corner
+of the parcel.
+@item @b{frame s}
+Position the window with its bottom edge centered on the bottom edge of
+the parcel.
+@item @b{frame sw}
+Position the window with its lower-left corner at the lower-left corner
+of the parcel.
+@item @b{frame w}
+Position the window with its left edge centered on the left edge of
+the parcel.
+@item @b{frame nw}
+Position the window with its upper-left corner at the upper-left corner
+of the parcel.
+
+The @b{pack info} command may be used to retrieve information about
+the packing order for a parent.  It returns a list in the form
+
+@example
+@i{window options window options ...}
+@end example
+
+Each @i{window}@r{ is a name of a window packed in }@i{parent},
+and the following @i{options} describes all of the options for that
+window, just as they would be typed to @b{pack append}.
+The order of the list is the same as the packing order for
+@i{parent}.
+
+The packer manages the mapped/unmapped state of all the packed
+children windows.  It automatically maps the windows when it packs
+them, and it unmaps any windows for which there was no space left
+in the cavity.
+
+The packer makes geometry requests on behalf of the parent windows
+it manages.  For each parent window it requests a size large enough
+to accommodate all the options specified by all the packed children,
+such that zero space would be leftover for @b{expand} options.
+
+@end table
+@unnumberedsubsec Keywords
+geometry manager, location, packer, parcel, size
+@node pack, place, pack-old, Control
+@section pack
+@c @cartouche
+
+pack \- Geometry manager that packs around edges of cavity
+@unnumberedsubsec Synopsis
+@b{pack }@i{option arg }@r{?}@i{arg ...}?
+@c @end cartouche
+
+@unnumberedsubsec Description
+
+The @b{pack} command is used to communicate with the packer,
+a geometry manager that arranges the children of a parent by
+packing them in order around the edges of the parent.
+The @b{pack} command can have any of several forms, depending
+on the @i{option} argument:
+
+@table @asis{}
+@item @b{pack }@i{slave }@r{?}@i{slave ...}@r{? ?}@i{options}?
+If the first argument to @b{pack} is a window name (any value
+starting with ``.''), then the command is processed in the same
+way as @b{pack configure}.
+@item @b{pack configure }@i{slave }@r{?}@i{slave ...}@r{? ?}@i{options}?
+The arguments consist of the names of one or more slave windows
+followed by pairs of arguments that specify how
+to manage the slaves.
+See ``THE PACKER ALGORITHM'' below for details on how the options
+are used by the packer.
+The following options are supported:
+@item @b{:after }@i{other}
+@i{Other} must the name of another window.
+Use its master as the master for the slaves, and insert
+the slaves just after @i{other} in the packing order.
+@item @b{:anchor }@i{anchor}
+@i{Anchor}@r{ must be a valid anchor position such as }@b{n}
+or @b{sw}; it specifies where to position each slave in its
+parcel.
+Defaults to @b{center}.
+@item @b{:before }@i{other}
+@i{Other} must the name of another window.
+Use its master as the master for the slaves, and insert
+the slaves just before @i{other} in the packing order.
+@item @b{:expand }@i{boolean}
+Specifies whether the slaves should be expanded to consume
+extra space in their master.
+@i{Boolean}@r{ may have any proper boolean value, such as }@b{1}
+or @b{no}.
+Defaults to 0.
+@item @b{:fill }@i{style}
+If a slave's parcel is larger than its requested dimensions, this
+option may be used to stretch the slave.
+@i{Style} must have one of the following values:
+@table @asis{}
+@item @b{none}
+Give the slave its requested dimensions plus any internal padding
+requested with @b{:ipadx}@r{ or }@b{:ipady}.  This is the default.
+@item @b{x}
+Stretch the slave horizontally to fill the entire width of its
+parcel (except leave external padding as specified by @b{:padx}).
+@item @b{y}
+Stretch the slave vertically to fill the entire height of its
+parcel (except leave external padding as specified by @b{:pady}).
+@item @b{both}
+Stretch the slave both horizontally and vertically.
+@end table
+@item @b{:in }@i{other}
+Insert the slave(s) at the end of the packing order for the master
+window given by @i{other}.
+@item @b{:ipadx }@i{amount}
+@i{Amount} specifies how much horizontal internal padding to
+leave on each side of the slave(s).
+@i{Amount}@r{ must be a valid screen distance, such as }@b{2}@r{ or }@b{.5c}.
+It defaults to 0.
+@item @b{:ipady }@i{amount}
+@i{Amount} specifies how much vertical internal padding to
+leave on each side of the slave(s).
+@i{Amount}  defaults to 0.
+@item @b{:padx }@i{amount}
+@i{Amount} specifies how much horizontal external padding to
+leave on each side of the slave(s).
+@i{Amount} defaults to 0.
+@item @b{:pady }@i{amount}
+@i{Amount} specifies how much vertical external padding to
+leave on each side of the slave(s).
+@i{Amount} defaults to 0.
+@item @b{:side }@i{side}
+Specifies which side of the master the slave(s) will be packed against.
+Must be @b{left}@r{, }@b{right}@r{, }@b{top}@r{, or }@b{bottom}.
+Defaults to @b{top}.
+@end table
+
+
+If no @b{:in}@r{, }@b{:after}@r{ or }@b{:before} option is specified
+then each of the slaves will be inserted at the end of the packing list
+for its parent unless it is already managed by the packer (in which
+case it will be left where it is).
+If one of these options is specified then all the slaves will be
+inserted at the specified point.
+If any of the slaves are already managed by the geometry manager
+then any unspecified options for them retain their previous values rather
+than receiving default values.
+.RE
+
+@table @asis{}
+@item @b{pack :forget }@i{slave }@r{?}@i{slave ...}?
+Removes each of the @i{slave}s from the packing order for its
+master and unmaps their windows.
+The slaves will no longer be managed by the packer.
+@item @b{pack :newinfo }@i{slave}
+Returns a list whose elements are the current configuration state of
+the slave given by @i{slave} in the same option-value form that
+might be specified to @b{pack configure}.
+The first two elements of the list are ``@b{:in }@i{master}'' where
+@i{master} is the slave's master.
+Starting with Tk 4.0 this option will be renamed "pack info".
+@item @b{pack :propagate }@i{master}@r{ ?}@i{boolean}?
+If @i{boolean}@r{ has a true boolean value such as }@b{1}@r{ or }@b{on}
+then propagation is enabled for @i{master}, which must be a window
+name (see ``GEOMETRY PROPAGATION'' below).
+If @i{boolean} has a false boolean value then propagation is
+disabled for @i{master}.
+In either of these cases an empty string is returned.
+If @i{boolean}@r{ is omitted then the command returns }@b{0} or
+@b{1} to indicate whether propagation is currently enabled
+for @i{master}.
+Propagation is enabled by default.
+@item @b{pack :slaves }@i{master}
+Returns a list of all of the slaves in the packing order for @i{master}.
+The order of the slaves in the list is the same as their order in
+the packing order.
+If @i{master} has no slaves then an empty string is returned.
+
+@end table
+@unnumberedsubsec "The Packer Algorithm"
+
+For each master the packer maintains an ordered list of slaves
+called the @i{packing list}.
+The @b{:in}@r{, }@b{:after}@r{, and }@b{:before} configuration
+options are used to specify the master for each slave and the slave's
+position in the packing list.
+If none of these options is given for a slave then the slave
+is added to the end of the packing list for its parent.
+
+The packer arranges the slaves for a master by scanning the
+packing list in order.
+At the time it processes each slave, a rectangular area within
+the master is still unallocated.
+This area is called the @i{cavity};  for the first slave it
+is the entire area of the master.
+
+For each slave the packer carries out the following steps:
+@itemize @asis{}
+@item
+[1]
+The packer allocates a rectangular @i{parcel} for the slave
+along the side of the cavity given by the slave's @b{:side} option.
+If the side is top or bottom then the width of the parcel is
+the width of the cavity and its height is the requested height
+of the slave plus the @b{:ipady}@r{ and }@b{:pady} options.
+For the left or right side the height of the parcel is
+the height of the cavity and the width is the requested width
+of the slave plus the @b{:ipadx}@r{ and }@b{:padx} options.
+The parcel may be enlarged further because of the @b{:expand}
+option (see ``EXPANSION'' below)
+@item
+[2]
+The packer chooses the dimensions of the slave.
+The width will normally be the slave's requested width plus
+twice its @b{:ipadx} option and the height will normally be
+the slave's requested height plus twice its @b{:ipady}
+option.
+However, if the @b{:fill}@r{ option is }@b{x}@r{ or }@b{both}
+then the width of the slave is expanded to fill the width of the parcel,
+minus twice the @b{:padx} option.
+If the @b{:fill}@r{ option is }@b{y}@r{ or }@b{both}
+then the height of the slave is expanded to fill the width of the parcel,
+minus twice the @b{:pady} option.
+@item
+[3]
+The packer positions the slave over its parcel.
+If the slave is smaller than the parcel then the @b{:anchor}
+option determines where in the parcel the slave will be placed.
+If @b{:padx}@r{ or }@b{:pady} is non-zero, then the given
+amount of external padding will always be left between the
+slave and the edges of the parcel.
+@end itemize
+
+
+Once a given slave has been packed, the area of its parcel
+is subtracted from the cavity, leaving a smaller rectangular
+cavity for the next slave.
+If a slave doesn't use all of its parcel, the unused space
+in the parcel will not be used by subsequent slaves.
+If the cavity should become too small to meet the needs of
+a slave then the slave will be given whatever space is
+left in the cavity.
+If the cavity shrinks to zero size, then all remaining slaves
+on the packing list will be unmapped from the screen until
+the master window becomes large enough to hold them again.
+
+@unnumberedsubsec "Expansion"
+
+If a master window is so large that there will be extra space
+left over after all of its slaves have been packed, then the
+extra space is distributed uniformly among all of the slaves
+for which the @b{:expand} option is set.
+Extra horizontal space is distributed among the expandable
+slaves whose @b{:side}@r{ is }@b{left}@r{ or }@b{right},
+and extra vertical space is distributed among the expandable
+slaves whose @b{:side}@r{ is }@b{top}@r{ or }@b{bottom}.
+
+@unnumberedsubsec "Geometry Propagation"
+
+The packer normally computes how large a master must be to
+just exactly meet the needs of its slaves, and it sets the
+requested width and height of the master to these dimensions.
+This causes geometry information to propagate up through a
+window hierarchy to a top-level window so that the entire
+sub-tree sizes itself to fit the needs of the leaf windows.
+However, the @b{pack propagate} command may be used to
+turn off propagation for one or more masters.
+If propagation is disabled then the packer will not set
+the requested width and height of the packer.
+This may be useful if, for example, you wish for a master
+window to have a fixed size that you specify.
+
+@unnumberedsubsec "Restrictions On Master Windows"
+
+The master for each slave must either be the slave's parent
+(the default) or a descendant of the slave's parent.
+This restriction is necessary to guarantee that the
+slave can be placed over any part of its master that is
+visible without danger of the slave being clipped by its parent.
+
+@unnumberedsubsec "Packing Order"
+
+If the master for a slave is not its parent then you must make sure
+that the slave is higher in the stacking order than the master.
+Otherwise the master will obscure the slave and it will appear as
+if the slave hasn't been packed correctly.
+The easiest way to make sure the slave is higher than the master is
+to create the master window first:  the most recently created window
+will be highest in the stacking order.
+Or, you can use the @b{raise}@r{ and }@b{lower} commands to change
+the stacking order of either the master or the slave.
+
+@unnumberedsubsec Keywords
+geometry manager, location, packer, parcel, propagation, size
+@node place, raise, pack, Control
+@section place
+@c @cartouche
+
+place \- Geometry manager for fixed or rubber-sheet placement
+@unnumberedsubsec Synopsis
+@b{place }@i{window option value }@r{?}@i{option value ...}?
+@sp 1
+@b{place configure }@i{window option value }@r{?}@i{option value ...}?
+@sp 1
+@b{place forget }@i{window}
+@sp 1
+@b{place info }@i{window}
+@sp 1
+@b{place slaves }@i{window}
+@c @end cartouche
+
+@unnumberedsubsec Description
+
+The placer is a geometry manager for Tk.
+It provides simple fixed placement of windows, where you specify
+the exact size and location of one window, called the @i{slave},
+within another window, called the @i{master}.
+The placer also provides rubber-sheet placement, where you specify the
+size and location of the slave in terms of the dimensions of
+the master, so that the slave changes size and location
+in response to changes in the size of the master.
+Lastly, the placer allows you to mix these styles of placement so
+that, for example, the slave has a fixed width and height but is
+centered inside the master.
+
+If the first argument to the @b{place} command is a window path
+name or @b{configure} then the command arranges for the placer
+to manage the geometry of a slave whose path name is @i{window}.
+The remaining arguments consist of one or more @i{option:value}
+pairs that specify the way in which @i{window}'s
+geometry is managed.
+If the placer is already managing @i{window}, then the
+@i{option:value}@r{ pairs modify the configuration for }@i{window}.
+In this form the @b{place} command returns an empty string as result.
+The following @i{option:value} pairs are supported:
+
+@table @asis{}
+@item @b{:in }@i{master}
+@i{Master} specifes the path name of the window relative
+to which @i{window} is to be placed.
+@i{Master}@r{ must either be }@i{window}'s parent or a descendant
+of @i{window}'s parent.
+In addition, @i{master}@r{ and }@i{window} must both be descendants
+of the same top-level window.
+These restrictions are necessary to guarantee
+that @i{window}@r{ is visible whenever }@i{master} is visible.
+If this option isn't specified then the master defaults to
+@i{window}'s parent.
+@item @b{:x }@i{location}
+@i{Location} specifies the x-coordinate within the master window
+of the anchor point for @i{window}.
+The location is specified in screen units (i.e. any of the forms
+accepted by @b{Tk_GetPixels}) and need not lie within the bounds
+of the master window.
+@item @b{:relx }@i{location}
+@i{Location} specifies the x-coordinate within the master window
+of the anchor point for @i{window}.
+In this case the location is specified in a relative fashion
+as a floating-point number:  0.0 corresponds to the left edge
+of the master and 1.0 corresponds to the right edge of the master.
+@i{Location} need not be in the range 0.0\-1.0.
+@item @b{:y }@i{location}
+@i{Location} specifies the y-coordinate within the master window
+of the anchor point for @i{window}.
+The location is specified in screen units (i.e. any of the forms
+accepted by @b{Tk_GetPixels}) and need not lie within the bounds
+of the master window.
+@item @b{:rely }@i{location}
+@i{Location} specifies the y-coordinate within the master window
+of the anchor point for @i{window}.
+In this case the value is specified in a relative fashion
+as a floating-point number:  0.0 corresponds to the top edge
+of the master and 1.0 corresponds to the bottom edge of the master.
+@i{Location} need not be in the range 0.0\-1.0.
+@item @b{:anchor }@i{where}
+@i{Where}@r{ specifies which point of }@i{window} is to be positioned
+at the (x,y) location selected by the @b{:x}@r{, }@b{:y},
+@b{:relx}@r{, and }@b{:rely} options.
+The anchor point is in terms of the outer area of @i{window}
+including its border, if any.
+Thus if @i{where}@r{ is }@b{se} then the lower-right corner of
+@i{window}'s border will appear at the given (x,y) location
+in the master.
+The anchor position defaults to @b{nw}.
+@item @b{:width }@i{size}
+@i{Size}@r{ specifies the width for }@i{window} in screen units
+(i.e. any of the forms accepted by @b{Tk_GetPixels}).
+The width will be the outer width of @i{window} including its
+border, if any.
+If @i{size}@r{ is an empty string, or if no }@b{:width}
+or @b{:relwidth} option is specified, then the width requested
+internally by the window will be used.
+@item @b{:relwidth }@i{size}
+@i{Size}@r{ specifies the width for }@i{window}.
+In this case the width is specified as a floating-point number
+relative to the width of the master: 0.5 means @i{window} will
+be half as wide as the master, 1.0 means @i{window} will have
+the same width as the master, and so on.
+@item @b{:height }@i{size}
+@i{Size}@r{ specifies the height for }@i{window} in screen units
+(i.e. any of the forms accepted by @b{Tk_GetPixels}).
+The height will be the outer dimension of @i{window} including its
+border, if any.
+If @i{size}@r{ is an empty string, or if no }@b{:height} or
+@b{:relheight} option is specified, then the height requested
+internally by the window will be used.
+@item @b{:relheight }@i{size}
+@i{Size}@r{ specifies the height for }@i{window}.
+In this case the height is specified as a floating-point number
+relative to the height of the master: 0.5 means @i{window} will
+be half as high as the master, 1.0 means @i{window} will have
+the same height as the master, and so on.
+@item @b{:bordermode }@i{mode}
+@i{Mode} determines the degree to which borders within the
+master are used in determining the placement of the slave.
+The default and most common value is @b{inside}.
+In this case the placer considers the area of the master to
+be the innermost area of the master, inside any border:
+an option of @b{:x 0} corresponds to an x-coordinate just
+inside the border and an option of @b{:relwidth 1.0}
+means @i{window} will fill the area inside the master's
+border.
+If @i{mode}@r{ is }@b{outside} then the placer considers
+the area of the master to include its border;
+this mode is typically used when placing @i{window}
+outside its master, as with the options @b{:x 0 :y 0 :anchor ne}.
+Lastly, @i{mode}@r{ may be specified as }@b{ignore}, in which
+case borders are ignored:  the area of the master is considered
+to be its official X area, which includes any internal border but
+no external border.  A bordermode of @b{ignore} is probably
+not very useful.
+
+If the same value is specified separately with
+two different options, such as @b{:x}@r{ and }@b{:relx}, then
+the most recent option is used and the older one is ignored.
+
+The @b{place slaves} command returns a list of all the slave
+windows for which @i{window} is the master.
+If there are no slaves for @i{window} then an empty string is
+returned.
+
+The @b{place forget} command causes the placer to stop managing
+the geometry of @i{window}.  As a side effect of this command
+@i{window} will be unmapped so that it doesn't appear on the
+screen.
+If @i{window} isn't currently managed by the placer then the
+command has no effect.
+@b{Place forget} returns an empty string as result.
+
+The @b{place info} command returns a list giving the current
+configuration of @i{window}.
+The list consists of @i{option:value} pairs in exactly the
+same form as might be specified to the @b{place configure}
+command.
+If the configuration of a window has been retrieved with
+@b{place info}, that configuration can be restored later by
+first using @b{place forget} to erase any existing information
+for the window and then invoking @b{place configure} with
+the saved information.
+
+@end table
+@unnumberedsubsec "Fine Points"
+
+It is not necessary for the master window to be the parent
+of the slave window.
+This feature is useful in at least two situations.
+First, for complex window layouts it means you can create a
+hierarchy of subwindows whose only purpose
+is to assist in the layout of the parent.
+The ``real children'' of the parent (i.e. the windows that
+are significant for the application's user interface) can be
+children of the parent yet be placed inside the windows
+of the geometry-management hierarchy.
+This means that the path names of the ``real children''
+don't reflect the geometry-management hierarchy and users
+can specify options for the real children
+without being aware of the structure of the geometry-management
+hierarchy.
+
+A second reason for having a master different than the slave's
+parent is to tie two siblings together.
+For example, the placer can be used to force a window always to
+be positioned centered just below one of its
+siblings by specifying the configuration
+
+@example
+@b{:in }@i{sibling}@b{ :relx 0.5 :rely 1.0 :anchor n :bordermode outside}
+@end example
+
+Whenever the sibling is repositioned in the future, the slave
+will be repositioned as well.
+
+Unlike many other geometry managers (such as the packer)
+the placer does not make any attempt to manipulate the geometry of
+the master windows or the parents of slave windows (i.e. it doesn't
+set their requested sizes).
+To control the sizes of these windows, make them windows like
+frames and canvases that provide configuration options for this purpose.
+
+@unnumberedsubsec Keywords
+geometry manager, height, location, master, place, rubber sheet, slave, width
+@node raise, selection, place, Control
+@section raise
+@c @cartouche
+
+raise \- Change a window's position in the stacking order
+@unnumberedsubsec Synopsis
+@b{raise }@i{window }@r{?}@i{aboveThis}?
+@c @end cartouche
+
+@unnumberedsubsec Description
+
+If the @i{aboveThis} argument is omitted then the command raises
+@i{window} so that it is above all of its siblings in the stacking
+order (it will not be obscured by any siblings and will obscure
+any siblings that overlap it).
+If @i{aboveThis} is specified then it must be the path name of
+a window that is either a sibling of @i{window} or the descendant
+of a sibling of @i{window}.
+In this case the @b{raise} command will insert
+@i{window}@r{ into the stacking order just above }@i{aboveThis}
+(or the ancestor of @i{aboveThis}@r{ that is a sibling of }@i{window});
+this could end up either raising or lowering @i{window}.
+
+@unnumberedsubsec Keywords
+obscure, raise, stacking order
+@node selection, send, raise, Control
+@section selection
+@c @cartouche
+
+selection \- Manipulate the X selection
+@unnumberedsubsec Synopsis
+@b{selection }@i{option}@r{ ?}@i{arg arg ...}?
+@c @end cartouche
+
+@unnumberedsubsec Description
+
+This command provides a Tcl interface to the X selection mechanism and
+implements the full selection functionality described in the
+X Inter-Client Communication Conventions Manual (ICCCM), except that it
+supports only the primary selection.
+
+The first argument to @b{selection} determines the format of the
+rest of the arguments and the behavior of the command.  The following
+forms are currently supported:
+
+@table @asis{}
+@item @b{selection :clear }@i{window}
+If there is a selection anywhere on @i{window}'s display, clear it
+so that no window owns the selection anymore.  Returns an empty string.
+@item @b{selection :get }@r{?}@i{type}?
+Retrieves the value
+of the primary selection and returns it as a result.
+@b{Type} specifies the form in which the selection is to be
+returned (the desired ``target'' for conversion, in ICCCM
+terminology), and should be an
+atom name such as STRING or FILE_NAME;  see the Inter-Client
+Communication Conventions Manual for complete details.
+@b{Type} defaults to STRING.  The selection :owner may choose to
+return the selection in any of several different representation
+formats, such as STRING, ATOM, INTEGER, etc. (this format is
+different than the selection type;  see the ICCCM for all the
+confusing details).  If the selection is returned in
+a non-string format, such as INTEGER or ATOM, the @b{selection}
+command converts it to string format as a collection of fields
+separated by spaces:  atoms are converted to their
+textual names, and anything else is converted to hexadecimal
+integers.
+@item @b{selection :handle }@i{window command }@r{?}@i{type}@r{? ?}@i{format}?
+Creates a handler for selection requests, such that @i{command} will
+be executed whenever the primary selection is
+owned by @i{window} and someone attempts to retrieve it in the form
+given by @i{type}@r{ (e.g. }@i{type}@r{ is specified in the }@b{selection :get}
+command).  @i{Type} defaults to STRING.
+If @i{command} is an empty string then any existing handler for
+@i{window}@r{ and }@i{type} is removed.
+
+When the selection is requested and @i{window} is the selection :owner
+and @i{type}@r{ is the requested type, }@i{command} will be executed
+as a Tcl command with two additional numbers appended to it
+(with space separators).  The two additional numbers
+are @i{offset}@r{ and }@i{maxBytes}@r{:  }@i{offset} specifies a starting
+character position in the selection and @i{maxBytes} gives the maximum
+number of bytes to retrieve.  The command should return a value consisting
+of at most @i{maxBytes} of the selection, starting at position
+@i{offset}@r{.  For very large selections (larger than }@i{maxBytes})
+the selection will be retrieved using several invocations of @i{command}
+with increasing @i{offset}@r{ values.  If }@i{command} returns a string
+whose length is less than @i{maxBytes}, the return value is assumed to
+include all of the remainder of the selection;  if the length of
+@i{command}@r{'s result is equal to }@i{maxBytes} then
+@i{command} will be invoked again, until it eventually
+returns a result shorter than @i{maxBytes}@r{.  The value of }@i{maxBytes}
+will always be relatively large (thousands of bytes).
+
+If @i{command} returns an error then the selection retrieval is rejected
+just as if the selection didn't exist at all.
+
+The @i{format} argument specifies the representation that should be
+used to transmit the selection to the requester (the second column of
+Table 2 of the ICCCM), and defaults to STRING.  If @i{format} is
+STRING, the selection is transmitted as 8-bit ASCII characters (i.e.
+just in the form returned by @i{command}@r{).  If }@i{format} is
+ATOM, then the return value from @i{command} is divided into fields
+separated by white space;  each field is converted to its atom value,
+and the 32-bit atom value is transmitted instead of the atom name.
+For any other @i{format}@r{, the return value from }@i{command} is
+divided into fields separated by white space and each field is
+converted to a 32-bit integer;  an array of integers is transmitted
+to the selection requester.
+
+The @i{format} argument is needed only for compatibility with
+selection requesters that don't use Tk.  If the Tk toolkit is being
+used to retrieve the selection then the value is converted back to
+a string at the requesting end, so @i{format} is
+irrelevant.
+.RE
+@item @b{selection :own }@r{?}@i{window}@r{? ?}@i{command}?
+If @i{window} is specified, then it becomes the new selection :owner
+and the command returns an empty string as result.
+The existing owner, if any, is notified that it has lost the selection.
+If @i{command} is specified, it is a Tcl script to execute when
+some other window claims ownership of the selection away from
+@i{window}.
+If neither @i{window}@r{ nor }@i{command} is specified then
+the command returns the path name of the window in this application
+that owns the selection, or an empty string if no window in this
+application owns the selection.
+
+@end table
+@unnumberedsubsec Keywords
+clear, format, handler, ICCCM, own, selection, target, type
+@node send, tk, selection, Control
+@section send
+@c @cartouche
+
+send \- Execute a command in a different interpreter
+@unnumberedsubsec Synopsis
+@b{send }@i{interp cmd }@r{?}@i{arg arg ...}?
+@c @end cartouche
+
+@unnumberedsubsec Description
+
+This command arranges for @i{cmd}@r{ (and }@i{arg}s) to be executed in the
+interpreter named by @i{interp}.  It returns the result or
+error from that command execution.  @i{Interp} must be the
+name of an interpreter registered on the display associated with
+the interpreter in which the command is invoked;  it need not
+be within the same process or application.  If no @i{arg}
+arguments are present, then the command to be executed is
+contained entirely within the @i{cmd} argument.  If one or
+more @i{arg}s are present, they are concatenated to form the
+command to be executed, just as for the @b{eval} Tcl command.
+
+@unnumberedsubsec Security
+
+The @b{send} command is potentially a serious security loophole,
+since any application that can connect to your X server can send
+scripts to your applications.
+These incoming scripts can use Tcl to read and
+write your files and invoke subprocesses under your name.
+Host-based access control such as that provided by @b{xhost}
+is particularly insecure, since it allows anyone with an account
+on particular hosts to connect to your server, and if disabled it
+allows anyone anywhere to connect to your server.
+In order to provide at least a small amount of
+security, Tk checks the access control being used by the server
+and rejects incoming sends unless (a) @b{xhost}-style access control
+is enabled (i.e. only certain hosts can establish connections) and (b) the
+list of enabled hosts is empty.
+This means that applications cannot connect to your server unless
+they use some other form of authorization
+such as that provide by @b{xauth}.
+
+@unnumberedsubsec Keywords
+interpreter, remote execution, security, send
+@node tk, tkerror, send, Control
+@section tk
+@c @cartouche
+
+tk \- Manipulate Tk internal state
+@unnumberedsubsec Synopsis
+@b{tk}@r{ }@i{option }@r{?}@i{arg arg ...}?
+@c @end cartouche
+
+@unnumberedsubsec Description
+
+The @b{tk} command provides access to miscellaneous
+elements of Tk's internal state.
+Most of the information manipulated by this command pertains to the
+application as a whole, or to a screen or display, rather than to a
+particular window.
+The command can take any of a number of different forms
+depending on the @i{option} argument.  The legal forms are:
+
+@table @asis{}
+@item @b{tk :colormodel }@i{window}@r{ ?}@i{newValue}?
+If @i{newValue} isn't specified, this command returns the current
+color model in use for @i{window}'s screen, which will be either
+@b{color}@r{ or }@b{monochrome}.
+If @i{newValue}@r{ is specified, then it must be either }@b{color}
+or @b{monochrome} or an abbreviation of one of them;
+the color model for @i{window}'s screen is set to this value.
+@end table
+
+
+The color model is used by Tk and its widgets to determine whether
+it should display in black and white only or use colors.
+A single color model is shared by all of the windows managed by one
+process on a given screen.
+The color model for a screen is set initially by Tk to @b{monochrome}
+if the display has four or fewer bit planes and to @b{color} otherwise.
+The color model will automatically be changed from @b{color} to
+@b{monochrome} if Tk fails to allocate a color because all entries
+in the colormap were in use.
+An application can change its own color model at any time (e.g. it
+might change the model to @b{monochrome} in order to conserve
+colormap entries, or it might set the model to @b{color}
+to use color on a four-bit display in special circumstances), but
+an application is not allowed to change the color model to @b{color}
+unless the screen has at least two bit planes.
+.RE
+
+@unnumberedsubsec Keywords
+color model, internal state
+@node tkerror, tkvars, tk, Control
+@section tkerror
+@c @cartouche
+
+tkerror \- Command invoked to process background errors
+@unnumberedsubsec Synopsis
+@b{tkerror }@i{message}
+@c @end cartouche
+
+@unnumberedsubsec Description
+
+The @b{tkerror} command doesn't exist as built-in part of Tk.  Instead,
+individual applications or users can define a @b{tkerror}
+command (e.g. as a Tcl procedure) if they wish to handle background
+errors.
+
+A background error is one that occurs in a command that didn't
+originate with the application.  For example, if an error occurs
+while executing a command specified with a @b{bind}@r{ of }@b{after}
+command, then it is a background error.  For a non-background error,
+the error can simply be returned up through nested Tcl command
+evaluations until it reaches the top-level code in the application;
+then the application can report the error in whatever way it
+wishes.  When a background error occurs, the unwinding ends in
+the Tk library and there is no obvious way for Tk to report
+the error.
+
+When Tk detects a background error, it invokes the @b{tkerror}
+command, passing it the error message as its only argument.
+Tk assumes that the application has implemented the @b{tkerror}
+command, and that the command will report the error in a way that
+makes sense for the application.  Tk will ignore any result returned
+by the @b{tkerror} command.
+
+If another Tcl error occurs within the @b{tkerror} command
+then Tk reports the error itself by writing a message
+to stderr.
+
+The Tk script library includes a default @b{tkerror} procedure
+that posts a dialog box containing the error message and offers
+the user a chance to see a stack trace that shows where the
+error occurred.
+
+@unnumberedsubsec Keywords
+background error, reporting
+@node tkvars, tkwait, tkerror, Control
+@section tkvars
+@c @cartouche
+
+tkvars \- Variables used or set by Tk
+@c @end cartouche
+
+@unnumberedsubsec Description
+
+The following Tcl variables are either set or used by Tk at various times
+in its execution:
+
+@table @asis{}
+@item @b{tk_library}
+Tk sets this variable hold the name of a directory containing a library
+of Tcl scripts related to Tk.  These scripts include an initialization
+file that is normally processed whenever a Tk application starts up,
+plus other files containing procedures that implement default behaviors
+for widgets.
+The value of this variable is taken from the TK_LIBRARY environment
+variable, if one exists, or else from a default value compiled into
+Tk.
+@item @b{tk_patchLevel}
+Contains a decimal integer giving the current patch level for Tk.
+The patch level is incremented for each new release or patch, and
+it uniquely identifies an official version of Tk.
+@item @b{tk_priv}
+This variable is an array containing several pieces of information
+that are private to Tk.  The elements of @b{tk_priv} are used by
+Tk library procedures and default bindings.
+They should not be accessed by any code outside Tk.
+@item @b{tk_strictMotif}
+This variable is set to zero by default.
+If an application sets it to one, then Tk attempts to adhere as
+closely as possible to Motif look-and-feel standards.
+For example, active elements such as buttons and scrollbar
+sliders will not change color when the pointer passes over them.
+@item @b{tk_version}
+Tk sets this variable in the interpreter for each application.
+The variable holds the current version number of the Tk
+library in the form @i{major}@r{.}@i{minor}@r{.  }@i{Major} and
+@i{minor} are integers.  The major version number increases in
+any Tk release that includes changes that are not backward compatible
+(i.e. whenever existing Tk applications and scripts may have to change to
+work with the new release).  The minor version number increases with
+each new release of Tk, except that it resets to zero whenever the
+major version number changes.
+@item @b{tkVersion}
+Has the same value as @b{tk_version}.  This variable is obsolete and
+will be deleted soon.
+
+@end table
+@unnumberedsubsec Keywords
+variables, version
+@node tkwait, update, tkvars, Control
+@section tkwait
+@c @cartouche
+
+tkwait \- Wait for variable to change or window to be destroyed
+@unnumberedsubsec Synopsis
+@*@w{@b{tkwait :variable }@i{name}}@*
+@*@w{@b{tkwait :visibility }@i{name}}@*
+@b{tkwait :window }@i{name}
+@c @end cartouche
+
+@unnumberedsubsec Description
+
+The @b{tkwait} command waits for one of several things to happen,
+then it returns without taking any other actions.
+The return value is always an empty string.
+If the first argument is @b{:variable} (or any abbreviation of
+it) then the second argument is the name of a global variable and the
+command waits for that variable to be modified.
+If the first argument is @b{:visibility} (or any abbreviation
+of it) then the second argument is the name of a window and the
+@b{tkwait} command waits for a change in its
+visibility state (as indicated by the arrival of a VisibilityNotify
+event).  This form is typically used to wait for a newly-created
+window to appear on the screen before taking some action.
+If the first argument is @b{:window} (or any abbreviation
+of it) then the second argument is the name of a window and the
+@b{tkwait} command waits for that window to be destroyed.
+This form is typically used to wait for a user to finish interacting
+with a dialog box before using the result of that interaction.
+
+While the @b{tkwait} command is waiting it processes events in
+the normal fashion, so the application will continue to respond
+to user interactions.
+
+@unnumberedsubsec Keywords
+variable, visibility, wait, window
+@node update, winfo, tkwait, Control
+@section update
+@c @cartouche
+
+update \- Process pending events and/or when-idle handlers
+@unnumberedsubsec Synopsis
+@b{update}@r{ ?}@b{:idletasks}?
+@c @end cartouche
+
+@unnumberedsubsec Description
+
+This command is used to bring the entire application world
+``up to date.''
+It flushes all pending output to the display,  waits for the
+server to process that output and return errors or events,
+handles all pending events of any sort (including when-idle handlers),
+and repeats this set of operations until there are no pending
+events, no pending when-idle handlers, no pending output to the server,
+and no operations still outstanding at the server.  
+
+If the @b{idletasks} keyword is specified as an argument to the
+command, then no new events or errors are processed;  only when-idle
+idlers are invoked.
+This causes operations that are normally deferred, such as display
+updates and window layout calculations, to be performed immediately.
+
+The @b{update :idletasks} command is useful in scripts where
+changes have been made to the application's state and you want those
+changes to appear on the display immediately, rather than waiting
+for the script to complete.
+The @b{update} command with no options is useful in scripts where
+you are performing a long-running computation but you still want
+the application to respond to user interactions;  if you occasionally
+call @b{update} then user input will be processed during the
+next call to @b{update}.
+
+@unnumberedsubsec Keywords
+event, flush, handler, idle, update
+@node winfo, wm, update, Control
+@section winfo
+@c @cartouche
+
+winfo \- Return window-related information
+@unnumberedsubsec Synopsis
+@b{winfo}@r{ }@i{option }@r{?}@i{arg arg ...}?
+@c @end cartouche
+
+@unnumberedsubsec Description
+
+The @b{winfo} command is used to retrieve information about windows
+managed by Tk.  It can take any of a number of different forms,
+depending on the @i{option} argument.  The legal forms are:
+
+@table @asis{}
+@item @b{winfo :atom }@i{name}
+Returns a decimal string giving the integer identifier for the
+atom whose name is @i{name}.  If no atom exists with the name
+@i{name} then a new one is created.
+@item @b{winfo :atomname }@i{id}
+Returns the textual name for the atom whose integer identifier is
+@i{id}.
+This command is the inverse of the @b{winfo :atom} command.
+Generates an error if no such atom exists.
+@item @b{winfo :cells }@i{window}
+Returns a decimal string giving the number of cells in the
+color map for @i{window}.
+@item @b{winfo :children }@i{window}
+Returns a list containing the path names of all the children
+of @i{window}.  Top-level windows are returned as children
+of their logical parents.
+@item @b{winfo :class }@i{window}
+Returns the class name for @i{window}.
+@item @b{winfo :containing }@i{rootX rootY}
+Returns the path name for the window containing the point given
+by @i{rootX}@r{ and }@i{rootY}.
+@i{RootX}@r{ and }@i{rootY} are specified in screen units (i.e.
+any form acceptable to @b{Tk_GetPixels}) in the coordinate
+system of the root window (if a virtual-root window manager is in
+use then the coordinate system of the virtual root window is used).
+If no window in this application contains the point then an empty
+string is returned.
+In selecting the containing window, children are given higher priority
+than parents and among siblings the highest one in the stacking order is
+chosen.
+@item @b{winfo :depth }@i{window}
+Returns a decimal string giving the depth of @i{window} (number
+of bits per pixel).
+@item @b{winfo :exists }@i{window}
+Returns 1 if there exists a window named @i{window}, 0 if no such
+window exists.
+@item @b{winfo :fpixels }@i{window}@r{ }@i{number}
+Returns a floating-point value giving the number of pixels
+in @i{window}@r{ corresponding to the distance given by }@i{number}.
+@i{Number} may be specified in any of the forms acceptable
+to @b{Tk_GetScreenMM}, such as ``2.0c'' or ``1i''.
+The return value may be fractional;  for an integer value, use
+@b{winfo :pixels}.
+@item @b{winfo :geometry }@i{window}
+Returns the geometry for @i{window}, in the form
+@i{width}@b{x}@i{height}@b{+}@i{x}@b{+}@i{y}.  All dimensions are
+in pixels.
+@item @b{winfo :height }@i{window}
+Returns a decimal string giving @i{window}'s height in pixels.
+When a window is first created its height will be 1 pixel;  the
+height will eventually be changed by a geometry manager to fulfill
+the window's needs.
+If you need the true height immediately after creating a widget,
+invoke @b{update} to force the geometry manager to arrange it,
+or use @b{winfo :reqheight} to get the window's requested height
+instead of its actual height.
+@item @b{winfo :id }@i{window}
+Returns a hexadecimal string indicating the X identifier for @i{window}.
+@item @b{winfo :interps}
+Returns a list whose members are the names of all Tcl interpreters
+(e.g. all Tk-based applications) currently registered for the
+display of the invoking application.
+@item @b{winfo :ismapped }@i{window}
+Returns @b{1}@r{ if }@i{window}@r{ is currently mapped, }@b{0} otherwise.
+@item @b{winfo :name }@i{window}
+Returns @i{window}'s name (i.e. its name within its parent, as opposed
+to its full path name).
+The command @b{winfo :name .} will return the name of the application.
+@item @b{winfo :parent }@i{window}
+Returns the path name of @i{window}'s parent, or an empty string
+if @i{window} is the main window of the application.
+@item @b{winfo :pathname }@i{id}
+Returns the path name of the window whose X identifier is @i{id}.
+@i{Id} must be a decimal, hexadecimal, or octal integer and must
+correspond to a window in the invoking application.
+@item @b{winfo :pixels }@i{window}@r{ }@i{number}
+Returns the number of pixels in @i{window} corresponding
+to the distance given by @i{number}.
+@i{Number} may be specified in any of the forms acceptable
+to @b{Tk_GetPixels}, such as ``2.0c'' or ``1i''.
+The result is rounded to the nearest integer value;  for a
+fractional result, use @b{winfo :fpixels}.
+@item @b{winfo :reqheight }@i{window}
+Returns a decimal string giving @i{window}'s requested height,
+in pixels.  This is the value used by @i{window}'s geometry
+manager to compute its geometry.
+@item @b{winfo :reqwidth }@i{window}
+Returns a decimal string giving @i{window}'s requested width,
+in pixels.  This is the value used by @i{window}'s geometry
+manager to compute its geometry.
+@item @b{winfo :rgb }@i{window color}
+Returns a list containing three decimal values, which are the
+red, green, and blue intensities that correspond to @i{color} in
+the window given by @i{window}@r{.  }@i{Color}
+may be specified in any of the forms acceptable for a color
+option.
+@item @b{winfo :rootx }@i{window}
+Returns a decimal string giving the x-coordinate, in the root
+window of the screen, of the
+upper-left corner of @i{window}@r{'s border (or }@i{window} if it
+has no border).
+@item @b{winfo :rooty }@i{window}
+Returns a decimal string giving the y-coordinate, in the root
+window of the screen, of the
+upper-left corner of @i{window}@r{'s border (or }@i{window} if it
+has no border).
+@item @b{winfo :screen }@i{window}
+Returns the name of the screen associated with @i{window}, in
+the form @i{displayName}@r{.}@i{screenIndex}.
+@item @b{winfo :screencells }@i{window}
+Returns a decimal string giving the number of cells in the default
+color map for @i{window}'s screen.
+@item @b{winfo :screendepth }@i{window}
+Returns a decimal string giving the depth of the root window
+of @i{window}'s screen (number of bits per pixel).
+@item @b{winfo :screenheight }@i{window}
+Returns a decimal string giving the height of @i{window}'s screen,
+in pixels.
+@item @b{winfo :screenmmheight }@i{window}
+Returns a decimal string giving the height of @i{window}'s screen,
+in millimeters.
+@item @b{winfo :screenmmwidth }@i{window}
+Returns a decimal string giving the width of @i{window}'s screen,
+in millimeters.
+@item @b{winfo :screenvisual }@i{window}
+Returns one of the following strings to indicate the default visual
+type for @i{window}@r{'s screen: }@b{directcolor}@r{, }@b{grayscale},
+@b{pseudocolor}@r{, }@b{staticcolor}@r{, }@b{staticgray}, or
+@b{truecolor}.
+@item @b{winfo :screenwidth }@i{window}
+Returns a decimal string giving the width of @i{window}'s screen,
+in pixels.
+@item @b{winfo :toplevel }@i{window}
+Returns the path name of the top-level window containing @i{window}.
+@item @b{winfo :visual }@i{window}
+Returns one of the following strings to indicate the visual
+type for @i{window}@r{: }@b{directcolor}@r{, }@b{grayscale},
+@b{pseudocolor}@r{, }@b{staticcolor}@r{, }@b{staticgray}, or
+@b{truecolor}.
+@item @b{winfo :vrootheight }@i{window}
+Returns the height of the virtual root window associated with @i{window}
+if there is one;  otherwise returns the height of @i{window}'s screen.
+@item @b{winfo :vrootwidth }@i{window}
+Returns the width of the virtual root window associated with @i{window}
+if there is one;  otherwise returns the width of @i{window}'s screen.
+@item @b{winfo :vrootx }@i{window}
+Returns the x-offset of the virtual root window associated with @i{window},
+relative to the root window of its screen.
+This is normally either zero or negative.
+Returns 0 if there is no virtual root window for @i{window}.
+@item @b{winfo :vrooty }@i{window}
+Returns the y-offset of the virtual root window associated with @i{window},
+relative to the root window of its screen.
+This is normally either zero or negative.
+Returns 0 if there is no virtual root window for @i{window}.
+@item @b{winfo :width }@i{window}
+Returns a decimal string giving @i{window}'s width in pixels.
+When a window is first created its width will be 1 pixel;  the
+width will eventually be changed by a geometry manager to fulfill
+the window's needs.
+If you need the true width immediately after creating a widget,
+invoke @b{update} to force the geometry manager to arrange it,
+or use @b{winfo :reqwidth} to get the window's requested width
+instead of its actual width.
+@item @b{winfo :x }@i{window}
+Returns a decimal string giving the x-coordinate, in @i{window}'s
+parent, of the
+upper-left corner of @i{window}@r{'s border (or }@i{window} if it
+has no border).
+@item @b{winfo :y }@i{window}
+Returns a decimal string giving the y-coordinate, in @i{window}'s
+parent, of the
+upper-left corner of @i{window}@r{'s border (or }@i{window} if it
+has no border).
+
+@end table
+@unnumberedsubsec Keywords
+atom, children, class, geometry, height, identifier, information, interpreters,
+mapped, parent, path name, screen, virtual root, width, window
+@node wm,  , winfo, Control
+@section wm
+@c @cartouche
+
+wm \- Communicate with window manager
+@unnumberedsubsec Synopsis
+@b{wm}@r{ }@i{option window }@r{?}@i{args}?
+@c @end cartouche
+
+@unnumberedsubsec Description
+
+The @b{wm} command is used to interact with window managers in
+order to control such things as the title for a window, its geometry,
+or the increments in terms of which it may be resized.  The @b{wm}
+command can take any of a number of different forms, depending on
+the @i{option} argument.  All of the forms expect at least one
+additional argument, @i{window}, which must be the path name of a
+top-level window.
+
+The legal forms for the @b{wm} command are:
+
+@table @asis{}
+@item @b{wm :aspect }@i{window}@r{ ?}@i{minNumer minDenom maxNumer maxDenom}?
+If @i{minNumer}@r{, }@i{minDenom}@r{, }@i{maxNumer}@r{, and }@i{maxDenom}
+are all specified, then they will be passed to the window manager
+and the window manager should use them to enforce a range of
+acceptable aspect ratios for @i{window}.  The aspect ratio of
+@i{window} (width/length) will be constrained to lie
+between @i{minNumer}@r{/}@i{minDenom}@r{ and }@i{maxNumer}@r{/}@i{maxDenom}.
+If @i{minNumer} etc. are all specified as empty strings, then
+any existing aspect ratio restrictions are removed.
+If @i{minNumer} etc. are specified, then the command returns an
+empty string.  Otherwise, it returns
+a Tcl list containing four elements, which are the current values
+of @i{minNumer}@r{, }@i{minDenom}@r{, }@i{maxNumer}@r{, and }@i{maxDenom}
+(if no aspect restrictions are in effect, then an empty string is
+returned).
+@item @b{wm :client }@i{window}@r{ ?}@i{name}?
+If @i{name}@r{ is specified, this command stores }@i{name} (which
+should be the name of
+the host on which the application is executing) in @i{window}'s
+@b{WM_CLIENT_MACHINE} property for use by the window manager or
+session manager.
+The command returns an empty string in this case.
+If @i{name} isn't specified, the command returns the last name
+set in a @b{wm :client}@r{ command for }@i{window}.
+If @i{name} is specified as an empty string, the command deletes the
+@b{WM_CLIENT_MACHINE}@r{ property from }@i{window}.
+@item @b{wm :command }@i{window}@r{ ?}@i{value}?
+If @i{value}@r{ is specified, this command stores }@i{value}@r{ in }@i{window}'s
+@b{WM_COMMAND} property for use by the window manager or
+session manager and returns an empty string.
+@i{Value} must have proper list structure;  the elements should
+contain the words of the command used to invoke the application.
+If @i{value} isn't specified then the command returns the last value
+set in a @b{wm :command}@r{ command for }@i{window}.
+If @i{value} is specified as an empty string, the command
+deletes the @b{WM_COMMAND}@r{ property from }@i{window}.
+@item @b{wm :deiconify }@i{window}
+Arrange for @i{window} to be displayed in normal (non-iconified) form.
+This is done by mapping the window.  If the window has never been
+mapped then this command will not map the window, but it will ensure
+that when the window is first mapped it will be displayed
+in de-iconified form.  Returns an empty string.
+@item @b{wm :focusmodel }@i{window}@r{ ?}@b{active}@r{|}@b{passive}?
+If @b{active}@r{ or }@b{passive} is supplied as an optional argument
+to the command, then it specifies the focus model for @i{window}.
+In this case the command returns an empty string.  If no additional
+argument is supplied, then the command returns the current focus
+model for @i{window}.
+An @b{active}@r{ focus model means that }@i{window} will claim the
+input focus for itself or its descendants, even at times when
+the focus is currently in some other application.  @b{Passive} means that
+@i{window} will never claim the focus for itself:  the window manager
+should give the focus to @i{window} at appropriate times.  However,
+once the focus has been given to @i{window} or one of its descendants,
+the application may re-assign the focus among @i{window}'s descendants.
+The focus model defaults to @b{passive}@r{, and Tk's }@b{focus} command
+assumes a passive model of focussing.
+@item @b{wm :frame }@i{window}
+If @i{window} has been reparented by the window manager into a
+decorative frame, the command returns the X window identifier for
+the outermost frame that contains @i{window} (the window whose
+parent is the root or virtual root).  If @i{window} hasn't been
+reparented by the window manager then the command returns the
+X window identifier for @i{window}.
+@item @b{wm :geometry }@i{window}@r{ ?}@i{newGeometry}?
+If @i{newGeometry}@r{ is specified, then the geometry of }@i{window}
+is changed and an empty string is returned.  Otherwise the current
+geometry for @i{window} is returned (this is the most recent
+geometry specified either by manual resizing or
+in a @b{wm :geometry}@r{ command).  }@i{NewGeometry} has
+the form @b{=}@i{width}@b{x}@i{height}@b{\(+-}@i{x}@b{\(+-}@i{y}, where
+any of @b{=}@r{, }@i{width}@b{x}@i{height}@r{, or }@b{\(+-}@i{x}@b{\(+-}@i{y}
+may be omitted.  @i{Width}@r{ and }@i{height} are positive integers
+specifying the desired dimensions of @i{window}@r{.  If }@i{window}
+is gridded (see GRIDDED GEOMETRY MANAGEMENT below) then the dimensions
+are specified in grid units;  otherwise they are specified in pixel
+units.  @i{X}@r{ and }@i{y} specify the desired location of
+@i{window} on the screen, in pixels.
+If @i{x}@r{ is preceded by }@b{+}, it specifies
+the number of pixels between the left edge of the screen and the left
+edge of @i{window}@r{'s border;  if preceded by }@b{-} then
+@i{x} specifies the number of pixels
+between the right edge of the screen and the right edge of @i{window}'s
+border.  If @i{y}@r{ is preceded by }@b{+} then it specifies the
+number of pixels between the top of the screen and the top
+of @i{window}@r{'s border;  if }@i{y}@r{ is preceded by }@b{-} then
+it specifies the number of pixels between the bottom of @i{window}'s
+border and the bottom of the screen.
+If @i{newGeometry} is specified as an empty string then any
+existing user-specified geometry for @i{window} is cancelled, and
+the window will revert to the size requested internally by its
+widgets.
+@item @b{wm :grid }@i{window}@r{ ?}@i{baseWidth baseHeight widthInc heightInc}?
+This command indicates that @i{window} is to be managed as a
+gridded window.
+It also specifies the relationship between grid units and pixel units.
+@i{BaseWidth}@r{ and }@i{baseHeight} specify the number of grid
+units corresponding to the pixel dimensions requested internally
+by @i{window}@r{ using }@b{Tk_GeometryRequest}@r{.  }@i{WidthInc}
+and @i{heightInc} specify the number of pixels in each horizontal
+and vertical grid unit.
+These four values determine a range of acceptable sizes for
+@i{window}, corresponding to grid-based widths and heights
+that are non-negative integers.
+Tk will pass this information to the window manager;  during
+manual resizing, the window manager will restrict the window's size
+to one of these acceptable sizes.
+Furthermore, during manual resizing the window manager will display
+the window's current size in terms of grid units rather than pixels.
+If @i{baseWidth} etc. are all specified as empty strings, then
+@i{window} will no longer be managed as a gridded window.  If
+@i{baseWidth} etc. are specified then the return value is an
+empty string.
+Otherwise the return value is a Tcl list containing
+four elements corresponding to the current @i{baseWidth},
+@i{baseHeight}@r{, }@i{widthInc}@r{, and }@i{heightInc};  if
+@i{window} is not currently gridded, then an empty string
+is returned.
+Note: this command should not be needed very often, since the
+@b{Tk_SetGrid}@r{ library procedure and the }@b{setGrid} option
+provide easier access to the same functionality.
+@item @b{wm :group }@i{window}@r{ ?}@i{pathName}?
+If @i{pathName} is specified, it gives the path name for the leader of
+a group of related windows.  The window manager may use this information,
+for example, to unmap all of the windows in a group when the group's
+leader is iconified.  @i{PathName} may be specified as an empty string to
+remove @i{window}@r{ from any group association.  If }@i{pathName} is
+specified then the command returns an empty string;  otherwise it
+returns the path name of @i{window}'s current group leader, or an empty
+string if @i{window} isn't part of any group.
+@item @b{wm :iconbitmap }@i{window}@r{ ?}@i{bitmap}?
+If @i{bitmap} is specified, then it names a bitmap in the standard
+forms accepted by Tk (see the @b{Tk_GetBitmap} manual entry for details).
+This bitmap is passed to the window manager to be displayed in
+@i{window}'s icon, and the command returns an empty string.  If
+an empty string is specified for @i{bitmap}, then any current icon
+bitmap is cancelled for @i{window}.
+If @i{bitmap} is specified then the command returns an empty string.
+Otherwise it returns the name of
+the current icon bitmap associated with @i{window}, or an empty
+string if @i{window} has no icon bitmap.
+@item @b{wm :iconify }@i{window}
+Arrange for @i{window}@r{ to be iconified.  It }@i{window} hasn't
+yet been mapped for the first time, this command will arrange for
+it to appear in the iconified state when it is eventually mapped.
+@item @b{wm :iconmask }@i{window}@r{ ?}@i{bitmap}?
+If @i{bitmap} is specified, then it names a bitmap in the standard
+forms accepted by Tk (see the @b{Tk_GetBitmap} manual entry for details).
+This bitmap is passed to the window manager to be used as a mask
+in conjunction with the @b{iconbitmap} option:  where the mask
+has zeroes no icon will be displayed;  where it has ones, the bits
+from the icon bitmap will be displayed.  If
+an empty string is specified for @i{bitmap} then any current icon
+mask is cancelled for @i{window} (this is equivalent to specifying
+a bitmap of all ones).  If @i{bitmap} is specified
+then the command returns an empty string.  Otherwise it
+returns the name of the current icon mask associated with
+@i{window}, or an empty string if no mask is in effect.
+@item @b{wm :iconname }@i{window}@r{ ?}@i{newName}?
+If @i{newName} is specified, then it is passed to the window
+manager;  the window manager should display @i{newName} inside
+the icon associated with @i{window}.  In this case an empty
+string is returned as result.  If @i{newName} isn't specified
+then the command returns the current icon name for @i{window},
+or an empty string if no icon name has been specified (in this
+case the window manager will normally display the window's title,
+as specified with the @b{wm :title} command).
+@item @b{wm :iconposition }@i{window}@r{ ?}@i{x y}?
+If @i{x}@r{ and }@i{y} are specified, they are passed to the window
+manager as a hint about where to position the icon for @i{window}.
+In this case an empty string is returned.  If @i{x}@r{ and }@i{y} are
+specified as empty strings then any existing icon position hint is cancelled.
+If neither @i{x}@r{ nor }@i{y} is specified, then the command returns
+a Tcl list containing two values, which are the current icon position
+hints (if no hints are in effect then an empty string is returned).
+@item @b{wm :iconwindow }@i{window}@r{ ?}@i{pathName}?
+If @i{pathName} is specified, it is the path name for a window to
+use as icon for @i{window}@r{: when }@i{window} is iconified then
+@i{pathName}@r{ should be mapped to serve as icon, and when }@i{window}
+is de-iconified then @i{pathName} will be unmapped again.  If
+@i{pathName} is specified as an empty string then any existing
+icon window association for @i{window} will be cancelled.  If
+the @i{pathName} argument is specified then an empty string is
+returned.  Otherwise the command returns the path name of the
+current icon window for @i{window}, or an empty string if there
+is no icon window currently specified for @i{window}.  Note:
+not all window managers support the notion of an icon window.
+@item @b{wm :maxsize }@i{window}@r{ ?}@i{width height}?
+If @i{width}@r{ and }@i{height}@r{ are specified, then }@i{window}
+becomes resizable and @i{width}@r{ and }@i{height} give its
+maximum permissible dimensions.
+For gridded windows the dimensions are specified in
+grid units;  otherwise they are specified in pixel units.
+During manual sizing, the window manager
+should restrict the window's dimensions to be less than or
+equal to @i{width}@r{ and }@i{height}.
+If @i{width}@r{ and }@i{height} are specified as empty strings,
+then the maximum size option is cancelled for @i{window}.
+If @i{width}@r{ and }@i{height} are
+specified, then the command returns an empty string.  Otherwise
+it returns a Tcl list with two elements, which are the
+maximum width and height currently in effect;  if no maximum
+dimensions are in effect for @i{window} then an empty
+string is returned.  See the sections on geometry management
+below for more information.
+@item @b{wm :minsize }@i{window}@r{ ?}@i{width height}?
+If @i{width}@r{ and }@i{height}@r{ are specified, then }@i{window}
+becomes resizable and @i{width}@r{ and }@i{height} give its
+minimum permissible dimensions.
+For gridded windows the dimensions are specified in
+grid units;  otherwise they are specified in pixel units.
+During manual sizing, the window manager
+should restrict the window's dimensions to be greater than or
+equal to @i{width}@r{ and }@i{height}.
+If @i{width}@r{ and }@i{height} are specified as empty strings,
+then the minimum size option is cancelled for @i{window}.
+If @i{width}@r{ and }@i{height} are
+specified, then the command returns an empty string.  Otherwise
+it returns a Tcl list with two elements, which are the
+minimum width and height currently in effect;  if no minimum
+dimensions are in effect for @i{window} then an empty
+string is returned.  See the sections on geometry management
+below for more information.
+@item @b{wm :overrideredirect }@i{window}@r{ ?}@i{boolean}?
+If @i{boolean} is specified, it must have a proper boolean form and
+the override-redirect flag for @i{window} is set to that value.
+If @i{boolean}@r{ is not specified then }@b{1}@r{ or }@b{0} is
+returned to indicate whether or not the override-redirect flag
+is currently set for @i{window}.
+Setting the override-redirect flag for a window causes
+it to be ignored by the window manager;  among other things, this means
+that the window will not be reparented from the root window into a
+decorative frame and the user will not be able to manipulate the
+window using the normal window manager mechanisms.
+@item @b{wm :positionfrom }@i{window}@r{ ?}@i{who}?
+If @i{who}@r{ is specified, it must be either }@b{program} or
+@b{user}, or an abbreviation of one of these two.  It indicates
+whether @i{window}'s current position was requested by the
+program or by the user.  Many window managers ignore program-requested
+initial positions and ask the user to manually position the window;  if
+@b{user} is specified then the window manager should position the
+window at the given place without asking the user for assistance.
+If @i{who} is specified as an empty string, then the current position
+source is cancelled.
+If @i{who} is specified, then the command returns an empty string.
+Otherwise it returns @b{user}@r{ or }@b{window} to indicate the
+source of the window's current position, or an empty string if
+no source has been specified yet.  Most window managers interpret
+``no source'' as equivalent to @b{program}.
+Tk will automatically set the position source to @b{user}
+when a @b{wm :geometry} command is invoked, unless the source has
+been set explicitly to @b{program}.
+@item @b{wm :protocol }@i{window}@r{ ?}@i{name}@r{? ?}@i{command}?
+This command is used to manage window manager protocols such as
+@b{WM_DELETE_WINDOW}.
+@i{Name} is the name of an atom corresponding to a window manager
+protocol, such as @b{WM_DELETE_WINDOW}@r{ or }@b{WM_SAVE_YOURSELF}
+or @b{WM_TAKE_FOCUS}.
+If both @i{name}@r{ and }@i{command}@r{ are specified, then }@i{command}
+is associated with the protocol specified by @i{name}.
+@i{Name}@r{ will be added to }@i{window}@r{'s }@b{WM_PROTOCOLS}
+property to tell the window manager that the application has a
+protocol handler for @i{name}@r{, and }@i{command} will
+be invoked in the future whenever the window manager sends a
+message to the client for that protocol.
+In this case the command returns an empty string.
+If @i{name}@r{ is specified but }@i{command} isn't, then the current
+command for @i{name} is returned, or an empty string if there
+is no handler defined for @i{name}.
+If @i{command} is specified as an empty string then the current
+handler for @i{name} is deleted and it is removed from the
+@b{WM_PROTOCOLS}@r{ property on }@i{window};  an empty string is
+returned.
+Lastly, if neither @i{name}@r{ nor }@i{command} is specified, the
+command returns a list of all the protocols for which handlers
+are currently defined for @i{window}.
+@end table
+
+
+Tk always defines a protocol handler for @b{WM_DELETE_WINDOW}, even if
+you haven't asked for one with @b{wm :protocol}.
+If a @b{WM_DELETE_WINDOW} message arrives when you haven't defined
+a handler, then Tk handles the message by destroying the window for
+which it was received.
+.RE
+
+@table @asis{}
+@item @b{wm :sizefrom }@i{window}@r{ ?}@i{who}?
+If @i{who}@r{ is specified, it must be either }@b{program} or
+@b{user}, or an abbreviation of one of these two.  It indicates
+whether @i{window}'s current size was requested by the
+program or by the user.  Some window managers ignore program-requested
+sizes and ask the user to manually size the window;  if
+@b{user} is specified then the window manager should give the
+window its specified size without asking the user for assistance.
+If @i{who} is specified as an empty string, then the current size
+source is cancelled.
+If @i{who} is specified, then the command returns an empty string.
+Otherwise it returns @b{user}@r{ or }@b{window} to indicate the
+source of the window's current size, or an empty string if
+no source has been specified yet.  Most window managers interpret
+``no source'' as equivalent to @b{program}.
+@item @b{wm :state }@i{window}
+Returns the current state of @i{window}@r{:  either }@b{normal},
+@b{iconic}@r{, or }@b{withdrawn}.
+@item @b{wm :title }@i{window}@r{ ?}@i{string}?
+If @i{string} is specified, then it will be passed to the window
+manager for use as the title for @i{window} (the window manager
+should display this string in @i{window}'s title bar).  In this
+case the command returns an empty string.  If @i{string} isn't
+specified then the command returns the current title for the
+@i{window}.  The title for a window defaults to its name.
+@item @b{wm :transient }@i{window}@r{ ?}@i{master}?
+If @i{master} is specified, then the window manager is informed
+that @i{window} is a transient window (e.g. pull-down menu) working
+on behalf of @i{master}@r{ (where }@i{master} is the
+path name for a top-level window).  Some window managers will use
+this information to manage @i{window}@r{ specially.  If }@i{master}
+is specified as an empty string then @i{window} is marked as not
+being a transient window any more.  If @i{master} is specified,
+then the command returns an empty string.  Otherwise the command
+returns the path name of @i{window}'s current master, or an
+empty string if @i{window} isn't currently a transient window.
+@item @b{wm :withdraw }@i{window}
+Arranges for @i{window} to be withdrawn from the screen.  This
+causes the window to be unmapped and forgotten about by the window
+manager.  If the window
+has never been mapped, then this command
+causes the window to be mapped in the withdrawn state.  Not all
+window managers appear to know how to handle windows that are
+mapped in the withdrawn state.
+Note: it sometimes seems to be necessary to withdraw a
+window and then re-map it (e.g. with @b{wm :deiconify}) to get some
+window managers to pay attention to changes in window attributes
+such as group.
+
+@end table
+@unnumberedsubsec "Sources Of Geometry Information"
+
+Size-related information for top-level windows
+can come from three sources.
+First, geometry requests come from the widgets that are descendants
+of a top-level window.
+Each widget requests a particular size for itself
+by calling @b{Tk_GeometryRequest}.  This information is passed to
+geometry managers, which then request large enough sizes for parent
+windows so that they can layout the children properly.
+Geometry information passes upwards through the window hierarchy
+until eventually a particular size is requested for each top-level
+window.
+These requests are called @i{internal requests} in the discussion
+below.
+The second source of width and height information is through the
+@b{wm :geometry} command.  Third, the user can
+request a particular size for a window using the
+interactive facilities of the window manager.
+The second and third types of geometry requests are called
+@i{external requests} in the discussion below;  Tk treats
+these two kinds of requests identically.
+
+@unnumberedsubsec "Ungridded Geometry Management"
+
+Tk allows the geometry of a top-level window to be managed in
+either of two general ways: ungridded or gridded.
+The ungridded form occurs if no @b{wm :grid} command
+has been issued for a top-level window.
+Ungridded management has several variants.
+In the simplest variant of ungridded windows,
+no @b{wm :geometry}@r{, }@b{wm :minsize}@r{, or }@b{wm :maxsize}
+commands have been invoked either.
+In this case, the window's size is
+determined totally by the internal requests emanating from the
+widgets inside the window:  Tk will ask the window manager not to
+permit the user to resize the window interactively.
+
+If a @b{wm :geometry} command is invoked on an ungridded window,
+then the size in that command overrides any size requested by the
+window's widgets;  from now on, the window's size will be determined
+entirely by the most recent information from @b{wm :geometry}
+commands.  To go back to using the size requested by the window's
+widgets, issue a @b{wm :geometry}@r{ command with an empty }@i{geometry}
+string.
+
+To enable interactive resizing of an ungridded window, one or both
+of the @b{wm :maxsize}
+and @b{wm :minsize} commands must be issued.
+The information from these commands will be passed to the window
+manager, and size changes within the specified range will be permitted.
+For ungridded windows the limits refer to the top-level window's
+dimensions in pixels.
+If only a @b{wm :maxsize} command is issued then the minimum
+dimensions default to 1;  if only a @b{wm :minsize} command is
+issued then the maximum dimensions default to the size of the display.
+If the size of a window is changed interactively, it has the same
+effect as if @b{wm :geometry} had been invoked:  from now on, internal
+geometry requests will be ignored.
+To return to internal control over the window's size, issue a
+@b{wm :geometry}@r{ command with an empty }@i{geometry} argument.
+If a window has been manually resized or moved, the @b{wm :geometry}
+command will return the geometry that was requested interactively.
+
+@unnumberedsubsec "Gridded Geometry Management"
+
+The second style of geometry management is called @i{gridded}.
+This approach occurs when one of the widgets of an application
+supports a range of useful sizes.
+This occurs, for example, in a text editor where the scrollbars,
+menus, and other adornments are fixed in size but the edit widget
+can support any number of lines of text or characters per line.
+In this case, it is usually desirable to let the user specify the
+number of lines or characters-per-line, either with the
+@b{wm :geometry} command or by interactively resizing the window.
+In the case of text, and in other interesting cases also, only
+discrete sizes of the window make sense, such as integral numbers
+of lines and characters-per-line;  arbitrary pixel sizes are not useful.
+
+Gridded geometry management provides support for this kind of
+application.
+Tk (and the window manager) assume that there is a grid of some
+sort within the application and that the application should be
+resized in terms of @i{grid units} rather than pixels.
+Gridded geometry management is typically invoked by turning on
+the @b{setGrid} option for a widget;  it can also be invoked
+with the @b{wm :grid}@r{ command or by calling }@b{Tk_SetGrid}.
+In each of these approaches the particular widget (or sometimes
+code in the application as a whole) specifies the relationship between 
+integral grid sizes for the window and pixel sizes.
+To return to non-gridded geometry management, invoke
+@b{wm :grid} with empty argument strings.
+
+When gridded geometry management is enabled then all the dimensions specified
+in @b{wm :minsize}@r{, }@b{wm :maxsize}@r{, and }@b{wm :geometry} commands
+are treated as grid units rather than pixel units.
+Interactive resizing is automatically enabled, and it will be
+carried out in even numbers of grid units rather than pixels.
+By default there are no limits on the minimum or maximum dimensions
+of a gridded window.
+As with ungridded windows, interactive resizing has exactly the
+same effect as invoking the @b{wm :geometry} command.
+For gridded windows, internally- and externally-requested dimensions
+work together: the externally-specified width and height determine
+the size of the window in grid units, and the information from the
+last @b{wm :grid} command maps from grid units to pixel units.
+
+@unnumberedsubsec Bugs
+
+The window manager interactions seem too complicated, especially
+for managing geometry.  Suggestions on how to simplify this would
+be greatly appreciated.
+
+Most existing window managers appear to have bugs that affect the
+operation of the @b{wm} command.  For example, some changes won't
+take effect if the window is already active:  the window will have
+to be withdrawn and de-iconified in order to make the change happen.
+
+@unnumberedsubsec Keywords
+aspect ratio, deiconify, focus model, geometry, grid, group, icon, iconify, increments, position, size, title, top-level window, units, window manager

@@ -1,0 +1,2274 @@
+
+
+@node Sequences, Hash Tables, Strings, Top
+@chapter Sequences
+
+@menu
+* Sequence Concepts::		
+* Rules about Test Functions::	
+* Sequences Dictionary::	
+@end menu
+
+@node Sequence Concepts, Rules about Test Functions, Sequences, Sequences
+@section Sequence Concepts
+
+@c including concept-sequences
+
+A @i{sequence}
+@IGindex sequence
+ is an ordered collection of @i{elements},
+implemented as either a @i{vector} or a @i{list}.
+
+@i{Sequences} can be created by the @i{function} @b{make-sequence},
+as well as other @i{functions} that create @i{objects} 
+of @i{types} that are @i{subtypes} of @b{sequence} 
+(@i{e.g.}, @b{list}, @b{make-list}, @b{mapcar}, and @b{vector}).
+
+A @i{sequence function}
+@IGindex sequence function
+ is a @i{function} 
+   defined by this specification
+or added as an extension by the @i{implementation} 
+that operates on one or more @i{sequences}.
+Whenever a @i{sequence function} must construct and return
+a new @i{vector}, it always returns a @i{simple vector}.
+Similarly, any @i{strings} constructed will be @i{simple strings}.
+
+@format
+@group
+@noindent
+@w{  concatenate        length              remove             }
+@w{  copy-seq           map                 remove-duplicates  }
+@w{  count              map-into            remove-if          }
+@w{  count-if           merge               remove-if-not      }
+@w{  count-if-not       mismatch            replace            }
+@w{  delete             notany              reverse            }
+@w{  delete-duplicates  notevery            search             }
+@w{  delete-if          nreverse            some               }
+@w{  delete-if-not      nsubstitute         sort               }
+@w{  elt                nsubstitute-if      stable-sort        }
+@w{  every              nsubstitute-if-not  subseq             }
+@w{  fill               position            substitute         }
+@w{  find               position-if         substitute-if      }
+@w{  find-if            position-if-not     substitute-if-not  }
+@w{  find-if-not        reduce                                 }
+
+@noindent
+@w{        Figure 17--1: Standardized Sequence Functions       }
+
+@end group
+@end format
+
+@menu
+* General Restrictions on Parameters that must be Sequences::  
+@end menu
+
+@node General Restrictions on Parameters that must be Sequences,  , Sequence Concepts, Sequence Concepts
+@subsection General Restrictions on Parameters that must be Sequences
+
+In general, @i{lists} (including @i{association lists} and @i{property lists})
+that are treated as @i{sequences} must be @i{proper lists}.
+
+@c end of including concept-sequences
+
+@node Rules about Test Functions, Sequences Dictionary, Sequence Concepts, Sequences
+@section Rules about Test Functions
+
+@c including concept-tests
+
+@menu
+* Satisfying a Two-Argument Test::  
+* Satisfying a One-Argument Test::  
+@end menu
+
+@node Satisfying a Two-Argument Test, Satisfying a One-Argument Test, Rules about Test Functions, Rules about Test Functions
+@subsection Satisfying a Two-Argument Test
+
+When an @i{object} O is being considered iteratively 
+against each @i{element} E_i
+of a @i{sequence} S
+by an @i{operator} F listed in Figure 17--2,
+it is sometimes useful to control the way in which the presence of O 
+is tested in S is tested by F.
+This control is offered on the basis of a @i{function} designated with 
+either a @t{:test} or @t{:test-not} @i{argument}.
+
+@format
+@group
+@noindent
+@w{  adjoin           nset-exclusive-or  search            }
+@w{  assoc            nsublis            set-difference    }
+@w{  count            nsubst             set-exclusive-or  }
+@w{  delete           nsubstitute        sublis            }
+@w{  find             nunion             subsetp           }
+@w{  intersection     position           subst             }
+@w{  member           pushnew            substitute        }
+@w{  mismatch         rassoc             tree-equal        }
+@w{  nintersection    remove             union             }
+@w{  nset-difference  remove-duplicates                    }
+
+@noindent
+@w{  Figure 17--2: Operators that have Two-Argument Tests to be Satisfied}
+
+@end group
+@end format
+
+The object O might not be compared directly to E_i.
+If a @t{:key} @i{argument} is provided,
+it is a @i{designator} for a @i{function} of one @i{argument} 
+to be called with each E_i as an @i{argument}, 
+and @i{yielding} an @i{object} Z_i to be used for comparison.
+(If there is no @t{:key} @i{argument}, Z_i is E_i.)
+
+The @i{function} designated by the @t{:key} @i{argument} is never called on O itself.
+However, if the function operates on multiple sequences
+(@i{e.g.}, as happens in @b{set-difference}), O
+will be the result of calling the @t{:key} function on an
+@i{element} of the other sequence.  
+
+A @t{:test} @i{argument}, if supplied to F,
+is a @i{designator} for a  @i{function}
+of two @i{arguments}, O and Z_i.
+An E_i is said (or, sometimes, an O and an E_i are said)
+to @i{satisfy the test}
+@IGindex satisfy the test
+
+if this @t{:test} @i{function} returns a @i{generalized boolean} representing 
+@i{true}.
+
+A @t{:test-not} @i{argument}, if supplied to F, 
+is @i{designator} for a @i{function} 
+of two @i{arguments}, O and Z_i.
+An E_i is said (or, sometimes, an O and an E_i are said)
+to @i{satisfy the test}
+@IGindex satisfy the test
+
+if this @t{:test-not} @i{function}
+returns a @i{generalized boolean} representing @i{false}.
+
+If neither a @t{:test} nor a @t{:test-not} @i{argument} is supplied, 
+it is as if a @t{:test} argument of @t{#'eql} was supplied.
+
+The consequences are unspecified if both a @t{:test} and a @t{:test-not} @i{argument}
+are supplied in the same @i{call} to F.
+
+@menu
+* Examples of Satisfying a Two-Argument Test::	
+@end menu
+
+@node Examples of Satisfying a Two-Argument Test,  , Satisfying a Two-Argument Test, Satisfying a Two-Argument Test
+@subsubsection Examples of Satisfying a Two-Argument Test
+
+@example
+ (remove "FOO" '(foo bar "FOO" "BAR" "foo" "bar") :test #'equal)
+@result{}  (foo bar "BAR" "foo" "bar")
+ (remove "FOO" '(foo bar "FOO" "BAR" "foo" "bar") :test #'equalp)
+@result{}  (foo bar "BAR" "bar")
+ (remove "FOO" '(foo bar "FOO" "BAR" "foo" "bar") :test #'string-equal)
+@result{}  (bar "BAR" "bar")
+ (remove "FOO" '(foo bar "FOO" "BAR" "foo" "bar") :test #'string=)
+@result{}  (BAR "BAR" "foo" "bar")
+
+ (remove 1 '(1 1.0 #C(1.0 0.0) 2 2.0 #C(2.0 0.0)) :test-not #'eql)
+@result{}  (1)
+ (remove 1 '(1 1.0 #C(1.0 0.0) 2 2.0 #C(2.0 0.0)) :test-not #'=)
+@result{}  (1 1.0 #C(1.0 0.0))
+ (remove 1 '(1 1.0 #C(1.0 0.0) 2 2.0 #C(2.0 0.0)) :test (complement #'=))
+@result{}  (1 1.0 #C(1.0 0.0))
+
+ (count 1 '((one 1) (uno 1) (two 2) (dos 2)) :key #'cadr) @result{}  2
+
+ (count 2.0 '(1 2 3) :test #'eql :key #'float) @result{}  1
+
+ (count "FOO" (list (make-pathname :name "FOO" :type "X")  
+                    (make-pathname :name "FOO" :type "Y"))
+        :key #'pathname-name
+        :test #'equal)
+@result{}  2
+@end example
+
+@node Satisfying a One-Argument Test,  , Satisfying a Two-Argument Test, Rules about Test Functions
+@subsection Satisfying a One-Argument Test
+
+When using one of the @i{functions} in Figure 17--3,
+the elements E of a @i{sequence} S are filtered
+not on the basis of the presence or absence of an object O 
+under a two @i{argument} @i{predicate},
+as with the @i{functions} described in @ref{Satisfying a Two-Argument Test},
+but rather on the basis of a one @i{argument} @i{predicate}.
+
+@format
+@group
+@noindent
+@w{  assoc-if       member-if           rassoc-if          }
+@w{  assoc-if-not   member-if-not       rassoc-if-not      }
+@w{  count-if       nsubst-if           remove-if          }
+@w{  count-if-not   nsubst-if-not       remove-if-not      }
+@w{  delete-if      nsubstitute-if      subst-if           }
+@w{  delete-if-not  nsubstitute-if-not  subst-if-not       }
+@w{  find-if        position-if         substitute-if      }
+@w{  find-if-not    position-if-not     substitute-if-not  }
+
+@noindent
+@w{  Figure 17--3: Operators that have One-Argument Tests to be Satisfied}
+
+@end group
+@end format
+
+The element E_i might not be considered directly.
+If a @t{:key} @i{argument} is provided,
+it is a @i{designator} for a @i{function} of one @i{argument} 
+to be called with each E_i as an @i{argument}, 
+and @i{yielding} an @i{object} Z_i to be used for comparison.
+(If there is no @t{:key} @i{argument}, Z_i is E_i.)
+
+@i{Functions} defined in this specification and having a name that
+ends in ``@t{-if}'' accept a first @i{argument} that is a @i{designator} for a 
+@i{function} of one @i{argument}, Z_i.
+An E_i is said to @i{satisfy the test}
+@IGindex satisfy the test
+ if this @t{:test} @i{function}
+returns a @i{generalized boolean} representing @i{true}.
+
+@i{Functions} defined in this specification and having a name that
+ends in ``@t{-if-not}'' accept a first @i{argument} that is a @i{designator} for a 
+@i{function} of one @i{argument}, Z_i.
+An E_i is said to @i{satisfy the test}
+@IGindex satisfy the test
+ if this @t{:test} @i{function}
+returns a @i{generalized boolean} representing @i{false}.
+
+@menu
+* Examples of Satisfying a One-Argument Test::	
+@end menu
+
+@node Examples of Satisfying a One-Argument Test,  , Satisfying a One-Argument Test, Satisfying a One-Argument Test
+@subsubsection Examples of Satisfying a One-Argument Test
+
+@example
+ (count-if #'zerop '(1 #C(0.0 0.0) 0 0.0d0 0.0s0 3)) @result{}  4
+
+ (remove-if-not #'symbolp '(0 1 2 3 4 5 6 7 8 9 A B C D E F))
+@result{}  (A B C D E F)
+ (remove-if (complement #'symbolp) '(0 1 2 3 4 5 6 7 8 9 A B C D E F))
+@result{}  (A B C D E F)
+
+ (count-if #'zerop '("foo" "" "bar" "" "" "baz" "quux") :key #'length)
+@result{}  3
+@end example
+
+@c end of including concept-tests
+
+@node Sequences Dictionary,  , Rules about Test Functions, Sequences
+@section Sequences Dictionary
+
+@c including dict-sequences
+
+@menu
+* sequence::			
+* copy-seq::			
+* elt::				
+* fill::			
+* make-sequence::		
+* subseq::			
+* map::				
+* map-into::			
+* reduce::			
+* count::			
+* length::			
+* reverse::			
+* sort::			
+* find::			
+* position::			
+* search::			
+* mismatch::			
+* replace::			
+* substitute::			
+* concatenate::			
+* merge::			
+* remove::			
+* remove-duplicates::		
+@end menu
+
+@node sequence, copy-seq, Sequences Dictionary, Sequences Dictionary
+@subsection sequence                                                     [System Class]
+
+@subsubheading  Class Precedence List::
+@b{sequence},
+@b{t}
+
+@subsubheading  Description::
+
+@i{Sequences} are ordered collections of @i{objects},
+called the @i{elements} of the @i{sequence}.
+
+The @i{types} @b{vector} and the @i{type} @b{list} are @i{disjoint} @i{subtypes} of @i{type} @b{sequence},
+but are not necessarily an @i{exhaustive partition} of @i{sequence}.
+
+When viewing a @i{vector} as a @i{sequence}, 
+only the @i{active} @i{elements} of that @i{vector} 
+are considered @i{elements} of the @i{sequence};
+that is,
+@i{sequence} operations respect the @i{fill pointer}
+when given @i{sequences} represented as @i{vectors}.
+
+@node copy-seq, elt, sequence, Sequences Dictionary
+@subsection copy-seq                                                         [Function]
+
+@code{copy-seq}  @i{sequence} @result{}  @i{copied-sequence}
+
+@subsubheading  Arguments and Values::
+
+@i{sequence}---a @i{proper sequence}.
+
+@i{copied-sequence}---a @i{proper sequence}.
+
+@subsubheading  Description::
+
+Creates a copy of @i{sequence}.  The @i{elements} of the new
+@i{sequence} are the @i{same} as the corresponding @i{elements} of
+the given @i{sequence}.
+
+If @i{sequence} is a @i{vector}, 
+the result is a @i{fresh} @i{simple array}
+of @i{rank} one 
+that has the same @i{actual array element type} as @i{sequence}.
+If @i{sequence} is a @i{list}, 
+the result is a @i{fresh} @i{list}. 
+
+@subsubheading  Examples::
+@example
+ (setq str "a string") @result{}  "a string"
+ (equalp str (copy-seq str)) @result{}  @i{true}
+ (eql str (copy-seq str)) @result{}  @i{false}
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{sequence} is not a @i{proper sequence}.
+
+@subsubheading  See Also::
+
+@ref{copy-list}
+
+@subsubheading  Notes::
+
+From a functional standpoint,
+@example
+ (copy-seq x) @equiv{} (subseq x 0)
+@end example
+
+However, the programmer intent is typically very different in these two cases.
+
+@node elt, fill, copy-seq, Sequences Dictionary
+@subsection elt                                                              [Accessor]
+
+@code{elt}  @i{sequence index} @result{}  @i{object}
+
+(setf (@code{         elt} @i{sequence index}) new-object)@*
+
+@subsubheading  Arguments and Values::
+
+@i{sequence}---a @i{proper sequence}.
+
+@i{index}---a @i{valid sequence index} for @i{sequence}.
+
+@i{object}---an @i{object}.
+
+@i{new-object}---an @i{object}.
+
+@subsubheading  Description::
+
+@i{Accesses} the @i{element} of @i{sequence} specified by @i{index}.
+
+@subsubheading  Examples::
+
+@example
+ (setq str (copy-seq "0123456789")) @result{}  "0123456789"
+ (elt str 6) @result{}  #\6
+ (setf (elt str 0) #\#) @result{}  #\#
+ str @result{}  "#123456789"
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{sequence} is not a @i{proper sequence}.
+Should signal an error of @i{type} @b{type-error}
+			      if @i{index} is not a @i{valid sequence index} for @i{sequence}.
+
+@subsubheading  See Also::                               
+
+@ref{aref}
+,
+@ref{nth}
+,
+
+@ref{Compiler Terminology}
+
+@subsubheading  Notes::
+
+@b{aref} may be used to @i{access} @i{vector} 
+elements that are beyond the @i{vector}'s @i{fill pointer}.
+
+@node fill, make-sequence, elt, Sequences Dictionary
+@subsection fill                                                             [Function]
+
+@code{fill}  @i{sequence item @r{&key} start end} @result{}  @i{sequence}
+
+@subsubheading  Arguments and Values::
+
+@i{sequence}---a @i{proper sequence}.
+
+@i{item}---a @i{sequence}.
+
+@i{start}, @i{end}---@i{bounding index designators} of @i{sequence}.
+ The defaults for @i{start} and @i{end} are @t{0} and @b{nil}, respectively.
+
+@subsubheading  Description::
+
+Replaces the @i{elements} of @i{sequence} 
+@i{bounded} by @i{start} and @i{end}
+with @i{item}.
+
+@subsubheading  Examples::
+
+@example
+ (fill (list 0 1 2 3 4 5) '(444)) @result{}  ((444) (444) (444) (444) (444) (444))
+ (fill (copy-seq "01234") #\e :start 3) @result{}  "012ee"
+ (setq x (vector 'a 'b 'c 'd 'e)) @result{}  #(A B C D E)
+ (fill x 'z :start 1 :end 3) @result{}  #(A Z Z D E)
+ x @result{}  #(A Z Z D E)
+ (fill x 'p) @result{}  #(P P P P P)
+ x @result{}  #(P P P P P)
+@end example
+
+@subsubheading  Side Effects::
+
+@i{Sequence} is destructively modified.
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{sequence} is not a @i{proper sequence}. 
+Should signal an error of @i{type} @b{type-error}
+			      if @i{start} is not a non-negative @i{integer}.
+Should signal an error of @i{type} @b{type-error}
+			      if @i{end} is not a non-negative @i{integer} or @b{nil}.
+
+@subsubheading  See Also::
+
+@ref{replace}
+, @b{nsubstitute}
+
+@subsubheading  Notes::
+
+@t{(fill @i{sequence} @i{item}) @equiv{} 
+   (nsubstitute-if @i{item} (constantly t) @i{sequence})}
+
+@node make-sequence, subseq, fill, Sequences Dictionary
+@subsection make-sequence                                                    [Function]
+
+@code{make-sequence}  @i{result-type size @r{&key} initial-element} @result{}  @i{sequence}
+
+@subsubheading  Arguments and Values::
+
+@i{result-type}---a @b{sequence} @i{type specifier}.
+
+@i{size}---a non-negative @i{integer}.
+
+@i{initial-element}---an @i{object}.
+ The default is @i{implementation-dependent}.
+
+@i{sequence}---a @i{proper sequence}.
+
+@subsubheading  Description::
+
+Returns a @i{sequence} of the type @i{result-type} and of length @i{size},
+each of the @i{elements} of which has been initialized to @i{initial-element}.
+
+If the @i{result-type} is a @i{subtype} of @b{list},
+the result will be a @i{list}.
+
+If the @i{result-type} is a @i{subtype} of @b{vector},
+then if the implementation can determine the element type specified
+for the @i{result-type}, the element type of the resulting array 
+is the result of @i{upgrading} that element type; or, if the
+implementation can determine that the element type is unspecified (or @t{*}),
+the element type of the resulting array is @b{t};
+otherwise, an error is signaled.
+
+@subsubheading  Examples::
+
+@example
+ (make-sequence 'list 0) @result{}  ()
+ (make-sequence 'string 26 :initial-element #\.) 
+@result{}  ".........................."
+ (make-sequence '(vector double-float) 2
+                :initial-element 1d0)
+@result{}  #(1.0d0 1.0d0)
+@end example
+
+@example
+ (make-sequence '(vector * 2) 3) should signal an error
+ (make-sequence '(vector * 4) 3) should signal an error
+@end example
+
+@subsubheading  Affected By::
+
+The @i{implementation}.
+
+@subsubheading  Exceptional Situations::
+
+The consequences are unspecified if @i{initial-element} 
+is not an @i{object} which can be stored in the resulting @i{sequence}.
+
+An error of @i{type} @b{type-error} must be signaled if the @i{result-type} is neither
+     a @i{recognizable subtype} of @b{list},
+ nor a @i{recognizable subtype} of @b{vector}.
+
+An error of @i{type} @b{type-error} should be signaled if @i{result-type} specifies 
+the number of elements and @i{size} is different from that number.
+
+@subsubheading  See Also::
+
+@ref{make-array}
+, 
+@ref{make-list}
+
+@subsubheading  Notes::
+
+@example
+ (make-sequence 'string 5) @equiv{} (make-string 5)               
+@end example
+
+@node subseq, map, make-sequence, Sequences Dictionary
+@subsection subseq                                                           [Accessor]
+
+@code{subseq}  @i{sequence start @r{&optional} end} @result{}  @i{subsequence}
+
+(setf (@code{         subseq} @i{sequence start @r{&optional} end}) new-subsequence)@*
+
+@subsubheading  Arguments and Values::
+
+@i{sequence}---a @i{proper sequence}.
+
+@i{start}, @i{end}---@i{bounding index designators} of @i{sequence}.
+ The default for @i{end} is @b{nil}.
+
+@i{subsequence}---a @i{proper sequence}.
+
+@i{new-subsequence}---a @i{proper sequence}.
+
+@subsubheading  Description::
+
+@b{subseq} creates a @i{sequence} 
+that is a copy of the subsequence of @i{sequence}
+@i{bounded} by @i{start} and @i{end}.
+
+@i{Start} specifies an offset into the original @i{sequence} and
+marks the beginning position of the subsequence.
+@i{end} marks the position following the last element of the subsequence.
+
+@b{subseq} always allocates a new @i{sequence} for a result;
+it never shares storage with an old @i{sequence}. 
+The result subsequence is always of the same @i{type} as @i{sequence}.
+
+If @i{sequence} is a @i{vector},
+the result is a @i{fresh} @i{simple array}
+of @i{rank} one
+that has the same @i{actual array element type} as @i{sequence}.
+If @i{sequence} is a @i{list}, 
+the result is a @i{fresh} @i{list}. 
+
+@b{setf} may be used with @b{subseq} to destructively replace
+@i{elements} of a subsequence with @i{elements} 
+taken from a @i{sequence} of new values.
+If the subsequence and the new sequence are not of equal length,
+the shorter length determines the number of elements that are
+replaced.  The remaining @i{elements} at the end of the longer sequence 
+are not modified in the operation.
+
+@subsubheading  Examples::
+
+@example
+ (setq str "012345") @result{}  "012345"
+ (subseq str 2) @result{}  "2345"
+ (subseq str 3 5) @result{}  "34"
+ (setf (subseq str 4) "abc") @result{}  "abc"
+ str @result{}  "0123ab"
+ (setf (subseq str 0 2) "A") @result{}  "A"
+ str @result{}  "A123ab"
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{sequence} is not a @i{proper sequence}.
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{new-subsequence} is not a @i{proper sequence}.
+
+@subsubheading  See Also::
+
+@ref{replace}
+
+@node map, map-into, subseq, Sequences Dictionary
+@subsection map                                                              [Function]
+
+@code{map}  @i{result-type function @r{&rest} sequences^+} @result{}  @i{result}
+
+@subsubheading  Arguments and Values:: 
+
+@i{result-type} -- a @b{sequence} @i{type specifier}, or @b{nil}.
+
+@i{function}---a @i{function designator}.
+  @i{function} must take as many arguments as 
+  there are @i{sequences}.
+
+@i{sequence}---a @i{proper sequence}.
+
+@i{result}---if @i{result-type} is a @i{type specifier} other than @b{nil}, 
+		 then a @i{sequence} of the @i{type} it denotes;
+		 otherwise (if the @i{result-type} is @b{nil}), @b{nil}.
+
+@subsubheading  Description::
+
+Applies @i{function} to successive sets of arguments in which
+one argument is obtained from each @i{sequence}.
+The @i{function} is called first on all the elements with index @t{0},
+then on all those with index @t{1}, and so on.
+The @i{result-type} specifies the @i{type} of the resulting @i{sequence}.
+
+@b{map} returns @b{nil} if @i{result-type} is @b{nil}.      
+Otherwise, @b{map} returns
+a @i{sequence} such that element @t{j} is the result
+of applying @i{function} to element @t{j} of each of the 
+@i{sequences}.  The result @i{sequence} 
+is as long as the shortest of the
+@i{sequences}.
+The consequences are undefined if the result of applying @i{function} 
+to the successive elements of the @i{sequences} cannot
+be contained in a @i{sequence} of the @i{type} given by @i{result-type}.
+
+If the @i{result-type} is a @i{subtype} of @b{list},
+the result will be a @i{list}.
+
+If the @i{result-type} is a @i{subtype} of @b{vector},
+then if the implementation can determine the element type specified
+for the @i{result-type}, the element type of the resulting array 
+is the result of @i{upgrading} that element type; or, if the
+implementation can determine that the element type is unspecified (or @t{*}),
+the element type of the resulting array is @b{t};
+otherwise, an error is signaled.
+
+@subsubheading  Examples::
+
+@example
+ (map 'string #'(lambda (x y)
+                  (char "01234567890ABCDEF" (mod (+ x y) 16)))
+       '(1 2 3 4)
+       '(10 9 8 7)) @result{}  "AAAA"
+ (setq seq '("lower" "UPPER" "" "123")) @result{}  ("lower" "UPPER" "" "123")
+ (map nil #'nstring-upcase seq) @result{}  NIL
+ seq @result{}  ("LOWER" "UPPER" "" "123")
+ (map 'list #'- '(1 2 3 4)) @result{}  (-1 -2 -3 -4)
+ (map 'string
+      #'(lambda (x) (if (oddp x) #\1 #\0))
+      '(1 2 3 4)) @result{}  "1010"
+@end example
+
+@example
+ (map '(vector * 4) #'cons "abc" "de") should signal an error
+@end example
+
+@subsubheading  Exceptional Situations::
+
+An error of @i{type} @b{type-error} must be signaled if the @i{result-type} is 
+     not a @i{recognizable subtype} of @b{list},
+     not a @i{recognizable subtype} of @b{vector},
+ and not @b{nil}.
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			    if any @i{sequence} is not a @i{proper sequence}.
+
+An error of @i{type} @b{type-error} should be signaled
+if @i{result-type} specifies the
+number of elements and the minimum length of the @i{sequences} 
+is different from that number.
+
+@subsubheading  See Also::
+
+@ref{Traversal Rules and Side Effects}
+
+@node map-into, reduce, map, Sequences Dictionary
+@subsection map-into                                                         [Function]
+
+@code{map-into}  @i{result-sequence function @r{&rest} sequences} @result{}  @i{result-sequence}
+
+@subsubheading  Arguments and Values::
+
+@i{result-sequence}---a @i{proper sequence}.
+
+@i{function}---a @i{designator} for a @i{function}
+		   of as many @i{arguments} as there are @i{sequences}.
+
+@i{sequence}---a @i{proper sequence}.
+
+@subsubheading  Description::
+
+Destructively modifies @i{result-sequence} to contain the results of
+applying @i{function} to each element in the argument @i{sequences} 
+in turn.
+
+@i{result-sequence} and each element of @i{sequences} can each be
+either a @i{list} or a @i{vector}. 
+If @i{result-sequence} and each element of @i{sequences} are not all
+the same length, the iteration terminates when the shortest @i{sequence}
+(of any of the @i{sequences} or the @i{result-sequence})
+is exhausted.
+If @i{result-sequence} is a @i{vector} with a 
+@i{fill pointer}, the @i{fill pointer} is ignored when deciding how
+many iterations to perform, and afterwards the @i{fill pointer} is set to
+the number of times @i{function} was applied.
+If @i{result-sequence} is longer than the shortest element of @i{sequences},
+extra elements at the end of @i{result-sequence} are left unchanged.
+If @i{result-sequence} is @b{nil}, @b{map-into} immediately returns
+@b{nil}, since @b{nil} is a @i{sequence} of length zero.
+
+If @i{function} has side effects, it can count on being called
+first on all of the elements with index 0, then on all of those 
+numbered 1, and so on.
+
+@subsubheading  Examples::
+
+@example
+ (setq a (list 1 2 3 4) b (list 10 10 10 10)) @result{}  (10 10 10 10)
+ (map-into a #'+ a b) @result{}  (11 12 13 14)
+ a @result{}  (11 12 13 14)
+ b @result{}  (10 10 10 10)
+ (setq k '(one two three)) @result{}  (ONE TWO THREE)
+ (map-into a #'cons k a) @result{}  ((ONE . 11) (TWO . 12) (THREE . 13) 14)
+ (map-into a #'gensym) @result{}  (#:G9090 #:G9091 #:G9092 #:G9093)
+ a @result{}  (#:G9090 #:G9091 #:G9092 #:G9093)
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{result-sequence} is not a @i{proper sequence}.
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{sequence} is not a @i{proper sequence}.
+
+@subsubheading  Notes::
+
+@b{map-into} differs from @b{map} in that it modifies an
+existing @i{sequence} rather than creating a new one.
+In addition, @b{map-into} can be called with only two 
+arguments, while @b{map} requires at least three arguments.
+
+@b{map-into} could be defined by:
+
+@example
+ (defun map-into (result-sequence function &rest sequences)
+   (loop for index below (apply #'min 
+                                (length result-sequence)
+                                (mapcar #'length sequences))
+         do (setf (elt result-sequence index)
+                  (apply function
+                         (mapcar #'(lambda (seq) (elt seq index))
+                                 sequences))))
+   result-sequence)
+@end example
+
+@node reduce, count, map-into, Sequences Dictionary
+@subsection reduce                                                           [Function]
+
+@code{reduce}  @i{function sequence @r{&key} key from-end start end initial-value} @result{}  @i{result}
+
+@subsubheading  Arguments and Values::
+
+@i{function}---a @i{designator} for a @i{function}
+   that might be called with either zero or two @i{arguments}.
+
+@i{sequence}---a @i{proper sequence}.
+
+@i{key}---a @i{designator} for a @i{function} of one argument,
+  or @b{nil}.
+
+@i{from-end}---a @i{generalized boolean}.
+  The default is @i{false}.
+
+@i{start}, @i{end}---@i{bounding index designators} of @i{sequence}.
+ The defaults for @i{start} and @i{end} are @t{0} and @b{nil}, respectively.
+
+@i{initial-value}---an @i{object}. 
+
+@i{result}---an @i{object}.
+
+@subsubheading  Description::
+
+@b{reduce} uses a binary operation, @i{function},
+to combine the @i{elements} of @i{sequence} 
+@i{bounded} by @i{start} and @i{end}.
+
+The @i{function} must accept as @i{arguments} two @i{elements}
+of @i{sequence} or the results from combining those @i{elements}.
+The @i{function} must also be able to accept no arguments.
+
+If @i{key} is supplied, it is used is used to extract the values to reduce.
+The @i{key} function is applied exactly once to each element of @i{sequence}
+in the order implied by the reduction order but not to the value of
+@i{initial-value}, if supplied.
+
+The @i{key} function typically returns part of the @i{element} of @i{sequence}.
+If @i{key} is not supplied or is @b{nil}, the @i{sequence} @i{element} itself is used.
+
+The reduction is left-associative,
+unless @i{from-end} is @i{true} in which case it is right-associative.  
+
+If @i{initial-value} is supplied, 
+it is logically placed before the subsequence
+(or after it if @i{from-end} is @i{true})
+and included in the reduction operation.
+
+In the normal case, the result of @b{reduce} is the combined 
+result of @i{function}'s being applied to successive pairs of @i{elements} 
+of @i{sequence}.
+If the subsequence contains exactly one @i{element} 
+and no @i{initial-value} is given,
+then that @i{element} is returned and @i{function} is not called.
+If the subsequence is empty and an @i{initial-value} is given,
+then the @i{initial-value} is returned and @i{function} is not called.
+If the subsequence is empty and no @i{initial-value} is given,
+then the @i{function} is called with zero arguments,
+and @b{reduce} returns whatever @i{function} does.
+This is the only case where the
+@i{function} is called with other than two arguments.
+
+@subsubheading  Examples::
+@example
+ (reduce #'* '(1 2 3 4 5)) @result{}  120
+ (reduce #'append '((1) (2)) :initial-value '(i n i t)) @result{}  (I N I T 1 2)
+ (reduce #'append '((1) (2)) :from-end t                  
+                             :initial-value '(i n i t)) @result{}  (1 2 I N I T) 
+ (reduce #'- '(1 2 3 4)) @equiv{} (- (- (- 1 2) 3) 4) @result{}  -8
+ (reduce #'- '(1 2 3 4) :from-end t)    ;Alternating sum.
+@equiv{} (- 1 (- 2 (- 3 4))) @result{}  -2
+ (reduce #'+ '()) @result{}  0
+ (reduce #'+ '(3)) @result{}  3
+ (reduce #'+ '(foo)) @result{}  FOO
+ (reduce #'list '(1 2 3 4)) @result{}  (((1 2) 3) 4)
+ (reduce #'list '(1 2 3 4) :from-end t) @result{}  (1 (2 (3 4)))
+ (reduce #'list '(1 2 3 4) :initial-value 'foo) @result{}  ((((foo 1) 2) 3) 4)
+ (reduce #'list '(1 2 3 4)
+        :from-end t :initial-value 'foo) @result{}  (1 (2 (3 (4 foo))))
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{sequence} is not a @i{proper sequence}.
+
+@subsubheading  See Also::
+
+@ref{Traversal Rules and Side Effects}
+
+@node count, length, reduce, Sequences Dictionary
+@subsection count, count-if, count-if-not                                    [Function]
+
+@code{count}  @i{item sequence @r{&key} from-end start end key test test-not} @result{}  @i{n}
+
+@code{count-if}  @i{predicate sequence @r{&key} from-end start end key} @result{}  @i{n}
+
+@code{count-if-not}  @i{predicate sequence @r{&key} from-end start end key} @result{}  @i{n}
+
+@subsubheading  Arguments and Values:: 
+
+@i{item}---an @i{object}.
+
+@i{sequence}---a @i{proper sequence}.
+
+@i{predicate}---a @i{designator} for a @i{function} of one @i{argument}
+  that returns a @i{generalized boolean}.
+
+@i{from-end}---a @i{generalized boolean}.
+  The default is @i{false}.
+
+@i{test}---a @i{designator} for a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{test-not}---a @i{designator} for 
+  a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{start}, @i{end}---@i{bounding index designators} of @i{sequence}.
+ The defaults for @i{start} and @i{end} are @t{0} and @b{nil}, respectively.
+
+@i{key}---a @i{designator} for a @i{function} of one argument,
+  or @b{nil}.
+
+@i{n}---a non-negative @i{integer} 
+	    less than or equal to the @i{length} of @i{sequence}.
+
+@subsubheading  Description::
+
+@b{count}, @b{count-if}, and @b{count-if-not} 
+count and return the number of @i{elements} in 
+the @i{sequence} @i{bounded} by @i{start} and @i{end}
+that @i{satisfy the test}.
+
+The @i{from-end} has no direct effect on the result.
+However, if @i{from-end} is @i{true},
+the @i{elements} of @i{sequence} will be supplied as @i{arguments} to
+      the @i{test},
+      @i{test-not},
+  and @i{key} in reverse order,
+which may change the side-effects, if any, of those functions.
+
+@subsubheading  Examples::
+
+@example
+ (count #\a "how many A's are there in here?") @result{}  2
+ (count-if-not #'oddp '((1) (2) (3) (4)) :key #'car) @result{}  2
+ (count-if #'upper-case-p "The Crying of Lot 49" :start 4) @result{}  2 
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{sequence} is not a @i{proper sequence}.
+
+@subsubheading  See Also::
+
+@ref{Rules about Test Functions},
+
+@ref{Traversal Rules and Side Effects}
+
+@subsubheading  Notes::
+
+The @t{:test-not} @i{argument} is deprecated.
+
+The @i{function} @b{count-if-not} is deprecated.
+
+@node length, reverse, count, Sequences Dictionary
+@subsection length                                                           [Function]
+
+@code{length}  @i{sequence} @result{}  @i{n}
+
+@subsubheading  Arguments and Values::
+
+@i{sequence}---a @i{proper sequence}.
+
+@i{n}---a non-negative @i{integer}.
+
+@subsubheading  Description::
+
+Returns the number of @i{elements} in @i{sequence}.
+
+If @i{sequence} is a @i{vector} with a @i{fill pointer},
+the active length as specified by the @i{fill pointer} is returned.
+
+@subsubheading  Examples::
+
+@example
+ (length "abc") @result{}  3
+ (setq str (make-array '(3) :element-type 'character 
+                            :initial-contents "abc"
+                            :fill-pointer t)) @result{}  "abc"
+ (length str) @result{}  3
+ (setf (fill-pointer str) 2) @result{}  2
+ (length str) @result{}  2
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{sequence} is not a @i{proper sequence}.
+
+@subsubheading  See Also::
+
+@ref{list-length}
+,
+@b{sequence}
+
+@node reverse, sort, length, Sequences Dictionary
+@subsection reverse, nreverse                                                [Function]
+
+@code{reverse}  @i{sequence} @result{}  @i{reversed-sequence}
+
+@code{nreverse}  @i{sequence} @result{}  @i{reversed-sequence}
+
+@subsubheading  Arguments and Values::
+
+@i{sequence}---a @i{proper sequence}.
+
+@i{reversed-sequence}---a @i{sequence}.
+
+@subsubheading  Description::
+
+@b{reverse} and @b{nreverse} return a new @i{sequence} 
+of the same kind as @i{sequence}, containing the same @i{elements},
+but in reverse order.
+
+@b{reverse} and @b{nreverse} differ in that @b{reverse} 
+always creates and returns a new @i{sequence}, whereas @b{nreverse}
+might modify and return the given @i{sequence}.  @b{reverse} never
+modifies the given @i{sequence}.
+
+For @b{reverse}, if @i{sequence} is a @i{vector}, 
+the result is a @i{fresh} @i{simple array} of @i{rank} one
+that has the same @i{actual array element type} as @i{sequence}.
+If @i{sequence} is a @i{list}, the result is a @i{fresh} @i{list}. 
+
+For @b{nreverse}, if @i{sequence} is a @i{vector},
+the result is a @i{vector}
+that has the same @i{actual array element type} as @i{sequence}.
+If @i{sequence} is a @i{list}, the result is a @i{list}.
+
+For @b{nreverse},
+@i{sequence} might be destroyed and re-used to produce the result.
+The result might or might not be @i{identical} to @i{sequence}.
+
+Specifically, when @i{sequence} is a @i{list}, 
+@b{nreverse} is permitted to @b{setf} any part, @b{car} or @b{cdr},
+of any @i{cons} that is part of the @i{list structure} of @i{sequence}.
+When @i{sequence} is a @i{vector},
+@b{nreverse} is permitted to re-order the elements of @i{sequence}
+in order to produce the resulting @i{vector}.
+
+@subsubheading  Examples::
+@example
+ (setq str "abc") @result{}  "abc"
+ (reverse str) @result{}  "cba"
+ str @result{}  "abc"
+ (setq str (copy-seq str)) @result{}  "abc"
+ (nreverse str) @result{}  "cba"
+ str @result{}  @i{implementation-dependent}
+ (setq l (list 1 2 3)) @result{}  (1 2 3)
+ (nreverse l) @result{}  (3 2 1)
+ l @result{}  @i{implementation-dependent}
+@end example
+
+@subsubheading  Side Effects::
+
+@b{nreverse} might either create a new @i{sequence},
+modify the argument @i{sequence}, or both.
+(@b{reverse} does not modify @i{sequence}.)
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{sequence} is not a @i{proper sequence}.
+
+@node sort, find, reverse, Sequences Dictionary
+@subsection sort, stable-sort                                                [Function]
+
+@code{sort}  @i{sequence predicate @r{&key} key} @result{}  @i{sorted-sequence}
+
+@code{stable-sort}  @i{sequence predicate @r{&key} key} @result{}  @i{sorted-sequence}
+
+@subsubheading  Arguments and Values::
+
+@i{sequence}---a @i{proper sequence}.
+
+@i{predicate}---a @i{designator} for
+  a @i{function} of two arguments that returns a @i{generalized boolean}.
+
+@i{key}---a @i{designator} for a @i{function} of one argument,
+  or @b{nil}.
+
+@i{sorted-sequence}---a @i{sequence}.
+
+@subsubheading  Description::
+
+@b{sort} and @b{stable-sort} destructively sort @i{sequences}  
+according to the order determined by the @i{predicate} function.
+
+If @i{sequence} is a @i{vector},
+the result is a @i{vector} 
+that has the same @i{actual array element type} as @i{sequence}.
+The result might or might not be simple, 
+and might or might not be @i{identical} to @i{sequence}.
+If @i{sequence} is a @i{list},
+the result is a @i{list}. 
+
+@b{sort} determines the relationship between two elements
+by giving keys extracted from the elements to the @i{predicate}.
+The first argument to the @i{predicate} function is the part of one element
+of @i{sequence} extracted by the @i{key} function
+(if supplied); the second
+argument is the part of another element
+of @i{sequence} extracted by the @i{key} function
+(if supplied).
+@i{Predicate} should return @i{true} if and only if the first argument is
+strictly less than the second (in some appropriate sense). 
+If the first argument is greater than or equal to the second
+(in the appropriate sense), then the @i{predicate} should return @i{false}.
+
+The argument to the @i{key} function is the @i{sequence} element.
+The return value of the @i{key} function 
+becomes an argument to @i{predicate}.
+If @i{key} is not supplied or @b{nil}, the @i{sequence} element itself is used.
+There is no guarantee on the number of times the @i{key} will be called.
+
+If the @i{key} and @i{predicate} always return,
+then the sorting operation will always terminate,
+producing a @i{sequence} containing the same @i{elements} as @i{sequence} 
+(that is, the result is a permutation of @i{sequence}).
+This is guaranteed even if the @i{predicate}
+does not really consistently represent a total order
+(in which case the @i{elements} will be scrambled in some unpredictable way,
+but no @i{element} will be lost).  
+If the @i{key} consistently returns meaningful keys,
+and the @i{predicate} does reflect some total ordering criterion on those keys,
+then the @i{elements} of the @i{sorted-sequence}
+will be properly sorted according to that ordering.
+
+The sorting operation performed by @b{sort} is not guaranteed stable.
+Elements considered equal by the @i{predicate} might or might not
+stay in their original order.  The @i{predicate} is assumed to
+consider two elements @t{x} and @t{y} to be equal if
+@t{(funcall @i{predicate} @i{x} @i{y})} and
+@t{(funcall @i{predicate} @i{y} @i{x})} are both @i{false}.
+@b{stable-sort} guarantees stability.
+
+The sorting operation can be destructive in all cases.  In the case of a
+@i{vector} 
+argument, this is accomplished by permuting the elements in place.
+In the case of a @i{list}, the @i{list} is
+destructively reordered in the same manner as for
+@b{nreverse}.  
+
+@subsubheading  Examples::
+
+@example
+ (setq tester (copy-seq "lkjashd")) @result{}  "lkjashd"
+ (sort tester #'char-lessp) @result{}  "adhjkls"
+ (setq tester (list '(1 2 3) '(4 5 6) '(7 8 9))) @result{}  ((1 2 3) (4 5 6) (7 8 9))
+ (sort tester #'> :key #'car)  @result{}  ((7 8 9) (4 5 6) (1 2 3)) 
+ (setq tester (list 1 2 3 4 5 6 7 8 9 0)) @result{}  (1 2 3 4 5 6 7 8 9 0)
+ (stable-sort tester #'(lambda (x y) (and (oddp x) (evenp y))))
+@result{}  (1 3 5 7 9 2 4 6 8 0)
+ (sort (setq committee-data
+             (vector (list (list "JonL" "White") "Iteration")
+                     (list (list "Dick" "Waters") "Iteration")
+                     (list (list "Dick" "Gabriel") "Objects")
+                     (list (list "Kent" "Pitman") "Conditions")
+                     (list (list "Gregor" "Kiczales") "Objects")
+                     (list (list "David" "Moon") "Objects")
+                     (list (list "Kathy" "Chapman") "Editorial")
+                     (list (list "Larry" "Masinter") "Cleanup")
+                     (list (list "Sandra" "Loosemore") "Compiler")))
+       #'string-lessp :key #'cadar)
+@result{}  #((("Kathy" "Chapman") "Editorial")
+     (("Dick" "Gabriel") "Objects")
+     (("Gregor" "Kiczales") "Objects")
+     (("Sandra" "Loosemore") "Compiler")
+     (("Larry" "Masinter") "Cleanup")
+     (("David" "Moon") "Objects")
+     (("Kent" "Pitman") "Conditions")
+     (("Dick" "Waters") "Iteration")
+     (("JonL" "White") "Iteration"))
+ ;; Note that individual alphabetical order within `committees'
+ ;; is preserved.
+ (setq committee-data 
+       (stable-sort committee-data #'string-lessp :key #'cadr))
+@result{}  #((("Larry" "Masinter") "Cleanup")
+     (("Sandra" "Loosemore") "Compiler")
+     (("Kent" "Pitman") "Conditions")
+     (("Kathy" "Chapman") "Editorial")
+     (("Dick" "Waters") "Iteration")
+     (("JonL" "White") "Iteration")
+     (("Dick" "Gabriel") "Objects")
+     (("Gregor" "Kiczales") "Objects")
+     (("David" "Moon") "Objects"))
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{sequence} is not a @i{proper sequence}.
+
+@subsubheading  See Also::
+
+@ref{merge}
+,
+
+@ref{Compiler Terminology},
+
+@ref{Traversal Rules and Side Effects},
+
+@ref{Destructive Operations}
+
+@node find, position, sort, Sequences Dictionary
+@subsection find, find-if, find-if-not                                       [Function]
+
+@code{find}  @i{item sequence @r{&key} from-end test test-not start end key} @result{}  @i{element}
+
+@code{find-if}  @i{predicate sequence @r{&key} from-end start end key} @result{}  @i{element}
+
+@code{find-if-not}  @i{predicate sequence @r{&key} from-end start end key} @result{}  @i{element}
+
+@subsubheading  Arguments and Values:: 
+
+@i{item}---an @i{object}.
+
+@i{sequence}---a @i{proper sequence}.
+
+@i{predicate}---a @i{designator} for a @i{function} of one @i{argument}
+  that returns a @i{generalized boolean}.
+
+@i{from-end}---a @i{generalized boolean}.
+  The default is @i{false}.
+
+@i{test}---a @i{designator} for a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{test-not}---a @i{designator} for 
+  a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{start}, @i{end}---@i{bounding index designators} of @i{sequence}.
+ The defaults for @i{start} and @i{end} are @t{0} and @b{nil}, respectively.
+
+@i{key}---a @i{designator} for a @i{function} of one argument,
+  or @b{nil}.
+
+@i{element}---an @i{element} of the @i{sequence}, or @b{nil}.
+
+@subsubheading  Description::
+
+@b{find}, @b{find-if}, and @b{find-if-not} 
+each search for an @i{element} of the @i{sequence}
+@i{bounded} by @i{start} and @i{end}
+   that @i{satisfies the predicate} @i{predicate} 
+or that @i{satisfies the test} @i{test} or @i{test-not},
+as appropriate.
+
+If @i{from-end} is @i{true},
+then the result is the rightmost @i{element} that @i{satisfies the test}. 
+
+If the @i{sequence} contains an @i{element} that @i{satisfies the test},
+then the leftmost or rightmost @i{sequence} element, 
+depending on @i{from-end},
+is returned;
+otherwise @b{nil} is returned.
+
+@subsubheading  Examples::
+
+@example
+ (find #\d "here are some letters that can be looked at" :test #'char>)
+@result{}  #\Space 
+ (find-if #'oddp '(1 2 3 4 5) :end 3 :from-end t) @result{}  3
+ (find-if-not #'complexp                                    
+             '#(3.5 2 #C(1.0 0.0) #C(0.0 1.0))
+             :start 2) @result{}  NIL 
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{sequence} is not a @i{proper sequence}.
+
+@subsubheading  See Also::
+
+@ref{position}
+,
+@ref{Rules about Test Functions},
+
+@ref{Traversal Rules and Side Effects}
+
+@subsubheading  Notes::
+
+The @t{:test-not} @i{argument} is deprecated.
+
+The @i{function} @b{find-if-not} is deprecated.
+
+@node position, search, find, Sequences Dictionary
+@subsection position, position-if, position-if-not                           [Function]
+
+@code{position}  @i{item sequence @r{&key} from-end test test-not start end key} @result{}  @i{position}
+
+@code{position-if}  @i{predicate sequence @r{&key} from-end start end key} @result{}  @i{position}
+
+@code{position-if-not}  @i{predicate sequence @r{&key} from-end start end key} @result{}  @i{position}
+
+@subsubheading  Arguments and Values::
+
+@i{item}---an @i{object}.
+
+@i{sequence}---a @i{proper sequence}.
+
+@i{predicate}---a @i{designator} for a @i{function} of one argument 
+  that returns a @i{generalized boolean}.
+
+@i{from-end}---a @i{generalized boolean}.
+  The default is @i{false}.
+
+@i{test}---a @i{designator} for a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{test-not}---a @i{designator} for 
+  a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{start}, @i{end}---@i{bounding index designators} of @i{sequence}.
+ The defaults for @i{start} and @i{end} are @t{0} and @b{nil}, respectively.
+
+@i{key}---a @i{designator} for a @i{function} of one argument,
+  or @b{nil}.
+
+@i{position}---a @i{bounding index} of @i{sequence}, or @b{nil}.
+
+@subsubheading  Description::
+
+@b{position}, @b{position-if}, and @b{position-if-not} 
+each search @i{sequence} for an @i{element} that @i{satisfies the test}.
+
+The @i{position} returned is the index within @i{sequence}
+    of the leftmost  (if @i{from-end} is @i{true})
+ or of the rightmost (if @i{from-end} is @i{false})
+@i{element} that @i{satisfies the test};
+otherwise @b{nil} is returned.
+The index returned is relative to the left-hand end of the entire @i{sequence},
+regardless of the value of @i{start}, @i{end}, or @i{from-end}.
+
+@subsubheading  Examples::
+
+@example
+ (position #\a "baobab" :from-end t) @result{}  4
+ (position-if #'oddp '((1) (2) (3) (4)) :start 1 :key #'car) @result{}  2
+ (position 595 '()) @result{}  NIL
+ (position-if-not #'integerp '(1 2 3 4 5.0)) @result{}  4 
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{sequence} is not a @i{proper sequence}.
+
+@subsubheading  See Also::
+
+@ref{find}
+,
+
+@ref{Traversal Rules and Side Effects}
+
+@subsubheading  Notes::
+
+The @t{:test-not} @i{argument} is deprecated.
+
+The @i{function} @b{position-if-not} is deprecated.
+
+@node search, mismatch, position, Sequences Dictionary
+@subsection search                                                           [Function]
+
+@code{search}  @i{sequence-1 sequence-2 
+                         @r{&key} from-end test test-not
+                                      key start1 start2
+                                      end1 end2}@*
+   @result{}  @i{position}
+
+@subsubheading  Arguments and Values::
+
+@i{Sequence-1}---a @i{sequence}.
+
+@i{Sequence-2}---a @i{sequence}.
+
+@i{from-end}---a @i{generalized boolean}.
+  The default is @i{false}.
+
+@i{test}---a @i{designator} for a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{test-not}---a @i{designator} for 
+  a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{key}---a @i{designator} for a @i{function} of one argument,
+  or @b{nil}.
+
+@i{start1}, @i{end1}---@i{bounding index designators} of @i{sequence-1}.
+ The defaults for @i{start1} and @i{end1} are @t{0} and @b{nil}, respectively.
+
+@i{start2}, @i{end2}---@i{bounding index designators} of @i{sequence-2}.
+ The defaults for @i{start2} and @i{end2} are @t{0} and @b{nil}, respectively.
+
+@i{position}---a @i{bounding index} of @i{sequence-2},
+		   or @b{nil}.
+
+@subsubheading  Description::
+
+Searches @i{sequence-2} for a subsequence that matches @i{sequence-1}.  
+
+The implementation may choose to search @i{sequence-2} in any order;
+there is no guarantee on the number of times the test is made.
+For example,
+when @i{start-end} is @i{true},
+the @i{sequence} might actually be searched from left to right
+instead of from right to left (but in either case would return
+the rightmost matching subsequence). 
+If the search succeeds,
+@b{search} returns the offset into @i{sequence-2} 
+of the first element of the leftmost or rightmost matching subsequence, 
+depending on @i{from-end};
+otherwise @b{search} returns @b{nil}.
+
+If @i{from-end} is @i{true}, the index of the leftmost
+element of the rightmost matching subsequence is returned.
+
+@subsubheading  Examples::
+@example
+ (search "dog" "it's a dog's life") @result{}  7
+ (search '(0 1) '(2 4 6 1 3 5) :key #'oddp) @result{}  2
+@end example
+
+@subsubheading  See Also::
+
+@ref{Traversal Rules and Side Effects}
+
+@subsubheading  Notes::
+
+The @t{:test-not} @i{argument} is deprecated.
+
+@node mismatch, replace, search, Sequences Dictionary
+@subsection mismatch                                                         [Function]
+
+@code{mismatch}  @i{sequence-1 sequence-2 
+			 @r{&key} from-end test test-not key start1 start2 end1 end2}@*
+   @result{}  @i{position}
+
+@subsubheading  Arguments and Values::
+
+@i{Sequence-1}---a @i{sequence}.
+
+@i{Sequence-2}---a @i{sequence}.
+
+@i{from-end}---a @i{generalized boolean}.
+  The default is @i{false}.
+
+@i{test}---a @i{designator} for a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{test-not}---a @i{designator} for 
+  a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{start1}, @i{end1}---@i{bounding index designators} of @i{sequence-1}.
+ The defaults for @i{start1} and @i{end1} are @t{0} and @b{nil}, respectively.
+
+@i{start2}, @i{end2}---@i{bounding index designators} of @i{sequence-2}.
+ The defaults for @i{start2} and @i{end2} are @t{0} and @b{nil}, respectively.
+
+@i{key}---a @i{designator} for a @i{function} of one argument,
+  or @b{nil}.
+
+@i{position}---a @i{bounding index} of @i{sequence-1},
+		   or @b{nil}.
+
+@subsubheading  Description::
+
+The specified subsequences of         
+@i{sequence-1} and @i{sequence-2} are compared element-wise.
+
+The @i{key} argument is used for both the @i{sequence-1} and the @i{sequence-2}.
+
+If @i{sequence-1} and @i{sequence-2} 
+are of equal length and match in every element, the result is
+@i{false}.  Otherwise, the result is a non-negative @i{integer},
+the index within
+@i{sequence-1} of the leftmost or rightmost position, depending
+on @i{from-end}, at which the two
+subsequences fail to match.
+If one subsequence 
+is shorter than and a matching prefix of the other,
+the result is the index
+relative to @i{sequence-1} beyond the last position tested.
+
+If @i{from-end} is @i{true}, then one plus the index of the rightmost
+position in which the @i{sequences}
+differ is returned.  In effect, the subsequences
+are aligned at their right-hand ends; then, the last elements are compared,
+the penultimate elements, and so on.  The index returned is 
+an index relative to @i{sequence-1}.                  
+
+@subsubheading  Examples::                                 
+@example
+ (mismatch "abcd" "ABCDE" :test #'char-equal) @result{}  4
+ (mismatch '(3 2 1 1 2 3) '(1 2 3) :from-end t) @result{}  3
+ (mismatch '(1 2 3) '(2 3 4) :test-not #'eq :key #'oddp) @result{}  NIL
+ (mismatch '(1 2 3 4 5 6) '(3 4 5 6 7) :start1 2 :end2 4) @result{}  NIL 
+@end example
+
+@subsubheading  See Also::
+
+@ref{Traversal Rules and Side Effects}
+
+@subsubheading  Notes::
+
+The @t{:test-not} @i{argument} is deprecated.
+
+@node replace, substitute, mismatch, Sequences Dictionary
+@subsection replace                                                          [Function]
+
+@code{replace}  @i{sequence-1 sequence-2 @r{&key} start1 end1 start2 end2} @result{}  @i{sequence-1}
+
+@subsubheading  Arguments and Values:: 
+
+@i{sequence-1}---a @i{sequence}.
+
+@i{sequence-2}---a @i{sequence}.
+
+@i{start1}, @i{end1}---@i{bounding index designators} of @i{sequence-1}.
+ The defaults for @i{start1} and @i{end1} are @t{0} and @b{nil}, respectively.
+
+@i{start2}, @i{end2}---@i{bounding index designators} of @i{sequence-2}.
+ The defaults for @i{start2} and @i{end2} are @t{0} and @b{nil}, respectively.
+
+@subsubheading  Description::
+
+Destructively modifies @i{sequence-1} 
+by replacing the @i{elements} of @i{subsequence-1}
+ 	      @i{bounded} by @i{start1} and @i{end1}
+with the @i{elements} of @i{subsequence-2} 
+      @i{bounded} by @i{start2} and @i{end2}. 
+
+@i{Sequence-1} is destructively modified by copying successive
+@i{elements} into it from @i{sequence-2}.
+@i{Elements} of the subsequence of @i{sequence-2} 
+@i{bounded} by @i{start2} and @i{end2}
+are copied into the subsequence of @i{sequence-1} 
+@i{bounded} by @i{start1} and @i{end1}.
+If these subsequences are not of the same length,
+then the shorter length determines how many @i{elements} are copied;
+the extra @i{elements} near the end of the longer subsequence 
+are not involved in the operation.
+The number of elements copied can be expressed as:
+
+@example
+ (min (- @i{end1} @i{start1}) (- @i{end2} @i{start2}))
+@end example
+
+If @i{sequence-1} and @i{sequence-2} are the @i{same} @i{object}
+and the region being modified overlaps the region being copied
+from, then it is as if the entire source region were copied to another
+place and only then copied back into the target region.
+However, if @i{sequence-1} and @i{sequence-2} are not the same,
+but the region being modified overlaps the region being copied from
+(perhaps because of shared list structure or displaced @i{arrays}),
+then after the @b{replace} operation
+the subsequence of @i{sequence-1} being modified will have
+unpredictable contents.
+It is an error if the elements of @i{sequence-2} are not of a 
+@i{type} that can be stored into @i{sequence-1}.
+
+@subsubheading  Examples::
+@example
+ (replace "abcdefghij" "0123456789" :start1 4 :end1 7 :start2 4) 
+@result{}  "abcd456hij"
+ (setq lst "012345678") @result{}  "012345678"
+ (replace lst lst :start1 2 :start2 0) @result{}  "010123456"
+ lst @result{}  "010123456"
+@end example
+
+@subsubheading  Side Effects::
+
+The @i{sequence-1} is modified.
+
+@subsubheading  See Also::
+
+@ref{fill}
+
+@node substitute, concatenate, replace, Sequences Dictionary
+@subsection substitute, substitute-if, substitute-if-not,
+@subheading nsubstitute, nsubstitute-if, nsubstitute-if-not
+@flushright
+@i{[Function]}
+@end flushright
+
+@code{substitute}  @i{newitem  olditem  sequence 
+		   	  @r{&key} from-end test
+				       test-not start
+                                       end count key}@*
+   @result{}  @i{result-sequence}
+
+@code{substitute-if}  @i{newitem predicate sequence @r{&key} from-end start end count key}@*
+   @result{}  @i{result-sequence}
+
+@code{substitute-if-not}  @i{newitem predicate sequence @r{&key} from-end start end count key}@*
+   @result{}  @i{result-sequence}
+
+@code{nsubstitute}  @i{newitem  olditem  sequence
+                          @r{&key} from-end test test-not start end count key}@*
+   @result{}  @i{sequence}
+
+@code{nsubstitute-if}  @i{newitem predicate sequence @r{&key} from-end start end count key}@*
+   @result{}  @i{sequence}
+
+@code{nsubstitute-if-not}  @i{newitem predicate sequence @r{&key} from-end start end count key}@*
+   @result{}  @i{sequence}
+
+@subsubheading  Arguments and Values::
+
+@i{newitem}---an @i{object}.
+
+@i{olditem}---an @i{object}.
+
+@i{sequence}---a @i{proper sequence}.
+
+@i{predicate}---a @i{designator} for a @i{function} of one @i{argument}
+  that returns a @i{generalized boolean}.
+
+@i{from-end}---a @i{generalized boolean}.
+  The default is @i{false}.
+
+@i{test}---a @i{designator} for a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{test-not}---a @i{designator} for 
+  a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{start}, @i{end}---@i{bounding index designators} of @i{sequence}.
+ The defaults for @i{start} and @i{end} are @t{0} and @b{nil}, respectively.
+
+@i{count}---an @i{integer} or @b{nil}.
+
+ The default is @b{nil}.
+
+@i{key}---a @i{designator} for a @i{function} of one argument,
+  or @b{nil}.
+
+@i{result-sequence}---a @i{sequence}.
+
+@subsubheading  Description::
+
+@b{substitute}, @b{substitute-if}, and @b{substitute-if-not}
+return a 
+copy of @i{sequence} in which each @i{element}
+that @i{satisfies the test} has been replaced with @i{newitem}.
+
+@b{nsubstitute}, @b{nsubstitute-if}, and @b{nsubstitute-if-not}
+are like @b{substitute}, @b{substitute-if}, and
+@b{substitute-if-not} respectively, but they may modify 
+@i{sequence}.
+
+If 
+@i{sequence} is a @i{vector}, the result is a
+@i{vector} that has the same
+@i{actual array element type} as @i{sequence}.
+The result might or might not be simple, and 
+might or might not be @i{identical}
+to @i{sequence}.
+If @i{sequence} is a @i{list}, the result is a 
+@i{list}. 
+
+@i{Count}, if supplied, limits the number of elements
+altered; if more than @i{count} @i{elements} @i{satisfy the test},
+then of these @i{elements} only the leftmost or rightmost, depending
+on @i{from-end}, are replaced,
+as many as specified by @i{count}.
+
+If @i{count} is supplied and negative, 
+the behavior is as if zero had been supplied instead.
+
+If @i{count} is @b{nil}, all matching items are affected.
+
+Supplying a @i{from-end} of @i{true} matters only when the
+@i{count} is provided (and @i{non-nil});
+in that case,
+only the rightmost @i{count} @i{elements} @i{satisfying the test} are removed
+(instead of the leftmost).
+
+@i{predicate}, @i{test}, and @i{test-not} 
+might be called more than once for each @i{sequence} @i{element},
+and their side effects can happen in any order.         
+
+The result of all these functions is a @i{sequence}
+of the same @i{type} as @i{sequence}
+that has the same elements except that those in the subsequence
+@i{bounded} by @i{start} and @i{end} and @i{satisfying the test} 
+have been replaced by @i{newitem}.  
+
+@b{substitute}, @b{substitute-if}, and @b{substitute-if-not}
+return a @i{sequence} which can share with @i{sequence} 
+or may be @i{identical} to the input @i{sequence}
+if no elements need to be changed.
+
+@b{nsubstitute} and  @b{nsubstitute-if} are required to 
+@b{setf} any @b{car} (if @i{sequence} is a @i{list}) 
+or @b{aref} (if @i{sequence} is a @i{vector})
+of @i{sequence} that is required to be replaced with @i{newitem}.
+If @i{sequence} is a @i{list},
+none of the @i{cdrs} of the top-level @i{list} can be modified.  
+
+@subsubheading  Examples::                                                            
+
+@example
+ (substitute #\. #\SPACE "0 2 4 6") @result{}  "0.2.4.6"
+ (substitute 9 4 '(1 2 4 1 3 4 5)) @result{}  (1 2 9 1 3 9 5)
+ (substitute 9 4 '(1 2 4 1 3 4 5) :count 1) @result{}  (1 2 9 1 3 4 5)
+ (substitute 9 4 '(1 2 4 1 3 4 5) :count 1 :from-end t)
+@result{}  (1 2 4 1 3 9 5)
+ (substitute 9 3 '(1 2 4 1 3 4 5) :test #'>) @result{}  (9 9 4 9 3 4 5)
+
+ (substitute-if 0 #'evenp '((1) (2) (3) (4)) :start 2 :key #'car)
+@result{}  ((1) (2) (3) 0)
+ (substitute-if 9 #'oddp '(1 2 4 1 3 4 5)) @result{}  (9 2 4 9 9 4 9)
+ (substitute-if 9 #'evenp '(1 2 4 1 3 4 5) :count 1 :from-end t)
+@result{}  (1 2 4 1 3 9 5)
+
+ (setq some-things (list 'a 'car 'b 'cdr 'c)) @result{}  (A CAR B CDR C)
+ (nsubstitute-if "function was here" #'fboundp some-things
+                 :count 1 :from-end t) @result{}  (A CAR B "function was here" C)
+ some-things @result{}  (A CAR B "function was here" C)
+ (setq alpha-tester (copy-seq "ab ")) @result{}  "ab "
+ (nsubstitute-if-not #\z #'alpha-char-p alpha-tester) @result{}  "abz"
+ alpha-tester @result{}  "abz"
+@end example
+
+@subsubheading  Side Effects::
+
+@b{nsubstitute}, @b{nsubstitute-if}, and @b{nsubstitute-if-not}
+modify @i{sequence}.
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{sequence} is not a @i{proper sequence}.
+
+@subsubheading  See Also::
+
+@ref{subst}
+,
+@b{nsubst},
+
+@ref{Compiler Terminology},
+
+@ref{Traversal Rules and Side Effects}
+
+@subsubheading  Notes::
+
+The @t{:test-not} @i{argument} is deprecated.
+
+The functions @b{substitute-if-not} and @b{nsubstitute-if-not} are deprecated.
+
+@b{nsubstitute} and @b{nsubstitute-if} can be used 
+in for-effect-only positions in code.
+
+Because the side-effecting variants (@i{e.g.}, @b{nsubstitute})
+potentially change the path that is being traversed, their effects in
+the presence of shared or circular structure may vary in surprising ways when
+compared to their non-side-effecting alternatives.  To see this,
+consider the following side-effect behavior, which might be exhibited by
+some implementations:
+
+@example
+ (defun test-it (fn)
+   (let ((x (cons 'b nil)))
+     (rplacd x x)
+     (funcall fn 'a 'b x :count 1)))
+ (test-it #'substitute) @result{}  (A . #1=(B . #1#))
+ (test-it #'nsubstitute) @result{}  (A . #1#)
+@end example
+
+@node concatenate, merge, substitute, Sequences Dictionary
+@subsection concatenate                                                      [Function]
+
+@code{concatenate}  @i{result-type @r{&rest} sequences} @result{}  @i{result-sequence}
+
+@subsubheading  Arguments and Values::
+
+@i{result-type}---a @b{sequence} @i{type specifier}.
+
+@i{sequences}---a @i{sequence}.
+
+@i{result-sequence}---a @i{proper sequence} of @i{type} @i{result-type}.
+
+@subsubheading  Description::
+
+@b{concatenate} returns a @i{sequence} that contains 
+all the individual elements of all the @i{sequences} in the order 
+that they are supplied.
+The @i{sequence} is of type @i{result-type}, 
+which must be a @i{subtype} of @i{type} @b{sequence}.
+
+All of the @i{sequences} are copied from; the result
+does not share any structure with any of the @i{sequences}.
+Therefore, if only one @i{sequence} is provided
+and it is of type @i{result-type},
+@b{concatenate} is required to copy @i{sequence} rather than simply
+returning it.  
+
+It is an error if any element of the @i{sequences} cannot be an
+element of the @i{sequence} result.
+
+[Reviewer Note by Barmar: Should signal?]
+
+If the @i{result-type} is a @i{subtype} of @b{list},
+the result will be a @i{list}.
+
+If the @i{result-type} is a @i{subtype} of @b{vector},
+then if the implementation can determine the element type specified
+for the @i{result-type}, the element type of the resulting array 
+is the result of @i{upgrading} that element type; or, if the
+implementation can determine that the element type is unspecified (or @t{*}),
+the element type of the resulting array is @b{t};
+otherwise, an error is signaled.
+
+@subsubheading  Examples::
+
+@example
+(concatenate 'string "all" " " "together" " " "now") @result{}  "all together now"
+(concatenate 'list "ABC" '(d e f) #(1 2 3) #*1011)
+@result{}  (#\A #\B #\C D E F 1 2 3 1 0 1 1)
+(concatenate 'list) @result{}  NIL
+@end example
+
+@example
+  (concatenate '(vector * 2) "a" "bc") should signal an error
+@end example
+
+@subsubheading  Exceptional Situations::
+
+An error is signaled if the @i{result-type} is neither
+     a @i{recognizable subtype} of @b{list},
+ nor a @i{recognizable subtype} of @b{vector}.
+
+An error of @i{type} @b{type-error} should be signaled if @i{result-type} 
+specifies the number of elements and the sum of @i{sequences}
+is different from that number.
+
+@subsubheading  See Also::
+
+@ref{append}
+
+@node merge, remove, concatenate, Sequences Dictionary
+@subsection merge                                                            [Function]
+
+@code{merge}  @i{result-type sequence-1 sequence-2 predicate @r{&key} key} @result{}  @i{result-sequence}
+
+@subsubheading  Arguments and Values::
+
+@i{result-type}---a @b{sequence} @i{type specifier}.
+
+@i{sequence-1}---a @i{sequence}.
+
+@i{sequence-2}---a @i{sequence}.
+
+@i{predicate}---a @i{designator} for
+  a @i{function} of two arguments that returns a @i{generalized boolean}.
+
+@i{key}---a @i{designator} for a @i{function} of one argument,
+  or @b{nil}.
+
+@i{result-sequence}---a @i{proper sequence} of @i{type} @i{result-type}.
+
+@subsubheading  Description::
+
+Destructively merges @i{sequence-1} with @i{sequence-2} according
+to an order determined by the @i{predicate}.  @b{merge} determines
+the relationship between two elements by giving keys extracted from the
+sequence elements to the @i{predicate}.
+
+The first argument to the @i{predicate} function is an element of
+@i{sequence-1} as returned by the @i{key} (if supplied); 
+the second argument is an element of @i{sequence-2} as returned by 
+the @i{key} (if supplied). 
+@i{Predicate} should return @i{true} if and only if its first 
+argument is strictly less than the second (in some appropriate sense). 
+If the first argument is greater than or equal to the second
+(in the appropriate sense), then @i{predicate} should return @i{false}.
+@b{merge}
+considers two elements @t{x} and @t{y} to be equal if
+@t{(funcall predicate x y)} and
+@t{(funcall predicate y x)} both @i{yield} @i{false}.
+
+The argument to the @i{key} is the @i{sequence} element.
+Typically, the return value of the @i{key} 
+becomes the argument to @i{predicate}.
+If @i{key} is not supplied or @b{nil}, the sequence element itself is used.
+The @i{key} may be executed more than once for each @i{sequence} @i{element},
+and its side effects may occur in any order.
+
+If @i{key} and @i{predicate} return, then the merging operation 
+will terminate.  The result of merging two @i{sequences} @t{x} and @t{y}
+is a new @i{sequence} of type @i{result-type} @t{z}, 
+such that the length of @t{z} is the sum of the lengths of @t{x}
+and @t{y}, and @t{z} contains all the elements of @t{x} and @t{y}.
+If @t{x1} and @t{x2} are two elements of @t{x}, and @t{x1} precedes
+@t{x2} in @t{x}, then @t{x1} precedes @t{x2} in @t{z}, and similarly for
+elements of @t{y}.  In short, @t{z} is an interleaving of @t{x} and @t{y}.
+
+If @t{x} and @t{y} were correctly sorted according to the
+@i{predicate}, then @t{z} will also be correctly sorted.
+If @t{x} or @t{y} is not so sorted, then @t{z} will not be sorted,
+but will nevertheless be an interleaving of @t{x} and @t{y}.
+
+The merging operation is guaranteed stable;
+if two or more elements are considered equal by the @i{predicate}, 
+then the elements from @i{sequence-1} will
+precede those from @i{sequence-2} in the result.
+
+@i{sequence-1} and/or @i{sequence-2} may be destroyed.
+
+If the @i{result-type} is a @i{subtype} of @b{list},
+the result will be a @i{list}.
+
+If the @i{result-type} is a @i{subtype} of @b{vector},
+then if the implementation can determine the element type specified
+for the @i{result-type}, the element type of the resulting array 
+is the result of @i{upgrading} that element type; or, if the
+implementation can determine that the element type is unspecified (or @t{*}),
+the element type of the resulting array is @b{t};
+otherwise, an error is signaled.
+
+@subsubheading  Examples::                               
+@example
+ (setq test1 (list 1 3 4 6 7))
+ (setq test2 (list 2 5 8))
+ (merge 'list test1 test2 #'<) @result{}  (1 2 3 4 5 6 7 8)
+ (setq test1 (copy-seq "BOY"))
+ (setq test2 (copy-seq :nosy"))
+ (merge 'string test1 test2 #'char-lessp) @result{}  "BnOosYy"
+ (setq test1 (vector ((red . 1) (blue . 4))))
+ (setq test2 (vector ((yellow . 2) (green . 7))))
+ (merge 'vector test1 test2 #'< :key #'cdr) 
+@result{}  #((RED . 1) (YELLOW . 2) (BLUE . 4) (GREEN . 7)) 
+@end example
+
+@example
+ (merge '(vector * 4) '(1 5) '(2 4 6) #'<) should signal an error
+@end example
+
+@subsubheading  Exceptional Situations::
+
+An error must be signaled if the @i{result-type} is neither
+     a @i{recognizable subtype} of @b{list},
+ nor a @i{recognizable subtype} of @b{vector}.
+
+An error of @i{type} @b{type-error} should be signaled
+if @i{result-type} specifies the number of elements 
+and the sum of the lengths of @i{sequence-1} and @i{sequence-2} 
+is different from that number.
+
+@subsubheading  See Also::
+
+@ref{sort}
+,
+@b{stable-sort},
+
+@ref{Compiler Terminology},
+
+@ref{Traversal Rules and Side Effects}
+
+@node remove, remove-duplicates, merge, Sequences Dictionary
+@subsection remove, remove-if, remove-if-not, 
+@subheading delete, delete-if, delete-if-not
+@flushright
+@i{[Function]}
+@end flushright
+
+@code{remove}  @i{item sequence @r{&key} from-end test test-not start end count key} @result{}  @i{result-sequence}
+
+@code{remove-if}  @i{test sequence @r{&key} from-end start end count key} @result{}  @i{result-sequence}
+
+@code{remove-if-not}  @i{test sequence @r{&key} from-end start end count key} @result{}  @i{result-sequence}
+
+@code{delete}  @i{item sequence @r{&key} from-end test test-not start end count key} @result{}  @i{result-sequence}
+
+@code{delete-if}  @i{test sequence @r{&key} from-end start end count key} @result{}  @i{result-sequence}
+
+@code{delete-if-not}  @i{test sequence @r{&key} from-end start end count key} @result{}  @i{result-sequence}
+
+@subsubheading  Arguments and Values::
+
+@i{item}---an @i{object}.
+
+@i{sequence}---a @i{proper sequence}.
+
+@i{test}---a @i{designator} for a @i{function} 
+  of one @i{argument} that returns a @i{generalized boolean}.
+
+@i{from-end}---a @i{generalized boolean}.
+  The default is @i{false}.
+
+@i{test}---a @i{designator} for a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{test-not}---a @i{designator} for 
+  a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{start}, @i{end}---@i{bounding index designators} of @i{sequence}.
+ The defaults for @i{start} and @i{end} are @t{0} and @b{nil}, respectively.
+
+@i{count}---an @i{integer} or @b{nil}.
+
+  The default is @b{nil}.
+
+@i{key}---a @i{designator} for a @i{function} of one argument,
+  or @b{nil}.
+
+@i{result-sequence}---a @i{sequence}.
+
+@subsubheading  Description::
+
+@b{remove}, @b{remove-if}, and @b{remove-if-not}
+return a @i{sequence} from which 
+the elements that @i{satisfy the test} 
+have been removed.  
+
+@b{delete}, @b{delete-if}, and @b{delete-if-not}
+are like @b{remove}, @b{remove-if}, and
+@b{remove-if-not} respectively, 
+but they may modify @i{sequence}.
+
+If @i{sequence} is a @i{vector}, the result is a
+@i{vector} that has the same
+@i{actual array element type} as @i{sequence}.
+The result might or might not be simple, and 
+might or might not be @i{identical}
+to @i{sequence}.
+If @i{sequence} is a @i{list}, the result is a @i{list}. 
+
+Supplying a @i{from-end} of @i{true} matters only when the
+@i{count} is provided; in that case only the rightmost @i{count} elements 
+@i{satisfying the test} are deleted.
+
+@i{Count}, if supplied, limits the number of elements
+removed or deleted; if more than @i{count} elements @i{satisfy the test},
+then of these elements only the leftmost or rightmost, depending on
+@i{from-end},
+are deleted or removed,
+as many as specified by @i{count}.
+
+If @i{count} is supplied and negative, 
+the behavior is as if zero had been supplied instead.
+
+If @i{count} is @b{nil}, all matching items are affected.
+
+For all these functions,
+elements 
+not removed or deleted occur in the same order in the result
+as they did in @i{sequence}.
+
+@b{remove}, @b{remove-if}, @b{remove-if-not} return
+a @i{sequence}
+of the same @i{type} as @i{sequence}
+that has the same elements except that those in the subsequence
+@i{bounded} by @i{start} and @i{end} and @i{satisfying the test}
+have been removed.  
+This is a non-destructive operation. If any
+elements need to be removed, the result will be a copy.
+The result of @b{remove} may share
+with @i{sequence}; 
+the result may be @i{identical} to the input @i{sequence}
+if no elements need to be removed.
+
+@b{delete}, @b{delete-if}, and @b{delete-if-not}
+return a @i{sequence} 
+of the same @i{type} as @i{sequence}
+that has the same elements except that those in the subsequence
+@i{bounded} by @i{start} and @i{end} and @i{satisfying the test}
+have been deleted. 
+@i{Sequence} may be destroyed and used to construct
+the result; however, the result might or might not be @i{identical} 
+to @i{sequence}.
+
+@b{delete}, when @i{sequence} is a @i{list}, is permitted to 
+@b{setf} any part, @b{car} or @b{cdr}, of the
+top-level list structure in that @i{sequence}.
+When @i{sequence} is a @i{vector},  @b{delete} is 
+permitted to change the dimensions of the @i{vector} 
+and to slide its elements into new positions without
+permuting them to produce the resulting @i{vector}.
+
+@b{delete-if} is constrained to behave exactly as follows:
+
+@example
+ (delete nil @i{sequence}
+             :test #'(lambda (ignore @i{item}) (funcall @i{test} @i{item}))
+             ...)
+@end example
+
+@subsubheading  Examples::
+@example
+ (remove 4 '(1 3 4 5 9)) @result{}  (1 3 5 9)
+ (remove 4 '(1 2 4 1 3 4 5)) @result{}  (1 2 1 3 5)
+ (remove 4 '(1 2 4 1 3 4 5) :count 1) @result{}  (1 2 1 3 4 5)
+ (remove 4 '(1 2 4 1 3 4 5) :count 1 :from-end t) @result{}  (1 2 4 1 3 5)
+ (remove 3 '(1 2 4 1 3 4 5) :test #'>) @result{}  (4 3 4 5)
+ (setq lst '(list of four elements)) @result{}  (LIST OF FOUR ELEMENTS)
+ (setq lst2 (copy-seq lst)) @result{}  (LIST OF FOUR ELEMENTS)
+ (setq lst3 (delete 'four lst)) @result{}  (LIST OF ELEMENTS)
+ (equal lst lst2) @result{}  @i{false}
+ (remove-if #'oddp '(1 2 4 1 3 4 5)) @result{}  (2 4 4)
+ (remove-if #'evenp '(1 2 4 1 3 4 5) :count 1 :from-end t) 
+@result{}  (1 2 4 1 3 5)
+ (remove-if-not #'evenp '(1 2 3 4 5 6 7 8 9) :count 2 :from-end t)
+@result{}  (1 2 3 4 5 6 8)
+ (setq tester (list 1 2 4 1 3 4 5)) @result{}  (1 2 4 1 3 4 5)
+ (delete 4 tester) @result{}  (1 2 1 3 5)
+ (setq tester (list 1 2 4 1 3 4 5)) @result{}  (1 2 4 1 3 4 5)
+ (delete 4 tester :count 1) @result{}  (1 2 1 3 4 5)
+ (setq tester (list 1 2 4 1 3 4 5)) @result{}  (1 2 4 1 3 4 5)
+ (delete 4 tester :count 1 :from-end t) @result{}  (1 2 4 1 3 5)
+ (setq tester (list 1 2 4 1 3 4 5)) @result{}  (1 2 4 1 3 4 5)
+ (delete 3 tester :test #'>) @result{}  (4 3 4 5)
+ (setq tester (list 1 2 4 1 3 4 5)) @result{}  (1 2 4 1 3 4 5)
+ (delete-if #'oddp tester) @result{}  (2 4 4)
+ (setq tester (list 1 2 4 1 3 4 5)) @result{}  (1 2 4 1 3 4 5)
+ (delete-if #'evenp tester :count 1 :from-end t) @result{}  (1 2 4 1 3 5)    
+ (setq tester (list 1 2 3 4 5 6)) @result{}  (1 2 3 4 5 6) 
+ (delete-if #'evenp tester) @result{}  (1 3 5) 
+ tester @result{}  @i{implementation-dependent}
+@end example
+
+@example
+ (setq foo (list 'a 'b 'c)) @result{}  (A B C)
+ (setq bar (cdr foo)) @result{}  (B C)
+ (setq foo (delete 'b foo)) @result{}  (A C)
+ bar @result{}  ((C)) or ...
+ (eq (cdr foo) (car bar)) @result{}  T or ...
+@end example
+
+@subsubheading  Side Effects::
+
+For @b{delete}, @b{delete-if}, and @b{delete-if-not},
+@i{sequence} may be destroyed and used to construct the result.
+
+@subsubheading  Exceptional Situations::
+
+Should be prepared to signal an error of @i{type} @b{type-error}
+			 if @i{sequence} is not a @i{proper sequence}.
+
+@subsubheading  See Also::
+
+@ref{Compiler Terminology},
+
+@ref{Traversal Rules and Side Effects}
+
+@subsubheading  Notes::
+
+The @t{:test-not} @i{argument} is deprecated.
+
+The functions @b{delete-if-not} and @b{remove-if-not} are deprecated.
+
+@node remove-duplicates,  , remove, Sequences Dictionary
+@subsection remove-duplicates, delete-duplicates                             [Function]
+
+@code{remove-duplicates}  @i{sequence @r{&key}
+ 			  from-end test test-not
+				start end key}@*
+   @result{}  @i{result-sequence}
+
+@code{delete-duplicates}  @i{sequence @r{&key} 
+			   from-end test test-not
+                                 start end key}@*
+   @result{}  @i{result-sequence}
+
+@subsubheading  Arguments and Values::
+
+@i{sequence}---a @i{proper sequence}.
+
+@i{from-end}---a @i{generalized boolean}.
+  The default is @i{false}.
+
+@i{test}---a @i{designator} for a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{test-not}---a @i{designator} for 
+  a @i{function} of two @i{arguments}
+  that returns a @i{generalized boolean}.
+
+@i{start}, @i{end}---@i{bounding index designators} of @i{sequence}.
+ The defaults for @i{start} and @i{end} are @t{0} and @b{nil}, respectively.
+
+@i{key}---a @i{designator} for a @i{function} of one argument,
+  or @b{nil}.
+
+@i{result-sequence}---a @i{sequence}.
+
+@subsubheading  Description::
+
+@b{remove-duplicates} returns a modified copy of @i{sequence} 
+from which any element that matches another element occurring in
+@i{sequence} has been removed. 
+
+If @i{sequence} is a @i{vector}, the result is a
+@i{vector} that has the same
+@i{actual array element type} as @i{sequence}.
+The result might or might not be simple, and 
+might or might not be @i{identical}
+to @i{sequence}.
+If @i{sequence} is a @i{list}, the result is a @i{list}. 
+
+@b{delete-duplicates} is like @b{remove-duplicates},
+but @b{delete-duplicates} may modify @i{sequence}.
+
+The elements of @i{sequence} are compared @i{pairwise}, and if any two match,
+then the one occurring earlier in @i{sequence}
+is discarded, unless @i{from-end} is @i{true}, in which case the one
+later in @i{sequence} is discarded.
+
+@b{remove-duplicates} and @b{delete-duplicates} 
+return a @i{sequence} of the same @i{type} as 
+@i{sequence} with enough elements removed so that no two of the remaining
+elements match.  The order of the elements remaining in the result
+is the same as the order in which they appear in @i{sequence}.
+
+@b{remove-duplicates} returns a @i{sequence}
+that may share
+with @i{sequence} or may be @i{identical} to @i{sequence}
+if no elements need to be removed.
+
+@b{delete-duplicates}, when @i{sequence} is a @i{list},
+is permitted to @b{setf} any part, @b{car} or @b{cdr},
+of the top-level list structure in that @i{sequence}.
+When @i{sequence} is a @i{vector}, @b{delete-duplicates} 
+is permitted to change the dimensions of the @i{vector} 
+and to slide its elements into new positions without
+permuting them to produce the resulting @i{vector}.
+
+@subsubheading  Examples::
+
+@example
+ (remove-duplicates "aBcDAbCd" :test #'char-equal :from-end t) @result{}  "aBcD"
+ (remove-duplicates '(a b c b d d e)) @result{}  (A C B D E)
+ (remove-duplicates '(a b c b d d e) :from-end t) @result{}  (A B C D E)
+ (remove-duplicates '((foo #\a) (bar #\%) (baz #\A))
+     :test #'char-equal :key #'cadr) @result{}  ((BAR #\%) (BAZ #\A))
+ (remove-duplicates '((foo #\a) (bar #\%) (baz #\A)) 
+     :test #'char-equal :key #'cadr :from-end t) @result{}  ((FOO #\a) (BAR #\%))
+ (setq tester (list 0 1 2 3 4 5 6))
+ (delete-duplicates tester :key #'oddp :start 1 :end 6) @result{}  (0 4 5 6)
+@end example
+
+@subsubheading  Side Effects::
+
+@b{delete-duplicates} might destructively modify @i{sequence}.
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{sequence} is not a @i{proper sequence}.
+
+@subsubheading  See Also::
+
+@ref{Compiler Terminology},
+
+@ref{Traversal Rules and Side Effects}
+
+@subsubheading  Notes::
+
+The @t{:test-not} @i{argument} is deprecated.
+
+These functions are useful for converting @i{sequence} into a canonical
+form suitable for representing a set.
+
+@c end of including dict-sequences
+
+@c %**end of chapter
+

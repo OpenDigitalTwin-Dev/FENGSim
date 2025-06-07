@@ -1,0 +1,369 @@
+@node GCL Specific, C Interface, Type, Top
+@chapter GCL Specific
+
+@defun SYSTEM (string)
+Package:LISP
+
+GCL specific: Executes a Shell command as if STRING is an input to the
+Shell.  Not all versions of GCL support this function.  At least on
+POSIX systems, this call should return two integers represeting the
+exit status and any possible terminating signal respectively.
+
+
+@end defun
+
+@defvar *TMP-DIR* 
+Package:COMPILER
+GCL specific: Directory in which temporary ``gazonk'' files used by the
+compiler are to be created.
+
+
+@end defvar
+
+@defvar *IGNORE-MAXIMUM-PAGES* 
+Package:SI
+GCL specific: Tells the GCL memory manager whether (non-NIL) or not (NIL) it
+should expand memory whenever the maximum allocatable pages have been used
+up.
+
+
+@end defvar
+
+@defvar *OPTIMIZE-MAXIMUM-PAGES* 
+Package:SI
+
+GCL specific: Tells the GCL memory manager whether to attempt to
+adjust the maximum allowable pages for each type to approximately
+optimize the garbage collection load in the current process.  Defaults
+to T.  Set to NIL if you care more about memory usage than runtime.
+
+
+@end defvar
+
+@defun MACHINE-VERSION ()
+Package:LISP
+
+Returns a string that identifies the machine version of the machine
+on which GCL is currently running.
+
+
+@end defun
+
+@defun BY ()
+Package:LISP
+
+GCL specific: Exits from GCL.
+
+
+@end defun
+
+@deffn {Macro} DEFCFUN 
+Package:LISP
+
+Syntax:
+@example
+(defcfun header n @{element@}*)
+@end example
+
+
+GCL specific: Defines a C-language function which calls Lisp functions
+and/or handles Lisp objects.  HEADER gives the header of the C
+function as a string.  Non-negative-integer is the number of the main
+stack entries used by the C function, primarily for protecting Lisp
+objects from being garbage-collected.  Each ELEMENT may give a C code
+fragment as a string, or it may be a list
+	((symbol @{arg@}*) @{place@}*)
+which, when executed, calls the Lisp function named by SYMBOL with the
+specified arguments and saves the value(s) to the specified places.
+The DEFCFUN form has the above meanings only after compiled;  The GCL
+interpreter simply ignores this form.
+
+An example which defines a C function list2 of two arguments, but which 
+calls the 'lisp' function CONS by name, and refers to the constant 'NIL.
+Note to be loaded by @code{load} the function should be static.
+
+
+(defCfun "static object list2(x,y) object x,y;" 0
+              "object z;"
+               ('NIL z)
+               ((CONS y z) z)
+               ((CONS x z) z)
+         	"return(z);"
+)
+
+In lisp the operations in the body would be
+   (setq z 'nil)
+   (setq z (cons y z))
+   (setq z (cons x z))
+   
+
+
+Syntax:
+@example
+
+        (defCfun header non-negative-integer
+                @{ string
+                  | ( function-symbol @{ value @}* )
+                  | (( function-symbol  @{ value @}* ) @{ place @}* ) @})
+
+
+value:
+place:
+         @{ C-expr | ( C-type C-expr ) @}
+
+C-function-name:
+C-expr:
+         @{ string | symbol @}
+ 
+C-type:
+         @{ object | int | char | float | double @}
+
+@end example
+
+
+
+
+@end deffn
+
+@deffn {Macro} CLINES 
+Package:LISP
+
+Syntax:
+@example
+(clines @{string@}*)
+@end example
+
+GCL specific:  The GCL compiler embeds STRINGs into the intermediate C
+language code.  The interpreter ignores this form.
+
+
+@end deffn
+
+@defun SET-LOG-MAXPAGE-BOUND (positive-integer)
+Package:SYSTEM
+
+GCL specific: Limits the heap to 1<<(positive-integer+1) bytes.  Trumps any limits
+specified in the environment.
+
+@end defun
+
+@defun ALLOCATE (type number &optional (really-allocate nil))
+Package:LISP
+
+GCL specific: Sets the maximum number of pages for the type class of the
+GCL implementation type TYPE to NUMBER.  If REALLY-ALLOCATE is given a
+non-NIL value, then the specified number of pages will be allocated
+immediately.
+
+
+@end defun
+
+@defun GBC (x)
+Package:LISP
+
+GCL specific: Invokes the garbage collector (GC) with the collection level
+specified by X.  NIL as the argument causes GC to collect cells only.  T as
+the argument causes GC to collect everything.
+
+
+@end defun
+
+@defun SAVE (pathname)
+Package:LISP
+
+GCL specific: Saves the current GCL core image into a program file specified
+by PATHNAME.  This function depends on the version of GCL.  The function
+si::save-system is to be preferred in almost all circumstances.   Unlike
+save, it makes the relocatable section permanent, and causes no future gc of
+currently loaded .o files.
+
+@end defun
+
+@defun HELP* (string &optional (package 'lisp))
+Package:LISP
+
+GCL specific: Prints the documentation associated with those symbols in the
+specified package whose print names contain STRING as substring.  STRING may
+be a symbol, in which case the print-name of that symbol is used.  If PACKAGE
+is NIL, then all packages are searched.
+
+
+@end defun
+
+@deffn {Macro} DEFLA 
+Package:LISP
+
+Syntax:
+@example
+(defla name lambda-list @{decl | doc@}* @{form@}*)
+@end example
+
+GCL specific: Used to DEFine Lisp Alternative.  For the interpreter, DEFLA is
+equivalent to DEFUN, but the compiler ignores this form.
+
+
+@end deffn
+
+@defun PROCLAMATION (decl-spec)
+Package:LISP
+
+GCL specific: Returns T if the specified declaration is globally in effect;
+NIL otherwise.  See the doc of DECLARE for possible DECL-SPECs.
+
+
+@end defun
+
+@deffn {Macro} DEFENTRY 
+Package:LISP
+
+Syntax:
+@example
+(defentry name arg-types c-function)
+@end example
+
+
+GCL specific: The compiler defines a Lisp function whose body consists of a
+calling sequence to the C language function specified by C-FUNCTION.  The
+interpreter ignores this form.  The ARG-TYPES specifies the C types of the
+arguments which C-FUNCTION requires.  The list of allowed types is (object
+char int float double string).  Code will be produced to coerce from a lisp
+object to the appropriate type before passing the argument to the C-FUNCTION.
+The c-function should be of the form (c-result-type c-fname) where
+c-result-type is a member of (void object char int float double string).
+c-fname may be a symbol (in which case it will be downcased) or a string.  If
+c-function is not a list, then (object c-function) is assumed.  In order
+for C code to be loaded in by @code{load} you should declare any
+variables and functions to be static.   If you will link them in
+at build time, of course you are allowed to define new externals.
+
+@example
+  Sample usage:
+--File begin-----
+;; JOE takes X a lisp string and Y a fixnum and returns a character.
+(clines "#include \"foo.ch\"")
+(defentry joe (string int) (char "our_c_fun"))
+---File end------
+---File foo.ch---
+/* C function for extracting the i'th element of a string */
+static char our_c_fun(p,i)
+char *p;
+int i;
+   @{
+	return p[i];
+   @}
+-----File end---
+@end example
+
+One must be careful of storage allocation issues when passing a string.
+If the C code invokes storage allocation (either by calling @code{malloc}
+or @code{make_cons} etc), then there is a possibility of a garbage
+collection, so that if the string passed was not constructed with
+@code{:static t} when its array was constructed, then it could move.
+If the C function may allocate storage, then you should pass a copy:
+@example
+(defun safe-c-string (x)
+  (let* ((n (length x))
+         (a (make-array (+ n 1) :element-type 'string-char
+           :static t :fill-pointer n)))
+    (si::copy-array-portion x y 0 0 n)
+    (setf (aref a n) (code-char 0)))
+    a)
+
+@end example
+
+
+@end deffn
+@defun COPY-ARRAY-PORTION (x,y,i1,i2,n1)
+Package:SI
+Copy elements from X to Y starting at X[i1] to Y[i2] and doing N1
+elements if N1 is supplied otherwise, doing the length of X - I1
+elements.  If the types of the arrays are not the same, this has
+implementation dependent results.
+@end defun
+
+@defun BYE ( &optional (exit-status 0))
+Package:LISP
+
+GCL specific: Exits from GCL with exit-status.
+
+
+@end defun
+
+@defun USE-FAST-LINKS (turn-on)
+Package:LISP
+
+GCL specific: If TURN-ON is not nil, the fast link mechanism is enabled,
+so that ordinary function calls will not appear in the invocation stack,
+and calls will be much faster.  This is the default.   If you anticipate
+needing to see a stack trace in the debugger, then you should turn this
+off.
+
+
+@end defun
+
+@menu
+* Bignums::			
+@end menu
+
+@node Bignums,  , GCL Specific, GCL Specific
+@section Bignums
+
+A directory mp was added to hold the new multi precision arithmetic
+code.  The layout and a fair amount of code in the mp directory is an
+enhanced version of gpari version 34. The gpari c code was rewritten
+to be more efficient, and gcc assembler macros were added to allow
+inlining of operations not possible to do in C.  On a 68K machine,
+this allows the C version to be as efficient as the very carefully
+written assembler in the gpari distribution.  For the main machines,
+an assembler file (produced by gcc) based on this new method, is
+included.   This is for sites which do not have gcc, or do not
+wish to compile the whole system with gcc.
+
+Bignum arithmetic is much faster now.  Many changes were made to
+cmpnew also, to add 'integer' as a new type.  It differs from
+variables of other types, in that storage is associated to each such
+variable, and assignments mean copying the storage.  This allows a
+function which does a good deal of bignum arithmetic, to do very
+little consing in the heap.  An example is the computation of PI-INV
+in scratchpad, which calculates the inverse of pi to a prescribed
+number of bits accuracy.  That function is now about 20 times faster,
+and no longer causes garbage collection.  In versions of GCL  where
+HAVE_ALLOCA is defined, the temporary storage growth is on the C
+stack, although this often not so critical (for example it makes
+virtually no difference in the PI-INV example, since in spite of the
+many operations, only one storage allocation takes place.
+	
+Below is the actual code for PI-INV
+
+On a sun3/280 (cli.com)
+
+Here is the comparison of lucid and gcl before and after
+on that pi-inv.   Times are in seconds with multiples of the
+gcl/akcl time in parentheses.
+
+On a sun3/280 (cli.com)
+
+@example
+
+pi-inv   akcl-566  franz        lucid         old kcl/akcl
+----------------------------------------
+10000      3.3     9.2(2.8 X)  15.3 (4.6X)    92.7   (29.5 X)
+20000      12.7    31.0(2.4 X) 62.2 (4.9X)    580.0  (45.5 X)
+
+
+(defun pi-inv (bits &aux (m 0))
+  (declare (integer bits m))
+  (let* ((n (+ bits (integer-length bits) 11))
+         (tt (truncate (ash 1 n) 882))
+         (d (* 4 882 882))
+         (s 0))
+    (declare (integer s d tt n))
+    (do ((i 2 (+ i 2))
+         (j 1123 (+ j 21460)))
+        ((zerop tt) (cons s (- (+ n 2))))
+      (declare (integer i j))
+        (setq s (+ s (* j tt))
+              m (- (* (- i 1) (- (* 2 i) 1) (- (* 2 i) 3)))
+              tt (truncate (* m tt) (* d (the integer (expt i 3))))))))
+
+@end example

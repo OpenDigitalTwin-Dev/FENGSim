@@ -1,0 +1,1592 @@
+
+
+@node Characters, Conses, Numbers (Numbers), Top
+@chapter Characters
+
+@menu
+* Character Concepts::		
+* Characters Dictionary::	
+@end menu
+
+@node Character Concepts, Characters Dictionary, Characters, Characters
+@section Character Concepts
+
+@c including concept-characters
+
+@menu
+* Introduction to Characters::	
+* Introduction to Scripts and Repertoires::  
+* Character Attributes::	
+* Character Categories::	
+* Identity of Characters::	
+* Ordering of Characters::	
+* Character Names::		
+* Treatment of Newline during Input and Output::  
+* Character Encodings::		
+* Documentation of Implementation-Defined Scripts::  
+@end menu
+
+@node Introduction to Characters, Introduction to Scripts and Repertoires, Character Concepts, Character Concepts
+@subsection Introduction to Characters
+
+A @i{character}
+@IGindex character
+ is an @i{object} that represents a unitary token 
+(@i{e.g.}, a letter, a special symbol, or a ``control character'')
+in an aggregate quantity of text
+(@i{e.g.}, a @i{string} or a text @i{stream}).
+
+@r{Common Lisp} allows an implementation to provide support 
+for international language @i{characters} as well
+as @i{characters} used in specialized arenas (@i{e.g.}, mathematics).
+
+The following figures contain lists of @i{defined names} applicable to 
+@i{characters}.
+
+Figure 13--1 lists some @i{defined names} relating to 
+@i{character} @i{attributes} and @i{character} @i{predicates}.
+
+@format
+@group
+@noindent
+@w{  alpha-char-p     char-not-equal     char>            }
+@w{  alphanumericp    char-not-greaterp  char>=           }
+@w{  both-case-p      char-not-lessp     digit-char-p     }
+@w{  char-code-limit  char/=             graphic-char-p   }
+@w{  char-equal       char<              lower-case-p     }
+@w{  char-greaterp    char<=             standard-char-p  }
+@w{  char-lessp       char=              upper-case-p     }
+
+@noindent
+@w{       Figure 13--1: Character defined names -- 1      }
+
+@end group
+@end format
+
+Figure 13--2 lists some @i{character} construction and conversion @i{defined names}.
+
+@format
+@group
+@noindent
+@w{  char-code      char-name    code-char   }
+@w{  char-downcase  char-upcase  digit-char  }
+@w{  char-int       character    name-char   }
+
+@noindent
+@w{  Figure 13--2: Character defined names -- 2}
+
+@end group
+@end format
+
+@node Introduction to Scripts and Repertoires, Character Attributes, Introduction to Characters, Character Concepts
+@subsection Introduction to Scripts and Repertoires
+
+@menu
+* Character Scripts::		
+* Character Repertoires::	
+@end menu
+
+@node Character Scripts, Character Repertoires, Introduction to Scripts and Repertoires, Introduction to Scripts and Repertoires
+@subsubsection Character Scripts
+
+A @i{script} is one of possibly several sets that form an @i{exhaustive partition}
+of the type @b{character}.
+
+The number of such sets and boundaries between them is @i{implementation-defined}.
+@r{Common Lisp} does not require these sets to be @i{types}, but an @i{implementation}
+is permitted to define such @i{types} as an extension.  Since no @i{character}
+from one @i{script} can ever be a member of another @i{script}, it is generally
+more useful to speak about @i{character} @i{repertoires}.
+
+Although
+the term ``@i{script}'' is chosen for 
+definitional 
+compatibility with ISO terminology, no @i{conforming implementation} 
+is required to use any particular @i{scripts} standardized by ISO
+or by any other standards organization.
+
+Whether and how the @i{script} or @i{scripts} used by any given
+@i{implementation} are named is @i{implementation-dependent}.
+
+@node Character Repertoires,  , Character Scripts, Introduction to Scripts and Repertoires
+@subsubsection Character Repertoires
+
+A @i{repertoire}
+@IGindex repertoire
+ is a @i{type specifier} for a @i{subtype} of @i{type} @b{character}.
+
+This term is generally used when describing a collection of @i{characters}
+independent of their coding.
+@i{Characters} in @i{repertoires} are only identified
+    by name,
+    by @i{glyph}, or
+    by character description.
+
+A @i{repertoire} can contain @i{characters} from several
+@i{scripts}, and a @i{character} can appear in more than
+one @i{repertoire}.
+
+For some examples of @i{repertoires}, see the coded character standards
+ISO 8859/1, ISO 8859/2, and ISO 6937/2.
+Note, however, that although
+the term ``@i{repertoire}'' is chosen for 
+definitional 
+compatibility with ISO terminology, no @i{conforming implementation} 
+is required to use @i{repertoires} standardized by ISO or any other 
+standards organization.
+
+@node Character Attributes, Character Categories, Introduction to Scripts and Repertoires, Character Concepts
+@subsection Character Attributes
+
+@i{Characters} have only one @i{standardized} @i{attribute}:
+a @i{code}.  A @i{character}'s @i{code} is a non-negative @i{integer}.
+This @i{code} is composed from a character @i{script} and a character label
+in an @i{implementation-dependent} way.  See the @i{functions} @b{char-code} and @b{code-char}.
+
+Additional, @i{implementation-defined} @i{attributes} of @i{characters}
+are also permitted
+so that, for example, 
+two @i{characters} with the same @i{code} may differ 
+in some other, @i{implementation-defined} way.
+
+For any @i{implementation-defined} @i{attribute}
+there is a distinguished value
+called the @i{null}
+@IGindex null
+ value for that @i{attribute}. 
+A @i{character} for which each @i{implementation-defined} @i{attribute}
+has the null value for that @i{attribute} is called a @i{simple} @i{character}.
+If the @i{implementation} has no @i{implementation-defined} @i{attributes},
+then all @i{characters} are @i{simple} @i{characters}.
+
+@node Character Categories, Identity of Characters, Character Attributes, Character Concepts
+@subsection Character Categories
+
+There are several (overlapping) categories of @i{characters} that have no formally
+associated @i{type} but that are nevertheless useful to name. 
+They include
+     @i{graphic} @i{characters}, 
+     @i{alphabetic}_1 @i{characters},
+     @i{characters} with @i{case} 
+       (@i{uppercase} and @i{lowercase} @i{characters}),
+     @i{numeric} @i{characters},
+     @i{alphanumeric} @i{characters},
+ and @i{digits} (in a given @i{radix}).
+
+For each @i{implementation-defined} @i{attribute} of a @i{character},
+the documentation for that @i{implementation} must specify whether 
+@i{characters} that differ only in that @i{attribute} are permitted to differ
+in whether are not they are members of one of the aforementioned categories.
+
+Note that these terms are defined independently of any special syntax 
+which might have been enabled in the @i{current readtable}.
+
+@menu
+* Graphic Characters::		
+* Alphabetic Characters::	
+* Characters With Case::	
+* Uppercase Characters::	
+* Lowercase Characters::	
+* Corresponding Characters in the Other Case::	
+* Case of Implementation-Defined Characters::  
+* Numeric Characters::		
+* Alphanumeric Characters::	
+* Digits in a Radix::		
+@end menu
+
+@node Graphic Characters, Alphabetic Characters, Character Categories, Character Categories
+@subsubsection Graphic Characters
+
+@i{Characters} that are classified as @i{graphic}
+@IGindex graphic
+, or displayable, are each
+associated with a glyph, a visual representation of the @i{character}.
+
+A @i{graphic} @i{character} is one that has a standard textual 
+representation as a single @i{glyph}, such as @t{A} or @t{*} or @t{=}.
+@i{Space}, which effectively has a blank @i{glyph}, is defined
+to be a @i{graphic}.
+
+Of the @i{standard characters},
+     @i{newline} is @i{non-graphic} 
+ and all others are @i{graphic}; see @ref{Standard Characters}.
+
+@i{Characters} that are not @i{graphic} are called @i{non-graphic}
+@IGindex non-graphic
+.
+
+@i{Non-graphic} @i{characters} are sometimes informally called
+    ``formatting characters'' 
+ or ``control characters.''
+
+@t{#\Backspace},
+@t{#\Tab},
+@t{#\Rubout},
+@t{#\Linefeed}, 
+@t{#\Return}, and
+@t{#\Page},
+if they are supported by the @i{implementation},
+are @i{non-graphic}.
+
+@node Alphabetic Characters, Characters With Case, Graphic Characters, Character Categories
+@subsubsection Alphabetic Characters
+
+The @i{alphabetic}_1 @i{characters} are
+a subset of the @i{graphic} @i{characters}.
+Of the @i{standard characters}, only these are the @i{alphabetic}_1 @i{characters}:
+
+@t{A B C D E F G H I J K L M N O P Q R S T U V W X Y Z}
+
+@t{a b c d e f g h i j k l m n o p q r s t u v w x y z}
+
+Any @i{implementation-defined} @i{character} that has @i{case} 
+must be @i{alphabetic}_1.
+For each @i{implementation-defined} @i{graphic} @i{character} 
+that has no @i{case},
+it is @i{implementation-defined} whether 
+that @i{character} is @i{alphabetic}_1.
+
+@node Characters With Case, Uppercase Characters, Alphabetic Characters, Character Categories
+@subsubsection Characters With Case
+
+The @i{characters} with @i{case} are 
+a subset of the @i{alphabetic}_1 @i{characters}.
+A @i{character} with @i{case} has the property of being either
+@i{uppercase} or @i{lowercase}.
+Every @i{character} with @i{case} is in one-to-one correspondence
+with some other @i{character} with the opposite @i{case}.
+
+@node Uppercase Characters, Lowercase Characters, Characters With Case, Character Categories
+@subsubsection Uppercase Characters
+
+An uppercase @i{character} is one that has a corresponding
+@i{lowercase} @i{character} that is @i{different} 
+(and can be obtained using @b{char-downcase}).
+
+Of the @i{standard characters}, only these are @i{uppercase} @i{characters}:
+
+@t{A B C D E F G H I J K L M N O P Q R S T U V W X Y Z}
+
+@node Lowercase Characters, Corresponding Characters in the Other Case, Uppercase Characters, Character Categories
+@subsubsection Lowercase Characters
+
+A lowercase @i{character} is one that has a corresponding 
+@i{uppercase} @i{character} that is @i{different} 
+(and can be obtained using @b{char-upcase}).
+
+Of the @i{standard characters}, only these are @i{lowercase} @i{characters}:
+
+@t{a b c d e f g h i j k l m n o p q r s t u v w x y z}
+
+@node Corresponding Characters in the Other Case, Case of Implementation-Defined Characters, Lowercase Characters, Character Categories
+@subsubsection Corresponding Characters in the Other Case
+
+The @i{uppercase} @i{standard characters} @t{A} through @t{Z} mentioned above
+respectively correspond to
+the @i{lowercase} @i{standard characters} @t{a} through @t{z} mentioned above.
+For example, the @i{uppercase} @i{character} @t{E} 
+corresponds to the @i{lowercase} @i{character} @t{e}, and vice versa.
+
+@node Case of Implementation-Defined Characters, Numeric Characters, Corresponding Characters in the Other Case, Character Categories
+@subsubsection Case of Implementation-Defined Characters
+
+An @i{implementation} may define that other @i{implementation-defined}
+@i{graphic} @i{characters} have @i{case}.  Such definitions must always
+be done in pairs---one @i{uppercase} @i{character} in one-to-one 
+@i{correspondence} with one @i{lowercase} @i{character}.
+
+@node Numeric Characters, Alphanumeric Characters, Case of Implementation-Defined Characters, Character Categories
+@subsubsection Numeric Characters
+
+The @i{numeric} @i{characters} are
+a subset of the @i{graphic} @i{characters}.
+Of the @i{standard characters}, only these are @i{numeric} @i{characters}:
+
+@t{0 1 2 3 4 5 6 7 8 9}
+
+For each @i{implementation-defined} @i{graphic} @i{character} 
+that has no @i{case}, the @i{implementation} must define whether
+or not it is a @i{numeric} @i{character}.
+
+@node Alphanumeric Characters, Digits in a Radix, Numeric Characters, Character Categories
+@subsubsection Alphanumeric Characters
+
+The set of @i{alphanumeric} @i{characters} is the union of 
+    the set of @i{alphabetic}_1 @i{characters} 
+and the set of @i{numeric} @i{characters}.
+
+@node Digits in a Radix,  , Alphanumeric Characters, Character Categories
+@subsubsection Digits in a Radix
+
+What qualifies as a @i{digit} depends on the @i{radix} 
+(an @i{integer} between @t{2} and @t{36}, inclusive).
+The potential @i{digits} are:
+
+@t{0 1 2 3 4 5 6 7 8 9 A B C D E F G H I J K L M N O P Q R S T U V W X Y Z}
+
+Their respective weights are @t{0}, @t{1}, @t{2}, ... @t{35}.
+In any given radix n, only the first n potential @i{digits} 
+are considered to be @i{digits}.
+For example,
+the digits in radix @t{2}  are @t{0} and @t{1}, 
+the digits in radix @t{10} are @t{0} through @t{9}, and
+the digits in radix @t{16} are @t{0} through @t{F}.
+
+@i{Case} is not significant in @i{digits}; 
+for example, in radix @t{16}, both @t{F} and @t{f} 
+are @i{digits} with weight @t{15}.
+
+@node Identity of Characters, Ordering of Characters, Character Categories, Character Concepts
+@subsection Identity of Characters
+
+Two @i{characters} that are @b{eql}, @b{char=}, or @b{char-equal} 
+are not necessarily @b{eq}.
+
+@node Ordering of Characters, Character Names, Identity of Characters, Character Concepts
+@subsection Ordering of Characters
+
+The total ordering on @i{characters} is guaranteed to have 
+the following properties: 
+
+@table @asis
+
+@item @t{*}  
+If two @i{characters} have the same @i{implementation-defined} @i{attributes},
+then their ordering by @b{char<} is consistent with the numerical
+ordering by the predicate @b{<} on their code @i{attributes}.
+
+@item @t{*}  
+If two @i{characters} differ in any @i{attribute}, then they
+are not @b{char=}.
+
+[Reviewer Note by Barmar: I wonder if we should say that the ordering may be dependent on the
+	          @i{implementation-defined} @i{attributes}.]
+
+@item @t{*}  
+The total ordering is not necessarily the same as the total ordering
+  on the @i{integers} produced by applying @b{char-int} to the
+  @i{characters}.
+
+@item @t{*}  
+While @i{alphabetic}_1 @i{standard characters} of a given @i{case}
+  must    
+  obey a partial ordering,
+  they need not be contiguous; it is permissible for 
+  @i{uppercase} and @i{lowercase} @i{characters} to be interleaved. 
+  Thus @t{(char<= #\a x #\z)} 
+  is not a valid way of determining whether or not @t{x} is a
+  @i{lowercase} @i{character}.  
+
+@end table
+
+Of the @i{standard characters}, 
+those which are @i{alphanumeric} obey the following partial ordering:
+
+@example
+ A<B<C<D<E<F<G<H<I<J<K<L<M<N<O<P<Q<R<S<T<U<V<W<X<Y<Z
+ a<b<c<d<e<f<g<h<i<j<k<l<m<n<o<p<q<r<s<t<u<v<w<x<y<z
+ 0<1<2<3<4<5<6<7<8<9
+ either 9<A or Z<0
+ either 9<a or z<0                                                      
+@end example
+
+This implies that, for @i{standard characters}, @i{alphabetic}_1 
+ordering holds within each @i{case} (@i{uppercase} and @i{lowercase}), 
+and that the @i{numeric} @i{characters} as a group are not interleaved
+with @i{alphabetic} @i{characters}.
+However, the ordering or possible interleaving of @i{uppercase} @i{characters}
+and @i{lowercase} @i{characters} is @i{implementation-defined}.
+
+@node Character Names, Treatment of Newline during Input and Output, Ordering of Characters, Character Concepts
+@subsection Character Names
+
+The following @i{character} @i{names} must be present in all 
+@i{conforming implementations}:
+
+@table @asis
+
+@item @t{Newline}  
+The character that represents the division between lines.
+An implementation must translate between @t{#\Newline}, 
+a single-character representation, and whatever external representation(s)
+may be used.
+
+@item @t{Space}  
+The space or blank character.
+@end table
+
+The following names are @i{semi-standard}; 
+if an @i{implementation} supports them,
+they should be used for the described @i{characters} and no others.
+
+@table @asis
+
+@item @t{Rubout}  
+The rubout or delete character.
+
+@item @t{Page}  
+The form-feed or page-separator character.
+
+@item @t{Tab}  
+The tabulate character.
+
+@item @t{Backspace}  
+The backspace character.
+
+@item @t{Return}  
+The carriage return character.
+
+@item @t{Linefeed}  
+The line-feed character.
+@end table
+
+In some @i{implementations},
+one or more of these @i{character} @i{names} 
+might denote a @i{standard character}; 
+for example,
+@t{#\Linefeed} and @t{#\Newline} might be the @i{same} @i{character}
+in some @i{implementations}.
+
+@node Treatment of Newline during Input and Output, Character Encodings, Character Names, Character Concepts
+@subsection Treatment of Newline during Input and Output
+
+When the character @t{#\Newline} is written to an output file,
+the implementation must take the appropriate action
+to produce a line division.  This might involve writing out a
+record or translating @t{#\Newline} to a CR/LF sequence.
+When reading, a corresponding reverse transformation must take place.
+
+@node Character Encodings, Documentation of Implementation-Defined Scripts, Treatment of Newline during Input and Output, Character Concepts
+@subsection Character Encodings
+
+A @i{character} is sometimes represented merely by its @i{code}, and sometimes
+by another @i{integer} value which is composed from the @i{code} and all 
+@i{implementation-defined} @i{attributes}
+(in an @i{implementation-defined} way
+that might vary between @i{Lisp images} even in the same @i{implementation}).
+This @i{integer}, returned by the function @b{char-int}, is called the
+character's ``encoding.''
+There is no corresponding function
+from a character's encoding back to the @i{character}, 
+since its primary intended uses include things like hashing where an inverse operation
+is not really called for.
+
+@node Documentation of Implementation-Defined Scripts,  , Character Encodings, Character Concepts
+@subsection Documentation of Implementation-Defined Scripts
+
+   An @i{implementation} must document the @i{character} @i{scripts} 
+   it supports. For each @i{character} @i{script} supported,
+   the documentation must describe at least the following:
+@table @asis
+
+@item @t{*}  
+Character labels, glyphs, and descriptions.
+   Character labels must be uniquely named using only Latin capital letters A--Z,
+   hyphen (-), and digits 0--9.
+@item @t{*}  
+Reader canonicalization.
+   Any mechanisms by which @b{read} treats
+   @i{different} characters as equivalent must be documented.
+@item @t{*}  
+The impact on @b{char-upcase},
+		 @b{char-downcase},
+	     and the case-sensitive @i{format directives}.
+   In particular, for each @i{character} with @i{case},
+   whether it is @i{uppercase} or @i{lowercase},
+   and which @i{character} is its equivalent in the opposite case.
+@item @t{*}  
+The behavior of the case-insensitive @i{functions}
+     @b{char-equal}, @b{char-not-equal},
+     @b{char-lessp}, @b{char-greaterp}, 
+     @b{char-not-greaterp}, and @b{char-not-lessp}.
+@item @t{*}  
+The behavior of any @i{character} @i{predicates};
+   in particular, the effects of
+   @b{alpha-char-p},
+   @b{lower-case-p},
+   @b{upper-case-p},
+   @b{both-case-p},
+   @b{graphic-char-p}, 
+   and
+   @b{alphanumericp}.
+@item @t{*}  
+The interaction with file I/O, in particular,
+   the supported coded character sets (for example, ISO8859/1-1987)
+   and external encoding schemes supported are documented.
+@end table
+
+@c end of including concept-characters
+
+@node Characters Dictionary,  , Character Concepts, Characters
+@section Characters Dictionary
+
+@c including dict-characters
+
+@menu
+* character (System Class)::	
+* base-char::			
+* standard-char::		
+* extended-char::		
+* char=::			
+* character::			
+* characterp::			
+* alpha-char-p::		
+* alphanumericp::		
+* digit-char::			
+* digit-char-p::		
+* graphic-char-p::		
+* standard-char-p::		
+* char-upcase::			
+* upper-case-p::		
+* char-code::			
+* char-int::			
+* code-char::			
+* char-code-limit::		
+* char-name::			
+* name-char::			
+@end menu
+
+@node character (System Class), base-char, Characters Dictionary, Characters Dictionary
+@subsection character                                                    [System Class]
+
+@subsubheading  Class Precedence List::
+@b{character},
+@b{t}
+
+@subsubheading  Description::
+
+A @i{character} is an @i{object} that 
+represents a unitary token in an aggregate quantity of text;
+see @ref{Character Concepts}.
+
+The @i{types} @b{base-char} and @b{extended-char}
+form an @i{exhaustive partition} of the @i{type} @b{character}.
+
+@subsubheading  See Also::
+
+@ref{Character Concepts},
+@ref{Sharpsign Backslash},
+@ref{Printing Characters}
+
+@node base-char, standard-char, character (System Class), Characters Dictionary
+@subsection base-char                                                            [Type]
+
+@subsubheading  Supertypes::
+
+@b{base-char},
+@b{character},
+@b{t}
+
+@subsubheading  Description::
+
+The @i{type} @b{base-char} is defined as the @i{upgraded array element type} 
+of @b{standard-char}.
+An @i{implementation} can support additional @i{subtypes} of @i{type} @b{character}
+(besides the ones listed in this standard) 
+that might or might not be @i{supertypes} of @i{type} @b{base-char}.
+In addition, an @i{implementation} can define @b{base-char}
+to be the @i{same} @i{type} as @b{character}.
+
+@i{Base characters} are distinguished in the following respects:
+@table @asis
+
+@item 1.  
+The @i{type} @b{standard-char} is a @i{subrepertoire} of the @i{type} @b{base-char}.
+@item 2.  
+The selection of @i{base characters} that are not @i{standard characters}
+	      is implementation defined.
+@item 3.  
+Only @i{objects} of the @i{type} @b{base-char} can be 
+	     @i{elements} of a @i{base string}.
+@item 4.  
+No upper bound is specified for the number of characters in the 
+@b{base-char} @i{repertoire}; the size of that @i{repertoire}
+is 
+@i{implementation-defined}.
+The lower bound is~96, the number of @i{standard characters}.
+@end table
+
+Whether a character is a @i{base character} depends on the way 
+that an @i{implementation} represents @i{strings}, 
+and not any other properties of the @i{implementation} or the host operating system.  
+For example, one implementation might encode all @i{strings} 
+as characters having 16-bit encodings, and another might have
+two kinds of @i{strings}: those with characters having 8-bit 
+encodings and those with characters having 16-bit encodings.  In the
+first @i{implementation}, the @i{type} @b{base-char} is equivalent to
+the @i{type} @b{character}: there is only one kind of @i{string}.
+In the second @i{implementation}, the @i{base characters} might be 
+those @i{characters} that could be stored in a @i{string} of @i{characters}
+having 8-bit encodings.  In such an implementation,
+the @i{type} @b{base-char} is a @i{proper subtype} of the @i{type} @b{character}.
+
+The @i{type} @b{standard-char} is a 
+
+@i{subtype} of @i{type} @b{base-char}.
+
+@node standard-char, extended-char, base-char, Characters Dictionary
+@subsection standard-char                                                        [Type]
+
+@subsubheading  Supertypes::
+
+@b{standard-char},
+
+@b{base-char},
+
+@b{character},
+@b{t}
+
+@subsubheading  Description::
+
+A fixed set of 96 @i{characters} required to be present in all 
+@i{conforming implementations}.  @i{Standard characters} are 
+defined in @ref{Standard Characters}.
+
+Any @i{character} that is not @i{simple} is not a @i{standard character}.
+
+@subsubheading  See Also::
+
+@ref{Standard Characters}
+
+@node extended-char, char=, standard-char, Characters Dictionary
+@subsection extended-char                                                        [Type]
+
+@subsubheading  Supertypes::
+
+@b{extended-char},
+@b{character},
+@b{t}
+
+@subsubheading  Description::
+
+The @i{type} @b{extended-char} is equivalent to the @i{type} @t{(and character (not base-char))}.
+
+@subsubheading  Notes::
+
+The @i{type} @b{extended-char} might 
+have no @i{elements}_4
+in @i{implementations} in which all @i{characters} are of @i{type} @b{base-char}.
+
+@node char=, character, extended-char, Characters Dictionary
+@subsection char=, char/=, char<, char>, char<=, char>=, 
+@subheading char-equal, char-not-equal, char-lessp, char-greaterp, char-not-greaterp,
+@subheading char-not-lessp
+@flushright
+@i{[Function]}
+@end flushright
+
+@code{@r{char=}}  @i{@r{&rest} characters^+} @result{}  @i{generalized-boolean}
+
+@code{@r{char/=}}  @i{@r{&rest} characters^+} @result{}  @i{generalized-boolean}
+
+@code{@r{char<}}  @i{@r{&rest} characters^+} @result{}  @i{generalized-boolean}
+
+@code{@r{char>}}  @i{@r{&rest} characters^+} @result{}  @i{generalized-boolean}
+
+@code{@r{char<=}}  @i{@r{&rest} characters^+} @result{}  @i{generalized-boolean}
+
+@code{@r{char>=}}  @i{@r{&rest} characters^+} @result{}  @i{generalized-boolean}
+
+@code{char-equal}  @i{@r{&rest} characters^+} @result{}  @i{generalized-boolean}
+
+@code{char-not-equal}  @i{@r{&rest} characters^+} @result{}  @i{generalized-boolean}
+
+@code{char-lessp}  @i{@r{&rest} characters^+} @result{}  @i{generalized-boolean}
+
+@code{char-greaterp}  @i{@r{&rest} characters^+} @result{}  @i{generalized-boolean}
+
+@code{char-not-greaterp}  @i{@r{&rest} characters^+} @result{}  @i{generalized-boolean}
+
+@code{char-not-lessp}  @i{@r{&rest} characters^+} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{character}---a @i{character}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+These predicates compare @i{characters}.
+
+@b{char=} returns @i{true} if all @i{characters} are the @i{same};
+otherwise, it returns @i{false}.
+
+If two @i{characters} differ 
+in any @i{implementation-defined} @i{attributes},
+then they are not @b{char=}.
+
+@b{char/=} returns @i{true} if all @i{characters} are different;
+otherwise, it returns @i{false}.
+
+@b{char<} returns @i{true} if the @i{characters} are monotonically increasing; 
+otherwise, it returns @i{false}.
+
+If two @i{characters} 
+have @i{identical} @i{implementation-defined} @i{attributes}, 
+then their ordering by @b{char<} is 
+consistent with the numerical ordering by the predicate @t{<} on their @i{codes}.
+
+@b{char>} returns @i{true} if the @i{characters} are monotonically decreasing; 
+otherwise, it returns @i{false}.
+
+If two @i{characters} have 
+@i{identical} @i{implementation-defined} @i{attributes},
+then their ordering by @b{char>} is 
+consistent with the numerical ordering by the predicate @t{>} on their @i{codes}. 
+
+@b{char<=} returns @i{true} 
+if the @i{characters} are monotonically nondecreasing; 
+otherwise, it returns @i{false}.
+
+If two @i{characters} have
+@i{identical} @i{implementation-defined} @i{attributes},
+then their ordering by @b{char<=} is
+consistent with the numerical ordering by the predicate @t{<=} on their @i{codes}. 
+
+@b{char>=} returns @i{true} 
+if the @i{characters} are monotonically nonincreasing; 
+otherwise, it returns @i{false}.
+
+If two @i{characters} have
+@i{identical} @i{implementation-defined} @i{attributes},
+then their ordering by @b{char>=} is 
+consistent with the numerical ordering by the predicate @t{>=} on their @i{codes}. 
+
+    @b{char-equal},
+    @b{char-not-equal},
+    @b{char-lessp},
+    @b{char-greaterp},
+    @b{char-not-greaterp},
+and @b{char-not-lessp}
+are similar to 
+    @b{char=},
+    @b{char/=},
+    @b{char<},
+    @b{char>},
+    @b{char<=},
+    @b{char>=},
+respectively,
+except that they ignore differences in @i{case} and
+
+might have an @i{implementation-defined} behavior 
+for @i{non-simple} @i{characters}.
+For example, an @i{implementation} might define that 
+@b{char-equal}, @i{etc.} ignore certain 
+@i{implementation-defined} @i{attributes}.
+The effect, if any, 
+of each @i{implementation-defined} @i{attribute}
+upon these functions must be specified as part of the definition of that @i{attribute}.
+
+@subsubheading  Examples::
+
+@example
+ (char= #\d #\d) @result{}  @i{true}
+ (char= #\A #\a) @result{}  @i{false}
+ (char= #\d #\x) @result{}  @i{false}
+ (char= #\d #\D) @result{}  @i{false}
+ (char/= #\d #\d) @result{}  @i{false}
+ (char/= #\d #\x) @result{}  @i{true}
+ (char/= #\d #\D) @result{}  @i{true}
+ (char= #\d #\d #\d #\d) @result{}  @i{true}
+ (char/= #\d #\d #\d #\d) @result{}  @i{false}
+ (char= #\d #\d #\x #\d) @result{}  @i{false}
+ (char/= #\d #\d #\x #\d) @result{}  @i{false}
+ (char= #\d #\y #\x #\c) @result{}  @i{false}
+ (char/= #\d #\y #\x #\c) @result{}  @i{true}
+ (char= #\d #\c #\d) @result{}  @i{false}
+ (char/= #\d #\c #\d) @result{}  @i{false}
+ (char< #\d #\x) @result{}  @i{true}
+ (char<= #\d #\x) @result{}  @i{true}
+ (char< #\d #\d) @result{}  @i{false}
+ (char<= #\d #\d) @result{}  @i{true}
+ (char< #\a #\e #\y #\z) @result{}  @i{true}
+ (char<= #\a #\e #\y #\z) @result{}  @i{true}
+ (char< #\a #\e #\e #\y) @result{}  @i{false}
+ (char<= #\a #\e #\e #\y) @result{}  @i{true}
+ (char> #\e #\d) @result{}  @i{true}
+ (char>= #\e #\d) @result{}  @i{true}
+ (char> #\d #\c #\b #\a) @result{}  @i{true}
+ (char>= #\d #\c #\b #\a) @result{}  @i{true}
+ (char> #\d #\d #\c #\a) @result{}  @i{false}
+ (char>= #\d #\d #\c #\a) @result{}  @i{true}
+ (char> #\e #\d #\b #\c #\a) @result{}  @i{false}
+ (char>= #\e #\d #\b #\c #\a) @result{}  @i{false}
+ (char> #\z #\A) @result{}  @i{implementation-dependent}
+ (char> #\Z #\a) @result{}  @i{implementation-dependent}
+ (char-equal #\A #\a) @result{}  @i{true}
+ (stable-sort (list #\b #\A #\B #\a #\c #\C) #'char-lessp)
+@result{}  (#\A #\a #\b #\B #\c #\C)
+ (stable-sort (list #\b #\A #\B #\a #\c #\C) #'char<)
+@result{}  (#\A #\B #\C #\a #\b #\c) ;Implementation A
+@result{}  (#\a #\b #\c #\A #\B #\C) ;Implementation B
+@result{}  (#\a #\A #\b #\B #\c #\C) ;Implementation C
+@result{}  (#\A #\a #\B #\b #\C #\c) ;Implementation D
+@result{}  (#\A #\B #\a #\b #\C #\c) ;Implementation E
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{program-error} 
+		       if at least one @i{character} is not supplied.
+
+@subsubheading  See Also::
+
+@ref{Character Syntax},
+@ref{Documentation of Implementation-Defined Scripts}
+
+@subsubheading  Notes::
+
+If characters differ in their @i{code} @i{attribute} 
+or any @i{implementation-defined} @i{attribute},
+they are considered to be different by @b{char=}.
+
+There is no requirement that @t{(eq c1 c2)} be true merely because
+@t{(char= c1 c2)} is @i{true}.  While @b{eq} can distinguish two 
+@i{characters}
+that @b{char=} does not, it is distinguishing them not
+as @i{characters}, but in some sense on the basis of a lower level
+implementation characteristic.
+If @t{(eq c1 c2)} is @i{true},
+then @t{(char= c1 c2)} is also true.
+@b{eql} and @b{equal}
+compare @i{characters} in the same
+way that @b{char=} does.
+
+The manner in which @i{case} is used by 
+     @b{char-equal},
+     @b{char-not-equal},
+     @b{char-lessp},
+     @b{char-greaterp},
+     @b{char-not-greaterp},
+ and @b{char-not-lessp}
+implies an ordering for @i{standard characters} such that
+@t{A=a}, @t{B=b}, and so on, up to @t{Z=z}, and furthermore either
+@t{9<A} or @t{Z<0}.
+
+@node character, characterp, char=, Characters Dictionary
+@subsection character                                                        [Function]
+
+@code{character}  @i{character} @result{}  @i{denoted-character}
+
+@subsubheading  Arguments and Values:: 
+
+@i{character}---a @i{character designator}.
+
+@i{denoted-character}---a @i{character}.
+
+@subsubheading  Description::
+
+Returns the @i{character} denoted by the @i{character} @i{designator}.
+
+@subsubheading  Examples::
+
+@example
+ (character #\a) @result{}  #\a
+ (character "a") @result{}  #\a
+ (character 'a) @result{}  #\A
+ (character '\a) @result{}  #\a
+ (character 65.) is an error.
+ (character 'apple) is an error.
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{object} is not a @i{character designator}.
+
+@subsubheading  See Also::
+
+@ref{coerce}
+
+@subsubheading  Notes::
+
+@example
+ (character @i{object}) @equiv{} (coerce @i{object} 'character)
+@end example
+
+@node characterp, alpha-char-p, character, Characters Dictionary
+@subsection characterp                                                       [Function]
+
+@code{characterp}  @i{object} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{object}---an @i{object}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{object} is of @i{type} @b{character};
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::                  
+
+@example
+ (characterp #\a) @result{}  @i{true}
+ (characterp 'a) @result{}  @i{false}
+ (characterp "a") @result{}  @i{false}
+ (characterp 65.) @result{}  @i{false}
+ (characterp #\Newline) @result{}  @i{true}
+ ;; This next example presupposes an implementation 
+ ;; in which #\Rubout is an implementation-defined character.
+ (characterp #\Rubout) @result{}  @i{true}
+@end example
+
+@subsubheading  See Also::
+
+@ref{character}
+ (@i{type} and @i{function}), 
+@ref{typep}
+
+@subsubheading  Notes::
+
+@example
+ (characterp @i{object}) @equiv{} (typep @i{object} 'character)
+@end example
+
+@node alpha-char-p, alphanumericp, characterp, Characters Dictionary
+@subsection alpha-char-p                                                     [Function]
+
+@code{alpha-char-p}  @i{character} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{character}---a @i{character}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{character} is an @i{alphabetic}_1 @i{character};
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::
+
+@example
+ (alpha-char-p #\a) @result{}  @i{true}
+ (alpha-char-p #\5) @result{}  @i{false}
+ (alpha-char-p #\Newline) @result{}  @i{false}
+ ;; This next example presupposes an implementation
+ ;; in which #\\alpha is a defined character.
+ (alpha-char-p #\\alpha) @result{}  @i{implementation-dependent}
+@end example
+
+@subsubheading  Affected By::
+
+None.
+(In particular, the results of this predicate are independent 
+of any special syntax which might have been enabled in the @i{current readtable}.)
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{character} is not a @i{character}.
+
+@subsubheading  See Also::
+
+@ref{alphanumericp}
+,
+@ref{Documentation of Implementation-Defined Scripts}
+
+@node alphanumericp, digit-char, alpha-char-p, Characters Dictionary
+@subsection alphanumericp                                                    [Function]
+
+@code{alphanumericp}  @i{character} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values:: 
+
+@i{character}---a @i{character}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{character} is an @i{alphabetic}_1 @i{character} 
+		   or a  @i{numeric}    @i{character};
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::
+
+@example
+ (alphanumericp #\Z) @result{}  @i{true}
+ (alphanumericp #\9) @result{}  @i{true}
+ (alphanumericp #\Newline) @result{}  @i{false}
+ (alphanumericp #\#) @result{}  @i{false}
+@end example
+
+@subsubheading  Affected By::
+
+None.
+(In particular, the results of this predicate are independent 
+of any special syntax which might have been enabled in the @i{current readtable}.)
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{character} is not a @i{character}.
+
+@subsubheading  See Also::
+
+@ref{alpha-char-p}
+, 
+@ref{graphic-char-p}
+, 
+@ref{digit-char-p}
+
+@subsubheading  Notes::
+
+Alphanumeric characters are graphic
+as defined by @b{graphic-char-p}.
+The alphanumeric characters are a subset of the graphic characters.
+The standard characters @t{A} through @t{Z},
+		        @t{a} through @t{z},
+		    and @t{0} through @t{9} are alphanumeric characters.
+
+@example
+ (alphanumericp x)
+   @equiv{} (or (alpha-char-p x) (not (null (digit-char-p x))))
+@end example
+
+@node digit-char, digit-char-p, alphanumericp, Characters Dictionary
+@subsection digit-char                                                       [Function]
+
+@code{digit-char}  @i{weight @r{&optional} radix} @result{}  @i{char}
+
+@subsubheading  Arguments and Values::
+
+@i{weight}---a non-negative @i{integer}.
+
+@i{radix}---a @i{radix}.
+ The default is @t{10}.
+
+@i{char}---a @i{character} or @i{false}.
+
+@subsubheading  Description::   
+
+If @i{weight} is less than @i{radix},
+@b{digit-char} returns a @i{character} which has that @i{weight}
+when considered as a digit in the specified radix.
+If the resulting @i{character} is to be an @i{alphabetic}_1 @i{character},
+it will be an uppercase @i{character}.
+
+If @i{weight} is greater than or equal to @i{radix},
+@b{digit-char} returns @i{false}.
+
+@subsubheading  Examples::
+
+@example
+ (digit-char 0) @result{}  #\0
+ (digit-char 10 11) @result{}  #\A
+ (digit-char 10 10) @result{}  @i{false}
+ (digit-char 7) @result{}  #\7
+ (digit-char 12) @result{}  @i{false}
+ (digit-char 12 16) @result{}  #\C  ;not #\c
+ (digit-char 6 2) @result{}  @i{false}
+ (digit-char 1 2) @result{}  #\1
+@end example
+
+@subsubheading  See Also::
+
+@ref{digit-char-p}
+,
+@ref{graphic-char-p}
+,
+@ref{Character Syntax}
+
+@subsubheading  Notes::
+
+@node digit-char-p, graphic-char-p, digit-char, Characters Dictionary
+@subsection digit-char-p                                                     [Function]
+
+@code{digit-char-p}  @i{char @r{&optional} radix} @result{}  @i{weight}
+
+@subsubheading  Arguments and Values::
+
+@i{char}---a @i{character}.
+
+@i{radix}---a @i{radix}.
+ The default is @t{10}.
+
+@i{weight}---either a non-negative @i{integer} less than @i{radix}, 
+		 or @i{false}.
+
+@subsubheading  Description::
+
+Tests whether @i{char} is a digit in the specified @i{radix}
+(@i{i.e.}, with a weight less than @i{radix}).
+If it is a digit in that @i{radix},
+its weight is returned as an @i{integer}; 
+otherwise @b{nil} is returned.
+
+@subsubheading  Examples::
+
+@example
+ (digit-char-p #\5)    @result{}  5
+ (digit-char-p #\5 2)  @result{}  @i{false}
+ (digit-char-p #\A)    @result{}  @i{false}
+ (digit-char-p #\a)    @result{}  @i{false}
+ (digit-char-p #\A 11) @result{}  10
+ (digit-char-p #\a 11) @result{}  10
+ (mapcar #'(lambda (radix) 
+             (map 'list #'(lambda (x) (digit-char-p x radix)) 
+                  "059AaFGZ"))
+         '(2 8 10 16 36))
+ @result{}  ((0 NIL NIL NIL NIL NIL NIL NIL)
+     (0 5 NIL NIL NIL NIL NIL NIL)
+     (0 5 9 NIL NIL NIL NIL NIL)
+     (0 5 9 10 10 15 NIL NIL)
+     (0 5 9 10 10 15 16 35))
+@end example
+
+@subsubheading  Affected By::
+
+None.
+(In particular, the results of this predicate are independent 
+of any special syntax which might have been enabled in the @i{current readtable}.)
+
+@subsubheading  See Also::
+
+@ref{alphanumericp}
+
+@subsubheading  Notes::
+
+Digits are @i{graphic} @i{characters}.
+
+@node graphic-char-p, standard-char-p, digit-char-p, Characters Dictionary
+@subsection graphic-char-p                                                   [Function]
+
+@code{graphic-char-p}  @i{char} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{char}---a @i{character}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{character} is a @i{graphic} @i{character};
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::                   
+
+@example
+ (graphic-char-p #\G) @result{}  @i{true}
+ (graphic-char-p #\#) @result{}  @i{true}
+ (graphic-char-p #\Space) @result{}  @i{true}
+ (graphic-char-p #\Newline) @result{}  @i{false}
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{character} is not a @i{character}.
+
+@subsubheading  See Also::
+
+@ref{read}
+,
+@ref{Character Syntax},
+@ref{Documentation of Implementation-Defined Scripts}
+
+@node standard-char-p, char-upcase, graphic-char-p, Characters Dictionary
+@subsection standard-char-p                                                  [Function]
+
+@code{standard-char-p}  @i{character} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{character}---a @i{character}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{character} is of @i{type} @b{standard-char};
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::                
+
+@example
+ (standard-char-p #\Space) @result{}  @i{true}
+ (standard-char-p #\~) @result{}  @i{true}
+ ;; This next example presupposes an implementation
+ ;; in which #\Bell is a defined character.
+ (standard-char-p #\Bell) @result{}  @i{false}
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{character} is not a @i{character}.
+
+@node char-upcase, upper-case-p, standard-char-p, Characters Dictionary
+@subsection char-upcase, char-downcase                                       [Function]
+
+@code{char-upcase}  @i{character} @result{}  @i{corresponding-character}
+
+@code{char-downcase}  @i{character} @result{}  @i{corresponding-character}
+
+@subsubheading  Arguments and Values:: 
+
+@i{character}, @i{corresponding-character}---a @i{character}.
+
+@subsubheading  Description::
+
+If @i{character} is a @i{lowercase} @i{character},
+@b{char-upcase} returns the corresponding @i{uppercase} @i{character}.
+Otherwise, @b{char-upcase} just returns the given @i{character}.
+
+If @i{character} is an @i{uppercase} @i{character},
+@b{char-downcase} returns the corresponding @i{lowercase} @i{character}.
+Otherwise, @b{char-downcase} just returns the given @i{character}.
+
+The result only ever differs from @i{character} 
+in its @i{code} @i{attribute};
+all @i{implementation-defined} @i{attributes} are preserved.
+
+@subsubheading  Examples::
+
+@example
+ (char-upcase #\a) @result{}  #\A
+ (char-upcase #\A) @result{}  #\A
+ (char-downcase #\a) @result{}  #\a
+ (char-downcase #\A) @result{}  #\a
+ (char-upcase #\9) @result{}  #\9
+ (char-downcase #\9) @result{}  #\9
+ (char-upcase #\@@) @result{}  #\@@
+ (char-downcase #\@@) @result{}  #\@@
+ ;; Note that this next example might run for a very long time in 
+ ;; some implementations if CHAR-CODE-LIMIT happens to be very large
+ ;; for that implementation.
+ (dotimes (code char-code-limit)
+   (let ((char (code-char code)))
+     (when char
+       (unless (cond ((upper-case-p char) (char= (char-upcase (char-downcase char)) char))
+                     ((lower-case-p char) (char= (char-downcase (char-upcase char)) char))
+                     (t (and (char= (char-upcase (char-downcase char)) char)
+                             (char= (char-downcase (char-upcase char)) char))))
+         (return char)))))
+@result{}  NIL
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{character} is not a @i{character}.
+
+@subsubheading  See Also::
+
+@ref{upper-case-p}
+,
+@ref{alpha-char-p}
+,
+@ref{Characters With Case},
+@ref{Documentation of Implementation-Defined Scripts}
+
+@subsubheading  Notes::
+
+If the @i{corresponding-char} is @i{different} than @i{character},
+then both the @i{character} and the @i{corresponding-char} have @i{case}.
+
+Since @b{char-equal} ignores the @i{case} of the @i{characters} it compares,
+the @i{corresponding-character} is always the @i{same} as @i{character}
+under @b{char-equal}.
+
+@node upper-case-p, char-code, char-upcase, Characters Dictionary
+@subsection upper-case-p, lower-case-p, both-case-p                          [Function]
+
+@code{upper-case-p}  @i{character} @result{}  @i{generalized-boolean}
+
+@code{lower-case-p}  @i{character} @result{}  @i{generalized-boolean}
+
+@code{both-case-p}  @i{character} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{character}---a @i{character}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+These functions test the case of a given @i{character}.
+
+@b{upper-case-p} returns @i{true} if @i{character} is an @i{uppercase} @i{character};
+otherwise, returns @i{false}.
+
+@b{lower-case-p} returns @i{true} if @i{character} is a @i{lowercase} @i{character};
+otherwise, returns @i{false}.
+
+@b{both-case-p} returns @i{true} if @i{character} is a @i{character} with @i{case};
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::
+
+@example
+ (upper-case-p #\A) @result{}  @i{true}
+ (upper-case-p #\a) @result{}  @i{false}
+ (both-case-p #\a) @result{}  @i{true}
+ (both-case-p #\5) @result{}  @i{false}
+ (lower-case-p #\5) @result{}  @i{false}
+ (upper-case-p #\5) @result{}  @i{false}
+ ;; This next example presupposes an implementation 
+ ;; in which #\Bell is an implementation-defined character.
+ (lower-case-p #\Bell) @result{}  @i{false}
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{character} is not a @i{character}.
+
+@subsubheading  See Also::
+
+@ref{char-upcase}
+,
+@b{char-downcase},
+@ref{Characters With Case},
+@ref{Documentation of Implementation-Defined Scripts}
+
+@node char-code, char-int, upper-case-p, Characters Dictionary
+@subsection char-code                                                        [Function]
+
+@code{char-code}  @i{character} @result{}  @i{code}
+
+@subsubheading  Arguments and Values:: 
+
+@i{character}---a @i{character}.
+
+@i{code}---a @i{character code}.
+
+@subsubheading  Description::
+
+@b{char-code} returns the @i{code} @i{attribute} of @i{character}.
+
+@subsubheading  Examples::
+
+@example
+;; An implementation using ASCII character encoding 
+;; might return these values:
+(char-code #\$) @result{}  36
+(char-code #\a) @result{}  97
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{character} is not a @i{character}.
+
+@subsubheading  See Also::
+
+@ref{char-code-limit}
+
+@node char-int, code-char, char-code, Characters Dictionary
+@subsection char-int                                                         [Function]
+
+@code{char-int}  @i{character} @result{}  @i{integer}
+
+@subsubheading  Arguments and Values:: 
+
+@i{character}---a @i{character}.
+
+@i{integer}---a non-negative @i{integer}.
+
+@subsubheading  Description::
+
+Returns a non-negative @i{integer} encoding the @i{character} object.
+The manner in which the @i{integer} is computed is @i{implementation-dependent}.
+In contrast to @b{sxhash}, the result is not guaranteed to be independent 
+of the particular @i{Lisp image}.
+
+If @i{character} has no @i{implementation-defined} @i{attributes},
+the results of @b{char-int} and @b{char-code} are the same. 
+
+@example
+ (char= @i{c1} @i{c2}) @equiv{} (= (char-int @i{c1}) (char-int @i{c2}))
+@end example
+
+for characters @i{c1} and @i{c2}.
+
+@subsubheading  Examples::
+
+@example
+ (char-int #\A) @result{}  65       ; implementation A
+ (char-int #\A) @result{}  577      ; implementation B
+ (char-int #\A) @result{}  262145   ; implementation C
+@end example
+
+@subsubheading  See Also::
+
+@ref{char-code}
+
+@node code-char, char-code-limit, char-int, Characters Dictionary
+@subsection code-char                                                        [Function]
+
+@code{code-char}  @i{code} @result{}  @i{char-p}
+
+@subsubheading  Arguments and Values::
+
+@i{code}---a @i{character code}.
+
+@i{char-p}---a @i{character} or @b{nil}.
+
+@subsubheading  Description::
+
+Returns a @i{character} with the @i{code} @i{attribute} given by @i{code}.
+If no such @i{character} exists and one cannot be created, @b{nil} is returned.
+
+@subsubheading  Examples::
+
+@example
+(code-char 65.) @result{}  #\A  ;in an implementation using ASCII codes
+(code-char (char-code #\Space)) @result{}  #\Space  ;in any implementation
+@end example
+
+@subsubheading  Affected By::
+
+The @i{implementation}'s character encoding.
+
+@subsubheading  See Also::
+
+@ref{char-code}
+
+@subsubheading  Notes::
+
+@node char-code-limit, char-name, code-char, Characters Dictionary
+@subsection char-code-limit                                         [Constant Variable]
+
+@subsubheading  Constant Value::
+
+A non-negative @i{integer}, the exact magnitude of which
+is @i{implementation-dependent}, but which is not less
+than @t{96} (the number of @i{standard characters}).
+
+@subsubheading  Description::
+
+The upper exclusive bound on the @i{value} returned by 
+the @i{function} @b{char-code}.
+
+@subsubheading  See Also::
+
+@ref{char-code}
+
+@subsubheading  Notes::
+
+The @i{value} of @b{char-code-limit} might be larger than the actual
+number of @i{characters} supported by the @i{implementation}.
+
+@node char-name, name-char, char-code-limit, Characters Dictionary
+@subsection char-name                                                        [Function]
+
+@code{char-name}  @i{character} @result{}  @i{name}
+
+@subsubheading  Arguments and Values::
+
+@i{character}---a @i{character}.
+
+@i{name}---a @i{string} or @b{nil}.
+
+@subsubheading  Description::
+
+Returns a @i{string} that is the @i{name} of the @i{character},
+or @b{nil} if the @i{character} has no @i{name}.
+
+All @i{non-graphic} characters are required to have @i{names}
+unless they have some @i{implementation-defined} @i{attribute}
+which is not @i{null}.  Whether or not other @i{characters}
+have @i{names} is @i{implementation-dependent}.
+
+The @i{standard characters}
+<@i{Newline}> and <@i{Space}> have the respective names @t{"Newline"} and @t{"Space"}.
+The @i{semi-standard} @i{characters}
+<@i{Tab}>, <@i{Page}>, <@i{Rubout}>, <@i{Linefeed}>, <@i{Return}>, and <@i{Backspace}> 
+(if they are supported by the @i{implementation})
+have the respective names
+@t{"Tab"},  @t{"Page"},  @t{"Rubout"},  @t{"Linefeed"},  @t{"Return"}, and @t{"Backspace"}
+(in the indicated case, even though name lookup by ``@t{#\}'' 
+and by the @i{function} @b{name-char} is not case sensitive).
+
+@subsubheading  Examples::
+
+@example
+ (char-name #\ ) @result{}  "Space"
+ (char-name #\Space) @result{}  "Space"
+ (char-name #\Page) @result{}  "Page"
+
+ (char-name #\a)
+@result{}  NIL
+@i{OR}@result{} "LOWERCASE-a"
+@i{OR}@result{} "Small-A"
+@i{OR}@result{} "LA01"
+
+ (char-name #\A)
+@result{}  NIL
+@i{OR}@result{} "UPPERCASE-A"
+@i{OR}@result{} "Capital-A"
+@i{OR}@result{} "LA02"
+
+ ;; Even though its CHAR-NAME can vary, #\A prints as #\A
+ (prin1-to-string (read-from-string (format nil "#\\~A" (or (char-name #\A) "A"))))
+@result{}  "#\\A"
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{character} is not a @i{character}.
+
+@subsubheading  See Also::
+
+@ref{name-char}
+,
+@ref{Printing Characters}
+
+@subsubheading  Notes::
+
+@i{Non-graphic} 
+@i{characters} having @i{names} are written by the @i{Lisp printer}
+as ``@t{#\}'' followed by the their @i{name}; see @ref{Printing Characters}.
+
+@node name-char,  , char-name, Characters Dictionary
+@subsection name-char                                                        [Function]
+
+@code{name-char}  @i{name} @result{}  @i{char-p}
+
+@subsubheading  Arguments and Values::
+
+@i{name}---a @i{string designator}.
+
+@i{char-p}---a @i{character} or @b{nil}.
+
+@subsubheading  Description::
+
+Returns the @i{character} @i{object} whose @i{name} is
+@i{name} (as determined by @b{string-equal}---@i{i.e.}, lookup is not case sensitive).
+If such a @i{character} does not exist, @b{nil} is returned.
+
+@subsubheading  Examples::
+
+@example
+(name-char 'space) @result{}  #\Space
+(name-char "space") @result{}  #\Space
+(name-char "Space") @result{}  #\Space
+(let ((x (char-name #\a)))
+  (or (not x) (eql (name-char x) #\a))) @result{}  @i{true}
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{name} is not a @i{string designator}.
+
+@subsubheading  See Also::
+
+@ref{char-name}
+
+@c end of including dict-characters
+
+@c %**end of chapter
+

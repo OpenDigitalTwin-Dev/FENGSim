@@ -1,0 +1,3 @@
+autoreconf -f -i
+./configure --prefix=$PWD/../install/gcl_install
+make install

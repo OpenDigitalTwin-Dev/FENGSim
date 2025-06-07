@@ -1,0 +1,25 @@
+#!/bin/sh
+
+TK_XLIB_DIR=@TK_XLIB_DIR@
+if [ -d "${TK_XLIB_DIR}" ] ; then
+  export LD_LIBRARY_PATH
+  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${TK_XLIB_DIR}
+fi  
+
+#check to see if TK_LIBRARY set in users environment ok..
+if [ -f ${TK_LIBRARY}/tk.tcl ] ;then true;
+else 
+TK_LIBRARY=@TK_LIBRARY@
+  if [ -f ${TK_LIBRARY}/tk.tcl ] ;then export TK_LIBRARY ; fi
+export TK_LIBRARY
+fi
+if [ -f ${TCL_LIBRARY}/init.tcl ] ;then true;
+else 
+TCL_LIBRARY=@TCL_LIBRARY@
+ if [ -f ${TCL_LIBRARY}/init.tcl ] ; then export TCL_LIBRARY ; fi
+fi
+if [ $# -ge 4 ] ;then
+DISPLAY=$4 ;
+export DISPLAY;
+fi
+exec $(dirname $0)/gcltkaux $1 $2 $3

@@ -1,0 +1,5537 @@
+
+
+@node Numbers (Numbers), Characters, Packages, Top
+@chapter Numbers
+
+@menu
+* Number Concepts::		
+* Numbers Dictionary::		
+@end menu
+
+@node Number Concepts, Numbers Dictionary, Numbers (Numbers), Numbers (Numbers)
+@section Number Concepts
+
+@c including concept-numbers
+
+@menu
+* Numeric Operations::		
+* Implementation-Dependent Numeric Constants::	
+* Rational Computations::	
+* Floating-point Computations::	 
+* Complex Computations::	
+* Interval Designators::	
+* Random-State Operations::	
+@end menu
+
+@node Numeric Operations, Implementation-Dependent Numeric Constants, Number Concepts, Number Concepts
+@subsection Numeric Operations
+
+@r{Common Lisp} provides a large variety of operations related to @i{numbers}.
+This section provides an overview of those operations by grouping them
+into categories that emphasize some of the relationships among them.
+
+Figure 12--1 shows @i{operators} relating to
+arithmetic operations.
+
+@format
+@group
+@noindent
+@w{  *  1+         gcd   }
+@w{  +  1-         incf  }
+@w{  -  conjugate  lcm   }
+@w{  /  decf             }
+
+@noindent
+@w{  Figure 12--1: Operators relating to Arithmetic.}
+
+@end group
+@end format
+
+Figure 12--2 shows @i{defined names} relating to
+exponential, logarithmic, and trigonometric operations.
+
+@format
+@group
+@noindent
+@w{  abs    cos    signum  }
+@w{  acos   cosh   sin     }
+@w{  acosh  exp    sinh    }
+@w{  asin   expt   sqrt    }
+@w{  asinh  isqrt  tan     }
+@w{  atan   log    tanh    }
+@w{  atanh  phase          }
+@w{  cis    pi             }
+
+@noindent
+@w{  Figure 12--2: Defined names relating to Exponentials, Logarithms, and Trigonometry.}
+
+@end group
+@end format
+
+Figure 12--3 shows @i{operators} relating to
+numeric comparison and predication.
+
+@format
+@group
+@noindent
+@w{  /=  >=      oddp   }
+@w{  <   evenp   plusp  }
+@w{  <=  max     zerop  }
+@w{  =   min            }
+@w{  >   minusp         }
+
+@noindent
+@w{  Figure 12--3: Operators for numeric comparison and predication.}
+
+@end group
+@end format
+
+Figure 12--4 shows @i{defined names} relating to
+numeric type manipulation and coercion.
+
+@format
+@group
+@noindent
+@w{  ceiling          float-radix           rational     }
+@w{  complex          float-sign            rationalize  }
+@w{  decode-float     floor                 realpart     }
+@w{  denominator      fround                rem          }
+@w{  fceiling         ftruncate             round        }
+@w{  ffloor           imagpart              scale-float  }
+@w{  float            integer-decode-float  truncate     }
+@w{  float-digits     mod                                }
+@w{  float-precision  numerator                          }
+
+@noindent
+@w{  Figure 12--4: Defined names relating to numeric type manipulation and coercion.}
+
+@end group
+@end format
+
+@menu
+* Associativity and Commutativity in Numeric Operations::  
+* Examples of Associativity and Commutativity in Numeric Operations::  
+* Contagion in Numeric Operations::  
+* Viewing Integers as Bits and Bytes::	
+* Logical Operations on Integers::  
+* Byte Operations on Integers::	 
+@end menu
+
+@node Associativity and Commutativity in Numeric Operations, Examples of Associativity and Commutativity in Numeric Operations, Numeric Operations, Numeric Operations
+@subsubsection Associativity and Commutativity in Numeric Operations
+
+For functions that are mathematically associative (and possibly commutative),
+a @i{conforming implementation} may process the @i{arguments} in any manner 
+consistent with associative (and possibly commutative) rearrangement.  This does not
+affect the order in which the @i{argument} @i{forms} are @i{evaluated};
+for a discussion of evaluation order, see @ref{Function Forms}.
+What is unspecified is only the order in which the @i{parameter} @i{values}
+are processed.  This implies that @i{implementations} may differ in which 
+automatic @i{coercions} are applied; see @ref{Contagion in Numeric Operations}.
+
+A @i{conforming program} can control the order of processing explicitly by 
+separating the operations into separate (possibly nested) @i{function forms},
+or by writing explicit calls to @i{functions} that perform coercions.
+
+@node Examples of Associativity and Commutativity in Numeric Operations, Contagion in Numeric Operations, Associativity and Commutativity in Numeric Operations, Numeric Operations
+@subsubsection Examples of Associativity and Commutativity in Numeric Operations
+
+Consider the following expression, in which we assume that @t{1.0} and
+@t{1.0e-15} both denote @i{single floats}:
+
+@example
+ (+ 1/3 2/3 1.0d0 1.0 1.0e-15)
+@end example
+
+One @i{conforming implementation} might
+process the @i{arguments} from left to right,
+first adding @t{1/3} and @t{2/3} to get @t{1}, 
+then converting that to a @i{double float} 
+for combination with @t{1.0d0},
+then successively converting and adding @t{1.0} and @t{1.0e-15}.
+
+Another @i{conforming implementation} might process the @i{arguments} from
+right to left, first performing a @i{single float} addition of @t{1.0} and
+@t{1.0e-15} (perhaps losing accuracy in the process), then converting the sum to 
+a @i{double float} and adding @t{1.0d0}, then converting @t{2/3} to a
+@i{double float} and adding it, and then converting @t{1/3} and adding that.
+
+A third @i{conforming implementation} might first scan all the @i{arguments},
+process all the @i{rationals} first to keep that part of the computation exact,
+then find an @i{argument} of the largest floating-point format among all the
+@i{arguments} and add that, and then add in all other @i{arguments}, converting
+each in turn (all in a perhaps misguided attempt to make the computation as accurate
+as possible).
+
+In any case, all three strategies are legitimate.
+
+A @i{conforming program} could control the order by writing, for example,
+
+@example
+ (+ (+ 1/3 2/3) (+ 1.0d0 1.0e-15) 1.0)
+@end example
+
+@node Contagion in Numeric Operations, Viewing Integers as Bits and Bytes, Examples of Associativity and Commutativity in Numeric Operations, Numeric Operations
+@subsubsection Contagion in Numeric Operations
+
+For information about the contagion rules for implicit coercions of @i{arguments} 
+in numeric operations, see
+     @ref{Rule of Float Precision Contagion}, 
+     @ref{Rule of Float and Rational Contagion},
+ and @ref{Rule of Complex Contagion}.
+
+@node Viewing Integers as Bits and Bytes, Logical Operations on Integers, Contagion in Numeric Operations, Numeric Operations
+@subsubsection Viewing Integers as Bits and Bytes
+
+@node Logical Operations on Integers, Byte Operations on Integers, Viewing Integers as Bits and Bytes, Numeric Operations
+@subsubsection Logical Operations on Integers
+
+Logical operations require @i{integers} as arguments;
+an error of @i{type} @b{type-error} should be signaled 
+if an argument is supplied that is not an @i{integer}.
+@i{Integer} arguments to logical operations are treated as if
+they were represented in two's-complement notation.
+
+Figure 12--5 shows @i{defined names} relating to
+logical operations on numbers.
+
+@format
+@group
+@noindent
+@w{  ash          boole-ior       logbitp   }
+@w{  boole        boole-nand      logcount  }
+@w{  boole-1      boole-nor       logeqv    }
+@w{  boole-2      boole-orc1      logior    }
+@w{  boole-and    boole-orc2      lognand   }
+@w{  boole-andc1  boole-set       lognor    }
+@w{  boole-andc2  boole-xor       lognot    }
+@w{  boole-c1     integer-length  logorc1   }
+@w{  boole-c2     logand          logorc2   }
+@w{  boole-clr    logandc1        logtest   }
+@w{  boole-eqv    logandc2        logxor    }
+
+@noindent
+@w{  Figure 12--5: Defined names relating to logical operations on numbers.}
+
+@end group
+@end format
+
+@node Byte Operations on Integers,  , Logical Operations on Integers, Numeric Operations
+@subsubsection Byte Operations on Integers
+
+The byte-manipulation @i{functions} use @i{objects} 
+called @i{byte specifiers} to designate the size and position
+of a specific @i{byte} within an @i{integer}.
+The representation of a @i{byte specifier} is @i{implementation-dependent};
+it might or might not be a @i{number}.
+The @i{function} @b{byte} will construct a @i{byte specifier},
+which various other byte-manipulation @i{functions} will accept.
+
+Figure 12--6 shows @i{defined names} relating to
+manipulating @i{bytes} of @i{numbers}.
+
+@format
+@group
+@noindent
+@w{  byte           deposit-field  ldb-test    }
+@w{  byte-position  dpb            mask-field  }
+@w{  byte-size      ldb                        }
+
+@noindent
+@w{  Figure 12--6: Defined names relating to byte manipulation.}
+
+@end group
+@end format
+
+@node Implementation-Dependent Numeric Constants, Rational Computations, Numeric Operations, Number Concepts
+@subsection Implementation-Dependent Numeric Constants
+
+Figure 12--7 shows @i{defined names} relating to
+@i{implementation-dependent} details about @i{numbers}.
+
+@format
+@group
+@noindent
+@w{  double-float-epsilon           most-negative-fixnum           }
+@w{  double-float-negative-epsilon  most-negative-long-float       }
+@w{  least-negative-double-float    most-negative-short-float      }
+@w{  least-negative-long-float      most-negative-single-float     }
+@w{  least-negative-short-float     most-positive-double-float     }
+@w{  least-negative-single-float    most-positive-fixnum           }
+@w{  least-positive-double-float    most-positive-long-float       }
+@w{  least-positive-long-float      most-positive-short-float      }
+@w{  least-positive-short-float     most-positive-single-float     }
+@w{  least-positive-single-float    short-float-epsilon            }
+@w{  long-float-epsilon             short-float-negative-epsilon   }
+@w{  long-float-negative-epsilon    single-float-epsilon           }
+@w{  most-negative-double-float     single-float-negative-epsilon  }
+
+@noindent
+@w{  Figure 12--7: Defined names relating to implementation-dependent details about numbers.}
+
+@end group
+@end format
+
+@node Rational Computations, Floating-point Computations, Implementation-Dependent Numeric Constants, Number Concepts
+@subsection Rational Computations
+
+The rules in this section apply to @i{rational} computations.
+
+@menu
+* Rule of Unbounded Rational Precision::  
+* Rule of Canonical Representation for Rationals::  
+* Rule of Float Substitutability::  
+@end menu
+
+@node Rule of Unbounded Rational Precision, Rule of Canonical Representation for Rationals, Rational Computations, Rational Computations
+@subsubsection Rule of Unbounded Rational Precision
+
+Rational computations cannot overflow in the usual sense 
+(though there may not be enough storage to represent a result), 
+since @i{integers} and @i{ratios} may in principle be of any magnitude.
+
+@node Rule of Canonical Representation for Rationals, Rule of Float Substitutability, Rule of Unbounded Rational Precision, Rational Computations
+@subsubsection Rule of Canonical Representation for Rationals
+
+If any computation produces a result that is a mathematical ratio of two integers
+such that the denominator evenly divides the numerator, then the result is converted
+to the equivalent @i{integer}.  
+
+If the denominator does not evenly divide the numerator,
+the canonical representation of a @i{rational} number is as the @i{ratio}
+that numerator and that denominator, where the greatest common divisor of
+the numerator and denominator is one, and where the denominator is positive
+and greater than one.
+
+When used as input (in the default syntax),
+the notation @t{-0} always denotes the @i{integer} @t{0}.
+A @i{conforming implementation} must not have a
+representation of ``minus zero'' for @i{integers}
+that is distinct from its representation of zero for @i{integers}.
+However, such a distinction is possible for @i{floats}; 
+see the @i{type} @b{float}.
+
+@node Rule of Float Substitutability,  , Rule of Canonical Representation for Rationals, Rational Computations
+@subsubsection Rule of Float Substitutability
+
+When the arguments to an irrational mathematical @i{function} 
+
+[Reviewer Note by Barmar: There should be a table of these functions.]
+are all @i{rational} and the true mathematical result
+is also (mathematically) rational, then unless otherwise noted
+an implementation is free to return either an accurate
+@i{rational} result
+or a @i{single float} approximation.
+If the arguments are all @i{rational} 
+but the result cannot be expressed
+as a @i{rational} number, then a @i{single float} 
+approximation is always returned.
+
+If the arguments to a mathematical @i{function} are all of type
+  @t{(or rational (complex rational))} 
+and the true mathematical result is
+  (mathematically) a complex number with rational real and imaginary
+  parts, then unless otherwise noted an implementation is free to return
+  either an accurate result of type @t{(or rational (complex rational))} 
+or
+  a @i{single float}
+  (permissible only if the imaginary part of the true mathematical
+  result is zero) or @t{(complex single-float)}. If the arguments are
+  all of type @t{(or rational (complex rational))}
+but the result cannot be
+  expressed as a @i{rational} or @i{complex rational},
+then the returned
+  value will be of @i{type} @b{single-float} 
+(permissible only if the imaginary
+  part of the true mathematical result is zero) or @t{(complex single-float)}.
+
+@format
+@group
+@noindent
+@w{  Function  Sample Results                                   }
+@w{  @b{abs}       @t{(abs #c(3 4)) @result{}  5 @i{or} 5.0}                       }
+@w{  @b{acos}      @t{(acos 1) @result{}  0 @i{or} 0.0}                            }
+@w{  @b{acosh}     @t{(acosh 1) @result{}  0 @i{or} 0.0}                           }
+@w{  @b{asin}      @t{(asin 0) @result{}  0 @i{or} 0.0}                            }
+@w{  @b{asinh}     @t{(asinh 0) @result{}  0 @i{or} 0.0}                           }
+@w{  @b{atan}      @t{(atan 0) @result{}  0 @i{or} 0.0}                            }
+@w{  @b{atanh}     @t{(atanh 0) @result{}  0 @i{or} 0.0}                           }
+@w{  @b{cis}       @t{(cis 0) @result{}  #c(1 0) @i{or} #c(1.0 0.0)}               }
+@w{  @b{cos}       @t{(cos 0) @result{}  1 @i{or} 1.0}                             }
+@w{  @b{cosh}      @t{(cosh 0) @result{}  1 @i{or} 1.0}                            }
+@w{  @b{exp}       @t{(exp 0) @result{}  1 @i{or} 1.0}                             }
+@w{  @b{expt}      @t{(expt 8 1/3) @result{}  2 @i{or} 2.0}                        }
+@w{  @b{log}       @t{(log 1) @result{}  0 @i{or} 0.0}                             }
+@w{            @t{(log 8 2) @result{}  3 @i{or} 3.0}                           }
+@w{  @b{phase}     @t{(phase 7) @result{}  0 @i{or} 0.0}                           }
+@w{  @b{signum}    @t{(signum #c(3 4)) @result{}  #c(3/5 4/5) @i{or} #c(0.6 0.8)}  }
+@w{  @b{sin}       @t{(sin 0) @result{}  0 @i{or} 0.0}                             }
+@w{  @b{sinh}      @t{(sinh 0) @result{}  0 @i{or} 0.0}                            }
+@w{  @b{sqrt}      @t{(sqrt 4) @result{}  2 @i{or} 2.0}                            }
+@w{            @t{(sqrt 9/16) @result{}  3/4 @i{or} 0.75}                      }
+@w{  @b{tan}       @t{(tan 0) @result{}  0 @i{or} 0.0}                             }
+@w{  @b{tanh}      @t{(tanh 0) @result{}  0 @i{or} 0.0}                            }
+
+@noindent
+@w{  Figure 12--8: Functions Affected by Rule of Float Substitutability}
+
+@end group
+@end format
+
+@node Floating-point Computations, Complex Computations, Rational Computations, Number Concepts
+@subsection Floating-point Computations
+
+The following rules apply to floating point computations.
+
+@menu
+* Rule of Float and Rational Contagion::  
+* Examples of Rule of Float and Rational Contagion::  
+* Rule of Float Approximation::	 
+* Rule of Float Underflow and Overflow::  
+* Rule of Float Precision Contagion::  
+@end menu
+
+@node Rule of Float and Rational Contagion, Examples of Rule of Float and Rational Contagion, Floating-point Computations, Floating-point Computations
+@subsubsection Rule of Float and Rational Contagion
+
+When @i{rationals} and @i{floats} are combined by a numerical function, 
+the @i{rational} is first converted to a @i{float} of the same format.
+For @i{functions} such as @b{+} that take more than two arguments,
+it is permitted that part of the operation be carried out exactly using
+@i{rationals} and the rest be done using floating-point arithmetic.
+
+When @i{rationals} and @i{floats} are compared by a numerical function, 
+the @i{function} @b{rational} is effectively called to convert the @i{float} 
+to a @i{rational} and then an exact
+comparison is performed. In the case of @i{complex} numbers,
+the real and imaginary parts are effectively handled individually.
+
+@node Examples of Rule of Float and Rational Contagion, Rule of Float Approximation, Rule of Float and Rational Contagion, Floating-point Computations
+@subsubsection Examples of Rule of Float and Rational Contagion
+
+@example
+ ;;;; Combining rationals with floats.
+ ;;; This example assumes an implementation in which 
+ ;;; (float-radix 0.5) is 2 (as in IEEE) or 16 (as in IBM/360),
+ ;;; or else some other implementation in which 1/2 has an exact 
+ ;;;  representation in floating point.
+ (+ 1/2 0.5) @result{}  1.0
+ (- 1/2 0.5d0) @result{}  0.0d0
+ (+ 0.5 -0.5 1/2) @result{}  0.5
+
+ ;;;; Comparing rationals with floats.
+ ;;; This example assumes an implementation in which the default float 
+ ;;; format is IEEE single-float, IEEE double-float, or some other format
+ ;;; in which 5/7 is rounded upwards by FLOAT.
+ (< 5/7 (float 5/7)) @result{}  @i{true}
+ (< 5/7 (rational (float 5/7))) @result{}  @i{true}
+ (< (float 5/7) (float 5/7)) @result{}  @i{false}
+@end example
+
+@node Rule of Float Approximation, Rule of Float Underflow and Overflow, Examples of Rule of Float and Rational Contagion, Floating-point Computations
+@subsubsection Rule of Float Approximation
+
+Computations with @i{floats} are only approximate,
+although they are described as if the results
+were mathematically accurate. 
+Two mathematically identical
+expressions may be computationally different because of errors
+inherent in the floating-point approximation process.
+The precision of a @i{float} is not necessarily
+correlated with the accuracy of that number.
+For instance, 3.142857142857142857 is a more precise approximation
+to \pi than 3.14159, but the latter is more accurate.
+The precision refers to the number of bits retained in the representation.
+When an operation combines a @i{short float} with a 
+@i{long float},
+the result will be a @i{long float}. 
+@r{Common Lisp} functions assume that the accuracy of
+arguments to them does not exceed their precision.  Therefore
+when two @i{small floats} 
+are combined, the result is a @i{small float}. 
+@r{Common Lisp} functions 
+never convert automatically from a larger size to a smaller one.
+
+@node Rule of Float Underflow and Overflow, Rule of Float Precision Contagion, Rule of Float Approximation, Floating-point Computations
+@subsubsection Rule of Float Underflow and Overflow
+
+An error of @i{type} @b{floating-point-overflow}
+or @b{floating-point-underflow} should be signaled if a 
+floating-point computation causes exponent overflow or underflow, respectively.
+
+@node Rule of Float Precision Contagion,  , Rule of Float Underflow and Overflow, Floating-point Computations
+@subsubsection Rule of Float Precision Contagion
+
+The result of a numerical function is a @i{float} of the 
+largest format among all the floating-point arguments to the @i{function}. 
+
+@node Complex Computations, Interval Designators, Floating-point Computations, Number Concepts
+@subsection Complex Computations
+
+The following rules apply to @i{complex} computations:
+
+@menu
+* Rule of Complex Substitutability::  
+* Rule of Complex Contagion::	
+* Rule of Canonical Representation for Complex Rationals::  
+* Examples of Rule of Canonical Representation for Complex Rationals::	
+* Principal Values and Branch Cuts::  
+@end menu
+
+@node Rule of Complex Substitutability, Rule of Complex Contagion, Complex Computations, Complex Computations
+@subsubsection Rule of Complex Substitutability
+
+Except during the execution of irrational and transcendental @i{functions},
+no numerical @i{function} ever @i{yields} a @i{complex} unless 
+one or more of its @i{arguments} is a @i{complex}.
+
+@node Rule of Complex Contagion, Rule of Canonical Representation for Complex Rationals, Rule of Complex Substitutability, Complex Computations
+@subsubsection Rule of Complex Contagion
+
+When a 
+
+@i{real}
+
+and 
+a @i{complex} are both part of a computation, 
+the 
+
+@i{real}
+
+is first converted to a @i{complex} by providing an imaginary part of @t{0}.
+
+@node Rule of Canonical Representation for Complex Rationals, Examples of Rule of Canonical Representation for Complex Rationals, Rule of Complex Contagion, Complex Computations
+@subsubsection Rule of Canonical Representation for Complex Rationals
+
+If the result of any computation would be a @i{complex}
+number whose real part is of @i{type} @b{rational} and whose imaginary
+part is zero, the result is converted to the @i{rational} 
+which is the real part.
+This rule does not apply to @i{complex} numbers whose parts
+are @i{floats}. 
+For example, @t{#C(5 0)} and @t{5} are not @i{different} @i{objects} in @r{Common Lisp}
+(they are always the @i{same} under @b{eql});
+@t{#C(5.0 0.0)} and @t{5.0} are always @i{different} @i{objects} in @r{Common Lisp}
+(they are never the @i{same} under @b{eql},
+although they are the @i{same} under @b{equalp} and @b{=}).
+
+@node Examples of Rule of Canonical Representation for Complex Rationals, Principal Values and Branch Cuts, Rule of Canonical Representation for Complex Rationals, Complex Computations
+@subsubsection Examples of Rule of Canonical Representation for Complex Rationals
+
+@example
+ #c(1.0 1.0) @result{}  #C(1.0 1.0)
+ #c(0.0 0.0) @result{}  #C(0.0 0.0)
+ #c(1.0 1) @result{}  #C(1.0 1.0)
+ #c(0.0 0) @result{}  #C(0.0 0.0)
+ #c(1 1) @result{}  #C(1 1)
+ #c(0 0) @result{}  0
+ (typep #c(1 1) '(complex (eql 1))) @result{}  @i{true}
+ (typep #c(0 0) '(complex (eql 0))) @result{}  @i{false}
+@end example
+
+@node Principal Values and Branch Cuts,  , Examples of Rule of Canonical Representation for Complex Rationals, Complex Computations
+@subsubsection Principal Values and Branch Cuts
+
+Many of the irrational and transcendental functions are multiply defined
+in the complex domain; for example, there are in general an infinite
+number of complex values for the logarithm function.  In each such
+case, a @i{principal} @i{value} must be chosen for the function to return.
+In general, such values cannot be chosen so as to make the range
+continuous; lines in the domain
+called branch cuts must be defined, which in turn
+define the discontinuities in the range.
+@r{Common Lisp} defines the branch cuts, @i{principal} @i{values}, and boundary
+conditions for the complex functions following ``Principal Values and Branch Cuts in Complex APL.'' The branch
+cut rules that apply to each function are located with the description of
+that function.
+
+Figure 12--9 lists
+the identities that are obeyed
+throughout the applicable portion of the complex domain, even on
+the branch cuts:
+
+@format
+@group
+@noindent
+@w{  sin i z = i sinh z  sinh i z = i sin z        arctan i z = i arctanh z  }
+@w{  cos i z = cosh z    cosh i z = cos z          arcsinh i z = i arcsin z  }
+@w{  tan i z = i tanh z  arcsin i z = i arcsinh z  arctanh i z = i arctan z  }
+
+@noindent
+@w{         Figure 12--9: Trigonometric Identities for Complex Domain        }
+
+@end group
+@end format
+
+The quadrant numbers referred to in the discussions of branch cuts are as illustrated
+in Figure 12--10.
+
+@example
+                           Imaginary Axis
+	                         |
+	        		 |
+	        	II       |        I
+	        	         |
+	        	         |
+	        	         |
+	       ______________________________________ Real Axis
+	        	         |
+	        	         |
+	        	         |
+	               III       |     	   IV
+	        		 |
+	        		 |
+	        		 |
+	        		 |
+
+@end example
+
+@w{  Figure 12--9: Quadrant Numbering for Branch Cuts}
+
+@node Interval Designators, Random-State Operations, Complex Computations, Number Concepts
+@subsection Interval Designators
+
+The @i{compound type specifier} form of the numeric @i{type specifiers}
+in Figure 12--10 permit the user to specify an interval on the real number line
+which describe a @i{subtype} of the @i{type} which would be described by the
+corresponding @i{atomic type specifier}.  A @i{subtype} of some @i{type}
+@i{T} is specified using an ordered pair of @i{objects} called
+@i{interval designators} for @i{type} @i{T}.
+
+The first of the two @i{interval designators} for @i{type} @i{T} can be
+any of the following:
+
+@table @asis
+
+@item a number @i{N} of @i{type} @i{T}  
+This denotes a lower inclusive bound of @i{N}.  That is, @i{elements}
+of the @i{subtype} of @i{T} will be greater than or equal to @i{N}.
+
+@item a @i{singleton} @i{list} whose @i{element} is
+	  a number @i{M} of @i{type} @i{T}  
+This denotes a lower exclusive bound of @i{M}.  That is, @i{elements}
+of the @i{subtype} of @i{T} will be greater than @i{M}.
+
+@item the symbol @b{*}  
+This denotes the absence of a lower bound on the interval.
+
+@end table
+
+The second of the two @i{interval designators} for @i{type} @i{T} can be
+any of the following:
+
+@table @asis
+
+@item a number @i{N} of @i{type} @i{T}  
+This denotes an upper inclusive bound of @i{N}.  That is, @i{elements}
+of the @i{subtype} of @i{T} will be less than or equal to @i{N}.
+
+@item a @i{singleton} @i{list} whose @i{element} is
+	  a number @i{M} of @i{type} @i{T}  
+This denotes an upper exclusive bound of @i{M}.  That is, @i{elements}
+of the @i{subtype} of @i{T} will be less than @i{M}.
+
+@item the symbol @b{*}  
+This denotes the absence of an upper bound on the interval.
+
+@end table
+
+@node Random-State Operations,  , Interval Designators, Number Concepts
+@subsection Random-State Operations
+
+Figure 12--10 lists some @i{defined names} that are applicable to @i{random states}.
+
+@format
+@group
+@noindent
+@w{  *random-state*     random            }
+@w{  make-random-state  random-state-p    }
+
+@noindent
+@w{  Figure 12--10: Random-state defined names}
+
+@end group
+@end format
+
+@c end of including concept-numbers
+
+@node Numbers Dictionary,  , Number Concepts, Numbers (Numbers)
+@section Numbers Dictionary
+
+@c including dict-numbers
+
+@menu
+* number::			
+* complex (System Class)::	
+* real::			
+* float (System Class)::	
+* short-float::			
+* rational (System Class)::			
+* ratio::			
+* integer::			
+* signed-byte::			
+* unsigned-byte::		
+* mod (System Class)::				
+* bit (System Class)::				
+* fixnum::			
+* bignum::			
+* =::				
+* max::				
+* minusp::			
+* zerop::			
+* floor::			
+* sin::				
+* asin::			
+* pi::				
+* sinh::			
+* *::				
+* +::				
+* -::				
+* /::				
+* 1+::				
+* abs::				
+* evenp::			
+* exp::				
+* gcd::				
+* incf::			
+* lcm::				
+* log::				
+* mod (Function)::				
+* signum::			
+* sqrt::			
+* random-state::		
+* make-random-state::		
+* random::			
+* random-state-p::		
+* *random-state*::		
+* numberp::			
+* cis::				
+* complex::			
+* complexp::			
+* conjugate::			
+* phase::			
+* realpart::			
+* upgraded-complex-part-type::	
+* realp::			
+* numerator::			
+* rational (Function)::			
+* rationalp::			
+* ash::				
+* integer-length::		
+* integerp::			
+* parse-integer::		
+* boole::			
+* boole-1::			
+* logand::			
+* logbitp::			
+* logcount::			
+* logtest::			
+* byte::			
+* deposit-field::		
+* dpb::				
+* ldb::				
+* ldb-test::			
+* mask-field::			
+* most-positive-fixnum::	
+* decode-float::		
+* float::			
+* floatp::			
+* most-positive-short-float::	
+* short-float-epsilon::		
+* arithmetic-error::		
+* arithmetic-error-operands::	
+* division-by-zero::		
+* floating-point-invalid-operation::  
+* floating-point-inexact::	
+* floating-point-overflow::	
+* floating-point-underflow::	
+@end menu
+
+@node number, complex (System Class), Numbers Dictionary, Numbers Dictionary
+@subsection number                                                       [System Class]
+
+@subsubheading  Class Precedence List::
+@b{number},
+@b{t}
+
+@subsubheading  Description::
+
+The @i{type} @b{number} contains @i{objects} which represent
+mathematical numbers.
+
+The @i{types} @b{real} and @b{complex} are @i{disjoint} 
+@i{subtypes} of @b{number}.
+
+The @i{function} @b{=} tests for numerical equality.
+The @i{function} @b{eql}, when its arguments are both @i{numbers}, 
+tests that they have both the same @i{type} and numerical value.
+Two @i{numbers} that are the @i{same} under @b{eql} or @b{=}
+are not necessarily the @i{same} under @b{eq}.
+
+@subsubheading  Notes::
+
+@r{Common Lisp} differs from mathematics on some naming issues.  In mathematics,
+the set of real numbers is traditionally described as a subset of the
+complex numbers, but in @r{Common Lisp}, the @i{type} @b{real} and the @i{type} @b{complex} are
+disjoint.  The @r{Common Lisp} type which includes all mathematical complex
+numbers is called @b{number}.  The reasons for these differences
+include historical precedent, compatibility with most other popular
+computer languages, and various issues of time and space efficiency.
+
+@node complex (System Class), real, number, Numbers Dictionary
+@subsection complex                                                      [System Class]
+
+@subsubheading  Class Precedence List::
+@b{complex},
+@b{number},
+@b{t}
+
+@subsubheading  Description::
+
+The @i{type} @b{complex} includes all mathematical complex numbers
+other than those included in the @i{type} @b{rational}.
+@i{Complexes} are 
+expressed
+in Cartesian form with a
+real part and an imaginary part, each of which is a @i{real}.
+The real part and imaginary part are either both
+@i{rational} or both of the same @i{float} @i{type}.
+The imaginary part can be a @i{float} zero, but can never
+be a @i{rational} zero, for such a number is always represented
+by @r{Common Lisp} as a @i{rational} rather than a @i{complex}.
+
+@subsubheading  Compound Type Specifier Kind::
+
+Specializing.
+
+@subsubheading  Compound Type Specifier Syntax::
+
+(@code{complex}@{@i{@t{[}typespec | @b{*}@t{]}}@})
+
+@subsubheading  Compound Type Specifier Arguments::
+
+@i{typespec}---a @i{type specifier} that denotes a @i{subtype} of @i{type} @b{real}.
+
+@subsubheading  Compound Type Specifier Description::
+
+[Editorial Note by KMP: If you ask me, this definition is a complete mess.  Looking at
+issue ARRAY-TYPE-ELEMENT-TYPE-SEMANTICS:UNIFY-UPGRADING does not help me figure 
+it out, either.  Anyone got any suggestions?]
+
+Every element of this @i{type} is a @i{complex} whose
+real part and imaginary part are each of type
+
+@t{(upgraded-complex-part-type @i{typespec})}.
+
+This @i{type} encompasses those @i{complexes}
+that can result by giving numbers of @i{type} @i{typespec}
+to @b{complex}.
+
+@t{(complex @i{type-specifier})}
+refers to all @i{complexes} that can result from giving
+@i{numbers} of @i{type} @i{type-specifier} to the @i{function} @b{complex}, 
+plus all other @i{complexes} of the same specialized representation.      
+
+@subsubheading  See Also::
+
+@ref{Rule of Canonical Representation for Complex Rationals},
+@ref{Constructing Numbers from Tokens},
+@ref{Printing Complexes}
+
+@subsubheading  Notes::
+
+The input syntax for a @i{complex} with real part r and 
+imaginary part i is @t{#C(r i)}.  
+For further details, see @ref{Standard Macro Characters}.
+
+For every @i{float}, n, there is a @i{complex}
+which represents the same mathematical number 
+and which can be obtained by @t{(COERCE n 'COMPLEX)}.
+
+@node real, float (System Class), complex (System Class), Numbers Dictionary
+@subsection real                                                         [System Class]
+
+@subsubheading  Class Precedence List::
+@b{real},
+@b{number},
+@b{t}
+
+@subsubheading  Description::
+
+The @i{type} @b{real} includes all @i{numbers} that
+represent mathematical real numbers, though there are mathematical real
+numbers (@i{e.g.}, irrational numbers) that do not have an exact representation 
+in @r{Common Lisp}.  Only @i{reals} can be ordered using the
+@b{<}, @b{>}, @b{<=}, and @b{>=} functions.
+
+The @i{types} @b{rational} and @b{float} are @i{disjoint}
+@i{subtypes} of @i{type} @b{real}.
+
+@subsubheading  Compound Type Specifier Kind::
+
+Abbreviating.
+
+@subsubheading  Compound Type Specifier Syntax::
+
+(@code{real}@{@i{@t{[}lower-limit @r{[}upper-limit@r{]}@t{]}}@})
+
+@subsubheading  Compound Type Specifier Arguments::
+
+@i{lower-limit}, @i{upper-limit}---@i{interval designators} 
+					   for @i{type} @b{real}.
+ The defaults for each of @i{lower-limit} and @i{upper-limit} is the @i{symbol} @b{*}.
+
+@subsubheading  Compound Type Specifier Description::
+
+This denotes the @i{reals} on the interval described by
+@i{lower-limit} and @i{upper-limit}.
+
+@node float (System Class), short-float, real, Numbers Dictionary
+@subsection float                                                        [System Class]
+
+@subsubheading  Class Precedence List::
+@b{float},
+
+@b{real},
+
+@b{number},
+@b{t}
+
+@subsubheading  Description::
+
+A @i{float}
+is a mathematical rational (but @i{not} a @r{Common Lisp} @i{rational})
+of the form
+s\cdot f\cdot b^@r{e-p},
+where s is +1 or -1, the @i{sign};
+b is an @i{integer} 
+greater than~1, the @i{base} or @i{radix} of the representation;
+p is a positive @i{integer}, 
+the @i{precision} (in base-b digits) of the @i{float};
+f is a positive @i{integer} 
+between b^@r{p-1} and
+b^p-1 (inclusive), the significand;
+and e is an @i{integer}, the exponent.
+The value of p and the range of~e
+depends on the implementation and on the type of @i{float} 
+within that implementation. In addition, there is a floating-point zero;
+depending on the implementation, there can also be a ``minus zero''. If there
+is no minus zero, then 0.0 and~-0.0 are both interpreted as simply a
+floating-point zero.
+@t{(= 0.0 -0.0)} is always true.  
+If there is a minus zero, @t{(eql -0.0 0.0)} is @i{false},
+otherwise it is @i{true}.
+
+[Reviewer Note by Barmar: What about IEEE NaNs and infinities?]
+
+[Reviewer Note by RWK: In the following, what is the ``ordering''?  precision? range?
+	  Can there be additional subtypes of float or does ``others'' in the
+	  list of four?]
+
+The @i{types} @b{short-float}, @b{single-float}, @b{double-float}, 
+and @b{long-float} are @i{subtypes} of @i{type} @b{float}.  Any two of them must be
+either @i{disjoint} @i{types} or the @i{same} @i{type};
+if the @i{same} @i{type}, then any other @i{types} between them in the
+above ordering must also be the @i{same} @i{type}.  For example, 
+if the @i{type} @b{single-float} and the @i{type} @b{long-float} are the @i{same} @i{type},
+then the @i{type} @b{double-float} must be the @i{same} @i{type} also.
+
+@subsubheading  Compound Type Specifier Kind::
+
+Abbreviating.
+
+@subsubheading  Compound Type Specifier Syntax::
+
+(@code{float}@{@i{@t{[}lower-limit @r{[}upper-limit@r{]}@t{]}}@})
+
+@subsubheading  Compound Type Specifier Arguments::
+
+@i{lower-limit}, @i{upper-limit}---@i{interval designators} 
+					   for @i{type} @b{float}.
+ The defaults for each of @i{lower-limit} and @i{upper-limit} is the @i{symbol} @b{*}.
+
+@subsubheading  Compound Type Specifier Description::
+
+This denotes the @i{floats} on the interval described by
+@i{lower-limit} and @i{upper-limit}.
+
+@subsubheading  See Also::
+
+@i{Figure~2--9},
+@ref{Constructing Numbers from Tokens},
+@ref{Printing Floats}
+
+@subsubheading  Notes::
+
+Note that all mathematical integers are representable not only as
+@r{Common Lisp} @i{reals}, but also as @i{complex floats}.  For example,
+possible representations of the mathematical number 1 
+include the @i{integer} @t{1},
+        the @i{float} @t{1.0},
+     or the @i{complex} @t{#C(1.0 0.0)}.  
+
+@node short-float, rational (System Class), float (System Class), Numbers Dictionary
+@subsection short-float, single-float, double-float, long-float                  [Type]
+
+@subsubheading  Supertypes:: 
+
+@b{short-float}: 
+ @b{short-float},
+ @b{float}, 
+
+ @b{real},
+
+ @b{number},
+ @b{t}
+
+@b{single-float}: 
+ @b{single-float},
+ @b{float}, 
+
+ @b{real},
+
+ @b{number},
+ @b{t}
+
+@b{double-float}: 
+ @b{double-float},
+ @b{float}, 
+
+ @b{real},
+
+ @b{number},
+ @b{t}
+
+@b{long-float}: 
+ @b{long-float},
+ @b{float}, 
+
+ @b{real},
+
+ @b{number},
+ @b{t}
+
+@subsubheading  Description::
+
+For the four defined @i{subtypes} of @i{type} @b{float}, it is true that
+intermediate between the @i{type} @b{short-float} and the @i{type} @b{long-float} are
+the @i{type} @b{single-float} and the @i{type} @b{double-float}.
+The precise definition of these categories is 
+@i{implementation-defined}.
+The precision (measured in ``bits'', computed as p\log_2b)
+and the exponent size (also measured in ``bits,'' computed as
+\log_2(n+1), where n is the maximum exponent value) is recommended
+to be at least as great
+as the values in Figure 12--11. 
+Each of the defined @i{subtypes} of @i{type} @b{float} might or might not have a minus zero.
+
+@format
+@group
+@noindent
+@w{  @b{Format}  @b{Minimum Precision}  @b{Minimum Exponent Size}  }
+@w{  __________________________________________________}
+@w{  Short   13 bits            5 bits                 }
+@w{  Single  24 bits            8 bits                 }
+@w{  Double  50 bits            8 bits                 }
+@w{  Long    50 bits            8 bits                 }
+
+@noindent
+@w{  Figure 12--11: Recommended Minimum Floating-Point Precision and Exponent Size}
+
+@end group
+@end format
+
+There can be fewer than four internal 
+representations for @i{floats}. 
+If there are fewer distinct representations, the following rules apply:
+@table @asis
+
+@item --  
+If there is only one, it is 
+the @i{type} @b{single-float}.
+In this representation, an @i{object} is simultaneously of @i{types} 
+@b{single-float}, @b{double-float}, @b{short-float}, 
+and @b{long-float}.
+@item --  
+Two internal representations can be arranged in either of the
+following ways:
+@table @asis
+
+@item @t{*}  
+Two @i{types} are provided: @b{single-float} and
+@b{short-float}.  An @i{object} is simultaneously 
+of @i{types} @b{single-float}, @b{double-float}, and @b{long-float}.
+@item @t{*}  
+Two @i{types} are provided: @b{single-float} and
+@b{double-float}. An @i{object} is simultaneously of @i{types}
+@b{single-float} and @b{short-float}, or
+@b{double-float} and @b{long-float}.
+@end table
+
+@item --  
+Three internal representations can be arranged in either
+of the following ways:
+@table @asis
+
+@item @t{*}  
+Three @i{types} are provided: @b{short-float}, 
+@b{single-float}, and @b{double-float}.
+An @i{object} can simultaneously be of @i{type} @b{double-float}
+and @b{long-float}.
+@item @t{*}  
+Three @i{types} are provided: 
+@b{single-float}, @b{double-float},
+and @b{long-float}. An @i{object} can simultaneously
+be of @i{types} @b{single-float} and @b{short-float}.
+@end table
+
+@end table
+
+@subsubheading  Compound Type Specifier Kind::
+
+Abbreviating.
+
+@subsubheading  Compound Type Specifier Syntax::
+
+(@code{short-float}@{@i{@t{[}short-lower-limit   @r{[}short-upper-limit@r{]}@t{]}}@})
+(@code{single-float}@{@i{@t{[}single-lower-limit @r{[}single-upper-limit@r{]}@t{]}}@})
+(@code{double-float}@{@i{@t{[}double-lower-limit @r{[}double-upper-limit@r{]}@t{]}}@})
+(@code{long-float}@{@i{@t{[}long-lower-limit     @r{[}long-upper-limit@r{]}@t{]}}@})
+
+@subsubheading  Compound Type Specifier Arguments::
+
+@i{short-lower-limit}, @i{short-upper-limit}---@i{interval designators} 
+					   for @i{type} @b{short-float}.
+ The defaults for each of @i{lower-limit} and @i{upper-limit} is the @i{symbol} @b{*}.
+
+@i{single-lower-limit}, @i{single-upper-limit}---@i{interval designators} 
+					   for @i{type} @b{single-float}.
+ The defaults for each of @i{lower-limit} and @i{upper-limit} is the @i{symbol} @b{*}.
+
+@i{double-lower-limit}, @i{double-upper-limit}---@i{interval designators} 
+					   for @i{type} @b{double-float}.
+ The defaults for each of @i{lower-limit} and @i{upper-limit} is the @i{symbol} @b{*}.
+
+@i{long-lower-limit}, @i{long-upper-limit}---@i{interval designators} 
+					   for @i{type} @b{long-float}.
+ The defaults for each of @i{lower-limit} and @i{upper-limit} is the @i{symbol} @b{*}.
+
+@subsubheading  Compound Type Specifier Description::
+
+Each of these denotes the set of @i{floats} of the indicated @i{type} 
+that are on the interval specified by the @i{interval designators}.
+
+@node rational (System Class), ratio, short-float, Numbers Dictionary
+@subsection rational                                                     [System Class]
+
+@subsubheading  Class Precedence List::
+@b{rational},
+
+@b{real},
+
+@b{number},
+@b{t}
+
+@subsubheading  Description::
+
+The canonical representation of a @i{rational} 
+is as an @i{integer} if its value is integral,
+and otherwise as a @i{ratio}.
+
+The @i{types} @b{integer} and @b{ratio} 
+are @i{disjoint} @i{subtypes} of @i{type} @b{rational}.
+
+@subsubheading  Compound Type Specifier Kind::
+
+Abbreviating.
+
+@subsubheading  Compound Type Specifier Syntax::
+
+(@code{rational}@{@i{@t{[}lower-limit @r{[}upper-limit@r{]}@t{]}}@})
+
+@subsubheading  Compound Type Specifier Arguments::
+
+@i{lower-limit}, @i{upper-limit}---@i{interval designators} 
+					   for @i{type} @b{rational}.
+ The defaults for each of @i{lower-limit} and @i{upper-limit} is the @i{symbol} @b{*}.
+
+@subsubheading  Compound Type Specifier Description::
+
+This denotes the @i{rationals} on the interval described by
+@i{lower-limit} and @i{upper-limit}.
+
+@node ratio, integer, rational (System Class), Numbers Dictionary
+@subsection ratio                                                        [System Class]
+
+@subsubheading  Class Precedence List::
+@b{ratio},
+@b{rational},
+
+@b{real},
+
+@b{number},
+@b{t}
+
+@subsubheading  Description::
+
+A @i{ratio} is a @i{number} 
+representing the mathematical ratio of two non-zero integers,
+the numerator and denominator,
+whose greatest common divisor is one,
+and of which the denominator is positive and greater than one.
+
+@subsubheading  See Also::
+
+@i{Figure~2--9},
+@ref{Constructing Numbers from Tokens},
+@ref{Printing Ratios}
+
+@node integer, signed-byte, ratio, Numbers Dictionary
+@subsection integer                                                      [System Class]
+
+@subsubheading  Class Precedence List::
+@b{integer},
+@b{rational},
+
+@b{real},
+
+@b{number},
+@b{t}
+
+@subsubheading  Description::
+
+An @i{integer} is a mathematical integer. There is no limit on the 
+magnitude of an @i{integer}.
+
+The @i{types} @b{fixnum} and @b{bignum} 
+form an @i{exhaustive partition} of @i{type} @b{integer}.
+
+@subsubheading  Compound Type Specifier Kind::
+
+Abbreviating.
+
+@subsubheading  Compound Type Specifier Syntax::
+
+(@code{integer}@{@i{@t{[}lower-limit @r{[}upper-limit@r{]}@t{]}}@})
+
+@subsubheading  Compound Type Specifier Arguments::
+
+@i{lower-limit}, @i{upper-limit}---@i{interval designators} 
+					   for @i{type} @b{integer}.
+ The defaults for each of @i{lower-limit} and @i{upper-limit} is the @i{symbol} @b{*}.
+
+@subsubheading  Compound Type Specifier Description::
+
+This denotes the @i{integers} on the interval described by
+@i{lower-limit} and @i{upper-limit}.
+
+@subsubheading  See Also::
+
+@i{Figure~2--9},
+@ref{Constructing Numbers from Tokens},
+@ref{Printing Integers}
+
+@subsubheading  Notes::
+
+The @i{type} @t{(integer @i{lower} @i{upper})},
+where @i{lower} and @i{upper} 
+are @b{most-negative-fixnum} and @b{most-positive-fixnum}, respectively,
+is also called @b{fixnum}.
+
+The @i{type} @t{(integer 0 1)} is also called @b{bit}.
+The @i{type} @t{(integer 0 *)} is also called @b{unsigned-byte}.
+
+@node signed-byte, unsigned-byte, integer, Numbers Dictionary
+@subsection signed-byte                                                          [Type]
+
+@subsubheading  Supertypes:: 
+
+@b{signed-byte},
+@b{integer},
+@b{rational},
+
+@b{real},
+
+@b{number},
+@b{t}
+
+@subsubheading  Description::
+
+The atomic @i{type specifier} @b{signed-byte} denotes the same 
+type as is denoted by the @i{type specifier} @b{integer};
+however, the list forms of these two @i{type specifiers} have different semantics.
+
+@subsubheading  Compound Type Specifier Kind::
+
+Abbreviating.
+
+@subsubheading  Compound Type Specifier Syntax::
+
+(@code{signed-byte}@{@i{@t{[}s | @b{*}@t{]}}@})
+
+@subsubheading  Compound Type Specifier Arguments::
+
+@i{s}---a positive @i{integer}.
+
+@subsubheading  Compound Type Specifier Description::
+
+This denotes the set of @i{integers} that can be represented
+in two's-complement form in a @i{byte} of @i{s} bits.  This is
+equivalent to @t{(integer -2^@r{s-1} 2^@r{s-1}-1)}.  The type
+@b{signed-byte} or the type @t{(signed-byte *)} is the same
+as the @i{type} @b{integer}.
+
+@node unsigned-byte, mod (System Class), signed-byte, Numbers Dictionary
+@subsection unsigned-byte                                                        [Type]
+
+@subsubheading  Supertypes:: 
+
+@b{unsigned-byte},
+@b{signed-byte},
+@b{integer},
+@b{rational},
+
+@b{real},
+
+@b{number},
+@b{t}
+
+@subsubheading  Description::
+
+The atomic @i{type specifier} @b{unsigned-byte} denotes the same 
+type as is denoted by the @i{type specifier} @t{(integer 0 *)}.  
+
+@subsubheading  Compound Type Specifier Kind::
+
+Abbreviating.
+
+@subsubheading  Compound Type Specifier Syntax::
+
+(@code{unsigned-byte}@{@i{@t{[}@i{s} | @b{*}@t{]}}@})
+
+@subsubheading  Compound Type Specifier Arguments::
+
+@i{s}---a positive @i{integer}.
+
+@subsubheading  Compound Type Specifier Description::
+
+This denotes the set of non-negative @i{integers} that can be
+represented in a byte of size @i{s} (bits).  
+This is equivalent 
+to @t{(mod @i{m})} for @i{m}=2^s, or
+to @t{(integer 0 @i{n})} for @i{n}=2^s-1.
+The @i{type} @b{unsigned-byte} or 
+the type @t{(unsigned-byte *)} is the same as
+the type @t{(integer 0 *)}, the set of non-negative @i{integers}.
+
+@subsubheading  Notes::
+
+The @i{type} @t{(unsigned-byte 1)} is also called @b{bit}.
+
+@node mod (System Class), bit (System Class), unsigned-byte, Numbers Dictionary
+@subsection mod                                                        [Type Specifier]
+
+@subsubheading  Compound Type Specifier Kind::
+
+Abbreviating.
+
+@subsubheading  Compound Type Specifier Syntax::
+
+(@code{mod}@{@i{n}@})
+
+@subsubheading  Compound Type Specifier Arguments::
+
+@i{n}---a positive @i{integer}.
+
+@subsubheading  Compound Type Specifier Description::
+
+This denotes the set of non-negative @i{integers} less than @i{n}.
+This is equivalent to 
+  @t{(integer 0 (@i{n}))}
+or to
+  @t{(integer 0 @i{m})},
+where @i{m}=@i{n}-1.
+
+The argument is required, and cannot be @b{*}.
+
+The symbol @b{mod} is not valid as a @i{type specifier}.
+
+@node bit (System Class), fixnum, mod (System Class), Numbers Dictionary
+@subsection bit                                                                  [Type]
+
+@subsubheading  Supertypes:: 
+
+@b{bit},
+@b{unsigned-byte},
+@b{signed-byte},
+@b{integer},
+@b{rational},
+
+@b{real},
+
+@b{number},
+@b{t}
+
+@subsubheading  Description::
+
+The @i{type} @b{bit} is equivalent to the @i{type} @t{(integer 0 1)}
+and @t{(unsigned-byte 1)}.
+
+@node fixnum, bignum, bit (System Class), Numbers Dictionary
+@subsection fixnum                                                               [Type]
+
+@subsubheading  Supertypes:: 
+
+@b{fixnum},
+@b{integer},
+@b{rational},
+
+@b{real},
+
+@b{number},
+@b{t}
+
+@subsubheading  Description::
+
+A @i{fixnum} is an @i{integer} whose value is between 
+@b{most-negative-fixnum} and @b{most-positive-fixnum} inclusive.
+Exactly which @i{integers} are @i{fixnums} is 
+@i{implementation-defined}.
+
+The @i{type} @b{fixnum} is required to be a supertype of
+@t{(signed-byte 16)}.
+
+@node bignum, =, fixnum, Numbers Dictionary
+@subsection bignum                                                               [Type]
+
+@subsubheading  Supertypes:: 
+
+@b{bignum},
+@b{integer},
+@b{rational},
+
+@b{real},
+
+@b{number},
+@b{t}
+
+@subsubheading  Description::
+
+The @i{type} @b{bignum} is defined to be exactly @t{(and integer (not fixnum))}.
+
+@node =, max, bignum, Numbers Dictionary
+@subsection =, /=, <, >, <=, >=                                              [Function]
+
+@code{=}  @i{@r{&rest} numbers^+} @result{}  @i{generalized-boolean}
+
+@code{/=}  @i{@r{&rest} numbers^+} @result{}  @i{generalized-boolean}
+
+@code{<}  @i{@r{&rest} numbers^+} @result{}  @i{generalized-boolean}
+
+@code{>}  @i{@r{&rest} numbers^+} @result{}  @i{generalized-boolean}
+
+@code{<=}  @i{@r{&rest} numbers^+} @result{}  @i{generalized-boolean}
+
+@code{>=}  @i{@r{&rest} numbers^+} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{number}---for @b{<}, @b{>}, @b{<=}, @b{>=}: a @i{real};
+		 for @b{=}, @b{/=}: a @i{number}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+@b{=}, @b{/=}, @b{<}, @b{>}, @b{<=}, and @b{>=} 
+perform arithmetic comparisons on their arguments as follows:
+
+@table @asis
+
+@item @b{=}  
+The value of @b{=} is @i{true} if all @i{numbers} are the same in value;
+otherwise it is @i{false}.
+Two @i{complexes} are considered equal by @b{=}
+if their real and imaginary parts are equal according to @b{=}.
+
+@item @b{/=}  
+The value of @b{/=} is @i{true} if no two @i{numbers} are the same in value;
+otherwise it is @i{false}.
+
+@item @b{<}  
+The value of @b{<} is @i{true} if the @i{numbers} are in monotonically increasing order;
+otherwise it is @i{false}.
+
+@item @b{>}  
+The value of @b{>} is @i{true} if the @i{numbers} are in monotonically decreasing order;
+otherwise it is @i{false}.
+
+@item @b{<=}  
+The value of @b{<=} is @i{true} if the @i{numbers} are in monotonically 
+ nondecreasing order;
+otherwise it is @i{false}.
+
+@item @b{>=}  
+The value of @b{>=} is @i{true} if the @i{numbers} are in monotonically
+ nonincreasing order;
+otherwise it is @i{false}.
+@end table
+
+@b{=}, @b{/=}, @b{<}, @b{>}, @b{<=}, and @b{>=} 
+perform necessary type conversions. 
+
+@subsubheading  Examples::
+
+The uses of these functions are illustrated in Figure 12--12.
+
+@format
+@group
+@noindent
+@w{  @t{(= 3 3)} is @i{true}.              @t{(/= 3 3)} is @i{false}.             }
+@w{  @t{(= 3 5)} is @i{false}.             @t{(/= 3 5)} is @i{true}.              }
+@w{  @t{(= 3 3 3 3)} is @i{true}.          @t{(/= 3 3 3 3)} is @i{false}.         }
+@w{  @t{(= 3 3 5 3)} is @i{false}.         @t{(/= 3 3 5 3)} is @i{false}.         }
+@w{  @t{(= 3 6 5 2)} is @i{false}.         @t{(/= 3 6 5 2)} is @i{true}.          }
+@w{  @t{(= 3 2 3)} is @i{false}.           @t{(/= 3 2 3)} is @i{false}.           }
+@w{  @t{(< 3 5)} is @i{true}.              @t{(<= 3 5)} is @i{true}.              }
+@w{  @t{(< 3 -5)} is @i{false}.            @t{(<= 3 -5)} is @i{false}.            }
+@w{  @t{(< 3 3)} is @i{false}.             @t{(<= 3 3)} is @i{true}.              }
+@w{  @t{(< 0 3 4 6 7)} is @i{true}.        @t{(<= 0 3 4 6 7)} is @i{true}.        }
+@w{  @t{(< 0 3 4 4 6)} is @i{false}.       @t{(<= 0 3 4 4 6)} is @i{true}.        }
+@w{  @t{(> 4 3)} is @i{true}.              @t{(>= 4 3)} is @i{true}.              }
+@w{  @t{(> 4 3 2 1 0)} is @i{true}.        @t{(>= 4 3 2 1 0)} is @i{true}.        }
+@w{  @t{(> 4 3 3 2 0)} is @i{false}.       @t{(>= 4 3 3 2 0)} is @i{true}.        }
+@w{  @t{(> 4 3 1 2 0)} is @i{false}.       @t{(>= 4 3 1 2 0)} is @i{false}.       }
+@w{  @t{(= 3)} is @i{true}.                @t{(/= 3)} is @i{true}.                }
+@w{  @t{(< 3)} is @i{true}.                @t{(<= 3)} is @i{true}.                }
+@w{  @t{(= 3.0 #c(3.0 0.0))} is @i{true}.  @t{(/= 3.0 #c(3.0 1.0))} is @i{true}.  }
+@w{  @t{(= 3 3.0)} is @i{true}.            @t{(= 3.0s0 3.0d0)} is @i{true}.       }
+@w{  @t{(= 0.0 -0.0)} is @i{true}.         @t{(= 5/2 2.5)} is @i{true}.           }
+@w{  @t{(> 0.0 -0.0)} is @i{false}.        @t{(= 0 -0.0)} is @i{true}.            }
+@w{  @t{(<= 0 x 9)} is @i{true} if @t{x} is between @t{0} and @t{9}, inclusive}
+@w{  @t{(< 0.0 x 1.0)} is @i{true} if @t{x} is between @t{0.0} and @t{1.0}, exclusive}
+@w{  @t{(< -1 j (length v))} is @i{true} if @t{j} is a @i{valid array index} for a @i{vector} @t{v}}
+
+@noindent
+@w{         Figure 12--12: Uses of /=, =, <, >, <=, and >=        }
+
+@end group
+@end format
+
+@subsubheading  Exceptional Situations::
+
+Might signal @b{type-error} if some @i{argument} is not a @i{real}.
+Might signal @b{arithmetic-error} if otherwise unable to fulfill its contract.
+
+@subsubheading  Notes::
+
+@b{=} differs from @b{eql} in that
+@t{(= 0.0 -0.0)} is always true,
+because @b{=} compares the mathematical values of its operands,
+whereas @b{eql} compares the representational values, so to speak.
+
+@node max, minusp, =, Numbers Dictionary
+@subsection max, min                                                         [Function]
+
+@code{max}  @i{@r{&rest} reals^+} @result{}  @i{max-real}
+
+@code{min}  @i{@r{&rest} reals^+} @result{}  @i{min-real}
+
+@subsubheading  Arguments and Values::
+
+@i{real}---a @i{real}.
+
+@i{max-real}, @i{min-real}---a @i{real}.
+
+@subsubheading  Description::
+
+@b{max} returns the @i{real} that is greatest (closest to positive infinity).
+@b{min} returns the @i{real} that is least (closest to negative infinity).
+
+For @b{max},
+the implementation has the choice of returning the largest
+argument as is or applying the rules of floating-point @i{contagion},
+taking all the arguments into consideration for @i{contagion} purposes.
+Also, if one or more of the arguments are @b{=}, then any one
+of them may be chosen as the value to return.
+For example, if the @i{reals} are a mixture of @i{rationals} and @i{floats},
+and the largest argument is a @i{rational},
+then the implementation is free to
+produce either that @i{rational} 
+or its @i{float} approximation;
+if the largest argument is a 
+@i{float} of a smaller format
+than the largest format of any @i{float} argument,
+then the implementation is free to
+return the argument in its given format or expanded to the larger format.
+Similar remarks apply to @b{min} 
+(replacing ``largest argument'' by ``smallest argument'').
+
+@subsubheading  Examples::
+
+@example
+ (max 3) @result{}  3 
+ (min 3) @result{}  3
+ (max 6 12) @result{}  12 
+ (min 6 12) @result{}  6
+ (max -6 -12) @result{}  -6 
+ (min -6 -12) @result{}  -12
+ (max 1 3 2 -7) @result{}  3 
+ (min 1 3 2 -7) @result{}  -7
+ (max -2 3 0 7) @result{}  7 
+ (min -2 3 0 7) @result{}  -2
+ (max 5.0 2) @result{}  5.0 
+ (min 5.0 2)
+@result{}  2
+@i{OR}@result{} 2.0
+ (max 3.0 7 1)
+@result{}  7
+@i{OR}@result{} 7.0 
+ (min 3.0 7 1)
+@result{}  1
+@i{OR}@result{} 1.0
+ (max 1.0s0 7.0d0) @result{}  7.0d0
+ (min 1.0s0 7.0d0)
+@result{}  1.0s0
+@i{OR}@result{} 1.0d0
+ (max 3 1 1.0s0 1.0d0)
+@result{}  3
+@i{OR}@result{} 3.0d0
+ (min 3 1 1.0s0 1.0d0)
+@result{}  1
+@i{OR}@result{} 1.0s0 
+@i{OR}@result{} 1.0d0
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if any @i{number} is not a @i{real}.
+
+@node minusp, zerop, max, Numbers Dictionary
+@subsection minusp, plusp                                                    [Function]
+
+@code{minusp}  @i{real} @result{}  @i{generalized-boolean}
+
+@code{plusp}  @i{real} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{real}---a @i{real}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+@b{minusp} returns @i{true} if @i{real} is less than zero;
+otherwise, returns @i{false}.
+
+@b{plusp} returns @i{true} if @i{real} is greater than zero;
+otherwise, returns @i{false}.
+
+Regardless of whether an @i{implementation} provides distinct
+representations for positive and negative @i{float} zeros,
+@t{(minusp -0.0)} always returns @i{false}.
+
+@subsubheading  Examples::
+@example
+ (minusp -1) @result{}  @i{true}
+ (plusp 0) @result{}  @i{false}
+ (plusp least-positive-single-float) @result{}  @i{true}
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{real} is not a @i{real}.
+
+@node zerop, floor, minusp, Numbers Dictionary
+@subsection zerop                                                            [Function]
+
+@code{zerop}  @i{number} @result{}  @i{generalized-boolean}
+
+@subsubheading  Pronunciation::
+
+pronounced 'z\=e (, )r\=o@r{}(, )p\=e
+
+@subsubheading  Arguments and Values::
+
+@i{number}---a @i{number}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{number} is zero (@i{integer}, @i{float}, or @i{complex});
+otherwise, returns @i{false}.
+
+Regardless of whether an @i{implementation} provides distinct representations
+for positive and negative floating-point zeros, @t{(zerop -0.0)} 
+always returns @i{true}.
+
+@subsubheading  Examples::
+
+@example
+ (zerop 0) @result{}  @i{true}
+ (zerop 1) @result{}  @i{false}
+ (zerop -0.0) @result{}  @i{true}
+ (zerop 0/100) @result{}  @i{true}
+ (zerop #c(0 0.0)) @result{}  @i{true}
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{number} is not a @i{number}.
+
+@subsubheading  Notes::
+
+@example
+ (zerop @i{number}) @equiv{} (= @i{number} 0)
+@end example
+
+@node floor, sin, zerop, Numbers Dictionary
+@subsection floor, ffloor, ceiling, fceiling,
+@subheading truncate, ftruncate, round, fround
+@flushright
+@i{[Function]}
+@end flushright
+
+@code{floor}  @i{number @r{&optional} divisor} @result{}  @i{quotient, remainder}
+
+@code{ffloor}  @i{number @r{&optional} divisor} @result{}  @i{quotient, remainder}
+
+@code{ceiling}  @i{number @r{&optional} divisor} @result{}  @i{quotient, remainder}
+
+@code{fceiling}  @i{number @r{&optional} divisor} @result{}  @i{quotient, remainder}
+
+@code{truncate}  @i{number @r{&optional} divisor} @result{}  @i{quotient, remainder}
+
+@code{ftruncate}  @i{number @r{&optional} divisor} @result{}  @i{quotient, remainder}
+
+@code{round}  @i{number @r{&optional} divisor} @result{}  @i{quotient, remainder}
+
+@code{fround}  @i{number @r{&optional} divisor} @result{}  @i{quotient, remainder}
+
+@subsubheading  Arguments and Values::
+
+@i{number}---a @i{real}.
+
+@i{divisor}---a non-zero @i{real}.
+ The default is the @i{integer} @t{1}.
+
+@i{quotient}---for @b{floor}, @b{ceiling}, 
+		       @b{truncate}, and @b{round}: an @i{integer};
+		   for @b{ffloor}, @b{fceiling}, 
+		       @b{ftruncate}, and @b{fround}: a @i{float}.
+
+@i{remainder}---a @i{real}.
+
+@subsubheading  Description::
+
+These functions divide @i{number} by @i{divisor}, 
+returning a @i{quotient} and @i{remainder}, such that 
+
+ @i{quotient}@r{\cdot} @i{divisor}+@i{remainder}=@i{number}
+
+The @i{quotient} always represents a mathematical integer.
+When more than one mathematical integer might be possible
+ (@i{i.e.}, when the remainder is not zero),
+the kind of rounding or truncation depends on the @i{operator}:
+
+@table @asis
+
+@item @b{floor}, @b{ffloor}  
+@b{floor} and @b{ffloor} produce a @i{quotient} 
+that has been truncated toward negative infinity;
+that is, the @i{quotient} represents the largest mathematical integer
+that is not larger than the mathematical quotient.
+
+@item @b{ceiling}, @b{fceiling}  
+@b{ceiling} and @b{fceiling} produce a @i{quotient}
+that has been truncated toward positive infinity;
+that is, the @i{quotient} represents the smallest mathematical integer
+that is not smaller than the mathematical result.
+
+@item @b{truncate}, @b{ftruncate}  
+@b{truncate} and @b{ftruncate} produce a @i{quotient}
+that has been truncated towards zero;
+that is, the @i{quotient} represents the mathematical integer
+of the same sign as the mathematical quotient, and
+that has the greatest integral magnitude not greater than that of the mathematical quotient.
+
+@item @b{round}, @b{fround}  
+@b{round} and @b{fround} produce a @i{quotient}
+that has been rounded to the nearest mathematical integer;
+if the mathematical quotient is exactly halfway between two integers,
+(that is, it has the form @i{integer}+1\over2),
+then the @i{quotient} has been rounded to the even (divisible by two) integer.
+
+@end table
+
+All of these functions perform type conversion operations on @i{numbers}.
+
+The @i{remainder}
+is an @i{integer}  if both   @t{x} and @t{y} are @i{integers},
+is a  @i{rational} if both   @t{x} and @t{y} are @i{rationals}, and
+is a  @i{float}    if either @t{x} or  @t{y} is  a @i{float}.
+
+@b{ffloor}, @b{fceiling}, @b{ftruncate}, and @b{fround} 
+handle arguments of different @i{types} in the following way:
+If  @i{number}  is     a @i{float},
+and @i{divisor} is not a @i{float} of longer format,
+then the first result is a @i{float} of the same @i{type} as @i{number}.
+Otherwise, the first result is of the @i{type} determined by @i{contagion} rules;
+see @ref{Contagion in Numeric Operations}.
+
+@subsubheading  Examples::
+
+@example
+ (floor 3/2) @result{}  1, 1/2
+ (ceiling 3 2) @result{}  2, -1
+ (ffloor 3 2) @result{}  1.0, 1
+ (ffloor -4.7) @result{}  -5.0, 0.3
+ (ffloor 3.5d0) @result{}  3.0d0, 0.5d0
+ (fceiling 3/2) @result{}  2.0, -1/2
+ (truncate 1) @result{}  1, 0
+ (truncate .5) @result{}  0, 0.5
+ (round .5) @result{}  0, 0.5
+ (ftruncate -7 2) @result{}  -3.0, -1
+ (fround -7 2) @result{}  -4.0, 1
+ (dolist (n '(2.6 2.5 2.4 0.7 0.3 -0.3 -0.7 -2.4 -2.5 -2.6))
+   (format t "~&~4,1@@F ~2,' D ~2,' D ~2,' D ~2,' D"
+           n (floor n) (ceiling n) (truncate n) (round n)))
+@t{ |> } +2.6  2  3  2  3
+@t{ |> } +2.5  2  3  2  2
+@t{ |> } +2.4  2  3  2  2
+@t{ |> } +0.7  0  1  0  1
+@t{ |> } +0.3  0  1  0  0
+@t{ |> } -0.3 -1  0  0  0
+@t{ |> } -0.7 -1  0  0 -1
+@t{ |> } -2.4 -3 -2 -2 -2
+@t{ |> } -2.5 -3 -2 -2 -2
+@t{ |> } -2.6 -3 -2 -2 -3
+@result{}  NIL
+@end example
+
+@subsubheading  Notes::
+
+When only @i{number} is given, the two results are exact;
+the mathematical sum of the two results is always equal to the
+mathematical value of @i{number}.
+
+@t{(@i{function} @i{number} @i{divisor})}
+and @t{(@i{function} (/ @i{number} @i{divisor}))}
+(where @i{function} is any of one
+of @b{floor}, @b{ceiling}, @b{ffloor}, 
+@b{fceiling}, @b{truncate}, 
+@b{round}, @b{ftruncate}, and @b{fround})
+return the same first value, but
+they return different remainders as the second value. For example:
+
+@example
+ (floor 5 2) @result{}  2, 1
+ (floor (/ 5 2)) @result{}  2, 1/2
+@end example
+
+If an effect is desired that is similar to @b{round},
+but that always rounds up or down (rather than toward the nearest even integer) 
+if the mathematical quotient is exactly halfway between two integers, 
+the programmer should consider a construction such as
+    @t{(floor (+ x 1/2))}
+ or @t{(ceiling (- x 1/2))}.
+
+@node sin, asin, floor, Numbers Dictionary
+@subsection sin, cos, tan                                                    [Function]
+
+@code{sin}  @i{radians} @result{}  @i{number}
+
+@code{cos}  @i{radians} @result{}  @i{number}
+
+@code{tan}  @i{radians} @result{}  @i{number}
+
+@subsubheading  Arguments and Values::
+
+@i{radians}---a @i{number} given in radians.
+
+@i{number}---a @i{number}.
+
+@subsubheading  Description::
+
+@b{sin}, @b{cos}, and @b{tan} 
+return the sine, cosine, and tangent, respectively, of @i{radians}.
+
+@subsubheading  Examples::
+
+@example
+ (sin 0) @result{}  0.0
+ (cos 0.7853982) @result{}  0.707107
+ (tan #c(0 1)) @result{}  #C(0.0 0.761594)
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{radians} is not a @i{number}.
+Might signal @b{arithmetic-error}.
+
+@subsubheading  See Also::
+
+@ref{asin}
+,
+@b{acos},
+@b{atan},
+@ref{Rule of Float Substitutability}
+
+@node asin, pi, sin, Numbers Dictionary
+@subsection asin, acos, atan                                                 [Function]
+
+@code{asin}  @i{number} @result{}  @i{radians}
+
+@code{acos}  @i{number} @result{}  @i{radians}
+
+@code{atan}  @i{number1 @r{&optional} number2} @result{}  @i{radians}
+
+@subsubheading  Arguments and Values::
+
+@i{number}---a @i{number}.
+
+@i{number1}---a @i{number} if @i{number2} is not supplied,
+	       or a @i{real}   if @i{number2} is     supplied.
+
+@i{number2}---a @i{real}.
+
+@i{radians}---a @i{number} (of radians).
+
+@subsubheading  Description::
+
+@b{asin}, @b{acos}, and @b{atan}
+compute the arc sine, arc cosine, and arc tangent respectively.
+
+The arc sine, arc cosine, and arc tangent (with only @i{number1} supplied)
+functions can be defined mathematically for
+@i{number} or @i{number1} specified as @i{x} as in Figure 12--13.
+
+@format
+@group
+@noindent
+@w{  Function     Definition                            }
+@w{  Arc sine      -i @t{log}  (ix+ \sqrt@r{1-x^2} )          }
+@w{  Arc cosine    (\pi/2) - @t{arcsin}  x                  }
+@w{  Arc tangent   -i @t{log}  ((1+ix) \sqrt@r{1/(1+x^2)} )   }
+
+@noindent
+@w{  Figure 12--13: Mathematical definition of arc sine, arc cosine, and arc tangent}
+
+@end group
+@end format
+
+These formulae are mathematically correct, assuming
+completely accurate computation. They are not necessarily
+the simplest ones for real-valued computations. 
+
+If both @i{number1} and @i{number2} are supplied
+for @b{atan}, the result is the arc tangent 
+of @i{number1}/@i{number2}.
+The value of @b{atan} is always between
+-\pi (exclusive) and~\pi (inclusive)
+
+ when minus zero is not supported.
+The range of the two-argument arc tangent when minus zero is supported
+includes -\pi.
+
+For a 
+
+@i{real}
+
+@i{number1}, 
+the result is 
+
+a @i{real}
+
+and lies between
+-\pi/2 and~\pi/2 (both exclusive).
+@i{number1} can be a @i{complex} if @i{number2}
+is not supplied. If both are supplied, @i{number2} can be zero provided
+@i{number1} is not zero.  
+
+[Reviewer Note by Barmar: Should add ``However, if the implementation distinguishes 
+		  positive and negative zero, both may be signed zeros, 
+		  and limits are used to define the result.'']
+
+The following definition for arc sine determines the range and
+branch cuts:
+
+@center  @t{arcsin}  z = -i @t{log}  (iz+\sqrt@r{1-z^2}\Bigr) 
+
+The branch cut for the arc sine function is in two pieces:
+one along the negative real axis to the left of~-1
+(inclusive), continuous with quadrant II, and one along the positive real
+axis to the right of~1 (inclusive), continuous with quadrant IV.  The
+range is that strip of the complex plane containing numbers whose real
+part is between -\pi/2 and~\pi/2.  A number with real
+part equal to -\pi/2 is in the range if and only if its imaginary
+part is non-negative; a number with real part equal to \pi/2 is in
+the range if and only if its imaginary part is non-positive.
+
+The following definition for arc cosine determines the range and
+branch cuts:
+
+@center  @t{arccos}  z = \pi\over2 - @t{arcsin}  z
+
+or, which are equivalent,
+
+@center  @t{arccos}  z = -i @t{log}  (z+i \sqrt@r{1-z^2}\Bigr) 
+
+@center  @t{arccos}  z = @t{2 @t{log}  (\sqrt@r{(1+z)/2} + i \sqrt@r{(1-z)/2})}\over@r{i}
+
+The branch cut for the arc cosine function is in two pieces:
+one along the negative real axis to the left of~-1
+(inclusive), continuous with quadrant II, and one along the positive real
+axis to the right of~1 (inclusive), continuous with quadrant IV.  
+This is the same branch cut as for arc sine.
+The range is that strip of the complex plane containing numbers whose real
+part is between 0 and~\pi.  A number with real
+part equal to 0 is in the range if and only if its imaginary
+part is non-negative; a number with real part equal to \pi is in
+the range if and only if its imaginary part is non-positive.
+
+The following definition for (one-argument) arc tangent determines the
+range and branch cuts:
+
+@center  @t{arctan}  z = @i{@i{@t{log}  (1+iz) - @t{log}  (1-iz)}\over@i{2i}} 
+
+Beware of simplifying this formula; ``obvious'' simplifications are likely
+to alter the branch cuts or the values on the branch cuts incorrectly.
+The branch cut for the arc tangent function is in two pieces:
+one along the positive imaginary axis above i
+(exclusive), continuous with quadrant II, and one along the negative imaginary
+axis below -i (exclusive), continuous with quadrant IV.  
+The points i and~-i are excluded from the domain.
+The range is that strip of the complex plane containing numbers whose real
+part is between -\pi/2 and~\pi/2.  A number with real
+part equal to -\pi/2 is in the range if and only if its imaginary
+part is strictly positive; a number with real part equal to \pi/2 is in
+the range if and only if its imaginary part is strictly negative.  Thus the range of
+arc tangent is identical to that of arc sine with the points
+-\pi/2 and~\pi/2 excluded.
+
+For @b{atan},
+the signs of @i{number1} (indicated as @i{x})
+and @i{number2} (indicated as @i{y}) are used to derive quadrant
+information. Figure 12--14 details various special cases.
+
+The asterisk (*) indicates that the entry in the figure applies to
+implementations that support minus zero.
+
+@format
+@group
+@noindent
+@w{   to 1pc@r{}@i{y} Condition  @i{x} Condition  Cartesian locus  Range of result          }
+@w{   to 1pc@r{} y = 0        x > 0       Positive x-axis   0                       }
+@w{   to 1pc* y = +0      x > 0       Positive x-axis  +0                       }
+@w{   to 1pc* y = -0      x > 0       Positive x-axis  -0                       }
+@w{   to 1pc@r{} y > 0        x > 0       Quadrant I       0 < result < \pi/2      }
+@w{   to 1pc@r{} y > 0        x = 0       Positive y-axis  \pi/2                    }
+@w{   to 1pc@r{} y > 0        x < 0       Quadrant II      \pi/2 < result < \pi    }
+@w{   to 1pc@r{} y = 0        x < 0       Negative x-axis   \pi                     }
+@w{   to 1pc* y = +0      x < 0       Negative x-axis  +\pi                     }
+@w{   to 1pc* y = -0      x < 0       Negative x-axis  -\pi                     }
+@w{   to 1pc@r{} y < 0        x < 0       Quadrant III     -\pi < result < -\pi/2  }
+@w{   to 1pc@r{} y < 0        x = 0       Negative y-axis  -\pi/2                   }
+@w{   to 1pc@r{} y < 0        x > 0       Quadrant IV      -\pi/2 < result < 0     }
+@w{   to 1pc@r{} y = 0        x = 0       Origin           undefined consequences   }
+@w{   to 1pc* y = +0      x = +0      Origin           +0                       }
+@w{   to 1pc* y = -0      x = +0      Origin           -0                       }
+@w{   to 1pc* y = +0      x = -0      Origin           +\pi                     }
+@w{   to 1pc* y = -0      x = -0      Origin           -\pi                     }
+
+@noindent
+@w{               Figure 12--14: Quadrant information for arc tangent             }
+
+@end group
+@end format
+
+@subsubheading  Examples::
+
+@example
+ (asin 0) @result{}  0.0 
+ (acos #c(0 1))  @result{}  #C(1.5707963267948966 -0.8813735870195432)
+ (/ (atan 1 (sqrt 3)) 6)  @result{}  0.087266 
+ (atan #c(0 2)) @result{}  #C(-1.5707964 0.54930615)
+@end example
+
+@subsubheading  Exceptional Situations::
+
+@b{acos} and @b{asin} should signal an error of @i{type} @b{type-error}
+			   if @i{number} is not a @i{number}.
+@b{atan} should signal @b{type-error} if
+  one argument is supplied and that argument is not a @i{number},
+  or if two arguments are supplied and both of those arguments are not @i{reals}.
+
+@b{acos}, @b{asin}, and @b{atan} might signal @b{arithmetic-error}.
+
+@subsubheading  See Also::
+
+@ref{log}
+,
+@ref{sqrt}
+,
+@ref{Rule of Float Substitutability}
+
+@subsubheading  Notes::
+
+The result of either @b{asin} or @b{acos} can be a @i{complex}
+even if @i{number} is not a @i{complex}; this occurs when the 
+absolute value of @i{number} is greater than one.
+
+@node pi, sinh, asin, Numbers Dictionary
+@subsection pi                                                      [Constant Variable]
+
+@subsubheading  Value:: 
+
+an @i{implementation-dependent} @i{long float}.
+
+@subsubheading  Description::
+
+The best @i{long float} approximation to the mathematical constant \pi.
+
+@subsubheading  Examples::
+
+@example
+ ;; In each of the following computations, the precision depends 
+ ;; on the implementation.  Also, if `long float' is treated by 
+ ;; the implementation as equivalent to some other float format 
+ ;; (e.g., `double float') the exponent marker might be the marker
+ ;; for that equivalent (e.g., `D' instead of `L').
+ pi @result{}  3.141592653589793L0
+ (cos pi) @result{}  -1.0L0
+
+ (defun sin-of-degrees (degrees)
+   (let ((x (if (floatp degrees) degrees (float degrees pi))))
+     (sin (* x (/ (float pi x) 180)))))
+@end example
+
+@subsubheading  Notes::
+
+An approximation to \pi in some other precision can be obtained
+by writing @t{(float pi x)}, where @t{x} is a @i{float} of the
+desired precision, or by writing @t{(coerce pi @i{type})}, 
+where @i{type} is the desired type, such as @b{short-float}.
+
+@node sinh, *, pi, Numbers Dictionary
+@subsection sinh, cosh, tanh, asinh, acosh, atanh                            [Function]
+
+@code{sinh}  @i{number} @result{}  @i{result}
+
+@code{cosh}  @i{number} @result{}  @i{result}
+
+@code{tanh}  @i{number} @result{}  @i{result}
+
+@code{asinh}  @i{number} @result{}  @i{result}
+
+@code{acosh}  @i{number} @result{}  @i{result}
+
+@code{atanh}  @i{number} @result{}  @i{result}
+
+@subsubheading  Arguments and Values:: 
+
+@i{number}---a @i{number}.
+
+@i{result}---a @i{number}.
+
+@subsubheading  Description::
+
+These functions compute the hyperbolic sine, cosine, tangent,
+arc sine, arc cosine, and arc tangent functions, 
+which are mathematically defined for an argument @i{x}
+as given in Figure 12--15.
+
+@format
+@group
+@noindent
+@w{  Function                Definition                                  }
+@w{  Hyperbolic sine          (e^x-e^@i{-x})/2                             }
+@w{  Hyperbolic cosine        (e^x+e^@i{-x})/2                             }
+@w{  Hyperbolic tangent       (e^x-e^@i{-x})/(e^x+e^@i{-x})                  }
+@w{  Hyperbolic arc sine      @t{log}  (x+\sqrt@i{1+x^2})                      }
+@w{  Hyperbolic arc cosine    2 @t{log}  (\sqrt@i{(x+1)/2} + \sqrt@i{(x-1)/2})   }
+@w{  Hyperbolic arc tangent   (@t{log}  (1+x) - @t{log} (1-x))/2                 }
+
+@noindent
+@w{    Figure 12--15: Mathematical definitions for hyperbolic functions  }
+
+@end group
+@end format
+
+The following definition for the inverse hyperbolic cosine
+determines the range and branch cuts:
+
+@center  @t{arccosh}  z = 2 @t{log}  (\sqrt@i{(z+1)/2} + \sqrt@i{(z-1)/2}\Bigr). 
+
+The branch cut for the inverse hyperbolic cosine function
+lies along the real axis to the left of~1 (inclusive), extending
+indefinitely along the negative real axis, continuous with quadrant II
+and (between 0 and~1) with quadrant I.
+The range is that half-strip of the complex plane containing numbers whose
+real part is non-negative and whose imaginary
+part is between -\pi (exclusive) and~\pi (inclusive).
+A number with real part zero is in the range 
+if its imaginary part is between zero (inclusive) and~\pi (inclusive).
+
+The following definition for the inverse hyperbolic sine determines
+the range and branch cuts:
+
+@center  @t{arcsinh}  z = @t{log}  (z+\sqrt@i{1+z^2}\Bigr). 
+
+The branch cut for the inverse hyperbolic sine function is in two pieces:
+one along the positive imaginary axis above i
+(inclusive), continuous with quadrant I, and one along the negative imaginary
+axis below -i (inclusive), continuous with quadrant III.
+The range is that strip of the complex plane containing numbers whose imaginary
+part is between -\pi/2 and~\pi/2.  A number with imaginary
+part equal to -\pi/2 is in the range if and only if its real
+part is non-positive; a number with imaginary part equal to \pi/2 is in
+the range if and only if its imaginary part is non-negative.
+
+The following definition for the inverse hyperbolic tangent
+determines the range and branch cuts:
+
+@center  @t{arctanh}  z = @i{@i{@t{log}  (1+z) - @t{log}  (1-z)}\over@r{2}}. 
+
+Note that:
+
+@center  i @t{arctan}  z = @t{arctanh}  iz. 
+
+The branch cut for the inverse hyperbolic tangent function
+is in two pieces: one along the negative real axis to the left of
+-1 (inclusive), continuous with quadrant III, and one along
+the positive real axis to the right of~1 (inclusive), continuous with
+quadrant I.  The points -1 and~1 are excluded from the
+domain.
+The range is that strip of the complex plane containing
+numbers whose imaginary part is between -\pi/2 and
+\pi/2.  A number with imaginary part equal to -\pi/2
+is in the range if and only if its real part is strictly negative; a number with
+imaginary part equal to \pi/2 is in the range if and only if its imaginary
+part is strictly positive.  
+Thus the range of the inverse hyperbolic tangent function is identical to
+that of the inverse hyperbolic sine function with the points
+-\pi i/2 and~\pi i/2 excluded.
+
+@subsubheading  Examples::
+
+@example
+ (sinh 0) @result{}  0.0 
+ (cosh (complex 0 -1)) @result{}  #C(0.540302 -0.0)
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{number} is not a @i{number}.
+Might signal @b{arithmetic-error}.
+
+@subsubheading  See Also::
+
+@ref{log}
+,
+@ref{sqrt}
+,
+@ref{Rule of Float Substitutability}
+
+@subsubheading  Notes::
+
+The result of @b{acosh} may be a @i{complex} even if @i{number} 
+is not a @i{complex}; this occurs when @i{number} is less than one.
+Also, the result of @b{atanh} may be a @i{complex} even if @i{number} 
+is not a @i{complex}; this occurs when the absolute value of @i{number} 
+is greater than one.
+
+The branch cut formulae are mathematically correct, assuming
+completely accurate computation.  
+Implementors should consult a good text on
+numerical analysis.  The formulae given above are not necessarily
+the simplest ones for real-valued computations; they are chosen
+to define the branch cuts in desirable ways for the complex case.
+
+@node *, +, sinh, Numbers Dictionary
+@subsection *                                                                [Function]
+
+@code{*}  @i{@r{&rest} numbers} @result{}  @i{product}
+
+@subsubheading  Arguments and Values::
+
+@i{number}---a @i{number}.
+
+@i{product}---a @i{number}.
+
+@subsubheading  Description::
+
+Returns the product of @i{numbers},
+performing any necessary type conversions in the process.
+If no @i{numbers} are supplied, @t{1} is returned.
+
+@subsubheading  Examples::
+
+@example
+ (*) @result{}  1
+ (* 3 5) @result{}  15
+ (* 1.0 #c(22 33) 55/98) @result{}  #C(12.346938775510203 18.520408163265305)
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Might signal @b{type-error} if some @i{argument} is not a @i{number}.
+Might signal @b{arithmetic-error}.
+
+@subsubheading  See Also::
+
+@ref{Numeric Operations},
+@ref{Rational Computations},
+@ref{Floating-point Computations},
+@ref{Complex Computations}
+
+@node +, -, *, Numbers Dictionary
+@subsection +                                                                [Function]
+
+@code{+}  @i{@r{&rest} numbers} @result{}  @i{sum}
+
+@subsubheading  Arguments and Values::
+
+@i{number}---a @i{number}.
+
+@i{sum}---a @i{number}.
+
+@subsubheading  Description::
+
+Returns the sum of @i{numbers},
+performing any necessary type conversions in the process.
+If no @i{numbers} are supplied, @t{0} is returned.
+
+@subsubheading  Examples::
+@example
+ (+) @result{}  0
+ (+ 1) @result{}  1
+ (+ 31/100 69/100) @result{}  1
+ (+ 1/5 0.8) @result{}  1.0
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Might signal @b{type-error} if some @i{argument} is not a @i{number}.
+Might signal @b{arithmetic-error}.
+
+@subsubheading  See Also::
+
+@ref{Numeric Operations},
+@ref{Rational Computations},
+@ref{Floating-point Computations},
+@ref{Complex Computations}
+
+@node -, /, +, Numbers Dictionary
+@subsection -                                                              [Function]
+
+@code{-}  @i{number} @result{}  @i{negation}
+
+@code{-}  @i{minuend @r{&rest} subtrahends^+} @result{}  @i{difference}
+
+@subsubheading  Arguments and Values::
+
+@i{number}, @i{minuend}, @i{subtrahend}---a @i{number}.
+
+@i{negation}, @i{difference}---a @i{number}.
+
+@subsubheading  Description::
+
+The @i{function} @b{-} performs arithmetic subtraction and negation.
+
+If only one @i{number} is supplied,
+the negation of that @i{number} is returned.
+
+If more than one @i{argument} is given, 
+it subtracts all of the @i{subtrahends} from the @i{minuend}
+and returns the result.
+
+The @i{function} @b{-} performs necessary type conversions. 
+
+@subsubheading  Examples::
+
+@example
+ (- 55.55) @result{}  -55.55
+ (- #c(3 -5)) @result{}  #C(-3 5)
+ (- 0) @result{}  0
+ (eql (- 0.0) -0.0) @result{}  @i{true}
+ (- #c(100 45) #c(0 45)) @result{}  100
+ (- 10 1 2 3 4) @result{}  0
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Might signal @b{type-error} if some @i{argument} is not a @i{number}.
+Might signal @b{arithmetic-error}.
+
+@subsubheading  See Also::
+
+@ref{Numeric Operations},
+@ref{Rational Computations},
+@ref{Floating-point Computations},
+@ref{Complex Computations}
+
+@node /, 1+, -, Numbers Dictionary
+@subsection /                                                                [Function]
+
+@code{/}  @i{number} @result{}  @i{reciprocal}
+
+@code{/}  @i{numerator @r{&rest} denominators^+} @result{}  @i{quotient}
+
+@subsubheading  Arguments and Values::
+
+@i{number}, @i{denominator}---a non-zero @i{number}.
+
+@i{numerator}, @i{quotient}, @i{reciprocal}---a @i{number}.
+
+@subsubheading  Description::
+
+The @i{function} @b{/} performs division or reciprocation.
+
+If no @i{denominators} are supplied,
+the @i{function} @b{/} returns the reciprocal of @i{number}.
+
+If at least one @i{denominator} is supplied,
+the @i{function} @b{/} divides the @i{numerator} by all of the @i{denominators} 
+and returns the resulting @i{quotient}.
+
+If each @i{argument} is either an @i{integer} or a @i{ratio},
+and the result is not an @i{integer}, then it is a @i{ratio}.
+
+The @i{function} @b{/} performs necessary type conversions.
+
+If any @i{argument} is a @i{float} then 
+the rules of floating-point contagion apply;
+see @ref{Floating-point Computations}.
+
+@subsubheading  Examples::
+
+@example
+ (/ 12 4) @result{}  3
+ (/ 13 4) @result{}  13/4
+ (/ -8) @result{}  -1/8
+ (/ 3 4 5) @result{}  3/20
+ (/ 0.5) @result{}  2.0
+ (/ 20 5) @result{}  4
+ (/ 5 20) @result{}  1/4
+ (/ 60 -2 3 5.0) @result{}  -2.0
+ (/ 2 #c(2 2)) @result{}  #C(1/2 -1/2)
+@end example
+
+@subsubheading  Exceptional Situations::
+
+The consequences are unspecified if any @i{argument} other than the first is zero.
+If there is only one @i{argument}, the consequences are unspecified if it is zero.
+
+Might signal @b{type-error} if some @i{argument} is not a @i{number}.
+Might signal @b{division-by-zero} if division by zero is attempted.
+Might signal @b{arithmetic-error}.
+
+@subsubheading  See Also::
+
+@ref{floor}
+, @b{ceiling}, @b{truncate}, @b{round}
+
+@node 1+, abs, /, Numbers Dictionary
+@subsection 1+, 1-                                                         [Function]
+
+@code{1}  @i{+} @result{}  @i{number}
+ @r{successor}
+@code{1}  @i{-} @result{}  @i{number}
+ @r{predecessor}
+
+@subsubheading  Arguments and Values:: 
+
+@i{number}---a @i{number}.
+
+@i{successor}, @i{predecessor}---a @i{number}.
+
+@subsubheading  Description::
+
+@b{1+} returns a @i{number} that is one more than its argument @i{number}.
+@b{1-} returns a @i{number} that is one less than its argument @i{number}.
+
+@subsubheading  Examples::
+
+@example
+ (1+ 99) @result{}  100 
+ (1- 100) @result{}  99 
+ (1+ (complex 0.0)) @result{}  #C(1.0 0.0) 
+ (1- 5/3) @result{}  2/3 
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Might signal @b{type-error} if its @i{argument} is not a @i{number}.
+Might signal @b{arithmetic-error}.
+
+@subsubheading  See Also::
+
+@ref{incf}
+, @b{decf}
+
+@subsubheading  Notes::
+
+@example
+ (1+ @i{number}) @equiv{} (+ @i{number} 1)
+ (1- @i{number}) @equiv{} (- @i{number} 1)
+@end example
+
+Implementors are encouraged to make the performance of both the previous
+expressions be the same.
+
+@node abs, evenp, 1+, Numbers Dictionary
+@subsection abs                                                              [Function]
+
+@code{abs}  @i{number} @result{}  @i{absolute-value}
+
+@subsubheading  Arguments and Values::
+
+@i{number}---a @i{number}.
+
+@i{absolute-value}---a non-negative @i{real}.
+
+@subsubheading  Description::
+
+@b{abs} returns the absolute value of @i{number}.
+
+If @i{number} is 
+
+a @i{real},
+
+the result is  of the same @i{type} as @i{number}.
+
+If @i{number} is a @i{complex}, 
+the result is a positive 
+
+@i{real}
+
+with
+the same magnitude as @i{number}.  
+The result can be a @i{float} 
+
+[Reviewer Note by Barmar: Single-float.]
+even if @i{number}'s components are @i{rationals} 
+and an exact rational result
+would have been possible.
+Thus the result of @t{(abs #c(3 4))} can be either @t{5} or @t{5.0},
+depending on the implementation.
+
+@subsubheading  Examples::
+
+@example
+ (abs 0) @result{}  0
+ (abs 12/13) @result{}  12/13
+ (abs -1.09) @result{}  1.09
+ (abs #c(5.0 -5.0)) @result{}  7.071068
+ (abs #c(5 5)) @result{}  7.071068
+ (abs #c(3/5 4/5)) @result{}  1 or approximately 1.0
+ (eql (abs -0.0) -0.0) @result{}  @i{true}
+@end example
+
+@subsubheading  See Also::
+
+@ref{Rule of Float Substitutability}
+
+@subsubheading  Notes::
+
+If @i{number} is a @i{complex}, 
+the result is equivalent to the following: 
+
+@t{(sqrt (+ (expt (realpart @i{number}) 2)  (expt (imagpart @i{number}) 2)))}
+
+An implementation should not use this formula directly
+for all @i{complexes}
+but should handle very large or very small components specially
+to avoid intermediate overflow or underflow.
+
+@node evenp, exp, abs, Numbers Dictionary
+@subsection evenp, oddp                                                      [Function]
+
+@code{evenp}  @i{integer} @result{}  @i{generalized-boolean}
+
+@code{oddp}  @i{integer} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{integer}---an @i{integer}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+@b{evenp} returns @i{true} if @i{integer} is even (divisible by two);
+otherwise, returns @i{false}.
+
+@b{oddp} returns @i{true} if @i{integer} is odd (not divisible by two);
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::
+
+@example
+ (evenp 0) @result{}  @i{true}
+ (oddp 10000000000000000000000) @result{}  @i{false}
+ (oddp -1) @result{}  @i{true}
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{integer} is not an @i{integer}.
+
+@subsubheading  Notes::
+
+@example
+ (evenp @i{integer}) @equiv{} (not (oddp @i{integer}))
+ (oddp @i{integer})  @equiv{} (not (evenp @i{integer}))
+@end example
+
+@node exp, gcd, evenp, Numbers Dictionary
+@subsection exp, expt                                                        [Function]
+
+@code{exp}  @i{number} @result{}  @i{result}
+
+@code{expt}  @i{base-number power-number} @result{}  @i{result}
+
+@subsubheading  Arguments and Values::
+
+@i{number}---a @i{number}.
+
+@i{base-number}---a @i{number}.
+
+@i{power-number}---a @i{number}.
+
+@i{result}---a @i{number}.
+
+@subsubheading  Description::
+
+@b{exp} and @b{expt} perform exponentiation.
+
+@b{exp} returns @i{e} raised to the power @i{number},
+where @i{e} is the base of the natural logarithms.
+@b{exp} has no branch cut.
+
+@b{expt} returns @i{base-number} 
+raised to the power @i{power-number}.
+If the @i{base-number} is a @i{rational} 
+and @i{power-number} is
+an @i{integer},
+the calculation is exact and the result will be of @i{type} @b{rational};
+otherwise a floating-point approximation might result.
+
+For @b{expt} of a @i{complex rational} to an @i{integer} power,
+the calculation must be exact and the result is
+of type @t{(or rational (complex rational))}.
+
+The result of @b{expt} can be a @i{complex},
+even when neither argument is a @i{complex},
+if @i{base-number} is negative and @i{power-number}
+is not an @i{integer}. 
+The result is always the @i{principal} @i{complex} @i{value}.
+For example, @t{(expt -8 1/3)} is not permitted to return @t{-2},
+even though @t{-2} is one of the cube roots of @t{-8}. 
+The @i{principal} cube root is a @i{complex}
+approximately equal to @t{#C(1.0 1.73205)}, not @t{-2}.
+
+@b{expt} is defined
+as @i{b^x = e^@i{x log b\/}}.
+This defines the @i{principal} @i{values} precisely.  The range of
+@b{expt} is the entire complex plane.  Regarded
+as a function of @i{x}, with @i{b} fixed, there is no branch cut.
+Regarded as a function of @i{b}, with @i{x} fixed, there is in general
+a branch cut along the negative real axis, continuous with quadrant II.
+The domain excludes the origin.
+By definition, 0^0=1.  If @i{b}=0 and the real part of @i{x} is strictly
+positive, then 
+@i{b^x}=0. For all other values of @i{x}, 0^@i{x} 
+is an error.
+
+When @i{power-number} is an @i{integer} @t{0},
+then the result is always the value one in the @i{type} 
+of @i{base-number},
+even if the @i{base-number} is zero (of any @i{type}).  That is:
+
+@example
+ (expt x 0) @equiv{} (coerce 1 (type-of x))
+@end example
+
+If @i{power-number} is a zero of any other @i{type},
+then the result is also the value one, in the @i{type} of the arguments
+after the application of the contagion rules in @ref{Contagion in Numeric Operations},
+with one exception:
+the consequences are undefined if @i{base-number} is zero when @i{power-number}
+is zero and not of @i{type} @b{integer}.
+
+@subsubheading  Examples::
+
+@example
+ (exp 0) @result{}  1.0
+ (exp 1) @result{}  2.718282
+ (exp (log 5)) @result{}  5.0 
+ (expt 2 8) @result{}  256
+ (expt 4 .5) @result{}  2.0
+ (expt #c(0 1) 2) @result{}  -1
+ (expt #c(2 2) 3) @result{}  #C(-16 16)
+ (expt #c(2 2) 4) @result{}  -64 
+@end example
+
+@subsubheading  See Also::
+
+@ref{log}
+,
+@ref{Rule of Float Substitutability}
+
+@subsubheading  Notes::
+
+Implementations of @b{expt} are permitted to use different algorithms
+for the cases of a @i{power-number} of @i{type} @b{rational} 
+	     and a @i{power-number} of @i{type} @b{float}.
+
+  Note that by the following logic, 
+@t{(sqrt (expt @i{x} 3))} is not equivalent to 
+@t{(expt @i{x} 3/2)}.
+
+@example
+ (setq x (exp (/ (* 2 pi #c(0 1)) 3)))         ;exp(2.pi.i/3)
+ (expt x 3) @result{}  1 ;except for round-off error
+ (sqrt (expt x 3)) @result{}  1 ;except for round-off error
+ (expt x 3/2) @result{}  -1 ;except for round-off error
+@end example
+
+@node gcd, incf, exp, Numbers Dictionary
+@subsection gcd                                                              [Function]
+
+@code{gcd}  @i{@r{&rest} integers} @result{}  @i{greatest-common-denominator}
+
+@subsubheading  Arguments and Values::
+
+@i{integer}---an @i{integer}.
+
+@i{greatest-common-denominator}---a non-negative @i{integer}.
+
+@subsubheading  Description::
+
+Returns the greatest common divisor of @i{integers}.
+If only one @i{integer} is supplied, its absolute value is returned.
+If no @i{integers} are given, @b{gcd} returns @t{0},
+which is an identity for this operation.
+
+@subsubheading  Examples::
+
+@example
+ (gcd) @result{}  0
+ (gcd 60 42) @result{}  6
+ (gcd 3333 -33 101) @result{}  1
+ (gcd 3333 -33 1002001) @result{}  11
+ (gcd 91 -49) @result{}  7
+ (gcd 63 -42 35) @result{}  7
+ (gcd 5) @result{}  5
+ (gcd -4) @result{}  4
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if any @i{integer} is not an @i{integer}.
+
+@subsubheading  See Also::
+
+@ref{lcm}
+
+@subsubheading  Notes::
+For three or more arguments,
+
+@example
+ (gcd b c ... z) @equiv{} (gcd (gcd a b) c ... z)
+@end example
+
+@node incf, lcm, gcd, Numbers Dictionary
+@subsection incf, decf                                                          [Macro]
+
+@code{incf}  @i{place @r{[}delta-form@r{]}} @result{}  @i{new-value}
+
+@code{decf}  @i{place @r{[}delta-form@r{]}} @result{}  @i{new-value}
+
+@subsubheading  Arguments and Values:: 
+
+@i{place}---a @i{place}.
+
+@i{delta-form}---a @i{form}; evaluated to produce a @i{delta}.
+ The default is @t{1}.
+
+@i{delta}---a @i{number}.
+
+@i{new-value}---a @i{number}.
+
+@subsubheading  Description::
+
+@b{incf} and @b{decf} are used for incrementing and
+decrementing the @i{value} of @i{place}, respectively.
+
+The @i{delta} is 
+    added to        (in the case of @b{incf})
+ or subtracted from (in the case of @b{decf})
+the number in @i{place} and the result is stored in @i{place}.
+
+Any necessary type conversions are performed automatically.
+
+For information about the @i{evaluation} of @i{subforms} of @i{places},
+see @ref{Evaluation of Subforms to Places}.  
+
+@subsubheading  Examples::
+@example
+ (setq n 0)
+ (incf n) @result{}  1      
+ n @result{}  1
+ (decf n 3) @result{}  -2   
+ n @result{}  -2
+ (decf n -5) @result{}  3      
+ (decf n) @result{}  2      
+ (incf n 0.5) @result{}  2.5
+ (decf n) @result{}  1.5
+ n @result{}  1.5
+@end example
+
+@subsubheading  Side Effects::
+
+@i{Place} is modified.
+
+@subsubheading  See Also::
+
+@b{+}, 
+@ref{-}
+, @b{1+}, @b{1-}, 
+@ref{setf}
+
+@node lcm, log, incf, Numbers Dictionary
+@subsection lcm                                                              [Function]
+
+@code{lcm}  @i{@r{&rest} integers} @result{}  @i{least-common-multiple}
+
+@subsubheading  Arguments and Values::
+
+@i{integer}---an @i{integer}.
+
+@i{least-common-multiple}---a non-negative @i{integer}.
+
+@subsubheading  Description::
+
+@b{lcm} returns the least common multiple of the @i{integers}.
+
+If no @i{integer} is supplied, the @i{integer} @t{1} is returned.
+
+If only one @i{integer} is supplied, 
+the absolute value of that @i{integer} is returned.
+
+For two arguments that are not both zero,
+
+@example
+ (lcm a b) @equiv{} (/ (abs (* a b)) (gcd a b))
+@end example
+
+If one or both arguments are zero,
+
+@example
+ (lcm a 0) @equiv{} (lcm 0 a) @equiv{} 0
+@end example
+
+For three or more arguments,
+
+@example
+ (lcm a b c ... z) @equiv{} (lcm (lcm a b) c ... z)
+@end example
+
+@subsubheading  Examples::
+@example
+ (lcm 10) @result{}  10
+ (lcm 25 30) @result{}  150
+ (lcm -24 18 10) @result{}  360
+ (lcm 14 35) @result{}  70
+ (lcm 0 5) @result{}  0
+ (lcm 1 2 3 4 5 6) @result{}  60
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal @b{type-error} if any argument is not an @i{integer}.
+
+@subsubheading  See Also::
+
+@ref{gcd}
+
+@node log, mod (Function), lcm, Numbers Dictionary
+@subsection log                                                              [Function]
+
+@code{log}  @i{number @r{&optional} base} @result{}  @i{logarithm}
+
+@subsubheading  Arguments and Values::
+
+@i{number}---a non-zero @i{number}.
+
+@i{base}---a @i{number}.
+
+@i{logarithm}---a @i{number}.
+
+@subsubheading  Description::
+
+@b{log} returns the logarithm of @i{number} in base @i{base}.
+If @i{base} is not supplied its value is @i{e}, 
+the base of the natural logarithms.
+
+@b{log} may return a @i{complex} when given a 
+
+@i{real}
+
+negative @i{number}.
+
+@example
+ (log -1.0) @equiv{} (complex 0.0 (float pi 0.0))
+@end example
+
+If @i{base} is zero,
+@b{log} returns zero.
+
+The result of @t{(log 8 2)} may be either @t{3} or @t{3.0}, depending on the
+implementation. An implementation can use floating-point calculations
+even if an exact integer result is possible.
+
+The branch cut for the logarithm function of one argument (natural
+logarithm) lies along the negative real axis, continuous with quadrant II.
+The domain excludes the origin.
+
+The mathematical definition of a complex logarithm 
+is as follows, whether or not minus zero is supported by the
+implementation:
+
+@example
+(log @i{x}) @equiv{} (complex (log (abs @i{x})) (phase @i{x}))
+@end example
+
+Therefore the range of the one-argument logarithm function is that strip
+of the complex plane containing numbers with imaginary parts between
+
+-\pi (exclusive) and~\pi (inclusive) if minus zero is not supported,
+or -\pi (inclusive) and~\pi (inclusive) if minus zero is supported.
+
+The two-argument logarithm function is defined as 
+
+@example
+ (log @i{base} @i{number})
+ @equiv{} (/ (log @i{number}) (log @i{base}))
+@end example
+
+This defines the @i{principal} @i{values} precisely.  
+The range of the two-argument logarithm function is the entire complex plane.
+
+@subsubheading  Examples::
+
+@example
+ (log 100 10)
+@result{}  2.0
+@result{}  2
+ (log 100.0 10) @result{}  2.0
+ (log #c(0 1) #c(0 -1))
+@result{}  #C(-1.0 0.0)
+@i{OR}@result{} #C(-1 0)
+ (log 8.0 2) @result{}  3.0
+@end example
+
+@example
+ (log #c(-16 16) #c(2 2)) @result{}  3 or approximately #c(3.0 0.0)
+                               or approximately 3.0 (unlikely)
+@end example
+
+@subsubheading  Affected By::
+
+The implementation.
+
+@subsubheading  See Also::
+
+@ref{exp}
+,
+@b{expt},
+@ref{Rule of Float Substitutability}
+
+@node mod (Function), signum, log, Numbers Dictionary
+@subsection mod, rem                                                         [Function]
+
+@code{mod}  @i{number divisor} @result{}  @i{modulus}
+
+@code{rem}  @i{number divisor} @result{}  @i{remainder}
+
+@subsubheading  Arguments and Values::
+
+@i{number}---a @i{real}.
+
+@i{divisor}---a @i{real}.
+
+@i{modulus}, @i{remainder}---a @i{real}.
+
+@subsubheading  Description::
+
+@b{mod} and @b{rem} are generalizations of the modulus
+and remainder functions respectively.
+
+@b{mod} performs the operation @b{floor} 
+on @i{number} and @i{divisor} 
+and returns the remainder of the @b{floor} operation.
+
+@b{rem} performs the operation @b{truncate} 
+on @i{number} and @i{divisor}
+and returns the remainder of the @b{truncate} operation.
+
+@b{mod} and @b{rem} are 
+the modulus and remainder functions 
+when @i{number} and @i{divisor} are @i{integers}.
+
+@subsubheading  Examples::
+@example
+ (rem -1 5) @result{}  -1
+ (mod -1 5) @result{}  4
+ (mod 13 4) @result{}  1
+ (rem 13 4) @result{}  1
+ (mod -13 4) @result{}  3
+ (rem -13 4) @result{}  -1
+ (mod 13 -4) @result{}  -3
+ (rem 13 -4) @result{}  1
+ (mod -13 -4) @result{}  -1
+ (rem -13 -4) @result{}  -1
+ (mod 13.4 1) @result{}  0.4
+ (rem 13.4 1) @result{}  0.4
+ (mod -13.4 1) @result{}  0.6
+ (rem -13.4 1) @result{}  -0.4
+@end example
+
+@subsubheading  See Also::
+
+@ref{floor}
+, @b{truncate}
+
+@subsubheading  Notes::
+
+The result of @b{mod} is either zero or a 
+
+@i{real}
+
+with the same sign as @i{divisor}.
+
+@node signum, sqrt, mod (Function), Numbers Dictionary
+@subsection signum                                                           [Function]
+
+@code{signum}  @i{number} @result{}  @i{signed-prototype}
+
+@subsubheading  Arguments and Values::
+
+@i{number}---a @i{number}.
+
+@i{signed-prototype}---a @i{number}.
+
+@subsubheading  Description::
+
+@b{signum} determines a numerical value that indicates whether
+@i{number} is negative, zero, or positive.
+
+For a @i{rational},
+@b{signum} returns one of @t{-1}, @t{0}, or @t{1}
+according to whether @i{number} is negative, zero, or positive.
+For a @i{float}, 
+the result is a @i{float} of the same format
+whose value is minus one, zero, or one.
+For a @i{complex} number @t{z},
+@t{(signum @i{z})} is a complex number of the same phase but with unit magnitude,
+unless @t{z} is a complex zero, in which case the result is @t{z}.
+
+For @i{rational} @i{arguments}, @b{signum} is a rational function,
+but it may be irrational for @i{complex} @i{arguments}.
+
+If @i{number} is a @i{float}, the result is a @i{float}.
+If @i{number} is a @i{rational}, the result is a @i{rational}.
+If @i{number} is a @i{complex float}, the result is a @i{complex float}.
+If @i{number} is a @i{complex rational}, the result is a @i{complex}, 
+but it is @i{implementation-dependent} whether that result is a
+@i{complex rational} or a @i{complex float}.
+
+@subsubheading  Examples::
+
+@example
+ (signum 0) @result{}  0
+ (signum 99) @result{}  1
+ (signum 4/5) @result{}  1
+ (signum -99/100) @result{}  -1
+ (signum 0.0) @result{}  0.0
+ (signum #c(0 33)) @result{}  #C(0.0 1.0)
+ (signum #c(7.5 10.0)) @result{}  #C(0.6 0.8)
+ (signum #c(0.0 -14.7)) @result{}  #C(0.0 -1.0)
+ (eql (signum -0.0) -0.0) @result{}  @i{true}
+@end example
+
+@subsubheading  See Also::
+
+@ref{Rule of Float Substitutability}
+
+@subsubheading  Notes::
+@example
+ (signum x) @equiv{} (if (zerop x) x (/ x (abs x)))
+@end example
+
+@node sqrt, random-state, signum, Numbers Dictionary
+@subsection sqrt, isqrt                                                      [Function]
+
+@code{sqrt}  @i{number} @result{}  @i{root}
+
+@code{isqrt}  @i{natural} @result{}  @i{natural-root}
+
+@subsubheading  Arguments and Values:: 
+
+@i{number}, @i{root}---a @i{number}.
+
+@i{natural}, @i{natural-root}---a non-negative @i{integer}.
+
+@subsubheading  Description::
+
+@b{sqrt} and @b{isqrt} compute square roots.
+
+@b{sqrt} returns the @i{principal} square root of @i{number}.
+If the @i{number} is not a @i{complex} but is negative,
+then the result is a @i{complex}.
+
+@b{isqrt} returns the greatest @i{integer} 
+less than or equal to the exact positive square root of @i{natural}.
+
+If @i{number} is a positive @i{rational},
+it is @i{implementation-dependent} 
+whether @i{root} is a @i{rational} or a @i{float}.
+If @i{number} is a negative @i{rational},
+it is @i{implementation-dependent} 
+whether @i{root} is a @i{complex rational} or a @i{complex float}.
+
+The mathematical definition of complex square root (whether or not
+minus zero is supported) follows:
+
+@t{(sqrt @i{x}) = (exp (/ (log @i{x}) 2))}
+
+The branch cut for square root lies along the negative real axis,
+continuous with quadrant II.
+The range consists of the right half-plane, including the non-negative
+imaginary axis and excluding the negative imaginary axis.
+
+@subsubheading  Examples::
+
+@example
+ (sqrt 9.0) @result{}  3.0
+ (sqrt -9.0) @result{}  #C(0.0 3.0)
+ (isqrt 9) @result{}  3
+ (sqrt 12) @result{}  3.4641016
+ (isqrt 12) @result{}  3
+ (isqrt 300) @result{}  17
+ (isqrt 325) @result{}  18
+ (sqrt 25)
+@result{}  5
+@i{OR}@result{} 5.0
+ (isqrt 25) @result{}  5
+ (sqrt -1) @result{}  #C(0.0 1.0)
+ (sqrt #c(0 2)) @result{}  #C(1.0 1.0)
+@end example
+
+@subsubheading  Exceptional Situations::
+
+The @i{function} @b{sqrt} should signal @b{type-error} if its argument 
+is not a @i{number}.
+
+The @i{function} @b{isqrt} should signal @b{type-error} if its argument 
+is not a non-negative @i{integer}.
+
+The functions @b{sqrt} and @b{isqrt} might signal @b{arithmetic-error}.
+
+@subsubheading  See Also::
+
+@ref{exp}
+,
+@ref{log}
+,
+@ref{Rule of Float Substitutability}
+
+@subsubheading  Notes::
+
+@example
+ (isqrt x) @equiv{} (values (floor (sqrt x))) 
+@end example
+
+but it is potentially more efficient.
+
+@node random-state, make-random-state, sqrt, Numbers Dictionary
+@subsection random-state                                                 [System Class]
+
+@subsubheading  Class Precedence List::
+@b{random-state},
+@b{t}
+
+@subsubheading  Description::
+
+A @i{random state} @i{object} contains state
+information used by the pseudo-random number generator.
+The nature of a @i{random state} @i{object} is @i{implementation-dependent}.
+It can be printed out and successfully read back in by the same @i{implementation},
+but might not function correctly as a @i{random state} in another @i{implementation}.
+
+@i{Implementations} are required to provide a read syntax for
+@i{objects} of @i{type} @b{random-state}, but the specific nature of that syntax 
+is @i{implementation-dependent}.
+
+@subsubheading  See Also::
+
+@ref{random-state}
+,
+@ref{random}
+,
+@ref{Printing Random States}
+
+@node make-random-state, random, random-state, Numbers Dictionary
+@subsection make-random-state                                                [Function]
+
+@code{make-random-state}  @i{@r{&optional} state} @result{}  @i{new-state}
+
+@subsubheading  Arguments and Values::
+
+@i{state}---a @i{random state}, or @b{nil}, or @b{t}.
+ The default is @b{nil}.
+
+@i{new-state}---a @i{random state} @i{object}.
+
+@subsubheading  Description::
+
+Creates a @i{fresh} @i{object} of @i{type} @b{random-state} suitable
+for use as the @i{value} of @b{*random-state*}.
+
+If @i{state} is a @i{random state} @i{object},
+the @i{new-state} is a @i{copy}_5 of that @i{object}.
+If @i{state} is @b{nil},
+the @i{new-state} is a @i{copy}_5 of the @i{current random state}.
+If @i{state} is @b{t},
+the @i{new-state} is a @i{fresh} @i{random state} @i{object}
+that has been randomly initialized by some means.
+
+@subsubheading  Examples::
+
+@example
+ (let* ((rs1 (make-random-state nil))
+        (rs2 (make-random-state t))
+        (rs3 (make-random-state rs2))
+        (rs4 nil))
+   (list (loop for i from 1 to 10 
+               collect (random 100)
+               when (= i 5)
+                do (setq rs4 (make-random-state)))
+         (loop for i from 1 to 10 collect (random 100 rs1))
+         (loop for i from 1 to 10 collect (random 100 rs2))
+         (loop for i from 1 to 10 collect (random 100 rs3))
+         (loop for i from 1 to 10 collect (random 100 rs4))))
+@result{}  ((29 25 72 57 55 68 24 35 54 65)
+    (29 25 72 57 55 68 24 35 54 65)
+    (93 85 53 99 58 62 2 23 23 59)
+    (93 85 53 99 58 62 2 23 23 59)
+    (68 24 35 54 65 54 55 50 59 49))
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{state} is not a @i{random state}, or @b{nil}, or @b{t}.
+
+@subsubheading  See Also::
+
+@ref{random}
+, 
+@ref{random-state}
+
+@subsubheading  Notes::
+
+One important use of @b{make-random-state} is to allow the same
+series of pseudo-random @i{numbers} to be generated many times within a 
+single program.
+
+@node random, random-state-p, make-random-state, Numbers Dictionary
+@subsection random                                                           [Function]
+
+@code{random}  @i{limit @r{&optional} random-state} @result{}  @i{random-number}
+
+@subsubheading  Arguments and Values::
+
+@i{limit}---a positive @i{integer},
+	     or a positive @i{float}.
+
+@i{random-state}---a @i{random state}.
+ The default is the @i{current random state}.
+
+@i{random-number}---a non-negative @i{number}
+			less than @i{limit} 
+		    and of the same @i{type} as @i{limit}.
+
+@subsubheading  Description::
+
+Returns a pseudo-random number that is a non-negative @i{number}
+less than @i{limit} and of the same @i{type} as @i{limit}.
+
+The @i{random-state}, which is modified by this function,
+encodes the internal state maintained by the random number generator.
+
+An approximately uniform choice distribution is used.  If @i{limit}
+is an @i{integer}, each of the possible results occurs with
+(approximate) probability 1/@i{limit}.
+
+@subsubheading  Examples::
+
+@example
+ (<= 0 (random 1000) 1000) @result{}  @i{true}
+ (let ((state1 (make-random-state))
+       (state2 (make-random-state)))
+   (= (random 1000 state1) (random 1000 state2))) @result{}  @i{true}
+@end example
+
+@subsubheading  Side Effects::
+
+The @i{random-state} is modified.
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{limit} is not a positive @i{integer} or a positive @i{real}.
+
+@subsubheading  See Also::
+
+@ref{make-random-state}
+, 
+@ref{random-state}
+
+@subsubheading  Notes::
+
+See @i{Common Lisp: The Language} for information about generating random numbers.
+
+@node random-state-p, *random-state*, random, Numbers Dictionary
+@subsection random-state-p                                                   [Function]
+
+@code{random-state-p}  @i{object} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{object}---an @i{object}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{object} is of @i{type} @b{random-state};
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::
+
+@example
+ (random-state-p *random-state*) @result{}  @i{true}
+ (random-state-p (make-random-state)) @result{}  @i{true}
+ (random-state-p 'test-function) @result{}  @i{false}
+@end example
+
+@subsubheading  See Also::
+
+@ref{make-random-state}
+, 
+@ref{random-state}
+
+@subsubheading  Notes::
+
+@example
+ (random-state-p @i{object}) @equiv{} (typep @i{object} 'random-state)
+@end example
+
+@node *random-state*, numberp, random-state-p, Numbers Dictionary
+@subsection *random-state*                                                   [Variable]
+
+@subsubheading  Value Type::
+
+a @i{random state}.
+
+@subsubheading  Initial Value::
+
+@i{implementation-dependent}.
+
+@subsubheading  Description::
+
+The @i{current random state}, which is used, for example,
+by the @i{function} @b{random} when a @i{random state} is not explicitly supplied.
+
+@subsubheading  Examples::      
+
+@example
+ (random-state-p *random-state*) @result{}  @i{true}
+ (setq snap-shot (make-random-state))
+ ;; The series from any given point is random,
+ ;; but if you backtrack to that point, you get the same series.
+ (list (loop for i from 1 to 10 collect (random))
+       (let ((*random-state* snap-shot))
+         (loop for i from 1 to 10 collect (random)))
+       (loop for i from 1 to 10 collect (random))
+       (let ((*random-state* snap-shot))
+         (loop for i from 1 to 10 collect (random))))
+@result{}  ((19 16 44 19 96 15 76 96 13 61)
+    (19 16 44 19 96 15 76 96 13 61)
+    (16 67 0 43 70 79 58 5 63 50)
+    (16 67 0 43 70 79 58 5 63 50))
+@end example
+
+@subsubheading  Affected By::
+
+The @i{implementation}.
+
+@b{random}.
+
+@subsubheading  See Also::
+
+@ref{make-random-state}
+,
+@ref{random}
+,
+@b{random-state}
+
+@subsubheading  Notes::
+
+@i{Binding} @b{*random-state*} to a different 
+@i{random state} @i{object} correctly saves and 
+restores the old @i{random state} @i{object}.
+
+@node numberp, cis, *random-state*, Numbers Dictionary
+@subsection numberp                                                          [Function]
+
+@code{numberp}  @i{object} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{object}---an @i{object}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{object} is of @i{type} @b{number};
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::
+
+@example
+ (numberp 12) @result{}  @i{true}
+ (numberp (expt 2 130)) @result{}  @i{true}
+ (numberp #c(5/3 7.2)) @result{}  @i{true}
+ (numberp nil) @result{}  @i{false}
+ (numberp (cons 1 2)) @result{}  @i{false}
+@end example
+
+@subsubheading  Notes::
+
+@example
+ (numberp @i{object}) @equiv{} (typep @i{object} 'number)
+@end example
+
+@node cis, complex, numberp, Numbers Dictionary
+@subsection cis                                                              [Function]
+
+@code{cis}  @i{radians} @result{}  @i{number}
+
+@subsubheading  Arguments and Values::
+
+@i{radians}---a @i{real}.
+
+@i{number}---a @i{complex}.
+
+@subsubheading  Description::
+
+@b{cis} returns the value of~@i{e}^@i{i\cdot @i{radians}},
+which is a @i{complex} in which the
+real part is equal to the cosine of @i{radians}, and the 
+imaginary part is equal to the sine of @i{radians}.
+
+@subsubheading  Examples::
+@example
+ (cis 0) @result{}  #C(1.0 0.0)
+@end example
+
+@subsubheading  See Also::
+
+@ref{Rule of Float Substitutability}
+
+@node complex, complexp, cis, Numbers Dictionary
+@subsection complex                                                          [Function]
+
+@code{complex}  @i{realpart @r{&optional} imagpart} @result{}  @i{complex}
+
+@subsubheading  Arguments and Values::
+
+@i{realpart}---a @i{real}.
+
+@i{imagpart}---a @i{real}.
+
+@i{complex}---a @i{rational} or a @i{complex}.
+
+@subsubheading  Description::
+
+@b{complex} returns a @i{number} 
+    whose real      part is @i{realpart} 
+and whose imaginary part is @i{imagpart}.
+
+If @i{realpart} is a @i{rational}
+and @i{imagpart} is the @i{rational} number zero, 
+the result of @b{complex} is @i{realpart}, a @i{rational}.
+Otherwise, the result is a @i{complex}.
+
+If either @i{realpart} or @i{imagpart} is a @i{float},
+the non-@i{float} is converted to a @i{float} 
+before the @i{complex} is created.
+If @i{imagpart} is not supplied, the imaginary part is a 
+zero of the same @i{type} as @i{realpart}; @i{i.e.}, @t{(coerce 0 (type-of @i{realpart}))} is
+effectively used.  
+
+Type upgrading implies a movement upwards in the type 
+hierarchy lattice.  
+In the case of @i{complexes}, the @i{type-specifier} 
+
+[Reviewer Note by Barmar: What type specifier?]
+must be a subtype of 
+@t{(upgraded-complex-part-type @i{type-specifier})}.
+If @i{type-specifier1} is a subtype of @i{type-specifier2}, then
+@t{(upgraded-complex-element-type '@i{type-specifier1})}
+must also be a subtype of
+@t{(upgraded-complex-element-type '@i{type-specifier2})}.  
+Two disjoint types can be upgraded into 
+the same thing.
+
+@subsubheading  Examples::
+@example
+ (complex 0) @result{}  0
+ (complex 0.0) @result{}  #C(0.0 0.0)
+ (complex 1 1/2) @result{}  #C(1 1/2)
+ (complex 1 .99) @result{}  #C(1.0 0.99)
+ (complex 3/2 0.0) @result{}  #C(1.5 0.0)
+@end example
+
+@subsubheading  See Also::
+
+@ref{realpart}
+, @b{imagpart}
+
+@subsubheading  Notes::
+
+@example
+ #c(a b) @equiv{} #.(complex a b)
+@end example
+
+@node complexp, conjugate, complex, Numbers Dictionary
+@subsection complexp                                                         [Function]
+
+@code{complexp}  @i{object} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{object}---an @i{object}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{object} is of @i{type} @b{complex};
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::
+@example
+ (complexp 1.2d2) @result{}  @i{false}
+ (complexp #c(5/3 7.2)) @result{}  @i{true}
+
+@end example
+
+@subsubheading  See Also::
+
+@ref{complex}
+ (@i{function} and @i{type}), 
+@ref{typep}
+
+@subsubheading  Notes::
+
+@example
+ (complexp @i{object}) @equiv{} (typep @i{object} 'complex)
+@end example
+
+@node conjugate, phase, complexp, Numbers Dictionary
+@subsection conjugate                                                        [Function]
+
+@code{conjugate}  @i{number} @result{}  @i{conjugate}
+
+@subsubheading  Arguments and Values::
+
+@i{number}---a @i{number}.
+
+@i{conjugate}---a @i{number}.
+
+@subsubheading  Description::
+
+Returns the complex conjugate of @i{number}.
+The conjugate of a 
+
+@i{real}
+
+number is itself.  
+
+@subsubheading  Examples::
+
+@example
+ (conjugate #c(0 -1)) @result{}  #C(0 1)
+ (conjugate #c(1 1)) @result{}  #C(1 -1)
+ (conjugate 1.5) @result{}  1.5
+ (conjugate #C(3/5 4/5)) @result{}  #C(3/5 -4/5)
+ (conjugate #C(0.0D0 -1.0D0)) @result{}  #C(0.0D0 1.0D0)
+ (conjugate 3.7) @result{}  3.7
+@end example
+
+@subsubheading  Notes::
+
+For a @i{complex} number @t{z},
+
+@example
+ (conjugate z) @equiv{} (complex (realpart z) (- (imagpart z)))
+@end example
+
+@node phase, realpart, conjugate, Numbers Dictionary
+@subsection phase                                                            [Function]
+
+@code{phase}  @i{number} @result{}  @i{phase}
+
+@subsubheading  Arguments and Values::
+
+@i{number}---a @i{number}.
+
+@i{phase}---a @i{number}.
+
+@subsubheading  Description::
+
+@b{phase} 
+returns the phase 
+of @i{number} (the angle part of its polar representation)
+in radians, in the range 
+
+-\pi (exclusive) if minus zero is not supported, or 
+-\pi (inclusive) if minus zero is supported, 
+
+to \pi (inclusive).  The phase of a positive 
+
+@i{real}
+
+number
+is zero; that of a negative 
+
+@i{real}
+
+number is \pi.
+The phase of zero is defined to be zero.
+
+If @i{number} is a @i{complex float},  
+the result is a @i{float} of the same @i{type} 
+as the components of @i{number}.
+If @i{number} is a @i{float}, the result is a
+@i{float} of the same @i{type}.
+If @i{number} is a @i{rational} or a @i{complex rational},
+the result is a @i{single float}.  
+
+The branch cut for @b{phase} lies along the negative real
+axis, continuous with quadrant II.  The range consists of that portion of
+the real axis between -\pi (exclusive) and~\pi (inclusive).
+
+The mathematical definition of @b{phase} is as follows:
+
+@t{(phase @i{x}) = (atan (imagpart @i{x}) (realpart @i{x}))}
+
+@subsubheading  Examples::
+
+@example
+ (phase 1) @result{}  0.0s0
+ (phase 0) @result{}  0.0s0
+ (phase (cis 30)) @result{}  -1.4159266
+ (phase #c(0 1)) @result{}  1.5707964
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal @b{type-error} if its argument is not a @i{number}.
+Might signal @b{arithmetic-error}.
+
+@subsubheading  See Also::
+
+@ref{Rule of Float Substitutability}
+
+@node realpart, upgraded-complex-part-type, phase, Numbers Dictionary
+@subsection realpart, imagpart                                               [Function]
+
+@code{realpart}  @i{number} @result{}  @i{real}
+
+@code{imagpart}  @i{number} @result{}  @i{real}
+
+@subsubheading  Arguments and Values:: 
+
+@i{number}---a @i{number}.
+
+@i{real}---a @i{real}.
+
+@subsubheading  Description::
+
+@b{realpart} and @b{imagpart} return the real and
+imaginary parts of @i{number} respectively.
+If @i{number} is 
+
+@i{real},
+
+then @b{realpart} returns @i{number} and @b{imagpart}
+returns @t{(* 0 @i{number})}, which has the effect that the
+imaginary part of a @i{rational} is @t{0} and that of
+a @i{float} is a floating-point zero of the same format.
+
+@subsubheading  Examples::
+
+@example
+ (realpart #c(23 41)) @result{}  23
+ (imagpart #c(23 41.0)) @result{}  41.0
+ (realpart #c(23 41.0)) @result{}  23.0
+ (imagpart 23.0) @result{}  0.0
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{number} is not a @i{number}.
+
+@subsubheading  See Also::
+
+@ref{complex}
+
+@node upgraded-complex-part-type, realp, realpart, Numbers Dictionary
+@subsection upgraded-complex-part-type                                       [Function]
+
+@code{upgraded-complex-part-type}  @i{typespec @r{&optional} environment} @result{}  @i{upgraded-typespec}
+
+@subsubheading  Arguments and Values:: 
+
+@i{typespec}---a @i{type specifier}.
+
+@i{environment}---an @i{environment} @i{object}.
+  The default is @b{nil}, denoting the @i{null lexical environment}
+	   and the and current @i{global environment}.
+
+@i{upgraded-typespec}---a @i{type specifier}.
+
+@subsubheading  Description::
+
+@b{upgraded-complex-part-type} returns the part type of the
+most specialized @i{complex} number representation that can
+hold parts of @i{type} @i{typespec}.
+
+The @i{typespec} is a @i{subtype} of 
+(and possibly @i{type equivalent} to)
+the @i{upgraded-typespec}.
+
+The purpose of @b{upgraded-complex-part-type}
+is to reveal how an implementation does its @i{upgrading}.
+
+@subsubheading  See Also::
+
+@ref{complex}
+ (@i{function} and @i{type})
+
+@subsubheading  Notes::
+
+@node realp, numerator, upgraded-complex-part-type, Numbers Dictionary
+@subsection realp                                                            [Function]
+
+@code{realp}  @i{object} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{object}---an @i{object}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{object} is of @i{type} @b{real};
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::
+@example
+ (realp 12) @result{}  @i{true}
+ (realp #c(5/3 7.2)) @result{}  @i{false}
+ (realp nil) @result{}  @i{false}
+ (realp (cons 1 2)) @result{}  @i{false}
+@end example
+
+@subsubheading  Notes::
+
+@example
+ (realp @i{object}) @equiv{} (typep @i{object} 'real)
+@end example
+
+@node numerator, rational (Function), realp, Numbers Dictionary
+@subsection numerator, denominator                                           [Function]
+
+@code{numerator}  @i{rational} @result{}  @i{numerator}
+
+@code{denominator}  @i{rational} @result{}  @i{denominator}
+
+@subsubheading  Arguments and Values::
+
+@i{rational}---a @i{rational}.
+
+@i{numerator}---an @i{integer}.
+
+@i{denominator}---a positive @i{integer}.
+
+@subsubheading  Description::
+
+@b{numerator} and @b{denominator} reduce @i{rational}
+to canonical form and compute the numerator or denominator of that number.
+
+@b{numerator} and @b{denominator} return the numerator 
+or denominator of the canonical form of @i{rational}.
+
+If @i{rational} is an @i{integer}, 
+@b{numerator} returns @i{rational}
+and @b{denominator} returns 1.
+
+@subsubheading  Examples::
+@example
+ (numerator 1/2) @result{}  1
+ (denominator 12/36) @result{}  3
+ (numerator -1) @result{}  -1
+ (denominator (/ -33)) @result{}  33
+ (numerator (/ 8 -6)) @result{}  -4
+ (denominator (/ 8 -6)) @result{}  3
+@end example
+
+@subsubheading  See Also::
+
+@ref{/}
+
+@subsubheading  Notes::
+@example
+ (gcd (numerator x) (denominator x)) @result{}  1
+@end example
+
+@node rational (Function), rationalp, numerator, Numbers Dictionary
+@subsection rational, rationalize                                            [Function]
+
+@code{rational}  @i{number} @result{}  @i{rational}
+
+@code{rationalize}  @i{number} @result{}  @i{rational}
+
+@subsubheading  Arguments and Values::
+
+@i{number}---a @i{real}.
+
+@i{rational}---a @i{rational}.
+
+@subsubheading  Description::
+
+@b{rational} and @b{rationalize} convert 
+
+@i{reals}
+
+to @i{rationals}.
+
+If @i{number} is already @i{rational}, it is returned.
+
+If @i{number} is a @i{float}, 
+@b{rational} returns a @i{rational} 
+that is mathematically equal in value to the @i{float}. 
+@b{rationalize} returns a @i{rational} that
+approximates the @i{float} to the accuracy of 
+the underlying floating-point representation. 
+
+@b{rational} assumes that the @i{float} is completely accurate.
+
+@b{rationalize} assumes that the
+@i{float} is accurate only to the precision of the
+floating-point representation.
+
+@subsubheading  Examples::
+@example
+ (rational 0) @result{}  0
+ (rationalize -11/100) @result{}  -11/100
+ (rational .1) @result{}  13421773/134217728 ;implementation-dependent
+ (rationalize .1) @result{}  1/10
+@end example
+
+@subsubheading  Affected By::
+
+The @i{implementation}.
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{number} is not a @i{real}.
+Might signal @b{arithmetic-error}.
+
+@subsubheading  Notes::
+
+It is always the case that
+
+@example
+ (float (rational x) x) @equiv{} x
+@end example
+
+and
+
+@example
+ (float (rationalize x) x) @equiv{} x
+@end example
+
+That is, rationalizing a @i{float} by either method
+and then converting it back
+to a @i{float} 
+of the same format produces the original @i{number}.
+
+@node rationalp, ash, rational (Function), Numbers Dictionary
+@subsection rationalp                                                        [Function]
+
+@code{rationalp}  @i{object} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{object}---an @i{object}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{object} is of @i{type} @b{rational};
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::
+
+@example
+ (rationalp 12) @result{}  @i{true}
+ (rationalp 6/5) @result{}  @i{true}
+ (rationalp 1.212) @result{}  @i{false}
+@end example
+
+@subsubheading  See Also::
+
+@ref{rational (Function)}
+
+@subsubheading  Notes::
+@example
+ (rationalp @i{object}) @equiv{} (typep @i{object} 'rational)
+@end example
+
+@node ash, integer-length, rationalp, Numbers Dictionary
+@subsection ash                                                              [Function]
+
+@code{ash}  @i{integer count} @result{}  @i{shifted-integer}
+
+@subsubheading  Arguments and Values::
+
+@i{integer}---an @i{integer}.
+
+@i{count}---an @i{integer}.
+
+@i{shifted-integer}---an @i{integer}.
+
+@subsubheading  Description::
+
+@b{ash} performs the arithmetic shift operation on the binary
+representation of @i{integer}, which is treated as if it were binary.
+
+@b{ash} shifts @i{integer} arithmetically left by @i{count} bit
+positions if @i{count} is positive,
+or right @i{count} bit positions if @i{count} is negative.
+The shifted value of the same sign 
+as @i{integer} is returned.
+
+Mathematically speaking, @b{ash} performs the computation
+@t{floor}(@i{integer}\cdot 2^@i{count}).
+Logically, @b{ash} 
+moves all of the bits in @i{integer} to the left,
+adding zero-bits at the right, or moves them to the right,
+discarding bits.  
+
+@b{ash} is defined to behave as if @i{integer} were 
+represented in two's complement form, regardless of
+how @i{integers} are represented internally.
+@subsubheading  Examples::
+@example
+ (ash 16 1) @result{}  32
+ (ash 16 0) @result{}  16
+ (ash 16 -1) @result{}  8
+ (ash -100000000000000000000000000000000 -100) @result{}  -79
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{integer} is not an @i{integer}.
+Should signal an error of @i{type} @b{type-error}
+			      if @i{count} is not an @i{integer}.
+Might signal @b{arithmetic-error}.
+
+@subsubheading  Notes::
+
+@example
+ (logbitp @i{j} (ash @i{n} @i{k}))
+ @equiv{} (and (>= @i{j} @i{k}) (logbitp (- @i{j} @i{k}) @i{n}))
+@end example
+
+@node integer-length, integerp, ash, Numbers Dictionary
+@subsection integer-length                                                   [Function]
+
+@code{integer-length}  @i{integer} @result{}  @i{number-of-bits}
+
+@subsubheading  Arguments and Values::
+
+@i{integer}---an @i{integer}.
+
+@i{number-of-bits}---a non-negative @i{integer}.
+
+@subsubheading  Description::
+
+Returns the number of bits needed to represent @i{integer}
+in binary two's-complement format.
+
+@subsubheading  Examples::
+
+@example
+ (integer-length 0) @result{}  0
+ (integer-length 1) @result{}  1
+ (integer-length 3) @result{}  2
+ (integer-length 4) @result{}  3
+ (integer-length 7) @result{}  3
+ (integer-length -1) @result{}  0
+ (integer-length -4) @result{}  2
+ (integer-length -7) @result{}  3
+ (integer-length -8) @result{}  3
+ (integer-length (expt 2 9)) @result{}  10
+ (integer-length (1- (expt 2 9))) @result{}  9
+ (integer-length (- (expt 2 9))) @result{}  9
+ (integer-length (- (1+ (expt 2 9)))) @result{}  10
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{integer} is not an @i{integer}.
+
+@subsubheading  Notes::
+
+This function could have been defined by:
+
+@example
+(defun integer-length (integer)
+  (ceiling (log (if (minusp integer)
+                    (- integer)
+                    (1+ integer))
+                2)))
+@end example
+
+If @i{integer} is non-negative, then its value can be represented
+in unsigned binary form in a field whose width in bits is
+no smaller than @t{(integer-length @i{integer})}.
+Regardless of the sign of @i{integer}, its value can be
+represented in signed binary two's-complement form in a field
+whose width in bits is no smaller than @t{(+ (integer-length @i{integer}) 1)}.
+
+@node integerp, parse-integer, integer-length, Numbers Dictionary
+@subsection integerp                                                         [Function]
+
+@code{integerp}  @i{object} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{object}---an @i{object}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{object} is of @i{type} @b{integer};
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::
+@example
+ (integerp 1) @result{}  @i{true}
+ (integerp (expt 2 130)) @result{}  @i{true}
+ (integerp 6/5) @result{}  @i{false}
+ (integerp nil) @result{}  @i{false}
+
+@end example
+
+@subsubheading  Notes::
+
+@example
+ (integerp @i{object}) @equiv{} (typep @i{object} 'integer)
+@end example
+
+@node parse-integer, boole, integerp, Numbers Dictionary
+@subsection parse-integer                                                    [Function]
+
+@code{parse-integer}  @i{string @r{&key} start end radix junk-allowed} @result{}  @i{integer, pos}
+
+@subsubheading  Arguments and Values::
+
+@i{string}---a @i{string}.
+
+@i{start}, @i{end}---@i{bounding index designators} of @i{string}.
+ The defaults for @i{start} and @i{end} are @t{0} and @b{nil}, respectively.
+
+@i{radix}---a @i{radix}.
+ The default is @t{10}.
+
+@i{junk-allowed}---a @i{generalized boolean}.
+ The default is @i{false}.
+
+@i{integer}---an @i{integer} or @i{false}.
+
+@i{pos}---a @i{bounding index} of @i{string}.
+
+@subsubheading  Description::
+
+@b{parse-integer} parses an @i{integer} in the specified @i{radix}
+from the substring of @i{string} delimited by @i{start} and @i{end}.
+
+@b{parse-integer} expects an optional sign (@t{+} or @t{-}) followed by
+a a non-empty sequence of digits to be interpreted in the specified @i{radix}.
+Optional leading and trailing @i{whitespace}_1 is ignored.
+
+@b{parse-integer} does not recognize the syntactic radix-specifier
+prefixes @t{#O}, @t{#B}, @t{#X}, and @t{#@i{n}R}, 
+nor does it recognize a trailing decimal point.
+
+If @i{junk-allowed} is @i{false}, an error of @i{type} @b{parse-error} is 
+signaled if substring does not consist entirely of the representation of a 
+signed @i{integer}, possibly surrounded on either side by @i{whitespace}_1 
+@i{characters}.
+
+The first @i{value} returned is either
+    the @i{integer} that was parsed,
+ or else @b{nil} if no syntactically correct @i{integer} 
+    was seen but @i{junk-allowed} was @i{true}.
+
+The second @i{value} is either 
+    the index into the @i{string} of the delimiter that terminated the parse,
+ or the upper @i{bounding index} of the substring if the parse terminated at
+    the end of the substring (as is always the case if @i{junk-allowed} 
+    is @i{false}).
+
+@subsubheading  Examples::
+@example
+ (parse-integer "123") @result{}  123, 3
+ (parse-integer "123" :start 1 :radix 5) @result{}  13, 3
+ (parse-integer "no-integer" :junk-allowed t) @result{}  NIL, 0
+@end example
+
+@subsubheading  Exceptional Situations::
+
+If @i{junk-allowed} is @i{false}, 
+an error is signaled if substring does not consist entirely of
+the representation of an @i{integer}, 
+possibly surrounded on either side by
+@i{whitespace}_1 characters.
+
+@node boole, boole-1, parse-integer, Numbers Dictionary
+@subsection boole                                                            [Function]
+
+@code{boole}  @i{op integer-1 integer-2} @result{}  @i{result-integer}
+
+@subsubheading  Arguments and Values:: 
+
+@i{Op}---a @i{bit-wise logical operation specifier}.
+
+@i{integer-1}---an @i{integer}.
+
+@i{integer-2}---an @i{integer}.
+
+@i{result-integer}---an @i{integer}.
+
+@subsubheading  Description::
+
+@b{boole} performs bit-wise logical operations on
+@i{integer-1} and @i{integer-2}, which are treated as if
+they were binary and in two's complement representation.
+
+The operation to be performed and the return value are determined by 
+@i{op}.  
+
+@b{boole} returns the values 
+specified for any @i{op} in Figure 12--16.
+
+
+
+@format
+@group
+@noindent
+@w{  Op           Result                                      }
+@w{  @b{boole-1}      @i{integer-1}                                   }
+@w{  @b{boole-2}      @i{integer-2}                                   }
+@w{  @b{boole-andc1}  and complement of @i{integer-1} with @i{integer-2}  }
+@w{  @b{boole-andc2}  and @i{integer-1} with complement of @i{integer-2}  }
+@w{  @b{boole-and}    and                                         }
+@w{  @b{boole-c1}     complement of @i{integer-1}                     }
+@w{  @b{boole-c2}     complement of @i{integer-2}                     }
+@w{  @b{boole-clr}    always 0 (all zero bits)                    }
+@w{  @b{boole-eqv}    equivalence (exclusive nor)                 }
+@w{  @b{boole-ior}    inclusive or                                }
+@w{  @b{boole-nand}   not-and                                     }
+@w{  @b{boole-nor}    not-or                                      }
+@w{  @b{boole-orc1}   or complement of @i{integer-1} with @i{integer-2}   }
+@w{  @b{boole-orc2}   or @i{integer-1} with complement of @i{integer-2}   }
+@w{  @b{boole-set}    always -1 (all one bits)                    }
+@w{  @b{boole-xor}    exclusive or                                }
+
+@noindent
+@w{         Figure 12--16: Bit-Wise Logical Operations        }
+
+@end group
+@end format
+
+
+
+@subsubheading  Examples::
+
+@example
+ (boole boole-ior 1 16) @result{}  17
+ (boole boole-and -2 5) @result{}  4
+ (boole boole-eqv 17 15) @result{}  -31
+
+;;; These examples illustrate the result of applying BOOLE and each
+;;; of the possible values of OP to each possible combination of bits.
+ (progn
+   (format t "~&Results of (BOOLE <op> #b0011 #b0101) ...~
+           ~
+   (dolist (symbol '(boole-1     boole-2    boole-and  boole-andc1
+                     boole-andc2 boole-c1   boole-c2   boole-clr
+                     boole-eqv   boole-ior  boole-nand boole-nor
+                     boole-orc1  boole-orc2 boole-set  boole-xor))
+     (let ((result (boole (symbol-value symbol) #b0011 #b0101)))
+       (format t "~& ~A~13T~3,' D~23T~:*~5,' B~31T ...~4,'0B~
+               symbol result (logand result #b1111)))))
+@t{ |> } Results of (BOOLE <op> #b0011 #b0101) ...
+@t{ |> } ---Op-------Decimal-----Binary----Bits---
+@t{ |> }  BOOLE-1       3          11    ...0011
+@t{ |> }  BOOLE-2       5         101    ...0101
+@t{ |> }  BOOLE-AND     1           1    ...0001
+@t{ |> }  BOOLE-ANDC1   4         100    ...0100
+@t{ |> }  BOOLE-ANDC2   2          10    ...0010
+@t{ |> }  BOOLE-C1     -4        -100    ...1100
+@t{ |> }  BOOLE-C2     -6        -110    ...1010
+@t{ |> }  BOOLE-CLR     0           0    ...0000
+@t{ |> }  BOOLE-EQV    -7        -111    ...1001
+@t{ |> }  BOOLE-IOR     7         111    ...0111
+@t{ |> }  BOOLE-NAND   -2         -10    ...1110
+@t{ |> }  BOOLE-NOR    -8       -1000    ...1000
+@t{ |> }  BOOLE-ORC1   -3         -11    ...1101
+@t{ |> }  BOOLE-ORC2   -5        -101    ...1011
+@t{ |> }  BOOLE-SET    -1          -1    ...1111
+@t{ |> }  BOOLE-XOR     6         110    ...0110
+@result{}  NIL
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal @b{type-error} if its first argument is not a 
+@i{bit-wise logical operation specifier} or if any subsequent argument is not
+an @i{integer}.
+
+@subsubheading  See Also::
+
+@ref{logand}
+
+@subsubheading  Notes::  
+
+In general,
+
+@example
+ (boole boole-and x y) @equiv{} (logand x y)
+@end example
+
+@i{Programmers} who would prefer to use numeric indices rather than 
+@i{bit-wise logical operation specifiers} can get an equivalent effect
+by a technique such as the following:
+
+@example
+;; The order of the values in this `table' are such that
+;; (logand (boole (elt boole-n-vector n) #b0101 #b0011) #b1111) => n
+ (defconstant boole-n-vector
+    (vector boole-clr   boole-and  boole-andc1 boole-2
+            boole-andc2 boole-1    boole-xor   boole-ior
+            boole-nor   boole-eqv  boole-c1    boole-orc1
+            boole-c2    boole-orc2 boole-nand  boole-set))
+@result{}  BOOLE-N-VECTOR
+ (proclaim '(inline boole-n))
+@result{}  @i{implementation-dependent}
+ (defun boole-n (n integer &rest more-integers)
+   (apply #'boole (elt boole-n-vector n) integer more-integers))
+@result{}  BOOLE-N
+ (boole-n #b0111 5 3) @result{}  7
+ (boole-n #b0001 5 3) @result{}  1
+ (boole-n #b1101 5 3) @result{}  -3
+ (loop for n from #b0000 to #b1111 collect (boole-n n 5 3))
+@result{}  (0 1 2 3 4 5 6 7 -8 -7 -6 -5 -4 -3 -2 -1)
+@end example
+
+@node boole-1, logand, boole, Numbers Dictionary
+@subsection boole-1,    boole-2,   boole-and,  boole-andc1, boole-andc2,
+@subheading boole-c1,   boole-c2,  boole-clr,  boole-eqv,   boole-ior,
+@subheading boole-nand, boole-nor, boole-orc1, boole-orc2,  boole-set, 
+@subheading boole-xor
+@flushright
+@i{[Constant Variable]}
+@end flushright
+
+@subsubheading  Constant Value::
+
+The identity and nature of the @i{values} of each of these @i{variables} 
+is @i{implementation-dependent},
+except that it must be @i{distinct} from each of the @i{values} of the others,
+and it must be a valid first @i{argument} to the @i{function} @b{boole}.
+
+@subsubheading  Description::
+
+Each of these @i{constants} has a @i{value} which is one of the 
+sixteen possible @i{bit-wise logical operation specifiers}.
+
+@subsubheading  Examples::
+@example
+ (boole boole-ior 1 16) @result{}  17
+ (boole boole-and -2 5) @result{}  4
+ (boole boole-eqv 17 15) @result{}  -31
+@end example
+
+@subsubheading  See Also::
+
+@ref{boole}
+
+@node logand, logbitp, boole-1, Numbers Dictionary
+@subsection logand,  logandc1, logandc2, logeqv,  logior,
+@subheading lognand, lognor,   lognot,   logorc1, logorc2,
+@subheading logxor
+@flushright
+@i{[Function]}
+@end flushright
+
+@code{logand}  @i{@r{&rest} integers} @result{}  @i{result-integer}
+
+@code{logandc}  @i{1} @result{}  @i{integer-1 integer-2}
+ @r{result-integer}
+@code{logandc}  @i{2} @result{}  @i{integer-1 integer-2}
+ @r{result-integer}
+@code{logeqv}  @i{@r{&rest} integers} @result{}  @i{result-integer}
+
+@code{logior}  @i{@r{&rest} integers} @result{}  @i{result-integer}
+
+@code{lognand}  @i{integer-1 integer-2} @result{}  @i{result-integer}
+
+@code{lognor}  @i{integer-1 integer-2} @result{}  @i{result-integer}
+
+@code{lognot}  @i{integer} @result{}  @i{result-integer}
+
+@code{logorc}  @i{1} @result{}  @i{integer-1 integer-2}
+ @r{result-integer}
+@code{logorc}  @i{2} @result{}  @i{integer-1 integer-2}
+ @r{result-integer}
+@code{logxor}  @i{@r{&rest} integers} @result{}  @i{result-integer}
+
+@subsubheading  Arguments and Values::
+
+@i{integers}---@i{integers}.
+
+@i{integer}---an @i{integer}.
+
+@i{integer-1}---an @i{integer}.
+
+@i{integer-2}---an @i{integer}.
+
+@i{result-integer}---an @i{integer}.
+
+@subsubheading  Description::
+
+The @i{functions}
+       @b{logandc1},
+       @b{logandc2},
+       @b{logand},
+       @b{logeqv},
+       @b{logior},
+       @b{lognand},
+       @b{lognor}, 
+       @b{lognot},
+       @b{logorc1}, 
+       @b{logorc2},
+   and @b{logxor}
+perform bit-wise logical operations on their @i{arguments},
+that are treated as if they were binary.
+
+Figure 12--17 lists the meaning of each of the @i{functions}.
+Where an `identity' is shown, it indicates the @i{value} @i{yielded}
+by the @i{function} when no @i{arguments} are supplied.
+
+@format
+@group
+@noindent
+@w{  Function  Identity  Operation performed                         }
+@w{  @b{logandc1}  ---       and complement of @i{integer-1} with @i{integer-2}  }
+@w{  @b{logandc2}  ---       and @i{integer-1} with complement of @i{integer-2}  }
+@w{  @b{logand}    @t{-1}        and                                         }
+@w{  @b{logeqv}    @t{-1}        equivalence (exclusive nor)                 }
+@w{  @b{logior}    @t{0}         inclusive or                                }
+@w{  @b{lognand}   ---       complement of @i{integer-1} and @i{integer-2}       }
+@w{  @b{lognor}    ---       complement of @i{integer-1} or @i{integer-2}        }
+@w{  @b{lognot}    ---       complement                                  }
+@w{  @b{logorc1}   ---       or complement of @i{integer-1} with @i{integer-2}   }
+@w{  @b{logorc2}   ---       or @i{integer-1} with complement of @i{integer-2}   }
+@w{  @b{logxor}    @t{0}         exclusive or                                }
+
+@noindent
+@w{       Figure 12--17: Bit-wise Logical Operations on Integers     }
+
+@end group
+@end format
+
+Negative @i{integers} are treated as if they were in two's-complement notation.
+
+@subsubheading  Examples::
+
+@example
+ (logior 1 2 4 8) @result{}  15
+ (logxor 1 3 7 15) @result{}  10
+ (logeqv) @result{}  -1
+ (logand 16 31) @result{}  16
+ (lognot 0) @result{}  -1
+ (lognot 1) @result{}  -2
+ (lognot -1) @result{}  0
+ (lognot (1+ (lognot 1000))) @result{}  999
+
+;;; In the following example, m is a mask.  For each bit in
+;;; the mask that is a 1, the corresponding bits in x and y are
+;;; exchanged.  For each bit in the mask that is a 0, the 
+;;; corresponding bits of x and y are left unchanged.
+ (flet ((show (m x y)
+          (format t "~
+                  m x y)))
+   (let ((m #o007750)
+         (x #o452576)
+         (y #o317407))
+     (show m x y)
+     (let ((z (logand (logxor x y) m)))
+       (setq x (logxor z x))
+       (setq y (logxor z y))
+       (show m x y))))
+@t{ |> } m = #o007750
+@t{ |> } x = #o452576
+@t{ |> } y = #o317407
+@t{ |> } 
+@t{ |> } m = #o007750
+@t{ |> } x = #o457426
+@t{ |> } y = #o312557
+@result{}  NIL
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal @b{type-error} if any argument is not an @i{integer}.
+
+@subsubheading  See Also::
+
+@ref{boole}
+
+@subsubheading  Notes::
+
+@t{(logbitp @i{k} -1)} returns @i{true} for all values of @i{k}.
+
+Because the following functions are not associative,
+they take exactly two arguments rather than any number
+of arguments.
+
+@example
+ (lognand @i{n1} @i{n2}) @equiv{} (lognot (logand @i{n1} @i{n2}))
+ (lognor @i{n1} @i{n2}) @equiv{} (lognot (logior @i{n1} @i{n2}))
+ (logandc1 @i{n1} @i{n2}) @equiv{} (logand (lognot @i{n1}) @i{n2})
+ (logandc2 @i{n1} @i{n2}) @equiv{} (logand @i{n1} (lognot @i{n2}))
+ (logiorc1 @i{n1} @i{n2}) @equiv{} (logior (lognot @i{n1}) @i{n2})
+ (logiorc2 @i{n1} @i{n2}) @equiv{} (logior @i{n1} (lognot @i{n2}))
+ (logbitp @i{j} (lognot @i{x})) @equiv{} (not (logbitp @i{j} @i{x}))
+@end example
+
+@node logbitp, logcount, logand, Numbers Dictionary
+@subsection logbitp                                                          [Function]
+
+@code{logbitp}  @i{index integer} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{index}---a non-negative @i{integer}.
+
+@i{integer}---an @i{integer}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+@b{logbitp} is used to test the value of a particular bit 
+in @i{integer}, that is treated as if it were binary.
+The value of @b{logbitp} is @i{true} if the bit in @i{integer} 
+whose index is @i{index} (that is, its weight is 2^@i{index}) 
+is a one-bit; otherwise it is @i{false}.
+
+Negative @i{integers} are treated as if they were in 
+two's-complement notation.
+
+@subsubheading  Examples::
+@example
+ (logbitp 1 1) @result{}  @i{false}
+ (logbitp 0 1) @result{}  @i{true}
+ (logbitp 3 10) @result{}  @i{true}
+ (logbitp 1000000 -1) @result{}  @i{true}
+ (logbitp 2 6) @result{}  @i{true}
+ (logbitp 0 6) @result{}  @i{false}
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{index} is not a non-negative @i{integer}.
+Should signal an error of @i{type} @b{type-error}
+			      if @i{integer} is not an @i{integer}.
+
+@subsubheading  Notes::
+
+@example
+ (logbitp @i{k} @i{n}) @equiv{} (ldb-test (byte 1 @i{k}) @i{n})
+@end example
+
+@node logcount, logtest, logbitp, Numbers Dictionary
+@subsection logcount                                                         [Function]
+
+@code{logcount}  @i{integer} @result{}  @i{number-of-on-bits}
+
+@subsubheading  Arguments and Values:: 
+
+@i{integer}---an @i{integer}.
+
+@i{number-of-on-bits}---a non-negative @i{integer}.
+
+@subsubheading  Description::
+
+Computes and returns the number of bits 
+in the two's-complement binary representation of @i{integer}
+that are `on' or `set'.
+If @i{integer} is negative, the @t{0} bits are counted;
+otherwise, the @t{1} bits are counted.
+
+@subsubheading  Examples::
+
+@example
+ (logcount 0) @result{}  0
+ (logcount -1) @result{}  0
+ (logcount 7) @result{}  3
+ (logcount  13) @result{}  3 ;Two's-complement binary: ...0001101
+ (logcount -13) @result{}  2 ;Two's-complement binary: ...1110011
+ (logcount  30) @result{}  4 ;Two's-complement binary: ...0011110
+ (logcount -30) @result{}  4 ;Two's-complement binary: ...1100010
+ (logcount (expt 2 100)) @result{}  1
+ (logcount (- (expt 2 100))) @result{}  100
+ (logcount (- (1+ (expt 2 100)))) @result{}  1
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal @b{type-error} if its argument is not an @i{integer}.
+
+@subsubheading  Notes::
+
+Even if the @i{implementation} does not represent @i{integers} internally
+in two's complement binary, @b{logcount} behaves as if it did.
+
+The following identity always holds:
+
+@example
+    (logcount @i{x})
+ @equiv{} (logcount (- (+ @i{x} 1)))
+ @equiv{} (logcount (lognot @i{x}))
+@end example
+
+@node logtest, byte, logcount, Numbers Dictionary
+@subsection logtest                                                          [Function]
+
+@code{logtest}  @i{integer-1 integer-2} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{integer-1}---an @i{integer}.
+
+@i{integer-2}---an @i{integer}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if any of the bits designated by the 1's 
+in @i{integer-1} is 1 in @i{integer-2};
+otherwise it is @i{false}.
+@i{integer-1} and @i{integer-2} are treated as if they were binary.
+
+Negative @i{integer-1} and @i{integer-2} are treated as if
+they were represented in two's-complement binary.
+
+@subsubheading  Examples::
+
+@example
+ (logtest 1 7) @result{}  @i{true}
+ (logtest 1 2) @result{}  @i{false}
+ (logtest -2 -1) @result{}  @i{true}
+ (logtest 0 -1) @result{}  @i{false}
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{integer-1} is not an @i{integer}.
+Should signal an error of @i{type} @b{type-error}
+			      if @i{integer-2} is not an @i{integer}.
+
+@subsubheading  Notes::
+
+@example
+ (logtest @i{x} @i{y}) @equiv{} (not (zerop (logand @i{x} @i{y})))
+@end example
+
+@node byte, deposit-field, logtest, Numbers Dictionary
+@subsection byte, byte-size, byte-position                                   [Function]
+
+@code{byte}  @i{size position} @result{}  @i{bytespec}
+
+@code{byte-size}  @i{bytespec} @result{}  @i{size}
+
+@code{byte-position}  @i{bytespec} @result{}  @i{position}
+
+@subsubheading  Arguments and Values::
+
+@i{size}, @i{position}---a non-negative @i{integer}.
+
+@i{bytespec}---a @i{byte specifier}.
+
+@subsubheading  Description::
+
+@b{byte} returns a @i{byte specifier} that indicates
+a @i{byte} of width @i{size} and whose bits have weights            
+2^@i{@i{position} + @i{size} - 1\/} through 2^@i{position},
+and whose representation is
+@i{implementation-dependent}.                 
+
+@b{byte-size} returns the number of bits specified by @i{bytespec}.
+
+@b{byte-position} returns the position specified by @i{bytespec}.
+
+@subsubheading  Examples::
+
+@example
+ (setq b (byte 100 200)) @result{}  #<BYTE-SPECIFIER size 100 position 200>
+ (byte-size b) @result{}  100
+ (byte-position b) @result{}  200
+@end example
+
+@subsubheading  See Also::
+
+@ref{ldb}
+, 
+@ref{dpb}
+
+@subsubheading  Notes::
+
+@example
+ (byte-size (byte @i{j} @i{k})) @equiv{} @i{j}
+ (byte-position (byte @i{j} @i{k})) @equiv{} @i{k}
+@end example
+
+A @i{byte} of @i{size} of @t{0} is permissible; 
+it refers to a @i{byte} of width zero.  For example,
+
+@example
+ (ldb (byte 0 3) #o7777) @result{}  0
+ (dpb #o7777 (byte 0 3) 0) @result{}  0
+@end example
+
+@node deposit-field, dpb, byte, Numbers Dictionary
+@subsection deposit-field                                                    [Function]
+
+@code{deposit-field}  @i{newbyte bytespec integer} @result{}  @i{result-integer}
+
+@subsubheading  Arguments and Values::
+
+@i{newbyte}---an @i{integer}.
+
+@i{bytespec}---a @i{byte specifier}.
+
+@i{integer}---an @i{integer}.
+
+@i{result-integer}---an @i{integer}.
+
+@subsubheading  Description::
+
+Replaces a field of bits within @i{integer}; specifically,
+returns an @i{integer} that contains the bits of @i{newbyte}
+within the @i{byte} specified by @i{bytespec},
+and elsewhere contains the bits of @i{integer}.  
+
+@subsubheading  Examples::
+
+@example
+ (deposit-field 7 (byte 2 1) 0) @result{}  6
+ (deposit-field -1 (byte 4 0) 0) @result{}  15
+ (deposit-field 0 (byte 2 1) -3) @result{}  -7
+@end example
+
+@subsubheading  See Also::
+
+@ref{byte}
+,
+@ref{dpb}
+
+@subsubheading  Notes::
+
+@example
+ (logbitp @i{j} (deposit-field @i{m} (byte @i{s} @i{p}) @i{n}))
+ @equiv{} (if (and (>= @i{j} @i{p}) (< @i{j} (+ @i{p} @i{s})))
+        (logbitp @i{j} @i{m})
+        (logbitp @i{j} @i{n}))
+@end example
+
+   @b{deposit-field} is to @b{mask-field} 
+as @b{dpb}           is to @b{ldb}.
+
+@node dpb, ldb, deposit-field, Numbers Dictionary
+@subsection dpb                                                              [Function]
+
+@code{dpb}  @i{newbyte bytespec integer} @result{}  @i{result-integer}
+
+@subsubheading  Pronunciation::
+
+    pronounced ,de  'pib 
+ or pronounced ,de  'pe b 
+ or pronounced 'd\=e 'p\=e 'b\=e 
+
+@subsubheading  Arguments and Values::
+
+@i{newbyte}---an @i{integer}.
+
+@i{bytespec}---a @i{byte specifier}.
+
+@i{integer}---an @i{integer}.
+
+@i{result-integer}---an @i{integer}.
+
+@subsubheading  Description::
+
+@b{dpb} (deposit byte) is used to 
+replace a field of bits within @i{integer}.  
+@b{dpb} returns an @i{integer} that is 
+the same as @i{integer} except in the bits specified by @i{bytespec}.
+
+Let @t{s} be the size specified
+by @i{bytespec}; then the low @t{s} bits of @i{newbyte} appear in
+the result in the byte specified by @i{bytespec}.
+@i{Newbyte} is interpreted as
+being right-justified, as if it were the result of @b{ldb}.
+
+@subsubheading  Examples::
+
+@example
+ (dpb 1 (byte 1 10) 0) @result{}  1024
+ (dpb -2 (byte 2 10) 0) @result{}  2048
+ (dpb 1 (byte 2 10) 2048) @result{}  1024
+@end example
+
+@subsubheading  See Also::
+
+@ref{byte}
+, 
+@ref{deposit-field}
+, 
+@ref{ldb}
+
+@subsubheading  Notes::
+
+@example
+ (logbitp @i{j} (dpb @i{m} (byte @i{s} @i{p}) @i{n}))
+ @equiv{} (if (and (>= @i{j} @i{p}) (< @i{j} (+ @i{p} @i{s})))
+        (logbitp (- @i{j} @i{p}) @i{m})
+        (logbitp @i{j} @i{n}))
+@end example
+
+In general,
+
+@example
+ (dpb @i{x} (byte 0 @i{y}) @i{z}) @result{}  @i{z}
+@end example
+
+for all valid values of @i{x}, @i{y}, and @i{z}.
+
+Historically, the name ``dpb'' comes from a DEC PDP-10 assembly language
+instruction meaning ``deposit byte.''
+
+@node ldb, ldb-test, dpb, Numbers Dictionary
+@subsection ldb                                                              [Accessor]
+
+@code{ldb}  @i{bytespec integer} @result{}  @i{byte}
+
+(setf (@code{ ldb} @i{bytespec place}) new-byte)@*
+
+@subsubheading  Pronunciation::
+
+    pronounced 'lid ib
+ or pronounced 'lid e b
+ or pronounced 'el 'd\=e 'b\=e 
+
+@subsubheading  Arguments and Values::
+
+@i{bytespec}---a @i{byte specifier}.
+
+@i{integer}---an @i{integer}.
+
+@i{byte}, @i{new-byte}---a non-negative @i{integer}.
+
+@subsubheading  Description::
+
+@b{ldb} extracts and returns the @i{byte} of @i{integer}
+specified by @i{bytespec}.
+
+@b{ldb} returns an @i{integer} in which the bits with weights 
+2^@i{(@i{s}-1)} through 2^0 are the same as those in 
+@i{integer} with weights 2^@i{(@i{p}+@i{s}-1)} 
+through 2^@i{p}, and all other bits zero; @i{s} is
+@t{(byte-size @i{bytespec})} 
+and @i{p} is @t{(byte-position @i{bytespec})}.
+
+@b{setf} may be used with @b{ldb} to modify
+a byte within the @i{integer} that is stored
+in a given @i{place}.
+
+The order of evaluation, when an @b{ldb} form is supplied
+to @b{setf}, is exactly left-to-right.
+
+@ITindex order of evaluation
+
+@ITindex evaluation order
+
+The effect is to perform a @b{dpb} operation
+and then store the result back into the @i{place}.
+
+@subsubheading  Examples::
+
+@example
+ (ldb (byte 2 1) 10) @result{}  1
+ (setq a (list 8)) @result{}  (8)
+ (setf (ldb (byte 2 1) (car a)) 1) @result{}  1
+ a @result{}  (10)
+@end example
+
+@subsubheading  See Also::
+
+@ref{byte}
+,
+@b{byte-position},
+@b{byte-size},
+@ref{dpb}
+
+@subsubheading  Notes::
+
+@example
+ (logbitp @i{j} (ldb (byte @i{s} @i{p}) @i{n}))
+    @equiv{} (and (< @i{j} @i{s}) (logbitp (+ @i{j} @i{p}) @i{n}))
+@end example
+
+In general,
+
+@example
+ (ldb (byte 0 @i{x}) @i{y}) @result{}  0
+@end example
+
+for all valid values of @i{x} and @i{y}.
+
+Historically, the name ``ldb'' comes from a DEC PDP-10 assembly language
+instruction meaning ``load byte.''
+
+@node ldb-test, mask-field, ldb, Numbers Dictionary
+@subsection ldb-test                                                         [Function]
+
+@code{ldb-test}  @i{bytespec integer} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{bytespec}---a @i{byte specifier}.
+
+@i{integer}---an @i{integer}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if any of the bits of the byte in @i{integer}
+specified by @i{bytespec} is non-zero; otherwise returns @i{false}.
+
+@subsubheading  Examples::
+
+@example
+ (ldb-test (byte 4 1) 16) @result{}  @i{true}
+ (ldb-test (byte 3 1) 16) @result{}  @i{false}
+ (ldb-test (byte 3 2) 16) @result{}  @i{true}
+@end example
+
+@subsubheading  See Also::
+
+@ref{byte}
+, 
+@ref{ldb}
+, 
+@ref{zerop}
+
+@subsubheading  Notes::
+@example
+ (ldb-test bytespec n) @equiv{}
+ (not (zerop (ldb bytespec n))) @equiv{}
+ (logtest (ldb bytespec -1) n)
+@end example
+
+@node mask-field, most-positive-fixnum, ldb-test, Numbers Dictionary
+@subsection mask-field                                                       [Accessor]
+
+@code{mask-field}  @i{bytespec integer} @result{}  @i{masked-integer}
+
+(setf (@code{         mask-field} @i{bytespec place}) new-masked-integer)@*
+
+@subsubheading  Arguments and Values::
+
+@i{bytespec}---a @i{byte specifier}.
+
+@i{integer}---an @i{integer}.
+
+@i{masked-integer}, @i{new-masked-integer}---a non-negative @i{integer}.
+
+@subsubheading  Description::
+
+@b{mask-field} performs a ``mask'' operation on @i{integer}.
+It returns an @i{integer} that has the same bits as @i{integer} in 
+the @i{byte} specified by @i{bytespec}, but that has zero-bits everywhere else.
+
+@b{setf} may be used with @b{mask-field}
+to modify a byte within the @i{integer} that is stored
+in a given @i{place}.
+The effect is to perform a @b{deposit-field} operation
+and then store the result back into the @i{place}.
+
+@subsubheading  Examples::
+
+@example
+ (mask-field (byte 1 5) -1) @result{}  32
+ (setq a 15) @result{}  15
+ (mask-field (byte 2 0) a) @result{}  3
+ a @result{}  15
+ (setf (mask-field (byte 2 0) a) 1) @result{}  1
+ a @result{}  13
+@end example
+
+@subsubheading  See Also::
+
+@ref{byte}
+,
+@ref{ldb}
+
+@subsubheading  Notes::
+
+@example
+ (ldb @i{bs} (mask-field @i{bs} @i{n})) @equiv{} (ldb @i{bs} @i{n})
+ (logbitp @i{j} (mask-field (byte @i{s} @i{p}) @i{n}))
+   @equiv{} (and (>= @i{j} @i{p}) (< @i{j} @i{s}) (logbitp @i{j} @i{n}))
+ (mask-field @i{bs} @i{n}) @equiv{} (logand @i{n} (dpb -1 @i{bs} 0))
+@end example
+
+@node most-positive-fixnum, decode-float, mask-field, Numbers Dictionary
+@subsection most-positive-fixnum, most-negative-fixnum              [Constant Variable]
+
+@subsubheading  Constant Value::
+
+@i{implementation-dependent}.
+
+@subsubheading  Description::
+
+@b{most-positive-fixnum} is that @i{fixnum} closest in value 
+to positive infinity provided by the implementation,
+
+and greater than or equal to both 2^@r{15} - 1 and 
+@b{array-dimension-limit}.
+
+@b{most-negative-fixnum} is that @i{fixnum} closest in value
+to negative infinity provided by the implementation,
+
+and less than or equal to -2^@r{15}.
+
+@node decode-float, float, most-positive-fixnum, Numbers Dictionary
+@subsection decode-float, scale-float, float-radix, float-sign, 
+@subheading float-digits, float-precision, integer-decode-float
+@flushright
+@i{[Function]}
+@end flushright
+
+@code{decode-float}  @i{float} @result{}  @i{significand, exponent, sign}
+
+@code{scale-float}  @i{float integer} @result{}  @i{scaled-float}
+
+@code{float-radix}  @i{float} @result{}  @i{float-radix}
+
+@code{float-sign}  @i{float-1 @r{&optional} float-2} @result{}  @i{signed-float}
+
+@code{float-digits}  @i{float} @result{}  @i{digits1}
+
+@code{float-precision}  @i{float} @result{}  @i{digits2}
+
+@code{integer-decode-float}  @i{float} @result{}  @i{significand, exponent, integer-sign}
+
+@subsubheading  Arguments and Values::
+
+@i{digits1}---a non-negative @i{integer}.
+
+@i{digits2}---a non-negative @i{integer}.
+
+@i{exponent}---an @i{integer}.
+
+@i{float}---a @i{float}.
+
+@i{float-1}---a @i{float}.
+
+@i{float-2}---a @i{float}.
+
+@i{float-radix}---an @i{integer}.
+
+@i{integer}---a non-negative @i{integer}.
+
+@i{integer-sign}---the @i{integer} @t{-1},
+		    or the @i{integer} @t{1}.
+
+@i{scaled-float}---a @i{float}.
+
+@i{sign}---A @i{float} of the same @i{type} as @i{float}
+	       but numerically equal to @t{1.0} or @t{-1.0}.
+
+@i{signed-float}---a @i{float}.
+
+@i{significand}---a @i{float}.
+
+@subsubheading  Description::
+
+@b{decode-float} computes three values that characterize
+@i{float}.
+The first value is of the same @i{type}
+as @i{float} and 
+represents the significand.
+The second value represents the exponent
+to which the radix (notated in this description by @i{b}) must
+be raised to obtain the value that, when multiplied with the first
+result, produces the absolute value of @i{float}.
+If @i{float} is zero, any @i{integer} value may be returned, 
+provided that the identity shown for @b{scale-float} holds.
+The third value
+is of the same @i{type} as @i{float}
+and is 1.0 if @i{float} is greater
+than or equal to zero or -1.0 otherwise.
+
+@b{decode-float} 
+divides @i{float} by an integral power of @i{b}
+so as to bring its value between 1/@i{b} (inclusive) and~1 (exclusive),
+and returns the quotient as the first value.
+If @i{float} is zero, however, the result
+equals the absolute value of @i{float} (that is, if there is a negative
+zero, its significand is considered to be a positive zero).
+
+@b{scale-float} returns
+@t{(* @i{float} (expt (float @i{b} @i{float}) 
+@i{integer}))\/}, where @i{b} is the radix of the floating-point
+representation. @i{float} is not necessarily between 1/@i{b} and~1.
+
+@b{float-radix} returns 
+the radix of @i{float}.
+
+@b{float-sign} returns a number @t{z} such
+that @t{z} and @i{float-1} have the same sign and also such that
+@t{z} and @i{float-2} have the same absolute value.
+If @i{float-2} is not supplied, its value is @t{(float 1 @i{float-1})}.
+If an implementation
+has distinct representations for negative zero and positive zero,
+then @t{(float-sign -0.0)} @result{}  @t{-1.0}.
+
+@b{float-digits} returns
+the number of radix @i{b} digits
+used in the representation of @i{float} (including any implicit
+digits, such as a ``hidden bit'').
+
+@b{float-precision}
+returns
+the number of significant radix @i{b} digits present in @i{float};
+if @i{float} is a @i{float}
+zero, then the result is an @i{integer} zero.
+
+For @i{normalized} @i{floats},
+the results of @b{float-digits} and @b{float-precision} are the same,
+but the precision is less than the number of representation digits 
+for a @i{denormalized} or zero number.
+
+@b{integer-decode-float} computes three values that characterize
+@i{float} - 
+the significand scaled so as to be an @i{integer},
+and the same last two
+values that are returned by @b{decode-float}.
+If @i{float} is zero, @b{integer-decode-float} returns 
+zero as the first value.
+The second value bears the same relationship to the first value
+as for @b{decode-float}:
+
+@example
+ (multiple-value-bind (signif expon sign)
+                      (integer-decode-float f)
+   (scale-float (float signif f) expon)) @equiv{} (abs f)
+@end example
+
+@subsubheading  Examples::
+
+@example
+ ;; Note that since the purpose of this functionality is to expose
+ ;; details of the implementation, all of these examples are necessarily
+ ;; very implementation-dependent.  Results may vary widely.
+ ;; Values shown here are chosen consistently from one particular implementation.
+ (decode-float .5) @result{}  0.5, 0, 1.0
+ (decode-float 1.0) @result{}  0.5, 1, 1.0
+ (scale-float 1.0 1) @result{}  2.0
+ (scale-float 10.01 -2) @result{}  2.5025
+ (scale-float 23.0 0) @result{}  23.0
+ (float-radix 1.0) @result{}  2
+ (float-sign 5.0) @result{}  1.0
+ (float-sign -5.0) @result{}  -1.0
+ (float-sign 0.0) @result{}  1.0
+ (float-sign 1.0 0.0) @result{}  0.0
+ (float-sign 1.0 -10.0) @result{}  10.0
+ (float-sign -1.0 10.0) @result{}  -10.0
+ (float-digits 1.0) @result{}  24
+ (float-precision 1.0) @result{}  24
+ (float-precision least-positive-single-float) @result{}  1
+ (integer-decode-float 1.0) @result{}  8388608, -23, 1
+@end example
+
+@subsubheading  Affected By::
+
+The implementation's representation for @i{floats}.
+
+@subsubheading  Exceptional Situations::
+
+The functions @b{decode-float}, @b{float-radix}, @b{float-digits},
+@b{float-precision}, and @b{integer-decode-float} should signal an error
+if their only argument is not a @i{float}.
+
+The @i{function} @b{scale-float} should signal an error if its first argument
+is not a @i{float} or if its second argument is not an @i{integer}.
+
+The @i{function} @b{float-sign} should signal an error if its first argument
+is not a @i{float} or if its second argument is supplied but is 
+not a @i{float}.
+
+@subsubheading  Notes::
+
+The product of the first result of @b{decode-float} or @b{integer-decode-float},
+of the radix raised to the power of the second result, and of the third result
+is exactly equal to the value of @i{float}.
+
+@example
+ (multiple-value-bind (signif expon sign)
+                      (decode-float f)
+   (scale-float signif expon))
+@equiv{} (abs f)
+@end example
+
+and
+
+@example
+ (multiple-value-bind (signif expon sign)
+                      (decode-float f)
+   (* (scale-float signif expon) sign))
+@equiv{} f
+@end example
+
+@node float, floatp, decode-float, Numbers Dictionary
+@subsection float                                                            [Function]
+
+@code{float}  @i{number @r{&optional} prototype} @result{}  @i{float}
+
+@subsubheading  Arguments and Values::
+
+@i{number}---a @i{real}.
+
+@i{prototype}---a @i{float}.
+
+@i{float}---a @i{float}.
+
+@subsubheading  Description::
+
+@b{float} converts a 
+
+@i{real}
+
+number to a @i{float}.
+
+If a @i{prototype} is supplied,
+a @i{float} is returned that is mathematically equal to @i{number}
+but has the same format as @i{prototype}.
+
+If @i{prototype} is not supplied,
+then if the @i{number} is already a @i{float}, it is returned;
+otherwise, a @i{float} is returned that is mathematically equal to @i{number}
+but is a @i{single float}.
+
+@subsubheading  Examples:: 
+
+@example
+ (float 0) @result{}  0.0
+ (float 1 .5) @result{}  1.0
+ (float 1.0) @result{}  1.0
+ (float 1/2) @result{}  0.5
+@result{}  1.0d0
+@i{OR}@result{} 1.0
+ (eql (float 1.0 1.0d0) 1.0d0) @result{}  @i{true}
+@end example
+
+@subsubheading  See Also::
+
+@ref{coerce}
+
+@node floatp, most-positive-short-float, float, Numbers Dictionary
+@subsection floatp                                                           [Function]
+
+@code{floatp}  @i{object}
+ @r{generalized-boolean}
+
+@subsubheading  Arguments and Values::
+
+@i{object}---an @i{object}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{object} is of @i{type} @b{float};
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::
+
+@example
+ (floatp 1.2d2) @result{}  @i{true}
+ (floatp 1.212) @result{}  @i{true}
+ (floatp 1.2s2) @result{}  @i{true}
+ (floatp (expt 2 130)) @result{}  @i{false}
+@end example
+
+@subsubheading  Notes::
+
+@example
+ (floatp @i{object}) @equiv{} (typep @i{object} 'float)
+@end example
+
+@node most-positive-short-float, short-float-epsilon, floatp, Numbers Dictionary
+@subsection most-positive-short-float, least-positive-short-float,
+@subheading least-positive-normalized-short-float,
+@subheading most-positive-double-float, least-positive-double-float,
+@subheading least-positive-normalized-double-float,
+@subheading most-positive-long-float, least-positive-long-float, 
+@subheading least-positive-normalized-long-float,
+@subheading most-positive-single-float, least-positive-single-float,
+@subheading least-positive-normalized-single-float,
+@subheading most-negative-short-float, least-negative-short-float,
+@subheading least-negative-normalized-short-float,
+@subheading most-negative-single-float, least-negative-single-float,
+@subheading least-negative-normalized-single-float,
+@subheading most-negative-double-float, least-negative-double-float,
+@subheading least-negative-normalized-double-float,
+@subheading most-negative-long-float, least-negative-long-float,
+@subheading least-negative-normalized-long-float
+@flushright
+@i{[Constant Variable]}
+@end flushright
+
+@subsubheading  Constant Value::
+
+@i{implementation-dependent}.
+
+@subsubheading  Description::
+
+These @i{constant variables} provide a way for programs to examine
+the @i{implementation-defined} limits for the various float formats.
+
+Of these @i{variables},
+ each which has ``@t{-normalized}'' in its @i{name}
+  must have a @i{value} which is a @i{normalized} @i{float}, and
+ each which does not have ``@t{-normalized}'' in its name
+  may have a @i{value} which is either a @i{normalized} @i{float} 
+  or a @i{denormalized} @i{float}, as appropriate.
+
+Of these @i{variables},
+ each which has ``@t{short-float}'' in its name
+  must have a @i{value} which is a @i{short float},
+ each which has ``@t{single-float}'' in its name
+  must have a @i{value} which is a @i{single float},
+ each which has ``@t{double-float}'' in its name
+  must have a @i{value} which is a @i{double float}, and
+ each which has ``@t{long-float}'' in its name
+  must have a @i{value} which is a @i{long float}.
+
+@table @asis
+
+@item @t{*}  
+@b{most-positive-short-float},
+              @b{most-positive-single-float},
+        @b{most-positive-double-float},
+	      @b{most-positive-long-float}
+
+  Each of these @i{constant variables} has as its @i{value} 
+  the positive @i{float} of the largest magnitude 
+  (closest in value to, but not equal to, positive infinity)
+  for the float format implied by its name.
+
+@item @t{*}  
+@b{least-positive-short-float},
+	      @b{least-positive-normalized-short-float},
+	@b{least-positive-single-float},
+	      @b{least-positive-normalized-single-float},
+	@b{least-positive-double-float},
+	      @b{least-positive-normalized-double-float},
+	@b{least-positive-long-float},
+	      @b{least-positive-normalized-long-float}
+
+  Each of these @i{constant variables} has as its @i{value}
+  the smallest positive (nonzero) @i{float}
+  for the float format implied by its name.
+
+@item @t{*}  
+@b{least-negative-short-float},
+	      @b{least-negative-normalized-short-float},
+        @b{least-negative-single-float},
+	      @b{least-negative-normalized-single-float},
+        @b{least-negative-double-float},
+	      @b{least-negative-normalized-double-float},
+        @b{least-negative-long-float},
+	      @b{least-negative-normalized-long-float}
+
+  Each of these @i{constant variables} has as its @i{value}
+  the negative (nonzero) @i{float} of the smallest magnitude
+  for the float format implied by its name.
+  (If an implementation supports minus zero as a @i{different} 
+   @i{object} from positive zero, this value must not be minus zero.)
+
+@item @t{*}  
+@b{most-negative-short-float},
+	      @b{most-negative-single-float},
+	@b{most-negative-double-float},
+	      @b{most-negative-long-float}
+
+  Each of these @i{constant variables} has as its @i{value}
+  the negative @i{float} of the largest magnitude 
+  (closest in value to, but not equal to, negative infinity)
+  for the float format implied by its name.
+
+@end table
+
+@subsubheading  Notes::
+
+@node short-float-epsilon, arithmetic-error, most-positive-short-float, Numbers Dictionary
+@subsection short-float-epsilon, short-float-negative-epsilon,
+@subheading single-float-epsilon, single-float-negative-epsilon,
+@subheading double-float-epsilon, double-float-negative-epsilon,
+@subheading long-float-epsilon, long-float-negative-epsilon
+@flushright
+@i{[Constant Variable]}
+@end flushright
+
+@subsubheading  Constant Value::
+
+@i{implementation-dependent}.
+
+@subsubheading  Description::
+
+The value of each of the constants @b{short-float-epsilon}, 
+@b{single-float-epsilon},
+@b{double-float-epsilon}, and @b{long-float-epsilon} is 
+the smallest positive @i{float} \epsilon of the given format, 
+such that the following expression is @i{true} when evaluated:
+
+@t{(not (= (float 1 \epsilon) (+ (float 1 \epsilon) \epsilon)))\/}
+
+The value of each of the constants @b{short-float-negative-epsilon}, 
+@b{single-float-negative-epsilon},
+@b{double-float-negative-epsilon}, and  
+@b{long-float-negative-epsilon} is the smallest positive
+@i{float} \epsilon of the given format, such that the following
+expression is @i{true} when evaluated:
+
+@t{(not (= (float 1 \epsilon) (- (float 1 \epsilon) \epsilon)))\/}
+
+@node arithmetic-error, arithmetic-error-operands, short-float-epsilon, Numbers Dictionary
+@subsection arithmetic-error                                           [Condition Type]
+
+@subsubheading  Class Precedence List::
+@b{arithmetic-error},
+@b{error},
+@b{serious-condition},
+@b{condition},
+@b{t}
+
+@subsubheading  Description::
+
+The @i{type} @b{arithmetic-error} consists of error conditions
+that occur during arithmetic operations.
+The operation and operands are initialized with
+the initialization arguments named @t{:operation} and @t{:operands} to @b{make-condition},
+and are @i{accessed} by
+the functions @b{arithmetic-error-operation} and 
+@b{arithmetic-error-operands}.
+
+@subsubheading  See Also::
+
+@b{arithmetic-error-operation}, 
+@ref{arithmetic-error-operands}
+
+@node arithmetic-error-operands, division-by-zero, arithmetic-error, Numbers Dictionary
+@subsection arithmetic-error-operands, arithmetic-error-operation            [Function]
+
+@code{arithmetic-error-operands}  @i{condition} @result{}  @i{operands}
+
+@code{arithmetic-error-operation}  @i{condition} @result{}  @i{operation}
+
+@subsubheading  Arguments and Values::
+
+@i{condition}---a @i{condition} of @i{type} @b{arithmetic-error}.
+
+@i{operands}---a @i{list}.
+
+@i{operation}---a @i{function designator}.
+
+@subsubheading  Description::
+
+@b{arithmetic-error-operands} returns a @i{list} of the operands 
+which were used in the offending call to the operation that signaled 
+the @i{condition}.
+
+@b{arithmetic-error-operation} returns a @i{list} of 
+the offending operation in the offending call that signaled the @i{condition}.
+
+@subsubheading  See Also::
+
+@b{arithmetic-error},
+@ref{Conditions}
+
+@subsubheading  Notes::
+
+@node division-by-zero, floating-point-invalid-operation, arithmetic-error-operands, Numbers Dictionary
+@subsection division-by-zero                                           [Condition Type]
+
+@subsubheading  Class Precedence List::
+@b{division-by-zero},
+@b{arithmetic-error},
+@b{error},
+@b{serious-condition},
+@b{condition},
+@b{t}
+
+@subsubheading  Description::
+
+The @i{type} @b{division-by-zero} consists of error conditions that
+occur because of division by zero.
+
+@node floating-point-invalid-operation, floating-point-inexact, division-by-zero, Numbers Dictionary
+@subsection floating-point-invalid-operation                           [Condition Type]
+
+@subsubheading  Class Precedence List::
+@b{floating-point-invalid-operation},
+@b{arithmetic-error},
+@b{error},
+@b{serious-condition},
+@b{condition},
+@b{t}
+
+@subsubheading  Description::
+
+The @i{type} @b{floating-point-invalid-operation} consists of
+error conditions that occur because of certain 
+floating point traps. 
+
+It is @i{implementation-dependent} whether floating point traps
+occur, and whether or how they may be enabled or disabled.  Therefore,
+conforming code may establish handlers for this condition, but must not
+depend on its being @i{signaled}.
+
+@node floating-point-inexact, floating-point-overflow, floating-point-invalid-operation, Numbers Dictionary
+@subsection floating-point-inexact                                     [Condition Type]
+
+@subsubheading  Class Precedence List::
+@b{floating-point-inexact},
+@b{arithmetic-error},
+@b{error},
+@b{serious-condition},
+@b{condition},
+@b{t}
+
+@subsubheading  Description::
+
+The @i{type} @b{floating-point-inexact} consists of 
+error conditions that occur because of certain 
+floating point traps.
+
+It is @i{implementation-dependent} whether floating point traps
+occur, and whether or how they may be enabled or disabled.  Therefore,
+conforming code may establish handlers for this condition, but must not
+depend on its being @i{signaled}.
+
+@node floating-point-overflow, floating-point-underflow, floating-point-inexact, Numbers Dictionary
+@subsection floating-point-overflow                                    [Condition Type]
+
+@subsubheading  Class Precedence List::
+@b{floating-point-overflow},
+@b{arithmetic-error},
+@b{error},
+@b{serious-condition},
+@b{condition},
+@b{t}
+
+@subsubheading  Description::
+
+The @i{type} @b{floating-point-overflow} consists of error
+conditions that occur because of floating-point overflow.
+
+@node floating-point-underflow,  , floating-point-overflow, Numbers Dictionary
+@subsection floating-point-underflow                                   [Condition Type]
+
+@subsubheading  Class Precedence List::
+@b{floating-point-underflow},
+@b{arithmetic-error},
+@b{error},
+@b{serious-condition},
+@b{condition},
+@b{t}
+
+@subsubheading  Description::
+
+The @i{type} @b{floating-point-underflow} consists of 
+error conditions that occur because of floating-point underflow.
+
+@c end of including dict-numbers
+
+@c %**end of chapter
+

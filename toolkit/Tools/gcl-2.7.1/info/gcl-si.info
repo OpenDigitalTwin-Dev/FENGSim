@@ -1,0 +1,61 @@
+This is gcl-si.info, produced by makeinfo version 7.1 from gcl-si.texi.
+
+This is a Texinfo GCL SYSTEM INTERNALS Manual
+
+   Copyright 1994 William F. Schelter Copyright 2024 Camm Maguire
+
+INFO-DIR-SECTION GNU Common Lisp
+START-INFO-DIR-ENTRY
+* gcl-si: (gcl-si.info). GNU Common Lisp System Internals
+END-INFO-DIR-ENTRY
+
+
+Indirect:
+gcl-si.info-1: 319
+gcl-si.info-2: 347893
+
+Tag Table:
+(Indirect)
+Node: Top319
+Node: Numbers1239
+Node: Sequences and Arrays and Hash Tables23636
+Node: Characters49429
+Node: Lists56825
+Node: Streams and Reading70599
+Node: Special Forms and Functions95986
+Node: Compilation121638
+Node: Symbols134272
+Node: Operating System144031
+Node: Command Line144247
+Node: Operating System Definitions148429
+Node: Environment Variables154786
+Node: Structures156375
+Node: Iteration and Tests157927
+Node: User Interface161377
+Node: Doc170439
+Node: Type173724
+Node: GCL Specific176384
+Node: Bignums185027
+Node: C Interface187717
+Node: Available Symbols187909
+Node: External Shared Libraries188400
+Node: System Definitions203986
+Node: Regular Expressions238596
+Node: Debugging244844
+Node: Source Level Debugging in Emacs245045
+Node: Low Level Debug Functions249290
+Node: Miscellaneous250290
+Node: Environment250498
+Node: Inititialization251123
+Node: Low Level X Interface251667
+Node: Compiler Definitions252264
+Node: JAPI GUI Library Binding258393
+Node: Function Index277447
+Node: Variable Index347893
+
+End Tag Table
+
+
+Local Variables:
+coding: utf-8
+End:

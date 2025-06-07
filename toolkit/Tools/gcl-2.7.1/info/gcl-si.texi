@@ -1,0 +1,155 @@
+\input texinfo
+@c -*-texinfo-*-
+@c IMPORTANT....
+@c some versions of texinfo.tex cause an error message 'unmatched paren
+@c for:
+@c @defun foo (a &optional (b 3))
+@c ! unbalanced parens in @def arguments.
+@c ignore these by using 's' to scroll error messages in tex.
+
+
+@c @smallbook
+@setfilename gcl-si.info
+@settitle GCL SI Manual
+@c @synindex vr fn
+
+@c to update the menus do: 
+@c (texinfo-multiple-files-update "gcl-si.texi" t t)
+
+
+
+@setchapternewpage odd
+@ifinfo
+This is a Texinfo GCL SYSTEM INTERNALS Manual
+
+Copyright 1994 William F. Schelter
+Copyright 2024 Camm Maguire
+
+@format
+INFO-DIR-SECTION GNU Common Lisp
+START-INFO-DIR-ENTRY
+* gcl-si: (gcl-si.info). GNU Common Lisp System Internals
+END-INFO-DIR-ENTRY
+@end format
+@end ifinfo
+
+@titlepage
+@sp 10
+@comment The title is printed in a large font.
+@center @titlefont{GCL SI Manual}
+@end titlepage
+
+@node Top, Numbers, (dir), (dir)
+@top
+
+@menu
+* Numbers::			
+* Sequences and Arrays and Hash Tables::  
+* Characters::			
+* Lists::			
+* Streams and Reading::		
+* Special Forms and Functions::	 
+* Compilation::			
+* Symbols::			
+* Operating System::		
+* Structures::			
+* Iteration and Tests::		
+* User Interface::		
+* Doc::				
+* Type::			
+* GCL Specific::		
+* C Interface::			
+* System Definitions::		
+* Debugging::			
+* Miscellaneous::		
+* Compiler Definitions::	
+* JAPI GUI Library Binding::
+* Function Index::	 
+* Variable Index::	 
+
+ --- The Detailed Node Listing ---
+
+Operating System
+
+* Command Line::                
+* Operating System Definitions::  
+
+GCL Specific
+
+* Bignums::			
+
+C Interface
+
+* Available Symbols::		
+
+System Definitions
+
+* Regular Expressions::		
+
+Debugging
+
+* Source Level Debugging in Emacs::  
+* Low Level Debug Functions::	
+
+Miscellaneous
+
+* Environment::			
+* Inititialization::		
+* Low Level X Interface::	
+@end menu
+
+@include number.texi
+
+@include sequence.texi
+
+@include character.texi
+
+@include list.texi
+
+@include io.texi
+
+@include form.texi
+
+@include compile.texi
+
+@include symbol.texi
+
+@include system.texi
+
+@include structure.texi
+
+@include iteration.texi
+
+@include user-interface.texi
+
+@include doc.texi
+
+@include type.texi
+
+@include internal.texi
+
+@include c-interface.texi
+
+@include si-defs.texi
+
+@include debug.texi
+
+@include misc.texi
+
+@include compiler-defs.texi
+
+@include japi.texi
+
+@node Function Index,Variable Index ,JAPI GUI Library Binding, Top
+@appendix Function Index
+@printindex fn
+
+@node Variable Index, ,Function Index, Top
+@appendix Variable Index
+@printindex vr
+
+@summarycontents
+@contents
+@bye
+
+

@@ -1,0 +1,47 @@
+
+@node Miscellaneous, Compiler Definitions, Debugging, Top
+@chapter Miscellaneous
+
+@menu
+* Environment::			
+* Inititialization::		
+* Low Level X Interface::	
+@end menu
+
+@node Environment, Inititialization, Miscellaneous, Miscellaneous
+@section Environment
+
+The environment in GCL which is passed to macroexpand and
+other functions requesting an environment, should be a
+list of 3 lists.    The first list looks like ((v1 val1) (v2 val2) ..)
+where vi are variables and vali are their values.    
+The second is a list of ((fname1 . fbody1) (fname2 . fbody2) ...)
+where fbody1 is either (macro lambda-list lambda-body) or
+(lambda-list lambda-body) depending on whether this is a macro
+or a function.   The third list contains tags and blocks.
+
+@node Inititialization, Low Level X Interface, Environment, Miscellaneous
+@section Initialization
+
+If the file init.lsp exists in the current directory, it is
+loaded at startup.  The first argument passed to the executable image
+should be the system directory.  Normally this would be gcl/unixport.
+This directory is stored in the si::*system-directory* variable.  If
+the file sys-init.lsp exists in the system directory, it is loaded
+before init.lsp.  See also si::*TOP-LEVEL-HOOK*.
+
+@node Low Level X Interface,  , Inititialization, Miscellaneous
+@section Low Level X Interface
+
+A sample program for drawing things on X windows from lisp
+is included in the file gcl/lsp/littleXlsp.lsp
+
+That routine invokes the corresponding C routines in XLIB.
+So in order to use it you must `faslink' in the X routines.
+Directions are given at the beginning of the lisp file,
+for either building them into the image or using faslink.
+
+This program is also a good tutorial on invoking C from lisp.
+
+See also defentry and faslink.
+

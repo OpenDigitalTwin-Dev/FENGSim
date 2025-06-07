@@ -1,0 +1,466 @@
+/* h/gclincl.h.in.  Generated from configure.ac by autoheader.  */
+
+/* binding stack size */
+#undef BDSSIZE
+
+/* maximum C stack size */
+#undef CSSIZE
+
+/* C stack alignment */
+#undef CSTACK_ALIGNMENT
+
+/* whether C stack grows up or down */
+#undef CSTACK_DIRECTION
+
+/* Define to 1 if using 'alloca.c'. */
+#undef C_ALLOCA
+
+/* debug safecdr code */
+#undef DEBUG_SAFE_CDR
+
+/* big endian word order */
+#undef DOUBLE_BIGENDIAN
+
+/* frame stack size */
+#undef FRSSIZE
+
+/* using gmp */
+#undef GMP
+
+/* Define to 1 if you have 'alloca', as a function or macro. */
+#undef HAVE_ALLOCA
+
+/* Define to 1 if <alloca.h> works. */
+#undef HAVE_ALLOCA_H
+
+/* have __builtin__clear_cache instruction */
+#undef HAVE_BUILTIN_CLEAR_CACHE
+
+/* clzl instruction */
+#undef HAVE_CLZL
+
+/* Define to 1 if you have the <complex.h> header file. */
+#undef HAVE_COMPLEX_H
+
+/* ctzl instruction */
+#undef HAVE_CTZL
+
+/* have readline completion matches */
+#undef HAVE_DECL_RL_COMPLETION_MATCHES
+
+/* Define to 1 if you have the <dirent.h> header file. */
+#undef HAVE_DIRENT_H
+
+/* Define to 1 if you have the <dis-asm.h> header file. */
+#undef HAVE_DIS_ASM_H
+
+/* have struct dirent d_type field */
+#undef HAVE_D_TYPE
+
+/* Define to 1 if you have the <elf_abi.h> header file. */
+#undef HAVE_ELF_ABI_H
+
+/* Define to 1 if you have the <elf.h> header file. */
+#undef HAVE_ELF_H
+
+/* Define to 1 if you have the 'feenableexcept' function. */
+#undef HAVE_FEENABLEEXCEPT
+
+/* Have finite function */
+#undef HAVE_FINITE
+
+/* Define to 1 if you have the <float.h> header file. */
+#undef HAVE_FLOAT_H
+
+/* Define to 1 if you have the 'getcwd' function. */
+#undef HAVE_GETCWD
+
+/* Define to 1 if you have the 'getwd' function. */
+#undef HAVE_GETWD
+
+/* Define to 1 if you have the <gmp.h> header file. */
+#undef HAVE_GMP_H
+
+/* gnu linker present */
+#undef HAVE_GNU_LD
+
+/* Have ieeefp fpclass function */
+#undef HAVE_IEEEFP
+
+/* Define to 1 if you have the <inttypes.h> header file. */
+#undef HAVE_INTTYPES_H
+
+/* Have isfinite function */
+#undef HAVE_ISFINITE
+
+/* Have isnormal function */
+#undef HAVE_ISNORMAL
+
+/* Define to 1 if you have the 'dl' library (-ldl). */
+#undef HAVE_LIBDL
+
+/* Define to 1 if you have the 'opcodes' library (-lopcodes). */
+#undef HAVE_LIBOPCODES
+
+/* long long is available */
+#undef HAVE_LONG_LONG
+
+/* can madvise hugepages */
+#undef HAVE_MADVISE_HUGEPAGE
+
+/* Define to 1 if you have the <malloc/malloc.h> header file. */
+#undef HAVE_MALLOC_MALLOC_H
+
+/* memalign element present */
+#undef HAVE_MALLOC_ZONE_MEMALIGN
+
+/* Define to 1 if you have the <math.h> header file. */
+#undef HAVE_MATH_H
+
+/* Define to 1 if you have the <minix/config.h> header file. */
+#undef HAVE_MINIX_CONFIG_H
+
+/* Define to 1 if you have the 'mprotect' function. */
+#undef HAVE_MPROTECT
+
+/* can use nsocket library */
+#undef HAVE_NSOCKET
+
+/* Define to 1 if you have the 'print_insn_i386' function. */
+#undef HAVE_PRINT_INSN_I386
+
+/* have putenv call */
+#undef HAVE_PUTENV
+
+/* Define to 1 if you have the <readline/readline.h> header file. */
+#undef HAVE_READLINE_READLINE_H
+
+/* Define to 1 if you have the 'readlinkat' function. */
+#undef HAVE_READLINKAT
+
+/* Define to 1 if you have the 'rename' function. */
+#undef HAVE_RENAME
+
+/* have readline completion matches */
+#undef HAVE_RL_COMPENTRY_FUNC_T
+
+/* have setenv call */
+#undef HAVE_SETENV
+
+/* Define to 1 if you have the <setjmp.h> header file. */
+#undef HAVE_SETJMP_H
+
+/* Define to 1 if you have the 'sigaltstack' function. */
+#undef HAVE_SIGALTSTACK
+
+/* have SIGEMT signal */
+#undef HAVE_SIGEMT
+
+/* have SIGSYS signal */
+#undef HAVE_SIGSYS
+
+/* Define to 1 if you have the <stdint.h> header file. */
+#undef HAVE_STDINT_H
+
+/* Define to 1 if you have the <stdio.h> header file. */
+#undef HAVE_STDIO_H
+
+/* Define to 1 if you have the <stdlib.h> header file. */
+#undef HAVE_STDLIB_H
+
+/* Define to 1 if you have the <strings.h> header file. */
+#undef HAVE_STRINGS_H
+
+/* Define to 1 if you have the <string.h> header file. */
+#undef HAVE_STRING_H
+
+/* have sv_onstack */
+#undef HAVE_SV_ONSTACK
+
+/* Define to 1 if you have the <sys/ioctl.h> header file. */
+#undef HAVE_SYS_IOCTL_H
+
+/* Define to 1 if you have the <sys/mman.h> header file. */
+#undef HAVE_SYS_MMAN_H
+
+/* Define to 1 if you have the <sys/sockio.h> header file. */
+#undef HAVE_SYS_SOCKIO_H
+
+/* Define to 1 if you have the <sys/stat.h> header file. */
+#undef HAVE_SYS_STAT_H
+
+/* Define to 1 if you have the <sys/types.h> header file. */
+#undef HAVE_SYS_TYPES_H
+
+/* Define to 1 if you have the <unistd.h> header file. */
+#undef HAVE_UNISTD_H
+
+/* Define to 1 if you have the <values.h> header file. */
+#undef HAVE_VALUES_H
+
+/* Define to 1 if you have the <wchar.h> header file. */
+#undef HAVE_WCHAR_H
+
+/* have xdr extensions */
+#undef HAVE_XDR
+
+/* using xgcl */
+#undef HAVE_XGCL
+
+/* Host cpu */
+#undef HOST_CPU
+
+/* Host kernel */
+#undef HOST_KERNEL
+
+/* Host system */
+#undef HOST_SYSTEM
+
+/* invocation history stack size */
+#undef IHSSIZE
+
+/* beginning address for immediate fixnum range */
+#undef IM_FIX_BASE
+
+/* size of immediate fixnum address space */
+#undef IM_FIX_LIM
+
+/* symbol name mangling convention */
+#undef LEADING_UNDERSCORE
+
+/* can use fcntl for listen function */
+#undef LISTEN_USE_FCNTL
+
+/* upper immediate fixnum bound */
+#undef LOW_SHFT
+
+/* sizeof mp_limb in gmp library */
+#undef MP_LIMB_BYTES
+
+/* no profil system call */
+#undef NO_PROFILE
+
+/* can use C extension for functions that do not return */
+#undef NO_RETURN
+
+/* no uname call */
+#undef NO_UNAME
+
+/* lowest address non-object */
+#undef OBJNULL
+
+/* can use C extension for object alignment */
+#undef OBJ_ALIGN
+
+/* needed object alignment bytes */
+#undef OBJ_ALIGNMENT
+
+/* extern inline semantics */
+#undef OLD_INLINE
+
+/* bfd output arch */
+#undef OUTPUT_ARCH
+
+/* bfd output mach */
+#undef OUTPUT_MACH
+
+/* Name of package */
+#undef PACKAGE
+
+/* Define to the address where bug reports for this package should be sent. */
+#undef PACKAGE_BUGREPORT
+
+/* Define to the full name of this package. */
+#undef PACKAGE_NAME
+
+/* Define to the full name and version of this package. */
+#undef PACKAGE_STRING
+
+/* Define to the one symbol short name of this package. */
+#undef PACKAGE_TARNAME
+
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
+/* Define to the version of this package. */
+#undef PACKAGE_VERSION
+
+/* system pagewidth */
+#undef PAGEWIDTH
+
+/* readline is editline */
+#undef READLINE_IS_EDITLINE
+
+/* rl_completion_entry_function returns type Function */
+#undef RL_COMPLETION_ENTRY_FUNCTION_TYPE_FUNCTION
+
+/* rl_completion_entry_function returns type rl_compentry_func_t */
+#undef RL_COMPLETION_ENTRY_FUNCTION_TYPE_RL_COMPENTRY_FUNC_T
+
+/* rl_readline_name returns type char */
+#undef RL_READLINE_NAME_TYPE_CHAR
+
+/* rl_readline_name returns type const char */
+#undef RL_READLINE_NAME_TYPE_CONST_CHAR
+
+/* The size of 'char', as computed by sizeof. */
+#undef SIZEOF_CHAR
+
+/* sizeof linked list for contiguous pages */
+#undef SIZEOF_CONTBLOCK
+
+/* The size of 'int', as computed by sizeof. */
+#undef SIZEOF_INT
+
+/* sizeof jmp_buf */
+#undef SIZEOF_JMP_BUF
+
+/* The size of 'long', as computed by sizeof. */
+#undef SIZEOF_LONG
+
+/* The size of 'short', as computed by sizeof. */
+#undef SIZEOF_SHORT
+
+/* If using the C implementation of alloca, define if you know the
+   direction of stack growth for your system; otherwise it will be
+   automatically deduced at runtime.
+	STACK_DIRECTION > 0 => grows toward higher addresses
+	STACK_DIRECTION < 0 => grows toward lower addresses
+	STACK_DIRECTION = 0 => direction of growth unknown */
+#undef STACK_DIRECTION
+
+/* staticly linked images */
+#undef STATIC_LINKING
+
+/* Define to 1 if all of the C89 standard headers exist (not just the ones
+   required in a freestanding environment). This macro is provided for
+   backward compatibility; new code need not use it. */
+#undef STDC_HEADERS
+
+/* have _cleanup function */
+#undef USE_CLEANUP
+
+/* use fionbio for non-blocking io */
+#undef USE_FIONBIO
+
+/* use gprof */
+#undef USE_GPROF
+
+/* use readline library */
+#undef USE_READLINE
+
+/* protect cdr from immfix and speed up type processing */
+#undef USE_SAFE_CDR
+
+/* Enable extensions on AIX, Interix, z/OS.  */
+#ifndef _ALL_SOURCE
+# undef _ALL_SOURCE
+#endif
+/* Enable general extensions on macOS.  */
+#ifndef _DARWIN_C_SOURCE
+# undef _DARWIN_C_SOURCE
+#endif
+/* Enable general extensions on Solaris.  */
+#ifndef __EXTENSIONS__
+# undef __EXTENSIONS__
+#endif
+/* Enable GNU extensions on systems that have them.  */
+#ifndef _GNU_SOURCE
+# undef _GNU_SOURCE
+#endif
+/* Enable X/Open compliant socket functions that do not require linking
+   with -lxnet on HP-UX 11.11.  */
+#ifndef _HPUX_ALT_XOPEN_SOCKET_API
+# undef _HPUX_ALT_XOPEN_SOCKET_API
+#endif
+/* Identify the host operating system as Minix.
+   This macro does not affect the system headers' behavior.
+   A future release of Autoconf may stop defining this macro.  */
+#ifndef _MINIX
+# undef _MINIX
+#endif
+/* Enable general extensions on NetBSD.
+   Enable NetBSD compatibility extensions on Minix.  */
+#ifndef _NETBSD_SOURCE
+# undef _NETBSD_SOURCE
+#endif
+/* Enable OpenBSD compatibility extensions on NetBSD.
+   Oddly enough, this does nothing on OpenBSD.  */
+#ifndef _OPENBSD_SOURCE
+# undef _OPENBSD_SOURCE
+#endif
+/* Define to 1 if needed for POSIX-compatible behavior.  */
+#ifndef _POSIX_SOURCE
+# undef _POSIX_SOURCE
+#endif
+/* Define to 2 if needed for POSIX-compatible behavior.  */
+#ifndef _POSIX_1_SOURCE
+# undef _POSIX_1_SOURCE
+#endif
+/* Enable POSIX-compatible threading on Solaris.  */
+#ifndef _POSIX_PTHREAD_SEMANTICS
+# undef _POSIX_PTHREAD_SEMANTICS
+#endif
+/* Enable extensions specified by ISO/IEC TS 18661-5:2014.  */
+#ifndef __STDC_WANT_IEC_60559_ATTRIBS_EXT__
+# undef __STDC_WANT_IEC_60559_ATTRIBS_EXT__
+#endif
+/* Enable extensions specified by ISO/IEC TS 18661-1:2014.  */
+#ifndef __STDC_WANT_IEC_60559_BFP_EXT__
+# undef __STDC_WANT_IEC_60559_BFP_EXT__
+#endif
+/* Enable extensions specified by ISO/IEC TS 18661-2:2015.  */
+#ifndef __STDC_WANT_IEC_60559_DFP_EXT__
+# undef __STDC_WANT_IEC_60559_DFP_EXT__
+#endif
+/* Enable extensions specified by C23 Annex F.  */
+#ifndef __STDC_WANT_IEC_60559_EXT__
+# undef __STDC_WANT_IEC_60559_EXT__
+#endif
+/* Enable extensions specified by ISO/IEC TS 18661-4:2015.  */
+#ifndef __STDC_WANT_IEC_60559_FUNCS_EXT__
+# undef __STDC_WANT_IEC_60559_FUNCS_EXT__
+#endif
+/* Enable extensions specified by C23 Annex H and ISO/IEC TS 18661-3:2015.  */
+#ifndef __STDC_WANT_IEC_60559_TYPES_EXT__
+# undef __STDC_WANT_IEC_60559_TYPES_EXT__
+#endif
+/* Enable extensions specified by ISO/IEC TR 24731-2:2010.  */
+#ifndef __STDC_WANT_LIB_EXT2__
+# undef __STDC_WANT_LIB_EXT2__
+#endif
+/* Enable extensions specified by ISO/IEC 24747:2009.  */
+#ifndef __STDC_WANT_MATH_SPEC_FUNCS__
+# undef __STDC_WANT_MATH_SPEC_FUNCS__
+#endif
+/* Enable extensions on HP NonStop.  */
+#ifndef _TANDEM_SOURCE
+# undef _TANDEM_SOURCE
+#endif
+/* Enable X/Open extensions.  Define to 500 only if necessary
+   to make mbstate_t available.  */
+#ifndef _XOPEN_SOURCE
+# undef _XOPEN_SOURCE
+#endif
+
+
+/* Version number of package */
+#undef VERSION
+
+/* value stack size */
+#undef VSSIZE
+
+/* three word cons */
+#undef WIDE_CONS
+
+/* big endian byte order */
+#undef WORDS_BIGENDIAN
+
+/* long gmp3 limbs */
+#undef __LONG_LONG_LIMB
+
+/* short gmp3 limbs */
+#undef __SHORT_LIMB
+
+/* Define as 'unsigned int' if <stddef.h> doesn't define. */
+#undef size_t

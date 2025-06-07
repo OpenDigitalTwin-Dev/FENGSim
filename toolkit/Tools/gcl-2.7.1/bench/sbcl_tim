@@ -1,0 +1,25 @@
+_            sbcl_ref 20250408_x86_64
+BOYER        0.337
+BROWSE       0.409
+CTAK         0.046
+DDERIV       0.096
+DERIV        0.094
+DESTRU       0.190
+DESTRU-MOD   0.190
+DIV2         0.209
+FFT          0.395
+FFT-MOD      0.423
+FPRINT       0.300
+FREAD        0.192
+FRPOLY       0.561
+PUZZLE       0.165
+PUZZLE-MOD   0.187
+STAK         0.260
+TAK          0.724
+TAKL         0.549
+TAK-MOD      0.713
+TAKR         0.105
+TPRINT       0.526
+TRAVERSE     0.213
+TRIANG       0.525
+TRIANG-MOD   0.897

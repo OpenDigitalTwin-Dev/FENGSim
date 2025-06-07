@@ -1,0 +1,1348 @@
+
+
+@node Symbols, Packages, Conditions, Top
+@chapter Symbols
+
+@menu
+* Symbol Concepts::		
+* Symbols Dictionary::		
+@end menu
+
+@node Symbol Concepts, Symbols Dictionary, Symbols, Symbols
+@section Symbol Concepts
+
+@c including concept-symbols
+
+Figure 10--1 lists some
+@i{defined names} that are applicable to the @i{property lists} of @i{symbols}.
+
+@format
+@group
+@noindent
+@w{  get  remprop  symbol-plist  }
+
+@noindent
+@w{  Figure 10--1: Property list defined names}
+
+@end group
+@end format
+
+Figure 10--2 lists some @i{defined names} that are applicable 
+to the creation of and inquiry about @i{symbols}.
+
+@format
+@group
+@noindent
+@w{  copy-symbol  keywordp     symbol-package  }
+@w{  gensym       make-symbol  symbol-value    }
+@w{  gentemp      symbol-name                  }
+
+@noindent
+@w{  Figure 10--2: Symbol creation and inquiry defined names}
+
+@end group
+@end format
+
+@c end of including concept-symbols
+
+@node Symbols Dictionary,  , Symbol Concepts, Symbols
+@section Symbols Dictionary
+
+@c including dict-symbols
+
+@menu
+* symbol::			
+* keyword::			
+* symbolp::			
+* keywordp::			
+* make-symbol::			
+* copy-symbol::			
+* gensym::			
+* *gensym-counter*::		
+* gentemp::			
+* symbol-function::		
+* symbol-name::			
+* symbol-package::		
+* symbol-plist::		
+* symbol-value::		
+* get::				
+* remprop::			
+* boundp::			
+* makunbound::			
+* set::				
+* unbound-variable::		
+@end menu
+
+@node symbol, keyword, Symbols Dictionary, Symbols Dictionary
+@subsection symbol                                                       [System Class]
+
+@subsubheading  Class Precedence List::
+@b{symbol},
+@b{t}
+
+@subsubheading  Description::
+
+@i{Symbols} are used for their @i{object} identity to name various entities
+in @r{Common Lisp}, including (but not limited to) linguistic entities such as
+@i{variables} and @i{functions}.
+
+@i{Symbols} can be collected together into @i{packages}.
+A @i{symbol} is said to be @i{interned} in a @i{package} 
+if it is @i{accessible} in that @i{package};
+the same @i{symbol} can be @i{interned} in more than one @i{package}.
+If a @i{symbol} is not @i{interned} in any @i{package}, 
+it is called @i{uninterned}.
+
+An @i{interned} @i{symbol} is uniquely identifiable by its @i{name} from 
+any @i{package} in which it is @i{accessible}.
+
+@i{Symbols} have the following attributes. For historically reasons,
+these are sometimes referred to as @i{cells}, although the actual
+internal representation of @i{symbols} and their attributes is
+@i{implementation-dependent}.
+
+@table @asis
+
+@item @b{Name}  
+The @i{name} of a @i{symbol} is a @i{string} used to identify the @i{symbol}.
+Every @i{symbol} has a @i{name}, 
+
+and the consequences are undefined if that @i{name} is altered.  
+
+The @i{name} is used as part of the external, printed representation of
+the @i{symbol}; see @ref{Character Syntax}.
+The @i{function} @b{symbol-name} returns the @i{name} of a given @i{symbol}.
+
+A @i{symbol} may have any @i{character} in its @i{name}.
+
+@item @b{Package}  
+The @i{object} in this @i{cell} is called the @i{home package} 
+of the @i{symbol}.  If the @i{home package} is @b{nil}, the @i{symbol}
+is sometimes said to have no @i{home package}.
+
+When a @i{symbol} is first created, it has no @i{home package}.
+When it is first @i{interned}, the @i{package} in which it is
+initially @i{interned} becomes its @i{home package}.
+The @i{home package} of a @i{symbol} can be @i{accessed}
+by using the @i{function} @b{symbol-package}.
+
+If a @i{symbol} is @i{uninterned} from the @i{package} 
+which is its @i{home package}, its @i{home package} is set to @b{nil}.
+Depending on whether there is another @i{package} in which the @i{symbol}
+is @i{interned}, the symbol might or might not really be an @i{uninterned} @i{symbol}.
+A @i{symbol} with no @i{home package} is therefore called 
+@i{apparently uninterned}.
+
+The consequences are undefined if an attempt is made to alter the @i{home package}
+of a @i{symbol} 
+external
+in the @t{COMMON-LISP} @i{package} or the @t{KEYWORD} @i{package}.
+
+@item @b{Property list}  
+The @i{property list} of a @i{symbol} provides a mechanism for
+associating named attributes with that @i{symbol}.
+The operations for adding and removing entries are @i{destructive}
+to the @i{property list}.  @r{Common Lisp} provides @i{operators} both for
+direct manipulation of @i{property list} @i{objects} 
+ (@i{e.g.}, see @b{getf}, @b{remf}, and @b{symbol-plist})
+and for implicit manipulation of a @i{symbol}'s @i{property list} 
+by reference to the @i{symbol} 
+ (@i{e.g.}, see @b{get} and @b{remprop}).
+The @i{property list} associated with a @i{fresh} @i{symbol} is 
+initially @i{null}.
+
+@item @b{Value}  
+If a symbol has a value attribute, it is said to be @i{bound},
+and that fact can be detected by the @i{function} @b{boundp}.
+The @i{object} contained in the @i{value cell} of a @i{bound} @i{symbol}
+is the @i{value} of the @i{global variable} named by that @i{symbol}, 
+and can be @i{accessed} by the @i{function} @b{symbol-value}.
+A @i{symbol} can be made to be @i{unbound} by the @i{function} @b{makunbound}.
+
+The consequences are undefined if an attempt is made to change the @i{value}
+of a @i{symbol} that names a @i{constant variable}, or to make such a 
+@i{symbol} be @i{unbound}.
+
+@item @b{Function}  
+If a symbol has a function attribute, it is said to be @i{fbound},
+and that fact can be detected by the @i{function} @b{fboundp}.
+If the @i{symbol} is the @i{name} of a @i{function} in the @i{global environment},
+the @i{function cell} contains the @i{function}, 
+and can be @i{accessed} by the @i{function} @b{symbol-function}.
+If the @i{symbol} is the @i{name} of either
+   a @i{macro} in the @i{global environment} (see @b{macro-function})
+or a @i{special operator} (see @b{special-operator-p}),
+the @i{symbol} is @i{fbound}, 
+and can be @i{accessed} by the @i{function} @b{symbol-function},
+but the @i{object} which the @i{function cell}
+contains is of @i{implementation-dependent} @i{type} and purpose.
+A @i{symbol} can be made to be @i{funbound} by the @i{function} @b{fmakunbound}.
+
+The consequences are undefined if an attempt is made to change the @i{functional value}
+of a @i{symbol} that names a @i{special form}.
+
+@end table
+
+Operations on a @i{symbol}'s @i{value cell} and @i{function cell} are
+sometimes described in terms of their effect on the @i{symbol} itself, but 
+the user should keep in mind that there is an intimate relationship between the
+contents of those @i{cells} and the @i{global variable} or 
+global @i{function} definition, respectively.
+
+@i{Symbols} are used as identifiers for @i{lexical variables} and 
+lexical @i{function} definitions, but in that role, only their @i{object}
+identity is significant.  @r{Common Lisp} provides no operation on a @i{symbol} that
+can have any effect on a @i{lexical variable} or 
+on a lexical @i{function} definition.
+
+@subsubheading  See Also::
+
+@ref{Symbols as Tokens},
+@ref{Potential Numbers as Tokens},
+@ref{Printing Symbols}
+
+@node keyword, symbolp, symbol, Symbols Dictionary
+@subsection keyword                                                              [Type]
+
+@subsubheading  Supertypes:: 
+
+@b{keyword},
+@b{symbol},
+@b{t}
+
+@subsubheading  Description::
+
+The @i{type} @b{keyword} includes all @i{symbols} @i{interned} the @t{KEYWORD} @i{package}.
+
+@i{Interning} a @i{symbol} in the @t{KEYWORD} @i{package} has three automatic effects:
+
+@table @asis
+
+@item 1.  
+It causes the @i{symbol} to become @i{bound} to itself.
+@item 2.  
+It causes the @i{symbol} to become an @i{external symbol}
+	  of the @t{KEYWORD} @i{package}.
+@item 3.  
+It causes the @i{symbol} to become a @i{constant variable}.
+@end table
+
+@subsubheading  See Also::
+
+@ref{keywordp}
+
+@node symbolp, keywordp, keyword, Symbols Dictionary
+@subsection symbolp                                                          [Function]
+
+@code{symbolp}  @i{object} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values:: 
+
+@i{object}---an @i{object}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{object} is of @i{type} @b{symbol};
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::
+
+@example
+ (symbolp 'elephant) @result{}  @i{true}
+ (symbolp 12) @result{}  @i{false}
+ (symbolp nil) @result{}  @i{true}
+ (symbolp '()) @result{}  @i{true}
+ (symbolp :test) @result{}  @i{true}
+ (symbolp "hello") @result{}  @i{false}
+@end example
+
+@subsubheading  See Also::
+
+@ref{keywordp}
+,
+@b{symbol},
+@ref{typep}
+
+@subsubheading  Notes::
+
+@example
+ (symbolp @i{object}) @equiv{} (typep @i{object} 'symbol)
+@end example
+
+@node keywordp, make-symbol, symbolp, Symbols Dictionary
+@subsection keywordp                                                         [Function]
+
+@code{keywordp}  @i{object} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values:: 
+
+@i{object}---an @i{object}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{object} is a @i{keyword}_1;
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::
+
+@example
+ (keywordp 'elephant) @result{}  @i{false}
+ (keywordp 12) @result{}  @i{false}
+ (keywordp :test) @result{}  @i{true}
+ (keywordp ':test) @result{}  @i{true}
+ (keywordp nil) @result{}  @i{false}
+ (keywordp :nil) @result{}  @i{true}
+ (keywordp '(:test)) @result{}  @i{false}
+ (keywordp "hello") @result{}  @i{false}
+ (keywordp ":hello") @result{}  @i{false}
+ (keywordp '&optional) @result{}  @i{false}
+@end example
+
+@subsubheading  See Also::
+
+@ref{constantp}
+,
+@ref{keyword}
+,
+@ref{symbolp}
+,
+@ref{symbol-package}
+
+@node make-symbol, copy-symbol, keywordp, Symbols Dictionary
+@subsection make-symbol                                                      [Function]
+
+@code{make-symbol}  @i{name} @result{}  @i{new-symbol}
+
+@subsubheading  Arguments and Values:: 
+
+@i{name}---a @i{string}.
+
+@i{new-symbol}---a @i{fresh}, @i{uninterned} @i{symbol}.
+
+@subsubheading  Description::
+
+@b{make-symbol} creates and returns a @i{fresh}, @i{uninterned}
+@i{symbol} whose @i{name} is the given @i{name}.
+The @i{new-symbol} is neither @i{bound} nor @i{fbound} 
+and has a @i{null} @i{property list}.
+
+It is @i{implementation-dependent} whether the @i{string} 
+that becomes the @i{new-symbol}'s @i{name} is the given
+@i{name} or a copy of it.  Once a @i{string}
+has been given as the @i{name} @i{argument} to
+@i{make-symbol}, the consequences are undefined if a
+subsequent attempt is made to alter that @i{string}.
+
+@subsubheading  Examples::
+
+@example
+ (setq temp-string "temp") @result{}  "temp"
+ (setq temp-symbol (make-symbol temp-string)) @result{}  #:|temp|
+ (symbol-name temp-symbol) @result{}  "temp"
+ (eq (symbol-name temp-symbol) temp-string) @result{}  @i{implementation-dependent}
+ (find-symbol "temp") @result{}  NIL, NIL
+ (eq (make-symbol temp-string) (make-symbol temp-string)) @result{}  @i{false}
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{name} is not a @i{string}.
+
+@subsubheading  See Also::
+
+@ref{copy-symbol}
+
+@subsubheading  Notes::
+
+No attempt is made by @b{make-symbol} to convert the case
+of the @i{name} to uppercase.  The only case conversion which ever 
+occurs for @i{symbols} is done by the @i{Lisp reader}.
+The program interface to @i{symbol} creation retains case,
+and the program interface to interning symbols is case-sensitive.
+
+@node copy-symbol, gensym, make-symbol, Symbols Dictionary
+@subsection copy-symbol                                                      [Function]
+
+@code{copy-symbol}  @i{symbol @r{&optional} copy-properties} @result{}  @i{new-symbol}
+
+@subsubheading  Arguments and Values::
+
+@i{symbol}---a @i{symbol}.
+
+@i{copy-properties}---a @i{generalized boolean}.
+  The default is @i{false}.
+
+@i{new-symbol}---a @i{fresh}, @i{uninterned} @i{symbol}.
+
+@subsubheading  Description::
+
+@b{copy-symbol} returns a @i{fresh}, @i{uninterned} @i{symbol},
+the @i{name} of which is @b{string=} to and possibly the @i{same} as
+the @i{name} of the given @i{symbol}.
+
+If @i{copy-properties} is @i{false},
+the @i{new-symbol} is neither @i{bound} nor @i{fbound} 
+and has a @i{null} @i{property list}.
+If @i{copy-properties} is @i{true}, then
+the initial @i{value} of @i{new-symbol} is
+ the @i{value} of @i{symbol},
+the initial @i{function} definition of @i{new-symbol} is
+ the @i{functional value} of @i{symbol},
+and the @i{property list} of @i{new-symbol} is
+
+ a @i{copy}_2 of the @i{property list} of @i{symbol}.
+
+@subsubheading  Examples::
+
+@example
+ (setq fred 'fred-smith) @result{}  FRED-SMITH
+ (setf (symbol-value fred) 3) @result{}  3
+ (setq fred-clone-1a (copy-symbol fred nil)) @result{}  #:FRED-SMITH
+ (setq fred-clone-1b (copy-symbol fred nil)) @result{}  #:FRED-SMITH
+ (setq fred-clone-2a (copy-symbol fred t))   @result{}  #:FRED-SMITH
+ (setq fred-clone-2b (copy-symbol fred t))   @result{}  #:FRED-SMITH
+ (eq fred fred-clone-1a) @result{}  @i{false}
+ (eq fred-clone-1a fred-clone-1b) @result{}  @i{false}
+ (eq fred-clone-2a fred-clone-2b) @result{}  @i{false}
+ (eq fred-clone-1a fred-clone-2a) @result{}  @i{false}
+ (symbol-value fred) @result{}  3
+ (boundp fred-clone-1a) @result{}  @i{false}
+ (symbol-value fred-clone-2a) @result{}  3
+ (setf (symbol-value fred-clone-2a) 4) @result{}  4
+ (symbol-value fred) @result{}  3
+ (symbol-value fred-clone-2a) @result{}  4
+ (symbol-value fred-clone-2b) @result{}  3
+ (boundp fred-clone-1a) @result{}  @i{false}
+ (setf (symbol-function fred) #'(lambda (x) x)) @result{}  #<FUNCTION anonymous>
+ (fboundp fred) @result{}  @i{true}
+ (fboundp fred-clone-1a) @result{}  @i{false}
+ (fboundp fred-clone-2a) @result{}  @i{false}
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{symbol} is not a @i{symbol}.
+
+@subsubheading  See Also::
+
+@ref{make-symbol}
+
+@subsubheading  Notes::
+
+Implementors are encouraged not to copy the @i{string} 
+which is the @i{symbol}'s @i{name} unnecessarily.  
+Unless there is a good reason to do so, the normal implementation
+strategy is for the @i{new-symbol}'s @i{name} to
+be @i{identical} to the given @i{symbol}'s @i{name}.
+
+@node gensym, *gensym-counter*, copy-symbol, Symbols Dictionary
+@subsection gensym                                                           [Function]
+
+@code{gensym}  @i{@r{&optional} x} @result{}  @i{new-symbol}
+
+@subsubheading  Arguments and Values::
+
+@i{x}---a @i{string} or a non-negative @i{integer}.
+	    Complicated defaulting behavior; see below.
+
+@i{new-symbol}---a @i{fresh}, @i{uninterned} @i{symbol}.
+
+@subsubheading  Description::
+
+Creates and returns a @i{fresh}, @i{uninterned} @i{symbol},
+as if by calling @b{make-symbol}.  (The only difference between
+@b{gensym} and @b{make-symbol} is in how the @i{new-symbol}'s 
+@i{name} is determined.)
+
+The @i{name} of the @i{new-symbol} is the concatenation 
+of a prefix, which defaults to @t{"G"}, and
+
+a suffix, which is the decimal representation of a number that
+defaults to the @i{value} of @b{*gensym-counter*}.
+
+If @i{x} is supplied, and is a @i{string}, then that @i{string} 
+is used as a prefix instead of @t{"G"} for this call to @b{gensym} only.
+
+If @i{x} is supplied, and is an @i{integer}, then that @i{integer},
+instead of the @i{value} of @b{*gensym-counter*}, is used as the suffix
+for this call to @b{gensym} only.
+
+If and only if no explicit suffix is supplied,
+@b{*gensym-counter*} is incremented after it is used.
+
+@subsubheading  Examples::
+
+@example
+ (setq sym1 (gensym)) @result{}  #:G3142
+ (symbol-package sym1) @result{}  NIL
+ (setq sym2 (gensym 100)) @result{}  #:G100
+ (setq sym3 (gensym 100)) @result{}  #:G100
+ (eq sym2 sym3) @result{}  @i{false}
+ (find-symbol "G100") @result{}  NIL, NIL
+ (gensym "T") @result{}  #:T3143
+ (gensym) @result{}  #:G3144
+@end example
+
+@subsubheading  Side Effects::
+
+Might increment @b{*gensym-counter*}.
+
+@subsubheading  Affected By::
+
+@b{*gensym-counter*}
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{x} is not a @i{string} or a non-negative @i{integer}.
+
+@subsubheading  See Also::
+
+@ref{gentemp}
+,
+@b{*gensym-counter*}
+
+@subsubheading  Notes::
+
+The ability to pass a numeric argument to @b{gensym} has been deprecated;
+explicitly @i{binding} @b{*gensym-counter*} is now stylistically preferred.
+(The somewhat baroque conventions for the optional argument are historical
+in nature, and supported primarily for compatibility with older dialects
+of @r{Lisp}.   In modern code, it is recommended that the only kind of argument
+used be a string prefix.  In general, though, to obtain more flexible control
+of the @i{new-symbol}'s @i{name}, consider using @b{make-symbol} instead.)
+
+@node *gensym-counter*, gentemp, gensym, Symbols Dictionary
+@subsection *gensym-counter*                                                 [Variable]
+
+@subsubheading  Value Type::
+
+a non-negative @i{integer}.
+
+@subsubheading  Initial Value::
+
+@i{implementation-dependent}.
+
+@subsubheading  Description::
+
+A number which will be used in constructing the @i{name} of 
+the next @i{symbol} generated by the @i{function} @b{gensym}.
+
+@b{*gensym-counter*} can be either @i{assigned} or @i{bound}
+at any time, but its value must always be a non-negative @i{integer}.
+
+@subsubheading  Affected By::
+
+@b{gensym}.
+
+@subsubheading  See Also::
+
+@ref{gensym}
+
+@subsubheading  Notes::
+
+The ability to pass a numeric argument to @b{gensym} has been deprecated;
+explicitly @i{binding} @b{*gensym-counter*} is now stylistically preferred.
+
+@node gentemp, symbol-function, *gensym-counter*, Symbols Dictionary
+@subsection gentemp                                                          [Function]
+
+@code{gentemp}  @i{@r{&optional} prefix package} @result{}  @i{new-symbol}
+
+@subsubheading  Arguments and Values::
+
+@i{prefix}---a @i{string}.
+ The default is @t{"T"}.
+
+@i{package}---a @i{package designator}.
+ The default is the @i{current package}.
+
+@i{new-symbol}---a @i{fresh}, @i{interned} @i{symbol}.
+
+@subsubheading  Description::
+
+@b{gentemp} creates and returns a @i{fresh} @i{symbol},
+@i{interned} in the indicated @i{package}.
+The @i{symbol} is guaranteed to be one that was not previously
+@i{accessible} in @i{package}.
+It is neither @i{bound} nor @i{fbound}, and has a @i{null}
+@i{property list}.
+
+The @i{name} of the @i{new-symbol} is the concatenation 
+of the @i{prefix} and a suffix, which is taken from an internal
+counter used only by @b{gentemp}.  (If a @i{symbol} by that name
+is already @i{accessible} in @i{package}, the counter is incremented as
+many times as is necessary to produce a @i{name} that is not already the
+@i{name} of a @i{symbol} @i{accessible} in @i{package}.)
+
+@subsubheading  Examples::
+
+@example
+ (gentemp) @result{}  T1298
+ (gentemp "FOO") @result{}  FOO1299
+ (find-symbol "FOO1300") @result{}  NIL, NIL
+ (gentemp "FOO") @result{}  FOO1300
+ (find-symbol "FOO1300") @result{}  FOO1300, :INTERNAL
+ (intern "FOO1301") @result{}  FOO1301, :INTERNAL
+ (gentemp "FOO") @result{}  FOO1302
+ (gentemp) @result{}  T1303
+@end example
+
+@subsubheading  Side Effects::
+
+Its internal counter is incremented one or more times.
+
+@i{Interns} the @i{new-symbol} in @i{package}.
+
+@subsubheading  Affected By::
+
+The current state of its internal counter, and
+the current state of the @i{package}.
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{prefix} is not a @i{string}.
+Should signal an error of @i{type} @b{type-error}
+			      if @i{package} is not a @i{package designator}.
+
+@subsubheading  See Also::
+
+@ref{gensym}
+
+@subsubheading  Notes::
+
+The function @b{gentemp} is deprecated.
+
+If @i{package} is the @t{KEYWORD} @i{package},
+the result is an @i{external symbol} of @i{package}.
+Otherwise, the result is an @i{internal symbol} of @i{package}.
+
+The @b{gentemp} internal counter is independent of
+@b{*gensym-counter*}, the counter used by @b{gensym}.  
+There is no provision for accessing the @b{gentemp} internal counter.
+
+Just because @b{gentemp} creates a @i{symbol} which did not
+previously exist does not mean that such a @i{symbol} might not be
+seen in the future (@i{e.g.}, in a data file---perhaps even created by the
+same program in another session).  As such, this symbol is not truly
+unique in the same sense as a @i{gensym} would be.  In particular,
+programs which do automatic code generation should be careful not to
+attach global attributes to such generated @i{symbols} (@i{e.g.}, @b{special} @i{declarations}) and then write them into a file
+because such global attributes might, in a different session, end up
+applying to other @i{symbols} that were automatically generated on
+another day for some other purpose.
+
+@node symbol-function, symbol-name, gentemp, Symbols Dictionary
+@subsection symbol-function                                                  [Accessor]
+
+@code{symbol-function}  @i{symbol} @result{}  @i{contents}
+
+(setf (@code{         symbol-function} @i{symbol}) new-contents)@*
+
+@subsubheading  Arguments and Values:: 
+
+@i{symbol}---a @i{symbol}.
+
+@i{contents}---
+
+If the @i{symbol} is globally defined as a @i{macro} or a @i{special operator},
+an @i{object} of @i{implementation-dependent} nature and identity is returned.
+If the @i{symbol} is not globally defined as 
+ either a @i{macro} or a @i{special operator},
+and
+ if the @i{symbol} is @i{fbound},
+a @i{function} @i{object} is returned.
+
+@i{new-contents}---a @i{function}.
+
+@subsubheading  Description::
+
+@i{Accesses} the @i{symbol}'s @i{function cell}.
+
+@subsubheading  Examples::
+
+@example
+ (symbol-function 'car) @result{}  #<FUNCTION CAR>
+ (symbol-function 'twice) is an error   ;because TWICE isn't defined.
+ (defun twice (n) (* n 2)) @result{}  TWICE
+ (symbol-function 'twice) @result{}  #<FUNCTION TWICE>
+ (list (twice 3)
+       (funcall (function twice) 3)
+       (funcall (symbol-function 'twice) 3))
+@result{}  (6 6 6)
+ (flet ((twice (x) (list x x)))
+   (list (twice 3)
+         (funcall (function twice) 3)
+         (funcall (symbol-function 'twice) 3)))
+@result{}  ((3 3) (3 3) 6)   
+ (setf (symbol-function 'twice) #'(lambda (x) (list x x)))
+@result{}  #<FUNCTION anonymous>
+ (list (twice 3)
+       (funcall (function twice) 3)
+       (funcall (symbol-function 'twice) 3))
+@result{}  ((3 3) (3 3) (3 3))
+ (fboundp 'defun) @result{}  @i{true}
+ (symbol-function 'defun)
+@result{}  @i{implementation-dependent}
+ (functionp (symbol-function 'defun))
+@result{}  @i{implementation-dependent}
+ (defun symbol-function-or-nil (symbol)
+   (if (and (fboundp symbol) 
+            (not (macro-function symbol))
+            (not (special-operator-p symbol)))
+       (symbol-function symbol)
+       nil)) @result{}  SYMBOL-FUNCTION-OR-NIL
+ (symbol-function-or-nil 'car) @result{}  #<FUNCTION CAR>
+ (symbol-function-or-nil 'defun) @result{}  NIL
+@end example
+
+@subsubheading  Affected By::
+
+@b{defun}
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{symbol} is not a @i{symbol}.
+
+Should signal @b{undefined-function} if @i{symbol} is not @i{fbound}
+and an attempt is made to @i{read} its definition.  (No such error is signaled
+on an attempt to @i{write} its definition.)
+
+@subsubheading  See Also::
+
+@ref{fboundp}
+,
+@ref{fmakunbound}
+,
+@ref{macro-function}
+,
+
+@ref{special-operator-p}
+
+@subsubheading  Notes::
+@b{symbol-function} cannot @i{access} the value of a lexical function name
+produced by @b{flet} or @b{labels}; it can @i{access} only
+the global function value.
+
+@b{setf} may be used with 
+@b{symbol-function} to replace a global function
+definition when the @i{symbol}'s function definition 
+does not represent a @i{special operator}.
+
+@example
+(symbol-function @i{symbol}) @equiv{} (fdefinition @i{symbol})
+@end example
+
+However, @b{fdefinition} accepts arguments other than just @i{symbols}.
+
+@node symbol-name, symbol-package, symbol-function, Symbols Dictionary
+@subsection symbol-name                                                      [Function]
+
+@code{symbol-name}  @i{symbol} @result{}  @i{name}
+
+@subsubheading  Arguments and Values:: 
+
+@i{symbol}---a @i{symbol}.
+
+@i{name}---a @i{string}.
+
+@subsubheading  Description::
+
+@b{symbol-name} returns the @i{name} of @i{symbol}.
+
+The consequences are undefined if @i{name} is ever modified.
+
+@subsubheading  Examples::
+
+@example
+ (symbol-name 'temp) @result{}  "TEMP" 
+ (symbol-name :start) @result{}  "START"
+ (symbol-name (gensym)) @result{}  "G1234" ;for example
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{symbol} is not a @i{symbol}.
+
+@node symbol-package, symbol-plist, symbol-name, Symbols Dictionary
+@subsection symbol-package                                                   [Function]
+
+@code{symbol-package}  @i{symbol} @result{}  @i{contents}
+
+@subsubheading  Arguments and Values:: 
+
+@i{symbol}---a @i{symbol}.
+
+@i{contents}---a @i{package} @i{object} or @b{nil}.
+
+@subsubheading  Description::
+
+Returns the @i{home package} of @i{symbol}.
+
+@subsubheading  Examples::
+
+@example
+ (in-package "CL-USER") @result{}  #<PACKAGE "COMMON-LISP-USER">
+ (symbol-package 'car) @result{}  #<PACKAGE "COMMON-LISP">
+ (symbol-package 'bus) @result{}  #<PACKAGE "COMMON-LISP-USER">
+ (symbol-package :optional) @result{}  #<PACKAGE "KEYWORD">
+ ;; Gensyms are uninterned, so have no home package.
+ (symbol-package (gensym)) @result{}  NIL
+ (make-package 'pk1) @result{}  #<PACKAGE "PK1">
+ (intern "SAMPLE1" "PK1") @result{}  PK1::SAMPLE1, NIL
+ (export (find-symbol "SAMPLE1" "PK1") "PK1") @result{}  T
+ (make-package 'pk2 :use '(pk1)) @result{}  #<PACKAGE "PK2">
+ (find-symbol "SAMPLE1" "PK2") @result{}  PK1:SAMPLE1, :INHERITED
+ (symbol-package 'pk1::sample1) @result{}  #<PACKAGE "PK1">
+ (symbol-package 'pk2::sample1) @result{}  #<PACKAGE "PK1">
+ (symbol-package 'pk1::sample2) @result{}  #<PACKAGE "PK1">
+ (symbol-package 'pk2::sample2) @result{}  #<PACKAGE "PK2">
+ ;; The next several forms create a scenario in which a symbol
+ ;; is not really uninterned, but is "apparently uninterned",
+ ;; and so SYMBOL-PACKAGE still returns NIL.
+ (setq s3 'pk1::sample3) @result{}  PK1::SAMPLE3
+ (import s3 'pk2) @result{}  T
+ (unintern s3 'pk1) @result{}  T
+ (symbol-package s3) @result{}  NIL
+ (eq s3 'pk2::sample3) @result{}  T
+@end example
+
+@subsubheading  Affected By::
+
+@b{import},
+@b{intern},
+@b{unintern}
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{symbol} is not a @i{symbol}.
+
+@subsubheading  See Also::
+
+@ref{intern}
+
+@node symbol-plist, symbol-value, symbol-package, Symbols Dictionary
+@subsection symbol-plist                                                     [Accessor]
+
+@code{symbol-plist}  @i{symbol} @result{}  @i{plist}
+
+(setf (@code{         symbol-plist} @i{symbol}) new-plist)@*
+
+@subsubheading  Arguments and Values:: 
+
+@i{symbol}---a @i{symbol}.
+
+@i{plist}, @i{new-plist}---a @i{property list}.
+
+@subsubheading  Description::
+
+@i{Accesses} the @i{property list} of @i{symbol}.
+
+@subsubheading  Examples::
+
+@example
+ (setq sym (gensym)) @result{}  #:G9723
+ (symbol-plist sym) @result{}  ()
+ (setf (get sym 'prop1) 'val1) @result{}  VAL1
+ (symbol-plist sym) @result{}  (PROP1 VAL1)
+ (setf (get sym 'prop2) 'val2) @result{}  VAL2
+ (symbol-plist sym) @result{}  (PROP2 VAL2 PROP1 VAL1)
+ (setf (symbol-plist sym) (list 'prop3 'val3)) @result{}  (PROP3 VAL3)
+ (symbol-plist sym) @result{}  (PROP3 VAL3)
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{symbol} is not a @i{symbol}.
+
+@subsubheading  See Also::
+
+@ref{get}
+,
+@ref{remprop}
+
+@subsubheading  Notes::
+
+The use of @b{setf} should be avoided, since a @i{symbol}'s
+@i{property list} is a global resource that can contain information 
+established and depended upon by unrelated programs in the same @i{Lisp image}.
+
+@node symbol-value, get, symbol-plist, Symbols Dictionary
+@subsection symbol-value                                                     [Accessor]
+
+@code{symbol-value}  @i{symbol} @result{}  @i{value}
+
+(setf (@code{         symbol-value} @i{symbol}) new-value)@*
+
+@subsubheading  Arguments and Values:: 
+
+@i{symbol}---a @i{symbol} that must have a @i{value}.
+
+@i{value}, @i{new-value}---an @i{object}.
+
+@subsubheading  Description::
+
+@i{Accesses} the @i{symbol}'s @i{value cell}.
+
+@subsubheading  Examples::
+
+@example
+ (setf (symbol-value 'a) 1) @result{}  1
+ (symbol-value 'a) @result{}  1
+ ;; SYMBOL-VALUE cannot see lexical variables.
+ (let ((a 2)) (symbol-value 'a)) @result{}  1
+ (let ((a 2)) (setq a 3) (symbol-value 'a)) @result{}  1
+ ;; SYMBOL-VALUE can see dynamic variables.
+ (let ((a 2)) 
+   (declare (special a)) 
+   (symbol-value 'a)) @result{}  2
+ (let ((a 2)) 
+   (declare (special a)) 
+   (setq a 3)
+   (symbol-value 'a)) @result{}  3
+ (let ((a 2))
+   (setf (symbol-value 'a) 3)
+   a) @result{}  2
+ a @result{}  3
+ (symbol-value 'a) @result{}  3
+ (let ((a 4))
+   (declare (special a))
+   (let ((b (symbol-value 'a)))
+     (setf (symbol-value 'a) 5)
+     (values a b))) @result{}  5, 4
+ a @result{}  3
+ (symbol-value :any-keyword) @result{}  :ANY-KEYWORD
+ (symbol-value 'nil) @result{}  NIL
+ (symbol-value '()) @result{}  NIL
+ ;; The precision of this next one is @i{implementation-dependent}.
+ (symbol-value 'pi) @result{}  3.141592653589793d0  
+@end example
+
+@subsubheading  Affected By::
+
+@b{makunbound},
+@b{set},
+@b{setq}
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{symbol} is not a @i{symbol}.
+
+Should signal @b{unbound-variable} if @i{symbol} is @i{unbound}
+and an attempt is made to @i{read} its @i{value}.  (No such error is signaled
+on an attempt to @i{write} its @i{value}.)
+
+@subsubheading  See Also::
+
+@ref{boundp}
+, 
+@ref{makunbound}
+, 
+@ref{set}
+, 
+@ref{setq}
+
+@subsubheading  Notes::
+
+@b{symbol-value} can be used to get the value of a @i{constant variable}.
+@b{symbol-value} cannot @i{access} the value of a @i{lexical variable}.
+
+@node get, remprop, symbol-value, Symbols Dictionary
+@subsection get                                                              [Accessor]
+
+@code{get}  @i{symbol indicator @r{&optional} default} @result{}  @i{value}
+
+(setf (@code{         get} @i{symbol indicator @r{&optional} default}) new-value)@*
+
+@subsubheading  Arguments and Values:: 
+
+@i{symbol}---a @i{symbol}.
+
+@i{indicator}---an @i{object}.
+
+@i{default}---an @i{object}.
+ The default is @b{nil}.
+
+@i{value}---if the indicated property exists,
+		   the @i{object} that is its @i{value};
+		otherwise, the specified @i{default}.
+
+@i{new-value}---an @i{object}.
+
+@subsubheading  Description::
+
+@b{get} finds a @i{property} 
+on the @i{property list}_2 of @i{symbol} 
+whose @i{property indicator} is @i{identical} to @i{indicator},
+and returns its corresponding @i{property value}.
+
+If there are multiple @i{properties}_1 with that @i{property indicator},
+@b{get} uses the first such @i{property}.
+
+If there is no @i{property} with that @i{property indicator},
+@i{default} is returned.
+
+@b{setf} of @b{get} may be used to associate a new @i{object}
+with an existing indicator already on the @i{symbol}'s @i{property list},
+or to create a new association if none exists.
+
+If there are multiple @i{properties}_1 with that @i{property indicator},
+@b{setf} of @b{get} associates the @i{new-value} 
+with the first such @i{property}.
+
+When a @b{get} @i{form} is used as a @b{setf} @i{place},
+any @i{default} which is supplied is evaluated according to normal
+left-to-right evaluation rules, but its @i{value} is ignored.
+
+@subsubheading  Examples::
+
+@example
+ (defun make-person (first-name last-name)
+   (let ((person (gensym "PERSON")))
+     (setf (get person 'first-name) first-name)
+     (setf (get person 'last-name) last-name)
+     person)) @result{}  MAKE-PERSON
+ (defvar *john* (make-person "John" "Dow")) @result{}  *JOHN*
+ *john* @result{}  #:PERSON4603
+ (defvar *sally* (make-person "Sally" "Jones")) @result{}  *SALLY*
+ (get *john* 'first-name) @result{}  "John"
+ (get *sally* 'last-name) @result{}  "Jones"
+ (defun marry (man woman married-name)
+   (setf (get man 'wife) woman)
+   (setf (get woman 'husband) man)
+   (setf (get man 'last-name) married-name)
+   (setf (get woman 'last-name) married-name)
+   married-name) @result{}  MARRY
+ (marry *john* *sally* "Dow-Jones") @result{}  "Dow-Jones"
+ (get *john* 'last-name) @result{}  "Dow-Jones"
+ (get (get *john* 'wife) 'first-name) @result{}  "Sally"
+ (symbol-plist *john*)
+@result{}  (WIFE #:PERSON4604 LAST-NAME "Dow-Jones" FIRST-NAME "John")
+ (defmacro age (person &optional (default ''thirty-something)) 
+   `(get ,person 'age ,default)) @result{}  AGE
+ (age *john*) @result{}  THIRTY-SOMETHING
+ (age *john* 20) @result{}  20
+ (setf (age *john*) 25) @result{}  25
+ (age *john*) @result{}  25
+ (age *john* 20) @result{}  25
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{symbol} is not a @i{symbol}.
+
+@subsubheading  See Also::
+
+@ref{getf}
+,
+@ref{symbol-plist}
+,
+@ref{remprop}
+
+@subsubheading  Notes::
+
+@example
+ (get x y) @equiv{} (getf (symbol-plist x) y)
+@end example
+
+@i{Numbers} and @i{characters} are not recommended for use 
+as @i{indicators} in portable code since @b{get} tests 
+with @b{eq} rather than @b{eql}, and consequently 
+the effect of using such @i{indicators} is 
+@i{implementation-dependent}.
+
+There is no way using @b{get} to distinguish an absent property from
+one whose value is @i{default}.  However, see @b{get-properties}.
+
+@node remprop, boundp, get, Symbols Dictionary
+@subsection remprop                                                          [Function]
+
+@code{remprop}  @i{symbol indicator} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values:: 
+
+@i{symbol}---a @i{symbol}.
+
+@i{indicator}---an @i{object}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+@b{remprop} removes from the @i{property list}_2 of @i{symbol}
+a @i{property}_1 with a @i{property indicator}
+@i{identical} to @i{indicator}.
+
+If there are multiple @i{properties}_1 with the @i{identical} key,
+@b{remprop} only removes the first such @i{property}.
+
+@b{remprop} returns @i{false} if no such @i{property} was found,
+or @i{true} if a property was found.
+
+The @i{property indicator} 
+and the corresponding @i{property value} 
+are removed in an undefined order
+by destructively splicing the property list.  
+
+The permissible side-effects correspond to those permitted for @b{remf},
+such that:
+
+@example
+ (remprop @i{x} @i{y}) @equiv{} (remf (symbol-plist @i{x}) @i{y})
+@end example
+
+@subsubheading  Examples::
+
+@example
+ (setq test (make-symbol "PSEUDO-PI")) @result{}  #:PSEUDO-PI
+ (symbol-plist test) @result{}  ()
+ (setf (get test 'constant) t) @result{}  T
+ (setf (get test 'approximation) 3.14) @result{}  3.14
+ (setf (get test 'error-range) 'noticeable) @result{}  NOTICEABLE
+ (symbol-plist test) 
+@result{}  (ERROR-RANGE NOTICEABLE APPROXIMATION 3.14 CONSTANT T)
+ (setf (get test 'approximation) nil) @result{}  NIL
+ (symbol-plist test) 
+@result{}  (ERROR-RANGE NOTICEABLE APPROXIMATION NIL CONSTANT T)
+ (get test 'approximation) @result{}  NIL
+ (remprop test 'approximation) @result{}  @i{true}
+ (get test 'approximation) @result{}  NIL
+ (symbol-plist test)
+@result{}  (ERROR-RANGE NOTICEABLE CONSTANT T)
+ (remprop test 'approximation) @result{}  NIL
+ (symbol-plist test)
+@result{}  (ERROR-RANGE NOTICEABLE CONSTANT T)
+ (remprop test 'error-range) @result{}  @i{true}
+ (setf (get test 'approximation) 3) @result{}  3
+ (symbol-plist test)
+@result{}  (APPROXIMATION 3 CONSTANT T)
+@end example
+
+@subsubheading  Side Effects::
+
+The @i{property list} of @i{symbol} is modified.
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{symbol} is not a @i{symbol}.
+
+@subsubheading  See Also::
+
+@ref{remf}
+, 
+@ref{symbol-plist}
+
+@subsubheading  Notes::
+
+@i{Numbers} and @i{characters} are not recommended for use as
+@i{indicators} in portable code since @b{remprop} tests with
+@b{eq} rather than @b{eql}, and consequently the effect of
+using such @i{indicators} is @i{implementation-dependent}.  
+Of course, if you've gotten as far as needing to remove such a
+@i{property}, you don't have much choice---the time to have been
+thinking about this was when you used @b{setf} of @b{get} to
+establish the @i{property}.
+
+@node boundp, makunbound, remprop, Symbols Dictionary
+@subsection boundp                                                           [Function]
+
+@code{boundp}  @i{symbol} @result{}  @i{generalized-boolean}
+
+@subsubheading  Arguments and Values:: 
+
+@i{symbol}---a @i{symbol}.
+
+@i{generalized-boolean}---a @i{generalized boolean}.
+
+@subsubheading  Description::
+
+Returns @i{true} if @i{symbol} is @i{bound};
+otherwise, returns @i{false}.
+
+@subsubheading  Examples::
+
+@example
+ (setq x 1) @result{}  1
+ (boundp 'x) @result{}  @i{true}
+ (makunbound 'x) @result{}  X
+ (boundp 'x) @result{}  @i{false}
+ (let ((x 2)) (boundp 'x)) @result{}  @i{false}
+ (let ((x 2)) (declare (special x)) (boundp 'x)) @result{}  @i{true}
+@end example
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{symbol} is not a @i{symbol}.
+
+@subsubheading  See Also::
+
+@ref{set}
+,
+@ref{setq}
+,
+@ref{symbol-value}
+,
+@ref{makunbound}
+
+@subsubheading  Notes::
+
+The @i{function} @b{bound} determines only whether a @i{symbol} has a
+value in the @i{global environment}; any @i{lexical bindings}
+are ignored.
+
+@node makunbound, set, boundp, Symbols Dictionary
+@subsection makunbound                                                       [Function]
+
+@code{makunbound}  @i{symbol} @result{}  @i{symbol}
+
+@subsubheading  Arguments and Values::
+
+@i{symbol}---a @i{symbol}
+
+@subsubheading  Description::
+
+Makes the @i{symbol} be @i{unbound},
+regardless of whether it was previously @i{bound}.
+
+@subsubheading  Examples::
+
+@example
+ (setf (symbol-value 'a) 1)
+ (boundp 'a) @result{}  @i{true}
+ a @result{}  1
+ (makunbound 'a) @result{}  A
+ (boundp 'a) @result{}  @i{false}
+@end example
+
+@subsubheading  Side Effects::
+
+The @i{value cell} of @i{symbol} is modified.
+
+@subsubheading  Exceptional Situations::
+
+Should signal an error of @i{type} @b{type-error}
+			      if @i{symbol} is not a @i{symbol}.
+
+@subsubheading  See Also::
+
+@ref{boundp}
+, 
+@ref{fmakunbound}
+
+@node set, unbound-variable, makunbound, Symbols Dictionary
+@subsection set                                                              [Function]
+
+@code{set}  @i{symbol value} @result{}  @i{value}
+
+@subsubheading  Arguments and Values:: 
+
+@i{symbol}---a @i{symbol}.
+
+@i{value}---an @i{object}.
+
+@subsubheading  Description::
+
+@b{set} changes the contents of the @i{value cell} of @i{symbol}
+to the given @i{value}.
+
+@example
+(set @i{symbol} @i{value}) @equiv{} (setf (symbol-value @i{symbol}) @i{value})
+@end example
+
+@subsubheading  Examples::
+
+@example
+ (setf (symbol-value 'n) 1) @result{}  1
+ (set 'n 2) @result{}  2
+ (symbol-value 'n) @result{}  2
+ (let ((n 3))
+   (declare (special n))
+   (setq n (+ n 1))
+   (setf (symbol-value 'n) (* n 10))
+   (set 'n (+ (symbol-value 'n) n))
+   n) @result{}  80
+ n @result{}  2
+ (let ((n 3))
+   (setq n (+ n 1))
+   (setf (symbol-value 'n) (* n 10))
+   (set 'n (+ (symbol-value 'n) n))
+   n) @result{}  4
+ n @result{}  44
+ (defvar *n* 2)
+ (let ((*n* 3))
+   (setq *n* (+ *n* 1))
+   (setf (symbol-value '*n*) (* *n* 10))
+   (set '*n* (+ (symbol-value '*n*) *n*))
+   *n*) @result{}  80
+  *n* @result{}  2
+ (defvar *even-count* 0) @result{}  *EVEN-COUNT*
+ (defvar *odd-count* 0) @result{}  *ODD-COUNT*
+ (defun tally-list (list)
+   (dolist (element list)
+     (set (if (evenp element) '*even-count* '*odd-count*)
+          (+ element (if (evenp element) *even-count* *odd-count*)))))
+ (tally-list '(1 9 4 3 2 7)) @result{}  NIL
+ *even-count* @result{}  6
+ *odd-count* @result{}  20
+@end example
+
+@subsubheading  Side Effects::
+
+The @i{value} of @i{symbol} is changed.
+
+@subsubheading  See Also::
+
+@ref{setq}
+, 
+@ref{progv}
+, 
+@ref{symbol-value}
+
+@subsubheading  Notes::
+
+The function @b{set} is deprecated.
+
+@b{set} cannot change the value of a @i{lexical variable}.
+
+@node unbound-variable,  , set, Symbols Dictionary
+@subsection unbound-variable                                           [Condition Type]
+
+@subsubheading  Class Precedence List::
+@b{unbound-variable},
+@b{cell-error},
+@b{error},
+@b{serious-condition},
+@b{condition},
+@b{t}
+
+@subsubheading  Description::
+
+The @i{type} @b{unbound-variable} consists of @i{error} @i{conditions}
+that represent attempts to @i{read} the @i{value} of an @i{unbound variable}.
+
+The name of the cell (see @b{cell-error}) is the @i{name} of the 
+@i{variable} that was @i{unbound}.
+
+@subsubheading  See Also::
+
+@ref{cell-error-name}
+
+@c end of including dict-symbols
+
+@c %**end of chapter
+

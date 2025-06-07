@@ -1,0 +1,1294 @@
+
+@node System Definitions, Debugging, C Interface, Top
+@chapter System Definitions
+
+@defun SOCKET (port :host host)
+Package:SI
+
+GCL specific: Open a socket connection to HOST at PORT.
+
+@end defun
+@defun OPEN-NAMED-SOCKET (port)
+Package:SI
+
+GCL specific: Open a socket on PORT, returning (cons fd portname) where fd
+is a small fixnum which is the write file descriptor for
+the socket.  If PORT is zero do automatic allocation of port.
+
+@end defun
+@defun ACCEPT-SOCKET-CONNECTION (NAMED_SOCKET)
+Package:SI
+
+GCL specific: Wait for a connection on NAMED_SOCKET 
+and return (list* named_socket fd name1) when one is established.
+
+@end defun
+@defun ALLOCATE-CONTIGUOUS-PAGES (number &optional (really-allocate nil))
+Package:SI
+
+GCL specific: Sets the maximum number of pages for contiguous blocks to
+NUMBER.  If REALLY-ALLOCATE is non-NIL, then the specified
+number of pages will be allocated immediately.
+
+
+@end defun
+@defun FREEZE-DEFSTRUCT (name)
+Package:SI
+
+The inline defstruct type checker will be made more efficient, in that
+it will only check for types which currently include NAME.   After
+calling this the defstruct should not be altered.
+
+
+@end defun
+@defun MAXIMUM-ALLOCATABLE-PAGES (type)
+Package:SI
+
+GCL specific: Returns the current maximum number of pages for the type class
+of the GCL implementation type TYPE.
+
+
+@end defun
+@defun ALLOCATED-RELOCATABLE-PAGES ()
+Package:SI
+
+GCL specific: Returns the number of pages currently allocated for relocatable
+blocks.
+
+
+@end defun
+@defun PUTPROP (symbol value indicator)
+Package:SI
+
+Give SYMBOL the VALUE on INDICATOR property.
+
+
+@end defun
+@defun ALLOCATED-PAGES (type)
+Package:SI
+
+GCL specific: Returns the number of pages currently allocated for the type
+class of the GCL implementation type TYPE.
+
+
+@end defun
+@defun ALLOCATE-RELOCATABLE-PAGES (number)
+Package:SI
+
+GCL specific: Sets the maximum number of pages for relocatable blocks to
+NUMBER.
+
+
+@end defun
+@defun ALLOCATED-CONTIGUOUS-PAGES ()
+Package:SI
+
+GCL specific: Returns the number of pages currently allocated for contiguous
+blocks.
+
+
+@end defun
+@defun MAXIMUM-CONTIGUOUS-PAGES ()
+Package:SI
+
+GCL specific: Returns the current maximum number of pages for contiguous
+blocks.
+
+
+@end defun
+@defun GET-HOLE-SIZE ()
+Package:SI
+
+GCL specific: Returns as a fixnum the size of the memory hole (in pages).
+
+
+@end defun
+@defun SPECIALP (symbol)
+Package:SI
+
+GCL specific: Returns T if the SYMBOL is a globally special variable; NIL
+otherwise.
+
+
+@end defun
+@defun OUTPUT-STREAM-STRING (string-output-stream)
+Package:SI
+
+GCL specific: Returns the string corresponding to the STRING-OUTPUT-STREAM.
+
+
+@end defun
+@defun GET-STRING-INPUT-STREAM-INDEX (string-input-stream)
+Package:SI
+
+GCL specific: Returns the current index of the STRING-INPUT-STREAM.
+
+
+@end defun
+@defun STRING-CONCATENATE (&rest strings)
+Package:SI
+
+GCL specific: Returns the result of concatenating the given STRINGS.
+
+
+@end defun
+@defun BDS-VAR (i)
+Package:SI
+
+GCL specific: Returns the symbol of the i-th entity in the bind stack.
+
+
+@end defun
+@defun ERROR-SET (form)
+Package:SI
+
+GCL specific: Evaluates the FORM in the null environment.  If the evaluation
+of the FORM has successfully completed, SI:ERROR-SET returns NIL as the first
+value and the result of the evaluation as the rest of the values.  If, in the
+course of the evaluation, a non-local jump from the FORM is atempted,
+SI:ERROR-SET traps the jump and returns the corresponding jump tag as its
+value.
+
+
+@end defun
+@defun COMPILED-FUNCTION-NAME (compiled-function-object)
+Package:SI
+
+GCL specific: Returns the name of the COMPILED-FUNCTION-OBJECT.
+
+
+@end defun
+@defun STRUCTUREP (object)
+Package:SI
+
+GCL specific: Returns T if the OBJECT is a structure; NIL otherwise.
+
+
+@end defun
+@defun IHS-VS (i)
+Package:SI
+
+GCL specific: Returns the value stack index of the i-th entity in the
+invocation history stack.
+
+
+@end defun
+@defun UNIVERSAL-ERROR-HANDLER (error-name correctable function-name continue-format-string error-format-string &rest args)
+Package:SI
+
+GCL specific: Starts the error handler of GCL.  When an error is detected,
+GCL calls SI:UNIVERSAL-ERROR-HANDLER with the specified arguments.
+ERROR-NAME is the name of the error.  CORRECTABLE is T for a correctable
+error and NIL for a fatal error.  FUNCTION-NAME is the name of the function
+that caused the error.  CONTINUE-FORMAT-STRING and ERROR-FORMAT-STRING are
+the format strings of the error message.  ARGS are the arguments to the
+format strings.
+     To change the error handler of GCL, redefine SI:UNIVERSAL-ERROR-
+HANDLER.
+
+
+@end defun
+
+@defvar *CODE-BLOCK-RESERVE*
+Package:SI
+GCL specific: Set this variable to a static array (supply :static t to
+'make-array) to reserve space for loading code in low memory as the
+heap grows large.  On large systems, it may prove impossible without
+this to find unallocated memory below, for example, the 2Gb limit
+required for the default 'medium model' code produced by gcc on x86_64
+systems.
+@end defvar
+
+@defvar *FAST-LINK-WARNINGS*
+Package:SI
+GCL specific: Set to non-NIL to trace function calls that cannot
+proceed through a simple pointer dereference, usually because the
+signature of the callee is substantially different than that assumed
+when compiling the caller.
+@end defvar
+
+@defvar *ANNOTATE*
+Package:COMPILER
+GCL specific: Set to non-NIL to add comments in the generated C code
+indicating lisp function inlining.
+@end defvar
+
+@defvar *DEFAULT-PROF-P*
+Package:COMPILER
+GCL specific: Set to non-NIL to add the :prof t option to compile file
+by default to indicate code which should be prepared for gprof
+profiling.
+@end defvar
+
+@defvar *DEFAULT-LARGE-MEMORY-MODEL-P*
+Package:COMPILER
+GCL specific: Set to non-NIL to add the :large-memory-model t option
+to compile file by default to instruct gcc to produce code that can be
+loaded at any address, typically at a 10% performance penalty.
+@end defvar
+
+@defvar *DEFAULT-C-FILE*
+Package:COMPILER
+GCL specific: Set to non-NIL to add the :c-file t option
+to compile file by default to keep the intermediate generated C file.
+@end defvar
+
+@defvar *DEFAULT-H-FILE*
+Package:COMPILER
+GCL specific: Set to non-NIL to add the :h-file t option
+to compile file by default to keep the intermediate generated header
+file.
+@end defvar
+
+@defvar *DEFAULT-DATA-FILE*
+Package:COMPILER
+GCL specific: Set to non-NIL to add the :data-file t option
+to compile file by default to keep the intermediate generated data
+file.
+@end defvar
+
+@defvar *DEFAULT-SYSTEM-P*
+Package:COMPILER
+GCL specific: Set to non-NIL to add the :system-p t option
+to compile file by default to write a reference to the system
+cmpinclude.h file in the generated C code as opposed to inserting its
+contents in the file directly.
+@end defvar
+
+@defvar *FASD-DATA*
+Package:COMPILER
+GCL specific: Set to NIL to write the data file in human readable
+format.
+@end defvar
+
+@defvar *KEEP-GAZ*
+Package:COMPILER
+GCL specific: Set to non-NIL to preserve anonymous ``gazonk'' .o files.
+@end defvar
+
+@defvar *DISASSEMBLE-OBJDUMP*
+Package:COMPILER
+GCL specific: When set to non-NIL, 'disassemble will report assembly
+instructions output by objdump in addition to the C code output by GCL.
+@end defvar
+
+@defun FILE
+Package:SI
+GCL specific: Return the source file from which the designated
+function was loaded.
+@end defun
+
+@defun SIGNATURE
+Package:SI
+GCL specific: Return the call signature of the designated
+function.
+@end defun
+
+@defun INTERPRET
+Package:COMPILER
+GCL specific: Just as (compile 'foo) will replace an interpreted
+function designated by 'foo with a compiled one, (compiler::interpret
+'foo) will do the reverse.  Both functions are idempotent operations.
+@end defun
+
+@defun WATCH
+Package:COMPILER
+GCL specific: (watch 'foo) will trace compiler logic pertaining to
+'foo.  (watch 'compiler::tail-recursion) will trace the compiler's
+treatment of tail recursion optimization.  Other useful options
+include 'compiler::type-inference, 'compiler::branch-elimination,
+and 'compiler::inline.
+@end defun
+
+@defun UNWATCH
+Package:COMPILER
+GCL specific: (unwatch 'foo) will stop tracing 'foo.  (unwatch) will
+stop all compiler tracing.
+@end defun
+
+@defvar *INTERRUPT-ENABLE* 
+Package:SI
+GCL specific: If the value of SI:*INTERRUPT-ENABLE* is non-NIL, GCL signals
+an error on the terminal interrupt (this is the default case).  If it is NIL,
+GCL ignores the interrupt and assigns T to SI:*INTERRUPT-ENABLE*.
+@end defvar
+
+@defun CHDIR (pathname)
+Package:SI
+
+GCL/UNIX specific: Changes the current working directory to the specified
+pathname.
+
+
+@end defun
+@defun COPY-STREAM (in-stream out-stream)
+Package:SI
+
+GCL specific: Copies IN-STREAM to OUT-STREAM until the end-of-file on IN-
+STREAM.
+
+
+@end defun
+@defun INIT-SYSTEM ()
+Package:SI
+
+GCL specific: Initializes the library and the compiler of GCL.  Since they
+have already been initialized in the standard image of GCL, calling SI:INIT-
+SYSTEM will cause an error.
+
+
+@end defun
+@defvar *INDENT-FORMATTED-OUTPUT* 
+Package:SI
+GCL specific: The FORMAT directive ~% indents the next line if the value of
+this variable is non-NIL.  If NIL, ~% simply does Newline.
+
+
+@end defvar
+@defun SET-HOLE-SIZE (fixnum)
+Package:SI
+
+GCL specific: Sets the size of the memory hole (in pages).
+
+
+@end defun
+@defun FRS-BDS (i)
+Package:SI
+
+GCL specific: Returns the bind stack index of the i-th entity in the frame
+stack.
+
+
+@end defun
+@defun IHS-FUN (i)
+Package:SI
+
+GCL specific: Returns the function value of the i-th entity in the invocation
+history stack.
+
+
+@end defun
+@defun *MAKE-CONSTANT (symbol value)
+Package:SI
+
+GCL specific: Makes the SYMBOL a constant with the specified VALUE.
+
+
+@end defun
+@defun FIXNUMP (object)
+Package:SI
+
+GCL specific: Returns T if the OBJECT is a fixnum; NIL otherwise.
+
+
+@end defun
+@defun BDS-VAL (i)
+Package:SI
+
+GCL specific: Returns the value of the i-th entity in the bind stack.
+
+
+@end defun
+@defun STRING-TO-OBJECT (string)
+Package:SI
+
+GCL specific: (SI:STRING-TO-OBJECT STRING) is equivalent to
+(READ-FROM-STRING STRING), but much faster.
+
+
+@end defun
+@defvar *SYSTEM-DIRECTORY* 
+Package:SI
+GCL specific: Holds the name of the system directory of GCL.
+
+
+@end defvar
+@defun FRS-IHS (i)
+Package:SI
+
+GCL specific: Returns the invocation history stack index of the i-th entity
+in the frame stack.
+
+
+@end defun
+@defun RESET-GBC-COUNT ()
+Package:SI
+
+GCL specific: Resets the counter of the garbage collector that records how
+many times the garbage collector has been called for each implementation
+type.
+
+
+@end defun
+@defun CATCH-BAD-SIGNALS ()
+Package:SI
+
+GCL/BSD specific: Installs a signal catcher for bad signals:
+	SIGILL, SIGIOT, SIGEMT, SIGBUS, SIGSEGV, SIGSYS.
+The signal catcher, upon catching the signal, signals an error (and enter
+the break-level).  Since the internal memory of GCL may be broken, the user
+should check the signal and exit from GCL if necessary.  When the signal
+is caught during garbage collection, GCL terminates immediately.
+
+
+@end defun
+@defun RESET-STACK-LIMITS ()
+Package:SI
+
+GCL specific: Resets the stack limits to the normal state.  When a stack has
+overflowed, GCL extends the limit for the stack in order to execute the error
+handler.  After processing the error, GCL resets the stack limit by calling
+SI:RESET-STACK-LIMITS.
+
+
+@end defun
+@defvar *GBC-MESSAGE* 
+Package:SI
+GCL specific: If the value of SI:*GBC-MESSAGE* is non-NIL, the garbage
+collector prints some information on the terminal.  Usually SI:*GBC-MESSAGE*
+should be set NIL.
+
+
+@end defvar
+@defvar *GBC-NOTIFY* 
+Package:SI
+GCL specific: If the value is non-NIL, the garbage
+collector prints a very brief one line message about the area causing the collection,
+and the time spent in internal time units.
+
+
+@end defvar
+@defvar *AFTER-GBC-HOOK* 
+Package:SI
+Defaults to nil, but may be set to a function of one argument TYPE which is
+a lisp variable indicating the TYPE which caused the current collection.
+
+
+@end defvar
+@deffn {Funcition} ALLOCATED (type)
+Package:SI
+
+Returns 6 values:
+@table @asis{}
+@item nfree
+number free 
+@item npages
+number of pages 
+@item maxpage
+number of pages to grow to 
+@item nppage
+number per page 
+@item gbccount
+number of gc's due to running out of items of this size
+@item nused
+number of items used 
+@end table
+
+Note that all items of the same size are stored on similar pages.
+Thus for example on a 486 under linux the following basic types are
+all the same size and so will share the same allocated information:
+CONS BIGNUM RATIO COMPLEX STRUCTURE.
+
+
+
+@end deffn
+
+@defun *MAKE-SPECIAL (symbol)
+Package:SI
+
+GCL specific: Makes the SYMBOL globally special.
+
+
+@end defun
+@defun MAKE-STRING-OUTPUT-STREAM-FROM-STRING (string)
+Package:SI
+
+GCL specific: Creates a string-output-stream corresponding to the STRING and
+returns it.  The STRING should have a fill-pointer.
+
+
+@end defun
+@defvar *IGNORE-EOF-ON-TERMINAL-IO* 
+Package:SI
+GCL specific: If the value of SI:*IGNORE-EOF-ON-TERMINAL-IO* is non-NIL, GCL
+ignores the eof-character (usually ^D) on the terminal and the terminal never
+becomes end-of-file.  The default value of SI:*IGNORE-EOF-ON-TERMINAL-IO* is
+NIL.
+
+
+@end defvar
+@defun ADDRESS (object)
+Package:SI
+
+GCL specific: Returns the address of the OBJECT as a fixnum.  The address of
+an object depends on the version of GCL.  E.g. (SI:ADDRESS NIL) returns
+1879062044 on GCL/AOSVS dated March 14, 1986.
+
+
+@end defun
+@defvar *LISP-MAXPAGES* 
+Package:SI
+GCL specific: Holds the maximum number of pages (1 page = 2048 bytes) for the
+GCL process.  The result of changing the value of SI:*LISP-MAXPAGES* is
+unpredictable.
+
+
+@end defvar
+@defun ARGC ()
+Package:SI
+
+GCL specific: Returns the number of arguments on the command line that invoked
+the GCL process.
+
+
+@end defun
+@defun NANI (fixnum)
+Package:SI
+
+GCL specific: Returns the object in the address FIXNUM.  This function is
+the inverse of SI:ADDRESS.  Although SI:ADDRESS is a harmless operation,
+SI:NANI is quite dangerous and should be used with care.
+
+
+@end defun
+@defvar *NOTIFY-GBC* 
+Package:SI
+GCL specific: If the value of this variable is non-NIL, then the garbage
+collector notifies that it begins to run whenever it is invoked.  Otherwise,
+garbage collection begins silently.
+
+
+@end defvar
+@defun SAVE-SYSTEM (pathname)
+Package:SI
+
+GCL specific: Saves the current GCL core imange into a program file specified
+by PATHNAME.  This function differs from SAVE in that the contiguous and
+relocatable areas are made permanent in the saved image.  Usually the
+standard image of GCL interpreter/compiler is saved by SI:SAVE-SYSTEM.
+This function causes an exit from lisp.  Various changes are made
+to the memory of the running system, such as closing files and
+resetting io streams.   It would not be possible to continue normally.   
+
+
+@end defun
+@defun UNCATCH-BAD-SIGNALS ()
+Package:SI
+
+GCL/BSD specific: Undoes the effect of SI:CATCH-BAD-SIGNALS.
+
+
+@end defun
+@defun VS (i)
+Package:SI
+
+GCL specific: Returns the i-th entity in the value stack.
+
+
+@end defun
+@defun DISPLACED-ARRAY-P (array)
+Package:SI
+
+GCL specific: Returns T if the ARRAY is a displaced array; NIL otherwise.
+
+
+@end defun
+@defun ARGV (fixnum)
+Package:SI
+
+GCL specific: Returns the FIXNUM-th argument on the command line that invoked
+the GCL process.
+
+
+@end defun
+@defvar *DEFAULT-TIME-ZONE* 
+Package:SI
+GCL specific: Holds the default time zone.  The initial value of SI:*DEFAULT-
+TIME-ZONE* is 6 (the time zone of Austin, Texas).
+
+
+@end defvar
+@defun GETENV (string)
+Package:SI
+
+GCL/UNIX specific: Returns the environment with the name STRING as a string;
+if the environment specified by STRING is not found, returns NIL.
+
+
+@end defun
+@defun FASLINK (file string)
+Package:SI
+
+GCL/BSD specific: Loads the FASL file FILE while linking the object files and
+libraries specified by STRING.  For example,
+	(faslink "foo.o" "bar.o boo.o -lpixrect")
+loads foo.o while linking two object files (bar.o and boo.o) and the library
+pixrect.  Usually, foo.o consists of the C language interface for the
+functions defined in the object files or the libraries.
+
+A more portable way of making references to C code, is to build it
+in at the time of the original make.   If foo.c references things
+in -lpixrect, and foo.o is its compilation in the gcl/unixport directory
+
+(cd gcl/unixport ; make "EXTRAS= foo.o -lpixrect ")
+
+should add them.   If EXTRAS was already joe.o in the unixport/makefile
+you should of course add joe.o to the above "EXTRAS= joe.o foo.o.."
+
+Faslink does not work on most UNIX systems which are derived from SYS V or AIX.
+
+
+
+
+@end defun
+@defun TOP-LEVEL ()
+Package:SI
+
+GCL specific: Starts the standard top-level listener of GCL.  When the GCL
+process is invoked, it calls SI:TOP-LEVEL by (FUNCALL 'SI:TOP-LEVEL).
+     To change the top-level of GCL, redefine SI:TOP-LEVEL and save the core
+imange in a file.  When the saved imange is invoked, it will start the
+redefined top-level.
+
+
+@end defun
+@defun FRS-VS (i)
+Package:SI
+
+GCL specific: Returns the value stack index of the i-th entity in the frame
+stack.
+
+
+@end defun
+@defun WRITE-DEBUG-SYMBOLS (start file &key (main-file "/usr/local/schelter/xgcl/unixport/raw_gcl") (output-file "debug-symbols.o" ))
+Package:SI
+
+Write out a file of debug-symbols using address START as the place
+where FILE will be loaded into the running executable MAIN-FILE.  The
+last is a keyword argument.
+
+
+
+
+@end defun
+@defun PROF (x y)
+Package:SI
+
+These functions in the SI package are GCL specific, and allow monitoring
+the run time of functions loaded into GCL, as well as the basic functions.
+ Sample Usage:
+    (si::set-up-profile 1000000) (si::prof 0 90)
+     run program
+    (si::prof 0 0)   ;; turn off profile
+    (si::display-prof)
+    (si::clear-profile)
+    (si::prof 0 90)  ;; start profile again
+    run program
+   ..
+  Profile can be stopped with (si::prof 0 0) and restarted with (si::prof 0 90)
+The START-ADDRESS will correspond to the beginning of the profile array, and
+the SCALE will mean that 256 bytes of code correspond to SCALE bytes in the
+profile array.
+
+Thus if the profile array is 1,000,000  bytes long and the code segment is 
+5 megabytes long you can profile the whole thing using a scale of 50
+Note that long runs may result in overflow, and so an understating of the
+time in a function.
+
+You must run intensively however since, with a scale of 128 it takes
+6,000,000 times through a loop to overflow the sampling in one part of
+the code.
+
+
+@end defun
+@defun CATCH-FATAL (i)
+Package:SI
+
+
+Sets the value of the C variable catch_fatal to I which should be an integer.
+If catch_fatal is 1, then most unrecoverable fatal errors will be caught.
+Upon catching such an error catch_fatal becomes -1, to avoid recursive errors.
+The top level loop automatically sets catch_fatal to 1, if the value is less
+than zero.  Catching can be turned off by making catch_fatal = 0.
+
+
+
+
+@end defun
+@defvar *MULTIPLY-STACKS* 
+Package:SI
+
+If this variable is set to a positive fixnum, then the next time through the
+TOP-LEVEL loop, the loop will be exited.  The size of the stacks will be
+multiplied by the value of *multiply-stacks*, and the TOP-LEVEL will be called
+again.  Thus to double the size of the stacks:
+
+>(setq si::*multiply-stacks* 2)
+[exits top level and reinvokes it, with the new stacks in place]
+>
+
+We must exit TOP-LEVEL, because it and any other lisp functions
+maintain many pointers into the stacks, which would be incorrect when the
+stacks have been moved.    Interrupting the process of growing the stacks,
+can leave you in an inconsistent state.
+
+
+@end defvar
+@defun GBC-TIME (&optional x)
+Package:SI
+
+Sets the internal C variable gc_time to X if X is supplied and then
+returns gc_time.  If gc_time is greater or equal to 0, then gc_time is
+incremented by the garbage collector, according to the number of
+internal time units spent there.   The initial value of gc_time is -1.
+
+
+
+@end defun
+@defun FWRITE (string start count stream)
+Package:SI
+
+Write from STRING starting at char START (or 0 if it is nil) COUNT characters
+(or to end if COUNT is nil) to STREAM.  STREAM must be a stream such as
+returned by FP-OUTPUT-STREAM.  Returns nil if it fails.
+
+
+
+@end defun
+@defun FREAD (string start count stream)
+Package:SI
+
+Read characters into STRING starting at char START (or 0 if it is nil) COUNT
+characters (or from start to length of STRING if COUNT is nil).  Characters
+are read from STREAM.  STREAM must be a stream such as returned by
+FP-INPUT-STREAM.  Returns nil if it fails.  Return number of characters read
+if it succeeds.
+
+
+@end defun
+@defun SGC-ON (&optional ON)
+Package:SI
+
+If ON is not nil then SGC (stratified garbage collection) is turned
+on.   If ON is supplied and is nil, then SGC is turned off.
+If ON is not supplied, then it returns T if SGC is on, and NIL if
+SGC is off.
+
+The purpose of SGC is to prevent paging activity during garbage
+collection.  It is efficient if the actual number of pages being
+written to form a small percentage of the total image size.  The image
+should be built as compactly as possible.  This can be accomplished by
+using a settings such as (si::allocate-growth 'cons 1 10 50 20) to limit
+the growth in the cons maxpage to 10 pages per time.    Then
+just before calling si::save-system to save your image you can
+do something like:
+
+(si::set-hole-size 500)(gbc nil) (si::sgc-on t) (si::save-system ..)
+
+This makes the saved image come up with SGC on.  We have set a
+reasonably large hole size.  This is so that allocation of pages
+either because they fill up, or through specific calls to
+si::allocate, will not need to move all the relocatable data.  Moving
+relocatable data requires turning SGC off, performing a full gc, and
+then turning it back on.  New relocatable data is collected by SGC,
+but moving the old requires going through all pages of memory to
+change pointers into it.
+
+Using si::*notify-gbc* gives information about the number of pages
+used by SGC.   
+
+Note that SGC is only available on operating systems which provide
+the mprotect system call, to write protect pages.   Otherwise we
+cannot tell which pages have been written too.
+
+
+
+@end defun
+@defun ALLOCATE-SGC (type min-pages max-pages percent-free)
+Package:SI
+
+If MIN-PAGES is 0, then this type will not be swept by SGC.    Otherwise
+this is the minimum number of pages to make available to SGC.   MAX-PAGES
+is the upper limit of such pages.   Only pages with PERCENT-FREE objects
+on them, will be assigned to SGC.
+A list of the previous values for min, max and percent are returned.
+
+
+@end defun
+@defun ALLOCATE-GROWTH (type min max percent percent-free)
+Package:SI
+
+
+The next time after a garbage collection for TYPE, if PERCENT-FREE of
+the objects of this TYPE are not actually free, and if the maximum
+number of pages for this type has already been allocated, then the
+maximum number will be increased by PERCENT of the old maximum,
+subject to the condition that this increment be at least MIN pages and
+at most MAX pages.  A list of the previous values for min, max,
+percent, and percent-free for the type TYPE is returned.   A value
+of 0 means use the system default,  and if an argument is out of range
+then the current values are returned with no change made.
+
+Examples:
+(si::allocate-growth 'cons 1 10 50 10)
+would insist that after a garbage collection for cons, there be at least
+10% cons's free.   If not the number of cons pages would be grown by
+50% or 10 pages which ever was smaller.   This might be reasonable if you
+were trying to build an image which was `full', ie had few free objects
+of this type.
+
+(si::allocate-growth 'fixnum 0 10000 30 40)
+would grow space till there were normally 40% free fixnums, usually
+growing by 30% per time.
+
+(si::allocate-growth 'cons 0 0 0 40) would require 40% free conses after
+garbage collection for conses, and would use system defaults for the the rate
+to grow towards this goal.
+
+(si::allocate-growth 'cons -1 0 0 0)
+would return the current values, but not make any changes.
+
+
+@end defun
+@defun OPEN-FASD (stream direction eof-value table)
+Package:SI
+
+Given file STREAM open for input or output in DIRECTION,
+set it up to start writing or reading in fasd format.   When
+reading from this stream the EOF-VALUE will be returned when
+the end a fasd end of dump marker is encountered.   TABLE should
+be an eq hashtable on output, a vector on input, or nil.   In this
+last case a default one will be constructed.
+
+We shall refer to the result as a `fasd stream'.   It is
+suitable as the arg to CLOSE-FASD, READ-FASD-TOP, and as the second
+second arg to WRITE-FASD.   As a lisp object it is actually a vector,
+whose body coincides with:
+
+struct fasd @{
+  object stream;   /* lisp object of type stream */
+  object table;  /* hash table used in dumping or vector on input*/
+  object eof;      /* lisp object to be returned on coming to eof mark */
+  object direction;    /* holds Cnil or Kinput or Koutput */
+  object package;  /* the package symbols are in by default */
+  object index;     /* integer.  The current_dump index on write  */
+  object filepos;   /* nil or the position of the start */ 
+  object table_length; /*    On read it is set to the size dump array needed
+		     or 0
+		     */
+  object macro ; @}
+
+We did not use a defstruct for this, because we want the compiler to use this
+and it makes bootstrapping more difficult.   It is in "cmpnew/fasdmacros.lsp"
+
+
+
+@end defun
+@defun WRITE-FASD-TOP (X FASD-STREAM)
+Package:SI
+
+Write X to FASD-STREAM.
+
+
+@end defun
+@defun READ-FASD-TOP (FASD-STREAM)
+Package:SI
+
+Read the next object from FASD-STREAM.   Return the eof-value of FASD-STREAM if we
+encounter an eof marker put out by CLOSE-FASD.   Encountering end of actual file
+stream causes an error.
+
+
+@end defun
+@defun CLOSE-FASD (FASD-STREAM)
+Package:SI
+
+On output write an eof marker to the associated file stream, and then
+make FASD-STREAM invalid for further output.   It also attempts to write
+information to the stream on the size of the index table needed to read from the
+stream from the last open.    This is useful in growing the array.
+It does not alter the file stream, other than for writing this information to it.
+The file stream may be reopened for further use.   It is an error
+to OPEN-FASD the same file or file stream again with out first calling CLOSE-FASD.
+
+
+
+
+
+@end defun
+@defun FIND-SHARING-TOP (x table)
+Package:SI
+
+X is any lisp object and TABLE is an eq hash table.  This walks through X
+making entries to indicate the frequency of symbols,lists, and arrays.
+Initially items get -1 when they are first met, and this is decremented by 1
+each time the object occurs.  Call this function on all the objects in a fasd
+file, which you wish to share structure.
+
+
+@end defun
+@defvar *LOAD-PATHNAME* 
+Package:SI
+Load binds this to the pathname of the file being loaded.
+
+
+@end defvar
+@deffn {Macro} DEFINE-INLINE-FUNCTION (fname vars &body body)
+Package:SI
+
+This is equivalent to defun except that VARS may not contain
+&optional, &rest, &key or &aux.   Also a compiler property is
+added, which essentially saves the body and turns this into
+a let of the VARS and then execution of the body.   This
+last is done using si::DEFINE-COMPILER-MACRO
+Example:
+(si::define-inline-function myplus (a b c) (+ a b c))
+
+
+@end deffn
+@deffn {Macro} DEFINE-COMPILER-MACRO (fname vars &body body)
+Package:SI
+
+FNAME may be the name of a function, but at compile time the macro
+expansion given by this is used.
+
+(si::define-compiler-macro mycar (a) `(car ,a))
+
+
+@end deffn
+@defun DBL ()
+Package:SI
+
+Invoke a top level loop, in which debug commands may be entered.
+These commands may also be entered at breaks, or in the error
+handler.
+See SOURCE-LEVEL-DEBUG
+
+
+@end defun
+@defun NLOAD (file)
+Package:SI
+
+Load a file with the readtable bound to a special readtable, which
+permits tracking of source line information as the file is loaded.
+see SOURCE-LEVEL-DEBUG
+
+
+@end defun
+@defun BREAK-FUNCTION (function &optional line absolute)
+Package:SI
+
+Set a breakpoint for a FUNCTION at LINE if the function has source
+information loaded.  If ABSOLUTE is not nil, then the line is understood to be
+relative to the beginning of the buffer.  See also dbl-break-function, the
+emacs command.
+
+
+@end defun
+@defun XDR-OPEN (stream)
+Package:SI
+
+Returns an object suitable for passing to XDR-READ if the stream
+is an input stream, and XDR-WRITE if it was an output stream.
+Note the stream must be a unix stream, on which  si::fp-input-stream
+or si::fp-output-stream would act as the identity.
+
+
+
+@end defun
+@defun FP-INPUT-STREAM (stream)
+Package:SI
+
+Return a unix stream for input associated to STREAM if possible,
+otherwise return nil.
+
+
+@end defun
+@defun FP-OUTPUT-STREAM (stream)
+Package:SI
+
+Return a unix stream for output associated to STREAM if possible,
+otherwise return nil.
+
+
+
+@end defun
+@defun XDR-READ (stream element)
+Package:SI
+
+Read one item from STREAM of type the type of ELEMENT.    The representation
+of the elements is machine independent.    The xdr routines are what is
+used by the basic unix rpc calls.    
+
+
+@end defun
+@defun XDR-WRITE (stream element)
+Package:SI
+
+Write to STREAM the given ELEMENT.
+
+
+
+
+@end defun
+@defvar *TOP-LEVEL-HOOK* 
+Package:SI
+If this variable is has a function as its value at start up time, then
+it is run immediately after the init.lsp file is loaded.    This is useful
+for starting up an alternate top level loop.
+
+
+@end defvar
+@defun RUN-PROCESS (string arglist)
+Package:SI
+
+
+Execute the command STRING in a subshell passing the strings in the
+list ARGLIST as arguments to the command.  Return a two way stream
+associated to this.  Use si::fp-output-stream to get an associated
+output stream or si::fp-input-stream.
+
+Bugs: It does not properly deallocate everything, so that it will fail
+if you call it too many times.
+
+
+@end defun
+
+@defvar *CASE-FOLD-SEARCH*
+Package: SI
+Non nil means that a string-match should ignore case
+@end defvar
+
+@defun STRING-MATCH (pattern string &optional start end)
+Package: SI
+Match regexp PATTERN in STRING starting in string starting at START
+and ending at END.  Return -1 if match not found, otherwise
+return the start index  of the first matches.  The variable
+*MATCH-DATA* will be set to a fixnum array of sufficient size to hold
+the matches, to be obtained with match-beginning and match-end.
+If it already contains such an array, then the contents of it will
+be over written.
+
+The form of a regexp pattern is discussed in @xref{Regular Expressions}.
+
+@end defun
+
+@defun MATCH-BEGINNING (index)
+Returns the beginning of the I'th match from the previous STRING-MATCH,
+where the 0th is for the whole regexp and the subsequent ones match parenthetical expressions.  -1 is returned if there is no match, or if the *match-data*
+vector is not a fixnum array.
+@end defun
+
+@defun MATCH-END (index)
+   Returns the end of the I'th match from the previous STRING-MATCH
+@end defun
+
+@defun SOCKET (port &key host server async myaddr myport daemon)
+
+Establishes a socket connection to the specified PORT under a variety
+of circumstances.  
+
+If HOST is specified, then it is a string designating the IP address
+of the server to which we are the client.  ASYNC specifies that the
+connection should be made asynchronously, and the call return
+immediately.  MYADDR and MYPORT can specify the IP address and port
+respectively of a client connection, for example when the running
+machine has several network interfaces.
+
+If SERVER is specified, then it is a function which will handle
+incoming connections to this PORT.  DAEMON specifies that the running
+process should be forked to handle incoming connections in the
+background.  If DAEMON is set to the keyword PERSISTENT, then the
+backgrounded process will survive when the parent process exits, and
+the SOCKET call returns NIL.  Any other non-NIL setting of DAEMON
+causes the socket call to return the process id of the backgrounded
+process.  DAEMON currently only works on BSD and Linux based systems.
+
+If DAEMON is not set or nil, or if the socket is not a SERVER socket,
+then the SOCKET call returns a two way stream.  In this case, the
+running process is responsible for all I/O operations on the stream.
+Specifically, if a SERVER socket is created as a non-DAEMON, then the
+running process must LISTEN for connections, ACCEPT them when present,
+and call the SERVER function on the stream returned by ACCEPT.
+
+@end defun
+
+@defun ACCEPT (stream)
+
+Creates a new two-way stream to handle an individual incoming
+connection to STREAM, which must have been created with the SOCKET
+function with the SERVER keyword set.  ACCEPT should only be invoked
+when LISTEN on STREAM returns T.  If the STREAM was created with the
+DAEMON keyword set in the call to SOCKET, ACCEPT is unnecessary and
+will be called automatically as needed.
+
+@end defun
+
+@menu
+* Regular Expressions::		
+@end menu
+
+@node Regular Expressions,  , System Definitions, System Definitions
+@section Regular Expressions
+
+The function @code{string-match} (*Index string-match::) is used to
+match a regular expression against a string.  If the variable
+@code{*case-fold-search*} is not nil, case is ignored in the match.
+To determine the extent of the match use *Index match-beginning:: and
+*Index match-end::.
+
+Regular expressions are implemented using Henry Spencer's package
+(thank you  Henry!), and much of the description of regular expressions
+below is copied verbatim from his manual entry.  Code for delimited
+searches, case insensitive searches, and speedups to allow fast
+searching of long files was contributed by W. Schelter.  The speedups
+use an adaptation by Schelter of the Boyer and Moore string search
+algorithm to the case of branched regular expressions.  These allow
+such expressions as 'not_there|really_not' to be searched for 30 times
+faster than in GNU emacs (1995), and 200 times faster than in the
+original Spencer method.  Expressions such as [a-u]bcdex get a speedup
+of 60 and 194 times respectively.  This is based on searching a string
+of 50000 characters (such as the file tk.lisp).
+
+@itemize @bullet
+@item
+A regular expression is a string containing zero or more @i{branches} which are separated by @code{|}.  A match of the regular expression against a string is simply a match of the string with one of the branches.
+@item
+Each branch consists of zero or more @i{pieces}, concatenated.   A matching
+string must contain an initial substring  matching the first piece, immediately
+followed by a second substring matching the second piece and so on.
+@item
+Each piece is an @i{atom} optionally followed by  @code{+}, @code{*}, or @code{?}.
+@item
+An atom followed by @code{+} matches a sequence of 1 or more matches of the atom.
+@item
+An atom followed by @code{*} matches a sequence of 0 or more matches of the atom.
+@item
+An atom followed by @code{?} matches a match of the atom, or the null string.
+@item
+An atom is
+@itemize @minus
+@item
+a regular expression in parentheses matching a match for the regular expression
+@item
+a @i{range} see below
+@item
+a @code{.} matching any single character
+@item
+a @code{^} matching the null string at the beginning of the input string
+@item
+a @code{$} matching the null string at the end of the input string
+@item
+a @code{\} followed by a single character matching that character
+@item
+a single character with no other significance
+(matching that character).
+@end itemize
+@item
+A @i{range} is a sequence of characters enclosed in @code{[]}.
+It normally matches any single character from the sequence.
+@itemize @minus
+@item
+If the sequence begins with @code{^},
+it matches any single character @i{not} from the rest of the sequence.
+@item
+If two characters in the sequence are separated by @code{-}, this is shorthand
+for the full list of ASCII characters between them
+(e.g. @code{[0-9]} matches any decimal digit).
+@item
+To include a literal @code{]} in the sequence, make it the first character
+(following a possible @code{^}).
+@item
+To include a literal @code{-}, make it the first or last character.
+@end itemize
+@end itemize
+
+@unnumberedsubsec Ordering Multiple Matches
+
+In general there may be more than one way to match a regular expression
+to an input string.  For example, consider the command
+
+@example
+ (string-match "(a*)b*"  "aabaaabb")
+@end example
+
+Considering only the rules given so far, the value of (list-matches 0 1)
+might be @code{("aabb" "aa")} or @code{("aaab" "aaa")} or @code{("ab" "a")} 
+or any of several other combinations.
+To resolve this potential ambiguity @b{string-match} chooses among
+alternatives using the rule @i{first then longest}.
+In other words, it considers the possible matches in order working
+from left to right across the input string and the pattern, and it
+attempts to match longer pieces of the input string before shorter
+ones.  More specifically, the following rules apply in decreasing
+order of priority:
+@itemize @asis{}
+@item
+[1]
+If a regular expression could match two different parts of an input string
+then it will match the one that begins earliest.
+@item
+[2]
+If a regular expression contains @b{|} operators then the leftmost
+matching sub-expression is chosen.
+@item
+[3]
+In @b{*}@r{, }@b{+}@r{, and }@b{?} constructs, longer matches are chosen
+in preference to shorter ones.
+@item
+[4]
+In sequences of expression components the components are considered
+from left to right.
+@end itemize
+
+In the example from above, @b{(a*)b*}@r{ matches }@b{aab}@r{:  the }@b{(a*)}
+portion of the pattern is matched first and it consumes the leading
+@b{aa}@r{; then the }@b{b*} portion of the pattern consumes the
+next @b{b}.  Or, consider the following example:
+
+@example
+ (string-match "(ab|a)(b*)c"  "xabc") ==> 1
+ (list-matches 0 1 2 3) ==> ("abc" "ab" "" NIL)
+ (match-beginning 0) ==> 1
+ (match-end 0) ==> 4
+ (match-beginning 1) ==> 1
+ (match-end 1) ==> 3
+ (match-beginning 2) ==> 3
+ (match-end 2) ==> 3
+ (match-beginning 3) ==> -1
+ (match-end 3) ==> -1
+
+@end example
+
+In the above example the return value of @code{1} (which is @code{> -1})
+indicates that a match was found.   The entire match runs from
+1 to 4. 
+Rule 4 specifies that @b{(ab|a)} gets first shot at the input
+string and Rule 2 specifies that the @b{ab} sub-expression
+is checked before the @b{a} sub-expression.
+Thus the @b{b}@r{ has already been claimed before the }@b{(b*)}
+component is checked and @b{(b*)} must match an empty string.
+
+The special characters in the string @code{"\()[]+.*|^$?"},
+must be quoted, if a simple string search is desired.   The function
+re-quote-string is provided for this purpose.
+@example
+(re-quote-string "*standard*") ==> "\\*standard\\*"
+
+(string-match (re-quote-string "*standard*") "X *standard* ")
+ ==> 2
+
+(string-match "*standard*" "X *standard* ")
+Error: Regexp Error: ?+* follows nothing
+@end example
+Note there is actually just one @code{\} before the @code{*}
+but the printer makes two so that the string can be read, since
+@code{\} is also the lisp quote character.   In the last example
+an error is signalled since the special character @code{*} must
+follow an atom if it is interpreted as a regular expression.
+
+
+
+
+
+

@@ -1,0 +1,2560 @@
+
+
+@node Syntax, Evaluation and Compilation, Introduction (Introduction), Top
+@chapter Syntax
+
+@menu
+* Character Syntax::		
+* Reader Algorithm::		
+* Interpretation of Tokens::	
+* Standard Macro Characters::	
+@end menu
+
+@node Character Syntax, Reader Algorithm, Syntax, Syntax
+@section Character Syntax
+
+@c including concept-syntax
+
+The @i{Lisp reader} takes @i{characters} from a @i{stream}, 
+interprets them as a printed representation of an @i{object},
+constructs that @i{object}, and returns it.
+
+The syntax described by this chapter is called the @i{standard syntax}
+@IGindex standard syntax
+.
+Operations are provided by @r{Common Lisp} so that
+various aspects of the syntax information represented by a @i{readtable} 
+can be modified under program control; see @ref{Reader}.
+Except as explicitly stated otherwise, 
+the syntax used throughout this document is @i{standard syntax}.
+
+@menu
+* Readtables::			
+* Variables that affect the Lisp Reader::  
+* Standard Characters::		
+* Character Syntax Types::	
+@end menu
+
+@node Readtables, Variables that affect the Lisp Reader, Character Syntax, Character Syntax
+@subsection Readtables
+
+Syntax information for use by the @i{Lisp reader} is embodied in an
+@i{object} called a @i{readtable}
+@IGindex readtable
+.  Among other things, 
+the @i{readtable} contains the association between @i{characters} 
+and @i{syntax types}.
+
+Figure 2--1 lists some @i{defined names} that are applicable to
+@i{readtables}.
+
+@format
+@group
+@noindent
+@w{  *readtable*                    readtable-case                }
+@w{  copy-readtable                 readtablep                    }
+@w{  get-dispatch-macro-character   set-dispatch-macro-character  }
+@w{  get-macro-character            set-macro-character           }
+@w{  make-dispatch-macro-character  set-syntax-from-char          }
+
+@noindent
+@w{              Figure 2--1: Readtable defined names             }
+
+@end group
+@end format
+
+@menu
+* The Current Readtable::	
+* The Standard Readtable::	
+* The Initial Readtable::	
+@end menu
+
+@node The Current Readtable, The Standard Readtable, Readtables, Readtables
+@subsubsection The Current Readtable
+
+Several @i{readtables} describing different syntaxes can exist,
+but at any given time only one, called the @i{current readtable}
+@IGindex current readtable
+, 
+affects the way in which @i{expressions}_2 are parsed 
+into @i{objects} by the @i{Lisp reader}.
+The @i{current readtable} in a given @i{dynamic environment}
+is the @i{value} of @b{*readtable*} in that @i{environment}.
+To make a different @i{readtable} become the @i{current readtable},
+@b{*readtable*} can be @i{assigned} or @i{bound}.
+
+@node The Standard Readtable, The Initial Readtable, The Current Readtable, Readtables
+@subsubsection The Standard Readtable
+
+The @i{standard readtable}
+@IGindex standard readtable
+ conforms to @i{standard syntax}.
+The consequences are undefined if an attempt is made
+to modify the @i{standard readtable}.
+To achieve the effect of altering or extending @i{standard syntax},
+a copy of the @i{standard readtable} can be created; see the @i{function} @b{copy-readtable}.
+
+The @i{readtable case} of the @i{standard readtable} is @t{:upcase}.
+
+@node The Initial Readtable,  , The Standard Readtable, Readtables
+@subsubsection The Initial Readtable
+
+The @i{initial readtable}
+@IGindex initial readtable
+ is
+the @i{readtable} that is the @i{current readtable}
+at the time when the @i{Lisp image} starts.
+At that time, it conforms to @i{standard syntax}.
+The @i{initial readtable} is @i{distinct} 
+from the @i{standard readtable}.
+It is permissible for a @i{conforming program} 
+to modify the @i{initial readtable}.
+
+@node Variables that affect the Lisp Reader, Standard Characters, Readtables, Character Syntax
+@subsection Variables that affect the Lisp Reader
+
+The @i{Lisp reader} is influenced not only by the @i{current readtable},
+but also by various @i{dynamic variables}.  Figure 2--2 lists
+the @i{variables} that influence the behavior of the @i{Lisp reader}.
+
+@format
+@group
+@noindent
+@w{  *package*    *read-default-float-format*  *readtable*  }
+@w{  *read-base*  *read-suppress*                           }
+
+@noindent
+@w{  Figure 2--2: Variables that influence the Lisp reader. }
+
+@end group
+@end format
+
+@node Standard Characters, Character Syntax Types, Variables that affect the Lisp Reader, Character Syntax
+@subsection Standard Characters
+
+All @i{implementations} must support a @i{character} @i{repertoire}
+called @b{standard-char}; @i{characters} that are members of that
+@i{repertoire} are called @i{standard characters}
+@IGindex standard character
+.
+
+The @b{standard-char} @i{repertoire} consists of
+the @i{non-graphic} @i{character} @i{newline},
+the @i{graphic} @i{character} @i{space},
+and the following additional
+ninety-four @i{graphic} @i{characters} or their equivalents:
+
+@format
+@group
+@noindent
+@w{  Graphic ID  Glyph  Description  Graphic ID  Glyph  Description  }
+@w{  LA01        @t{a}      small a      LN01        @t{n}      small n      }
+@w{  LA02        @t{A}      capital A    LN02        @t{N}      capital N    }
+@w{  LB01        @t{b}      small b      LO01        @t{o}      small o      }
+@w{  LB02        @t{B}      capital B    LO02        @t{O}      capital O    }
+@w{  LC01        @t{c}      small c      LP01        @t{p}      small p      }
+@w{  LC02        @t{C}      capital C    LP02        @t{P}      capital P    }
+@w{  LD01        @t{d}      small d      LQ01        @t{q}      small q      }
+@w{  LD02        @t{D}      capital D    LQ02        @t{Q}      capital Q    }
+@w{  LE01        @t{e}      small e      LR01        @t{r}      small r      }
+@w{  LE02        @t{E}      capital E    LR02        @t{R}      capital R    }
+@w{  LF01        @t{f}      small f      LS01        @t{s}      small s      }
+@w{  LF02        @t{F}      capital F    LS02        @t{S}      capital S    }
+@w{  LG01        @t{g}      small g      LT01        @t{t}      small t      }
+@w{  LG02        @t{G}      capital G    LT02        @t{T}      capital T    }
+@w{  LH01        @t{h}      small h      LU01        @t{u}      small u      }
+@w{  LH02        @t{H}      capital H    LU02        @t{U}      capital U    }
+@w{  LI01        @t{i}      small i      LV01        @t{v}      small v      }
+@w{  LI02        @t{I}      capital I    LV02        @t{V}      capital V    }
+@w{  LJ01        @t{j}      small j      LW01        @t{w}      small w      }
+@w{  LJ02        @t{J}      capital J    LW02        @t{W}      capital W    }
+@w{  LK01        @t{k}      small k      LX01        @t{x}      small x      }
+@w{  LK02        @t{K}      capital K    LX02        @t{X}      capital X    }
+@w{  LL01        @t{l}      small l      LY01        @t{y}      small y      }
+@w{  LL02        @t{L}      capital L    LY02        @t{Y}      capital Y    }
+@w{  LM01        @t{m}      small m      LZ01        @t{z}      small z      }
+@w{  LM02        @t{M}      capital M    LZ02        @t{Z}      capital Z    }
+
+@noindent
+@w{  Figure 2--3: Standard Character Subrepertoire (Part 1 of 3: Latin Characters)}
+
+@end group
+@end format
+
+@format
+@group
+@noindent
+@w{  Graphic ID  Glyph  Description  Graphic ID  Glyph  Description  }
+@w{  ND01        @t{1}      digit 1      ND06        @t{6}      digit 6      }
+@w{  ND02        @t{2}      digit 2      ND07        @t{7}      digit 7      }
+@w{  ND03        @t{3}      digit 3      ND08        @t{8}      digit 8      }
+@w{  ND04        @t{4}      digit 4      ND09        @t{9}      digit 9      }
+@w{  ND05        @t{5}      digit 5      ND10        @t{0}      digit 0      }
+
+@noindent
+@w{  Figure 2--4: Standard Character Subrepertoire (Part 2 of 3: Numeric Characters)}
+
+@end group
+@end format
+
+@format
+@group
+@noindent
+@w{  Graphic ID  Glyph  Description                              }
+@w{  SP02        @t{!}      exclamation mark                         }
+@w{  SC03        @t{$}     dollar sign                              }
+@w{  SP04        @t{"}      quotation mark, or double quote          }
+@w{  SP05        @t{'}      apostrophe, or @r{[}single@r{]} quote            }
+@w{  SP06        @t{(}      left parenthesis, or open parenthesis    }
+@w{  SP07        @t{)}      right parenthesis, or close parenthesis  }
+@w{  SP08        @t{,}      comma                                    }
+@w{  SP09        @t{_}      low line, or underscore                  }
+@w{  SP10        @t{-}      hyphen, or minus @r{[}sign@r{]}                  }
+@w{  SP11        @t{.}      full stop, period, or dot                }
+@w{  SP12        @t{/}      solidus, or slash                        }
+@w{  SP13        @t{:}      colon                                    }
+@w{  SP14        @t{;}      semicolon                                }
+@w{  SP15        @t{?}      question mark                            }
+@w{  SA01        @t{+}      plus @r{[}sign@r{]}                              }
+@w{  SA03        @t{<}      less-than @r{[}sign@r{]}                         }
+@w{  SA04        @t{=}      equals @r{[}sign@r{]}                            }
+@w{  SA05        @t{>}      greater-than @r{[}sign@r{]}                      }
+@w{  SM01        @t{#}      number sign, or sharp@r{[}sign@r{]}              }
+@w{  SM02        @t{%}      percent @r{[}sign@r{]}                           }
+@w{  SM03        @t{&}      ampersand                                }
+@w{  SM04        @t{*}      asterisk, or star                        }
+@w{  SM05        @t{@@}      commercial at, or at-sign                }
+@w{  SM06        @t{[}      left @r{[}square@r{]} bracket                    }
+@w{  SM07        @t{\}      reverse solidus, or backslash            }
+@w{  SM08        @t{]}      right @r{[}square@r{]} bracket                   }
+@w{  SM11        @t{@{}      left curly bracket, or left brace        }
+@w{  SM13        @t{|}      vertical bar                             }
+@w{  SM14        @t{@}}      right curly bracket, or right brace      }
+@w{  SD13        @t{`}      grave accent, or backquote               }
+@w{  SD15        @t{@t{^}}      circumflex accent                        }
+@w{  SD19        @t{~}      tilde                                    }
+
+@noindent
+@w{  Figure 2--5: Standard Character Subrepertoire (Part 3 of 3: Special Characters)}
+
+@end group
+@end format
+
+The graphic IDs are not used within @r{Common Lisp},
+but are provided for cross reference purposes with @r{ISO 6937/2}.
+Note that the first letter of the graphic ID 
+categorizes the character as follows:
+L---Latin, N---Numeric, S---Special.
+
+@node Character Syntax Types,  , Standard Characters, Character Syntax
+@subsection Character Syntax Types
+
+The @i{Lisp reader} constructs an @i{object} 
+from the input text by interpreting each @i{character} 
+according to its @i{syntax type}.
+The @i{Lisp reader} cannot accept as input 
+everything that the @i{Lisp printer} produces,
+and the @i{Lisp reader} has features that are not used by the @i{Lisp printer}.
+The @i{Lisp reader} can be used as a lexical analyzer 
+for a more general user-written parser.
+
+When the @i{Lisp reader} is invoked, it reads a single character from 
+the @i{input} @i{stream} and dispatches according to the
+@i{syntax type}
+@IGindex syntax type
+ of that @i{character}.
+Every @i{character} that can appear in the @i{input} @i{stream}
+is of one of the @i{syntax types} shown in @i{Figure~2--6}.
+
+@format
+@group
+@noindent
+@w{  @i{constituent}  @i{macro character}  @i{single escape}  }
+@w{  @i{invalid}      @i{multiple escape}  @i{whitespace}_2   }
+
+@noindent
+@w{  Figure 2--6: Possible Character Syntax Types }
+
+@end group
+@end format
+
+The @i{syntax type} of a @i{character} in a @i{readtable}
+determines how that character is interpreted by the @i{Lisp reader}
+while that @i{readtable} is the @i{current readtable}.
+At any given time, every character has exactly one @i{syntax type}.
+
+@i{Figure~2--7} 
+lists the @i{syntax type} of each @i{character} in @i{standard syntax}.
+
+
+
+@format
+@group
+@noindent
+@w{  character  syntax type                 character  syntax type             }
+@w{  Backspace  @i{constituent}                 0--9       @i{constituent}             }
+@w{  Tab        @i{whitespace}_2                :          @i{constituent}             }
+@w{  Newline    @i{whitespace}_2                ;          @i{terminating} @i{macro char}  }
+@w{  Linefeed   @i{whitespace}_2                @t{<}          @i{constituent}             }
+@w{  Page       @i{whitespace}_2                =          @i{constituent}             }
+@w{  Return     @i{whitespace}_2                @t{>}          @i{constituent}             }
+@w{  Space      @i{whitespace}_2                ?          @i{constituent}*            }
+@w{  !          @i{constituent}*                @t{@@}          @i{constituent}             }
+@w{  @t{"}          @i{terminating} @i{macro char}      A--Z       @i{constituent}             }
+@w{  #          @i{non-terminating} @i{macro char}  @t{[}          @i{constituent}*            }
+@w{  $         @i{constituent}                 @t{\}          @i{single escape}           }
+@w{  %          @i{constituent}                 @t{]}          @i{constituent}*            }
+@w{  &          @i{constituent}                 @t{^}          @i{constituent}             }
+@w{  '          @i{terminating} @i{macro char}      @t{_}          @i{constituent}             }
+@w{  (          @i{terminating} @i{macro char}      `          @i{terminating} @i{macro char}  }
+@w{  )          @i{terminating} @i{macro char}      a--z       @i{constituent}             }
+@w{  @t{*}          @i{constituent}                 @t{@{}          @i{constituent}*            }
+@w{  +          @i{constituent}                 @t{|}          @i{multiple escape}         }
+@w{  ,          @i{terminating} @i{macro char}      @t{@}}          @i{constituent}*            }
+@w{  -          @i{constituent}                 @t{~}          @i{constituent}             }
+@w{  .          @i{constituent}                 Rubout     @i{constituent}             }
+@w{  /          @i{constituent}                 }
+
+@noindent
+@w{            Figure 2--7: Character Syntax Types in Standard Syntax          }
+
+@end group
+@end format
+
+
+The characters marked with an asterisk (*) are initially @i{constituents},
+but they are not used in any standard @r{Common Lisp} notations.
+These characters are explicitly reserved to the @i{programmer}.
+@t{~} is not used in @r{Common Lisp}, and reserved to implementors.
+@t{$} and @t{%} are @i{alphabetic}_2 @i{characters},
+but are not used in the names of any standard @r{Common Lisp} @i{defined names}.
+
+@i{Whitespace}_2 characters serve as separators but are otherwise
+ignored.  @i{Constituent} and @i{escape} @i{characters} are accumulated
+to make a @i{token}, which is then interpreted as a @i{number} or @i{symbol}.
+@i{Macro characters} trigger the invocation of @i{functions} (possibly
+user-supplied) that can perform arbitrary parsing actions.
+@i{Macro characters} are divided into two kinds,
+@i{terminating} and @i{non-terminating},
+depending on whether or not they terminate a @i{token}.
+The following are descriptions of each kind of @i{syntax type}.
+
+@menu
+* Constituent Characters::	
+* Constituent Traits::		
+* Invalid Characters::		
+* Macro Characters::		
+* Multiple Escape Characters::	
+* Examples of Multiple Escape Characters::  
+* Single Escape Character::	
+* Examples of Single Escape Characters::  
+* Whitespace Characters::	
+* Examples of Whitespace Characters::  
+@end menu
+
+@node Constituent Characters, Constituent Traits, Character Syntax Types, Character Syntax Types
+@subsubsection Constituent Characters
+
+@i{Constituent} @i{characters} are used in @i{tokens}.
+A @i{token}
+@IGindex token
+ is a representation of a @i{number} or a @i{symbol}.  
+Examples of @i{constituent} @i{characters} are letters and digits.
+
+Letters in symbol names are sometimes converted to 
+letters in the opposite @i{case} when the name is read;
+see @ref{Effect of Readtable Case on the Lisp Reader}.
+@i{Case} conversion can be suppressed by the use 
+of @i{single escape} or @i{multiple escape} characters.
+
+@node Constituent Traits, Invalid Characters, Constituent Characters, Character Syntax Types
+@subsubsection Constituent Traits
+
+Every @i{character} has one or more @i{constituent traits}
+that define how the @i{character} is to be interpreted by the @i{Lisp reader}
+when the @i{character} is a @i{constituent} @i{character}.
+These @i{constituent traits} are 
+     @i{alphabetic}_2,                  
+     digit,
+     @i{package marker},
+     plus sign,
+     minus sign, 
+     dot,
+     decimal point,
+     @i{ratio marker},
+     @i{exponent marker},
+ and @i{invalid}.
+@i{Figure~2--8} shows the @i{constituent traits}
+of the @i{standard characters}
+and of certain @i{semi-standard} @i{characters};
+no mechanism is provided for changing the @i{constituent trait} of a @i{character}.
+Any @i{character} with the alphadigit @i{constituent trait}
+in that figure is a digit if the @i{current input base} is greater
+than that character's digit value,
+otherwise the @i{character} is @i{alphabetic}_2.  
+Any @i{character} quoted by a @i{single escape} 
+is treated as an @i{alphabetic}_2 constituent, regardless of its normal syntax.
+
+@format
+@group
+@noindent
+@w{ constituent traits         constituent traits                                   }
+@w{ character                  character   }
+@w{ ________________________________________________________________________________}
+@w{ Backspace   @i{invalid}        @t{@{}           @i{alphabetic}_2                             }
+@w{ Tab         @i{invalid}*       @t{@}}           @i{alphabetic}_2                             }
+@w{ Newline     @i{invalid}*       +           @i{alphabetic}_2, plus sign                  }
+@w{ Linefeed    @i{invalid}*       -           @i{alphabetic}_2, minus sign                 }
+@w{ Page        @i{invalid}*       .           @i{alphabetic}_2, dot, decimal point         }
+@w{ Return      @i{invalid}*       /           @i{alphabetic}_2, @i{ratio marker}               }
+@w{ Space       @i{invalid}*       A, a        alphadigit                               }
+@w{ !           @i{alphabetic}_2   B, b        alphadigit                               }
+@w{ @t{"}           @i{alphabetic}_2*  C, c        alphadigit                               }
+@w{ #           @i{alphabetic}_2*  D, d        alphadigit, double-float @i{exponent marker} }
+@w{ $          @i{alphabetic}_2   E, e        alphadigit, float @i{exponent marker}        }
+@w{ %           @i{alphabetic}_2   F, f        alphadigit, single-float @i{exponent marker} }
+@w{ &           @i{alphabetic}_2   G, g        alphadigit                               }
+@w{ '           @i{alphabetic}_2*  H, h        alphadigit                               }
+@w{ (           @i{alphabetic}_2*  I, i        alphadigit                               }
+@w{ )           @i{alphabetic}_2*  J, j        alphadigit                               }
+@w{ @t{*}           @i{alphabetic}_2   K, k        alphadigit                               }
+@w{ ,           @i{alphabetic}_2*  L, l        alphadigit, long-float @i{exponent marker}   }
+@w{ 0-9         alphadigit     M, m        alphadigit                               }
+@w{ :           @i{package marker} N, n        alphadigit                               }
+@w{ ;           @i{alphabetic}_2*  O, o        alphadigit                               }
+@w{ @t{<}           @i{alphabetic}_2   P, p        alphadigit                               }
+@w{ =           @i{alphabetic}_2   Q, q        alphadigit                               }
+@w{ @t{>}           @i{alphabetic}_2   R, r        alphadigit                               }
+@w{ ?           @i{alphabetic}_2   S, s        alphadigit, short-float @i{exponent marker}  }
+@w{ @t{@@}           @i{alphabetic}_2   T, t        alphadigit                               }
+@w{ @t{[}           @i{alphabetic}_2   U, u        alphadigit                               }
+@w{ @t{\}           @i{alphabetic}_2*  V, v        alphadigit                               }
+@w{ @t{]}           @i{alphabetic}_2   W, w        alphadigit                               }
+@w{ @t{^}           @i{alphabetic}_2   X, x        alphadigit                               }
+@w{ @t{_}           @i{alphabetic}_2   Y, y        alphadigit                               }
+@w{ `           @i{alphabetic}_2*  Z, z        alphadigit                               }
+@w{ @t{|}           @i{alphabetic}_2*  Rubout      @i{invalid}                                  }
+@w{ @t{~}           @i{alphabetic}_2   }
+@end group
+@end format
+
+@w{  Figure 2--8: Constituent Traits of Standard Characters and Semi-Standard Characters}
+
+The interpretations in this table apply only to @i{characters}
+whose @i{syntax type} is @i{constituent}.
+Entries marked with an asterisk (*) are normally @i{shadowed}_2 
+because the indicated @i{characters} are of @i{syntax type}
+@i{whitespace}_2,
+@i{macro character},
+@i{single escape},
+or @i{multiple escape};
+these @i{constituent traits} apply to them only if their @i{syntax types} 
+are changed to @i{constituent}.
+
+@node Invalid Characters, Macro Characters, Constituent Traits, Character Syntax Types
+@subsubsection Invalid Characters
+
+@i{Characters} with the @i{constituent trait} @i{invalid} 
+cannot ever appear in a @i{token} 
+except under the control of a @i{single escape} @i{character}.
+If an @i{invalid} @i{character} is encountered while an @i{object} is
+being read, an error of @i{type} @b{reader-error} is signaled.
+If an @i{invalid} @i{character} is preceded by a @i{single escape} @i{character},
+it is treated as an @i{alphabetic}_2 @i{constituent} instead.
+
+@node Macro Characters, Multiple Escape Characters, Invalid Characters, Character Syntax Types
+@subsubsection Macro Characters
+
+When the @i{Lisp reader} encounters a @i{macro character} 
+on an @i{input} @i{stream},
+special parsing of subsequent @i{characters} 
+on the @i{input} @i{stream} 
+is performed.
+
+A @i{macro character} has an associated @i{function}
+called a @i{reader macro function}
+@IGindex reader macro function
+ that implements its specialized parsing behavior.
+An association of this kind can be established or modified under control of
+a @i{conforming program} by using 
+the @i{functions} @b{set-macro-character} and @b{set-dispatch-macro-character}.
+
+Upon encountering a @i{macro character}, the @i{Lisp reader} calls its
+@i{reader macro function}, which parses one specially formatted object 
+from the @i{input} @i{stream}.
+The @i{function} either returns the parsed @i{object},
+or else it returns no @i{values} 
+    to indicate that the characters scanned by the @i{function}
+    are being ignored (@i{e.g.}, in the case of a comment).
+Examples of @i{macro characters}
+are @i{backquote}, @i{single-quote}, @i{left-parenthesis}, and 
+@i{right-parenthesis}.
+
+A @i{macro character} is either @i{terminating} or @i{non-terminating}.
+The difference between @i{terminating} and @i{non-terminating} @i{macro characters} 
+lies in what happens when such characters occur in the middle of a @i{token}.  
+If a @i{non-terminating}
+@IGindex non-terminating
+ @i{macro character} occurs in the middle of a @i{token},
+the @i{function} associated 
+with the @i{non-terminating} @i{macro character} is not called,
+and the
+@i{non-terminating} @i{macro character} does not terminate the @i{token}'s name; it
+becomes part of the name as if the @i{macro character} were really a constituent
+character.  A @i{terminating}
+@IGindex terminating
+ @i{macro character} terminates any @i{token},
+and its associated @i{reader macro function}
+is called no matter where the @i{character} appears.
+The only @i{non-terminating} @i{macro character} in @i{standard syntax} 
+is @i{sharpsign}.
+
+If a @i{character} is a @i{dispatching macro character} C_1,
+its @i{reader macro function} is a @i{function} supplied by the @i{implementation}.
+This @i{function} reads decimal @i{digit} @i{characters} until a non-@i{digit}
+C_2 is read.
+If any @i{digits} were read,
+they are converted into a corresponding @i{integer} infix parameter P;
+otherwise, the infix parameter P is @b{nil}.  
+The terminating non-@i{digit} C_2 is a @i{character} 
+(sometimes called a ``sub-character'' to emphasize its subordinate role in the dispatching)
+that is looked up in the dispatch table associated with
+the @i{dispatching macro character} C_1.
+The @i{reader macro function} associated with the sub-character C_2 
+is invoked with three arguments:
+     the @i{stream},
+     the sub-character C_2,
+ and the infix parameter P.
+For more information about dispatch characters,
+see the @i{function} @b{set-dispatch-macro-character}.
+
+For information about the @i{macro characters} 
+that are available in @i{standard syntax},
+see @ref{Standard Macro Characters}.
+
+@node Multiple Escape Characters, Examples of Multiple Escape Characters, Macro Characters, Character Syntax Types
+@subsubsection Multiple Escape Characters
+
+A pair of @i{multiple escape}
+@IGindex multiple escape
+ @i{characters}
+is used to indicate that an enclosed sequence of characters,
+including possible @i{macro characters} and @i{whitespace}_2 @i{characters},
+are to be treated as @i{alphabetic}_2 @i{characters} 
+with @i{case} preserved.
+Any @i{single escape} and @i{multiple escape} @i{characters} 
+that are to appear in the sequence must be preceded by a @i{single escape} 
+@i{character}.  
+
+@i{Vertical-bar} is a @i{multiple escape} @i{character}
+in @i{standard syntax}.
+
+@node Examples of Multiple Escape Characters, Single Escape Character, Multiple Escape Characters, Character Syntax Types
+@subsubsection Examples of Multiple Escape Characters
+
+@example
+ ;; The following examples assume the readtable case of *readtable* 
+ ;; and *print-case* are both :upcase.
+ (eq 'abc 'ABC) @result{}  @i{true}
+ (eq 'abc '|ABC|) @result{}  @i{true}
+ (eq 'abc 'a|B|c) @result{}  @i{true}
+ (eq 'abc '|abc|) @result{}  @i{false}
+@end example
+
+@node Single Escape Character, Examples of Single Escape Characters, Examples of Multiple Escape Characters, Character Syntax Types
+@subsubsection Single Escape Character
+
+A @i{single escape}
+@IGindex single escape
+ is used to indicate that 
+the next @i{character} is to be treated as 
+an @i{alphabetic}_2 @i{character}
+with its @i{case} preserved,
+no matter what the @i{character} is 
+or which @i{constituent traits} it has.  
+
+@i{Slash} is a @i{single escape} @i{character}
+in @i{standard syntax}.
+
+@node Examples of Single Escape Characters, Whitespace Characters, Single Escape Character, Character Syntax Types
+@subsubsection Examples of Single Escape Characters
+
+@example
+ ;; The following examples assume the readtable case of *readtable* 
+ ;; and *print-case* are both :upcase.
+ (eq 'abc '\A\B\C) @result{}  @i{true}
+ (eq 'abc 'a\Bc) @result{}  @i{true}
+ (eq 'abc '\ABC) @result{}  @i{true}
+ (eq 'abc '\abc) @result{}  @i{false}
+@end example
+
+@node Whitespace Characters, Examples of Whitespace Characters, Examples of Single Escape Characters, Character Syntax Types
+@subsubsection Whitespace Characters
+
+@i{Whitespace}_2 @i{characters} are used to separate @i{tokens}.
+
+@i{Space} and @i{newline} are @i{whitespace}_2 @i{characters}
+in @i{standard syntax}.
+
+@node Examples of Whitespace Characters,  , Whitespace Characters, Character Syntax Types
+@subsubsection Examples of Whitespace Characters
+
+@example
+ (length '(this-that)) @result{}  1
+ (length '(this - that)) @result{}  3
+ (length '(a
+           b)) @result{}  2
+ (+ 34) @result{}  34
+ (+ 3 4) @result{}  7
+@end example
+
+@c end of including concept-syntax
+
+@node Reader Algorithm, Interpretation of Tokens, Character Syntax, Syntax
+@section Reader Algorithm
+
+@c including concept-reader-algorithm
+
+This section describes the algorithm used by the @i{Lisp reader}
+to parse @i{objects} from an @i{input} @i{character} @i{stream},
+including how the @i{Lisp reader} processes @i{macro characters}.
+
+When dealing with @i{tokens}, the reader's basic function is to distinguish
+representations of @i{symbols} from those of @i{numbers}.
+When a @i{token} is accumulated, it is assumed to represent a @i{number} if it
+satisfies the syntax for numbers listed in @i{Figure~2--9}.
+If it does not represent a @i{number},
+it is then assumed to be a @i{potential number} 
+if it satisfies the rules governing the syntax for a @i{potential number}.
+If a valid @i{token} is neither a representation of a @i{number} 
+			       nor a @i{potential number},
+it represents a @i{symbol}.
+
+The algorithm performed by the @i{Lisp reader} is as follows:
+
+@table @asis
+
+@item 1.  
+If at end of file, end-of-file processing is performed as specified
+in @b{read}.
+Otherwise,
+one @i{character}, @i{x},  is read from the @i{input} @i{stream}, and
+dispatched according to the @i{syntax type} of @i{x} to one
+of steps 2 to 7.
+
+@item 2.  
+If @i{x} is an @i{invalid} @i{character},
+an error of @i{type} @b{reader-error} is signaled.
+
+@item 3.  
+If @i{x} is a @i{whitespace}_2 @i{character},
+then it is discarded and step 1 is re-entered.
+
+@item 4.  
+If @i{x} is a @i{terminating} or @i{non-terminating} @i{macro character}
+then its associated @i{reader macro function} is called with two @i{arguments},
+the @i{input} @i{stream} and @i{x}.
+
+The @i{reader macro function} may read @i{characters} 
+from the @i{input} @i{stream}; 
+if it does, it will see those @i{characters} following the @i{macro character}.
+The @i{Lisp reader} may be invoked recursively from the @i{reader macro function}.
+
+The @i{reader macro function} must not have any side effects other than on the
+@i{input} @i{stream};
+because of backtracking and restarting of the @b{read} operation,
+front ends to the @i{Lisp reader} (@i{e.g.}, ``editors'' and ``rubout handlers'') 
+may cause the @i{reader macro function} to be called repeatedly during the
+reading of a single @i{expression} in which @i{x} only appears once.
+
+The @i{reader macro function} may return zero values or one value.
+If one value is returned,
+then that value is returned as the result of the read operation;
+the algorithm is done.
+If zero values are returned, then step 1 is re-entered.
+
+@item 5.  
+If @i{x} is a @i{single escape} @i{character}
+then the next @i{character}, @i{y}, is read, or an error of @i{type} @b{end-of-file} 
+is signaled if at the end of file.
+@i{y} is treated as if it is a @i{constituent} 
+whose only @i{constituent trait} is @i{alphabetic}_2.
+@i{y} is used to begin a @i{token}, and step 8 is entered.
+
+@item 6.  
+If @i{x} is a @i{multiple escape} @i{character}
+then a @i{token} (initially
+containing no @i{characters}) is  begun and step 9 is entered.
+
+@item 7.  
+If @i{x} is a @i{constituent} @i{character}, then it begins a @i{token}.
+After the @i{token} is read in, it will be interpreted
+either as a @r{Lisp} @i{object} or as being of invalid syntax.
+If the @i{token} represents an @i{object},
+that @i{object} is returned as the result of the read operation.
+If the @i{token} is of invalid syntax, an error is signaled.
+If @i{x} is a @i{character} with @i{case},
+it might be replaced with the corresponding @i{character} of the opposite @i{case}, 
+depending on the @i{readtable case} of the @i{current readtable},
+as outlined in @ref{Effect of Readtable Case on the Lisp Reader}.
+@i{X} is used to begin a @i{token}, and step 8 is entered.
+
+@item 8.  
+At this point a @i{token} is being accumulated, and an even number
+of @i{multiple escape} @i{characters} have been encountered.
+If at end of file, step 10 is entered.
+Otherwise, a @i{character}, @i{y}, is read, and
+one of the following actions is performed according to its @i{syntax type}:
+
+@table @asis
+
+@item @t{*}  
+If @i{y} is a @i{constituent} or @i{non-terminating} @i{macro character}:
+@table @asis
+
+@item --  
+If @i{y} is a @i{character} with @i{case},
+it might be replaced with the corresponding @i{character} of the opposite @i{case}, 
+depending on the @i{readtable case} of the @i{current readtable},
+as outlined in @ref{Effect of Readtable Case on the Lisp Reader}.
+@item --  
+@i{Y} is appended to the @i{token} being built.
+@item --  
+Step 8 is repeated.
+@end table
+
+@item @t{*}  
+If @i{y} is a @i{single escape} @i{character}, then the next @i{character},
+@i{z}, is read, or an error of @i{type} @b{end-of-file} is signaled if at end of file.
+@i{Z} is treated as if it is a @i{constituent} 
+whose only @i{constituent trait} is @i{alphabetic}_2.
+@i{Z} is appended to the @i{token} being built,
+and step 8 is repeated.
+
+@item @t{*}  
+If @i{y} is a @i{multiple escape} @i{character},
+then step 9 is entered.
+
+@item @t{*}  
+If @i{y} is an @i{invalid} @i{character},
+an error of @i{type} @b{reader-error} is signaled.
+
+@item @t{*}  
+If @i{y} is a @i{terminating} @i{macro character},
+then it terminates the @i{token}.
+First the @i{character} @i{y} is unread (see @b{unread-char}),
+and then step 10 is entered.
+
+@item @t{*}  
+If @i{y} is a @i{whitespace}_2 @i{character}, then it terminates
+the @i{token}.  First the @i{character} @i{y} is unread
+if appropriate (see @b{read-preserving-whitespace}),
+and then step 10 is entered.
+@end table
+
+@item 9.  
+At this point a @i{token} is being accumulated, and an odd number
+of @i{multiple escape} @i{characters} have been encountered.
+If at end of file, an error of @i{type} @b{end-of-file} is signaled.
+Otherwise, a @i{character}, @i{y}, is read, and
+one of the following actions is performed according to its @i{syntax type}:
+
+@table @asis
+
+@item @t{*}  
+If @i{y} is a @i{constituent}, macro, or @i{whitespace}_2 @i{character},
+@i{y} is treated as a @i{constituent} 
+whose only @i{constituent trait} is @i{alphabetic}_2.             
+@i{Y} is appended to the @i{token} being built, and step 9 is repeated.
+
+@item @t{*}  
+If @i{y} is a @i{single escape} @i{character}, then the next @i{character},
+@i{z}, is read, or an error of @i{type} @b{end-of-file} is signaled if at end of file.
+@i{Z} is treated as a @i{constituent}
+whose only @i{constituent trait} is @i{alphabetic}_2.
+@i{Z} is appended to the @i{token} being built,
+and step 9 is repeated.
+
+@item @t{*}  
+If @i{y} is a @i{multiple escape} @i{character},
+then step 8 is entered.
+
+@item @t{*}  
+If @i{y} is an @i{invalid} @i{character},
+an error of @i{type} @b{reader-error} is signaled.
+@end table
+
+@item 10.  
+An entire @i{token} has been accumulated.
+The @i{object} represented by the @i{token} is returned 
+as the result of the read operation,
+or an error of @i{type} @b{reader-error} is signaled if the @i{token} is not of valid syntax.
+@end table
+
+@c end of including concept-reader-algorithm
+
+@node Interpretation of Tokens, Standard Macro Characters, Reader Algorithm, Syntax
+@section Interpretation of Tokens
+
+@c including concept-tokens
+
+@menu
+* Numbers as Tokens::		
+* Constructing Numbers from Tokens::  
+* The Consing Dot::		
+* Symbols as Tokens::		
+* Valid Patterns for Tokens::	
+* Package System Consistency Rules::  
+@end menu
+
+@node Numbers as Tokens, Constructing Numbers from Tokens, Interpretation of Tokens, Interpretation of Tokens
+@subsection Numbers as Tokens
+
+When a @i{token} is read,
+it is interpreted as a @i{number} or @i{symbol}.
+The @i{token} is interpreted as a @i{number} if it satisfies
+the syntax for numbers specified in Figure 2--9.
+
+@format
+@group
+@noindent
+@w{ @i{numeric-token} ::= !@i{integer} | !@i{ratio} | !@i{float}                                              }
+@w{ @i{integer}       ::= @t{[}@i{sign}@t{]} @{@i{decimal-digit}@}^+ @i{decimal-point} | @t{[}@i{sign}@t{]} @{@i{digit}@}^+               }
+@w{ @i{ratio}         ::= @t{[}@i{sign}@t{]} @{@i{digit}@}^+ @i{slash} @{@i{digit}@}^+                                        }
+@w{ @i{float}         ::= @t{[}@i{sign}@t{]} @{@i{decimal-digit}@}* @i{decimal-point} @{@i{decimal-digit}@}^+ @t{[}!@i{exponent}@t{]}   }
+@w{                   | @t{[}@i{sign}@t{]} @{@i{decimal-digit}@}^+ @t{[}@i{decimal-point} @{@i{decimal-digit}@}*@t{]} !@i{exponent} }
+@w{ @i{exponent}      ::= @i{exponent-marker} @t{[}@i{sign}@t{]} @{@i{digit}@}^+                                        }
+@w{ @i{sign}---a @i{sign}.}
+@w{ @i{slash}---a @i{slash}}
+@w{ @i{decimal-point}---a @i{dot}.}
+@w{ @i{exponent-marker}---an @i{exponent marker}.}
+@w{ @i{decimal-digit}---a @i{digit} in @i{radix} @t{10}.}
+@w{ @i{digit}---a @i{digit} in the @i{current input radix}.}
+@end group
+@end format
+
+@w{  Figure 2--9: Syntax for Numeric Tokens}
+
+@menu
+* Potential Numbers as Tokens::	 
+* Escape Characters and Potential Numbers::  
+* Examples of Potential Numbers::  
+@end menu
+
+@node Potential Numbers as Tokens, Escape Characters and Potential Numbers, Numbers as Tokens, Numbers as Tokens
+@subsubsection Potential Numbers as Tokens
+
+To allow implementors and future @r{Common Lisp} standards
+to extend the syntax of numbers, a
+syntax for @i{potential numbers} is defined that is
+more general than the syntax for numbers.
+A @i{token} is a @i{potential number} if it satisfies all of the following
+requirements:
+
+@table @asis
+
+@item 1.  
+The @i{token} consists entirely of 
+  @i{digits},
+  @i{signs},
+  @i{ratio markers},
+  decimal points (@t{.}),
+  extension characters (@t{^} or @t{_}),
+  and number markers.
+A number marker is a letter. 
+Whether a letter may be treated as a number marker depends on context,
+but no letter that is adjacent to another letter may ever be treated as a number marker.
+@i{Exponent markers} are number markers.
+
+@item 2.  
+The @i{token} contains at least one digit.  Letters may be considered to be
+digits, depending on the @i{current input base}, but only
+in @i{tokens} containing no decimal points.
+
+@item 3.  
+The @i{token} begins with a @i{digit}, @i{sign}, decimal point, or extension character,
+
+[Reviewer Note by Barmar: This section is unnecessary because the first bullet already 
+		  omits discussion of a colon (@i{package marker}).]
+but not a 
+@i{package marker}.
+The syntax involving a leading 
+@i{package marker} followed by a @i{potential number} is
+not well-defined. The consequences of the use 
+of notation such as @t{:1}, @t{:1/2}, and @t{:2^3} in a
+position where an expression appropriate for @b{read} 
+is expected are unspecified.
+
+@item 4.  
+The @i{token} does not end with a sign.
+@end table
+
+If a @i{potential number} has number syntax, 
+a @i{number} of the appropriate type is constructed and returned, 
+if the @i{number} is representable in an implementation.
+A @i{number} will not be representable in an implementation 
+if it is outside the boundaries set by the @i{implementation-dependent} 
+constants for @i{numbers}.
+For example, specifying too large or too small an exponent for a @i{float}
+may make the @i{number} impossible to represent in the implementation.
+A @i{ratio} with denominator zero (such as @t{-35/000})
+is not represented in any implementation.
+When a @i{token} with the syntax of a number cannot be converted to an internal
+@i{number}, an error of @i{type} @b{reader-error} is signaled.  An error
+must not be signaled for specifying too many significant digits
+for a @i{float}; a truncated or rounded value should be produced.
+
+If there is an ambiguity as to whether
+a letter should be treated as a digit or as a number marker,
+the letter is treated as a digit.
+
+@node Escape Characters and Potential Numbers, Examples of Potential Numbers, Potential Numbers as Tokens, Numbers as Tokens
+@subsubsection Escape Characters and Potential Numbers
+
+A @i{potential number} cannot contain any @i{escape}
+@i{characters}.  An @i{escape} @i{character} robs the following
+@i{character} of all syntactic qualities, forcing it to be strictly
+@i{alphabetic}_2 and therefore unsuitable for use in a
+@i{potential number}.  For example, all of the following
+representations are interpreted as @i{symbols}, not @i{numbers}:
+
+@example
+ \256   25\64   1.0\E6   |100|   3\.14159   |3/4|   3\/4   5||
+@end example
+
+In each case, removing the @i{escape} @i{character} (or @i{characters}) 
+would 
+cause the token to be a @i{potential number}.
+
+@node Examples of Potential Numbers,  , Escape Characters and Potential Numbers, Numbers as Tokens
+@subsubsection Examples of Potential Numbers
+
+As examples, the @i{tokens} in Figure 2--10 are @i{potential numbers},
+but they are not actually numbers, and so are reserved @i{tokens};
+a @i{conforming implementation} is permitted, but not required,
+to define their meaning.
+
+@format
+@group
+@noindent
+@w{  @t{1b5000}                       @t{777777q}                @t{1.7J}  @t{-3/4+6.7J}  @t{12/25/83}  }
+@w{  @t{27^19}                      @t{3^4/5}                @t{6//7}  @t{3.1.2.6}    @t{@t{^}-43@t{^}}   }
+@w{  @t{3.141_592_653_589_793_238_4}  @t{-3.7+2.6i-6.17j+19.6k}  }
+
+@noindent
+@w{                     Figure 2--10: Examples of reserved tokens                   }
+
+@end group
+@end format
+
+The @i{tokens} in Figure 2--11 are not @i{potential numbers}; 
+they are always treated as @i{symbols}:
+
+@format
+@group
+@noindent
+@w{  @t{/}     @t{/5}     @t{+}  @t{1+}  @t{1-}     }
+@w{  @t{foo+}  @t{ab.cd}  @t{_}  @t{@t{^}}   @t{@t{^}/-}  }
+
+@noindent
+@w{  Figure 2--11: Examples of symbols}
+
+@end group
+@end format
+
+The @i{tokens} in Figure 2--12 are @i{potential numbers}
+if the @i{current input base} is @t{16}, 
+but they are always treated as @i{symbols} if the @i{current input base} is @t{10}. 
+
+@format
+@group
+@noindent
+@w{  @t{bad-face}  @t{25-dec-83}  @t{a/b}  @t{fad_cafe}  @t{f@t{^}} }
+
+@noindent
+@w{  Figure 2--12: Examples of symbols or potential numbers}
+
+@end group
+@end format
+
+@node Constructing Numbers from Tokens, The Consing Dot, Numbers as Tokens, Interpretation of Tokens
+@subsection Constructing Numbers from Tokens
+
+A @i{real} is constructed directly from a corresponding numeric @i{token};
+see @i{Figure~2--9}.
+
+A @i{complex} is notated as a @t{#C} (or @t{#c}) followed by a @i{list}
+of two @i{reals}; see @ref{Sharpsign C}.
+
+The @i{reader macros} @t{#B}, @t{#O}, @t{#X}, and @t{#R} may also be useful
+in controlling the input @i{radix} in which @i{rationals} are parsed;
+ see @ref{Sharpsign B},
+     @ref{Sharpsign O},
+     @ref{Sharpsign X},
+ and @ref{Sharpsign R}.
+
+This section summarizes the full syntax for @i{numbers}.
+
+@menu
+* Syntax of a Rational::	
+* Syntax of an Integer::	
+* Syntax of a Ratio::		
+* Syntax of a Float::		
+* Syntax of a Complex::		
+@end menu
+
+@node Syntax of a Rational, Syntax of an Integer, Constructing Numbers from Tokens, Constructing Numbers from Tokens
+@subsubsection Syntax of a Rational
+
+@node Syntax of an Integer, Syntax of a Ratio, Syntax of a Rational, Constructing Numbers from Tokens
+@subsubsection Syntax of an Integer
+
+@i{Integers} can be written as a sequence of @i{digits}, 
+optionally preceded by a @i{sign} and optionally followed by a decimal point;
+see @i{Figure~2--9}.
+When a decimal point is used,
+the @i{digits} are taken to be in @i{radix} @t{10};
+when no decimal point is used,
+the @i{digits} are taken to be in radix given by the @i{current input base}.
+
+For information on how @i{integers} are printed, see @ref{Printing Integers}.
+
+@node Syntax of a Ratio, Syntax of a Float, Syntax of an Integer, Constructing Numbers from Tokens
+@subsubsection Syntax of a Ratio
+
+@i{Ratios} can be written as an optional @i{sign} followed by two
+non-empty sequences of @i{digits} separated by a @i{slash};
+see @i{Figure~2--9}.
+The second sequence may not consist
+entirely of zeros.
+Examples of @i{ratios} are in Figure 2--13.
+
+@format
+@group
+@noindent
+@w{  @t{2/3}                 ;This is in canonical form                  }
+@w{  @t{4/6}                 ;A non-canonical form for 2/3               }
+@w{  @t{-17/23}              ;A ratio preceded by a sign                 }
+@w{  @t{-30517578125/32768}  ;This is (-5/2)^15                        }
+@w{  @t{10/5}                ;The canonical form for this is @t{2}           }
+@w{  @t{#o-101/75}           ;Octal notation for -65/61                  }
+@w{  @t{#3r120/21}           ;Ternary notation for 15/7                  }
+@w{  @t{#Xbc/ad}             ;Hexadecimal notation for 188/173           }
+@w{  @t{#xFADED/FACADE}      ;Hexadecimal notation for 1027565/16435934  }
+
+@noindent
+@w{                  Figure 2--13: Examples of Ratios                }
+
+@end group
+@end format
+
+[Reviewer Note by Barmar: #o, #3r, #X, and #x mentioned above 
+		  are not in the syntax rules defined just above that.]
+
+For information on how @i{ratios} are printed,
+see @ref{Printing Ratios}.
+
+@node Syntax of a Float, Syntax of a Complex, Syntax of a Ratio, Constructing Numbers from Tokens
+@subsubsection Syntax of a Float
+
+@i{Floats} can be written in either decimal fraction or computerized
+scientific notation: an optional sign, then a non-empty sequence of digits
+with an embedded decimal point,
+then an optional decimal exponent specification.
+If there is no exponent specifier, then
+the decimal point is required, and there must be digits
+after it.
+The exponent specifier consists of an @i{exponent marker},
+an optional sign, and a non-empty sequence of digits.
+If no exponent specifier is present, or if the @i{exponent marker} @t{e}
+(or @t{E}) is used, then
+the format specified
+by @b{*read-default-float-format*} is used.
+See @i{Figure~2--9}.
+
+An implementation may provide one or more kinds of @i{float}
+that collectively make up the @i{type} @b{float}.
+The letters @t{s}, @t{f}, @t{d}, and @t{l} (or their
+respective uppercase equivalents) explicitly specify the
+use of the @i{types} @b{short-float}, @b{single-float}, 
+@b{double-float}, and @b{long-float}, respectively.
+
+The internal format used for an external representation depends only
+on the @i{exponent marker}, and not on the number of decimal digits
+in the external representation.
+
+Figure 2--14 contains examples of notations for @i{floats}: 
+
+@format
+@group
+@noindent
+@w{  @t{0.0}       ;Floating-point zero in default format                          }
+@w{  @t{0E0}       ;As input, this is also floating-point zero in default format.  }
+@w{            ;As output, this would appear as @t{0.0}.                           }
+@w{  @t{0e0}       ;As input, this is also floating-point zero in default format.  }
+@w{            ;As output, this would appear as @t{0.0}.                           }
+@w{  @t{-.0}       ;As input, this might be a zero or a minus zero,                }
+@w{            ; depending on whether the implementation supports              }
+@w{            ; a distinct minus zero.                                        }
+@w{            ;As output, @t{0.0} is zero and @t{-0.0} is minus zero.                 }
+@w{  @t{0.}        ;On input, the integer zero---@i{not} a floating-point number!      }
+@w{            ;Whether this appears as @t{0} or @t{0.} on output depends              }
+@w{            ;on the @i{value} of @b{*print-radix*}.                                 }
+@w{  @t{0.0s0}     ;A floating-point zero in short format                          }
+@w{  @t{0s0}       ;As input, this is a floating-point zero in short format.       }
+@w{            ;As output, such a zero would appear as @t{0.0s0}                   }
+@w{            ; (or as @t{0.0} if @b{short-float} was the default format).            }
+@w{  @t{6.02E+23}  ;Avogadro's number, in default format                           }
+@w{  @t{602E+21}   ;Also Avogadro's number, in default format                      }
+
+@noindent
+@w{               Figure 2--14: Examples of Floating-point numbers             }
+
+@end group
+@end format
+
+For information on how @i{floats} are printed,
+see @ref{Printing Floats}.
+
+@node Syntax of a Complex,  , Syntax of a Float, Constructing Numbers from Tokens
+@subsubsection Syntax of a Complex
+
+A @i{complex} has a Cartesian structure, 
+with a real part and an imaginary part each of which is a 
+
+@i{real}.
+
+The parts of a @i{complex} are not necessarily @i{floats} 
+but both parts must be of the same @i{type}: 
+
+[Editorial Note by KMP: This is not the same as saying they must be the same type.
+                 Maybe we mean they are of the same `precision' or `format'?
+		 GLS had suggestions which are not yet merged.]
+either both are @i{rationals}, or both are of the same @i{float} @i{subtype}.
+When constructing a @i{complex}, if the specified parts are not the
+same @i{type}, the parts are converted to be the same @i{type}
+internally (@i{i.e.}, the @i{rational} part is converted to a @i{float}). 
+An @i{object} of type @t{(complex rational)} is converted internally
+and represented thereafter as a @i{rational} if its imaginary part is an 
+@i{integer} whose value is 0.
+
+For further information, see @ref{Sharpsign C} and @ref{Printing Complexes}.
+
+@node The Consing Dot, Symbols as Tokens, Constructing Numbers from Tokens, Interpretation of Tokens
+@subsection The Consing Dot
+
+If a @i{token} consists solely of dots (with no escape characters),
+then an error of @i{type} @b{reader-error} is signaled,
+except in one circumstance:
+if the @i{token} is a single @i{dot}
+and appears in a situation where @i{dotted pair} notation permits a @i{dot},
+then it is accepted as part of such syntax and no error is signaled. 
+See @ref{Left-Parenthesis}.
+
+@node Symbols as Tokens, Valid Patterns for Tokens, The Consing Dot, Interpretation of Tokens
+@subsection Symbols as Tokens
+
+Any @i{token} that is not a @i{potential number},
+does not contain a @i{package marker},
+and does not consist entirely of dots
+will always be interpreted as a @i{symbol}.
+Any @i{token} that is a @i{potential number} but does not fit the       
+number syntax is a reserved @i{token} and
+has an @i{implementation-dependent} interpretation.
+In all other cases, the @i{token} is construed to be the name of a @i{symbol}.
+
+Examples of the printed representation of @i{symbols} are in Figure 2--15. 
+For presentational simplicity,
+these examples assume that
+the @i{readtable case} of the @i{current readtable} is @t{:upcase}.
+
+@format
+@group
+@noindent
+@w{  @t{FROBBOZ}         The @i{symbol} whose @i{name} is @t{FROBBOZ}.                }
+@w{  @t{frobboz}         Another way to notate the same @i{symbol}.           }
+@w{  @t{fRObBoz}         Yet another way to notate it.                    }
+@w{  @t{unwind-protect}  A @i{symbol} with a hyphen in its @i{name}.              }
+@w{  @t{+$}             The @i{symbol} named @t{+$}.                            }
+@w{  @t{1+}              The @i{symbol} named @t{1+}.                             }
+@w{  @t{+1}              This is the @i{integer} @t{1}, not a @i{symbol}.             }
+@w{  @t{pascal_style}    This @i{symbol} has an underscore in its @i{name}.       }
+@w{  @t{file.rel.43}     This @i{symbol} has periods in its @i{name}.             }
+@w{  @t{\(}              The @i{symbol} whose @i{name} is @t{(}.                      }
+@w{  @t{\+1}             The @i{symbol} whose @i{name} is @t{+1}.                     }
+@w{  @t{+\1}             Also the @i{symbol} whose @i{name} is @t{+1}.                }
+@w{  @t{\frobboz}        The @i{symbol} whose @i{name} is @t{fROBBOZ}.                }
+@w{  @t{3.14159265\s0}   The @i{symbol} whose @i{name} is @t{3.14159265s0}.           }
+@w{  @t{3.14159265\S0}   A different @i{symbol}, whose @i{name} is @t{3.14159265S0}.  }
+@w{  @t{3.14159265s0}    A possible @i{short float} approximation to \pi.     }
+
+@noindent
+@w{  Figure 2--15: Examples of the printed representation of symbols (Part 1 of 2)}
+
+@end group
+@end format
+
+@format
+@group
+@noindent
+@w{  @t{APL\\360}               The @i{symbol} whose @i{name} is @t{APL\360}.       }
+@w{  @t{apl\\360}               Also the @i{symbol} whose @i{name} is @t{APL\360}.  }
+@w{  @t{\(b@t{^}2\)\ -\ 4*a@t{*c}}    The @i{name} is @t{(B@t{^}2) - 4*A*C}.            }
+@w{                         Parentheses and two spaces in it.       }
+@w{  @t{\(\b@t{^}2\)\ -\4*\a*\c}  The @i{name} is @t{(b@t{^}2) - 4*a*c}.            }
+@w{                         Letters explicitly lowercase.           }
+@w{  @t{|"|}                    The same as writing @t{\"}.                 }
+@w{  @t{|(b@t{^}2) - 4*a*c|}      The @i{name} is @t{(b@t{^}2) - 4*a*c}.            }
+@w{  @t{|frobboz|}              The @i{name} is @t{frobboz}, not @t{FROBBOZ}.       }
+@w{  @t{|APL\360|}              The @i{name} is @t{APL360}.                     }
+@w{  @t{|APL\\360|}             The @i{name} is @t{APL\360}.                    }
+@w{  @t{|apl\\360|}             The @i{name} is @t{apl\360}.                    }
+@w{  @t{|\|\||}                 Same as @t{\|\|} ---the @i{name} is @t{||}.          }
+@w{  @t{|(B@t{^}2) - 4*A*C|}      The @i{name} is @t{(B@t{^}2) - 4*A*C}.            }
+@w{                         Parentheses and two spaces in it.       }
+@w{  @t{|(b@t{^}2) - 4*a*c|}      The @i{name} is @t{(b@t{^}2) - 4*a*c}.            }
+
+@noindent
+@w{  Figure 2--16: Examples of the printed representation of symbols (Part 2 of 2)}
+
+@end group
+@end format
+
+In the process of parsing a @i{symbol},
+it is @i{implementation-dependent} which
+@i{implementation-defined} @i{attributes} are removed
+from the @i{characters} forming a @i{token} that represents a @i{symbol}.
+
+When parsing the syntax for a @i{symbol},
+the @i{Lisp reader} looks up the @i{name} of that @i{symbol} 
+in the @i{current package}.
+This lookup may involve looking in other 
+@i{packages} whose @i{external symbols}
+are inherited by the @i{current package}.  If the name is found,
+the corresponding @i{symbol} is returned.  If the name is not found
+(that is, there is no @i{symbol} 
+of that name @i{accessible} in the @i{current package}),
+a new @i{symbol} is created and is placed in the @i{current package}
+as an @i{internal symbol}.  The @i{current package} becomes the owner
+(@i{home package}) of the @i{symbol}, 
+and the @i{symbol} becomes interned in the @i{current package}.
+If the name is later read again while this same @i{package} is
+current, the same @i{symbol} will be found and returned.
+
+@node Valid Patterns for Tokens, Package System Consistency Rules, Symbols as Tokens, Interpretation of Tokens
+@subsection Valid Patterns for Tokens
+
+The valid patterns for @i{tokens} are summarized in Figure 2--17. 
+
+@format
+@group
+@noindent
+@w{  @t{@i{nnnnn}}              a @i{number}                                           }
+@w{  @t{@i{xxxxx}}              a @i{symbol} in the @i{current package}                    }
+@w{  @t{:@i{xxxxx}}             a @i{symbol} in the the @t{KEYWORD} @i{package}                }
+@w{  @t{@i{ppppp}:@i{xxxxx}}        an @i{external symbol} in the @i{ppppp} @i{package}            }
+@w{  @t{@i{ppppp}::@i{xxxxx}}       a (possibly internal) @i{symbol} in the @i{ppppp} @i{package}  }
+@w{  @t{:@i{nnnnn}}             undefined                                          }
+@w{  @t{@i{ppppp}:@i{nnnnn}}        undefined                                          }
+@w{  @t{@i{ppppp}::@i{nnnnn}}       undefined                                          }
+@w{  @t{::@i{aaaaa}}            undefined                                          }
+@w{  @t{@i{aaaaa}:}             undefined                                          }
+@w{  @t{@i{aaaaa}:@i{aaaaa}:@i{aaaaa}}  undefined                                          }
+
+@noindent
+@w{                 Figure 2--17: Valid patterns for tokens                }
+
+@end group
+@end format
+
+Note that @i{nnnnn} has number syntax,
+          neither @i{xxxxx} nor @i{ppppp} has number syntax,
+      and @i{aaaaa} has any syntax.
+
+A summary of rules concerning @i{package markers} follows.
+In each case, examples are offered to illustrate the case;
+for presentational simplicity, the examples assume that
+the @i{readtable case} of the @i{current readtable} is @t{:upcase}.
+
+@table @asis
+
+@item 1.  
+If there is a single @i{package marker}, and it occurs at the beginning of the
+@i{token}, then the @i{token} is interpreted as a @i{symbol} in the @t{KEYWORD} @i{package}.
+It also sets the @b{symbol-value} of the newly-created @i{symbol} to that
+same @i{symbol} so that the @i{symbol} will self-evaluate.
+
+For example, 
+@t{:bar}, when read, interns @t{BAR} as an @i{external symbol} in the @t{KEYWORD} @i{package}.
+
+@item 2.  
+If there is a single @i{package marker} not at the beginning or end of the
+@i{token}, then it divides the @i{token} into two parts.  The first part
+specifies a @i{package}; 
+the second part is the name of an @i{external symbol}
+available in that package.  
+
+For example, 
+@t{foo:bar}, when read, looks up @t{BAR} among the @i{external symbols} of
+the @i{package} named @t{FOO}.
+
+@item 3.  
+If there are two adjacent @i{package markers} not at the beginning or end of the
+@i{token}, then they divide the @i{token} into two parts.  The first part
+specifies a @i{package};
+the second part is the name of a @i{symbol} within
+that @i{package} (possibly an @i{internal symbol}).
+
+For example, 
+@t{foo::bar}, when read, interns @t{BAR} in the @i{package} named @t{FOO}.
+
+@item 4.  
+If the @i{token} contains no @i{package markers}, 
+and does not have @i{potential number} syntax,
+then the entire @i{token} is the name of the @i{symbol}.
+The @i{symbol} is looked up in the @i{current package}.
+
+For example, 
+@t{bar}, when read, interns @t{BAR} in the @i{current package}.
+
+@item 5.  
+The consequences are unspecified if any other pattern of @i{package markers}
+in a @i{token} is used.
+All other uses of @i{package markers} within names of @i{symbols} 
+are not defined by this standard 
+but are reserved for @i{implementation-dependent} use.
+@end table
+
+For example,
+assuming the @i{readtable case} of the @i{current readtable} is @t{:upcase},
+@t{editor:buffer} refers to the @i{external symbol} 
+named @t{BUFFER} present in the @i{package} named @t{editor},
+regardless of whether there is a @i{symbol} named @t{BUFFER} in
+the @i{current package}.  If there is no @i{package} named
+@t{editor}, or if no @i{symbol} named @t{BUFFER}
+is present in @t{editor}, or if @t{BUFFER} is not exported by
+@t{editor}, the reader signals
+a correctable error.
+If @t{editor::buffer} is seen, the effect is exactly the same as
+reading @t{buffer} with the @t{EDITOR} @i{package} being the @i{current package}.
+
+@node Package System Consistency Rules,  , Valid Patterns for Tokens, Interpretation of Tokens
+@subsection Package System Consistency Rules
+
+The following rules apply to the package system as long as 
+the @i{value} of @b{*package*} is not changed:
+
+@table @asis
+
+@item @b{Read-read consistency}  
+Reading the same @i{symbol} @i{name}
+always results in the @i{same} @i{symbol}.
+
+@item @b{Print-read consistency}  
+An @i{interned symbol} always prints as a sequence of characters that, 
+when read back in, yields the @i{same} @i{symbol}.
+
+For information about how the @i{Lisp printer} treats @i{symbols},
+see @ref{Printing Symbols}.
+
+@item @b{Print-print consistency}  
+If two interned @i{symbols} are not the @i{same},
+then their printed representations will be different sequences of characters.
+@end table
+
+These rules are true regardless of any implicit interning.
+As long as the @i{current package} is not changed,
+results are reproducible regardless of the order of @i{loading} files 
+or the exact history of what @i{symbols} were typed in when.  
+If the @i{value} of @b{*package*} is changed and then changed back to the previous value,
+consistency is maintained.
+The rules can be violated by
+    changing the @i{value} of @b{*package*},
+    forcing a change to @i{symbols} 
+                  or to @i{packages} 
+    	          or to both
+    by continuing from an error,
+or calling one of the following @i{functions}:
+    @b{unintern},
+    @b{unexport},
+    @b{shadow},
+    @b{shadowing-import},
+ or @b{unuse-package}.
+
+An inconsistency only applies if one of the restrictions is violated
+between two of the named @i{symbols}.
+@b{shadow}, @b{unexport}, @b{unintern},
+and @b{shadowing-import} can only affect the consistency of
+@i{symbols} with the same @i{names} (under @b{string=})
+as the ones supplied as arguments.
+
+@c end of including concept-tokens
+
+@node Standard Macro Characters,  , Interpretation of Tokens, Syntax
+@section Standard Macro Characters
+
+@c including concept-macro-chars
+
+If the reader encounters a @i{macro character},
+then its associated @i{reader macro function} 
+is invoked and may produce an @i{object} to be returned.
+This @i{function} may read the @i{characters} 
+following the @i{macro character} in the @i{stream} 
+in any syntax and return the @i{object} represented by that syntax.
+
+Any @i{character} can be made to be a @i{macro character}.
+The @i{macro characters} defined initially in a @i{conforming implementation}
+include
+the following:
+
+@menu
+* Left-Parenthesis::		
+* Right-Parenthesis::		
+* Single-Quote::		
+* Semicolon::			
+* Double-Quote::		
+* Backquote::			
+* Comma::			
+* Sharpsign::			
+* Re-Reading Abbreviated Expressions::	
+@end menu
+
+@node Left-Parenthesis, Right-Parenthesis, Standard Macro Characters, Standard Macro Characters
+@subsection Left-Parenthesis
+
+The @i{left-parenthesis} initiates reading of a @i{list}.
+@b{read} is called recursively to read successive @i{objects}
+until a right parenthesis is found in the input @i{stream}.
+A @i{list} of the @i{objects} read is returned.  Thus
+
+@example
+ (a b c)
+@end example
+
+is read as a @i{list} of three @i{objects}
+(the @i{symbols} @t{a}, @t{b}, and @t{c}).
+The right parenthesis need not immediately follow the printed representation of
+the last @i{object}; @i{whitespace}_2                              
+characters and comments may precede it.
+
+If no @i{objects} precede the right parenthesis, 
+it reads as a @i{list} of zero @i{objects} 
+(the @i{empty list}).
+
+If a @i{token} that is just a dot
+not immediately preceded by an escape character
+is read after some @i{object}
+then exactly one more @i{object} must follow the dot,
+possibly preceded or followed by @i{whitespace}_2 or a comment,
+followed by the right parenthesis:
+
+@example
+ (a b c . d)
+@end example
+
+This means that the @i{cdr} of the last @i{cons} in the 
+@i{list} is not @b{nil},
+but rather the @i{object} whose representation followed the dot.
+The above example might have been the result of evaluating
+
+@example
+ (cons 'a (cons 'b (cons 'c 'd)))
+@end example
+
+Similarly,
+
+@example
+ (cons 'this-one 'that-one) @result{}  (this-one . that-one)
+@end example
+
+It is permissible for the @i{object} 
+following the dot to be a @i{list}:
+
+@example
+ (a b c d . (e f . (g))) @equiv{} (a b c d e f g)
+@end example
+
+For information on how the @i{Lisp printer} prints @i{lists} and @i{conses},
+see @ref{Printing Lists and Conses}.
+
+@node Right-Parenthesis, Single-Quote, Left-Parenthesis, Standard Macro Characters
+@subsection Right-Parenthesis
+
+The @i{right-parenthesis} is invalid 
+except when used in conjunction with the left parenthesis character.
+For more information, see @ref{Reader Algorithm}.
+
+@node Single-Quote, Semicolon, Right-Parenthesis, Standard Macro Characters
+@subsection Single-Quote
+
+@b{Syntax:}  @t{'<<@i{exp}>>}
+
+A @i{single-quote} introduces an @i{expression} to be ``quoted.''
+@i{Single-quote} followed by an @i{expression} @i{exp} 
+is treated by the @i{Lisp reader} as an abbreviation for
+and is parsed identically to the @i{expression} @t{(quote @i{exp})}.
+See the @i{special operator} @b{quote}.
+
+@menu
+* Examples of Single-Quote::	
+@end menu
+
+@node Examples of Single-Quote,  , Single-Quote, Single-Quote
+@subsubsection Examples of Single-Quote
+
+@example
+ 'foo @result{}  FOO
+ ''foo @result{}  (QUOTE FOO)
+ (car ''foo) @result{}  QUOTE
+@end example
+
+@node Semicolon, Double-Quote, Single-Quote, Standard Macro Characters
+@subsection Semicolon
+
+@b{Syntax:} @t{;<<@i{text}>>}
+
+A @i{semicolon} introduces @i{characters} that are to be ignored,
+such as comments.  The @i{semicolon} and all @i{characters} up to
+and including the next @i{newline} or end of file are ignored.
+
+@menu
+* Examples of Semicolon::	
+* Notes about Style for Semicolon::  
+* Use of Single Semicolon::	
+* Use of Double Semicolon::	
+* Use of Triple Semicolon::	
+* Use of Quadruple Semicolon::	
+* Examples of Style for Semicolon::  
+@end menu
+
+@node Examples of Semicolon, Notes about Style for Semicolon, Semicolon, Semicolon
+@subsubsection Examples of Semicolon
+
+@example
+ (+ 3 ; three
+    4)
+@result{}  7    
+@end example
+
+@node Notes about Style for Semicolon, Use of Single Semicolon, Examples of Semicolon, Semicolon
+@subsubsection Notes about Style for Semicolon
+
+Some text editors make assumptions about desired indentation based on
+the number of @i{semicolons} that begin a comment.  The following style 
+conventions are common, although not by any means universal.  
+
+@node Use of Single Semicolon, Use of Double Semicolon, Notes about Style for Semicolon, Semicolon
+@subsubsection Use of Single Semicolon
+
+Comments that begin with a single @i{semicolon} are all aligned to 
+the same column at the right (sometimes called the ``comment column'').
+The text of such a comment generally applies only to the line on which it appears.
+Occasionally two or three contain a single sentence together;
+this is sometimes indicated by indenting all but the first with an additional
+space (after the @i{semicolon}).
+
+@node Use of Double Semicolon, Use of Triple Semicolon, Use of Single Semicolon, Semicolon
+@subsubsection Use of Double Semicolon
+
+Comments that begin with a double @i{semicolon} are all aligned to
+the same level of indentation as a @i{form} would be at that same
+position in the @i{code}.
+The text of such a comment usually describes
+    the state of the @i{program} at the point where the comment occurs,
+    the @i{code} which follows the comment,
+ or both.
+
+@node Use of Triple Semicolon, Use of Quadruple Semicolon, Use of Double Semicolon, Semicolon
+@subsubsection Use of Triple Semicolon
+
+Comments that begin with a triple @i{semicolon} are all aligned to
+the left margin.  Usually they are used prior to a definition or set
+of definitions, rather than within a definition.
+
+@node Use of Quadruple Semicolon, Examples of Style for Semicolon, Use of Triple Semicolon, Semicolon
+@subsubsection Use of Quadruple Semicolon
+
+Comments that begin with a quadruple @i{semicolon} are all aligned to
+the left margin, and generally contain only a short piece of text that
+serve as a title for the code which follows, and might be used in the
+header or footer of a program that prepares code for presentation as 
+a hardcopy document.
+
+@node Examples of Style for Semicolon,  , Use of Quadruple Semicolon, Semicolon
+@subsubsection Examples of Style for Semicolon
+
+@example
+;;;; Math Utilities
+
+;;; FIB computes the the Fibonacci function in the traditional
+;;; recursive way.
+
+(defun fib (n)
+  (check-type n integer)
+  ;; At this point we're sure we have an integer argument.
+  ;; Now we can get down to some serious computation.
+  (cond ((< n 0)
+         ;; Hey, this is just supposed to be a simple example.
+         ;; Did you really expect me to handle the general case?
+         (error "FIB got ~D as an argument." n))
+        ((< n 2) n)             ;fib[0]=0 and fib[1]=1
+        ;; The cheap cases didn't work.
+        ;; Nothing more to do but recurse.
+        (t (+ (fib (- n 1))     ;The traditional formula
+              (fib (- n 2)))))) ; is fib[n-1]+fib[n-2].
+@end example
+
+@node Double-Quote, Backquote, Semicolon, Standard Macro Characters
+@subsection Double-Quote
+
+@b{Syntax:} @t{"<<@i{text}>>"}
+
+The @i{double-quote} is used to begin and end a @i{string}.
+When a @i{double-quote} is encountered,
+@i{characters} are read from the @i{input} @i{stream} 
+and accumulated until another @i{double-quote} is encountered.
+If a @i{single escape} @i{character} is seen,
+the @i{single escape} @i{character} is discarded,
+the next @i{character} is accumulated, and accumulation continues.
+The accumulated @i{characters} 
+up to but not including the matching @i{double-quote} 
+are made into a @i{simple string} and returned.
+
+It is @i{implementation-dependent}
+which @i{attributes} of the accumulated characters are removed in this process.
+
+Examples of the use of the @i{double-quote} character are in Figure 2--18. 
+
+@format
+@group
+@noindent
+@w{  @t{"Foo"}                      ;A string with three characters in it  }
+@w{  @t{""}                         ;An empty string                       }
+@w{  @t{"\"APL\\360?\" he cried."}  ;A string with twenty characters       }
+@w{  @t{"|x| = |-x|"}               ;A ten-character string                }
+
+@noindent
+@w{          Figure 2--18: Examples of the use of double-quote         }
+
+@end group
+@end format
+
+Note that to place a single escape character or a @i{double-quote} into a string,
+such a character must be preceded by a single escape character.
+Note, too, that a multiple escape character need not be quoted by a 
+single escape character within a string.
+
+For information on how the @i{Lisp printer} prints @i{strings},
+see @ref{Printing Strings}.
+
+@node Backquote, Comma, Double-Quote, Standard Macro Characters
+@subsection Backquote
+
+The @i{backquote} introduces a template of a data structure to be built.  
+For example, writing
+
+@example
+ `(cond ((numberp ,x) ,@@y) (t (print ,x) ,@@y))
+@end example
+
+is roughly equivalent to writing
+
+@example
+ (list 'cond 
+       (cons (list 'numberp x) y) 
+       (list* 't (list 'print x) y))
+@end example
+
+Where a comma
+occurs in the template, 
+the @i{expression}
+following the comma is to be evaluated to produce an @i{object} to
+be inserted at that point.  Assume @t{b} has the value 3, for example, then
+evaluating the @i{form} denoted by @t{`(a b ,b ,(+ b 1) b)} produces
+the result @t{(a b 3 4 b)}.
+
+If a comma is immediately followed by an @i{at-sign}, 
+then the @i{form} following the @i{at-sign}
+is evaluated to produce a @i{list} of @i{objects}.
+These @i{objects} are then ``spliced'' into place in the template.  For
+example, if @t{x} has the value @t{(a b c)}, then
+
+@example
+ `(x ,x ,@@x foo ,(cadr x) bar ,(cdr x) baz ,@@(cdr x))
+@result{}  (x (a b c) a b c foo b bar (b c) baz b c)
+@end example
+
+The backquote syntax can be summarized formally as follows.
+
+@table @asis
+
+@item @t{*}  
+@t{`@i{basic}} is the same as @t{'@i{basic}},
+that is, @t{(quote @i{basic})}, for any @i{expression} 
+@i{basic} that is not a @i{list} or a general @i{vector}.
+
+@item @t{*}  
+@t{`,@i{form}} is the same as @i{form}, for any @i{form}, provided
+that the representation of @i{form} does not begin with @i{at-sign}
+or @i{dot}.  (A similar caveat holds for all occurrences of a form after a @i{comma}.)
+
+@item @t{*}  
+@t{`,@@@i{form}} has undefined consequences.
+
+@item @t{*}  
+@t{`(x1 x2 x3 ... xn . atom)}
+may be interpreted to mean
+
+@example
+ (append [ x1 ] [ x2 ] [ x3 ] ... [ xn ] (quote atom))
+@end example
+
+where the brackets are used to indicate
+a transformation of an @i{xj} as follows:
+
+@table @asis
+
+@item --  
+@t{[@i{form}]} is interpreted as @t{(list `@i{form})}, 
+which contains a backquoted form that must then be further interpreted.
+
+@item --  
+@t{[,@i{form}]} is interpreted as @t{(list @i{form})}.
+
+@item --  
+@t{[,@@@i{form}]} is interpreted as @i{form}.
+@end table
+
+@item @t{*}  
+@t{`(x1 x2 x3 ... xn)} may be interpreted to mean
+the same as the backquoted form
+@t{`(x1 x2 x3 ... xn . @b{nil})},
+thereby reducing it to the previous case.
+
+@item @t{*}  
+@t{`(x1 x2 x3 ... xn . ,form)} may be interpreted to mean
+
+@example
+ (append [ x1 ] [ x2 ] [ x3 ] ... [ xn ] form)
+@end example
+
+where the brackets indicate a transformation of an @t{xj} as described above.
+
+@item @t{*}  
+@t{`(x1 x2 x3 ... xn . ,@@form)} has undefined consequences.
+
+@item @t{*}  
+@t{`#(x1 x2 x3 ... xn)} may be interpreted to mean
+@t{(apply #'vector `(x1 x2 x3 ... xn))}.
+@end table
+
+Anywhere ``@t{,@@}'' may be used, the syntax ``@t{,.}'' may be used instead
+to indicate that it is permissible to operate @i{destructively} on 
+the @i{list structure}  produced by the form following the ``@t{,.}'' 
+(in effect, to use @b{nconc} instead of @b{append}).
+
+If the backquote syntax is nested, the innermost backquoted form
+should be expanded first.  This means that if several commas occur
+in a row, the leftmost one belongs to the innermost @i{backquote}.
+
+An @i{implementation} is free to interpret a backquoted @i{form} F_1
+as any @i{form} F_2 that, when evaluated, will produce a result that is
+the @i{same} under @b{equal} as the result implied by the above definition, 
+provided that the side-effect behavior of the substitute @i{form} F_2 
+is also consistent with the description given above.
+The constructed
+copy of the template might or might not share @i{list} structure with the
+template itself.  As an example, the above definition implies that
+
+@example
+ `((,a b) ,c ,@@d)
+@end example
+
+will be interpreted as if it were
+
+@example
+ (append (list (append (list a) (list 'b) '@b{nil})) (list c) d '@b{nil})
+@end example
+
+but it could also be legitimately interpreted to mean any of the following:
+
+@example
+ (append (list (append (list a) (list 'b))) (list c) d)
+ (append (list (append (list a) '(b))) (list c) d)
+ (list* (cons a '(b)) c d)
+ (list* (cons a (list 'b)) c d)
+ (append (list (cons a '(b))) (list c) d)
+ (list* (cons a '(b)) c (copy-list d))
+@end example
+
+@menu
+* Notes about Backquote::	
+@end menu
+
+@node Notes about Backquote,  , Backquote, Backquote
+@subsubsection Notes about Backquote
+
+Since the exact manner in which the @i{Lisp reader} will parse
+an @i{expression} involving the @i{backquote} @i{reader macro} 
+is not specified, an @i{implementation} is free to choose any
+representation that preserves the semantics described.
+
+Often an @i{implementation} will choose a representation that facilitates
+pretty printing of the expression, so that @t{(pprint `(a ,b))} will display
+@t{`(a ,b)} and not, for example, @t{(list 'a b)}.  However, this is not a
+requirement.
+
+Implementors who have no particular reason to make one choice or another
+might wish to refer to @b{IEEE Standard for the Scheme Programming Language}, which identifies a popular choice of
+representation for such expressions that might provide useful to be useful
+compatibility for some user communities.  There is no requirement, however,
+that any @i{conforming implementation} use this particular representation.
+This information is provided merely for cross-reference purposes.
+
+@node Comma, Sharpsign, Backquote, Standard Macro Characters
+@subsection Comma
+
+The @i{comma} is part of the backquote syntax; see @ref{Backquote}.
+@i{Comma} is invalid if used other than inside the body of a 
+backquote @i{expression} as described above.
+
+@node Sharpsign, Re-Reading Abbreviated Expressions, Comma, Standard Macro Characters
+@subsection Sharpsign
+
+@i{Sharpsign} is a @i{non-terminating} @i{dispatching macro character}.
+It reads an optional 
+sequence of digits and then one more character,
+and uses that character to select a @i{function} to run as a
+@i{reader macro function}.
+
+The @i{standard syntax} includes constructs introduced by the @t{#} character.
+The syntax of these constructs is as follows:
+a character that identifies the type of construct is 
+followed by arguments in some form.
+If the character is a letter, its @i{case} is not important;
+@t{#O} and @t{#o} are considered to be equivalent, for example.
+
+Certain @t{#} constructs allow an unsigned decimal number to appear
+between the @t{#} and the character.
+
+The @i{reader macros} associated with the @i{dispatching macro character} @t{#}
+are described later in this section and summarized in Figure 2--19.
+
+
+
+@format
+@group
+@noindent
+@w{  dispatch char  purpose                  dispatch char  purpose                }
+@w{  Backspace      signals error            @t{@{}              undefined*             }
+@w{  Tab            signals error            @t{@}}              undefined*             }
+@w{  Newline        signals error            +              read-time conditional  }
+@w{  Linefeed       signals error            -              read-time conditional  }
+@w{  Page           signals error            .              read-time evaluation   }
+@w{  Return         signals error            /              undefined              }
+@w{  Space          signals error            A, a           array                  }
+@w{  !              undefined*               B, b           binary rational        }
+@w{  @t{"}              undefined                C, c           complex number         }
+@w{  #              reference to = label     D, d           undefined              }
+@w{  $             undefined                E, e           undefined              }
+@w{  %              undefined                F, f           undefined              }
+@w{  &              undefined                G, g           undefined              }
+@w{  '              function abbreviation    H, h           undefined              }
+@w{  (              simple vector            I, i           undefined              }
+@w{  )              signals error            J, j           undefined              }
+@w{  @t{*}              bit vector               K, k           undefined              }
+@w{  ,              undefined                L, l           undefined              }
+@w{  :              uninterned symbol        M, m           undefined              }
+@w{  ;              undefined                N, n           undefined              }
+@w{  @t{<}              signals error            O, o           octal rational         }
+@w{  @t{=}              labels following object  P, p           pathname               }
+@w{  @t{>}              undefined                Q, q           undefined              }
+@w{  ?              undefined*               R, r           radix-n rational       }
+@w{  @@              undefined                S, s           structure              }
+@w{  [              undefined*               T, t           undefined              }
+@w{  @t{\}              character object         U, u           undefined              }
+@w{  ]              undefined*               V, v           undefined              }
+@w{  @t{^}            undefined                W, w           undefined              }
+@w{  @t{_}              undefined                X, x           hexadecimal rational   }
+@w{  `              undefined                Y, y           undefined              }
+@w{  @t{|}              balanced comment         Z, z           undefined              }
+@w{  @t{~}              undefined                Rubout         undefined              }
+
+@noindent
+@w{           Figure 2--19: Standard # Dispatching Macro Character Syntax         }
+
+@end group
+@end format
+
+
+The combinations marked by an asterisk (*) are explicitly reserved to the
+user.  No @i{conforming implementation} defines them.
+
+Note also that @i{digits} do not appear in the preceding table.  This is
+because the notations @t{#0}, @t{#1}, ..., @t{#9} are
+reserved for another purpose which occupies the same syntactic space.
+When a @i{digit} follows a @i{sharpsign},
+it is not treated as a dispatch character.
+Instead, an unsigned integer argument is accumulated 
+and passed as an @i{argument} to the @i{reader macro} 
+for the @i{character} that follows the digits.
+For example,
+@t{#2A((1 2) (3 4))} is a use of @t{#A} with an argument of @t{2}.
+
+@menu
+* Sharpsign Backslash::		
+* Sharpsign Single-Quote::	
+* Sharpsign Left-Parenthesis::	
+* Sharpsign Asterisk::		
+* Examples of Sharpsign Asterisk::  
+* Sharpsign Colon::		
+* Sharpsign Dot::		
+* Sharpsign B::			
+* Sharpsign O::			
+* Sharpsign X::			
+* Sharpsign R::			
+* Sharpsign C::			
+* Sharpsign A::			
+* Sharpsign S::			
+* Sharpsign P::			
+* Sharpsign Equal-Sign::	
+* Sharpsign Sharpsign::		
+* Sharpsign Plus::		
+* Sharpsign Minus::		
+* Sharpsign Vertical-Bar::	
+* Examples of Sharpsign Vertical-Bar::	
+* Notes about Style for Sharpsign Vertical-Bar::  
+* Sharpsign Less-Than-Sign::	
+* Sharpsign Whitespace::	
+* Sharpsign Right-Parenthesis::	 
+@end menu
+
+@node Sharpsign Backslash, Sharpsign Single-Quote, Sharpsign, Sharpsign
+@subsubsection Sharpsign Backslash
+
+@b{Syntax:} @t{#\<<@i{x}>>}
+
+When the @i{token} @i{x} is a single @i{character} long, 
+this parses as the literal @i{character} @i{char}.
+@i{Uppercase} and @i{lowercase} letters are distinguished after @t{#\};
+@t{#\A} and @t{#\a} denote different @i{character} @i{objects}.
+Any single @i{character} works after @t{#\},
+even those that are normally special to @b{read}, 
+such as @i{left-parenthesis} and @i{right-parenthesis}.
+
+In the single @i{character} case,
+the @i{x} must be followed by a non-constituent @i{character}.
+After @t{#\} is read,
+the reader backs up over the @i{slash} and then reads a @i{token},
+treating the initial @i{slash} as a @i{single escape} @i{character}
+(whether it really is or not in the @i{current readtable}).
+
+When the @i{token} @i{x} is more than one @i{character} long,
+the @i{x} must have the syntax of a @i{symbol} 
+with no embedded @i{package markers}.
+In this case, the @i{sharpsign} @i{backslash} notation
+parses as the @i{character} whose @i{name} is @t{(string-upcase @i{x})};
+see @ref{Character Names}.
+
+For information about how the @i{Lisp printer} prints @i{character} @i{objects},
+see @ref{Printing Characters}.
+
+@node Sharpsign Single-Quote, Sharpsign Left-Parenthesis, Sharpsign Backslash, Sharpsign
+@subsubsection Sharpsign Single-Quote
+
+Any @i{expression} preceded by @t{#'} 
+(@i{sharpsign} followed by @i{single-quote}),
+as in @t{#'@i{expression}},
+is treated by the @i{Lisp reader} as an abbreviation for and parsed identically 
+to the @i{expression} @t{(function @i{expression})}.
+See @b{function}.  For example,
+
+@example
+(apply #'+ l) @equiv{} (apply (function +) l)
+@end example
+
+@node Sharpsign Left-Parenthesis, Sharpsign Asterisk, Sharpsign Single-Quote, Sharpsign
+@subsubsection Sharpsign Left-Parenthesis
+
+@t{#(} and @t{)} are used to notate a @i{simple vector}. 
+
+If an unsigned decimal integer
+appears between the @t{#} and @t{(},
+it specifies explicitly the length of the @i{vector}.  
+The consequences are undefined if the number of @i{objects} 
+specified before the closing @t{)}
+exceeds the unsigned decimal integer.
+If the number of @i{objects} supplied before the closing @t{)}
+is less than the unsigned decimal integer but greater than zero,
+the last @i{object}
+is used to fill all
+remaining elements of the @i{vector}.
+
+[Editorial Note by Barmar: This should say "signals...".]
+The consequences are undefined if the unsigned decimal integer is non-zero and
+number of @i{objects} supplied before the closing @t{)}
+is zero.
+For example,
+
+@example
+ #(a b c c c c)
+ #6(a b c c c c)
+ #6(a b c)
+ #6(a b c c)
+@end example
+
+all mean the same thing: a @i{vector} of length @t{6}
+with @i{elements} @t{a}, @t{b}, and four occurrences of @t{c}.  
+Other examples follow:
+
+@example
+ #(a b c)               ;A vector of length 3
+ #(2 3 5 7 11 13 17 19 23 29 31 37 41 43 47)
+                        ;A vector containing the primes below 50
+ #()                    ;An empty vector
+@end example
+
+The notation @t{#()} denotes an empty @i{vector}, as does @t{#0()}.
+
+For information on how the @i{Lisp printer} prints @i{vectors},
+see @ref{Printing Strings},
+    @ref{Printing Bit Vectors},
+ or @ref{Printing Other Vectors}.
+
+@node Sharpsign Asterisk, Examples of Sharpsign Asterisk, Sharpsign Left-Parenthesis, Sharpsign
+@subsubsection Sharpsign Asterisk
+
+@b{Syntax:} @t{#*<<@i{bits}>>}
+
+A @i{simple bit vector} is constructed containing the indicated @i{bits}
+(@t{0}'s and @t{1}'s), where the leftmost @i{bit} has index zero 
+and the subsequent @i{bits} have increasing indices.
+
+@b{Syntax:} @t{#<<@i{n}>>*<<@i{bits}>>}
+
+With an argument @i{n},
+the @i{vector} to be created is of @i{length} @i{n}.
+If the number of @i{bits} is less than @i{n} but greater than zero,
+the last bit is used to fill all remaining bits of the @i{bit vector}.
+
+The notations @t{#*} and @t{#0*} each denote an empty @i{bit vector}.
+
+Regardless of whether the optional numeric argument @i{n} is provided,
+the @i{token} that follows the @i{asterisk} is delimited by 
+a normal @i{token} delimiter.
+However, (unless the @i{value} of @b{*read-suppress*} is @i{true})
+an error of @i{type} @b{reader-error} is signaled 
+     if that @i{token} is not composed entirely of @t{0}'s and @t{1}'s,
+  or if @i{n} was supplied 
+        and the @i{token} is composed of more than @i{n} @i{bits},
+  or if @i{n} is greater than one, but no @i{bits} were specified.
+Neither a @i{single escape} nor a @i{multiple escape} is permitted in this @i{token}.
+
+For information on how the @i{Lisp printer} prints @i{bit vectors},
+see @ref{Printing Bit Vectors}.
+
+@node Examples of Sharpsign Asterisk, Sharpsign Colon, Sharpsign Asterisk, Sharpsign
+@subsubsection Examples of Sharpsign Asterisk
+
+For example, 
+@example
+  #*101111
+ #6*101111
+ #6*101
+ #6*1011
+@end example
+
+all mean the same thing: a @i{vector} of length @t{6}
+with @i{elements} @t{1}, @t{0}, @t{1}, @t{1}, @t{1}, and @t{1}.
+
+For example:
+
+@example
+ #*         ;An empty bit-vector
+@end example
+
+@node Sharpsign Colon, Sharpsign Dot, Examples of Sharpsign Asterisk, Sharpsign
+@subsubsection Sharpsign Colon
+
+@b{Syntax:}  @t{#:<<@i{symbol-name}>>}
+
+@t{#:} introduces an @i{uninterned} @i{symbol} whose @i{name} 
+is @i{symbol-name}.  Every time this syntax is encountered,
+a @i{distinct} @i{uninterned} @i{symbol} is created.
+The @i{symbol-name} must have the syntax of a @i{symbol} 
+with no @i{package prefix}.
+
+For information on how the @i{Lisp reader} 
+prints @i{uninterned} @i{symbols},
+see @ref{Printing Symbols}.
+
+@node Sharpsign Dot, Sharpsign B, Sharpsign Colon, Sharpsign
+@subsubsection Sharpsign Dot
+
+@t{#.@i{foo}} is read as the @i{object} resulting from the evaluation
+of the @i{object} represented by @i{foo}.
+The evaluation is done during the @b{read} process,
+when the @t{#.} notation is encountered.
+The @t{#.} syntax therefore performs a read-time evaluation of @i{foo}.
+
+The normal effect of @t{#.} is inhibited when the @i{value} of @b{*read-eval*} is @i{false}.
+
+In that situation, an error of @i{type} @b{reader-error} is signaled.
+
+For an @i{object}
+that does not have a convenient printed
+representation, a @i{form} that computes the @i{object} can be given using
+the @t{#.} notation.
+
+@node Sharpsign B, Sharpsign O, Sharpsign Dot, Sharpsign
+@subsubsection Sharpsign B
+
+@t{#B}@i{rational} reads @i{rational} in binary (radix 2).
+For example, 
+
+@example
+ #B1101 @equiv{} 13 ;1101_2
+ #b101/11 @equiv{} 5/3
+@end example
+
+The consequences are undefined if the token immediately following
+the @t{#B} does not have the syntax of a binary (@i{i.e.}, radix 2) @i{rational}.
+
+@node Sharpsign O, Sharpsign X, Sharpsign B, Sharpsign
+@subsubsection Sharpsign O
+
+@t{#O}@i{rational} reads @i{rational} in octal (radix 8).
+For example, 
+
+@example
+ #o37/15 @equiv{} 31/13
+ #o777 @equiv{} 511
+ #o105 @equiv{} 69 ;105_8
+@end example
+
+The consequences are undefined if the token immediately following
+the @t{#O} does not have the syntax of an octal (@i{i.e.}, radix 8) @i{rational}.
+
+@node Sharpsign X, Sharpsign R, Sharpsign O, Sharpsign
+@subsubsection Sharpsign X
+
+@t{#X}@i{rational} reads @i{rational} in hexadecimal (radix 16).
+The digits above @t{9} are the letters @t{A} through @t{F} (the lowercase
+letters @t{a} through @t{f} are also acceptable).  For example,
+
+@example
+ #xF00 @equiv{} 3840             
+ #x105 @equiv{} 261 ;105_@t{16}
+@end example
+
+The consequences are undefined if the token immediately following
+the @t{#X} does not have the syntax of a hexadecimal (@i{i.e.}, radix 16) @i{rational}.
+
+@node Sharpsign R, Sharpsign C, Sharpsign X, Sharpsign
+@subsubsection Sharpsign R
+
+@t{#@i{n}R}
+
+@t{#@i{radix}R@i{rational}} reads @i{rational} in radix @i{radix}.
+@i{radix} must consist of only digits
+that are interpreted as an @i{integer}
+in decimal radix; its value must be between 2 and 36 (inclusive).
+Only valid digits
+for the specified radix may be used.
+
+For example, @t{#3r102} is another way of writing @t{11} (decimal), 
+and @t{#11R32}
+is another way of writing @t{35} (decimal).  
+For radices larger than 10, letters of
+the alphabet are used in order for the digits after @t{9}.
+No alternate @t{#} notation exists for the decimal radix since a
+decimal point suffices.
+
+Figure 2--20 contains examples of the use of @t{#B},
+@t{#O}, @t{#X}, and @t{#R}.
+
+@format
+@group
+@noindent
+@w{  @t{#2r11010101}  ;Another way of writing @t{213} decimal  }
+@w{  @t{#b11010101}   ;Ditto                               }
+@w{  @t{#b+11010101}  ;Ditto                               }
+@w{  @t{#o325}        ;Ditto, in octal radix               }
+@w{  @t{#xD5}         ;Ditto, in hexadecimal radix         }
+@w{  @t{#16r+D5}      ;Ditto                               }
+@w{  @t{#o-300}       ;Decimal @t{-192}, written in base 8     }
+@w{  @t{#3r-21010}    ;Same thing in base 3                }
+@w{  @t{#25R-7H}      ;Same thing in base 25               }
+@w{  @t{#xACCEDED}    ;@t{181202413}, in hexadecimal radix     }
+
+@noindent
+@w{        Figure 2--20: Radix Indicator Example       }
+
+@end group
+@end format
+
+The consequences are undefined if the token immediately following
+the @t{#@i{n}R} does not have the syntax of a @i{rational} in radix @i{n}.
+
+@node Sharpsign C, Sharpsign A, Sharpsign R, Sharpsign
+@subsubsection Sharpsign C
+
+@t{#C} reads a following @i{object}, which must be a @i{list} of
+length two whose @i{elements} are both @i{reals}.
+These @i{reals} denote, respectively,
+the real and imaginary parts of a @i{complex} number.
+
+If the two parts as notated are not of the same data type,
+then they are converted 
+according to the rules of floating-point @i{contagion}
+described in @ref{Contagion in Numeric Operations}.
+
+@t{#C(@i{real} @i{imag})} is equivalent to 
+@t{#.(complex (quote @i{real}) (quote @i{imag}))},
+except that @t{#C} is not affected by @b{*read-eval*}.
+See the @i{function} @b{complex}.
+
+Figure 2--21 contains examples of the use of @t{#C}.
+
+@format
+@group
+@noindent
+@w{  @t{#C(3.0s1 2.0s-1)}  ;A @i{complex} with @i{small float} parts.                }
+@w{  @t{#C(5 -3) }         ;A ``Gaussian integer''                             }
+@w{  @t{#C(5/3 7.0) }      ;Will be converted internally to @t{#C(1.66666 7.0)}  }
+@w{  @t{#C(0 1)}           ;The imaginary unit; that is, i.                  }
+
+@noindent
+@w{                  Figure 2--21: Complex Number Example                }
+
+@end group
+@end format
+
+For further information, 
+see @ref{Printing Complexes} and @ref{Syntax of a Complex}.
+
+@node Sharpsign A, Sharpsign S, Sharpsign C, Sharpsign
+@subsubsection Sharpsign A
+
+@t{#@i{n}A}
+
+@t{#@i{n}@t{A}@i{object}} constructs an @i{n}-dimensional @i{array},
+using @i{object} as the value of the @t{:initial-contents} argument
+to @b{make-array}.
+
+For example, @t{#2A((0 1 5) (foo 2 (hot dog)))} represents a 2-by-3 matrix:
+
+@example
+ 0       1       5
+ foo     2       (hot dog)
+@end example
+
+In contrast, @t{#1A((0 1 5) (foo 2 (hot dog)))} 
+represents a @i{vector} of @i{length} @t{2} 
+whose @i{elements} are @i{lists}:
+
+@example
+ (0 1 5) (foo 2 (hot dog))
+@end example
+
+@t{#0A((0 1 5) (foo 2 (hot dog)))} represents a zero-dimensional
+@i{array} whose sole element is a @i{list}:
+
+@example
+ ((0 1 5) (foo 2 (hot dog)))
+@end example
+
+@t{#0A foo} represents 
+a zero-dimensional @i{array} whose sole element is the 
+@i{symbol} @t{foo}.
+The notation @t{#1A foo} is not valid because @t{foo} is
+not a @i{sequence}.
+
+If some @i{dimension} of the @i{array}
+whose representation is being parsed is found to be @t{0},
+all @i{dimensions} to the right 
+(@i{i.e.}, the higher numbered @i{dimensions})
+are also considered to be @t{0}.
+
+For information on how the @i{Lisp printer} prints @i{arrays},
+see @ref{Printing Strings},
+    @ref{Printing Bit Vectors},
+    @ref{Printing Other Vectors},
+ or @ref{Printing Other Arrays}.
+
+@node Sharpsign S, Sharpsign P, Sharpsign A, Sharpsign
+@subsubsection Sharpsign S
+
+@t{#s(name slot1 value1 slot2 value2 ...)}
+denotes a @i{structure}.  This is valid only if @i{name} is the name
+of a @i{structure} @i{type} already defined by @b{defstruct} 
+and if the @i{structure} @i{type} has a standard constructor function.
+Let @i{cm} stand for the name of this constructor function;
+then this syntax is equivalent to
+
+@example
+ #.(cm keyword1 'value1 keyword2 'value2 ...)
+@end example
+
+where each @i{keywordj} is the result of computing
+
+@example
+ (intern (string slotj) (find-package 'keyword))
+@end example
+
+The net effect is that the constructor function is called with the specified
+slots having the specified values. 
+
+(This coercion feature is deprecated; in the future, keyword names will 
+ be taken in the package they are read in, so @i{symbols} that are 
+ actually in the @t{KEYWORD} @i{package} should be used if that is what is desired.)
+
+Whatever @i{object} the constructor function returns
+is returned by the @t{#S} syntax.
+
+For information on how the @i{Lisp printer} prints @i{structures},
+see @ref{Printing Structures}.
+
+@node Sharpsign P, Sharpsign Equal-Sign, Sharpsign S, Sharpsign
+@subsubsection Sharpsign P
+
+@t{#P} reads a following @i{object}, which must be a @i{string}.
+
+@t{#P<<@i{expression}>>} is equivalent to 
+@t{#.(parse-namestring '<<@i{expression}>>)},
+except that @t{#P} is not affected by @b{*read-eval*}.
+
+For information on how the @i{Lisp printer} prints @i{pathnames},
+see @ref{Printing Pathnames}.
+
+@node Sharpsign Equal-Sign, Sharpsign Sharpsign, Sharpsign P, Sharpsign
+@subsubsection Sharpsign Equal-Sign
+
+@t{#@i{n}=}
+
+@t{#@i{n}=@i{object}} reads as whatever @i{object}
+has @i{object} as its printed representation.  However, that @i{object}
+is labeled by @i{n}, a required unsigned decimal integer, for
+possible reference by the syntax @t{#@i{n}#}.
+The scope of the label is the @i{expression} being read by the outermost
+call to @b{read}; within this @i{expression},
+the same label may not appear twice.
+
+@node Sharpsign Sharpsign, Sharpsign Plus, Sharpsign Equal-Sign, Sharpsign
+@subsubsection Sharpsign Sharpsign
+
+@t{#@i{n}#}
+
+@t{#@i{n}#}, where @i{n} is a required unsigned decimal
+@i{integer},
+provides a reference to some @i{object} labeled by @t{#@i{n}=};
+that is, @t{#@i{n}#} represents a pointer to the same 
+(@b{eq}) @i{object} labeled by @t{#@i{n}=}.
+For example, a structure created in the variable @t{y} by this code:
+
+@example
+ (setq x (list 'p 'q))
+ (setq y (list (list 'a 'b) x 'foo x))
+ (rplacd (last y) (cdr y))
+@end example
+
+could be represented in this way:
+
+@example
+ ((a b) . #1=(#2=(p q) foo #2# . #1#))
+@end example
+
+Without this notation, but with @b{*print-length*} set to @t{10}
+and @b{*print-circle*} set to @b{nil},
+the structure would print in this way:
+
+@example
+ ((a b) (p q) foo (p q) (p q) foo (p q) (p q) foo (p q) ...)
+@end example
+
+A reference @t{#@i{n}#} may only occur after a label @t{#@i{n}=};
+forward references are not permitted.  The reference
+may not appear as the labeled object itself (that is,
+@t{#@i{n}=#@i{n}#}) may not be written 
+because the @i{object}
+labeled by @t{#@i{n}=} is not well defined in this case.
+
+@node Sharpsign Plus, Sharpsign Minus, Sharpsign Sharpsign, Sharpsign
+@subsubsection Sharpsign Plus
+
+@t{#+} provides a read-time conditionalization facility;
+the syntax is @t{#+@i{test} @i{expression}}.
+If the @i{feature expression} @i{test} succeeds,
+then this textual notation represents an @i{object}
+ whose printed representation is @i{expression}.
+If the @i{feature expression} @i{test} fails,
+then this textual notation is treated as @i{whitespace}_2; 
+ that is, it is as if the ``@t{#+} @i{test} @i{expression}'' 
+ did not appear and only a @i{space} appeared in its place.
+
+For a detailed description of success and failure in @i{feature expressions},
+see @ref{Feature Expressions}.
+
+@t{#+} operates by first reading the @i{feature expression}
+and then skipping over the @i{form} if the @i{feature expression} fails.
+
+While reading the @i{test}, the @i{current package} is the @t{KEYWORD} @i{package}.
+
+Skipping over the @i{form} is accomplished by @i{binding} 
+@b{*read-suppress*} to @i{true} and then calling @b{read}.
+
+For examples, see @ref{Examples of Feature Expressions}.
+
+@node Sharpsign Minus, Sharpsign Vertical-Bar, Sharpsign Plus, Sharpsign
+@subsubsection Sharpsign Minus
+
+@t{#-} is like @t{#+} 
+except that it skips the @i{expression} if the @i{test} succeeds; 
+that is,
+
+@example
+#-@i{test} @i{expression} @equiv{} #+(not @i{test}) @i{expression}
+@end example
+
+For examples, see @ref{Examples of Feature Expressions}.
+
+@node Sharpsign Vertical-Bar, Examples of Sharpsign Vertical-Bar, Sharpsign Minus, Sharpsign
+@subsubsection Sharpsign Vertical-Bar
+
+@t{#|...|#} is treated as a comment by the reader.
+It must be balanced with respect to other occurrences of @t{#|} and @t{|#},
+but otherwise may contain any characters whatsoever.
+
+@node Examples of Sharpsign Vertical-Bar, Notes about Style for Sharpsign Vertical-Bar, Sharpsign Vertical-Bar, Sharpsign
+@subsubsection Examples of Sharpsign Vertical-Bar
+
+The following are some examples that exploit the @t{#|...|#} notation:
+
+@example
+;;; In this example, some debugging code is commented out with #|...|#
+;;; Note that this kind of comment can occur in the middle of a line
+;;; (because a delimiter marks where the end of the comment occurs)
+;;; where a semicolon comment can only occur at the end of a line 
+;;; (because it comments out the rest of the line).
+ (defun add3 (n) #|(format t "~&Adding 3 to ~D." n)|# (+ n 3))
+
+;;; The examples that follow show issues related to #| ... |# nesting.
+
+;;; In this first example, #| and |# always occur properly paired,
+;;; so nesting works naturally.
+ (defun mention-fun-fact-1a ()
+   (format t "CL uses ; and #|...|# in comments."))
+@result{}  MENTION-FUN-FACT-1A
+ (mention-fun-fact-1a)
+@t{ |> } CL uses ; and #|...|# in comments.
+@result{}  NIL
+ #| (defun mention-fun-fact-1b ()
+      (format t "CL uses ; and #|...|# in comments.")) |#
+ (fboundp 'mention-fun-fact-1b) @result{}  NIL
+
+;;; In this example, vertical-bar followed by sharpsign needed to appear
+;;; in a string without any matching sharpsign followed by vertical-bar
+;;; having preceded this.  To compensate, the programmer has included a
+;;; slash separating the two characters.  In case 2a, the slash is 
+;;; unnecessary but harmless, but in case 2b, the slash is critical to
+;;; allowing the outer #| ... |# pair match.  If the slash were not present,
+;;; the outer comment would terminate prematurely.
+ (defun mention-fun-fact-2a ()
+   (format t "Don't use |\# unmatched or you'll get in trouble!"))
+@result{}  MENTION-FUN-FACT-2A
+ (mention-fun-fact-2a)
+@t{ |> } Don't use |# unmatched or you'll get in trouble!
+@result{}  NIL
+ #| (defun mention-fun-fact-2b ()
+      (format t "Don't use |\# unmatched or you'll get in trouble!") |#
+ (fboundp 'mention-fun-fact-2b) @result{}  NIL
+
+;;; In this example, the programmer attacks the mismatch problem in a
+;;; different way.  The sharpsign vertical bar in the comment is not needed
+;;; for the correct parsing of the program normally (as in case 3a), but 
+;;; becomes important to avoid premature termination of a comment when such 
+;;; a program is commented out (as in case 3b).
+ (defun mention-fun-fact-3a () ; #|
+   (format t "Don't use |# unmatched or you'll get in trouble!"))
+@result{}  MENTION-FUN-FACT-3A
+ (mention-fun-fact-3a)
+@t{ |> } Don't use |# unmatched or you'll get in trouble!
+@result{}  NIL
+ #|
+ (defun mention-fun-fact-3b () ; #|
+   (format t "Don't use |# unmatched or you'll get in trouble!"))
+ |#
+ (fboundp 'mention-fun-fact-3b) @result{}  NIL
+@end example
+
+@node Notes about Style for Sharpsign Vertical-Bar, Sharpsign Less-Than-Sign, Examples of Sharpsign Vertical-Bar, Sharpsign
+@subsubsection Notes about Style for Sharpsign Vertical-Bar
+
+Some text editors that purport to understand Lisp syntax treat any @t{|...|}
+as balanced pairs that cannot nest (as if they were just balanced pairs of 
+the multiple escapes used in notating certain symbols).  To compensate for 
+this deficiency, some programmers use the notation @t{#||...#||...||#...||#}
+instead of @t{#|...#|...|#...|#}.   Note that this alternate usage is not
+a different @i{reader macro}; it merely exploits the fact that the additional
+vertical-bars occur within the comment in a way that tricks certain text editor
+into better supporting nested comments.  As such, one might sometimes see code
+like:
+
+@example
+ #|| (+ #|| 3 ||# 4 5) ||# 
+@end example
+
+Such code is equivalent to:
+
+@example
+ #| (+ #| 3 |# 4 5) |#
+@end example
+
+@node Sharpsign Less-Than-Sign, Sharpsign Whitespace, Notes about Style for Sharpsign Vertical-Bar, Sharpsign
+@subsubsection Sharpsign Less-Than-Sign
+
+@t{#<} is not valid reader syntax.
+The @i{Lisp reader} will signal an error 
+
+of @i{type} @b{reader-error}
+
+on encountering @t{#<}.
+This syntax is typically used in the printed representation 
+of @i{objects} that cannot be read back in.  
+
+@node Sharpsign Whitespace, Sharpsign Right-Parenthesis, Sharpsign Less-Than-Sign, Sharpsign
+@subsubsection Sharpsign Whitespace
+
+@t{#} followed immediately by @i{whitespace}_1 is not valid reader syntax.
+The @i{Lisp reader} will signal an error of @i{type} @b{reader-error} if it
+encounters the reader macro notation @t{#<@i{Newline}>} or @t{#<@i{Space}>}.
+
+@node Sharpsign Right-Parenthesis,  , Sharpsign Whitespace, Sharpsign
+@subsubsection Sharpsign Right-Parenthesis
+
+This is not valid reader syntax.
+
+The @i{Lisp reader} will signal an error 
+
+of @i{type} @b{reader-error}
+
+upon encountering @t{#)}.
+
+@node Re-Reading Abbreviated Expressions,  , Sharpsign, Standard Macro Characters
+@subsection Re-Reading Abbreviated Expressions
+
+Note that the @i{Lisp reader} will 
+generally
+signal an error of @i{type} @b{reader-error}
+when reading an @i{expression}_2 that has been
+abbreviated because of length or level limits 
+(see @b{*print-level*},
+     @b{*print-length*},
+ and @b{*print-lines*})
+due to restrictions on ``@t{..}'', ``@t{...}'', ``@t{#}'' followed by @i{whitespace}_1,
+and ``@t{#)}''.
+
+@c end of including concept-macro-chars
+
+@c %**end of chapter
+
