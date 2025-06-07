@@ -38,6 +38,8 @@ There exist various solvers designed for nonlinear solid mechanics, computationa
 	git submodule update toolkit/Particles
 	git submodule update toolkit/NLA
 	git submodule update toolkit/PS
+	cd toolkit
+	git clone https://github.com/OpenDigitalTwin-Dev/MultiX.git
 ```
 
 Consequently, all the commands and the README.md files will be revised to be the rules and the notebooks in the Warp AI terminal.
