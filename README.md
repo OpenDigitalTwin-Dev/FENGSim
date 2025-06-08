@@ -60,6 +60,8 @@ We will utilize Warp alongside our SDK to accomplish the following tasks:
 
 # Solutions
 
+## General
+
 <div align="center">
 <img decoding="async" src="image/1.jpg" width="1800">
 </div>
