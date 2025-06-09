@@ -64,7 +64,7 @@ thermo_modify	temp new
 
 neigh_modify	exclude type 2 3
 
-#dump		1 all atom 500 dump.crack
+dump		1 all atom 500 dump.crack
 
 #dump		2 all image 250 image.*.jpg type type &
 #		zoom 1.6 adiam 1.5
