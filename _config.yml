@@ -1,2 +1,7 @@
 theme: jekyll-theme-time-machine
-exclude: toolkit
+exclude:
+  - toolkit
+  - starter
+  - framework
+  - cli
+  - image
