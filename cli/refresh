@@ -13,7 +13,7 @@ git pull origin main
 cd ..
 
 cd toolkit
-cd NSM
+cd MultiX
 git pull origin main
 cd ..
 
