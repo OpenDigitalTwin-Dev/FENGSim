@@ -5,9 +5,3 @@ exclude:
   - framework
   - cli
   - docs
-  - toolkit/CFD
-  - toolkit/CEM
-  - toolkit/DAE
-  - toolkit/Particles
-  - toolkit/NLA
-  - toolkit/PS
