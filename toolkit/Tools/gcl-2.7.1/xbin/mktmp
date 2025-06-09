@@ -1,3 +1,0 @@
-#!/bin/bash
-
-mktemp -p $(dirname $1) $(echo $(basename $1 | sed 's,\..*,,g'))XXXXXX

@@ -1,7 +1,0 @@
-
-dbl.el:   mode for source level  debugging lisp much like the authors gdb.el
-gcl.el:   mode for interacting with gcl
-sshell.el: old fashioned shell mode, used by dbl.el.   
-lisp-complete.el:  a history mechanism based on the prompt.
-
-
