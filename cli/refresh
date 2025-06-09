@@ -9,35 +9,43 @@ cd $homepath
 git pull origin main
 
 cd docs
+git checkout main
 git pull origin main
 cd ..
 
 cd toolkit
 cd MultiX
+git checkout main
 git pull origin main
 cd ..
 
 cd CFD
+git checkout main
 git pull origin main
 cd ..
 
 cd CEM
+git checkout main
 git pull origin main
 cd ..
 
 cd DAE
+git checkout main
 git pull origin main
 cd ..
 
 cd Particles
+git checkout main
 git pull origin main
 cd ..
 
 cd NLA
+git checkout main
 git pull origin main
 cd ..
 
 cd PS
+git checkout main
 git pull origin main
 cd ..
 
