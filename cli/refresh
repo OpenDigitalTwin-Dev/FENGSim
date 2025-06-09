@@ -40,3 +40,14 @@ cd ..
 cd PS
 git pull origin main
 cd ..
+
+cd ..
+git add docs
+git add toolkit/CFD
+git add toolkit/CEM
+git add toolkit/DAE
+git add toolkit/Particles
+git add toolkit/NLA
+git add toolkit/PS
+git commit -m 'update all submodules'
+git push origin main
