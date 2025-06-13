@@ -1,6 +1,13 @@
 theme: jekyll-theme-cayman
 show_downloads: true
 logo_url: ./image/Fengsim_logo_hi.png
+color:
+    gradient_left: "#155799"
+    gradient_right: "#159957"
+    header: "#fff"
+    android_theme: "#000" # this default to gradient_color
+    link: "#1e6bb8" # this default to gradient_color
+    section_title: "#155799" # this default to gradient_color
 exclude:
   - toolkit
   - starter
