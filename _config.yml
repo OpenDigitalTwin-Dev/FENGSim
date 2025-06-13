@@ -5,3 +5,4 @@ exclude:
   - framework
   - cli
   - docs
+show_downloads: true
