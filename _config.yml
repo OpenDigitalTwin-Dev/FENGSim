@@ -2,9 +2,9 @@ remote_theme: tuur29/pages-themes-cayman
 show_downloads: true
 color:
     header: "#000"	
-    gradient_left: "#0478e8"
-    gradient_right: "#bf8097"
-    section_title: "#0478e8" # this default to gradient_color
+    gradient_left: "#345980      "
+    gradient_right: "#ecf0fa      "
+    section_title: "#345980      " # this default to gradient_color
 logo_url: https://github.com/OpenDigitalTwin-Dev/FENGSim/blob/main/image/Fengsim_logo_hi.png	
 exclude:
   - toolkit
