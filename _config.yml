@@ -6,6 +6,7 @@ color:
     gradient_left: "#e53935"
     gradient_right: "#f57c00"
     section_title: "#e53935" # this default to gradient_color
+syntax_theme: https://stylishthemes.github.io/Syntax-Themes/pygments/css-github/pygments-monokai.css
 exclude:
   - toolkit
   - starter
