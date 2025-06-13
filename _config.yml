@@ -1,7 +1,7 @@
 remote_theme: tuur29/pages-themes-cayman
 show_downloads: true
 color:
-  header: "#000"
+  header: "#ffffff"
   gradient_left: "#e53935"
   gradient_right: "#f57c00"
 logo_url: https://github.com/OpenDigitalTwin-Dev/FENGSim/blob/main/image/Fengsim_logo_hi.png	
