@@ -2,12 +2,10 @@ remote_theme: tuur29/pages-themes-cayman
 show_downloads: true
 logo_url: ./image/Fengsim_logo_hi.png
 color:
-    gradient_left: "#e53935"	
+    header: "#000"	
+    gradient_left: "#e53935"
     gradient_right: "#f57c00"
-    header: "#fff"
-    android_theme: "#000" # this default to gradient_color
-    link: "#1e6bb8" # this default to gradient_color
-    section_title: "#155799" # this default to gradient_color
+    section_title: "#e53935" # this default to gradient_color
 exclude:
   - toolkit
   - starter
