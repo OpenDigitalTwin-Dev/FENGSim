@@ -3,10 +3,9 @@ show_downloads: true
 logo_url: https://github.com/OpenDigitalTwin-Dev/FENGSim/blob/main/image/Fengsim_logo_hi.png
 color:
     header: "#000"	
-    gradient_left: "#c3c7c6"
+    gradient_left: "#7697a0"
     gradient_right: "#ddded9"
-    section_title: "#c3c7c6" # this default to gradient_color
-syntax_theme: https://stylishthemes.github.io/Syntax-Themes/pygments/css-github/pygments-monokai.css
+    section_title: "#7697a0" # this default to gradient_color
 exclude:
   - toolkit
   - starter
