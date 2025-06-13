@@ -1,11 +1,11 @@
 remote_theme: tuur29/pages-themes-cayman
 show_downloads: true
-logo_url: https://github.com/OpenDigitalTwin-Dev/FENGSim/blob/main/image/Fengsim_logo_hi.png
 color:
     header: "#000"	
-    gradient_left: "#7697a0"
-    gradient_right: "#ddded9"
-    section_title: "#7697a0" # this default to gradient_color
+    gradient_left: "#283071      "
+    gradient_right: "#ffb43d      "
+    section_title: "#283071      " # this default to gradient_color
+logo_url: https://github.com/OpenDigitalTwin-Dev/FENGSim/blob/main/image/Fengsim_logo_hi.png	
 exclude:
   - toolkit
   - starter
