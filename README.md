@@ -31,7 +31,7 @@ To launch the Qt project for FENGSim:
 There exist various solvers designed for nonlinear solid mechanics, computational fluid dynamics, computational electrodynamics, differential algebraic equations, particle methods, numerical linear algebra, and probability and statistics. These solvers can be obtained from Git by following the provided instructions.
 
 ```shell
-	cd FENGSim/
+	cd FENGSim
 	git pull origin main
 	git submodule init
 	git submodule update docs
