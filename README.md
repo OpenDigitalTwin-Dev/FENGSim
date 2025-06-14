@@ -25,7 +25,7 @@ To launch the Qt project for FENGSim:
 ```
 
 <div align="center">
-<img decoding="async" src="/image/log/1.jpg" width="1000">
+<img decoding="async" src="image/log/1.jpg" width="1800">
 </div>
 
 There exist various solvers designed for nonlinear solid mechanics, computational fluid dynamics, computational electrodynamics, differential algebraic equations, particle methods, numerical linear algebra, and probability and statistics. These solvers can be obtained from Git by following the provided instructions.
@@ -56,7 +56,7 @@ We will utilize Warp alongside our SDK to accomplish the following tasks:
 4. Enhance automation for CAD design, model simplification, structural mesh generation, path planning, and inverse modeling.
 
 <div align="center">
-<img decoding="async" src="/image/warp.png" width="1800">
+<img decoding="async" src="image/warp.png" width="1800">
 </div>
 
 # [Docs](https://fengsim-docs.readthedocs.io)
