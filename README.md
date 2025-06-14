@@ -19,7 +19,7 @@ To install FENGSim on Ubuntu 24.04:
 ```
 To launch the Qt project for FENGSim:
 
-```
+```shell
 	cd FENGSim/cli
 	./qtcreator
 ```
