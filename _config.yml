@@ -5,7 +5,7 @@ color:
   gradient_left: "#ff8900"
   gradient_right: "#ff3100"
   section_title: "#000000"
-syntax_theme: https://stylishthemes.github.io/Syntax-Themes/pygments/css-github/pygments-monokai.css
+  link: "#ff3100"
 exclude:
   - toolkit
   - starter
