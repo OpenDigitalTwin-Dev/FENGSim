@@ -1,5 +1,5 @@
-![FENGSim](image/Fengsim_logo_hi_150.png)
-===================
+![FENGSim](image/Fengsim_logo_hi_100.png)
+============================================
 
 The FENGSim project serves as a software development kit (SDK) for high-fidelity manufacturing simulation and adaptive processing, integrating a variety of mathematical libraries such as computational geometry, computer algebra, numerical methods, numerical linear algebra, computer graphics, image processing, probability and statistics, optimization, and artificial intelligence. Central to the project are multi-x couplers tailored for intricate manufacturing applications. It also incorporates the CAX software framework along with practical examples.
 
@@ -19,10 +19,6 @@ To launch the Qt project for FENGSim:
 	cd FENGSim/cli
 	./qtcreator
 ```
-<div align="center">
-<img decoding="async" src="image/Fengsim_logo_hi.png" height="150">
-</div>
-
 <div align="center">
 <img decoding="async" src="image/log/1.jpg" width="1800">
 </div>
@@ -58,11 +54,14 @@ We will utilize Warp alongside our SDK to accomplish the following tasks:
 <img decoding="async" src="image/warp.png" width="1800">
 </div>
 
-# [Docs](https://fengsim-docs.readthedocs.io)
+[Docs](https://fengsim-docs.readthedocs.io)
+============================================
 
-# Solutions
+Solutions
+============================================
 
-## General
+General
+--------------------------------------------
 
 <div align="center">
 <img decoding="async" src="image/1.jpg" width="1800">
@@ -80,7 +79,8 @@ We will utilize Warp alongside our SDK to accomplish the following tasks:
 <img decoding="async" src="image/11.png" width="1800">
 </div>
 
-## Additive Manufacturing
+Additive Manufacturing
+--------------------------------------------
 
 <!--
 <div align="center">
@@ -92,7 +92,8 @@ We will utilize Warp alongside our SDK to accomplish the following tasks:
 </div>
 -->
 
-## Composite Materials
+Composite Materials
+--------------------------------------------
 
 <!--
 <div align="center">
@@ -106,7 +107,8 @@ We will utilize Warp alongside our SDK to accomplish the following tasks:
 </div>
 -->
 
-## Robotics
+Robotics
+--------------------------------------------
 
 <!--
 <div align="center">
@@ -114,7 +116,8 @@ We will utilize Warp alongside our SDK to accomplish the following tasks:
 </div>
 -->
 
-## Metrology
+Metrology
+--------------------------------------------
 
 <div align="center">
 <img decoding="async" src="image/8.jpg" width="1800">
