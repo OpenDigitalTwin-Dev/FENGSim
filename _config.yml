@@ -4,6 +4,7 @@ color:
   header: "#000000"
   gradient_left: "#ffff00"
   gradient_right: "#ff0000"
+  section_title: "#000000"
 exclude:
   - toolkit
   - starter
