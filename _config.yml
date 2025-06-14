@@ -4,7 +4,7 @@ color:
   header: "#ffffff"
   gradient_left: "#00C1D0"
   gradient_right: "#0A0F44"
-logo_url: ./image/Fengsim_logo_hi.png
+logo_url: ./image/Fengsim_bird_6464.png
 exclude:
   - toolkit
   - starter
