@@ -11,7 +11,7 @@ Moreover, FENGSim offers tools for managing library dependencies, package manage
 
 To install FENGSim on Ubuntu 24.04:
 
-```
+```shell
 	sudo apt install git
 	git clone https://github.com/OpenDigitalTwin-Dev/FENGSim.git
 	cd FENGSim/cli
@@ -30,7 +30,7 @@ To launch the Qt project for FENGSim:
 
 There exist various solvers designed for nonlinear solid mechanics, computational fluid dynamics, computational electrodynamics, differential algebraic equations, particle methods, numerical linear algebra, and probability and statistics. These solvers can be obtained from Git by following the provided instructions.
 
-```
+```shell
 	cd FENGSim/
 	git pull origin main
 	git submodule init
