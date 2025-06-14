@@ -1,4 +1,4 @@
-remote_theme: pages-themes/cayman@v0.2.0
+remote_theme: tuur29/pages-themes-cayman
 show_downloads: true
 color:
   header: "#ffffff"
