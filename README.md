@@ -19,7 +19,7 @@ To launch the Qt project for FENGSim:
 	./qtcreator
 ```
 <div align="center">
-<img decoding="async" src="image/Fengsim_logo_hi.png" height="200">
+<img decoding="async" src="image/Fengsim_logo_hi.png" height="150">
 </div>
 
 <div align="center">
