@@ -5,6 +5,7 @@ color:
   gradient_left: "#FF0000"
   gradient_right: "#000000"
   section_title: "#000000"
+  link: "#ff3100"
 exclude:
   - toolkit
   - starter
