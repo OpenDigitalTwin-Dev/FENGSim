@@ -1,9 +1,9 @@
 show_downloads: true
 remote_theme: tuur29/pages-themes-cayman
 color:
-  header: "#FFFFFF"
-  gradient_left: "#f11712"
-  gradient_right: "#190a05"
+  header: "#000000"
+  gradient_left: "#8e9eab"
+  gradient_right: "#eef2f3"
   section_title: "#000000"
   link: "#ff3100"
 exclude:
