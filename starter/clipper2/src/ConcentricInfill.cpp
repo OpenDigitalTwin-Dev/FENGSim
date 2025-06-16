@@ -11,13 +11,21 @@
 //#include "../../../toolkit/Geometry/clipper2/CPP/Utils/clipper.svg.utils.h"
 //#include "Utils/clipper.svg.utils.h"
 
+#include <vtkSmartPointer.h>
+#include <vtkPoints.h>
+#include <vtkCellArray.h>
+#include <vtkPolyData.h>
+#include <vtkPolyDataWriter.h>
+#include <vtkPolygon.h>
+
+
 using namespace Clipper2Lib;
 
 void DoSimpleTest(bool show_solution_coords = false);
 Path64 MakeRandomPoly(int width, int height, unsigned vertCnt);
 void System(const std::string &filename);
 Paths64 readInPolygon();
-
+void ExportPathsToVTK(const Clipper2Lib::Paths64& paths, const std::string& filename);
 
 int main()
 {  
@@ -119,11 +127,12 @@ void DoSimpleTest(bool show_solution_coords)
   SvgAddSubject(svg, subject, fr);
 
   //SvgAddClip(svg, clip, fr);
-
-
   SvgAddSolution(svg, solution, fr, false);
   SvgSaveToFile(svg, "solution.svg", 450, 450, 10);
   //System("solution.svg");
+
+  ExportPathsToVTK(solution, "solution.vtk");
+
 }
 
 
@@ -158,6 +167,52 @@ Paths64 ConcentricInfill(const Paths64& subject)
   clip.Execute(ClipType::Union, FillRule::NonZero, solution);
   return solution;
 }
+
+
+void ExportPathsToVTK(const Clipper2Lib::Paths64& paths, const std::string& filename) {
+    // 创建VTK数据结构
+    auto points = vtkSmartPointer<vtkPoints>::New();
+    auto polygons = vtkSmartPointer<vtkCellArray>::New();
+    
+    // 填充点数clipper2 生成的Paths64 导入vtk库 ,输出为vtk文件据
+    /* vtkIdType pointId = 0;
+    for (const auto& path : paths) {
+        auto polygon = vtkSmartPointer<vtkPolygon>::New();
+        polygon->GetPointIds()->SetNumberOfIds(path.size());
+        
+        for (size_t i = 0; i < path.size(); ++i) {
+            points->InsertNextPoint(path[i].x, path[i].y, 0.0);
+            polygon->GetPointIds()->SetId(i, pointId++);
+        }
+        
+        polygons->InsertNextCell(polygon);
+    } */
+    
+    // 填充点和多边形
+    for (const auto& path : paths) {
+        vtkIdType npts = static_cast<vtkIdType>(path.size());
+        polygons->InsertNextCell(npts);
+
+        for (size_t i = 0; i < path.size(); ++i) {
+            double point[3] = {static_cast<double>(path[i].x),
+                               static_cast<double>(path[i].y), 0.0};
+            vtkIdType pointId = points->InsertNextPoint(point);
+            polygons->InsertCellPoint(pointId);
+        }
+    }
+
+    // 创建PolyData
+    auto polyData = vtkSmartPointer<vtkPolyData>::New();
+    polyData->SetPoints(points);
+    polyData->SetPolys(polygons);
+    
+    // 写入文件
+    auto writer = vtkSmartPointer<vtkPolyDataWriter>::New();
+    writer->SetFileName(filename.c_str());
+    writer->SetInputData(polyData);
+    writer->Write();
+}
+
 
 
 void System(const std::string &filename)

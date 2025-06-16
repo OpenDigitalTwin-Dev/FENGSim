@@ -10,7 +10,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 list(APPEND CMAKE_PREFIX_PATH 
     "../../toolkit/Geometry/install/clipper2_install/lib/cmake/clipper2"
     "../../toolkit/Geometry/install/clipper2_install/lib/cmake/clipper2utils"
+    "../../toolkit/Geometry/install/vtk_install/lib/cmake/vtk-8.1"
 )
+
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/lib)
+
 #set(CMAKE_PREFIX_PATH "../../toolkit/Geometry/install/clipper2_install/lib/cmake/clipper2")
 
 #find_package(Clipper2 REQUIRED)
@@ -61,10 +66,29 @@ else()
   message(FATAL_ERROR "Clipper2Utils not found!")
 endif()
 
+# 查找VTK库
+find_package(VTK REQUIRED)
+if(VTK_FOUND)
+  message(STATUS "VTK_INCLUDE_DIRS" ${VTK_INCLUDE_DIRS})
+  message(STATUS "VTK_LIBRARY_DIRS" ${VTK_LIBRARY_DIRS})
+  message(STATUS "VTK_LIBRARIES" ${VTK_LIBRARIES})
+else()
+  message(FATAL_ERROR "VTK not found!")
+endif()
+
+include(${VTK_USE_FILE})
+
 
 #include_directories(${Clipper2_INCLUDE_DIRS} ${PROJECT_SOURCE_DIR}/Utils)
 #link_directories(${Clipper2_LIBRARIES})
-include_directories(Utils)
+include_directories(Utils ${VTK_INCLUDE_DIRS})
 
 add_executable(ConcentricInfill src/ConcentricInfill.cpp ${CLIPPER2_UTILS_INC} ${CLIPPER2_UTILS_SRC} )
-target_link_libraries(ConcentricInfill PRIVATE Clipper2::Clipper2)
+target_link_libraries(ConcentricInfill PRIVATE Clipper2::Clipper2 ${VTK_LIBRARIES})
+
+# 安装规则
+install(TARGETS ${PROJECT_NAME}
+    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+)
