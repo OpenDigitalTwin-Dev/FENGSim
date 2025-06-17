@@ -52,11 +52,17 @@
         <Attributes>5</Attributes>
         <Permeability>1</Permeability>
 	<CurrentIntensity>3000</CurrentIntensity>
+	<Position>0,10,0</Position>
+	<Angle>0</Angle>
+	<Axis>0,0,1</Axis>
       </part_5>
       <part_6>
         <Attributes>6</Attributes>
         <Permeability>1</Permeability>
 	<CurrentIntensity>3000</CurrentIntensity>
+	<Position>0,-10,0</Position>
+	<Angle>0</Angle>
+	<Axis>0,0,1</Axis>
       </part_6>
       <part_7>
         <Attributes>7</Attributes>
