@@ -43,16 +43,31 @@
     </Traction_BC>
   </BODY_0>
   
-
-
+  
+  
   <Electromagnetism>
     <Problem>Magnetostatic</Problem>
     <Materials>
+      <part_1>
+        <Attributes>1</Attributes>
+        <Permeability>1</Permeability>
+      </part_1>
+      <part_2>
+        <Attributes>2</Attributes>
+        <Permeability>1</Permeability>
+      </part_2>
+      <part_3>
+        <Attributes>3</Attributes>
+        <Permeability>1</Permeability>
+      </part_3>
+      <part_4>
+        <Attributes>4</Attributes>
+        <Permeability>1</Permeability>
+      </part_4>
       <part_5>
         <Attributes>5</Attributes>
         <Permeability>1</Permeability>
 	<CurrentIntensity>3000</CurrentIntensity>
-	<Position>0,10,0</Position>
 	<Angle>0</Angle>
 	<Axis>0,0,1</Axis>
       </part_5>
@@ -60,8 +75,7 @@
         <Attributes>6</Attributes>
         <Permeability>1</Permeability>
 	<CurrentIntensity>3000</CurrentIntensity>
-	<Position>0,-10,0</Position>
-	<Angle>0</Angle>
+	<Angle>180</Angle>
 	<Axis>0,0,1</Axis>
       </part_6>
       <part_7>
@@ -70,11 +84,11 @@
       </part_7>
     </Materials>
   </Electromagnetism>
+  
 
-
-
-
-
+  
+  
+  
   
   
   
