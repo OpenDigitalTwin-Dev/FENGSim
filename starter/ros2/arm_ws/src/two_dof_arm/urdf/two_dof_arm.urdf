@@ -1,0 +1,106 @@
+<?xml version="1.0"?>
+<robot name="two_dof_arm">
+  
+  <!-- Base Link  -->
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <cylinder length="0.1" radius="0.1"/>
+      </geometry>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <material name="blue">
+        <color rgba="0 0 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <cylinder length="0.1" radius="0.1"/>
+      </geometry>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+    </collision>
+  </link>
+
+  <!-- Joint 1 -->
+  <joint name="joint1" type="revolute">
+    <parent link="base_link"/>
+    <child link="link1"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-3.14159" upper="3.14159" effort="10" velocity="1"/>
+  </joint>
+
+  <!-- Link 1 -->
+  <link name="link1">
+    <visual>
+      <geometry>
+        <box size="1.0 0.05 0.05"/>
+      </geometry>
+      <origin xyz="0.5 0 0" rpy="0 0 0"/>
+      <material name="red">
+        <color rgba="1 0 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="1.0 0.05 0.05"/>
+      </geometry>
+      <origin xyz="0.5 0 0" rpy="0 0 0"/>
+    </collision>
+  </link>
+
+  <!-- Joint 2  -->
+  <joint name="joint2" type="revolute">
+    <parent link="link1"/>
+    <child link="link2"/>
+    <origin xyz="1.0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-3.14159" upper="3.14159" effort="10" velocity="1"/>
+  </joint>
+
+  <!-- Link 2-->
+  <link name="link2">
+    <visual>
+      <geometry>
+        <box size="0.8 0.05 0.05"/>
+      </geometry>
+      <origin xyz="0.4 0 0" rpy="0 0 0"/>
+      <material name="green">
+        <color rgba="0 1 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="0.8 0.05 0.05"/>
+      </geometry>
+      <origin xyz="0.4 0 0" rpy="0 0 0"/>
+    </collision>
+  </link>
+
+  <!-- End Effector -->
+  <joint name="joint_ee" type="fixed">
+    <parent link="link2"/>
+    <child link="end_effector"/>
+    <origin xyz="0.8 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="end_effector">
+    <visual>
+      <geometry>
+        <sphere radius="0.05"/>
+      </geometry>
+      <material name="yellow">
+        <color rgba="1 1 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <sphere radius="0.05"/>
+      </geometry>
+    </collision>
+  </link>
+
+</robot>
+
+
+
+
