@@ -42,12 +42,16 @@
       <load_nodes>ESCAAS_TIMEFUNCTION_LINEAR,5, 0, 0, 0, 0, 0, -300</load_nodes>
     </Traction_BC>
   </BODY_0>
-  
-  
+
+
   
   <Electromagnetism>
     <Problem>Magnetostatic</Problem>
     <Materials>
+      <part_0>
+        <Attributes>0</Attributes>
+        <Permeability>1</Permeability>
+      </part_0>
       <part_1>
         <Attributes>1</Attributes>
         <Permeability>1</Permeability>
@@ -58,45 +62,42 @@
       </part_2>
       <part_3>
         <Attributes>3</Attributes>
-        <Permeability>1</Permeability>
+        <Permeability>-1</Permeability>
       </part_3>
       <part_4>
         <Attributes>4</Attributes>
-        <Permeability>1</Permeability>
+        <Permeability>-1</Permeability>
       </part_4>
       <part_5>
         <Attributes>5</Attributes>
         <Permeability>1</Permeability>
-	<CurrentIntensity>3000</CurrentIntensity>
-	<Position>0,0,0</Position>
-	<Direction>0,0,1</Direction>
       </part_5>
       <part_6>
         <Attributes>6</Attributes>
         <Permeability>1</Permeability>
-	<CurrentIntensity>3000</CurrentIntensity>
-	<Position>0,0,0</Position>
-	<Direction>0,0,1</Direction>
       </part_6>
       <part_7>
         <Attributes>7</Attributes>
         <Permeability>1</Permeability>
       </part_7>
     </Materials>
+    <Coils>
+      <part_5>
+	<Attributes>5</Attributes>
+      	<CurrentIntensity>3000</CurrentIntensity>
+	<Size>0.015,0.015</Size>
+	<Position>0,0,0</Position>
+	<DirectionA>1,0,0</DirectionA>
+	<DirectionB>0,0,1</DirectionB>
+      </part_5>
+      <part_6>
+	<Attributes>6</Attributes>
+      	<CurrentIntensity>3000</CurrentIntensity>
+	<Size>0.015,0.015</Size>
+	<Position>0,0,0</Position>
+	<DirectionA>1,0,0</DirectionA>
+	<DirectionB>0,0,1</DirectionB>
+      </part_6>
+    </Coils>
   </Electromagnetism>
-  
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
 </ESCAAS>
