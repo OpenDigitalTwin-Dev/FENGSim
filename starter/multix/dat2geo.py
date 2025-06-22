@@ -35,19 +35,19 @@ for i in range(0,n) :
     line = f1.readline()
     line = line[:-1]
     values_point = re.split(' ',line)
-    vertices.append(float(values_point[0]))
     vertices.append(float(values_point[1]))
     vertices.append(float(values_point[2]))
+    vertices.append(float(values_point[3]))
 
 for i in range(0,m) :
     line = f1.readline()
     line = line[:-1]
     values_point = re.split(' ',line)
     elements.append(0)
-    elements.append(int(values_point[0]))
-    elements.append(int(values_point[1]))
-    elements.append(int(values_point[2]))
-    elements.append(int(values_point[3]))
+    elements.append(int(values_point[1])-1)
+    elements.append(int(values_point[2])-1)
+    elements.append(int(values_point[3])-1)
+    elements.append(int(values_point[4])-1)
 
 f1 = open(dat_file_name, 'r')
 lines = f1.readlines()
