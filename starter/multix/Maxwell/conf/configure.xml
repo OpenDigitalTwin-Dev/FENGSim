@@ -85,7 +85,7 @@
       <part_5>
 	<Attributes>5</Attributes>
       	<CurrentIntensity>3000</CurrentIntensity>
-	<Size>0.015,0.015</Size>
+	<Geom>0.015,0.015,0.020,0.017</Geom>
 	<Position>0,0,0</Position>
 	<DirectionA>1,0,0</DirectionA>
 	<DirectionB>0,0,1</DirectionB>
@@ -93,7 +93,7 @@
       <part_6>
 	<Attributes>6</Attributes>
       	<CurrentIntensity>3000</CurrentIntensity>
-	<Size>0.015,0.015</Size>
+	<Geom>0.015,0.015,0.020,0.017</Geom>
 	<Position>0,0,0</Position>
 	<DirectionA>1,0,0</DirectionA>
 	<DirectionB>0,0,1</DirectionB>
