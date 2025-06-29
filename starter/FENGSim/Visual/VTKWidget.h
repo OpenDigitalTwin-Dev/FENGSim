@@ -419,6 +419,35 @@ private:
     vtkSmartPointer<vtkActor> mbd_simulation_actor_2;
     vtkSmartPointer<vtkActor> mbd_simulation_actor_3;
     vtkSmartPointer<vtkActor> mbd_simulation_actor_4;
+    vtkSmartPointer<vtkActor> mbd_simulation_actor_5;
+    vtkSmartPointer<vtkSTLReader> reader1 = vtkSmartPointer<vtkSTLReader>::New();
+    vtkSmartPointer<vtkSTLReader> reader2 = vtkSmartPointer<vtkSTLReader>::New();
+    vtkSmartPointer<vtkSTLReader> reader3 = vtkSmartPointer<vtkSTLReader>::New();
+    vtkSmartPointer<vtkSTLReader> reader4 = vtkSmartPointer<vtkSTLReader>::New();
+    vtkSmartPointer<vtkSTLReader> reader5 = vtkSmartPointer<vtkSTLReader>::New();
+    vtkNew<vtkTransformFilter> transformFilter1;
+    vtkNew<vtkTransformFilter> transformFilter2;
+    vtkNew<vtkTransformFilter> transformFilter3;
+    vtkNew<vtkTransformFilter> transformFilter4;
+    vtkNew<vtkTransformFilter> transformFilter5;
+    vtkNew<vtkPolyDataMapper> mapper1;
+    vtkNew<vtkPolyDataMapper> mapper2;
+    vtkNew<vtkPolyDataMapper> mapper3;
+    vtkNew<vtkPolyDataMapper> mapper4;
+    vtkNew<vtkPolyDataMapper> mapper5;
+public:
+    void mbdmodel () {
+        reader1->SetFileName("data/robot/stage.stl");
+        reader1->Update();
+        reader2->SetFileName("data/robot/upper.stl");
+        reader2->Update();
+        reader3->SetFileName("data/robot/down.stl");
+        reader3->Update();
+        reader4->SetFileName("data/robot/wrist.stl");
+        reader4->Update();
+        reader5->SetFileName("data/robot/hand.stl");
+        reader5->Update();
+    }
 public:
     void mbdImportResults (int n, QString file_name);
 

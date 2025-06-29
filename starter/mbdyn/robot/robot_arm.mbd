@@ -14,7 +14,7 @@ begin: initial value;
    initial time:   0.;
    final time:     10.;
    time step:      1.e-3;
-   max iterations: 10;
+   max iterations: 100;
    tolerance:      1.e-6;
 end: initial value;
 
@@ -40,10 +40,10 @@ set: real M_LowerArm = 1.; #[kg] Mass of Lower Arm
 set: real M_Wrist    = 0.1; #[kg] Mass of Wrist
 set: real M_Hand     = 0.2; #[kg] Mass of Hand
 
-set: real H_Stage    = 1.; #[m] Height of Stage
-set: real L_UpperArm = 1.; #[m] Length of Upper Arm
-set: real L_LowerArm = 1.; #[m] Length of Lower Arm
-set: real L_Hand     = 0.2; #[m] Length of Hand
+set: real H_Stage    = 0.1518; #[m] Height of Stage
+set: real L_UpperArm = 0.2435; #[m] Length of Upper Arm
+set: real L_LowerArm = 0.2132; #[m] Length of Lower Arm
+set: real L_Hand     = 0.08535; #[m] Length of Hand
 
 set: real R_UpperArm = 0.05; #[m] Radius of Upper Arm
 set: real R_LowerArm = 0.05; #[m] Radius of Lower Arm
@@ -190,7 +190,7 @@ reference: Ref_JoRevh_LowerArm_Wrist,
    null;                                  # absolute angular velocity
 
 reference: Ref_JoRevh_Wrist_Hand,
-   0., 0., H_Stage+L_UpperArm+L_LowerArm, # absolute position
+   0., 0.11040, H_Stage+L_UpperArm+L_LowerArm, # absolute position
    eye,                                   # absolute orientation
    null,                                  # absolute velocity
    null;                                  # absolute angular velocity
@@ -321,7 +321,7 @@ begin: elements;
          orientation constraint,
             inactive, inactive, active,
          single, 0., 0., 1., scalar function, "Fun_Motor_JoTotp_Stage";
-         
+
    joint: JoTotj_Stage_UpperArm,
       total joint,
          Node_Stage,
@@ -336,7 +336,7 @@ begin: elements;
          orientation constraint,
             inactive, inactive, active,
          single, 0., 0., 1., scalar function, "Fun_Motor_JoTotj_Stage_UpperArm";
-         
+
    joint: JoTotj_UpperArm_LowerArm,
       total joint,
          Node_UpperArm,
@@ -366,7 +366,7 @@ begin: elements;
          orientation constraint,
             inactive, inactive, active,
          single, 0., 0., 1., scalar function, "Fun_Motor_JoTotj_LowerArm_Wrist";
-         
+
    joint: JoTotj_Wrist_Hand,
       total joint,
          Node_Wrist,
@@ -381,7 +381,7 @@ begin: elements;
          orientation constraint,
             inactive, inactive, active,
          single, 0., 0., 1., scalar function, "Fun_Motor_JoTotj_Wrist_Hand";
-   
+	 
    #-----------------------------------------------------------------------------
    # Gravity         
    gravity: 0., 0., -1., const, 9.81;

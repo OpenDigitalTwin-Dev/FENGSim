@@ -409,18 +409,21 @@ public slots:
 private:
     int mbd_time_sum = 5005;
     int mbd_time_step = 0;
+    int mbd_speed = 0;
     QTimer* mbd_timer =  new QTimer;
     QString mbd_file_name;
 public slots:
     void mbdOpenFile ();
     void mbdImportResults () {
-        if (mbd_time_step > mbd_time_sum) {
+        if (mbd_time_step*5 > mbd_time_sum) {
             mbd_time_step = 0;
+            mbd_speed = 0;
             return;
         }
-        std::cout << mbd_file_name.toStdString() << std::endl;
         vtk_widget->mbdImportResults(mbd_time_step,mbd_file_name);
-        mbd_time_step++;
+        mbd_speed++;
+        //mbd_time_step++;
+        mbd_time_step = mbd_speed * 10;
         mbd_timer->singleShot(1, this, SLOT(mbdImportResults()));
     }
 

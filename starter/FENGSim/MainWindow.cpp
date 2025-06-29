@@ -3556,6 +3556,7 @@ void  MainWindow::mbdOpenFile () {
     mbd_file_name = QFileDialog::getOpenFileName(this,tr("Open File"),"../../starter/mbdyn",
                                                  tr("MBD Files (*.mov)")
                                                  , 0 , QFileDialog::DontUseNativeDialog);
+    vtk_widget->mbdmodel();
 }
 // *******************************************************
 // *******************************************************
