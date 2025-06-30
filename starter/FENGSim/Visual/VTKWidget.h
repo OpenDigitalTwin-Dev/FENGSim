@@ -437,15 +437,15 @@ private:
     vtkNew<vtkPolyDataMapper> mapper5;
 public:
     void mbdmodel () {
-        reader1->SetFileName("data/robot/stage.stl");
+        reader1->SetFileName("../mbdyn/robot/stage.stl");
         reader1->Update();
-        reader2->SetFileName("data/robot/upper.stl");
+        reader2->SetFileName("../mbdyn/robot/upper.stl");
         reader2->Update();
-        reader3->SetFileName("data/robot/down.stl");
+        reader3->SetFileName("../mbdyn/robot/down.stl");
         reader3->Update();
-        reader4->SetFileName("data/robot/wrist.stl");
+        reader4->SetFileName("../mbdyn/robot/wrist.stl");
         reader4->Update();
-        reader5->SetFileName("data/robot/hand.stl");
+        reader5->SetFileName("../mbdyn/robot/hand.stl");
         reader5->Update();
     }
 public:
