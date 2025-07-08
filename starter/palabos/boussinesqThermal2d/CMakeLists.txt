@@ -124,12 +124,12 @@ endif()
 # Palabos Library
 ###############################################################################
 
-include_directories("../../../src")
-include_directories("../../../externalLibraries")
-include_directories("../../../externalLibraries/Eigen3")
+include_directories("../../../toolkit/Particles/palabos/src")
+include_directories("../../../toolkit/Particles/palabos/externalLibraries")
+include_directories("../../../toolkit/Particles/palabos/externalLibraries/Eigen3")
 
-file(GLOB_RECURSE PALABOS_SRC "../../../src/*.cpp")
-file(GLOB_RECURSE EXT_SRC "../../../externalLibraries/tinyxml/*.cpp")
+file(GLOB_RECURSE PALABOS_SRC "../../../toolkit/Particles/palabos/src/*.cpp")
+file(GLOB_RECURSE EXT_SRC "../../../toolkit/Particles/palabos/externalLibraries/tinyxml/*.cpp")
 
 add_library(palabos STATIC ${PALABOS_SRC} ${EXT_SRC})
 
