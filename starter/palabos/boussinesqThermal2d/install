@@ -1,0 +1,5 @@
+mkdir build
+mkdir tmp
+cd build
+cmake ..
+make -j4
