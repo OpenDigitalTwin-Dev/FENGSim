@@ -1,0 +1,9 @@
+Ra:100; Pr:1
+At time 0
+average=1.00015; stdDev/average=0.000824628
+Intermediate convergence.
+At time 20
+average=1; stdDev/average=6.61419e-08
+Simulation is over.
+N=50
+total iterations: 15800
