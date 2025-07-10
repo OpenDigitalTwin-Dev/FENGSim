@@ -1,0 +1,2 @@
+export LD_LIBRARY_PATH=$PWD/../../../toolkit/Geometry/install/vtk_install/lib:$LD_LIBRARY_PATH
+./../../../toolkit/Particles/install/liggghts_install/bin/liggghts < in.chute_wear
