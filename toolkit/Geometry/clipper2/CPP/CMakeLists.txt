@@ -108,20 +108,22 @@ set_target_properties(${CLIPPER2_LIBS} PROPERTIES FOLDER Libraries
                                          SOVERSION ${PROJECT_VERSION_MAJOR}
                                          PUBLIC_HEADER "${CLIPPER2_INC}"
 )
+set(CLIPPER2_UTILS_INC_FOLDER ${PROJECT_SOURCE_DIR}/Utils)
+
 
 if(CLIPPER2_UTILS OR CLIPPER2_TESTS OR CLIPPER2_EXAMPLES)
   set(CLIPPER2_UTILS_INC
-    Utils/clipper.svg.h
-    Utils/ClipFileLoad.h
-    Utils/ClipFileSave.h
-    Utils/Timer.h
-    Utils/Colors.h
-    Utils/CommonUtils.h
+    ${CLIPPER2_UTILS_INC_FOLDER}/clipper.svg.h
+    ${CLIPPER2_UTILS_INC_FOLDER}/ClipFileLoad.h
+    ${CLIPPER2_UTILS_INC_FOLDER}/ClipFileSave.h
+    ${CLIPPER2_UTILS_INC_FOLDER}/Timer.h
+    ${CLIPPER2_UTILS_INC_FOLDER}/Colors.h
+    ${CLIPPER2_UTILS_INC_FOLDER}/CommonUtils.h
   )
   set(CLIPPER2_UTILS_SRC
-    Utils/clipper.svg.cpp
-    Utils/ClipFileLoad.cpp
-    Utils/ClipFileSave.cpp
+    ${CLIPPER2_UTILS_INC_FOLDER}/clipper.svg.cpp
+    ${CLIPPER2_UTILS_INC_FOLDER}/ClipFileLoad.cpp
+    ${CLIPPER2_UTILS_INC_FOLDER}/ClipFileSave.cpp
   )
   set(CLIPPER2_UTILS "") # one or both of Clipper2utils/Clipper2Zutils
 
@@ -130,9 +132,12 @@ if(CLIPPER2_UTILS OR CLIPPER2_TESTS OR CLIPPER2_EXAMPLES)
     add_library(Clipper2utils STATIC ${CLIPPER2_UTILS_INC} ${CLIPPER2_UTILS_SRC})
 
     target_link_libraries(Clipper2utils PUBLIC Clipper2)
-    target_include_directories(Clipper2utils
-      PUBLIC Utils
+    target_include_directories(Clipper2utils PUBLIC
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Utils>
+      $<INSTALL_INTERFACE:include>
     )
+
+
   endif()
 
   if (NOT (CLIPPER2_USINGZ STREQUAL "OFF"))
@@ -140,8 +145,9 @@ if(CLIPPER2_UTILS OR CLIPPER2_TESTS OR CLIPPER2_EXAMPLES)
     add_library(Clipper2Zutils STATIC ${CLIPPER2_UTILS_INC} ${CLIPPER2_UTILS_SRC})
 
     target_link_libraries(Clipper2Zutils PUBLIC Clipper2Z)
-    target_include_directories(Clipper2Zutils
-      PUBLIC Utils
+    target_include_directories(Clipper2Zutils PUBLIC
+      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/Utils>
+      $<INSTALL_INTERFACE:include>
     )
   endif()
 
@@ -162,6 +168,7 @@ if(CLIPPER2_EXAMPLES)
   if (NOT (CLIPPER2_USINGZ STREQUAL "ONLY"))
     set(EXAMPLES
       Benchmarks
+      ConcentricInfill
       Inflate
       MemLeakTest
       PolygonSamples
@@ -351,3 +358,105 @@ install(
 # disable exceptions
 #string(REGEX REPLACE "/W[3|4]" "/w" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 #add_definitions(-D_HAS_EXCEPTIONS=0) # for STL
+# 导出 Clipper2utils 目标到单独的文件
+
+#message(STATUS "CLIPPER2_UTILS is" ${CLIPPER2_UTILS})
+
+# 导出 Clipper2utils 并指定导出目标名
+# export(TARGETS Clipper2utils
+#     FILE "${PROJECT_BINARY_DIR}/Clipper2UtilsTargets.cmake"
+#     NAMESPACE Clipper2::)  
+
+# 导出 Clipper2Zutils 并指定导出目标名
+# if (TARGET Clipper2Zutils)
+#     export(TARGETS Clipper2Zutils
+#         FILE "${PROJECT_BINARY_DIR}/Clipper2ZUtilsTargets.cmake"
+#         NAMESPACE Clipper2::)  
+# endif()
+
+
+
+write_basic_package_version_file(
+    "${PROJECT_BINARY_DIR}/Clipper2UtilsConfigVersion.cmake"
+    #VERSION ${PROJECT_VERSION}
+    COMPATIBILITY SameMajorVersion)
+
+configure_package_config_file(
+    "Clipper2UtilsConfig.cmake.in"
+    "${PROJECT_BINARY_DIR}/Clipper2UtilsConfig.cmake"
+    INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/clipper2utils)
+
+export(TARGETS ${CLIPPER2_UTILS} FILE "${PROJECT_BINARY_DIR}/Clipper2UtilsTargets.cmake")
+
+
+# installation
+install(TARGETS ${CLIPPER2_UTILS} EXPORT Clipper2Utils-targets
+        PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/clipper2utils
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+message(STATUS "Installing utils: ${CLIPPER2_UTILS}")
+
+
+
+
+install(
+    FILES 
+        ${PROJECT_BINARY_DIR}/Clipper2UtilsConfig.cmake 
+        ${PROJECT_BINARY_DIR}/Clipper2UtilsConfigVersion.cmake 
+    DESTINATION 
+        ${CMAKE_INSTALL_LIBDIR}/cmake/clipper2utils
+)
+
+install(
+    EXPORT 
+        Clipper2Utils-targets
+    NAMESPACE 
+        Clipper2::
+    FILE 
+        Clipper2UtilsTargets.cmake 
+    DESTINATION 
+        ${CMAKE_INSTALL_LIBDIR}/cmake/clipper2utils
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# # 安装配置文件
+# install(FILES
+#     "${PROJECT_BINARY_DIR}/Clipper2UtilsConfig.cmake"
+#     "${PROJECT_BINARY_DIR}/Clipper2UtilsConfigVersion.cmake"
+#     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/clipper2utils")    
+
+# install(EXPORT Clipper2utils-targets
+#     FILE Clipper2UtilsTargets.cmake
+#     NAMESPACE Clipper2::
+#     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/clipper2utils")
+
+# if (TARGET Clipper2Zutils)
+#     install(EXPORT Clipper2Zutils-targets
+#         FILE Clipper2ZUtilsTargets.cmake
+#         NAMESPACE Clipper2::
+#         DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/clipper2utils")
+# endif()
+
+
+# install(TARGETS ${CLIPPER2_UTILS}
+#     ARCHIVE DESTINATION lib
+#     LIBRARY DESTINATION lib
+#     RUNTIME DESTINATION bin
+#     PUBLIC_HEADER DESTINATION include/clipper2/utils)
