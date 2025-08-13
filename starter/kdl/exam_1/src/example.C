@@ -1,0 +1,115 @@
+// Copyright  (C)  2007  Francois Cauwe <francois at cauwe dot org>
+ 
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+ 
+#include <kdl/chain.hpp>
+#include <kdl/chainfksolver.hpp>
+#include <kdl/chainfksolverpos_recursive.hpp>
+#include <kdl/frames_io.hpp>
+#include <stdio.h>
+#include <iostream>
+
+#include <kdl/chainiksolver.hpp>
+#include <kdl/chainiksolverpos_lma.hpp>
+
+ 
+using namespace KDL;
+ 
+ 
+int main( int argc, char** argv )
+{
+    //Definition of a kinematic chain & add segments to the chain
+    KDL::Chain chain;
+    chain.addSegment(Segment(Joint(Joint::RotZ),Frame(Vector(0.0,0.0,0.1518))));
+    chain.addSegment(Segment(Joint(Joint::RotX),Frame(Vector(0.0,0.0,0.2435))));
+    chain.addSegment(Segment(Joint(Joint::RotX),Frame(Vector(0.0,0.0,0.2132))));
+    chain.addSegment(Segment(Joint(Joint::RotX)));
+    chain.addSegment(Segment(Joint(Joint::RotZ)));
+    chain.addSegment(Segment(Joint(Joint::RotZ),Frame(Vector(0.0,0.0,0.2132))));
+				    
+    // Create solver based on inverse kinematic chain
+    ChainIkSolverPos_LMA iksolver(chain);
+
+    KDL::Frame desired_pose(
+	KDL::Rotation::RPY(0, 0, 0),  // Orientation (roll, pitch, yaw)
+        KDL::Vector(0.2, 0.2, 0.2)    // Position (x, y, z)
+    );
+
+    KDL::JntArray joint_init(chain.getNrOfJoints());
+    for (unsigned int i = 0; i < joint_init.rows(); ++i) {
+        joint_init(i) = 0.0;  // Initialize to zero or another reasonable guess
+    }
+    
+    unsigned int nj = chain.getNrOfJoints();
+    KDL::JntArray joint_result = JntArray(nj);
+
+    // Solve IK
+    int status = iksolver.CartToJnt(joint_init, desired_pose, joint_result);
+    if (status >= 0) {
+        std::cout << "IK Solution: " << std::endl << joint_result.data << std::endl;
+    } else {
+        std::cerr << "IK Failed!" << std::endl;
+    }
+
+    /*
+ // Copyright  (C)  2007  Francois Cauwe <francois at cauwe dot org>
+ 
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Lesser General Public
+// License as published by the Free Software Foundation; either
+// version 2.1 of the License, or (at your option) any later version.
+ 
+#include <kdl/chain.hpp>
+#include <kdl/chainfksolver.hpp>
+#include <kdl/chainfksolverpos_recursive.hpp>
+#include <kdl/frames_io.hpp>
+#include <stdio.h>
+#include <iostream>
+ 
+using namespace KDL;
+ 
+ 
+int main( int argc, char** argv )
+{
+    //Definition of a kinematic chain & add segments to the chain
+    KDL::Chain chain;
+    chain.addSegment(Segment(Joint(Joint::RotZ),Frame(Vector(0.0,0.0,1.020))));
+    chain.addSegment(Segment(Joint(Joint::RotX),Frame(Vector(0.0,0.0,0.480))));
+    chain.addSegment(Segment(Joint(Joint::RotX),Frame(Vector(0.0,0.0,0.645))));
+    chain.addSegment(Segment(Joint(Joint::RotZ)));
+    chain.addSegment(Segment(Joint(Joint::RotX),Frame(Vector(0.0,0.0,0.120))));
+    chain.addSegment(Segment(Joint(Joint::RotZ)));
+ 
+    // Create solver based on kinematic chain
+    ChainFkSolverPos_recursive fksolver = ChainFkSolverPos_recursive(chain);
+ 
+    // Create joint array
+    unsigned int nj = chain.getNrOfJoints();
+    KDL::JntArray jointpositions = JntArray(nj);
+ 
+    // Assign some values to the joint positions
+    for(unsigned int i=0;i<nj;i++){
+        float myinput;
+        printf ("Enter the position of joint %i: ",i);
+        scanf ("%e",&myinput);
+        jointpositions(i)=(double)myinput;
+    }
+ 
+    // Create the frame that will contain the results
+    KDL::Frame cartpos;    
+ 
+    // Calculate forward position kinematics
+    bool kinematics_status;
+    kinematics_status = fksolver.JntToCart(jointpositions,cartpos);
+    if(kinematics_status>=0){
+        std::cout << cartpos <<std::endl;
+        printf("%s \n","Succes, thanks KDL!");
+    }else{
+        printf("%s \n","Error: could not calculate forward kinematics :(");
+    }
+}
+     */
+}
