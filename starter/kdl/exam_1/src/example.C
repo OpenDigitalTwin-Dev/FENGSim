@@ -15,29 +15,37 @@
 #include <kdl/chainiksolver.hpp>
 #include <kdl/chainiksolverpos_lma.hpp>
 
- 
+#include <fstream>
+#include <vector>
+#include <string>
+
 using namespace KDL;
  
- 
+
 int main( int argc, char** argv )
 {
     //Definition of a kinematic chain & add segments to the chain
     KDL::Chain chain;
-    chain.addSegment(Segment(Joint(Joint::RotZ),Frame(Vector(0.0,0.0,0.1518))));
-    chain.addSegment(Segment(Joint(Joint::RotX),Frame(Vector(0.0,0.0,0.2435))));
-    chain.addSegment(Segment(Joint(Joint::RotX),Frame(Vector(0.0,0.0,0.2132))));
-    chain.addSegment(Segment(Joint(Joint::RotX)));
-    chain.addSegment(Segment(Joint(Joint::RotZ)));
-    chain.addSegment(Segment(Joint(Joint::RotZ),Frame(Vector(0.0,0.0,0.2132))));
-				    
+    chain.addSegment(Segment(Joint(Joint::RotZ),Frame::DH(0.0,      M_PI/2,       0.1518, 0)));
+    chain.addSegment(Segment(Joint(Joint::RotZ),Frame::DH(-0.2435, 0,                 0,       0)));
+    chain.addSegment(Segment(Joint(Joint::RotZ),Frame::DH(-0.2132,  0,                 0,       0)));
+    chain.addSegment(Segment(Joint(Joint::RotZ),Frame::DH(0.0,      M_PI/2,       0.1104, 0)));
+    chain.addSegment(Segment(Joint(Joint::RotZ),Frame::DH(0.0,      -M_PI/2,      0.08535, 0)));
+    chain.addSegment(Segment(Joint(Joint::RotZ),Frame::DH(0.0,      0,                 0.0921,  0)));
+
+
+
+
+			 
+    
     // Create solver based on inverse kinematic chain
     ChainIkSolverPos_LMA iksolver(chain);
-
+    
     KDL::Frame desired_pose(
-	KDL::Rotation::RPY(0, 0, 0),  // Orientation (roll, pitch, yaw)
-        KDL::Vector(0.2, 0.2, 0.2)    // Position (x, y, z)
-    );
-
+	KDL::Rotation::RPY(0, 0, 0), 
+        KDL::Vector(0.3, 0.3, 0.3)    // Position (x, y, z)
+	);
+    
     KDL::JntArray joint_init(chain.getNrOfJoints());
     for (unsigned int i = 0; i < joint_init.rows(); ++i) {
         joint_init(i) = 0.0;  // Initialize to zero or another reasonable guess
@@ -45,63 +53,40 @@ int main( int argc, char** argv )
     
     unsigned int nj = chain.getNrOfJoints();
     KDL::JntArray joint_result = JntArray(nj);
-
+    
     // Solve IK
     int status = iksolver.CartToJnt(joint_init, desired_pose, joint_result);
     if (status >= 0) {
-        std::cout << "IK Solution: " << std::endl << joint_result.data << std::endl;
+	//std::cout << "IK Solution: " << std::endl << joint_result.data << std::endl;
+	std::cout << "z: " << joint_result(0) << std::endl;
+	std::cout << "x: " << joint_result(1) << std::endl;
+	std::cout << "x: " << joint_result(2) << std::endl;
+	std::cout << "x: " << joint_result(3) << std::endl;
+	std::cout << "z: " << joint_result(4) << std::endl;
+	std::cout << "x: " << joint_result(5) << std::endl;
+	std::cout <<
+	    0.1518+
+	    0.2435*cos(joint_result(1))+
+	    0.2132*cos(joint_result(1)+joint_result(2))+
+	    0.08535*cos(joint_result(1)+joint_result(2)+joint_result(3)) << std::endl;
     } else {
         std::cerr << "IK Failed!" << std::endl;
     }
 
-    /*
- // Copyright  (C)  2007  Francois Cauwe <francois at cauwe dot org>
- 
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Lesser General Public
-// License as published by the Free Software Foundation; either
-// version 2.1 of the License, or (at your option) any later version.
- 
-#include <kdl/chain.hpp>
-#include <kdl/chainfksolver.hpp>
-#include <kdl/chainfksolverpos_recursive.hpp>
-#include <kdl/frames_io.hpp>
-#include <stdio.h>
-#include <iostream>
- 
-using namespace KDL;
- 
- 
-int main( int argc, char** argv )
-{
-    //Definition of a kinematic chain & add segments to the chain
-    KDL::Chain chain;
-    chain.addSegment(Segment(Joint(Joint::RotZ),Frame(Vector(0.0,0.0,1.020))));
-    chain.addSegment(Segment(Joint(Joint::RotX),Frame(Vector(0.0,0.0,0.480))));
-    chain.addSegment(Segment(Joint(Joint::RotX),Frame(Vector(0.0,0.0,0.645))));
-    chain.addSegment(Segment(Joint(Joint::RotZ)));
-    chain.addSegment(Segment(Joint(Joint::RotX),Frame(Vector(0.0,0.0,0.120))));
-    chain.addSegment(Segment(Joint(Joint::RotZ)));
- 
-    // Create solver based on kinematic chain
+    /*!
+      check by fk
+    */
+    
     ChainFkSolverPos_recursive fksolver = ChainFkSolverPos_recursive(chain);
  
-    // Create joint array
-    unsigned int nj = chain.getNrOfJoints();
     KDL::JntArray jointpositions = JntArray(nj);
  
-    // Assign some values to the joint positions
     for(unsigned int i=0;i<nj;i++){
-        float myinput;
-        printf ("Enter the position of joint %i: ",i);
-        scanf ("%e",&myinput);
-        jointpositions(i)=(double)myinput;
+        jointpositions(i)=joint_result(i);
     }
  
-    // Create the frame that will contain the results
     KDL::Frame cartpos;    
  
-    // Calculate forward position kinematics
     bool kinematics_status;
     kinematics_status = fksolver.JntToCart(jointpositions,cartpos);
     if(kinematics_status>=0){
@@ -110,6 +95,30 @@ int main( int argc, char** argv )
     }else{
         printf("%s \n","Error: could not calculate forward kinematics :(");
     }
-}
-     */
+
+
+    /*!
+      output
+    */
+    std::ifstream inFile("../../../mbdyn/robot/robot_arm.mbd");
+
+    std::vector<std::string> lines;
+    std::string line;
+    while (std::getline(inFile, line)) {
+        lines.push_back(line);
+    }
+    inFile.close();
+
+    lines[60-1] = "      3.0, " + std::to_string(joint_result(0)) + ";";
+    lines[67-1] = "      3.0, " + std::to_string(joint_result(1)) + ";";
+    lines[74-1] = "      3.0, " + std::to_string(joint_result(2)) + ";";
+    lines[81-1] = "      3.0, " + std::to_string(joint_result(3)) + ";";
+    lines[88-1] = "      3.0, " + std::to_string(joint_result(4)) + ";";
+
+    // 写回文件
+    std::ofstream outFile("../../../mbdyn/robot/robot_arm.mbd");
+    for (const auto& l : lines) {
+        outFile << l << '\n';
+    }
+    outFile.close();
 }
