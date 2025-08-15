@@ -15,6 +15,9 @@
 #include <kdl/chainiksolver.hpp>
 #include <kdl/chainiksolverpos_lma.hpp>
 
+#include <kdl/chainiksolvervel_pinv.hpp>
+#include <kdl/chainiksolverpos_nr.hpp>
+
 #include <fstream>
 #include <vector>
 #include <string>
@@ -26,12 +29,14 @@ int main( int argc, char** argv )
 {
     //Definition of a kinematic chain & add segments to the chain
     KDL::Chain chain;
-    chain.addSegment(Segment(Joint(Joint::RotZ),Frame::DH(0.0,      M_PI/2,       0.1518, 0)));
-    chain.addSegment(Segment(Joint(Joint::RotZ),Frame::DH(-0.2435, 0,                 0,       0)));
-    chain.addSegment(Segment(Joint(Joint::RotZ),Frame::DH(-0.2132,  0,                 0,       0)));
-    chain.addSegment(Segment(Joint(Joint::RotZ),Frame::DH(0.0,      M_PI/2,       0.1104, 0)));
-    chain.addSegment(Segment(Joint(Joint::RotZ),Frame::DH(0.0,      -M_PI/2,      0.08535, 0)));
-    chain.addSegment(Segment(Joint(Joint::RotZ),Frame::DH(0.0,      0,                 0.0921,  0)));
+    chain.addSegment(Segment(Joint(Joint::RotZ),Frame(Vector(0.0,0.0,0.1518))));
+    chain.addSegment(Segment(Joint(Joint::RotX),Frame(Vector(0.0,0.0,0.2435))));
+    chain.addSegment(Segment(Joint(Joint::RotX),Frame(Vector(0.0,0.0,0.2132))));
+    chain.addSegment(Segment(Joint(Joint::RotX),Frame(Vector(0.11040,0.0,0.0))));
+    chain.addSegment(Segment(Joint(Joint::RotZ),Frame(Vector(0.0,0.0,0.08535))));
+    chain.addSegment(Segment(Joint(Joint::RotX),Frame(Vector(0.08246,0.0,0.0))));
+
+
 
 
 
@@ -39,10 +44,14 @@ int main( int argc, char** argv )
 			 
     
     // Create solver based on inverse kinematic chain
-    ChainIkSolverPos_LMA iksolver(chain);
+    ChainIkSolverPos_LMA iksolver(chain,1E-5,1000,1E-15);
+
+    KDL::ChainFkSolverPos_recursive fk_solver(chain);
+    KDL::ChainIkSolverVel_pinv vel_ik_solver(chain);
+    //KDL::ChainIkSolverPos_NR iksolver(chain, fk_solver, vel_ik_solver, 100, 1e-6);
     
     KDL::Frame desired_pose(
-	KDL::Rotation::RPY(0, 0, 0), 
+	//KDL::Rotation::RPY(0.1, 0, 0), 
         KDL::Vector(0.3, 0.3, 0.3)    // Position (x, y, z)
 	);
     
@@ -63,14 +72,16 @@ int main( int argc, char** argv )
 	std::cout << "x: " << joint_result(2) << std::endl;
 	std::cout << "x: " << joint_result(3) << std::endl;
 	std::cout << "z: " << joint_result(4) << std::endl;
-	std::cout << "x: " << joint_result(5) << std::endl;
-	std::cout <<
+	std::cout << "x: " << joint_result(5) << std::endl << std::endl;
+	
+
+	std::cout << "z: " <<
 	    0.1518+
 	    0.2435*cos(joint_result(1))+
 	    0.2132*cos(joint_result(1)+joint_result(2))+
 	    0.08535*cos(joint_result(1)+joint_result(2)+joint_result(3)) << std::endl;
     } else {
-        std::cerr << "IK Failed!" << std::endl;
+	std::cerr << "IK Failed!" << std::endl;
     }
 
     /*!
