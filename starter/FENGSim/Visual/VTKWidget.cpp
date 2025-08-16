@@ -3108,6 +3108,7 @@ void VTKWidget::FEMImportResults(QString filename)
 
 #include "vtkCubeSource.h"
 #include "vtkCylinderSource.h"
+#include "vtkSphereSource.h"
 
 void VTKWidget::mbdImportResults(int n, QString file_name)
 {
@@ -3116,6 +3117,42 @@ void VTKWidget::mbdImportResults(int n, QString file_name)
     char L[len];
     for (int i=0; i<n*5; i++)
         is.getline(L,len);
+
+    vtkSmartPointer<vtkSphereSource> sphereSource = vtkSmartPointer<vtkSphereSource>::New();
+    sphereSource->SetRadius(0.01);
+    sphereSource->SetCenter(0.0,0.0,0.0);
+    vtkSmartPointer<vtkPolyDataMapper> mapper_ball = vtkSmartPointer<vtkPolyDataMapper>::New();
+    mapper_ball->SetInputConnection(sphereSource->GetOutputPort());
+    vtkSmartPointer<vtkActor> actor_ball = vtkSmartPointer<vtkActor>::New();
+    actor_ball->SetMapper(mapper_ball);
+    renderer->AddActor(actor_ball);
+
+    vtkSmartPointer<vtkSphereSource> sphereSource1 = vtkSmartPointer<vtkSphereSource>::New();
+    sphereSource1->SetRadius(0.01);
+    sphereSource1->SetCenter(0.1,0.0,0.0);
+    vtkSmartPointer<vtkPolyDataMapper> mapper_ball1 = vtkSmartPointer<vtkPolyDataMapper>::New();
+    mapper_ball1->SetInputConnection(sphereSource1->GetOutputPort());
+    vtkSmartPointer<vtkActor> actor_ball1 = vtkSmartPointer<vtkActor>::New();
+    actor_ball1->SetMapper(mapper_ball1);
+    renderer->AddActor(actor_ball1);
+
+    vtkSmartPointer<vtkSphereSource> sphereSource2 = vtkSmartPointer<vtkSphereSource>::New();
+    sphereSource2->SetRadius(0.01);
+    sphereSource2->SetCenter(0.0,0.1,0.0);
+    vtkSmartPointer<vtkPolyDataMapper> mapper_ball2 = vtkSmartPointer<vtkPolyDataMapper>::New();
+    mapper_ball2->SetInputConnection(sphereSource2->GetOutputPort());
+    vtkSmartPointer<vtkActor> actor_ball2 = vtkSmartPointer<vtkActor>::New();
+    actor_ball2->SetMapper(mapper_ball2);
+    renderer->AddActor(actor_ball2);
+
+    vtkSmartPointer<vtkSphereSource> sphereSource3 = vtkSmartPointer<vtkSphereSource>::New();
+    sphereSource3->SetRadius(0.01);
+    sphereSource3->SetCenter(0.3,0.3,0.3);
+    vtkSmartPointer<vtkPolyDataMapper> mapper_ball3 = vtkSmartPointer<vtkPolyDataMapper>::New();
+    mapper_ball3->SetInputConnection(sphereSource3->GetOutputPort());
+    vtkSmartPointer<vtkActor> actor_ball3 = vtkSmartPointer<vtkActor>::New();
+    actor_ball3->SetMapper(mapper_ball3);
+    renderer->AddActor(actor_ball3);
 
     renderer->RemoveActor(mbd_simulation_actor_1);
     renderer->RemoveActor(mbd_simulation_actor_2);
