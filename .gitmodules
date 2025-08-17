@@ -19,3 +19,6 @@
 [submodule "docs"]
 	path = docs
 	url = https://github.com/OpenDigitalTwin-Dev/docs.git
+[submodule "toolkit/MultiX"]
+	path = toolkit/MultiX
+	url = https://github.com/fengsim/docs_multix.git
