@@ -57,6 +57,12 @@ git checkout main
 git pull origin main
 cd ..
 
+echo ">>> docs_multix"
+cd MultiX/docs_multix
+git checkout main
+git pull origin main
+cd ../..
+
 cd ..
 git add docs
 git add toolkit/CFD
@@ -65,5 +71,10 @@ git add toolkit/DAE
 git add toolkit/Particles
 git add toolkit/NLA
 git add toolkit/PS
+git commit -m 'update all submodules'
+git push origin main
+
+cd toolkit/MultiX
+git add docs_multix
 git commit -m 'update all submodules'
 git push origin main
