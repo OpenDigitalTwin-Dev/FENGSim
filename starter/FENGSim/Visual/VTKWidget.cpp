@@ -3108,6 +3108,7 @@ void VTKWidget::FEMImportResults(QString filename)
 
 #include "vtkCubeSource.h"
 #include "vtkCylinderSource.h"
+#include "vtkSphereSource.h"
 
 void VTKWidget::mbdImportResults(int n, QString file_name)
 {
@@ -3116,6 +3117,15 @@ void VTKWidget::mbdImportResults(int n, QString file_name)
     char L[len];
     for (int i=0; i<n*5; i++)
         is.getline(L,len);
+
+    vtkSmartPointer<vtkSphereSource> sphereSource3 = vtkSmartPointer<vtkSphereSource>::New();
+    sphereSource3->SetRadius(0.01);
+    sphereSource3->SetCenter(0.1,0.2,0.3);
+    vtkSmartPointer<vtkPolyDataMapper> mapper_ball3 = vtkSmartPointer<vtkPolyDataMapper>::New();
+    mapper_ball3->SetInputConnection(sphereSource3->GetOutputPort());
+    vtkSmartPointer<vtkActor> actor_ball3 = vtkSmartPointer<vtkActor>::New();
+    actor_ball3->SetMapper(mapper_ball3);
+    renderer->AddActor(actor_ball3);
 
     renderer->RemoveActor(mbd_simulation_actor_1);
     renderer->RemoveActor(mbd_simulation_actor_2);

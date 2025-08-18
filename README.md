@@ -110,11 +110,9 @@ Composite Materials
 Robotics
 --------------------------------------------
 
-<!--
 <div align="center">
-<img decoding="async" src="image/ros2.jpg" width="1800">
+<img decoding="async" src="image/ur3.jpg" width="1800">
 </div>
--->
 
 Metrology
 --------------------------------------------
