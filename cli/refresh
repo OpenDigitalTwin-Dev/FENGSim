@@ -8,60 +8,119 @@ echo $homepath
 cd $homepath
 git pull origin main
 
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>"
 echo ">>> docs"
+echo ">>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 cd docs
 git checkout main
 git pull origin main
 cd ..
+echo $'\n'
+echo $'\n'
 
 cd toolkit
+
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>"
 echo ">>> MultiX"
+echo ">>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 cd MultiX
 git checkout main
 git pull origin main
 cd ..
+echo $'\n'
+echo $'\n'
 
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>"
 echo ">>> CFD"
+echo ">>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 cd CFD
 git checkout main
 git pull origin main
 cd ..
+echo $'\n'
+echo $'\n'
 
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>"
 echo ">>> CEM"
+echo ">>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 cd CEM
 git checkout main
 git pull origin main
 cd ..
+echo $'\n'
+echo $'\n'
 
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>"
 echo ">>> DAE"
+echo ">>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 cd DAE
 git checkout main
 git pull origin main
 cd ..
+echo $'\n'
+echo $'\n'
 
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>"
 echo ">>> Particles"
+echo ">>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 cd Particles
 git checkout main
 git pull origin main
 cd ..
+echo $'\n'
+echo $'\n'
 
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>"
 echo ">>> NLA"
+echo ">>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 cd NLA
 git checkout main
 git pull origin main
 cd ..
+echo $'\n'
+echo $'\n'
 
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>"
 echo ">>> PS"
+echo ">>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 cd PS
 git checkout main
 git pull origin main
 cd ..
-
-echo ">>> docs_multix"
-cd MultiX/docs_multix
-git checkout main
-git pull origin main
-cd ../..
+echo $'\n'
+echo $'\n'
 
 cd ..
 git add docs
@@ -74,7 +133,18 @@ git add toolkit/PS
 git commit -m 'update all submodules'
 git push origin main
 
-cd toolkit/MultiX
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>"
+echo ">>> docs_multix"
+echo ">>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+cd toolkit/MultiX/docs_multix
+git checkout main
+git pull origin main
+cd ..
+
 git add docs_multix
 git commit -m 'update all submodules'
 git push origin main
