@@ -23,11 +23,8 @@
 #include <string>
 
 using namespace KDL;
- 
 
-int main( int argc, char** argv )
-{
-    //Definition of a kinematic chain & add segments to the chain
+double* Angle (double* pos) {
     KDL::Chain chain;
     
     chain.addSegment(Segment(Joint(Joint::RotZ),Frame(Vector(0.0,0.0,0.1518))));
@@ -36,20 +33,13 @@ int main( int argc, char** argv )
     chain.addSegment(Segment(Joint(Joint::RotY),Frame(Vector(0.0,-0.11040,0.08535))));
     chain.addSegment(Segment(Joint(Joint::RotZ),Frame(Vector(0.0,0.0,0.0))));
     chain.addSegment(Segment(Joint(Joint::RotY),Frame(Vector(0.0,-0.08246,0.0))));
-
-
-			 
     
     // Create solver based on inverse kinematic chain
     ChainIkSolverPos_LMA iksolver(chain,1E-5,1000,1E-15);
-
-    //KDL::ChainFkSolverPos_recursive fk_solver(chain);
-    //KDL::ChainIkSolverVel_pinv vel_ik_solver(chain);
-    //KDL::ChainIkSolverPos_NR iksolver(chain, fk_solver, vel_ik_solver, 100, 1e-6);
     
     KDL::Frame desired_pose(
 	//KDL::Rotation::RPY(0.1, 0, 0), 
-        KDL::Vector(-0.1, -0.2, 0.3)    // Position (x, y, z)
+        KDL::Vector(pos[0], pos[1], pos[2])    // Position (x, y, z)
 	);
     
     KDL::JntArray joint_init(chain.getNrOfJoints());
@@ -62,6 +52,10 @@ int main( int argc, char** argv )
     
     // Solve IK
     int status = iksolver.CartToJnt(joint_init, desired_pose, joint_result);
+
+    double* angle = new double[6];
+    for (int i=0; i<6; i++) angle[i] = joint_result(i);
+    return angle;
     
     if (status >= 0) {
 	//std::cout << "IK Solution: " << std::endl << joint_result.data << std::endl;
@@ -71,47 +65,43 @@ int main( int argc, char** argv )
 	std::cout << "x: " << joint_result(3) << std::endl;
 	std::cout << "z: " << joint_result(4) << std::endl;
 	std::cout << "x: " << joint_result(5) << std::endl << std::endl;
-	
-
 	std::cout << "z: " <<
 	    0.1518+
 	    0.2435*cos(joint_result(1))+
 	    0.2132*cos(joint_result(1)+joint_result(2))+
 	    0.08535*cos(joint_result(1)+joint_result(2)+joint_result(3)) << std::endl << std::endl;
-
     } else {
 	std::cerr << "IK Failed!" << std::endl;
     }
-
+    
     /*!
       check by fk
     */
     
     ChainFkSolverPos_recursive fksolver = ChainFkSolverPos_recursive(chain);
- 
+    
     KDL::JntArray jointpositions = JntArray(nj);
- 
+    
     for(unsigned int i=0;i<nj;i++){
         jointpositions(i)=joint_result(i);
     }
- 
+    
     KDL::Frame cartpos;    
- 
+    
     bool kinematics_status;
     kinematics_status = fksolver.JntToCart(jointpositions,cartpos);
-    if(kinematics_status>=0){
+    if(kinematics_status>=0) {
         std::cout << cartpos <<std::endl;
         printf("%s \n","Succes, thanks KDL!");
-    }else{
+    }
+    else {
         printf("%s \n","Error: could not calculate forward kinematics :(");
     }
+}
 
 
-    /*!
-      output
-    */
-    std::ifstream inFile("../../../mbdyn/robot/robot_arm.mbd");
-
+int main( int argc, char** argv ) {
+    std::ifstream inFile("../../../mbdyn/robot/ur3.path");
     std::vector<std::string> lines;
     std::string line;
     while (std::getline(inFile, line)) {
@@ -119,13 +109,63 @@ int main( int argc, char** argv )
     }
     inFile.close();
 
-    lines[60-2] = "      3.0, " + std::to_string(joint_result(0)) + ";";
-    lines[67-2] = "      3.0, " + std::to_string(joint_result(1)) + ";";
-    lines[74-2] = "      3.0, " + std::to_string(joint_result(2)) + ";";
-    lines[81-2] = "      3.0, " + std::to_string(joint_result(3)) + ";";
-    lines[88-2] = "      3.0, " + std::to_string(joint_result(4)) + ";";
+    double Time = 1;
+    std::vector<double*> angles;
+    for (int i=0; i<lines.size(); i++) {
+	double z[4];
+	sscanf(lines[i].data(),"%lf %lf %lf %lf",z,z+1,z+2,z+3);
+	double t = z[0];
+	double* pos = new double[3];
+	pos[0] = z[1]; 	pos[1] = z[2]; 	pos[2] = z[3];
+	double* angle = new double[6];
+	angle = Angle(pos);
+	double* angle_t = new double[7];
+	angle_t[0] = t;
+	for (int j=0; j<6; j++) angle_t[j+1] = angle[j];
+	angles.push_back(angle_t);
+	Time = t;
+    }
+    std::cout << "Time: " << Time << std::endl;
 
-    // 写回文件
+    for (int i=0; i<angles.size(); i++) {
+	for (int j=0; j<7; j++) {
+	    std::cout << angles[i][j] << " ";
+	}
+	std::cout << std::endl;
+    }
+
+    /*!
+      output
+    */
+    inFile.open("../../../mbdyn/robot/ur3.mbd");
+    lines.clear();
+    while (std::getline(inFile, line)) {
+        lines.push_back(line);
+    }
+    inFile.close();
+
+    lines[14] = "   final time:     "+std::to_string(Time)+";";
+    
+    int line_id[5];
+    line_id[0] = 67;
+    line_id[1] = 64;
+    line_id[2] = 61;
+    line_id[3] = 58;
+    line_id[4] = 55;
+    for (int k=0; k<5; k++) {
+	for (int i=0; i<angles.size(); i++) {
+	    double* s = angles[angles.size()-(i+1)];
+	    if (i==0) {
+		lines.insert(lines.begin()+line_id[k],"      "+std::to_string(s[0])+", "+std::to_string(s[5-k])+";");
+	    }
+	    else {
+		lines.insert(lines.begin()+line_id[k],"      "+std::to_string(s[0])+", "+std::to_string(s[5-k])+",");
+	    }
+	}
+	lines.insert(lines.begin()+line_id[k],"      0.1, 0.0,");
+	lines.insert(lines.begin()+line_id[k],"      0.0, 0.0,");
+    }
+    
     std::ofstream outFile("../../../mbdyn/robot/robot_arm.mbd");
     for (const auto& l : lines) {
         outFile << l << '\n';

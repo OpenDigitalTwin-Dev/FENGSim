@@ -407,7 +407,7 @@ public slots:
     // *******************************************************
     // multibody dynamic
 private:
-    int mbd_time_sum = 5005;
+    int mbd_time_sum = 755;
     int mbd_time_step = 0;
     int mbd_speed = 0;
     QTimer* mbd_timer =  new QTimer;
@@ -423,7 +423,7 @@ public slots:
         vtk_widget->mbdImportResults(mbd_time_step,mbd_file_name);
         mbd_speed++;
         //mbd_time_step++;
-        mbd_time_step = mbd_speed*1;
+        mbd_time_step = mbd_speed;
         mbd_timer->singleShot(1, this, SLOT(mbdImportResults()));
     }
 
