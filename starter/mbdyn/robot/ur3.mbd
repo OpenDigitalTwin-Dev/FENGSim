@@ -1,0 +1,334 @@
+# robot_arm.mbd
+
+#-----------------------------------------------------------------------------
+# [Data Block]
+
+begin: data;
+   problem: initial value;
+end: data;
+
+#-----------------------------------------------------------------------------
+# [<Problem> Block]
+
+begin: initial value;
+   initial time:   0.;
+   final time:     10.;
+   time step:      1.e-3;
+   max iterations: 100;
+   tolerance:      1.e-6;
+end: initial value;
+
+#-----------------------------------------------------------------------------
+# [Control Data Block]
+
+begin: control data;
+   output frequency: 10;
+   structural nodes: 5;
+   rigid bodies:     5;
+   joints:           5
+                    +5;
+   gravity;
+end: control data;
+
+#-----------------------------------------------------------------------------
+# Design Variables
+
+set: real Izz_Stage = 0.1; #[kg m^2]  Moment of Inertia of Stage
+
+set: real M_UpperArm = 1.; #[kg] Mass of Upper Arm
+set: real M_LowerArm = 1.; #[kg] Mass of Lower Arm
+set: real M_Wrist    = 0.1; #[kg] Mass of Wrist
+set: real M_Hand     = 0.2; #[kg] Mass of Hand
+
+set: real H_Stage    = 0.1518; #[m] Height of Stage
+set: real L_UpperArm = 0.2435; #[m] Length of Upper Arm
+set: real L_LowerArm = 0.2132; #[m] Length of Lower Arm
+set: real L_Hand     = 0.08535; #[m] Length of Hand
+
+set: real R_UpperArm = 0.05; #[m] Radius of Upper Arm
+set: real R_LowerArm = 0.05; #[m] Radius of Lower Arm
+set: real R_Hand     = 0.05; #[m] Radius of Hand 
+
+#-----------------------------------------------------------------------------
+# Scalar Functions 
+scalar function: "Fun_Motor_JoTotp_Stage",
+   multilinear,
+
+scalar function: "Fun_Motor_JoTotj_Stage_UpperArm",
+   multilinear,
+       
+scalar function: "Fun_Motor_JoTotj_UpperArm_LowerArm",
+   multilinear,
+      
+scalar function: "Fun_Motor_JoTotj_LowerArm_Wrist",
+   multilinear,
+      
+scalar function: "Fun_Motor_JoTotj_Wrist_Hand",
+   multilinear,
+
+#-----------------------------------------------------------------------------
+# Reference Labels
+set: integer Ref_JoRevh_Stage_UpperArm    = 1;
+set: integer Ref_JoRevh_UpperArm_LowerArm = 2;
+set: integer Ref_JoRevh_LowerArm_Wrist    = 3;
+set: integer Ref_JoRevh_Wrist_Hand        = 4;
+
+# Node Labels
+set: integer Node_Stage    = 1;
+set: integer Node_UpperArm = 2;
+set: integer Node_LowerArm = 3;
+set: integer Node_Wrist    = 4;
+set: integer Node_Hand     = 5;
+
+# Body Labels
+set: integer Body_Stage    = 1;
+set: integer Body_UpperArm = 2;
+set: integer Body_LowerArm = 3;
+set: integer Body_Wrist    = 4;
+set: integer Body_Hand     = 5;
+
+# Joint Labels
+set: integer JoRevp_Stage             = 1;
+set: integer JoRevh_Stage_UpperArm    = 2;
+set: integer JoRevh_UpperArm_LowerArm = 3;
+set: integer JoRevh_LowerArm_Wrist    = 4;
+set: integer JoRevh_Wrist_Hand        = 5;
+
+set: integer JoTotp_Stage             = 6;
+set: integer JoTotj_Stage_UpperArm    = 7;
+set: integer JoTotj_UpperArm_LowerArm = 8;
+set: integer JoTotj_LowerArm_Wrist    = 9;
+set: integer JoTotj_Wrist_Hand        = 10;
+
+#-----------------------------------------------------------------------------
+# Intermediate Variables
+set: real Ixx_UpperArm = 1./12.*M_UpperArm*(L_UpperArm^2+3*R_UpperArm^2);
+set: real Iyy_UpperArm = 1./12.*M_UpperArm*(L_UpperArm^2+3*R_UpperArm^2);
+set: real Izz_UpperArm = 1./2.*M_UpperArm*R_UpperArm^2;
+
+set: real Ixx_LowerArm = 1./12.*M_LowerArm*(L_LowerArm^2+3*R_LowerArm^2);
+set: real Iyy_LowerArm = 1./12.*M_LowerArm*(L_LowerArm^2+3*R_LowerArm^2);
+set: real Izz_LowerArm = 1./2.*M_LowerArm*R_LowerArm^2;
+
+set: real Ixx_Hand = 1./12.*M_Hand*(L_Hand^2+3*R_Hand^2);
+set: real Iyy_Hand = 1./12.*M_Hand*(L_Hand^2+3*R_Hand^2);
+set: real Izz_Hand = 1./2.*M_Hand*R_Hand^2;
+
+#-----------------------------------------------------------------------------
+# References
+reference: Ref_JoRevh_Stage_UpperArm,
+   0., 0., H_Stage,      # absolute position
+   euler, pi/2., 0., 0., # absolute orientation
+   null,                 # absolute velocity
+   null;                 # absolute angular velocity
+
+reference: Ref_JoRevh_UpperArm_LowerArm,
+   0., 0., H_Stage+L_UpperArm, # absolute position
+   euler, pi/2., 0., 0.,       # absolute orientation
+   null,                       # absolute velocity
+   null;                       # absolute angular velocity
+
+reference: Ref_JoRevh_LowerArm_Wrist,
+   0., 0., H_Stage+L_UpperArm+L_LowerArm, # absolute position
+   euler, pi/2., 0., 0.,                  # absolute orientation
+   null,                                  # absolute velocity
+   null;                                  # absolute angular velocity
+
+reference: Ref_JoRevh_Wrist_Hand,
+   0., 0.11040, H_Stage+L_UpperArm+L_LowerArm, # absolute position
+   eye,                                   # absolute orientation
+   null,                                  # absolute velocity
+   null;                                  # absolute angular velocity
+
+#-----------------------------------------------------------------------------
+# [Nodes Block]
+
+begin: nodes;
+
+   #-----------------------------------------------------------------------------
+   # Nodes
+   structural: Node_Stage, dynamic,
+      null, # absolute position
+      eye,  # absolute orientation
+      null, # absolute velocity
+      null; # absolute angular velocity
+      
+   structural: Node_UpperArm, dynamic,
+      0., 0., H_Stage+L_UpperArm/2., # absolute position
+      eye,                           # absolute orientation
+      null,                          # absolute velocity
+      null;                          # absolute angular velocity
+      
+   structural: Node_LowerArm, dynamic,
+      0., 0., H_Stage+L_UpperArm+L_LowerArm/2., # absolute position
+      eye,                                      # absolute orientation
+      null,                                     # absolute velocity
+      null;                                     # absolute angular velocity
+      
+   structural: Node_Wrist, dynamic,
+      0., 0., H_Stage+L_UpperArm+L_LowerArm, # absolute position
+      eye,                                   # absolute orientation
+      null,                                  # absolute velocity
+      null;                                  # absolute angular velocity
+      
+   structural: Node_Hand, dynamic,
+      0., 0., H_Stage+L_UpperArm+L_LowerArm, # absolute position
+      eye,                                   # absolute orientation
+      null,                                  # absolute velocity
+      null;                                  # absolute angular velocity
+      
+end: nodes;
+
+#-----------------------------------------------------------------------------
+# [Elements Block]
+
+begin: elements;
+
+   #-----------------------------------------------------------------------------
+   # Bodies
+   body: Body_Stage, Node_Stage,
+      1.,                      # mass
+      null,                    # relative center of mass
+      diag, 1., 1., Izz_Stage; # inertia matrix
+      
+   body: Body_UpperArm, Node_UpperArm,
+      M_UpperArm,                                     # mass
+      null,                                           # relative center of mass
+      diag, Ixx_UpperArm, Iyy_UpperArm, Izz_UpperArm; # inertia matrix
+      
+   body: Body_LowerArm, Node_LowerArm,
+      M_LowerArm,                                     # mass
+      null,                                           # relative center of mass
+      diag, Ixx_LowerArm, Iyy_LowerArm, Izz_LowerArm; # inertia matrix
+      
+   body: Body_Wrist, Node_Wrist,
+      M_Wrist,                   # mass
+      null,                      # relative center of mass
+      diag, 1.e-9, 1.e-9, 1.e-9; # inertia matrix
+      
+   body: Body_Hand, Node_Hand,
+      M_Hand,                             # mass
+      null,                               # relative center of mass
+      diag, Ixx_Hand, Iyy_Hand, Izz_Hand; # inertia matrix
+              
+   #-----------------------------------------------------------------------------
+   # Joints
+   joint: JoRevp_Stage, 
+      revolute pin, 
+         Node_Stage,
+            null, # relative offset
+            null; # absolute pin position
+            
+   joint: JoRevh_Stage_UpperArm, 
+      revolute hinge, 
+         Node_Stage,
+            reference, Ref_JoRevh_Stage_UpperArm, null,       # relative offset
+            hinge, reference, Ref_JoRevh_Stage_UpperArm, eye, # relative axis orientation
+         Node_UpperArm,
+            reference, Ref_JoRevh_Stage_UpperArm, null,       # relative offset
+            hinge, reference, Ref_JoRevh_Stage_UpperArm, eye; # relative axis orientation
+            
+   joint: JoRevh_UpperArm_LowerArm, 
+      revolute hinge, 
+         Node_UpperArm,
+            reference, Ref_JoRevh_UpperArm_LowerArm, null,       # relative offset
+            hinge, reference, Ref_JoRevh_UpperArm_LowerArm, eye, # relative axis orientation
+         Node_LowerArm,
+            reference, Ref_JoRevh_UpperArm_LowerArm, null,       # relative offset
+            hinge, reference, Ref_JoRevh_UpperArm_LowerArm, eye; # relative axis orientation
+            
+   joint: JoRevh_LowerArm_Wrist, 
+      revolute hinge, 
+         Node_LowerArm,
+            reference, Ref_JoRevh_LowerArm_Wrist, null,       # relative offset
+            hinge, reference, Ref_JoRevh_LowerArm_Wrist, eye, # relative axis orientation
+         Node_Wrist,
+            reference, Ref_JoRevh_LowerArm_Wrist, null,       # relative offset
+            hinge, reference, Ref_JoRevh_LowerArm_Wrist, eye; # relative axis orientation
+            
+   joint: JoRevh_Wrist_Hand, 
+      revolute hinge, 
+         Node_Wrist,
+            reference, Ref_JoRevh_Wrist_Hand, null,       # relative offset
+            hinge, reference, Ref_JoRevh_Wrist_Hand, eye, # relative axis orientation
+         Node_Hand,
+            reference, Ref_JoRevh_Wrist_Hand, null,       # relative offset
+            hinge, reference, Ref_JoRevh_Wrist_Hand, eye; # relative axis orientation
+            
+   joint: JoTotp_Stage,
+      total pin joint,
+         Node_Stage,
+            position, null, # relative offset
+            position, null, # absolute position
+         position constraint,
+            inactive, inactive, inactive,
+            null,
+         orientation constraint,
+            inactive, inactive, active,
+         single, 0., 0., 1., scalar function, "Fun_Motor_JoTotp_Stage";
+
+   joint: JoTotj_Stage_UpperArm,
+      total joint,
+         Node_Stage,
+            position, reference, Ref_JoRevh_Stage_UpperArm, null,            # relative offset
+            rotation orientation, reference, Ref_JoRevh_Stage_UpperArm, eye, # relative rotation orientation
+         Node_UpperArm,
+            position, reference, Ref_JoRevh_Stage_UpperArm, null,            # relative offset
+            rotation orientation, reference, Ref_JoRevh_Stage_UpperArm, eye, # relative rotation orientation
+         position constraint,
+            inactive, inactive, inactive,
+            null,
+         orientation constraint,
+            inactive, inactive, active,
+         single, 0., 0., 1., scalar function, "Fun_Motor_JoTotj_Stage_UpperArm";
+
+   joint: JoTotj_UpperArm_LowerArm,
+      total joint,
+         Node_UpperArm,
+            position, reference, Ref_JoRevh_UpperArm_LowerArm, null,            # relative offset
+            rotation orientation, reference, Ref_JoRevh_UpperArm_LowerArm, eye, # relative rotation orientation
+         Node_LowerArm,
+            position, reference, Ref_JoRevh_UpperArm_LowerArm, null,            # relative offset
+            rotation orientation, reference, Ref_JoRevh_UpperArm_LowerArm, eye, # relative rotation orientation
+         position constraint,
+            inactive, inactive, inactive,
+            null,
+         orientation constraint,
+            inactive, inactive, active,
+         single, 0., 0., 1., scalar function, "Fun_Motor_JoTotj_UpperArm_LowerArm";
+         
+   joint: JoTotj_LowerArm_Wrist,
+      total joint,
+         Node_LowerArm,
+            position, reference, Ref_JoRevh_LowerArm_Wrist, null,            # relative offset
+            rotation orientation, reference, Ref_JoRevh_LowerArm_Wrist, eye, # relative rotation orientation
+         Node_Wrist,
+            position, reference, Ref_JoRevh_LowerArm_Wrist, null,            # relative offset
+            rotation orientation, reference, Ref_JoRevh_LowerArm_Wrist, eye, # relative rotation orientation
+         position constraint,
+            inactive, inactive, inactive,
+            null,
+         orientation constraint,
+            inactive, inactive, active,
+         single, 0., 0., 1., scalar function, "Fun_Motor_JoTotj_LowerArm_Wrist";
+
+   joint: JoTotj_Wrist_Hand,
+      total joint,
+         Node_Wrist,
+            position, reference, Ref_JoRevh_Wrist_Hand, null,            # relative offset
+            rotation orientation, reference, Ref_JoRevh_Wrist_Hand, eye, # relative rotation orientation
+         Node_Hand,
+            position, reference, Ref_JoRevh_Wrist_Hand, null,            # relative offset
+            rotation orientation, reference, Ref_JoRevh_Wrist_Hand, eye, # relative rotation orientation
+         position constraint,
+            inactive, inactive, inactive,
+            null,
+         orientation constraint,
+            inactive, inactive, active,
+         single, 0., 0., 1., scalar function, "Fun_Motor_JoTotj_Wrist_Hand";
+	 
+   #-----------------------------------------------------------------------------
+   # Gravity         
+   gravity: 0., 0., -1., const, 9.81;
+                
+end: elements;

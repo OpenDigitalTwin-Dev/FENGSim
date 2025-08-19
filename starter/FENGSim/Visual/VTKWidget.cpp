@@ -3109,6 +3109,8 @@ void VTKWidget::FEMImportResults(QString filename)
 #include "vtkCubeSource.h"
 #include "vtkCylinderSource.h"
 #include "vtkSphereSource.h"
+#include "vtkLineSource.h"
+#include "vtkLine.h"
 
 void VTKWidget::mbdImportResults(int n, QString file_name)
 {
@@ -3118,14 +3120,35 @@ void VTKWidget::mbdImportResults(int n, QString file_name)
     for (int i=0; i<n*5; i++)
         is.getline(L,len);
 
-    vtkSmartPointer<vtkSphereSource> sphereSource3 = vtkSmartPointer<vtkSphereSource>::New();
-    sphereSource3->SetRadius(0.01);
-    sphereSource3->SetCenter(0.1,0.2,0.3);
-    vtkSmartPointer<vtkPolyDataMapper> mapper_ball3 = vtkSmartPointer<vtkPolyDataMapper>::New();
-    mapper_ball3->SetInputConnection(sphereSource3->GetOutputPort());
-    vtkSmartPointer<vtkActor> actor_ball3 = vtkSmartPointer<vtkActor>::New();
-    actor_ball3->SetMapper(mapper_ball3);
-    renderer->AddActor(actor_ball3);
+
+
+
+
+    vtkSmartPointer<vtkLineSource> ls = vtkSmartPointer<vtkLineSource>::New();
+    ls->SetPoint1(0.10,0.3,0.3);
+    ls->SetPoint2(0.23,0.3,0.3);
+    vtkSmartPointer<vtkPolyDataMapper> mapper_ls = vtkSmartPointer<vtkPolyDataMapper>::New();
+    mapper_ls->SetInputConnection(ls->GetOutputPort());
+    vtkSmartPointer<vtkActor> actor_ls = vtkSmartPointer<vtkActor>::New();
+    actor_ls->SetMapper(mapper_ls);
+    actor_ls->GetProperty()->SetColor(COLOR10);
+    renderer->AddActor(actor_ls);
+
+//    vtkSmartPointer<vtkSphereSource> ss = vtkSmartPointer<vtkSphereSource>::New();
+//    ss->SetCenter(0.1,0.3,0.3);
+//    ss->SetRadius(0.02);
+//    vtkSmartPointer<vtkPolyDataMapper> mapper_ss = vtkSmartPointer<vtkPolyDataMapper>::New();
+//    mapper_ss->SetInputConnection(ss->GetOutputPort());
+//    vtkSmartPointer<vtkActor> actor_ss = vtkSmartPointer<vtkActor>::New();
+//    actor_ss->SetMapper(mapper_ss);
+//    actor_ss->GetProperty()->SetColor(COLOR10);
+//    renderer->AddActor(actor_ss);
+
+
+
+
+
+
 
     renderer->RemoveActor(mbd_simulation_actor_1);
     renderer->RemoveActor(mbd_simulation_actor_2);
