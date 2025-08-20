@@ -1,4 +1,4 @@
-python3 path.py
+python3 discrete.py
 cd ../../kdl/exam_1/build
 make
 ./kdl
