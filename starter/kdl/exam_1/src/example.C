@@ -101,7 +101,7 @@ double* Angle (double* pos) {
 
 
 int main( int argc, char** argv ) {
-    std::ifstream inFile("../../../mbdyn/robot/ur3.path");
+    std::ifstream inFile("../../../mbdyn/robot/ur3.pnts");
     std::vector<std::string> lines;
     std::string line;
     while (std::getline(inFile, line)) {
