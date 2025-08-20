@@ -1,5 +1,5 @@
-cd ../../kdl/build
+cd ../../kdl/exam_1/build
 make
 ./kdl
-cd ../../mbdyn/robot
+cd ../../../mbdyn/robot
 ./../../../toolkit/DAE/install/mbdyn_install/bin/mbdyn -f robot_arm.mbd
