@@ -3112,6 +3112,69 @@ void VTKWidget::FEMImportResults(QString filename)
 #include "vtkLineSource.h"
 #include "vtkLine.h"
 
+void VTKWidget::mbdPath () {
+    std::vector<vtkSmartPointer<vtkLineSource>> lss;
+    lss.resize(20);
+    for (int i=0; i<20; i++)
+        lss[i] = vtkSmartPointer<vtkLineSource>::New();
+
+    for (int i=0; i<5; i++) {
+        lss[i*4]->SetPoint1(0.10,0.3,0.1+i*0.01);
+        lss[i*4]->SetPoint2(0.20,0.3,0.1+i*0.01);
+        vtkSmartPointer<vtkPolyDataMapper> mapper_ls = vtkSmartPointer<vtkPolyDataMapper>::New();
+        mapper_ls->SetInputConnection(lss[i*4]->GetOutputPort());
+        vtkSmartPointer<vtkActor> actor_ls = vtkSmartPointer<vtkActor>::New();
+        actor_ls->SetMapper(mapper_ls);
+        //actor_ls->GetProperty()->SetColor(1,0,0);
+        actor_ls->GetProperty()->SetLineWidth(2);
+
+        lss[i*4+1]->SetPoint1(0.20,0.3,0.1+i*0.01);
+        lss[i*4+1]->SetPoint2(0.20,0.4,0.1+i*0.01);
+        vtkSmartPointer<vtkPolyDataMapper> mapper_ls1 = vtkSmartPointer<vtkPolyDataMapper>::New();
+        mapper_ls1->SetInputConnection(lss[i*4+1]->GetOutputPort());
+        vtkSmartPointer<vtkActor> actor_ls1 = vtkSmartPointer<vtkActor>::New();
+        actor_ls1->SetMapper(mapper_ls1);
+        //actor_ls1->GetProperty()->SetColor(1,0,0);
+        actor_ls1->GetProperty()->SetLineWidth(2);
+
+        lss[i*4+2]->SetPoint1(0.10,0.4,0.1+i*0.01);
+        lss[i*4+2]->SetPoint2(0.20,0.4,0.1+i*0.01);
+        vtkSmartPointer<vtkPolyDataMapper> mapper_ls2 = vtkSmartPointer<vtkPolyDataMapper>::New();
+        mapper_ls2->SetInputConnection(lss[i*4+2]->GetOutputPort());
+        vtkSmartPointer<vtkActor> actor_ls2 = vtkSmartPointer<vtkActor>::New();
+        actor_ls2->SetMapper(mapper_ls2);
+        //actor_ls2->GetProperty()->SetColor(1,0,0);
+        actor_ls2->GetProperty()->SetLineWidth(2);
+
+        lss[i*4+3]->SetPoint1(0.10,0.4,0.1+i*0.01);
+        lss[i*4+3]->SetPoint2(0.10,0.3,0.1+i*0.01);
+        vtkSmartPointer<vtkPolyDataMapper> mapper_ls3 = vtkSmartPointer<vtkPolyDataMapper>::New();
+        mapper_ls3->SetInputConnection(lss[i*4+3]->GetOutputPort());
+        vtkSmartPointer<vtkActor> actor_ls3 = vtkSmartPointer<vtkActor>::New();
+        actor_ls3->SetMapper(mapper_ls3);
+        //actor_ls3->GetProperty()->SetColor(1,0,0);
+        actor_ls3->GetProperty()->SetLineWidth(2);
+
+        renderer->AddActor(actor_ls);
+        renderer->AddActor(actor_ls1);
+        renderer->AddActor(actor_ls2);
+        renderer->AddActor(actor_ls3);
+    }
+
+
+    //    vtkSmartPointer<vtkSphereSource> ss = vtkSmartPointer<vtkSphereSource>::New();
+    //    ss->SetCenter(0.1,0.3,0.3);
+    //    ss->SetRadius(0.02);
+    //    vtkSmartPointer<vtkPolyDataMapper> mapper_ss = vtkSmartPointer<vtkPolyDataMapper>::New();
+    //    mapper_ss->SetInputConnection(ss->GetOutputPort());
+    //    vtkSmartPointer<vtkActor> actor_ss = vtkSmartPointer<vtkActor>::New();
+    //    actor_ss->SetMapper(mapper_ss);
+    //    actor_ss->GetProperty()->SetColor(COLOR10);
+    //    renderer->AddActor(actor_ss);
+    GetRenderWindow()->Render();
+
+}
+
 void VTKWidget::mbdImportResults(int n, QString file_name)
 {
     std::ifstream is(file_name.toStdString());
@@ -3120,41 +3183,12 @@ void VTKWidget::mbdImportResults(int n, QString file_name)
     for (int i=0; i<n*5; i++)
         is.getline(L,len);
 
-
-
-
-
-    vtkSmartPointer<vtkLineSource> ls = vtkSmartPointer<vtkLineSource>::New();
-    ls->SetPoint1(0.10,0.3,0.3);
-    ls->SetPoint2(0.23,0.3,0.3);
-    vtkSmartPointer<vtkPolyDataMapper> mapper_ls = vtkSmartPointer<vtkPolyDataMapper>::New();
-    mapper_ls->SetInputConnection(ls->GetOutputPort());
-    vtkSmartPointer<vtkActor> actor_ls = vtkSmartPointer<vtkActor>::New();
-    actor_ls->SetMapper(mapper_ls);
-    actor_ls->GetProperty()->SetColor(COLOR10);
-    renderer->AddActor(actor_ls);
-
-//    vtkSmartPointer<vtkSphereSource> ss = vtkSmartPointer<vtkSphereSource>::New();
-//    ss->SetCenter(0.1,0.3,0.3);
-//    ss->SetRadius(0.02);
-//    vtkSmartPointer<vtkPolyDataMapper> mapper_ss = vtkSmartPointer<vtkPolyDataMapper>::New();
-//    mapper_ss->SetInputConnection(ss->GetOutputPort());
-//    vtkSmartPointer<vtkActor> actor_ss = vtkSmartPointer<vtkActor>::New();
-//    actor_ss->SetMapper(mapper_ss);
-//    actor_ss->GetProperty()->SetColor(COLOR10);
-//    renderer->AddActor(actor_ss);
-
-
-
-
-
-
-
     renderer->RemoveActor(mbd_simulation_actor_1);
     renderer->RemoveActor(mbd_simulation_actor_2);
     renderer->RemoveActor(mbd_simulation_actor_3);
     renderer->RemoveActor(mbd_simulation_actor_4);
     renderer->RemoveActor(mbd_simulation_actor_5);
+
     for (int i=0; i<5; i++) {
         is.getline(L,len);
         std::cout << L << std::endl;
@@ -3175,6 +3209,8 @@ void VTKWidget::mbdImportResults(int n, QString file_name)
             mbd_simulation_actor_1->SetMapper(mapper1);
             mbd_simulation_actor_1->GetProperty()->EdgeVisibilityOff();
             mbd_simulation_actor_1->GetProperty()->SetLineWidth(1);
+            mbd_simulation_actor_1->SetPickable(false);
+            mbd_simulation_actor_1->SetSelected(false);
         }
         if (z[0]==2) {
             transformFilter2->SetInputConnection(reader2->GetOutputPort());
@@ -3184,6 +3220,8 @@ void VTKWidget::mbdImportResults(int n, QString file_name)
             mbd_simulation_actor_2->SetMapper(mapper2);
             mbd_simulation_actor_2->GetProperty()->EdgeVisibilityOff();
             mbd_simulation_actor_2->GetProperty()->SetLineWidth(1);
+            mbd_simulation_actor_2->SetSelected(false);
+            mbd_simulation_actor_2->SetPickable(false);
         }
         if (z[0]==3) {
             transformFilter3->SetInputConnection(reader3->GetOutputPort());
@@ -3193,6 +3231,8 @@ void VTKWidget::mbdImportResults(int n, QString file_name)
             mbd_simulation_actor_3->SetMapper(mapper3);
             mbd_simulation_actor_3->GetProperty()->EdgeVisibilityOff();
             mbd_simulation_actor_3->GetProperty()->SetLineWidth(1);
+            mbd_simulation_actor_3->SetSelected(false);
+            mbd_simulation_actor_3->SetPickable(false);
         }
         if (z[0]==4) {
             transformFilter4->SetInputConnection(reader4->GetOutputPort());
@@ -3202,6 +3242,8 @@ void VTKWidget::mbdImportResults(int n, QString file_name)
             mbd_simulation_actor_4->SetMapper(mapper4);
             mbd_simulation_actor_4->GetProperty()->EdgeVisibilityOff();
             mbd_simulation_actor_4->GetProperty()->SetLineWidth(1);
+            mbd_simulation_actor_4->SetSelected(false);
+            mbd_simulation_actor_4->SetPickable(false);
         }
         if (z[0]==5) {
             transformFilter5->SetInputConnection(reader5->GetOutputPort());
@@ -3211,6 +3253,8 @@ void VTKWidget::mbdImportResults(int n, QString file_name)
             mbd_simulation_actor_5->SetMapper(mapper5);
             mbd_simulation_actor_5->GetProperty()->EdgeVisibilityOff();
             mbd_simulation_actor_5->GetProperty()->SetLineWidth(1);
+            mbd_simulation_actor_5->SetSelected(false);
+            mbd_simulation_actor_5->SetPickable(false);
         }
     }
 

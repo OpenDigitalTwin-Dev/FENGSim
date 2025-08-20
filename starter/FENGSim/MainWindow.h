@@ -407,7 +407,7 @@ public slots:
     // *******************************************************
     // multibody dynamic
 private:
-    int mbd_time_sum = 755;
+    int mbd_time_sum = 1105;
     int mbd_time_step = 0;
     int mbd_speed = 0;
     QTimer* mbd_timer =  new QTimer;
