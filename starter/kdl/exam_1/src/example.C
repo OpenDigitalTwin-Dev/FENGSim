@@ -38,7 +38,7 @@ double* Angle (double* pos) {
     ChainIkSolverPos_LMA iksolver(chain,1E-5,1000,1E-15);
     
     KDL::Frame desired_pose(
-	//KDL::Rotation::RPY(0.1, 0, 0), 
+	KDL::Rotation::RPY(M_PI/2, 0, 0), 
         KDL::Vector(pos[0], pos[1], pos[2])    // Position (x, y, z)
 	);
     
