@@ -3113,52 +3113,32 @@ void VTKWidget::FEMImportResults(QString filename)
 #include "vtkLine.h"
 
 void VTKWidget::mbdPath () {
-    std::vector<vtkSmartPointer<vtkLineSource>> lss;
-    lss.resize(20);
-    for (int i=0; i<20; i++)
-        lss[i] = vtkSmartPointer<vtkLineSource>::New();
+    std::ifstream inFile("../mbdyn/robot/ur3.traj");
+    std::vector<std::string> lines;
+    std::string line;
+    while (std::getline(inFile, line)) {
+        lines.push_back(line);
+    }
+    inFile.close();
 
-    for (int i=0; i<5; i++) {
-        lss[i*4]->SetPoint1(0.10,0.3,0.1+i*0.01);
-        lss[i*4]->SetPoint2(0.20,0.3,0.1+i*0.01);
+    std::vector<vtkSmartPointer<vtkLineSource>> lss;
+    lss.resize(lines.size()-1);
+    for (int i=0; i<lss.size(); i++) {
+        lss[i] = vtkSmartPointer<vtkLineSource>::New();
+    }
+
+    for (int i=0; i<lss.size(); i++) {
+        double z[6];
+        sscanf(lines[i+1].data(),"%lf %lf %lf %lf %lf %lf",z,z+1,z+2,z+3,z+4,z+5);
+        lss[i]->SetPoint1(-z[0],-z[1],z[2]);
+        lss[i]->SetPoint2(-z[3],-z[4],z[5]);
         vtkSmartPointer<vtkPolyDataMapper> mapper_ls = vtkSmartPointer<vtkPolyDataMapper>::New();
-        mapper_ls->SetInputConnection(lss[i*4]->GetOutputPort());
+        mapper_ls->SetInputConnection(lss[i]->GetOutputPort());
         vtkSmartPointer<vtkActor> actor_ls = vtkSmartPointer<vtkActor>::New();
         actor_ls->SetMapper(mapper_ls);
         //actor_ls->GetProperty()->SetColor(1,0,0);
         actor_ls->GetProperty()->SetLineWidth(2);
-
-        lss[i*4+1]->SetPoint1(0.20,0.3,0.1+i*0.01);
-        lss[i*4+1]->SetPoint2(0.20,0.4,0.1+i*0.01);
-        vtkSmartPointer<vtkPolyDataMapper> mapper_ls1 = vtkSmartPointer<vtkPolyDataMapper>::New();
-        mapper_ls1->SetInputConnection(lss[i*4+1]->GetOutputPort());
-        vtkSmartPointer<vtkActor> actor_ls1 = vtkSmartPointer<vtkActor>::New();
-        actor_ls1->SetMapper(mapper_ls1);
-        //actor_ls1->GetProperty()->SetColor(1,0,0);
-        actor_ls1->GetProperty()->SetLineWidth(2);
-
-        lss[i*4+2]->SetPoint1(0.10,0.4,0.1+i*0.01);
-        lss[i*4+2]->SetPoint2(0.20,0.4,0.1+i*0.01);
-        vtkSmartPointer<vtkPolyDataMapper> mapper_ls2 = vtkSmartPointer<vtkPolyDataMapper>::New();
-        mapper_ls2->SetInputConnection(lss[i*4+2]->GetOutputPort());
-        vtkSmartPointer<vtkActor> actor_ls2 = vtkSmartPointer<vtkActor>::New();
-        actor_ls2->SetMapper(mapper_ls2);
-        //actor_ls2->GetProperty()->SetColor(1,0,0);
-        actor_ls2->GetProperty()->SetLineWidth(2);
-
-        lss[i*4+3]->SetPoint1(0.10,0.4,0.1+i*0.01);
-        lss[i*4+3]->SetPoint2(0.10,0.3,0.1+i*0.01);
-        vtkSmartPointer<vtkPolyDataMapper> mapper_ls3 = vtkSmartPointer<vtkPolyDataMapper>::New();
-        mapper_ls3->SetInputConnection(lss[i*4+3]->GetOutputPort());
-        vtkSmartPointer<vtkActor> actor_ls3 = vtkSmartPointer<vtkActor>::New();
-        actor_ls3->SetMapper(mapper_ls3);
-        //actor_ls3->GetProperty()->SetColor(1,0,0);
-        actor_ls3->GetProperty()->SetLineWidth(2);
-
         renderer->AddActor(actor_ls);
-        renderer->AddActor(actor_ls1);
-        renderer->AddActor(actor_ls2);
-        renderer->AddActor(actor_ls3);
     }
 
 
