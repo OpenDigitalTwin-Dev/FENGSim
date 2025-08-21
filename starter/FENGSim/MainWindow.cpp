@@ -3557,6 +3557,16 @@ void  MainWindow::mbdOpenFile () {
                                                  tr("MBD Files (*.mov)")
                                                  , 0 , QFileDialog::DontUseNativeDialog);
     vtk_widget->mbdmodel();
+    vtk_widget->mbdPath();
+
+    ifstream inFile("../mbdyn/robot/robot_arm.mov");
+    std::vector<std::string> lines;
+    std::string line;
+    while (std::getline(inFile, line)) {
+        lines.push_back(line);
+    }
+    inFile.close();
+    mbd_time_sum = lines.size();
 }
 // *******************************************************
 // *******************************************************

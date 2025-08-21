@@ -450,6 +450,7 @@ public:
     }
 public:
     void mbdImportResults (int n, QString file_name);
+    void mbdPath ();
 
 
 
