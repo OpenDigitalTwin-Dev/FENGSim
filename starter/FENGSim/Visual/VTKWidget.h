@@ -415,21 +415,25 @@ public:
     // *******************************************************
     // multibody dynamic
 private:
+    vtkSmartPointer<vtkActor> mbd_simulation_actor_0;
     vtkSmartPointer<vtkActor> mbd_simulation_actor_1;
     vtkSmartPointer<vtkActor> mbd_simulation_actor_2;
     vtkSmartPointer<vtkActor> mbd_simulation_actor_3;
     vtkSmartPointer<vtkActor> mbd_simulation_actor_4;
     vtkSmartPointer<vtkActor> mbd_simulation_actor_5;
+    vtkSmartPointer<vtkSTLReader> reader0 = vtkSmartPointer<vtkSTLReader>::New();
     vtkSmartPointer<vtkSTLReader> reader1 = vtkSmartPointer<vtkSTLReader>::New();
     vtkSmartPointer<vtkSTLReader> reader2 = vtkSmartPointer<vtkSTLReader>::New();
     vtkSmartPointer<vtkSTLReader> reader3 = vtkSmartPointer<vtkSTLReader>::New();
     vtkSmartPointer<vtkSTLReader> reader4 = vtkSmartPointer<vtkSTLReader>::New();
     vtkSmartPointer<vtkSTLReader> reader5 = vtkSmartPointer<vtkSTLReader>::New();
+    vtkNew<vtkTransformFilter> transformFilter0;
     vtkNew<vtkTransformFilter> transformFilter1;
     vtkNew<vtkTransformFilter> transformFilter2;
     vtkNew<vtkTransformFilter> transformFilter3;
     vtkNew<vtkTransformFilter> transformFilter4;
     vtkNew<vtkTransformFilter> transformFilter5;
+    vtkNew<vtkPolyDataMapper> mapper0;
     vtkNew<vtkPolyDataMapper> mapper1;
     vtkNew<vtkPolyDataMapper> mapper2;
     vtkNew<vtkPolyDataMapper> mapper3;
@@ -437,7 +441,9 @@ private:
     vtkNew<vtkPolyDataMapper> mapper5;
 public:
     void mbdmodel () {
-        reader1->SetFileName("../mbdyn/robot/stage.stl");
+        reader0->SetFileName("../mbdyn/robot/stage1.stl");
+        reader0->Update();
+        reader1->SetFileName("../mbdyn/robot/stage2.stl");
         reader1->Update();
         reader2->SetFileName("../mbdyn/robot/upper.stl");
         reader2->Update();

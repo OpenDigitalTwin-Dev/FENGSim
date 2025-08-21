@@ -3183,11 +3183,20 @@ void VTKWidget::mbdImportResults(int n, QString file_name)
     for (int i=0; i<n*5; i++)
         is.getline(L,len);
 
+    renderer->RemoveActor(mbd_simulation_actor_0);
     renderer->RemoveActor(mbd_simulation_actor_1);
     renderer->RemoveActor(mbd_simulation_actor_2);
     renderer->RemoveActor(mbd_simulation_actor_3);
     renderer->RemoveActor(mbd_simulation_actor_4);
     renderer->RemoveActor(mbd_simulation_actor_5);
+
+    mapper0->SetInputConnection(reader0->GetOutputPort());
+    mbd_simulation_actor_0 = vtkSmartPointer<vtkActor>::New();
+    mbd_simulation_actor_0->SetMapper(mapper0);
+    mbd_simulation_actor_0->GetProperty()->EdgeVisibilityOff();
+    mbd_simulation_actor_0->GetProperty()->SetLineWidth(1);
+    mbd_simulation_actor_0->SetPickable(false);
+    mbd_simulation_actor_0->SetSelected(false);
 
     for (int i=0; i<5; i++) {
         is.getline(L,len);
@@ -3258,6 +3267,7 @@ void VTKWidget::mbdImportResults(int n, QString file_name)
         }
     }
 
+    renderer->AddActor(mbd_simulation_actor_0);
     renderer->AddActor(mbd_simulation_actor_1);
     renderer->AddActor(mbd_simulation_actor_2);
     renderer->AddActor(mbd_simulation_actor_3);
