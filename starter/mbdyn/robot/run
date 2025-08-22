@@ -1,5 +1,8 @@
 python3 discrete.py
-cd ../../kdl/exam_1/build
+cd ../../kdl/exam_1/
+mkdir build
+cd build
+cmake ..
 make
 ./kdl
 cd ../../../mbdyn/robot
