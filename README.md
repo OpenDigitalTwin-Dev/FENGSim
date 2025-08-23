@@ -8,15 +8,14 @@ Moreover, FENGSim offers tools for managing library dependencies, package manage
 To install FENGSim on Ubuntu 24.04:
 
 ```shell
-	sudo apt install git
 	git clone https://github.com/OpenDigitalTwin-Dev/FENGSim.git
-	cd FENGSim/cli
-	./install or ./uninstall
+	cd FENGSim
+	./install
 ```
 To launch the Qt project for FENGSim:
 
 ```shell
-	cd FENGSim/cli
+	cd FENGSim
 	./qtcreator
 ```
 <div align="center">
