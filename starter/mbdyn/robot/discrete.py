@@ -40,7 +40,8 @@ else :
     p = 0.01
     i = 1
     while i < len(lines):
-        line = lines[i][:-1]
+        line = lines[i]
+        print(line)
         values_point = re.split(' ',line)
         
         a = np.array([round(float(values_point[0]),10),round(float(values_point[1]),10),round(float(values_point[2]),10)])
