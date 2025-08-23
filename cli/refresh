@@ -122,6 +122,13 @@ cd ..
 echo $'\n'
 echo $'\n'
 
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>"
+echo ">>> update all submodules"
+echo ">>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 cd ..
 git add docs
 git add toolkit/CFD
@@ -132,19 +139,30 @@ git add toolkit/NLA
 git add toolkit/PS
 git commit -m 'update all submodules'
 git push origin main
+echo $'\n'
+echo $'\n'
 
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo ">>>"
-echo ">>> docs_multix"
+echo ">>> report"
 echo ">>>"
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-cd toolkit/MultiX/docs_multix
+cd toolkit/MultiX/report
 git checkout main
 git pull origin main
 cd ..
+echo $'\n'
+echo $'\n'
 
-git add docs_multix
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>"
+echo ">>> update report submodulces"
+echo ">>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
+git add report
 git commit -m 'update all submodules'
 git push origin main
