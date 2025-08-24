@@ -4,7 +4,7 @@ project(kdl_api)
 set(CMAKE_CXX_COMPILER /usr/bin/g++-10)
 
 message(${CMAKE_BINARY_DIR})
-include_directories(${CMAKE_BINARY_DIR}/../../../../toolkit/DAE/install/include/)
+include_directories(${CMAKE_BINARY_DIR}/../../../../toolkit/DAE/install/kdl_install/include/)
 include_directories(/usr/include/eigen3)
 aux_source_directory(${CMAKE_BINARY_DIR}/../src solver_DIR_SRCS)
 add_executable(kdl ${solver_DIR_SRCS})
