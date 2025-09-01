@@ -385,6 +385,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     rivet_dock = new RivetDockWidget;
     connect(ui->actionRivet, SIGNAL(triggered()), this, SLOT(OpenRivetModule()));
     connect(rivet_dock->ui->pushButton_5, SIGNAL(clicked(bool)), this, SLOT(rivetImportResults()));
+    connect(rivet_dock->ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(rivetCreateModel()));
 
 
 
@@ -4322,12 +4323,28 @@ void MainWindow::OpenRivetModule()
     }
 }
 
+void MainWindow::rivetCreateModel() {
+    NewProject();
+    double h1 = rivet_dock->ui->tableWidget->item(0,0)->text().toDouble();
+    double r1 = rivet_dock->ui->tableWidget->item(1,0)->text().toDouble();
+    double h2 = rivet_dock->ui->tableWidget->item(2,0)->text().toDouble();
+    double r2 = rivet_dock->ui->tableWidget->item(3,0)->text().toDouble();
+    double h3 = rivet_dock->ui->tableWidget->item(4,0)->text().toDouble();
+    TopoDS_Shape* S1 = new TopoDS_Shape(BRepPrimAPI_MakeCylinder(gp_Ax2(gp_Pnt(0,0,0),gp_Dir(0,0,1)),r1,h1).Shape());
+    TopoDS_Shape* S2 = new TopoDS_Shape(BRepPrimAPI_MakeCylinder(gp_Ax2(gp_Pnt(0,0,h1),gp_Dir(0,0,1)),r2,h2).Shape());
+    TopoDS_Shape* S = new TopoDS_Shape(BRepAlgoAPI_Fuse(*S1,*S2).Shape());
+    General* A = new General(S);
+    parts->Add(A);
+    vtk_widget->Plot(*(A->Value()),false);
+    vtk_widget->rivetPlotPlane(h1,h3);
+}
+
 void MainWindow::rivetImportResults () {
-    if (rivet_step == 0) {
+    if (rivet_step == 1) {
         rivet_file_name = QFileDialog::getExistingDirectory(
                     this,
                     "Open Dir",
-                    "../../toolkit/MultiX/build/data/vtk"
+                    "../../toolkit/MultiX/build/data/"
                     );
         QDir dir(rivet_file_name);
         QStringList stringlist_vtk;
@@ -4339,7 +4356,7 @@ void MainWindow::rivetImportResults () {
         std::cout << rivet_total_step << std::endl;
     }
     if (rivet_step > rivet_total_step) {
-        rivet_step = 0;
+        rivet_step = 1;
         rivet_total_step = 0;
         return;
     }

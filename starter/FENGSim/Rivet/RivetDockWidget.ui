@@ -117,6 +117,31 @@
           <string/>
          </property>
         </column>
+        <item row="0" column="0">
+         <property name="text">
+          <string>0.1</string>
+         </property>
+        </item>
+        <item row="1" column="0">
+         <property name="text">
+          <string>0.2</string>
+         </property>
+        </item>
+        <item row="2" column="0">
+         <property name="text">
+          <string>0.2</string>
+         </property>
+        </item>
+        <item row="3" column="0">
+         <property name="text">
+          <string>0.1</string>
+         </property>
+        </item>
+        <item row="4" column="0">
+         <property name="text">
+          <string>0.1</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>
@@ -260,6 +285,21 @@
           <string>New Column</string>
          </property>
         </column>
+        <item row="0" column="0">
+         <property name="text">
+          <string>71000</string>
+         </property>
+        </item>
+        <item row="1" column="0">
+         <property name="text">
+          <string>0.3</string>
+         </property>
+        </item>
+        <item row="2" column="0">
+         <property name="text">
+          <string>503</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>

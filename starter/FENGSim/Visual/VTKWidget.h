@@ -464,7 +464,9 @@ public:
      */
 public:
     vtkSmartPointer<vtkActor> rivet_simulation_actor;
+    vtkSmartPointer<vtkActor> rivet_plane_actor;
     void rivetImportResults (QString file_name);
+    void rivetPlotPlane (double h1, double h2);
 
 
     // *******************************************************

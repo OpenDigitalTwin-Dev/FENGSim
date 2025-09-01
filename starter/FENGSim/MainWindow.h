@@ -520,13 +520,14 @@ public slots:
 
 private:
     QTimer* rivet_timer =  new QTimer;
-    int rivet_step = 0;
+    int rivet_step = 1;
     int rivet_total_step = 0;
     QString rivet_file_name;
 public:
     RivetDockWidget* rivet_dock;
 public slots:
     void OpenRivetModule ();
+    void rivetCreateModel ();
     void rivetImportResults ();
 
 
