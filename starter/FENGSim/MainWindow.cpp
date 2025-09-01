@@ -35,6 +35,7 @@
 #include "BRep_Builder.hxx"
 #include "STEPControl_Writer.hxx"
 #include "qcustomplot.h"
+#include "ui_RivetDockWidget.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -383,6 +384,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
  */
     rivet_dock = new RivetDockWidget;
     connect(ui->actionRivet, SIGNAL(triggered()), this, SLOT(OpenRivetModule()));
+    connect(rivet_dock->ui->pushButton_5, SIGNAL(clicked(bool)), this, SLOT(rivetImportResults()));
 
 
 
@@ -4318,4 +4320,33 @@ void MainWindow::OpenRivetModule()
     {
         ui->dockWidget->hide();
     }
+}
+
+void MainWindow::rivetImportResults () {
+    if (rivet_step == 0) {
+        rivet_file_name = QFileDialog::getExistingDirectory(
+                    this,
+                    "Open Dir",
+                    "../../toolkit/MultiX/build/data/vtk"
+                    );
+        QDir dir(rivet_file_name);
+        QStringList stringlist_vtk;
+        stringlist_vtk << "telastoplasticity_undeform*.vtk";
+        dir.setNameFilters(stringlist_vtk);
+        QFileInfoList fileinfolist;
+        fileinfolist = dir.entryInfoList();
+        rivet_total_step = fileinfolist.length();
+        std::cout << rivet_total_step << std::endl;
+    }
+    if (rivet_step > rivet_total_step) {
+        rivet_step = 0;
+        rivet_total_step = 0;
+        return;
+    }
+    vtk_widget->rivetImportResults(
+                QString("../../toolkit/MultiX/build/data/vtk/telastoplasticity_undeform")
+                +QString::number(rivet_step)
+                +QString(".vtk"));
+    rivet_step++;
+    rivet_timer->singleShot(1, this, SLOT(rivetImportResults()));
 }

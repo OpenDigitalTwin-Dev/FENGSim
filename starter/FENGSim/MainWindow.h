@@ -7,6 +7,8 @@
 #include <QComboBox>
 #include <QProcess>
 #include <QTimer>
+#include <QFileDialog>
+#include <QString>
 
 #include "CAD/Primitive.h"
 #include "CAD/OCCWidget.h"
@@ -512,15 +514,20 @@ public slots:
     void OCPoroImportSummary ();
 
 
-/* !
+    /* !
   rivet app
   */
+
+private:
+    QTimer* rivet_timer =  new QTimer;
+    int rivet_step = 0;
+    int rivet_total_step = 0;
+    QString rivet_file_name;
 public:
     RivetDockWidget* rivet_dock;
 public slots:
     void OpenRivetModule ();
-
-
+    void rivetImportResults ();
 
 
 

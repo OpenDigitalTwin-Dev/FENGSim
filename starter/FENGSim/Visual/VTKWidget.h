@@ -459,6 +459,12 @@ public:
     void mbdPath ();
 
 
+    /* !
+     rivet dynamic
+     */
+public:
+    vtkSmartPointer<vtkActor> rivet_simulation_actor;
+    void rivetImportResults (QString file_name);
 
 
     // *******************************************************

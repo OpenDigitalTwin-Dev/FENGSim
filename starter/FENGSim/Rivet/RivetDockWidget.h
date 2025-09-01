@@ -15,7 +15,7 @@ public:
     explicit RivetDockWidget(QWidget *parent = nullptr);
     ~RivetDockWidget();
 
-private:
+public:
     Ui::RivetDockWidget *ui;
 };
 
