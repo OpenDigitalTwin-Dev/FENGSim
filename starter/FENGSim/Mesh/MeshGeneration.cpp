@@ -9,6 +9,7 @@ void MeshModule::MeshGeneration (TopoDS_Shape* S, double size, int refine_level,
     printf("USING GMSH\n");
     GmshInitialize();
     GmshSetOption("Mesh","Algorithm",2.);
+    GmshSetOption("Mesh","SubdivisionAlgorithm", 2.0);
     //GmshSetOption("Mesh","MinimumCurvePoints",20.);
     GmshSetOption("Mesh","CharacteristicLengthMax", size);
     GmshSetOption("General","Verbosity", 100.);
@@ -47,9 +48,9 @@ void MeshModule::MeshGeneration (TopoDS_Shape* S, double size, int refine_level,
 
 void MeshModule::FileFormat ()
 {
-//    QString filename =  QFileDialog::getSaveFileName(0,"Save Mesh",
-//                                                     QString("/home/jiping/M++/Elasticity/conf/geo"),
-//                                                     "Mesh files (*.geo);;", 0 , QFileDialog::DontUseNativeDialog);
+    //    QString filename =  QFileDialog::getSaveFileName(0,"Save Mesh",
+    //                                                     QString("/home/jiping/M++/Elasticity/conf/geo"),
+    //                                                     "Mesh files (*.geo);;", 0 , QFileDialog::DontUseNativeDialog);
     ifstream is;
     ofstream out;
     is.open(std::string("./data/mesh/fengsim_mesh.mesh").c_str());

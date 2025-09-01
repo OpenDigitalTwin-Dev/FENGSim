@@ -528,6 +528,7 @@ public:
 public slots:
     void OpenRivetModule ();
     void rivetCreateModel ();
+    void rivetMeshGen ();
     void rivetImportResults ();
 
 

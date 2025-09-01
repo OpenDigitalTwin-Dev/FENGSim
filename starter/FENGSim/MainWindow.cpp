@@ -386,6 +386,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     connect(ui->actionRivet, SIGNAL(triggered()), this, SLOT(OpenRivetModule()));
     connect(rivet_dock->ui->pushButton_5, SIGNAL(clicked(bool)), this, SLOT(rivetImportResults()));
     connect(rivet_dock->ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(rivetCreateModel()));
+    connect(rivet_dock->ui->pushButton_6, SIGNAL(clicked(bool)), this, SLOT(rivetMeshGen()));
 
 
 
@@ -4336,6 +4337,13 @@ void MainWindow::rivetCreateModel() {
     General* A = new General(S);
     parts->Add(A);
     vtk_widget->Plot(*(A->Value()),false);
+    vtk_widget->rivetPlotPlane(h1,h3);
+}
+
+void MainWindow::rivetMeshGen() {
+    MeshGen();
+    double h1 = rivet_dock->ui->tableWidget->item(0,0)->text().toDouble();
+    double h3 = rivet_dock->ui->tableWidget->item(4,0)->text().toDouble();
     vtk_widget->rivetPlotPlane(h1,h3);
 }
 

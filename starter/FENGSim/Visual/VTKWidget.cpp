@@ -3279,6 +3279,8 @@ void VTKWidget::rivetImportResults(QString file_name)
 
 void VTKWidget::rivetPlotPlane(double h1, double h2)
 {
+    renderer->RemoveActor(rivet_plane_actor);
+    rivet_plane_actor = vtkSmartPointer<vtkActor>::New();
     vtkSmartPointer<vtkCubeSource> box = vtkSmartPointer<vtkCubeSource>::New();
     box->SetXLength(1);
     box->SetYLength(1);
@@ -3286,15 +3288,13 @@ void VTKWidget::rivetPlotPlane(double h1, double h2)
     box->SetCenter(0,0,h1+h2/2);
     vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
     mapper->SetInputConnection(box->GetOutputPort());
-    renderer->RemoveActor(rivet_plane_actor);
-    rivet_plane_actor = vtkSmartPointer<vtkActor>::New();
     rivet_plane_actor->SetMapper(mapper);
     rivet_plane_actor->GetProperty()->EdgeVisibilityOff();
     rivet_plane_actor->GetProperty()->SetLineWidth(1);
+    rivet_plane_actor->GetProperty()->SetOpacity(0.5);
     rivet_plane_actor->SetPickable(false);
     rivet_plane_actor->SetSelected(false);
-    //rivet_plane_actor->GetProperty()->SetRepresentationToWireframe();
-    rivet_plane_actor->GetProperty()->SetOpacity(0.5);
+
     renderer->AddActor(rivet_plane_actor);
     GetRenderWindow()->Render();
 }
