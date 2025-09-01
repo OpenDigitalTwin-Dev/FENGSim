@@ -72,7 +72,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>24</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -188,6 +188,7 @@
    <addaction name="actionAdditiveManufacturing"/>
    <addaction name="actionMeasure"/>
    <addaction name="actionMachining"/>
+   <addaction name="actionRivet"/>
    <addaction name="actionSystem"/>
    <addaction name="actionSPC"/>
    <addaction name="actionTransport"/>
@@ -606,6 +607,18 @@
     <string>OCPoro</string>
    </property>
   </action>
+  <action name="actionRivet">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Rivet/RivetWindow.qrc">
+     <normaloff>:/new/prefix1/fig/rivet.png</normaloff>:/new/prefix1/fig/rivet.png</iconset>
+   </property>
+   <property name="text">
+    <string>Rivet</string>
+   </property>
+  </action>
   <zorder>dockWidget</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
@@ -618,15 +631,16 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="MeasureWidnow.qrc"/>
-  <include location="CADWindow.qrc"/>
-  <include location="SPCWindow.qrc"/>
-  <include location="System.qrc"/>
-  <include location="MeshWindow.qrc"/>
+  <include location="Rivet/RivetWindow.qrc"/>
   <include location="MainWindow.qrc"/>
-  <include location="OCPoro.qrc"/>
+  <include location="CADWindow.qrc"/>
+  <include location="MeasureWidnow.qrc"/>
+  <include location="SPCWindow.qrc"/>
   <include location="Machining/machining.qrc"/>
   <include location="TransportWindow.qrc"/>
+  <include location="MeshWindow.qrc"/>
+  <include location="System.qrc"/>
+  <include location="OCPoro.qrc"/>
  </resources>
  <connections/>
 </ui>

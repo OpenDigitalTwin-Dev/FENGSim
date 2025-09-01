@@ -33,6 +33,7 @@
 #include "OCPoro/OCPoroDockWidget.h"
 #include "OCPoro/OCPoroDialog.h"
 #include "Mesh/MeshGeneration.h"
+#include "Rivet/RivetDockWidget.h"
 
 // ui design
 namespace Ui {
@@ -511,8 +512,13 @@ public slots:
     void OCPoroImportSummary ();
 
 
-
-
+/* !
+  rivet app
+  */
+public:
+    RivetDockWidget* rivet_dock;
+public slots:
+    void OpenRivetModule ();
 
 
 

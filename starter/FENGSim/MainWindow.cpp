@@ -378,8 +378,11 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
 
 
 
-
-
+    /* !
+  rivet module
+ */
+    rivet_dock = new RivetDockWidget;
+    connect(ui->actionRivet, SIGNAL(triggered()), this, SLOT(OpenRivetModule()));
 
 
 
@@ -4287,6 +4290,29 @@ void MainWindow::OpenOCPoroModule()
         ui->actionSolver->setChecked(false);
         ui->actionVisual->setChecked(false);
         ui->actionMeasure->setChecked(false);
+    }
+    else
+    {
+        ui->dockWidget->hide();
+    }
+}
+
+void MainWindow::OpenRivetModule()
+{
+    if (ui->actionRivet->isChecked())
+    {
+        vtk_widget->SetSelectable(false);
+        vtk_widget->SetSelectDomain(false);
+        vtk_widget->Reset();
+        ui->dockWidget->setWidget(rivet_dock);
+        ui->dockWidget->show();
+        // set open and close
+        ui->actionCAD->setChecked(false);
+        ui->actionMesh->setChecked(false);
+        ui->actionSolver->setChecked(false);
+        ui->actionVisual->setChecked(false);
+        ui->actionMeasure->setChecked(false);
+        ui->actionOCPoro->setChecked(false);
     }
     else
     {
