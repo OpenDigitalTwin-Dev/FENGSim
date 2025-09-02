@@ -3,6 +3,7 @@ project(kdl_api)
 
 set(CMAKE_CXX_COMPILER /usr/bin/g++-10)
 
+link_directories(${CMAKE_BINARY_DIR}/../../../toolkit/Geometry/install/occt_install/lib/)
 
 message(${CMAKE_BINARY_DIR})
 include_directories(${CMAKE_BINARY_DIR}/../../../toolkit/Geometry/install/gmsh_4_14_0_install/include/)
