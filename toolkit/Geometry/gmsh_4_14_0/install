@@ -4,6 +4,7 @@ sudo apt install cmake make gcc g++
 
 mkdir build
 cd build
-cmake .. -DENABLE_OCC=OFF -DCMAKE_INSTALL_PREFIX=$PWD/../../install/gmsh_install -DENABLE_BUILD_DYNAMIC=ON -DENABLE_BUILD_SHARED=ON -DENABLE_BUILD_LIB=ON -DENABLE_PETSC=OFF -DENABLE_FLTK=OFF -DENABLE_MMG3D=OFF -DENABLE_MED=OFF -DENABLE_MESQUITE=OFF
-make -j4
+export CASROOT=$PWD/../../install/occt_install/lib/
+cmake .. -DOCC_INC=$PWD/../../install/occt_install/include/opencascade -DCMAKE_INSTALL_PREFIX=$PWD/../../install/gmsh_install -DENABLE_BUILD_DYNAMIC=ON -DENABLE_BUILD_SHARED=ON -DENABLE_BUILD_LIB=ON -DENABLE_PETSC=OFF -DENABLE_FLTK=OFF -DENABLE_MMG3D=OFF -DENABLE_MED=OFF -DENABLE_OCC=ON -DENABLE_OCC_CAF=OFF
+make -j8
 make install
