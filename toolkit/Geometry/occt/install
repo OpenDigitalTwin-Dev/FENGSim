@@ -1,0 +1,3 @@
+mkdir build
+cd build
+cmake .. -DINSTALL_DIR=$PWD/../../install/occt_install
