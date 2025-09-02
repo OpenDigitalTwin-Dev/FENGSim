@@ -25,13 +25,14 @@ int main(int argc, char **argv)
   // directly retrieve the tags of the highest dimensional imported entities):
   std::vector<std::pair<int, int> > v;
   try {
-    gmsh::model::occ::importShapes("../t20_data.step", v);
+    gmsh::model::occ::importShapes("t20_data.step", v);
   } catch(...) {
     gmsh::logger::write("Could not load STEP file: bye!");
     gmsh::finalize();
     return 0;
   }
 
+  /*
   // If we had specified
   //
   // gmsh::option::setString("Geometry.OCCTargetUnit", "M");
@@ -123,16 +124,18 @@ int main(int argc, char **argv)
     gmsh::model::getEntities(tmp, 0);
     gmsh::model::removeEntities(tmp);
   }
-
+  */
+  
   // Finally, let's specify a global mesh size and mesh the partitioned model:
   gmsh::option::setNumber("Mesh.MeshSizeMin", 3);
   gmsh::option::setNumber("Mesh.MeshSizeMax", 3);
+  
   gmsh::model::mesh::generate(3);
-  gmsh::write("t20.msh");
+  gmsh::write("t20.vtk");
 
   // Launch the GUI to see the results:
   std::set<std::string> args(argv, argv + argc);
-  if(!args.count("-nopopup")) gmsh::fltk::run();
+  //if(!args.count("-nopopup")) gmsh::fltk::run();
 
   gmsh::finalize();
   return 0;
