@@ -18,14 +18,15 @@
 int main(int argc, char **argv)
 {
     gmsh::initialize(argc, argv);
-    
+    gmsh::open("../data/mesh.opt");
     gmsh::model::add("t20");
     
     // Load a STEP file (using `importShapes' instead of `merge' allows to
     // directly retrieve the tags of the highest dimensional imported entities):
     std::vector<std::pair<int, int> > v;
     //  try {
-    gmsh::model::occ::importShapes("../data/t20_data.step", v);
+    //gmsh::model::occ::importShapes("../data/t20_data.step", v);
+    gmsh::model::occ::importShapes("../data/mesh.stp", v);
     //} catch(...) {
     //gmsh::logger::write("Could not load STEP file: bye!");
     //gmsh::finalize();
@@ -128,19 +129,24 @@ int main(int argc, char **argv)
 
     gmsh::model::occ::synchronize();
     // Finally, let's specify a global mesh size and mesh the partitioned model:
-    gmsh::option::setNumber("Mesh.MeshSizeMin", 0.2);
-    gmsh::option::setNumber("Mesh.MeshSizeMax", 0.2);
-    gmsh::option::setNumber("Mesh.Algorithm", 8);
+    /*
+    gmsh::option::setNumber("Mesh.MeshSizeMin", 0.05);
+    gmsh::option::setNumber("Mesh.MeshSizeMax", 0.05);
+    gmsh::option::setNumber("Mesh.Algorithm", 11);
     gmsh::option::setNumber("Mesh.Algorithm3D", 1);
     gmsh::option::setNumber("Mesh.ElementOrder", 1);
     gmsh::option::setNumber("Mesh.RecombineAll", 1);
+    gmsh::option::setNumber("Mesh.Smoothing", 5);
+    gmsh::option::setNumber("Mesh.AngleSmoothNormals", 30);
+    gmsh::option::setNumber("Mesh.AngleToleranceFacetOverlap", 0.1);
+    */
 
-    gmsh::model::mesh::generate(2);
+    //gmsh::model::mesh::generate(2);
     gmsh::model::mesh::generate(3);
     gmsh::write("t20.vtk");
     
     // Launch the GUI to see the results:
-    std::set<std::string> args(argv, argv + argc);
+    //std::set<std::string> args(argv, argv + argc);
     //if(!args.count("-nopopup")) gmsh::fltk::run();
     
     gmsh::finalize();
