@@ -3,11 +3,21 @@ project(kdl_api)
 
 set(CMAKE_CXX_COMPILER /usr/bin/g++-10)
 
+#find_package(OpenCASCADE PATHS ${CMAKE_BINARY_DIR}/../../../toolkit/Geometry/install/occt_install/lib/cmake/opencascade)
+message(${CMAKE_BINARY_DIR}/../../../toolkit/Geometry/install/occt_install/lib/cmake/opencascade)
+#if(OpenCASCADE_FOUND)
+#  message("OpenCASCADE FOUND")
+#  message(${OpenCASCADE_LIBRARIES})
+#  include_directories(${OpenCASCADE_INCLUDE_DIRS})
+#  link_directories(${OpenCASCADE_LIBRARY_DIRS})
+#  add_definitions(${OpenCASCADE_DEFINITIONS})
+#endif()
+
 link_directories(${CMAKE_BINARY_DIR}/../../../toolkit/Geometry/install/occt_install/lib/)
 
 message(${CMAKE_BINARY_DIR})
 include_directories(${CMAKE_BINARY_DIR}/../../../toolkit/Geometry/install/gmsh_4_14_0_install/include/)
 aux_source_directory(${CMAKE_BINARY_DIR}/../src solver_DIR_SRCS)
 add_executable(gmsh ${solver_DIR_SRCS})
-target_link_libraries(gmsh ${CMAKE_BINARY_DIR}/../../../toolkit/Geometry/install/gmsh_4_14_0_install/lib/libgmsh.so ${OpenCASCADE_LIBRARIES})
+target_link_libraries(gmsh ${CMAKE_BINARY_DIR}/../../../toolkit/Geometry/install/gmsh_4_14_0_install/lib/libgmsh.so)
 set_target_properties(gmsh PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
