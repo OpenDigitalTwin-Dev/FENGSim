@@ -18,15 +18,15 @@
 int main(int argc, char **argv)
 {
     gmsh::initialize(argc, argv);
-    gmsh::open("../data/mesh.opt");
-    gmsh::model::add("t20");
+    gmsh::open("../data/mesh.stp.opt");
+    gmsh::model::add("gmsh");
     
     // Load a STEP file (using `importShapes' instead of `merge' allows to
     // directly retrieve the tags of the highest dimensional imported entities):
     std::vector<std::pair<int, int> > v;
     //  try {
     //gmsh::model::occ::importShapes("../data/t20_data.step", v);
-    gmsh::model::occ::importShapes("../data/mesh.stp", v);
+    gmsh::model::occ::importShapes("../../build-FENGSim-Desktop_Qt_5_12_12_GCC_64bit-Debug/data/mesh/mesh.stp", v);
     //} catch(...) {
     //gmsh::logger::write("Could not load STEP file: bye!");
     //gmsh::finalize();
@@ -143,7 +143,8 @@ int main(int argc, char **argv)
 
     //gmsh::model::mesh::generate(2);
     gmsh::model::mesh::generate(3);
-    gmsh::write("t20.vtk");
+    gmsh::write("../../build-FENGSim-Desktop_Qt_5_12_12_GCC_64bit-Debug/data/mesh/fengsim_mesh.vtk");
+    gmsh::write("../../build-FENGSim-Desktop_Qt_5_12_12_GCC_64bit-Debug/data/mesh/fengsim_mesh.mesh");
     
     // Launch the GUI to see the results:
     //std::set<std::string> args(argv, argv + argc);
