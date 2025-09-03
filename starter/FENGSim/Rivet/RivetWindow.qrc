@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/new/prefix1">
         <file>fig/rivet.png</file>
+        <file>fig/rivet_mesh.png</file>
+        <file>fig/rivet_mesh_0.png</file>
+        <file>fig/rivet_mesh_1.png</file>
     </qresource>
 </RCC>

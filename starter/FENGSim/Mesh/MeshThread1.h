@@ -14,10 +14,11 @@ public:
     TopoDS_Shape* S;
     double size;
     int refine_level;
+    double subd=1;
     QString path;
 
     void run () {
-        MM->MeshGeneration(S,size,refine_level,path);
+        MM->MeshGeneration(S,size,refine_level,path,subd);
     }
 };
 

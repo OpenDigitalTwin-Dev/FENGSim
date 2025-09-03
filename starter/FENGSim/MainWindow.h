@@ -523,12 +523,16 @@ private:
     int rivet_step = 1;
     int rivet_total_step = 0;
     QString rivet_file_name;
+    double rivet_mesh_size = 10000;
+    double rivet_mesh_refine = 0;
 public:
     RivetDockWidget* rivet_dock;
 public slots:
     void OpenRivetModule ();
     void rivetCreateModel ();
     void rivetMeshGen ();
+    void rivetMeshPlot ();
+    void rivetMeshRefresh ();
     void rivetImportResults ();
 
 

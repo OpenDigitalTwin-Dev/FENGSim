@@ -3,13 +3,13 @@
 #include "TopExp_Explorer.hxx"
 #include "QString"
 
-void MeshModule::MeshGeneration (TopoDS_Shape* S, double size, int refine_level, QString path)
+void MeshModule::MeshGeneration (TopoDS_Shape* S, double size, int refine_level, QString path, double subd)
 {
     if (S == NULL) return;
     printf("USING GMSH\n");
     GmshInitialize();
     GmshSetOption("Mesh","Algorithm",2.);
-    GmshSetOption("Mesh","SubdivisionAlgorithm", 1.0);
+    GmshSetOption("Mesh","SubdivisionAlgorithm", subd);
     //GmshSetOption("Mesh","MinimumCurvePoints",20.);
     GmshSetOption("Mesh","CharacteristicLengthMax", size);
     GmshSetOption("General","Verbosity", 100.);

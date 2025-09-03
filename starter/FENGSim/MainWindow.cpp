@@ -387,6 +387,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     connect(rivet_dock->ui->pushButton_5, SIGNAL(clicked(bool)), this, SLOT(rivetImportResults()));
     connect(rivet_dock->ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(rivetCreateModel()));
     connect(rivet_dock->ui->pushButton_6, SIGNAL(clicked(bool)), this, SLOT(rivetMeshGen()));
+    connect(rivet_dock->ui->pushButton_8, SIGNAL(clicked(bool)), this, SLOT(rivetMeshRefresh()));
+
 
 
 
@@ -4338,13 +4340,42 @@ void MainWindow::rivetCreateModel() {
     parts->Add(A);
     vtk_widget->Plot(*(A->Value()),false);
     vtk_widget->rivetPlotPlane(h1,h3);
+
+    STEPControl_Writer writer;
+    writer.Transfer(*S,STEPControl_ManifoldSolidBrep);
+    writer.Write("data/mesh/mesh.stp");
 }
 
+
+
 void MainWindow::rivetMeshGen() {
-    MeshGen();
+    //MeshGen();
+    if (parts->size() == 0) return;
+    std::cout << "mesh check " << parts->size() << std::endl;
+    MeshThread1* mth1 = new MeshThread1;
+    mth1->S = parts->Union();
+    mth1->size = rivet_mesh_size;
+    mth1->refine_level = rivet_mesh_refine;
+    mth1->path = meas_path;
+    mth1->MM = &MM;
+    mth1->subd = 2;
+    mth1->start();
+    rivet_mesh_refine++;
+    connect(mth1, SIGNAL(finished()), this, SLOT(rivetMeshPlot()));
+}
+
+void MainWindow::rivetMeshPlot() {
+    mesh_dock->ui->pushButton->setEnabled(true);
+    vtk_widget->Hide();
+    MM.FileFormat();
+    vtk_widget->ImportVTKFile((meas_path+QString("/data/mesh/fengsim_mesh.vtk")).toStdString());
     double h1 = rivet_dock->ui->tableWidget->item(0,0)->text().toDouble();
     double h3 = rivet_dock->ui->tableWidget->item(4,0)->text().toDouble();
     vtk_widget->rivetPlotPlane(h1,h3);
+}
+
+void MainWindow::rivetMeshRefresh() {
+    rivet_mesh_refine = 0;
 }
 
 void MainWindow::rivetImportResults () {

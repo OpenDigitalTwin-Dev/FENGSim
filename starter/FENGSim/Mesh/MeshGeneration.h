@@ -70,7 +70,7 @@ class MeshModule {
     int mesh_dim;
 public:
     MeshModule () {}
-    void MeshGeneration (TopoDS_Shape* S, double size = 0.5, int refine_level = 0, QString path ="");
+    void MeshGeneration (TopoDS_Shape* S, double size = 0.5, int refine_level = 0, QString path ="", double subd=1);
     void FileFormat ();
     void MeasureModel (QString path, QString filename = QString("/data/meas/fengsim_meas_target.vtk"));
     void MeasureModel (int id);
