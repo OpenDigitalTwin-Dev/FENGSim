@@ -4351,9 +4351,7 @@ void MainWindow::rivetCreateModel() {
 void MainWindow::rivetMeshGen() {
     //MeshGen();
     QProcess proc;
-    proc.execute("bash",
-                 QStringList() << "-c" << "cd ../gmsh && ./run");
-
+    proc.execute("bash", QStringList() << "-c" << "cd ../gmsh && ./run");
     rivetMeshPlot();
 
     return;
