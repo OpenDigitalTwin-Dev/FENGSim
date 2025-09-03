@@ -9,7 +9,7 @@ void MeshModule::MeshGeneration (TopoDS_Shape* S, double size, int refine_level,
     printf("USING GMSH\n");
     GmshInitialize();
     GmshSetOption("Mesh","Algorithm",2.);
-    GmshSetOption("Mesh","SubdivisionAlgorithm", 2.0);
+    GmshSetOption("Mesh","SubdivisionAlgorithm", 1.0);
     //GmshSetOption("Mesh","MinimumCurvePoints",20.);
     GmshSetOption("Mesh","CharacteristicLengthMax", size);
     GmshSetOption("General","Verbosity", 100.);
