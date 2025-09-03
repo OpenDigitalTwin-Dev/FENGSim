@@ -392,7 +392,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
 
 
 
-
     return;
 }
 
@@ -3347,8 +3346,9 @@ void MainWindow::FEMCompute()
     //fem_dock->Configure();
     proc->start("./ElasticitySolver");
     if (proc->waitForFinished(-1)) {
-        vtk_widget->Hide();
-        vtk_widget->ImportVTKFile(std::string("../Elasticity/build/data/vtk/elasticity_3_deform.vtk"));
+        //        vtk_widget->Hide();
+        //        vtk_widget->ImportVTKFile(std::string("../Elasticity/build/data/vtk/fengsim_deform.vtk"));
+        FEMPlot();
     }
     return;
     if (fem_dock->ui->comboBox->currentText().toStdString() == "Poisson")
@@ -4350,6 +4350,13 @@ void MainWindow::rivetCreateModel() {
 
 void MainWindow::rivetMeshGen() {
     //MeshGen();
+    QProcess proc;
+    proc.execute("bash",
+                 QStringList() << "-c" << "cd ../gmsh && ./run");
+
+    rivetMeshPlot();
+
+    return;
     if (parts->size() == 0) return;
     std::cout << "mesh check " << parts->size() << std::endl;
     MeshThread1* mth1 = new MeshThread1;

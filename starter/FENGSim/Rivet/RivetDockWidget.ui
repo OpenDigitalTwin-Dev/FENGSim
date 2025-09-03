@@ -407,6 +407,9 @@
            <iconset resource="RivetWindow.qrc">
             <normaloff>:/new/prefix1/fig/rivet_mesh_1.png</normaloff>:/new/prefix1/fig/rivet_mesh_1.png</iconset>
           </property>
+          <property name="checkable">
+           <bool>false</bool>
+          </property>
          </widget>
         </item>
         <item>
