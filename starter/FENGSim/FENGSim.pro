@@ -56,6 +56,7 @@ SOURCES +=\
     Machining/MachiningThread2.cpp \
     Machining/MakeTools.cpp \
     Transport/TransportDockWidget.cpp \
+    Rivet/RivetDockWidget.cpp
 
 
 HEADERS  += \
@@ -97,6 +98,7 @@ HEADERS  += \
     Machining/MachiningThread1.h \
     Machining/MachiningThread2.h \
     Transport/TransportDockWidget.h \
+    Rivet/RivetDockWidget.h
 
 FORMS    += \
     CAD/PhysicsDockWidget.ui \
@@ -112,7 +114,8 @@ FORMS    += \
     AdditiveManufacturing/AdditiveManufacturingDockWidget.ui \
     StatisticalProcessControl/SPCDockWidget.ui \
     Machining/MachiningDockWidget.ui \
-    Transport/TransportDockWidget.ui
+    Transport/TransportDockWidget.ui \
+    Rivet/RivetDockWidget.ui
 
 RESOURCES += \
     MainWindow.qrc \
@@ -126,7 +129,8 @@ RESOURCES += \
     SPCWindow.qrc \
     AMWindow.qrc \
     Machining/machining.qrc \
-    TransportWindow.qrc
+    TransportWindow.qrc \
+    Rivet/RivetWindow.qrc
 
 INCLUDEPATH += $$PWD/../../toolkit/Geometry/install/oce_install/include/oce $$PWD/../../toolkit/Geometry/install/gmsh_install/include/gmsh $$PWD/../../toolkit/Geometry/install/vtk_install/include/vtk-8.1
 
