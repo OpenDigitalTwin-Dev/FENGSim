@@ -163,29 +163,6 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_3">
-          <property name="minimumSize">
-           <size>
-            <width>25</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>25</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="icon">
-           <iconset resource="../DataBaseWindow.qrc">
-            <normaloff>:/new/prefix1/figure/database_wind/edit.png</normaloff>:/new/prefix1/figure/database_wind/edit.png</iconset>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QPushButton" name="pushButton">
           <property name="minimumSize">
            <size>
@@ -205,6 +182,29 @@
           <property name="icon">
            <iconset resource="../AMWindow.qrc">
             <normaloff>:/amwind/figure/am_wind/ok.png</normaloff>:/amwind/figure/am_wind/ok.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_3">
+          <property name="minimumSize">
+           <size>
+            <width>25</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>25</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../DataBaseWindow.qrc">
+            <normaloff>:/new/prefix1/figure/database_wind/edit.png</normaloff>:/new/prefix1/figure/database_wind/edit.png</iconset>
           </property>
          </widget>
         </item>
@@ -321,29 +321,6 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_2">
-          <property name="minimumSize">
-           <size>
-            <width>25</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>25</width>
-            <height>25</height>
-           </size>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="icon">
-           <iconset resource="../DataBaseWindow.qrc">
-            <normaloff>:/new/prefix1/figure/database_wind/edit.png</normaloff>:/new/prefix1/figure/database_wind/edit.png</iconset>
-          </property>
-         </widget>
-        </item>
-        <item>
          <widget class="QPushButton" name="pushButton_4">
           <property name="minimumSize">
            <size>
@@ -363,6 +340,29 @@
           <property name="icon">
            <iconset resource="../AMWindow.qrc">
             <normaloff>:/amwind/figure/am_wind/ok.png</normaloff>:/amwind/figure/am_wind/ok.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="pushButton_2">
+          <property name="minimumSize">
+           <size>
+            <width>25</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>25</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../DataBaseWindow.qrc">
+            <normaloff>:/new/prefix1/figure/database_wind/edit.png</normaloff>:/new/prefix1/figure/database_wind/edit.png</iconset>
           </property>
          </widget>
         </item>
@@ -502,9 +502,9 @@
   </layout>
  </widget>
  <resources>
-  <include location="../AMWindow.qrc"/>
-  <include location="RivetWindow.qrc"/>
   <include location="../DataBaseWindow.qrc"/>
+  <include location="RivetWindow.qrc"/>
+  <include location="../AMWindow.qrc"/>
  </resources>
  <connections/>
 </ui>
