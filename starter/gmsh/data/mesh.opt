@@ -5,32 +5,35 @@ General.AxesLabelX = "";
 General.AxesLabelY = "";
 General.AxesLabelZ = "";
 General.BackgroundImageFileName = "";
-General.BuildInfo = "Version: 4.12.1; License: GNU General Public License; Build OS: Linux64-sdk; Build date: 20240331; Build host: debian-build-farm; Build options: 64Bit ALGLIB Bamg Blossom DIntegration Dlopen DomHex Eigen Fltk GMP Gmm Hxt Jpeg Kbipack LinuxJoystick MathEx[contrib] Mesh Metis Mpeg ONELAB ONELABMetamodel OpenCASCADE OpenCASCADE-CAF OpenGL OpenMP OptHom Parser Plugins Png Post QuadMeshingTools QuadTri Solver TetGen/BR Voro++ WinslowUntangler Zlib; FLTK version: 1.3.8; OCC version: 7.6.3; Packaged by: nobody; Web site: https://gmsh.info; Issue tracker: https://gitlab.onelab.info/gmsh/gmsh/issues";
-General.BuildOptions = "64Bit ALGLIB Bamg Blossom DIntegration Dlopen DomHex Eigen Fltk GMP Gmm Hxt Jpeg Kbipack LinuxJoystick MathEx[contrib] Mesh Metis Mpeg ONELAB ONELABMetamodel OpenCASCADE OpenCASCADE-CAF OpenGL OpenMP OptHom Parser Plugins Png Post QuadMeshingTools QuadTri Solver TetGen/BR Voro++ WinslowUntangler Zlib";
+General.BuildInfo = "Version: 4.14.0-git-efae7bad5c; License: GNU General Public License; Build OS: Linux64-sdk; Build date: 20250903; Build host: jiping-XM22AL5S; Build options: 64Bit ALGLIB[contrib] ANN[contrib] Bamg Blossom Cairo DIntegration Dlopen DomHex Eigen[contrib] Fltk GMP Gmm[contrib] Hxt Jpeg Kbipack LinuxJoystick MathEx[contrib] Mesh Metis[contrib] Mpeg Netgen Nii2mesh ONELAB ONELABMetamodel OpenCASCADE OpenGL OpenMP OptHom Parser Plugins Png Post QuadMeshingTools QuadTri Solver TetGen/BR TinyXML2[contrib] Untangle Voro++[contrib] WinslowUntangler Zlib tinyobjloader; FLTK version: 1.3.8; OCC version: 7.7.2; Packaged by: jiping; Web site: https://gmsh.info; Issue tracker: https://gitlab.onelab.info/gmsh/gmsh/issues";
+General.BuildOptions = "64Bit ALGLIB[contrib] ANN[contrib] Bamg Blossom Cairo DIntegration Dlopen DomHex Eigen[contrib] Fltk GMP Gmm[contrib] Hxt Jpeg Kbipack LinuxJoystick MathEx[contrib] Mesh Metis[contrib] Mpeg Netgen Nii2mesh ONELAB ONELABMetamodel OpenCASCADE OpenGL OpenMP OptHom Parser Plugins Png Post QuadMeshingTools QuadTri Solver TetGen/BR TinyXML2[contrib] Untangle Voro++[contrib] WinslowUntangler Zlib tinyobjloader";
 General.DefaultFileName = "untitled.geo";
 General.Display = "";
 General.ErrorFileName = ".gmsh-errors";
-General.ExecutableFileName = "/usr/bin/gmsh";
+General.ExecutableFileName = "/home/jiping/FENGSim/toolkit/Geometry/install/gmsh_4_14_0_install/bin/gmsh";
 General.FileName = "/home/jiping/FENGSim/starter/gmsh/data/mesh.stp";
 General.FltkTheme = "";
 General.GraphicsFont = "Helvetica";
 General.GraphicsFontEngine = "Native";
 General.GraphicsFontTitle = "Helvetica";
+General.LogFileName = "";
+General.NumberFormat = "%.3g";
 General.OptionsFileName = ".gmsh-options";
 General.RecentFile0 = "/home/jiping/FENGSim/starter/gmsh/data/mesh.stp";
 General.RecentFile1 = "untitled.geo";
-General.RecentFile2 = "/home/jiping/FENGSim/starter/gmsh/data/t20_data.step";
-General.RecentFile3 = "/home/jiping/FENGSim/starter/mbdyn/robot/down.stl";
-General.RecentFile4 = "/home/jiping/FENGSim/starter/su2/quickstart/test.geo";
-General.RecentFile5 = "/home/jiping/FENGSim/starter/palace/examples/coaxial/mesh/coaxial.msh";
-General.RecentFile6 = "/home/jiping/FENGSim/starter/palace/examples/static_mag/mesh/cube.geo";
-General.RecentFile7 = "/home/jiping/FENGSim/starter/ccx/oiltank/qiuguangfull_100k.dat";
-General.RecentFile8 = "/home/jiping/FENGSim/starter/palace/examples/static_mag/mesh/untitled.geo";
-General.RecentFile9 = "";
+General.RecentFile2 = "/home/jiping/FENGSim/starter/am/image/JetBlade_AdvancedManufacturing.stp";
+General.RecentFile3 = "/home/jiping/FENGSim/starter/palace/examples/rings/mesh/rings.msh";
+General.RecentFile4 = "/home/jiping/FENGSim/starter/su2/quickstart/flow.vtu";
+General.RecentFile5 = "/home/jiping/FENGSim/starter/su2/quickstart/EpplerE854.geo";
+General.RecentFile6 = "/home/jiping/FENGSim/starter/su2/quickstart/EpplerE854.STEP";
+General.RecentFile7 = "/home/jiping/FENGSim/starter/su2/quickstart/bnd.msh";
+General.RecentFile8 = "/home/jiping/FENGSim/starter/su2/quickstart/Eppler E854.geo";
+General.RecentFile9 = "/home/jiping/FENGSim/starter/su2/quickstart/Eppler E854.STEP";
 General.ScriptingLanguages = "geo";
-General.TextEditor = "gedit '%s'";
+General.ScriptingLanguages = "geo";
+General.TextEditor = "gedit %s";
 General.TmpFileName = ".gmsh-tmp";
-General.Version = "4.12.1";
+General.Version = "4.14.0-git-efae7bad5c";
 General.WatchFilePattern = "";
 General.AbortOnError = 0;
 General.AlphaBlending = 1;
@@ -101,8 +104,8 @@ General.ClipPositionY = 150;
 General.ClipWholeElements = 0;
 General.ColorScheme = 1;
 General.ConfirmOverwrite = 1;
-General.ContextPositionX = 307;
-General.ContextPositionY = 152;
+General.ContextPositionX = 134;
+General.ContextPositionY = 278;
 General.DetachedMenu = 0;
 General.DetachedProcess = 1;
 General.DisplayBorderFactor = 0.2;
@@ -118,17 +121,17 @@ General.FieldPositionX = 650;
 General.FieldPositionY = 550;
 General.FieldHeight = 344;
 General.FieldWidth = 447;
-General.FileChooserPositionX = 748;
-General.FileChooserPositionY = 385;
+General.FileChooserPositionX = 750;
+General.FileChooserPositionY = 382;
 General.FltkColorScheme = 0;
 General.FltkRefreshRate = 5;
 General.FontSize = -1;
 General.GraphicsFontSize = 15;
 General.GraphicsFontSizeTitle = 18;
-General.GraphicsHeight = 961;
-General.GraphicsPositionX = 66;
-General.GraphicsPositionY = 69;
-General.GraphicsWidth = 1854;
+General.GraphicsHeight = 966;
+General.GraphicsPositionX = 70;
+General.GraphicsPositionY = 64;
+General.GraphicsWidth = 1850;
 General.HighOrderToolsPositionX = 650;
 General.HighOrderToolsPositionY = 150;
 General.HighResolutionGraphics = 1;
@@ -167,18 +170,18 @@ General.Light5W = 0;
 General.LineWidth = 1;
 General.ManipulatorPositionX = 650;
 General.ManipulatorPositionY = 150;
-General.MaxX = 0.2002001001;
-General.MaxY = 0.2002001001;
-General.MaxZ = 0.3001001001;
-General.MenuWidth = 239;
+General.MaxX = 0.2000001;
+General.MaxY = 0.2000001;
+General.MaxZ = 0.3000001;
+General.MenuWidth = 294;
 General.MenuHeight = 200;
 General.MenuPositionX = 400;
 General.MenuPositionY = 400;
 General.MessageFontSize = -1;
-General.MessageHeight = 330;
-General.MinX = -0.2002001001;
-General.MinY = -0.2002001001;
-General.MinZ = -0.0002001001;
+General.MessageHeight = 300;
+General.MinX = -0.2000001;
+General.MinY = -0.2000001;
+General.MinZ = -1e-07;
 General.MouseHoverMeshes = 0;
 General.MouseSelection = 1;
 General.MouseInvertZoom = 0;
@@ -186,8 +189,8 @@ General.NativeFileChooser = 0;
 General.NonModalWindows = 1;
 General.NoPopup = 0;
 General.NumThreads = 1;
-General.OptionsPositionX = 360;
-General.OptionsPositionY = 348;
+General.OptionsPositionX = 398;
+General.OptionsPositionY = 356;
 General.Orthographic = 1;
 General.PluginPositionX = 650;
 General.PluginPositionY = 550;
@@ -199,18 +202,18 @@ General.PolygonOffsetFactor = 1;
 General.PolygonOffsetUnits = 1;
 General.ProgressMeterStep = 10;
 General.QuadricSubdivisions = 6;
-General.RotationX = 323.5042906476241;
-General.RotationY = 342.0958495832623;
-General.RotationZ = 70.16599431201449;
+General.RotationX = 298.9340649447084;
+General.RotationY = 1.561416946297741;
+General.RotationZ = 255.78408990483;
 General.RotationCenterGravity = 1;
 General.RotationCenterX = 0;
 General.RotationCenterY = 0;
 General.RotationCenterZ = 0;
 General.SaveOptions = 0;
 General.SaveSession = 1;
-General.ScaleX = 1;
-General.ScaleY = 1;
-General.ScaleZ = 1;
+General.ScaleX = 0.6439936761021702;
+General.ScaleY = 0.6439936761021702;
+General.ScaleZ = 0.6439936761021702;
 General.Shininess = 0.4;
 General.ShininessExponent = 40;
 General.ShowModuleMenu = 1;
@@ -228,17 +231,17 @@ General.Terminal = 0;
 General.Tooltips = 1;
 General.Trackball = 1;
 General.TrackballHyperbolicSheet = 1;
-General.TrackballQuaternion0 = 0.3380579508138014;
-General.TrackballQuaternion1 = -0.0568483446380383;
-General.TrackballQuaternion2 = -0.5790818774349376;
-General.TrackballQuaternion3 = 0.7396953878657914;
-General.TranslationX = 0;
-General.TranslationY = 0;
+General.TrackballQuaternion0 = -0.3212549882036043;
+General.TrackballQuaternion1 = -0.3936796313347017;
+General.TrackballQuaternion2 = -0.6839291214580632;
+General.TrackballQuaternion3 = -0.5235002743533875;
+General.TranslationX = -0.06039524559698541;
+General.TranslationY = 0.03212277611944231;
 General.TranslationZ = 0;
 General.VectorType = 4;
 General.Verbosity = 5;
-General.VisibilityPositionX = 130;
-General.VisibilityPositionY = 332;
+General.VisibilityPositionX = 233;
+General.VisibilityPositionY = 364;
 General.ZoomFactor = 4;
 General.Color.Background = {255,255,255};
 General.Color.BackgroundGradient = {208,215,255};
@@ -290,8 +293,13 @@ Geometry.Normals = 0;
 Geometry.NumSubEdges = 40;
 Geometry.OCCAutoEmbed = 1;
 Geometry.OCCAutoFix = 1;
+Geometry.OCCBooleanCheckInverted = 1;
+Geometry.OCCBooleanGlue = 0;
+Geometry.OCCBooleanNonDestructive = 0;
 Geometry.OCCBooleanPreserveNumbering = 1;
+Geometry.OCCBooleanSimplify = 1;
 Geometry.OCCBoundsUseStl = 0;
+Geometry.OCCBrepFormatVersion = 1;
 Geometry.OCCDisableStl = 0;
 Geometry.OCCFixDegenerated = 0;
 Geometry.OCCFixSmallEdges = 0;
@@ -304,7 +312,6 @@ Geometry.OCCFastUnbind = 1;
 Geometry.OCCScaling = 1;
 Geometry.OCCSewFaces = 0;
 Geometry.OCCThruSectionsDegree = -1;
-Geometry.OCCUnionUnify = 1;
 Geometry.OCCUseGenericClosestPoint = 0;
 Geometry.OffsetX = 0;
 Geometry.OffsetY = 0;
@@ -354,13 +361,14 @@ Geometry.Color.HighlightTwo = {255,255,0};
 Geometry.Color.Tangents = {255,255,0};
 Geometry.Color.Normals = {255,0,0};
 Geometry.Color.Projection = {0,255,0};
-Mesh.Algorithm = 11;
+Mesh.Algorithm = 5;
 Mesh.Algorithm3D = 1;
 Mesh.AlgorithmSwitchOnFailure = 1;
 Mesh.AngleSmoothNormals = 30;
 Mesh.AngleToleranceFacetOverlap = 0.1;
 Mesh.AnisoMax = 9.999999999999999e+32;
 Mesh.AllowSwapAngle = 10;
+Mesh.AvgQuality = 0.5233575554870221;
 Mesh.BdfFieldFormat = 1;
 Mesh.Binary = 0;
 Mesh.BoundaryLayerFanElements = 5;
@@ -375,7 +383,7 @@ Mesh.Clip = 0;
 Mesh.ColorCarousel = 1;
 Mesh.CompoundClassify = 1;
 Mesh.CompoundMeshSizeFactor = 0.5;
-Mesh.CpuTime = 1.328808832913637;
+Mesh.CpuTime = 0.02700394499970571;
 Mesh.CreateTopologyMsh2 = 0;
 Mesh.DrawSkinOnly = 0;
 Mesh.Dual = 0;
@@ -424,7 +432,7 @@ Mesh.MaxRetries = 10;
 Mesh.MeshOnlyVisible = 0;
 Mesh.MeshOnlyEmpty = 0;
 Mesh.MeshSizeExtendFromBoundary = 1;
-Mesh.MeshSizeFactor = 1;
+Mesh.MeshSizeFactor = 2;
 Mesh.MeshSizeMin = 0;
 Mesh.MeshSizeMax = 1e+22;
 Mesh.MeshSizeFromCurvature = 0;
@@ -437,22 +445,22 @@ Mesh.MetisMaxLoadImbalance = -1;
 Mesh.MetisObjective = 1;
 Mesh.MetisMinConn = -1;
 Mesh.MetisRefinementAlgorithm = 2;
-Mesh.MinimumLineNodes = 2;
-Mesh.MinimumCircleNodes = 7;
-Mesh.MinimumCurveNodes = 3;
-Mesh.MinimumElementsPerTwoPi = 0;
+Mesh.MinLineNodes = 2;
+Mesh.MinCircleNodes = 7;
+Mesh.MinCurveNodes = 3;
+Mesh.MinQuality = 0.115049375688514;
 Mesh.MshFileVersion = 4.1;
 Mesh.MedFileMinorVersion = -1;
 Mesh.MedImportGroupsOfNodes = 0;
 Mesh.MedSingleModel = 0;
-Mesh.NbHexahedra = 0;
-Mesh.NbNodes = 8099;
+Mesh.NbHexahedra = 44288;
+Mesh.NbNodes = 47893;
 Mesh.NbPartitions = 0;
 Mesh.NbPrisms = 0;
-Mesh.NbPyramids = 1166;
+Mesh.NbPyramids = 0;
 Mesh.NbTrihedra = 0;
-Mesh.NbQuadrangles = 1166;
-Mesh.NbTetrahedra = 43205;
+Mesh.NbQuadrangles = 6624;
+Mesh.NbTetrahedra = 0;
 Mesh.NbTriangles = 0;
 Mesh.NewtonConvergenceTestXYZ = 0;
 Mesh.Nodes = 0;
@@ -465,6 +473,7 @@ Mesh.OldInitialDelaunay2D = 0;
 Mesh.Optimize = 1;
 Mesh.OptimizeThreshold = 0.3;
 Mesh.OptimizeNetgen = 0;
+Mesh.OptimizePyramids = 0;
 Mesh.PartitionHexWeight = -1;
 Mesh.PartitionLineWeight = -1;
 Mesh.PartitionPrismWeight = -1;
@@ -491,6 +500,7 @@ Mesh.Quadrangles = 1;
 Mesh.QualityInf = 0;
 Mesh.QualitySup = 0;
 Mesh.QualityType = 2;
+Mesh.QuasiTransfinite = 0;
 Mesh.RadiusInf = 0;
 Mesh.RadiusSup = 0;
 Mesh.RandomFactor = 1e-09;
@@ -508,6 +518,7 @@ Mesh.Recombine3DConformity = 0;
 Mesh.RefineSteps = 10;
 Mesh.Renumber = 1;
 Mesh.ReparamMaxTriangles = 250000;
+Mesh.Reproducible = 0;
 Mesh.SaveAll = 0;
 Mesh.SaveElementTagType = 1;
 Mesh.SaveGroupsOfElements = 1;
@@ -518,7 +529,7 @@ Mesh.SaveTopology = 0;
 Mesh.ScalingFactor = 1;
 Mesh.SecondOrderIncomplete = 0;
 Mesh.SecondOrderLinear = 0;
-Mesh.Smoothing = 1;
+Mesh.Smoothing = 5;
 Mesh.SmoothCrossField = 0;
 Mesh.CrossFieldClosestPoint = 1;
 Mesh.SmoothNormals = 0;
@@ -527,8 +538,8 @@ Mesh.StlAngularDeflection = 0.3;
 Mesh.StlLinearDeflection = 0.001;
 Mesh.StlLinearDeflectionRelative = 1;
 Mesh.StlOneSolidPerSurface = 0;
-Mesh.StlRemoveDuplicateTriangles = 0;
-Mesh.SubdivisionAlgorithm = 0;
+Mesh.StlRemoveBadTriangles = 0;
+Mesh.SubdivisionAlgorithm = 2;
 Mesh.SurfaceEdges = 1;
 Mesh.SurfaceFaces = 1;
 Mesh.SurfaceLabels = 0;
@@ -652,243 +663,11 @@ PostProcessing.GraphPointX = 0;
 PostProcessing.GraphPointY = 0;
 PostProcessing.HorizontalScales = 1;
 PostProcessing.Link = 0;
-PostProcessing.NbViews = 1;
+PostProcessing.NbViews = 0;
 PostProcessing.Plugins = 1;
 PostProcessing.SaveInterpolationMatrices = 1;
 PostProcessing.SaveMesh = 1;
 PostProcessing.Smoothing = 0;
-View[0].Attributes = "";
-View[0].AxesFormatX = "%.3g";
-View[0].AxesFormatY = "%.3g";
-View[0].AxesFormatZ = "%.3g";
-View[0].AxesLabelX = "";
-View[0].AxesLabelY = "";
-View[0].AxesLabelZ = "";
-View[0].DoubleClickedCommand = "";
-View[0].FileName = "";
-View[0].Format = "%.3g";
-View[0].GeneralizedRaiseX = "v0";
-View[0].GeneralizedRaiseY = "v1";
-View[0].GeneralizedRaiseZ = "v2";
-View[0].Group = "";
-View[0].Name = "guiding_field";
-View[0].Stipple0 = "1*0x1F1F";
-View[0].Stipple1 = "1*0x3333";
-View[0].Stipple2 = "1*0x087F";
-View[0].Stipple3 = "1*0xCCCF";
-View[0].Stipple4 = "2*0x1111";
-View[0].Stipple5 = "2*0x0F0F";
-View[0].Stipple6 = "1*0xCFFF";
-View[0].Stipple7 = "2*0x0202";
-View[0].Stipple8 = "2*0x087F";
-View[0].Stipple9 = "1*0xFFFF";
-View[0].AbscissaRangeType = 1;
-View[0].AdaptVisualizationGrid = 0;
-View[0].AngleSmoothNormals = 30;
-View[0].ArrowSizeMax = 60;
-View[0].ArrowSizeMin = 0;
-View[0].AutoPosition = 1;
-View[0].Axes = 0;
-View[0].AxesMikado = 0;
-View[0].AxesAutoPosition = 1;
-View[0].AxesMaxX = 1;
-View[0].AxesMaxY = 1;
-View[0].AxesMaxZ = 1;
-View[0].AxesMinX = 0;
-View[0].AxesMinY = 0;
-View[0].AxesMinZ = 0;
-View[0].AxesTicsX = 5;
-View[0].AxesTicsY = 5;
-View[0].AxesTicsZ = 5;
-View[0].Boundary = 0;
-View[0].CenterGlyphs = 0;
-View[0].Clip = 0;
-View[0].Closed = 0;
-View[0].ColormapAlpha = 1;
-View[0].ColormapAlphaPower = 0;
-View[0].ColormapBeta = 0;
-View[0].ColormapBias = 0;
-View[0].ColormapCurvature = 0;
-View[0].ColormapInvert = 0;
-View[0].ColormapNumber = 2;
-View[0].ColormapRotation = 0;
-View[0].ColormapSwap = 0;
-View[0].ComponentMap0 = 0;
-View[0].ComponentMap1 = 1;
-View[0].ComponentMap2 = 2;
-View[0].ComponentMap3 = 3;
-View[0].ComponentMap4 = 4;
-View[0].ComponentMap5 = 5;
-View[0].ComponentMap6 = 6;
-View[0].ComponentMap7 = 7;
-View[0].ComponentMap8 = 8;
-View[0].CustomAbscissaMax = 0;
-View[0].CustomAbscissaMin = 0;
-View[0].CustomMax = 0;
-View[0].CustomMin = 0;
-View[0].DisplacementFactor = 1;
-View[0].DrawHexahedra = 1;
-View[0].DrawLines = 1;
-View[0].DrawPoints = 1;
-View[0].DrawPrisms = 1;
-View[0].DrawPyramids = 1;
-View[0].DrawTrihedra = 1;
-View[0].DrawQuadrangles = 1;
-View[0].DrawScalars = 1;
-View[0].DrawSkinOnly = 0;
-View[0].DrawStrings = 1;
-View[0].DrawTensors = 1;
-View[0].DrawTetrahedra = 1;
-View[0].DrawTriangles = 1;
-View[0].DrawVectors = 1;
-View[0].Explode = 1;
-View[0].ExternalView = -1;
-View[0].FakeTransparency = 0;
-View[0].ForceNumComponents = 0;
-View[0].GeneralizedRaiseFactor = 1;
-View[0].GeneralizedRaiseView = -1;
-View[0].GlyphLocation = 1;
-View[0].Height = 200;
-View[0].IntervalsType = 2;
-View[0].Light = 1;
-View[0].LightLines = 1;
-View[0].LightTwoSide = 1;
-View[0].LineType = 0;
-View[0].LineWidth = 1;
-View[0].MaxRecursionLevel = 0;
-View[0].Max = 0.06315645568613391;
-View[0].MaxVisible = 0.06315645568613391;
-View[0].MaxX = 0.2;
-View[0].MaxY = 0.1996616316542537;
-View[0].MaxZ = 0.3;
-View[0].Min = 3.16227766016838e-08;
-View[0].MinVisible = 3.16227766016838e-08;
-View[0].MinX = -0.2;
-View[0].MinY = -0.1996616316542537;
-View[0].MinZ = 0;
-View[0].NbIso = 10;
-View[0].NbTimeStep = 1;
-View[0].NormalRaise = 0;
-View[0].Normals = 0;
-View[0].OffsetX = 0;
-View[0].OffsetY = 0;
-View[0].OffsetZ = 0;
-View[0].PointSize = 3;
-View[0].PointType = 0;
-View[0].PositionX = 100;
-View[0].PositionY = 50;
-View[0].RaiseX = 0;
-View[0].RaiseY = 0;
-View[0].RaiseZ = 0;
-View[0].RangeType = 1;
-View[0].Sampling = 1;
-View[0].SaturateValues = 0;
-View[0].ScaleType = 1;
-View[0].ShowElement = 0;
-View[0].ShowScale = 1;
-View[0].ShowTime = 3;
-View[0].SmoothNormals = 0;
-View[0].Stipple = 0;
-View[0].Tangents = 0;
-View[0].TargetError = 0.0001;
-View[0].TensorType = 1;
-View[0].TimeStep = 0;
-View[0].Time = 0;
-View[0].TransformXX = 1;
-View[0].TransformXY = 0;
-View[0].TransformXZ = 0;
-View[0].TransformYX = 0;
-View[0].TransformYY = 1;
-View[0].TransformYZ = 0;
-View[0].TransformZX = 0;
-View[0].TransformZY = 0;
-View[0].TransformZZ = 1;
-View[0].Type = 1;
-View[0].UseGeneralizedRaise = 0;
-View[0].VectorType = 4;
-View[0].Visible = 0;
-View[0].Width = 300;
-View[0].Color.Points = {0,0,0};
-View[0].Color.Lines = {0,0,0};
-View[0].Color.Triangles = {0,0,0};
-View[0].Color.Quadrangles = {0,0,0};
-View[0].Color.Tetrahedra = {0,0,0};
-View[0].Color.Hexahedra = {0,0,0};
-View[0].Color.Prisms = {0,0,0};
-View[0].Color.Pyramids = {0,0,0};
-View[0].Color.Trihedra = {0,0,0};
-View[0].Color.Tangents = {255,255,0};
-View[0].Color.Normals = {255,0,0};
-View[0].Color.Text2D = {0,0,0};
-View[0].Color.Text3D = {0,0,0};
-View[0].Color.Axes = {0,0,0};
-View[0].Color.Background2D = {255,255,255};
-View[0].ColorTable = {
-{0, 0, 143, 255}, {0, 0, 147, 255}, {0, 0, 151, 255}, {0, 0, 155, 255}, 
-{0, 0, 159, 255}, {0, 0, 163, 255}, {0, 0, 167, 255}, {0, 0, 171, 255}, 
-{0, 0, 175, 255}, {0, 0, 179, 255}, {0, 0, 183, 255}, {0, 0, 187, 255}, 
-{0, 0, 191, 255}, {0, 0, 195, 255}, {0, 0, 199, 255}, {0, 0, 203, 255}, 
-{0, 0, 207, 255}, {0, 0, 211, 255}, {0, 0, 215, 255}, {0, 0, 219, 255}, 
-{0, 0, 223, 255}, {0, 0, 227, 255}, {0, 0, 231, 255}, {0, 0, 235, 255}, 
-{0, 0, 239, 255}, {0, 0, 243, 255}, {0, 0, 247, 255}, {0, 0, 251, 255}, 
-{0, 0, 255, 255}, {0, 4, 255, 255}, {0, 8, 255, 255}, {0, 12, 255, 255}, 
-{0, 16, 255, 255}, {0, 20, 255, 255}, {0, 24, 255, 255}, {0, 28, 255, 255}, 
-{0, 33, 255, 255}, {0, 37, 255, 255}, {0, 41, 255, 255}, {0, 45, 255, 255}, 
-{0, 49, 255, 255}, {0, 53, 255, 255}, {0, 57, 255, 255}, {0, 61, 255, 255}, 
-{0, 65, 255, 255}, {0, 69, 255, 255}, {0, 73, 255, 255}, {0, 77, 255, 255}, 
-{0, 81, 255, 255}, {0, 85, 255, 255}, {0, 89, 255, 255}, {0, 93, 255, 255}, 
-{0, 97, 255, 255}, {0, 101, 255, 255}, {0, 105, 255, 255}, {0, 109, 255, 255}, 
-{0, 113, 255, 255}, {0, 117, 255, 255}, {0, 121, 255, 255}, {0, 125, 255, 255}, 
-{0, 129, 255, 255}, {0, 133, 255, 255}, {0, 137, 255, 255}, {0, 141, 255, 255}, 
-{0, 145, 255, 255}, {0, 149, 255, 255}, {0, 153, 255, 255}, {0, 157, 255, 255}, 
-{0, 161, 255, 255}, {0, 165, 255, 255}, {0, 169, 255, 255}, {0, 173, 255, 255}, 
-{0, 177, 255, 255}, {0, 181, 255, 255}, {0, 185, 255, 255}, {0, 189, 255, 255}, 
-{0, 193, 255, 255}, {0, 197, 255, 255}, {0, 201, 255, 255}, {0, 205, 255, 255}, 
-{0, 209, 255, 255}, {0, 213, 255, 255}, {0, 217, 255, 255}, {0, 221, 255, 255}, 
-{0, 225, 255, 255}, {0, 229, 255, 255}, {0, 233, 255, 255}, {0, 237, 255, 255}, 
-{0, 241, 255, 255}, {0, 245, 255, 255}, {0, 249, 255, 255}, {0, 253, 255, 255}, 
-{2, 255, 255, 255}, {6, 255, 255, 255}, {10, 255, 252, 255}, {14, 255, 248, 255}, 
-{18, 255, 244, 255}, {22, 255, 240, 255}, {26, 255, 235, 255}, {30, 255, 231, 255}, 
-{35, 255, 227, 255}, {39, 255, 223, 255}, {43, 255, 219, 255}, {47, 255, 215, 255}, 
-{51, 255, 211, 255}, {55, 255, 207, 255}, {59, 255, 203, 255}, {63, 255, 199, 255}, 
-{67, 255, 195, 255}, {71, 255, 191, 255}, {75, 255, 187, 255}, {79, 255, 183, 255}, 
-{83, 255, 179, 255}, {87, 255, 175, 255}, {91, 255, 171, 255}, {95, 255, 167, 255}, 
-{99, 255, 163, 255}, {103, 255, 159, 255}, {107, 255, 155, 255}, {111, 255, 151, 255}, 
-{115, 255, 147, 255}, {119, 255, 143, 255}, {123, 255, 139, 255}, {127, 255, 135, 255}, 
-{131, 255, 131, 255}, {135, 255, 127, 255}, {139, 255, 123, 255}, {143, 255, 119, 255}, 
-{147, 255, 115, 255}, {151, 255, 111, 255}, {155, 255, 107, 255}, {159, 255, 103, 255}, 
-{163, 255, 99, 255}, {167, 255, 95, 255}, {171, 255, 91, 255}, {175, 255, 87, 255}, 
-{179, 255, 83, 255}, {183, 255, 79, 255}, {187, 255, 75, 255}, {191, 255, 71, 255}, 
-{195, 255, 67, 255}, {199, 255, 63, 255}, {203, 255, 59, 255}, {207, 255, 55, 255}, 
-{211, 255, 51, 255}, {215, 255, 47, 255}, {219, 255, 43, 255}, {223, 255, 39, 255}, 
-{227, 255, 35, 255}, {231, 255, 31, 255}, {235, 255, 27, 255}, {239, 255, 23, 255}, 
-{243, 255, 19, 255}, {247, 255, 15, 255}, {251, 255, 11, 255}, {255, 255, 7, 255}, 
-{255, 255, 3, 255}, {255, 254, 0, 255}, {255, 250, 0, 255}, {255, 246, 0, 255}, 
-{255, 242, 0, 255}, {255, 237, 0, 255}, {255, 233, 0, 255}, {255, 229, 0, 255}, 
-{255, 225, 0, 255}, {255, 221, 0, 255}, {255, 217, 0, 255}, {255, 213, 0, 255}, 
-{255, 209, 0, 255}, {255, 205, 0, 255}, {255, 201, 0, 255}, {255, 197, 0, 255}, 
-{255, 193, 0, 255}, {255, 189, 0, 255}, {255, 185, 0, 255}, {255, 181, 0, 255}, 
-{255, 177, 0, 255}, {255, 173, 0, 255}, {255, 169, 0, 255}, {255, 165, 0, 255}, 
-{255, 161, 0, 255}, {255, 157, 0, 255}, {255, 153, 0, 255}, {255, 149, 0, 255}, 
-{255, 145, 0, 255}, {255, 141, 0, 255}, {255, 137, 0, 255}, {255, 133, 0, 255}, 
-{255, 129, 0, 255}, {255, 125, 0, 255}, {255, 121, 0, 255}, {255, 117, 0, 255}, 
-{255, 113, 0, 255}, {255, 109, 0, 255}, {255, 105, 0, 255}, {255, 101, 0, 255}, 
-{255, 97, 0, 255}, {255, 93, 0, 255}, {255, 89, 0, 255}, {255, 85, 0, 255}, 
-{255, 81, 0, 255}, {255, 77, 0, 255}, {255, 73, 0, 255}, {255, 69, 0, 255}, 
-{255, 65, 0, 255}, {255, 61, 0, 255}, {255, 57, 0, 255}, {255, 53, 0, 255}, 
-{255, 49, 0, 255}, {255, 45, 0, 255}, {255, 41, 0, 255}, {255, 37, 0, 255}, 
-{255, 33, 0, 255}, {255, 29, 0, 255}, {255, 25, 0, 255}, {255, 21, 0, 255}, 
-{255, 17, 0, 255}, {255, 13, 0, 255}, {255, 9, 0, 255}, {255, 5, 0, 255}, 
-{255, 1, 0, 255}, {252, 0, 0, 255}, {248, 0, 0, 255}, {244, 0, 0, 255}, 
-{240, 0, 0, 255}, {235, 0, 0, 255}, {231, 0, 0, 255}, {227, 0, 0, 255}, 
-{223, 0, 0, 255}, {219, 0, 0, 255}, {215, 0, 0, 255}, {211, 0, 0, 255}, 
-{207, 0, 0, 255}, {203, 0, 0, 255}, {199, 0, 0, 255}, {195, 0, 0, 255}, 
-{191, 0, 0, 255}, {187, 0, 0, 255}, {183, 0, 0, 255}, {179, 0, 0, 255}, 
-{175, 0, 0, 255}, {171, 0, 0, 255}, {167, 0, 0, 255}, {163, 0, 0, 255}, 
-{159, 0, 0, 255}, {155, 0, 0, 255}, {151, 0, 0, 255}, {147, 0, 0, 255}, 
-{143, 0, 0, 255}, {139, 0, 0, 255}, {135, 0, 0, 255}, {131, 0, 0, 255}, 
-{127, 0, 0, 255}, {123, 0, 0, 255}, {119, 0, 0, 255}
-};
 Print.ParameterCommand = "Mesh.Clip=1; View.Clip=1; General.ClipWholeElements=1; General.Clip0D=Print.Parameter; SetChanged;";
 Print.Parameter = 0;
 Print.ParameterFirst = -1;
