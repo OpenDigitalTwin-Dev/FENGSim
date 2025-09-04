@@ -59,14 +59,14 @@ def cylinder_hex ():
                 x3 = a2 + (a4-a2)/d2*(i+1)*d2/m
                 x4 = a1 + (a3-a1)/d1*(i+1)*d1/m
                 
-                #f.write(str(round(x1[0],5)) + ' ' + str(round(x1[1],5)) + ' ' + str(round(x1[2],5)) + '\n')
-                #f.write(str(round(x2[0],5)) + ' ' + str(round(x2[1],5)) + ' ' + str(round(x2[2],5)) + '\n')
-                #f.write(str(round(x3[0],5)) + ' ' + str(round(x3[1],5)) + ' ' + str(round(x3[2],5)) + '\n')
-                #f.write(str(round(x4[0],5)) + ' ' + str(round(x4[1],5)) + ' ' + str(round(x4[2],5)) + '\n')
-                #f.write(str(round(x1[0],5)) + ' ' + str(round(x1[1],5)) + ' ' + str((k+1)*hd) + '\n')
-                #f.write(str(round(x2[0],5)) + ' ' + str(round(x2[1],5)) + ' ' + str((k+1)*hd) + '\n')
-                #f.write(str(round(x3[0],5)) + ' ' + str(round(x3[1],5)) + ' ' + str((k+1)*hd) + '\n')
-                #f.write(str(round(x4[0],5)) + ' ' + str(round(x4[1],5)) + ' ' + str((k+1)*hd) + '\n')
+                f.write(str(round(x1[0],5)) + ' ' + str(round(x1[1],5)) + ' ' + str(round(x1[2],5)) + '\n')
+                f.write(str(round(x2[0],5)) + ' ' + str(round(x2[1],5)) + ' ' + str(round(x2[2],5)) + '\n')
+                f.write(str(round(x3[0],5)) + ' ' + str(round(x3[1],5)) + ' ' + str(round(x3[2],5)) + '\n')
+                f.write(str(round(x4[0],5)) + ' ' + str(round(x4[1],5)) + ' ' + str(round(x4[2],5)) + '\n')
+                f.write(str(round(x1[0],5)) + ' ' + str(round(x1[1],5)) + ' ' + str((k+1)*hd) + '\n')
+                f.write(str(round(x2[0],5)) + ' ' + str(round(x2[1],5)) + ' ' + str((k+1)*hd) + '\n')
+                f.write(str(round(x3[0],5)) + ' ' + str(round(x3[1],5)) + ' ' + str((k+1)*hd) + '\n')
+                f.write(str(round(x4[0],5)) + ' ' + str(round(x4[1],5)) + ' ' + str((k+1)*hd) + '\n')
             
                 j = j + 1
             j = 0
@@ -77,10 +77,10 @@ def cylinder_hex ():
         j = 0
         while i < m:
             while j < n:
-                a1 = np.array([ax-l+j*d       ,ay-l  ,k*hd])
-                a2 = np.array([ax-l+(j+1)*d   ,ay-l  ,k*hd])
-                a3 = np.array([r*math.cos(-3/4*math.pi+da*j)     ,r*math.sin(-3/4*math.pi+da*j)     ,k*hd])
-                a4 = np.array([r*math.cos(-3/4*math.pi+da*(j+1)) ,r*math.sin(-3/4*math.pi+da*(j+1)) ,k*hd])
+                a1 = np.array([ax+l   ,ay+l-j*d  ,k*hd])
+                a2 = np.array([ax+l   ,ay+l-(j+1)*d  ,k*hd])
+                a3 = np.array([r*math.cos(1/4*math.pi-da*j)     ,r*math.sin(1/4*math.pi-da*j)     ,k*hd])
+                a4 = np.array([r*math.cos(1/4*math.pi-da*(j+1)) ,r*math.sin(1/4*math.pi-da*(j+1)) ,k*hd])
 
                 d1 = np.linalg.norm(a1-a3)
                 d2 = np.linalg.norm(a2-a4)
@@ -90,14 +90,14 @@ def cylinder_hex ():
                 x3 = a2 + (a4-a2)/d2*(i+1)*d2/m
                 x4 = a1 + (a3-a1)/d1*(i+1)*d1/m
                 
-                #f.write(str(round(x1[0],5)) + ' ' + str(round(x1[1],5)) + ' ' + str(round(x1[2],5)) + '\n')
-                #f.write(str(round(x2[0],5)) + ' ' + str(round(x2[1],5)) + ' ' + str(round(x2[2],5)) + '\n')
-                #f.write(str(round(x3[0],5)) + ' ' + str(round(x3[1],5)) + ' ' + str(round(x3[2],5)) + '\n')
-                #f.write(str(round(x4[0],5)) + ' ' + str(round(x4[1],5)) + ' ' + str(round(x4[2],5)) + '\n')
-                #f.write(str(round(x1[0],5)) + ' ' + str(round(x1[1],5)) + ' ' + str((k+1)*hd) + '\n')
-                #f.write(str(round(x2[0],5)) + ' ' + str(round(x2[1],5)) + ' ' + str((k+1)*hd) + '\n')
-                #f.write(str(round(x3[0],5)) + ' ' + str(round(x3[1],5)) + ' ' + str((k+1)*hd) + '\n')
-                #f.write(str(round(x4[0],5)) + ' ' + str(round(x4[1],5)) + ' ' + str((k+1)*hd) + '\n')
+                f.write(str(round(x1[0],5)) + ' ' + str(round(x1[1],5)) + ' ' + str(round(x1[2],5)) + '\n')
+                f.write(str(round(x2[0],5)) + ' ' + str(round(x2[1],5)) + ' ' + str(round(x2[2],5)) + '\n')
+                f.write(str(round(x3[0],5)) + ' ' + str(round(x3[1],5)) + ' ' + str(round(x3[2],5)) + '\n')
+                f.write(str(round(x4[0],5)) + ' ' + str(round(x4[1],5)) + ' ' + str(round(x4[2],5)) + '\n')
+                f.write(str(round(x1[0],5)) + ' ' + str(round(x1[1],5)) + ' ' + str((k+1)*hd) + '\n')
+                f.write(str(round(x2[0],5)) + ' ' + str(round(x2[1],5)) + ' ' + str((k+1)*hd) + '\n')
+                f.write(str(round(x3[0],5)) + ' ' + str(round(x3[1],5)) + ' ' + str((k+1)*hd) + '\n')
+                f.write(str(round(x4[0],5)) + ' ' + str(round(x4[1],5)) + ' ' + str((k+1)*hd) + '\n')
             
                 j = j + 1
             j = 0
@@ -108,10 +108,10 @@ def cylinder_hex ():
         j = 0
         while i < n:
             while j < m:
-                a1 = np.array([ax+l ,ay+l-j*d      ,k*hd])
-                a2 = np.array([ax+l ,ay+l-(j+1)*d  ,k*hd])
-                a3 = np.array([r*math.cos(1/4*math.pi-da*j)     ,r*math.sin(1/4*math.pi-da*j)     ,k*hd])
-                a4 = np.array([r*math.cos(1/4*math.pi-da*(j+1)) ,r*math.sin(1/4*math.pi-da*(j+1)) ,k*hd])
+                a1 = np.array([ax+l-j*d     ,ay-l      ,k*hd])
+                a2 = np.array([ax+l-(j+1)*d ,ay-l      ,k*hd])
+                a3 = np.array([r*math.cos(-1/4*math.pi-da*j)     ,r*math.sin(-1/4*math.pi-da*j)     ,k*hd])
+                a4 = np.array([r*math.cos(-1/4*math.pi-da*(j+1)) ,r*math.sin(-1/4*math.pi-da*(j+1)) ,k*hd])
                 
                 d1 = np.linalg.norm(a1-a3)
                 d2 = np.linalg.norm(a2-a4)
@@ -121,14 +121,14 @@ def cylinder_hex ():
                 x3 = a2 + (a4-a2)/d2*(i+1)*d2/m
                 x4 = a1 + (a3-a1)/d1*(i+1)*d1/m
                 
-                #f.write(str(round(x1[0],5)) + ' ' + str(round(x1[1],5)) + ' ' + str(round(x1[2],5)) + '\n')
-                #f.write(str(round(x2[0],5)) + ' ' + str(round(x2[1],5)) + ' ' + str(round(x2[2],5)) + '\n')
-                #f.write(str(round(x3[0],5)) + ' ' + str(round(x3[1],5)) + ' ' + str(round(x3[2],5)) + '\n')
-                #f.write(str(round(x4[0],5)) + ' ' + str(round(x4[1],5)) + ' ' + str(round(x4[2],5)) + '\n')
-                #f.write(str(round(x1[0],5)) + ' ' + str(round(x1[1],5)) + ' ' + str((k+1)*hd) + '\n')
-                #f.write(str(round(x2[0],5)) + ' ' + str(round(x2[1],5)) + ' ' + str((k+1)*hd) + '\n')
-                #f.write(str(round(x3[0],5)) + ' ' + str(round(x3[1],5)) + ' ' + str((k+1)*hd) + '\n')
-                #f.write(str(round(x4[0],5)) + ' ' + str(round(x4[1],5)) + ' ' + str((k+1)*hd) + '\n')
+                f.write(str(round(x1[0],5)) + ' ' + str(round(x1[1],5)) + ' ' + str(round(x1[2],5)) + '\n')
+                f.write(str(round(x2[0],5)) + ' ' + str(round(x2[1],5)) + ' ' + str(round(x2[2],5)) + '\n')
+                f.write(str(round(x3[0],5)) + ' ' + str(round(x3[1],5)) + ' ' + str(round(x3[2],5)) + '\n')
+                f.write(str(round(x4[0],5)) + ' ' + str(round(x4[1],5)) + ' ' + str(round(x4[2],5)) + '\n')
+                f.write(str(round(x1[0],5)) + ' ' + str(round(x1[1],5)) + ' ' + str((k+1)*hd) + '\n')
+                f.write(str(round(x2[0],5)) + ' ' + str(round(x2[1],5)) + ' ' + str((k+1)*hd) + '\n')
+                f.write(str(round(x3[0],5)) + ' ' + str(round(x3[1],5)) + ' ' + str((k+1)*hd) + '\n')
+                f.write(str(round(x4[0],5)) + ' ' + str(round(x4[1],5)) + ' ' + str((k+1)*hd) + '\n')
             
                 j = j + 1
             j = 0
@@ -139,10 +139,10 @@ def cylinder_hex ():
         j = 0
         while i < n:
             while j < m:
-                a1 = np.array([ax-l ,ay+l-j*d      ,k*hd])
-                a2 = np.array([ax-l ,ay+l-(j+1)*d  ,k*hd])
-                a3 = np.array([r*math.cos(3/4*math.pi+da*j)     ,r*math.sin(3/4*math.pi+da*j)     ,k*hd])
-                a4 = np.array([r*math.cos(3/4*math.pi+da*(j+1)) ,r*math.sin(3/4*math.pi+da*(j+1)) ,k*hd])
+                a1 = np.array([ax-l ,ay-l+j*d      ,k*hd])
+                a2 = np.array([ax-l ,ay-l+(j+1)*d  ,k*hd])
+                a3 = np.array([r*math.cos(-3/4*math.pi-da*j)     ,r*math.sin(-3/4*math.pi-da*j)     ,k*hd])
+                a4 = np.array([r*math.cos(-3/4*math.pi-da*(j+1)) ,r*math.sin(-3/4*math.pi-da*(j+1)) ,k*hd])
                 
                 d1 = np.linalg.norm(a1-a3)
                 d2 = np.linalg.norm(a2-a4)
@@ -152,14 +152,14 @@ def cylinder_hex ():
                 x3 = a2 + (a4-a2)/d2*(i+1)*d2/m
                 x4 = a1 + (a3-a1)/d1*(i+1)*d1/m
                 
-                #f.write(str(round(x1[0],5)) + ' ' + str(round(x1[1],5)) + ' ' + str(round(x1[2],5)) + '\n')
-                #f.write(str(round(x2[0],5)) + ' ' + str(round(x2[1],5)) + ' ' + str(round(x2[2],5)) + '\n')
-                #f.write(str(round(x3[0],5)) + ' ' + str(round(x3[1],5)) + ' ' + str(round(x3[2],5)) + '\n')
-                #f.write(str(round(x4[0],5)) + ' ' + str(round(x4[1],5)) + ' ' + str(round(x4[2],5)) + '\n')
-                #f.write(str(round(x1[0],5)) + ' ' + str(round(x1[1],5)) + ' ' + str((k+1)*hd) + '\n')
-                #f.write(str(round(x2[0],5)) + ' ' + str(round(x2[1],5)) + ' ' + str((k+1)*hd) + '\n')
-                #f.write(str(round(x3[0],5)) + ' ' + str(round(x3[1],5)) + ' ' + str((k+1)*hd) + '\n')
-                #f.write(str(round(x4[0],5)) + ' ' + str(round(x4[1],5)) + ' ' + str((k+1)*hd) + '\n')
+                f.write(str(round(x1[0],5)) + ' ' + str(round(x1[1],5)) + ' ' + str(round(x1[2],5)) + '\n')
+                f.write(str(round(x2[0],5)) + ' ' + str(round(x2[1],5)) + ' ' + str(round(x2[2],5)) + '\n')
+                f.write(str(round(x3[0],5)) + ' ' + str(round(x3[1],5)) + ' ' + str(round(x3[2],5)) + '\n')
+                f.write(str(round(x4[0],5)) + ' ' + str(round(x4[1],5)) + ' ' + str(round(x4[2],5)) + '\n')
+                f.write(str(round(x1[0],5)) + ' ' + str(round(x1[1],5)) + ' ' + str((k+1)*hd) + '\n')
+                f.write(str(round(x2[0],5)) + ' ' + str(round(x2[1],5)) + ' ' + str((k+1)*hd) + '\n')
+                f.write(str(round(x3[0],5)) + ' ' + str(round(x3[1],5)) + ' ' + str((k+1)*hd) + '\n')
+                f.write(str(round(x4[0],5)) + ' ' + str(round(x4[1],5)) + ' ' + str((k+1)*hd) + '\n')
                 
                 j = j + 1
             j = 0
@@ -169,7 +169,7 @@ def cylinder_hex ():
 
     f.write("CELLS:\n")
     i = 0
-    while i < s*(n*n+0*n*m):
+    while i < s*(n*n+4*n*m):
         f.write('8 0 ' + str(0+i*8) + ' ' + str(1+i*8) + ' ' + str(2+i*8)  + ' ' + str(3+i*8) + ' ' + str(4+i*8) + ' ' + str(5+i*8)  + ' ' + str(6+i*8) + ' ' + str(7+i*8) + '\n')
         i = i+1 
 
