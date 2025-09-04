@@ -7,17 +7,21 @@ def cylinder_hex ():
     l = r/4
     h = 0.3
     n = 5
-    m = 5
+    m = 10
     ax = 0
     ay = 0
     d = 2*l/n
     da = 1/2*math.pi/n
-    s = 10
+    s = 15
     hd = h/s
 
     f.write("POINTS:\n")
     k = 0
     while k < s:
+        if k<5:
+            r = 0.1
+        else:
+            r = 0.1
         # 1
         i = 0
         j = 0
@@ -75,20 +79,20 @@ def cylinder_hex ():
         # 3
         i = 0
         j = 0
-        while i < m:
-            while j < n:
-                a1 = np.array([ax+l   ,ay+l-j*d  ,k*hd])
-                a2 = np.array([ax+l   ,ay+l-(j+1)*d  ,k*hd])
-                a3 = np.array([r*math.cos(1/4*math.pi-da*j)     ,r*math.sin(1/4*math.pi-da*j)     ,k*hd])
-                a4 = np.array([r*math.cos(1/4*math.pi-da*(j+1)) ,r*math.sin(1/4*math.pi-da*(j+1)) ,k*hd])
+        while i < n:
+            while j < m:
+                a1 = np.array([ax+l   ,ay+l-i*d  ,k*hd])
+                a2 = np.array([ax+l   ,ay+l-(i+1)*d  ,k*hd])
+                a3 = np.array([r*math.cos(1/4*math.pi-da*i)     ,r*math.sin(1/4*math.pi-da*i)     ,k*hd])
+                a4 = np.array([r*math.cos(1/4*math.pi-da*(i+1)) ,r*math.sin(1/4*math.pi-da*(i+1)) ,k*hd])
 
                 d1 = np.linalg.norm(a1-a3)
                 d2 = np.linalg.norm(a2-a4)
                 
-                x1 = a1 + (a3-a1)/d1*i*d1/m
-                x2 = a2 + (a4-a2)/d2*i*d2/m
-                x3 = a2 + (a4-a2)/d2*(i+1)*d2/m
-                x4 = a1 + (a3-a1)/d1*(i+1)*d1/m
+                x1 = a1 + (a3-a1)/d1*j*d1/m
+                x2 = a2 + (a4-a2)/d2*j*d2/m
+                x3 = a2 + (a4-a2)/d2*(j+1)*d2/m
+                x4 = a1 + (a3-a1)/d1*(j+1)*d1/m
                 
                 f.write(str(round(x1[0],5)) + ' ' + str(round(x1[1],5)) + ' ' + str(round(x1[2],5)) + '\n')
                 f.write(str(round(x2[0],5)) + ' ' + str(round(x2[1],5)) + ' ' + str(round(x2[2],5)) + '\n')
@@ -106,8 +110,8 @@ def cylinder_hex ():
         # 4
         i = 0
         j = 0
-        while i < n:
-            while j < m:
+        while i < m:
+            while j < n:
                 a1 = np.array([ax+l-j*d     ,ay-l      ,k*hd])
                 a2 = np.array([ax+l-(j+1)*d ,ay-l      ,k*hd])
                 a3 = np.array([r*math.cos(-1/4*math.pi-da*j)     ,r*math.sin(-1/4*math.pi-da*j)     ,k*hd])
@@ -139,18 +143,18 @@ def cylinder_hex ():
         j = 0
         while i < n:
             while j < m:
-                a1 = np.array([ax-l ,ay-l+j*d      ,k*hd])
-                a2 = np.array([ax-l ,ay-l+(j+1)*d  ,k*hd])
-                a3 = np.array([r*math.cos(-3/4*math.pi-da*j)     ,r*math.sin(-3/4*math.pi-da*j)     ,k*hd])
-                a4 = np.array([r*math.cos(-3/4*math.pi-da*(j+1)) ,r*math.sin(-3/4*math.pi-da*(j+1)) ,k*hd])
+                a1 = np.array([ax-l ,ay-l+i*d      ,k*hd])
+                a2 = np.array([ax-l ,ay-l+(i+1)*d  ,k*hd])
+                a3 = np.array([r*math.cos(-3/4*math.pi-da*i)     ,r*math.sin(-3/4*math.pi-da*i)     ,k*hd])
+                a4 = np.array([r*math.cos(-3/4*math.pi-da*(i+1)) ,r*math.sin(-3/4*math.pi-da*(i+1)) ,k*hd])
                 
                 d1 = np.linalg.norm(a1-a3)
                 d2 = np.linalg.norm(a2-a4)
                 
-                x1 = a1 + (a3-a1)/d1*i*d1/m
-                x2 = a2 + (a4-a2)/d2*i*d2/m
-                x3 = a2 + (a4-a2)/d2*(i+1)*d2/m
-                x4 = a1 + (a3-a1)/d1*(i+1)*d1/m
+                x1 = a1 + (a3-a1)/d1*j*d1/m
+                x2 = a2 + (a4-a2)/d2*j*d2/m
+                x3 = a2 + (a4-a2)/d2*(j+1)*d2/m
+                x4 = a1 + (a3-a1)/d1*(j+1)*d1/m
                 
                 f.write(str(round(x1[0],5)) + ' ' + str(round(x1[1],5)) + ' ' + str(round(x1[2],5)) + '\n')
                 f.write(str(round(x2[0],5)) + ' ' + str(round(x2[1],5)) + ' ' + str(round(x2[2],5)) + '\n')
