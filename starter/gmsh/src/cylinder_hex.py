@@ -19,9 +19,11 @@ def cylinder_hex ():
     k = 0
     while k < s:
         if k<5:
-            r = 0.1
+            r = 0.2
+            m = 10
         else:
             r = 0.1
+            m = 5
         # 1
         i = 0
         j = 0
@@ -173,7 +175,7 @@ def cylinder_hex ():
 
     f.write("CELLS:\n")
     i = 0
-    while i < s*(n*n+4*n*m):
+    while i < 5*(n*n+4*n*10)+10*(n*n+4*n*5):
         f.write('8 0 ' + str(0+i*8) + ' ' + str(1+i*8) + ' ' + str(2+i*8)  + ' ' + str(3+i*8) + ' ' + str(4+i*8) + ' ' + str(5+i*8)  + ' ' + str(6+i*8) + ' ' + str(7+i*8) + '\n')
         i = i+1 
 
