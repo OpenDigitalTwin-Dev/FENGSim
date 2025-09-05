@@ -3,11 +3,14 @@ import numpy as np
 
 def cylinder_hex ():
     f = open('../../../toolkit/MultiX/build/Solid/conf/geo/rivet.geo', 'w')
-    r1 = 0.1
+    #geometry
+    r1 = 0.05
     r2 = 0.2
+    h1 = 0.06
+    h2 = 0.24
+    #mesh
     r = r1
     l = r/4
-    h = 0.3
     n = 5
     m1 = 5
     m2 = 5
@@ -16,10 +19,13 @@ def cylinder_hex ():
     ay = 0
     d = 2*l/n
     da = 1/2*math.pi/n
-    s1 = 5
-    s2 = 10
-    s = s1+s2
-    hd = h/s
+    # mesh level
+    h = round(h1+h2,5)
+    hd = 0.02
+    s = int(h/hd)
+    s1 = int(h1/hd)
+    s2 = int(h2/hd)
+
 
     f.write("POINTS:\n")
     k = 0
