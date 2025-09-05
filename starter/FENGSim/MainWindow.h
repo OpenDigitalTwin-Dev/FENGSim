@@ -533,6 +533,7 @@ public slots:
     void rivetMeshGen ();
     void rivetMeshPlot ();
     void rivetMeshRefresh ();
+    void rivetSolver ();
     void rivetImportResults ();
 
 
