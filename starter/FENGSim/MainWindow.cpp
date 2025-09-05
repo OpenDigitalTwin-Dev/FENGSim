@@ -388,6 +388,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     connect(rivet_dock->ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(rivetCreateModel()));
     connect(rivet_dock->ui->pushButton_6, SIGNAL(clicked(bool)), this, SLOT(rivetMeshGen()));
     connect(rivet_dock->ui->pushButton_8, SIGNAL(clicked(bool)), this, SLOT(rivetMeshRefresh()));
+    connect(rivet_dock->ui->pushButton_7, SIGNAL(clicked(bool)), this, SLOT(rivetSolver()));
 
 
 
@@ -4344,6 +4345,9 @@ void MainWindow::rivetCreateModel() {
     STEPControl_Writer writer;
     writer.Transfer(*S,STEPControl_ManifoldSolidBrep);
     writer.Write("data/mesh/mesh.stp");
+
+    ofstream out("data/rivet/para.dat");
+    out << h1 << " " << r1 << " " << h2 << " " << r2 << " " << h3 << endl;
 }
 
 
@@ -4383,14 +4387,35 @@ void MainWindow::rivetMeshRefresh() {
     rivet_mesh_refine = 0;
 }
 
+#include "Rivet/RivetThread.h"
+
+void MainWindow::rivetSolver() {
+    rivet_dock->ui->pushButton_7->setEnabled(false);
+//    QProcess *proc = new QProcess();
+//    proc->setWorkingDirectory( "./../../toolkit/MultiX/build" );
+//    proc->start("./multix");
+
+//    if (proc->waitForFinished(-1)) {
+//        rivet_dock->ui->pushButton_7->setEnabled(true);
+//    }
+
+    RivetThread* td1 = new RivetThread;
+    td1->start();
+    connect(td1, SIGNAL(finished()), this, SLOT(rivetImportResults()));
+    //fem_dock->ui->pushButton->setEnabled(false);
+}
+
 void MainWindow::rivetImportResults () {
     if (rivet_step == 1) {
-        rivet_file_name = QFileDialog::getExistingDirectory(
-                    this,
-                    "Open Dir",
-                    "../../toolkit/MultiX/build/data/"
-                    );
-        QDir dir(rivet_file_name);
+        vtk_widget->Hide();
+        rivet_dock->ui->pushButton_7->setEnabled(true);
+//        rivet_file_name = QFileDialog::getExistingDirectory(
+//                    this,
+//                    "Open Dir",
+//                    "../../toolkit/MultiX/build/data/"
+//                    );
+        //QDir dir(rivet_file_name);
+        QDir dir("../../toolkit/MultiX/build/data/vtk");
         QStringList stringlist_vtk;
         stringlist_vtk << "telastoplasticity_undeform*.vtk";
         dir.setNameFilters(stringlist_vtk);
@@ -4398,6 +4423,9 @@ void MainWindow::rivetImportResults () {
         fileinfolist = dir.entryInfoList();
         rivet_total_step = fileinfolist.length();
         std::cout << rivet_total_step << std::endl;
+        double h1 = rivet_dock->ui->tableWidget->item(0,0)->text().toDouble();
+        double h3 = rivet_dock->ui->tableWidget->item(4,0)->text().toDouble();
+        vtk_widget->rivetPlotPlane(h1,h3);
     }
     if (rivet_step > rivet_total_step) {
         rivet_step = 1;

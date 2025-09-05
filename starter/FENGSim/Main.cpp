@@ -45,6 +45,7 @@ int main(int argc, char *argv[])
     dir.mkdir(w.meas_path + QString("/data/mesh"));
     dir.mkdir(w.meas_path + QString("/data/meas"));
     dir.mkdir(w.meas_path + QString("/data/am"));
+    dir.mkdir(w.meas_path + QString("/data/rivet"));
 
 
 

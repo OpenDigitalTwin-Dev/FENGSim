@@ -81,10 +81,13 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="MainWindow.qrc">:/main_wind/figure/main_wind/Fengsim_logo_hi.png</pixmap>
+      <pixmap resource="MainWindow.qrc">:/main_wind/image/Fengsim_logo_hi_2.png</pixmap>
      </property>
      <property name="scaledContents">
-      <bool>true</bool>
+      <bool>false</bool>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
      </property>
     </widget>
    </item>

@@ -3268,7 +3268,7 @@ void VTKWidget::rivetImportResults(QString file_name)
     vtkSmartPointer<vtkDataSetMapper> mapper = vtkSmartPointer<vtkDataSetMapper>::New();
     mapper->SetInputConnection(reader->GetOutputPort());
     rivet_simulation_actor->SetMapper(mapper);
-    rivet_simulation_actor->GetProperty()->EdgeVisibilityOff();
+    rivet_simulation_actor->GetProperty()->EdgeVisibilityOn();
     rivet_simulation_actor->GetProperty()->SetLineWidth(1);
     rivet_simulation_actor->SetPickable(false);
     rivet_simulation_actor->SetSelected(false);
