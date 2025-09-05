@@ -4344,6 +4344,9 @@ void MainWindow::rivetCreateModel() {
     STEPControl_Writer writer;
     writer.Transfer(*S,STEPControl_ManifoldSolidBrep);
     writer.Write("data/mesh/mesh.stp");
+
+    ofstream out("data/rivet/para.dat");
+    out << h1 << " " << r1 << " " << h2 << " " << r2 << " " << h3 << endl;
 }
 
 
