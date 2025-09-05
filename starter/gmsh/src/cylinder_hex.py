@@ -1,13 +1,19 @@
 import math
 import numpy as np
+import re
 
 def cylinder_hex ():
-    f = open('../../../toolkit/MultiX/build/Solid/conf/geo/rivet.geo', 'w')
+    #parameters
+    f1 = open('../../../starter/build-FENGSim-Desktop_Qt_5_12_12_GCC_64bit-Debug/data/rivet/para.dat', 'r')
+    lines = f1.readlines()
+    line = lines[0][:-1]
+    print(line)
+    values_point = re.split(' ',line)
     #geometry
-    r1 = 0.05
-    r2 = 0.1
-    h1 = 0.06
-    h2 = 0.24
+    r1 = float(values_point[3])
+    r2 = float(values_point[1])
+    h1 = float(values_point[0]) 
+    h2 = float(values_point[2])
     #mesh
     r = r1
     l = r/4
@@ -26,7 +32,7 @@ def cylinder_hex ():
     s1 = int(h1/hd)
     s2 = int(h2/hd)
 
-
+    f = open('../../../toolkit/MultiX/build/Solid/conf/geo/rivet.geo', 'w')
     f.write("POINTS:\n")
     k = 0
     while k < s:
