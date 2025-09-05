@@ -4387,15 +4387,22 @@ void MainWindow::rivetMeshRefresh() {
     rivet_mesh_refine = 0;
 }
 
+#include "Rivet/RivetThread.h"
+
 void MainWindow::rivetSolver() {
     rivet_dock->ui->pushButton_7->setEnabled(false);
-    QProcess *proc = new QProcess();
-    proc->setWorkingDirectory( "./../../toolkit/MultiX/build" );
-    proc->start("./multix");
+//    QProcess *proc = new QProcess();
+//    proc->setWorkingDirectory( "./../../toolkit/MultiX/build" );
+//    proc->start("./multix");
 
-    if (proc->waitForFinished(-1)) {
-        rivet_dock->ui->pushButton_7->setEnabled(true);
-    }
+//    if (proc->waitForFinished(-1)) {
+//        rivet_dock->ui->pushButton_7->setEnabled(true);
+//    }
+
+    RivetThread* td1 = new RivetThread;
+    td1->start();
+    //connect(td1, SIGNAL(finished()), this, SLOT(FEMPlot()));
+    //fem_dock->ui->pushButton->setEnabled(false);
 }
 
 void MainWindow::rivetImportResults () {
