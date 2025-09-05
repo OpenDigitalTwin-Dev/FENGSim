@@ -1,3 +1,7 @@
-cd build
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/../../../toolkit/Geometry/install/occt_install/lib
-./gmsh
+#cd build
+#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/../../../toolkit/Geometry/install/occt_install/lib
+#./gmsh
+
+cd src
+python3 cylinder_hex.py
+python3 geo2vtk.py
