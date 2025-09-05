@@ -4401,13 +4401,14 @@ void MainWindow::rivetSolver() {
 
     RivetThread* td1 = new RivetThread;
     td1->start();
-    //connect(td1, SIGNAL(finished()), this, SLOT(FEMPlot()));
+    connect(td1, SIGNAL(finished()), this, SLOT(rivetImportResults()));
     //fem_dock->ui->pushButton->setEnabled(false);
 }
 
 void MainWindow::rivetImportResults () {
     if (rivet_step == 1) {
         vtk_widget->Hide();
+        rivet_dock->ui->pushButton_7->setEnabled(true);
 //        rivet_file_name = QFileDialog::getExistingDirectory(
 //                    this,
 //                    "Open Dir",

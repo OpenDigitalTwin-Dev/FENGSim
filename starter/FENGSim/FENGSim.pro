@@ -33,6 +33,7 @@ SOURCES +=\
     OCPoro/OCPoroDialog.cpp \
     OCPoro/OCPoroDockWidget.cpp \
 #    Transport/data_analyze.cpp \
+    Rivet/RivetThread.cpp \
     include/test.cpp \
     qcustomplot.cpp \
     AboutDialog.cpp \
@@ -75,6 +76,7 @@ HEADERS  += \
     OCPoro/OCPoroDialog.h \
     OCPoro/OCPoroDockWidget.h \
 #    Transport/data_analyze.h \
+    Rivet/RivetThread.h \
     include/test.h \
     qcustomplot.h \
     AboutDialog.h \
