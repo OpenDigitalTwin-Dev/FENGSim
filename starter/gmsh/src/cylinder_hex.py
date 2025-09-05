@@ -5,7 +5,7 @@ def cylinder_hex ():
     f = open('../../../toolkit/MultiX/build/Solid/conf/geo/rivet.geo', 'w')
     #geometry
     r1 = 0.05
-    r2 = 0.2
+    r2 = 0.1
     h1 = 0.06
     h2 = 0.24
     #mesh
