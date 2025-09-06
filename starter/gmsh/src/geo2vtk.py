@@ -1,6 +1,6 @@
 import re
 
-f1 = open('../../../toolkit/MultiX/build/Solid/conf/geo/pipe.geo', 'r')
+f1 = open('../../../toolkit/MultiX/build/Solid/conf/geo/rivet.geo', 'r')
 f2 = open('../../../starter/build-FENGSim-Desktop_Qt_5_12_12_GCC_64bit-Debug/data/mesh/fengsim_mesh.vtk', 'w')
 
 lines = f1.readlines()

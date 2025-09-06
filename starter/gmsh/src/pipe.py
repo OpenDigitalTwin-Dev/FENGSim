@@ -17,7 +17,7 @@ def cylinder_hex ():
     n = 5
     m = 5
     da = 1/2*math.pi/n
-    hd = 0.01
+    hd = 0.04
     s = int(length/hd)
 
     f = open('../../../toolkit/MultiX/build/Solid/conf/geo/pipe.geo', 'w')
