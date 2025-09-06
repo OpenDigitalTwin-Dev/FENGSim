@@ -3,5 +3,5 @@
 #./gmsh
 
 cd src
-python3 rivet.py
-python3 geo2vtk.py
+python3 pipe.py
+python3 geo2vtk_2.py
