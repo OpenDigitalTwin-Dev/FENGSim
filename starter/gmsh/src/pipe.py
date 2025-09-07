@@ -12,12 +12,12 @@ def cylinder_hex ():
     #geometry
     r1 = 0.01
     r2 = 0.02
-    length = 1
+    length = 1.0
     #mesh
     n = 5
     m = 5
     da = 1/2*math.pi/n
-    hd = 0.04
+    hd = 0.01
     s = int(length/hd)
 
     f = open('../../../toolkit/MultiX/build/Solid/conf/geo/pipe.geo', 'w')
@@ -41,14 +41,14 @@ def cylinder_hex ():
                 x3 = a2 + (a4-a2)/d2*(j+1)*d2/m
                 x4 = a1 + (a3-a1)/d1*(j+1)*d1/m
                 
-                f.write(str(k*hd) + ' ' + str(round(x1[1],5)) + ' ' + str(round(x1[2],5)) + '\n')
-                f.write(str(k*hd) + ' ' + str(round(x2[1],5)) + ' ' + str(round(x2[2],5)) + '\n')
-                f.write(str(k*hd) + ' ' + str(round(x3[1],5)) + ' ' + str(round(x3[2],5)) + '\n')
-                f.write(str(k*hd) + ' ' + str(round(x4[1],5)) + ' ' + str(round(x4[2],5)) + '\n')
-                f.write(str((k+1)*hd) + ' ' + str(round(x1[1],5)) + ' ' + str(round(x1[2],5)) + '\n')
-                f.write(str((k+1)*hd) + ' ' + str(round(x2[1],5)) + ' ' + str(round(x2[2],5)) + '\n')
-                f.write(str((k+1)*hd) + ' ' + str(round(x3[1],5)) + ' ' + str(round(x3[2],5)) + '\n')
-                f.write(str((k+1)*hd) + ' ' + str(round(x4[1],5)) + ' ' + str(round(x4[2],5)) + '\n')
+                f.write(str(k*hd-length/2) + ' ' + str(round(x1[1],5)) + ' ' + str(round(x1[2],5)) + '\n')
+                f.write(str(k*hd-length/2) + ' ' + str(round(x2[1],5)) + ' ' + str(round(x2[2],5)) + '\n')
+                f.write(str(k*hd-length/2) + ' ' + str(round(x3[1],5)) + ' ' + str(round(x3[2],5)) + '\n')
+                f.write(str(k*hd-length/2) + ' ' + str(round(x4[1],5)) + ' ' + str(round(x4[2],5)) + '\n')
+                f.write(str((k+1)*hd-length/2) + ' ' + str(round(x1[1],5)) + ' ' + str(round(x1[2],5)) + '\n')
+                f.write(str((k+1)*hd-length/2) + ' ' + str(round(x2[1],5)) + ' ' + str(round(x2[2],5)) + '\n')
+                f.write(str((k+1)*hd-length/2) + ' ' + str(round(x3[1],5)) + ' ' + str(round(x3[2],5)) + '\n')
+                f.write(str((k+1)*hd-length/2) + ' ' + str(round(x4[1],5)) + ' ' + str(round(x4[2],5)) + '\n')
                 j = j + 1
             j = 0
             i = i + 1
