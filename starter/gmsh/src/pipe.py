@@ -12,12 +12,12 @@ def cylinder_hex ():
     #geometry
     r1 = 0.01
     r2 = 0.02
-    length = 1.0
+    length = 0.2
     #mesh
-    n = 5
-    m = 5
+    n = 10
+    m = 3
     da = 1/2*math.pi/n
-    hd = 0.01
+    hd = 0.005
     s = int(length/hd)
 
     f = open('../../../toolkit/MultiX/build/Solid/conf/geo/pipe.geo', 'w')
