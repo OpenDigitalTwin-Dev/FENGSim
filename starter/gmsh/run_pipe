@@ -3,5 +3,5 @@
 #./gmsh
 
 cd src
-python3 pipe.py
+python3 pipe2.py
 python3 geo2vtk_2.py

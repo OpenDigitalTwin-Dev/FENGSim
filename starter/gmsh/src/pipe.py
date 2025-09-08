@@ -10,14 +10,14 @@ def cylinder_hex ():
     print(line)
     values_point = re.split(' ',line)
     #geometry
-    r1 = 0.01
+    r1 = 0.005
     r2 = 0.02
     length = 0.2
     #mesh
-    n = 10
-    m = 3
+    n = 5
+    m = 2
     da = 1/2*math.pi/n
-    hd = 0.005
+    hd = 0.0125
     s = int(length/hd)
 
     f = open('../../../toolkit/MultiX/build/Solid/conf/geo/pipe.geo', 'w')
