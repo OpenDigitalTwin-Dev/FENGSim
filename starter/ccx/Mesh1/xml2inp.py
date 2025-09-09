@@ -75,9 +75,9 @@ for line in f2:
             var = 0
         if (values_point[1]=="type=CPS4") :
             var = 0
-        if (values_point[1]=="type=C3D8") :
+        if (values_point[1]=="type=C3D8I") :
             var = 1
-            f.write("*ELEMENT, type=C3D8, ELSET="+ELSET+"\n")
+            f.write("*ELEMENT, type=C3D8I, ELSET="+ELSET+"\n")
             continue
         if (values_point[1]=="type=C3D4") :
             var = 1
