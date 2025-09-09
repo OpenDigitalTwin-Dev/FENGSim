@@ -6,10 +6,12 @@ import re
 xml_file_name = input("请输入xml配置文件名称：");
 xml_file_name = xml_file_name + ".xml"
 print ("您输入的xml文件名是: ", xml_file_name)
+
 mesh_file_name = input("请输入网格文件名称：");
 mesh_file_name = mesh_file_name + ".msh"
 print ("您输入的网格文件名称: ", mesh_file_name)
-f = open('modal.inp', 'w')
+
+f = open('modal2.inp', 'w')
 f2 = open(mesh_file_name, 'r')
 
 tree = E.parse(xml_file_name)
@@ -76,6 +78,10 @@ for line in f2:
         if (values_point[1]=="type=C3D8") :
             var = 1
             f.write("*ELEMENT, type=C3D8, ELSET="+ELSET+"\n")
+            continue
+        if (values_point[1]=="type=C3D4") :
+            var = 1
+            f.write("*ELEMENT, type=C3D4, ELSET="+ELSET+"\n")
             continue
     if var == 1 :
         f.write(line+"\n")
