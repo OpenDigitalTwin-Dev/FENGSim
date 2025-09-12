@@ -4399,6 +4399,10 @@ void MainWindow::rivetMeshRefresh() {
 #include "Rivet/RivetThread.h"
 
 void MainWindow::rivetSolver() {
+    QProcess proc;
+    proc.execute("bash", QStringList() << "-c" << "cd ../../toolkit/MultiX/build/data/vtk && rm *.vtk");
+    proc.execute("bash", QStringList() << "-c" << "cd ../../toolkit/MultiX/build/conf && cp rivetconf m++conf");
+
     rivet_dock->ui->pushButton_7->setEnabled(false);
     //    QProcess *proc = new QProcess();
     //    proc->setWorkingDirectory( "./../../toolkit/MultiX/build" );
