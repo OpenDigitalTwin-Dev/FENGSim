@@ -4500,8 +4500,6 @@ void MainWindow::PipeMeshGen() {
     //MeshGen();
     QProcess proc;
     proc.execute("bash", QStringList() << "-c" << "cd ../gmsh && ./run_pipe");
-    proc.execute("bash", QStringList() << "-c" << "cd ../../toolkit/MultiX/build/data/vtk && rm *.*");
-    proc.execute("bash", QStringList() << "-c" << "cd ../../conf && cp pipeconf m++conf");
     PipeMeshPlot();
 }
 
@@ -4524,6 +4522,10 @@ void MainWindow::PipeMeshPlot() {
 #include "Pipe/PipeThread.h"
 
 void MainWindow::PipeSolver() {
+    QProcess proc;
+    proc.execute("bash", QStringList() << "-c" << "cd ../../toolkit/MultiX/build/data/vtk && rm *.*");
+    proc.execute("bash", QStringList() << "-c" << "cd ../../conf && cp pipeconf m++conf");
+
     pipe_dock->ui->pushButton_7->setEnabled(false);
     PipeThread* td1 = new PipeThread;
     td1->start();
