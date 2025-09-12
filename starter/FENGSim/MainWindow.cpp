@@ -4523,8 +4523,9 @@ void MainWindow::PipeMeshPlot() {
 
 void MainWindow::PipeSolver() {
     QProcess proc;
-    proc.execute("bash", QStringList() << "-c" << "cd ../../toolkit/MultiX/build/data/vtk && rm *.*");
-    proc.execute("bash", QStringList() << "-c" << "cd ../../conf && cp pipeconf m++conf");
+    proc.execute("bash", QStringList() << "-c" << "cd ../../toolkit/MultiX/build/data/vtk && rm *.vtk");
+    proc.execute("bash", QStringList() << "-c" << "cd ../../toolkit/MultiX/build/conf && cp pipeconf m++conf");
+
 
     pipe_dock->ui->pushButton_7->setEnabled(false);
     PipeThread* td1 = new PipeThread;
