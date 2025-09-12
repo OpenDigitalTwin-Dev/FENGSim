@@ -468,6 +468,17 @@ public:
     void rivetImportResults (QString file_name);
     void rivetPlotPlane (double h1, double h2);
 
+    /* !
+     pipe dynamic
+     */
+public:
+    vtkSmartPointer<vtkActor> pipe_simulation_actor;
+    vtkSmartPointer<vtkActor> pipe_down_actor;
+    vtkSmartPointer<vtkActor> pipe_up_actor;
+    //void rivetImportResults (QString file_name);
+    void PipePlotDown (double cx, double cy, double cz, double r);
+    void PipePlotUp (double cx, double cy, double cz, double r);
+
 
     // *******************************************************
     // machining

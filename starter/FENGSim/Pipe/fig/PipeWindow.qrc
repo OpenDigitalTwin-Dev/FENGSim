@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/pipe">
+        <file>pipe.png</file>
+    </qresource>
+</RCC>

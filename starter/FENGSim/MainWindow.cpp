@@ -36,6 +36,8 @@
 #include "STEPControl_Writer.hxx"
 #include "qcustomplot.h"
 #include "ui_RivetDockWidget.h"
+#include "ui_PipeDockWidget.h"
+
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -390,8 +392,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     connect(rivet_dock->ui->pushButton_8, SIGNAL(clicked(bool)), this, SLOT(rivetMeshRefresh()));
     connect(rivet_dock->ui->pushButton_7, SIGNAL(clicked(bool)), this, SLOT(rivetSolver()));
 
-
-
+    /* !
+  rivet module
+ */
+    pipe_dock = new PipeDockWidget;
+    connect(ui->actionPipe, SIGNAL(triggered()), this, SLOT(OpenPipeModule()));
+    connect(pipe_dock->ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(PipeCreateModel()));
+    connect(pipe_dock->ui->pushButton_5, SIGNAL(clicked(bool)), this, SLOT(PipeImportResults()));
+    connect(pipe_dock->ui->pushButton_6, SIGNAL(clicked(bool)), this, SLOT(PipeMeshGen()));
+    connect(pipe_dock->ui->pushButton_7, SIGNAL(clicked(bool)), this, SLOT(PipeSolver()));
 
     return;
 }
@@ -4391,13 +4400,13 @@ void MainWindow::rivetMeshRefresh() {
 
 void MainWindow::rivetSolver() {
     rivet_dock->ui->pushButton_7->setEnabled(false);
-//    QProcess *proc = new QProcess();
-//    proc->setWorkingDirectory( "./../../toolkit/MultiX/build" );
-//    proc->start("./multix");
+    //    QProcess *proc = new QProcess();
+    //    proc->setWorkingDirectory( "./../../toolkit/MultiX/build" );
+    //    proc->start("./multix");
 
-//    if (proc->waitForFinished(-1)) {
-//        rivet_dock->ui->pushButton_7->setEnabled(true);
-//    }
+    //    if (proc->waitForFinished(-1)) {
+    //        rivet_dock->ui->pushButton_7->setEnabled(true);
+    //    }
 
     RivetThread* td1 = new RivetThread;
     td1->start();
@@ -4409,11 +4418,11 @@ void MainWindow::rivetImportResults () {
     if (rivet_step == 1) {
         vtk_widget->Hide();
         rivet_dock->ui->pushButton_7->setEnabled(true);
-//        rivet_file_name = QFileDialog::getExistingDirectory(
-//                    this,
-//                    "Open Dir",
-//                    "../../toolkit/MultiX/build/data/"
-//                    );
+        //        rivet_file_name = QFileDialog::getExistingDirectory(
+        //                    this,
+        //                    "Open Dir",
+        //                    "../../toolkit/MultiX/build/data/"
+        //                    );
         //QDir dir(rivet_file_name);
         QDir dir("../../toolkit/MultiX/build/data/vtk");
         QStringList stringlist_vtk;
@@ -4438,4 +4447,125 @@ void MainWindow::rivetImportResults () {
                 +QString(".vtk"));
     rivet_step++;
     rivet_timer->singleShot(1, this, SLOT(rivetImportResults()));
+}
+
+void MainWindow::OpenPipeModule()
+{
+    if (ui->actionPipe->isChecked())
+    {
+        vtk_widget->SetSelectable(false);
+        vtk_widget->SetSelectDomain(false);
+        vtk_widget->Reset();
+        ui->dockWidget->setWidget(pipe_dock);
+        ui->dockWidget->show();
+        // set open and close
+        ui->actionCAD->setChecked(false);
+        ui->actionMesh->setChecked(false);
+        ui->actionSolver->setChecked(false);
+        ui->actionVisual->setChecked(false);
+        ui->actionMeasure->setChecked(false);
+        ui->actionOCPoro->setChecked(false);
+        ui->actionMachining->setChecked(false);
+        ui->actionRivet->setChecked(false);
+    }
+    else
+    {
+        ui->dockWidget->hide();
+    }
+}
+
+void MainWindow::PipeCreateModel() {
+    NewProject();
+    double length = pipe_dock->ui->tableWidget->item(0,0)->text().toDouble();
+    double r_in = pipe_dock->ui->tableWidget->item(1,0)->text().toDouble();
+    double r_out = pipe_dock->ui->tableWidget->item(2,0)->text().toDouble();
+    double r_down = pipe_dock->ui->tableWidget->item(3,0)->text().toDouble();
+    double r_up = pipe_dock->ui->tableWidget->item(4,0)->text().toDouble();
+    TopoDS_Shape* S = new TopoDS_Shape(BRepPrimAPI_MakeCylinder(gp_Ax2(gp_Pnt(-length/2,0,0),gp_Dir(1,0,0)),r_out,length).Shape());
+    General* A = new General(S);
+    parts->Add(A);
+    vtk_widget->Plot(*(A->Value()),false);
+    vtk_widget->PipePlotDown(0,0,-(r_out+r_down),r_down);
+    vtk_widget->PipePlotUp(0,0,r_out+r_up,r_up);
+
+    STEPControl_Writer writer;
+    writer.Transfer(*S,STEPControl_ManifoldSolidBrep);
+    writer.Write("data/mesh/mesh.stp");
+
+    ofstream out("data/pipe/para.dat");
+    out << length << " " << r_in << " " << r_out << " " << r_down << " " << r_up << endl;
+}
+
+void MainWindow::PipeMeshGen() {
+    //MeshGen();
+    QProcess proc;
+    proc.execute("bash", QStringList() << "-c" << "cd ../gmsh && ./run_pipe");
+    PipeMeshPlot();
+}
+
+void MainWindow::PipeMeshPlot() {
+    mesh_dock->ui->pushButton->setEnabled(true);
+    vtk_widget->Hide();
+    MM.FileFormat();
+    vtk_widget->ImportVTKFile((meas_path+QString("/data/mesh/fengsim_mesh.vtk")).toStdString());
+
+    double length = pipe_dock->ui->tableWidget->item(0,0)->text().toDouble();
+    double r_in = pipe_dock->ui->tableWidget->item(1,0)->text().toDouble();
+    double r_out = pipe_dock->ui->tableWidget->item(2,0)->text().toDouble();
+    double r_down = pipe_dock->ui->tableWidget->item(3,0)->text().toDouble();
+    double r_up = pipe_dock->ui->tableWidget->item(4,0)->text().toDouble();
+
+    vtk_widget->PipePlotDown(0,0,-(r_out+r_down),r_down);
+    vtk_widget->PipePlotUp(0,0,r_out+r_up,r_up);
+}
+
+#include "Pipe/PipeThread.h"
+
+void MainWindow::PipeSolver() {
+    pipe_dock->ui->pushButton_7->setEnabled(false);
+    PipeThread* td1 = new PipeThread;
+    td1->start();
+    connect(td1, SIGNAL(finished()), this, SLOT(PipeImportResults()));
+}
+
+void MainWindow::PipeImportResults () {
+    if (pipe_step == 1) {
+        vtk_widget->Hide();
+        pipe_dock->ui->pushButton_7->setEnabled(true);
+        QDir dir("../../toolkit/MultiX/build/data/vtk");
+        QStringList stringlist_vtk;
+        stringlist_vtk << "telastoplasticity_undeform*.vtk";
+        dir.setNameFilters(stringlist_vtk);
+        QFileInfoList fileinfolist;
+        fileinfolist = dir.entryInfoList();
+        pipe_total_step = fileinfolist.length();
+        std::cout << pipe_total_step << std::endl;
+        //double h1 = pipe_dock->ui->tableWidget->item(0,0)->text().toDouble();
+        //double h3 = pipe_dock->ui->tableWidget->item(4,0)->text().toDouble();
+        //vtk_widget->rivetPlotPlane(h1,h3);
+    }
+    if (pipe_step > pipe_total_step) {
+        pipe_step = 1;
+        pipe_total_step = 0;
+        return;
+    }
+    vtk_widget->rivetImportResults(
+                QString("../../toolkit/MultiX/build/data/vtk/telastoplasticity_undeform")
+                +QString::number(pipe_step)
+                +QString(".vtk"));
+
+    double length = pipe_dock->ui->tableWidget->item(0,0)->text().toDouble();
+    double r_in = pipe_dock->ui->tableWidget->item(1,0)->text().toDouble();
+    double r_out = pipe_dock->ui->tableWidget->item(2,0)->text().toDouble();
+    double r_down = pipe_dock->ui->tableWidget->item(3,0)->text().toDouble();
+    double r_up = pipe_dock->ui->tableWidget->item(4,0)->text().toDouble();
+
+    vtk_widget->PipePlotDown(0,0,-(r_out+r_down),r_down);
+    double r = r_out*2+r_down+r_up;
+    double cx =r*sin(5*pipe_step*5*0.1/1000);
+    double cz =r*cos(5*pipe_step*5*0.1/1000)-r_out-r_down;
+    vtk_widget->PipePlotUp(cx,0,cz,r_up);
+
+    pipe_step++;
+    pipe_timer->singleShot(1, this, SLOT(PipeImportResults()));
 }

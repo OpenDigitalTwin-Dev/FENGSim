@@ -3299,6 +3299,48 @@ void VTKWidget::rivetPlotPlane(double h1, double h2)
     GetRenderWindow()->Render();
 }
 
+void VTKWidget::PipePlotDown(double cx, double cy, double cz, double r) {
+    renderer->RemoveActor(pipe_down_actor);
+    pipe_down_actor = vtkSmartPointer<vtkActor>::New();
+    vtkSmartPointer<vtkCylinderSource> box = vtkSmartPointer<vtkCylinderSource>::New();
+    box->SetCenter(cx,cy,cz);
+    box->SetHeight(0.1);
+    box->SetRadius(r);
+    box->SetResolution(100);
+    vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+    mapper->SetInputConnection(box->GetOutputPort());
+    pipe_down_actor->SetMapper(mapper);
+    pipe_down_actor->GetProperty()->EdgeVisibilityOff();
+    pipe_down_actor->GetProperty()->SetLineWidth(1);
+    pipe_down_actor->GetProperty()->SetOpacity(0.5);
+    pipe_down_actor->SetPickable(false);
+    pipe_down_actor->SetSelected(false);
+
+    renderer->AddActor(pipe_down_actor);
+    GetRenderWindow()->Render();
+}
+
+void VTKWidget::PipePlotUp(double cx, double cy, double cz, double r) {
+    renderer->RemoveActor(pipe_up_actor);
+    pipe_up_actor = vtkSmartPointer<vtkActor>::New();
+    vtkSmartPointer<vtkCylinderSource> box = vtkSmartPointer<vtkCylinderSource>::New();
+    box->SetCenter(cx,cy,cz);
+    box->SetHeight(0.1);
+    box->SetRadius(r);
+    box->SetResolution(1000);
+    vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+    mapper->SetInputConnection(box->GetOutputPort());
+    pipe_up_actor->SetMapper(mapper);
+    pipe_up_actor->GetProperty()->EdgeVisibilityOff();
+    pipe_up_actor->GetProperty()->SetLineWidth(1);
+    pipe_up_actor->GetProperty()->SetOpacity(0.5);
+    pipe_up_actor->SetPickable(false);
+    pipe_up_actor->SetSelected(false);
+
+    renderer->AddActor(pipe_up_actor);
+    GetRenderWindow()->Render();
+}
+
 
 // *******************************************************
 // machining

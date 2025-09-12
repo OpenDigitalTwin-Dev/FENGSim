@@ -33,6 +33,8 @@ SOURCES +=\
     OCPoro/OCPoroDialog.cpp \
     OCPoro/OCPoroDockWidget.cpp \
 #    Transport/data_analyze.cpp \
+    Pipe/PipeDockWidget.cpp \
+    Pipe/PipeThread.cpp \
     Rivet/RivetThread.cpp \
     include/test.cpp \
     qcustomplot.cpp \
@@ -76,6 +78,8 @@ HEADERS  += \
     OCPoro/OCPoroDialog.h \
     OCPoro/OCPoroDockWidget.h \
 #    Transport/data_analyze.h \
+    Pipe/PipeDockWidget.h \
+    Pipe/PipeThread.h \
     Rivet/RivetThread.h \
     include/test.h \
     qcustomplot.h \
@@ -110,6 +114,7 @@ FORMS    += \
     Mesh/MeshDockWidget.ui \
     OCPoro/OCPoroDialog.ui \
     OCPoro/OCPoroDockWidget.ui \
+    Pipe/PipeDockWidget.ui \
     Visual/VTKDockWidget.ui \
     FEM/FEMDockWidget.ui \
     Measure/MeasureDockWidget.ui \
@@ -127,6 +132,7 @@ RESOURCES += \
     DataBaseWindow.qrc \
     MeasureWidnow.qrc \
     OCPoro.qrc \
+    Pipe/fig/PipeWindow.qrc \
     System.qrc \
     SPCWindow.qrc \
     AMWindow.qrc \

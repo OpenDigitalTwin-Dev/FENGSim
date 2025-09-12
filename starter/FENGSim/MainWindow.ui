@@ -186,10 +186,11 @@
    <addaction name="actionSolver"/>
    <addaction name="actionVisual"/>
    <addaction name="actionAdditiveManufacturing"/>
-   <addaction name="actionMeasure"/>
    <addaction name="actionMachining"/>
    <addaction name="actionRivet"/>
+   <addaction name="actionPipe"/>
    <addaction name="actionSystem"/>
+   <addaction name="actionMeasure"/>
    <addaction name="actionSPC"/>
    <addaction name="actionTransport"/>
    <addaction name="actionOCPoro"/>
@@ -619,6 +620,18 @@
     <string>Rivet</string>
    </property>
   </action>
+  <action name="actionPipe">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="Pipe/fig/PipeWindow.qrc">
+     <normaloff>:/pipe/pipe.png</normaloff>:/pipe/pipe.png</iconset>
+   </property>
+   <property name="text">
+    <string>Pipe</string>
+   </property>
+  </action>
   <zorder>dockWidget</zorder>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
@@ -631,16 +644,17 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="Rivet/RivetWindow.qrc"/>
-  <include location="MainWindow.qrc"/>
-  <include location="CADWindow.qrc"/>
-  <include location="MeasureWidnow.qrc"/>
-  <include location="SPCWindow.qrc"/>
-  <include location="Machining/machining.qrc"/>
-  <include location="TransportWindow.qrc"/>
   <include location="MeshWindow.qrc"/>
+  <include location="TransportWindow.qrc"/>
+  <include location="Rivet/RivetWindow.qrc"/>
   <include location="System.qrc"/>
+  <include location="Machining/machining.qrc"/>
+  <include location="CADWindow.qrc"/>
+  <include location="SPCWindow.qrc"/>
+  <include location="Pipe/fig/PipeWindow.qrc"/>
+  <include location="MeasureWidnow.qrc"/>
   <include location="OCPoro.qrc"/>
+  <include location="MainWindow.qrc"/>
  </resources>
  <connections/>
 </ui>

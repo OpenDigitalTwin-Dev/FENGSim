@@ -36,6 +36,8 @@
 #include "OCPoro/OCPoroDialog.h"
 #include "Mesh/MeshGeneration.h"
 #include "Rivet/RivetDockWidget.h"
+#include "Pipe/PipeDockWidget.h"
+
 
 // ui design
 namespace Ui {
@@ -535,6 +537,28 @@ public slots:
     void rivetMeshRefresh ();
     void rivetSolver ();
     void rivetImportResults ();
+
+    /* !
+  pipe app
+  */
+private:
+    QTimer* pipe_timer =  new QTimer;
+    int pipe_step = 1;
+    int pipe_total_step = 0;
+    QString pipe_file_name;
+    double pipe_mesh_size = 10000;
+    double pipe_mesh_refine = 0;
+public:
+    PipeDockWidget* pipe_dock;
+public slots:
+    void OpenPipeModule ();
+    void PipeCreateModel ();
+    void PipeMeshGen ();
+    void PipeMeshPlot ();
+    void PipeSolver ();
+    void PipeImportResults ();
+
+
 
 
 
