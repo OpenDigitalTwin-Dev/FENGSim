@@ -4500,6 +4500,8 @@ void MainWindow::PipeMeshGen() {
     //MeshGen();
     QProcess proc;
     proc.execute("bash", QStringList() << "-c" << "cd ../gmsh && ./run_pipe");
+    proc.execute("bash", QStringList() << "-c" << "cd ../../toolkit/MultiX/build/data/vtk && rm *.*");
+    proc.execute("bash", QStringList() << "-c" << "cd ../../conf && cp pipeconf m++conf");
     PipeMeshPlot();
 }
 
