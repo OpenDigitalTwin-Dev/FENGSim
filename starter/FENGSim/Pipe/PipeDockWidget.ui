@@ -287,7 +287,7 @@
         </column>
         <item row="0" column="0">
          <property name="text">
-          <string>71000</string>
+          <string>210000</string>
          </property>
         </item>
         <item row="1" column="0">
@@ -297,7 +297,7 @@
         </item>
         <item row="2" column="0">
          <property name="text">
-          <string>503</string>
+          <string>5000</string>
          </property>
         </item>
        </widget>
