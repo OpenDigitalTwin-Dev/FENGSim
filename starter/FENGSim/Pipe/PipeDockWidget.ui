@@ -139,7 +139,7 @@
         </item>
         <item row="4" column="0">
          <property name="text">
-          <string>2</string>
+          <string>0.1</string>
          </property>
         </item>
        </widget>
@@ -505,9 +505,9 @@
   </layout>
  </widget>
  <resources>
-  <include location="../Rivet/RivetWindow.qrc"/>
   <include location="../DataBaseWindow.qrc"/>
   <include location="../AMWindow.qrc"/>
+  <include location="../Rivet/RivetWindow.qrc"/>
  </resources>
  <connections/>
 </ui>
