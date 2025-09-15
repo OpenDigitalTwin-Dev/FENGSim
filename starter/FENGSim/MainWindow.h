@@ -27,6 +27,7 @@
 #include "AdditiveManufacturing/AMConfig.h"
 #include "StatisticalProcessControl/SPCDockWidget.h"
 #include "Machining/MachiningDockWidget.h"
+#include "Machining/MachiningDockWidget2.h"
 #include "Transport/TransportDockWidget.h"
 #include "Measure/MeasureThread1.h"
 #include "Measure/MeasureThread3.h"
@@ -143,6 +144,8 @@ private:
     SPCDockWidget* spc_dock;
     // machining dock widget
     MachiningDockWidget* machining_dock;
+    MachiningDockWidget2* machining_dock2;
+
 
     // cad data
     Primitives* parts;
@@ -560,7 +563,23 @@ public slots:
     void PipeSolver ();
     void PipeImportResults ();
 
-
+    /* !
+  machining2 app
+  */
+private:
+    QTimer* machining2_timer =  new QTimer;
+    int machining2_step = 1;
+    int machining2_total_step = 0;
+    QString machining2_file_name;
+    double machining2_mesh_size = 10000;
+    double machining2_mesh_refine = 0;
+public slots:
+    void Machining2Create3DModel ();
+//    void PipeModelRefresh ();
+//    void PipeMeshGen ();
+//    void PipeMeshPlot ();
+//    void PipeSolver ();
+//    void PipeImportResults ();
 
 
 

@@ -20,6 +20,7 @@ TEMPLATE = app
 SOURCES +=\
     CAD/PhysicsDockWidget.cpp \
     FEM/FEMThread1.cpp \
+    Machining/MachiningDockWidget2.cpp \
     Main.cpp \
     MainWindow.cpp \
     CAD/OCCWidget.cpp \
@@ -65,6 +66,7 @@ SOURCES +=\
 HEADERS  += \
     CAD/PhysicsDockWidget.h \
     FEM/FEMThread1.h \
+    Machining/MachiningDockWidget2.h \
     Machining/MakeTools.h \
     MainWindow.h \
     CAD/OCCWidget.h \
@@ -108,6 +110,7 @@ HEADERS  += \
 
 FORMS    += \
     CAD/PhysicsDockWidget.ui \
+    Machining/MachiningDockWidget2.ui \
     MainWindow.ui \
     AboutDialog.ui \
     CAD/CADDockWidget.ui \

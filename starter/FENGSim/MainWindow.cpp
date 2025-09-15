@@ -24,6 +24,7 @@
 //#include "Measure/Registration.h"
 #include "ui_AdditiveManufacturingDockWidget.h"
 #include "ui_MachiningDockWidget.h"
+#include "ui_MachiningDockWidget2.h"
 #include "ui_TransportDockWidget.h"
 #include "ui_OCPoroDockWidget.h"
 #include "ui_OCPoroDialog.h"
@@ -332,6 +333,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     // *******************************************************
     // machining
     machining_dock = new MachiningDockWidget;
+    machining_dock2 = new MachiningDockWidget2;
     connect(ui->actionMachining,SIGNAL(triggered()), this, SLOT(OpenMachiningModule()));
     connect(machining_dock->ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(MachiningPartSet()));
     connect(machining_dock->ui->comboBox_2, SIGNAL(currentIndexChanged(int)), this, SLOT(MachiningToolSet()));
@@ -394,7 +396,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     connect(rivet_dock->ui->pushButton_7, SIGNAL(clicked(bool)), this, SLOT(rivetSolver()));
 
     /* !
-  rivet module
+  pipe module
  */
     pipe_dock = new PipeDockWidget;
     connect(ui->actionPipe, SIGNAL(triggered()), this, SLOT(OpenPipeModule()));
@@ -403,6 +405,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     connect(pipe_dock->ui->pushButton_5, SIGNAL(clicked(bool)), this, SLOT(PipeImportResults()));
     connect(pipe_dock->ui->pushButton_6, SIGNAL(clicked(bool)), this, SLOT(PipeMeshGen()));
     connect(pipe_dock->ui->pushButton_7, SIGNAL(clicked(bool)), this, SLOT(PipeSolver()));
+
+    /* !
+  machining module
+ */
+    connect(machining_dock2->ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(Machining2Create3DModel()));
+//    connect(pipe_dock->ui->pushButton_3, SIGNAL(clicked(bool)), this, SLOT(PipeModelRefresh()));
+//    connect(pipe_dock->ui->pushButton_5, SIGNAL(clicked(bool)), this, SLOT(PipeImportResults()));
+//    connect(pipe_dock->ui->pushButton_6, SIGNAL(clicked(bool)), this, SLOT(PipeMeshGen()));
+//    connect(pipe_dock->ui->pushButton_7, SIGNAL(clicked(bool)), this, SLOT(PipeSolver()));
 
     return;
 }
@@ -3603,7 +3614,7 @@ void MainWindow::OpenMachiningModule()
 
 
 
-        ui->dockWidget->setWidget(machining_dock);
+        ui->dockWidget->setWidget(machining_dock2);
         ui->dockWidget->show();
         ui->actionCAD->setChecked(false);
         ui->actionMesh->setChecked(false);
@@ -4595,4 +4606,24 @@ void MainWindow::PipeImportResults () {
 
     pipe_step++;
     pipe_timer->singleShot(1, this, SLOT(PipeImportResults()));
+}
+
+void MainWindow::Machining2Create3DModel() {
+    NewProject();
+    double part_l = machining_dock2->ui->tableWidget->item(0,0)->text().toDouble();
+    double part_w = machining_dock2->ui->tableWidget->item(1,0)->text().toDouble();
+    double part_h = machining_dock2->ui->tableWidget->item(2,0)->text().toDouble();
+    double tool_l = machining_dock2->ui->tableWidget->item(3,0)->text().toDouble();
+    TopoDS_Shape* S = new TopoDS_Shape(
+                BRepPrimAPI_MakeBox(gp_Ax2(gp_Pnt(0,0,0),gp_Dir(0,0,1)),part_l,part_w,part_h).Shape());
+    General* A = new General(S);
+    parts->Add(A);
+    vtk_widget->Plot(*(A->Value()),false);
+
+    STEPControl_Writer writer;
+    writer.Transfer(*S,STEPControl_ManifoldSolidBrep);
+    writer.Write("data/mesh/mesh.stp");
+
+    ofstream out("data/machining/para.dat");
+    out << part_l << " " << part_w << " " << part_h << " " << tool_l << endl;
 }
