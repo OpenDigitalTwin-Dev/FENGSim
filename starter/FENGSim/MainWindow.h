@@ -532,6 +532,7 @@ public:
 public slots:
     void OpenRivetModule ();
     void rivetCreateModel ();
+    void rivetModelRefresh ();
     void rivetMeshGen ();
     void rivetMeshPlot ();
     void rivetMeshRefresh ();
@@ -553,6 +554,7 @@ public:
 public slots:
     void OpenPipeModule ();
     void PipeCreateModel ();
+    void PipeModelRefresh ();
     void PipeMeshGen ();
     void PipeMeshPlot ();
     void PipeSolver ();

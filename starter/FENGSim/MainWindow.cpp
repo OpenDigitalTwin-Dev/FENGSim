@@ -388,6 +388,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     connect(ui->actionRivet, SIGNAL(triggered()), this, SLOT(OpenRivetModule()));
     connect(rivet_dock->ui->pushButton_5, SIGNAL(clicked(bool)), this, SLOT(rivetImportResults()));
     connect(rivet_dock->ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(rivetCreateModel()));
+    connect(rivet_dock->ui->pushButton_3, SIGNAL(clicked(bool)), this, SLOT(rivetModelRefresh()));
     connect(rivet_dock->ui->pushButton_6, SIGNAL(clicked(bool)), this, SLOT(rivetMeshGen()));
     connect(rivet_dock->ui->pushButton_8, SIGNAL(clicked(bool)), this, SLOT(rivetMeshRefresh()));
     connect(rivet_dock->ui->pushButton_7, SIGNAL(clicked(bool)), this, SLOT(rivetSolver()));
@@ -398,6 +399,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     pipe_dock = new PipeDockWidget;
     connect(ui->actionPipe, SIGNAL(triggered()), this, SLOT(OpenPipeModule()));
     connect(pipe_dock->ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(PipeCreateModel()));
+    connect(pipe_dock->ui->pushButton_3, SIGNAL(clicked(bool)), this, SLOT(PipeModelRefresh()));
     connect(pipe_dock->ui->pushButton_5, SIGNAL(clicked(bool)), this, SLOT(PipeImportResults()));
     connect(pipe_dock->ui->pushButton_6, SIGNAL(clicked(bool)), this, SLOT(PipeMeshGen()));
     connect(pipe_dock->ui->pushButton_7, SIGNAL(clicked(bool)), this, SLOT(PipeSolver()));
@@ -4359,6 +4361,14 @@ void MainWindow::rivetCreateModel() {
     out << h1 << " " << r1 << " " << h2 << " " << r2 << " " << h3 << endl;
 }
 
+void MainWindow::rivetModelRefresh() {
+    rivet_dock->ui->tableWidget->item(0,0)->setText("0.1");
+    rivet_dock->ui->tableWidget->item(1,0)->setText("0.2");
+    rivet_dock->ui->tableWidget->item(2,0)->setText("0.2");
+    rivet_dock->ui->tableWidget->item(3,0)->setText("0.1");
+    rivet_dock->ui->tableWidget->item(4,0)->setText("0.1");
+}
+
 
 
 void MainWindow::rivetMeshGen() {
@@ -4498,6 +4508,14 @@ void MainWindow::PipeCreateModel() {
 
     ofstream out("data/pipe/para.dat");
     out << length << " " << r_in << " " << r_out << " " << r_down << " " << r_up << endl;
+}
+
+void MainWindow::PipeModelRefresh() {
+    pipe_dock->ui->tableWidget->item(0,0)->setText("0.4");
+    pipe_dock->ui->tableWidget->item(1,0)->setText("0.0");
+    pipe_dock->ui->tableWidget->item(2,0)->setText("0.02");
+    pipe_dock->ui->tableWidget->item(3,0)->setText("0.1");
+    pipe_dock->ui->tableWidget->item(4,0)->setText("0.1");
 }
 
 void MainWindow::PipeMeshGen() {
