@@ -976,9 +976,9 @@
   </layout>
  </widget>
  <resources>
+  <include location="../AMWindow.qrc"/>
   <include location="../DataBaseWindow.qrc"/>
   <include location="../Rivet/RivetWindow.qrc"/>
-  <include location="../AMWindow.qrc"/>
  </resources>
  <connections/>
 </ui>

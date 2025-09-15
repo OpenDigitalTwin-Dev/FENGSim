@@ -3363,6 +3363,40 @@ void VTKWidget::Machining2PlotTool(double cx, double cy, double cz, double r) {
     GetRenderWindow()->Render();
 }
 
+
+void VTKWidget::Machining2MPMPlotTool (QString file_name) {
+    vtkSmartPointer<vtkSimplePointsReader> reader = vtkSmartPointer<vtkSimplePointsReader>::New();
+    reader->SetFileName(file_name.toStdString().c_str());
+    reader->Update();
+
+    vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+    mapper->SetInputConnection(reader->GetOutputPort());
+    mapper->Update();
+
+    renderer->RemoveActor(machining2_mpm_actor);
+    machining2_mpm_actor = vtkSmartPointer<vtkActor>::New();
+    machining2_mpm_actor->SetMapper(mapper);
+    machining2_mpm_actor->GetProperty()->EdgeVisibilityOn();
+    machining2_mpm_actor->GetProperty()->SetPointSize(5);
+    machining2_mpm_actor->GetProperty()->SetColor(237,125,49);
+    machining2_mpm_actor->SetPickable(false);
+    machining2_mpm_actor->SetSelected(false);
+    renderer->AddActor(machining2_mpm_actor);
+    renderer->ResetCameraClippingRange();
+    GetRenderWindow()->Render();
+
+}
+
+
+
+
+
+
+
+
+
+
+
 // *******************************************************
 // machining
 
@@ -3827,5 +3861,6 @@ int VTKWidget::OCPoroImportVTKFile(std::string name, int n)
     // This ensures that no props are cut off
     // redraw
     GetRenderWindow()->Render();
+
     return m;
 }

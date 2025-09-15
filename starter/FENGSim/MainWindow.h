@@ -579,6 +579,7 @@ public slots:
     void Machining2Mesh3DGen ();
     void Machining2Solver ();
     void Machining2ImportResults ();
+    void Machining2ImportMPMResults ();
 
 
 

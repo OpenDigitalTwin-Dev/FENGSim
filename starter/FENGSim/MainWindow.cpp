@@ -414,6 +414,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     connect(machining_dock2->ui->pushButton_5, SIGNAL(clicked(bool)), this, SLOT(Machining2ImportResults()));
     connect(machining_dock2->ui->pushButton_6, SIGNAL(clicked(bool)), this, SLOT(Machining2Mesh3DGen()));
     connect(machining_dock2->ui->pushButton_7, SIGNAL(clicked(bool)), this, SLOT(Machining2Solver()));
+    connect(machining_dock2->ui->pushButton_16, SIGNAL(clicked(bool)), this, SLOT(Machining2ImportMPMResults()));
 
     return;
 }
@@ -4690,4 +4691,35 @@ void MainWindow::Machining2ImportResults () {
 
     machining2_step++;
     machining2_timer->singleShot(1, this, SLOT(Machining2ImportResults()));
+}
+
+void MainWindow::Machining2ImportMPMResults () {
+    if (machining2_step == 0) {
+        vtk_widget->Hide();
+        machining_dock2->ui->pushButton_7->setEnabled(true);
+        QDir dir("../karamelo/cutting");
+        QStringList stringlist_vtk;
+        stringlist_vtk << "dump_*.vtk";
+        dir.setNameFilters(stringlist_vtk);
+        QFileInfoList fileinfolist;
+        fileinfolist = dir.entryInfoList();
+        machining2_total_step = fileinfolist.length();
+        std::cout << machining2_step << std::endl;
+        std::cout << machining2_total_step << std::endl;
+    }
+    if (machining2_step > machining2_total_step-1) {
+        machining2_step = 0;
+        machining2_total_step = 0;
+        return;
+    }
+    vtk_widget->Machining2MPMPlotTool(
+                QString("../karamelo/cutting/dump_")
+                +QString::number(machining2_step)
+                +QString(".vtk"));
+    std::cout << (QString("../karamelo/cutting/dump_")
+                 +QString::number(machining2_step)
+                 +QString(".vtk")).toStdString() << std::endl;
+
+    machining2_step++;
+    machining2_timer->singleShot(1, this, SLOT(Machining2ImportMPMResults()));
 }
