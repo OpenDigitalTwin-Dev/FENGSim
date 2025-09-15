@@ -568,7 +568,7 @@ public slots:
   */
 private:
     QTimer* machining2_timer =  new QTimer;
-    int machining2_step = 1;
+    int machining2_step = 0;
     int machining2_total_step = 0;
     QString machining2_file_name;
     double machining2_mesh_size = 10000;
@@ -576,11 +576,9 @@ private:
     General* machining2_part;
 public slots:
     void Machining2Create3DModel ();
-    //    void PipeModelRefresh ();
     void Machining2Mesh3DGen ();
-    //    void PipeMeshPlot ();
-    //    void PipeSolver ();
-    //    void PipeImportResults ();
+    void Machining2Solver ();
+    void Machining2ImportResults ();
 
 
 

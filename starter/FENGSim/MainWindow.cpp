@@ -411,9 +411,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
  */
     connect(machining_dock2->ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(Machining2Create3DModel()));
 //    connect(pipe_dock->ui->pushButton_3, SIGNAL(clicked(bool)), this, SLOT(PipeModelRefresh()));
-//    connect(pipe_dock->ui->pushButton_5, SIGNAL(clicked(bool)), this, SLOT(PipeImportResults()));
+    connect(machining_dock2->ui->pushButton_5, SIGNAL(clicked(bool)), this, SLOT(Machining2ImportResults()));
     connect(machining_dock2->ui->pushButton_6, SIGNAL(clicked(bool)), this, SLOT(Machining2Mesh3DGen()));
-//    connect(pipe_dock->ui->pushButton_7, SIGNAL(clicked(bool)), this, SLOT(PipeSolver()));
+    connect(machining_dock2->ui->pushButton_7, SIGNAL(clicked(bool)), this, SLOT(Machining2Solver()));
 
     return;
 }
@@ -4642,4 +4642,56 @@ void MainWindow::Machining2Mesh3DGen() {
     vtk_widget->Machining2PlotTool(part_l+tool_l/2,tool_l/2,part_h-cut_d+tool_l/2,tool_l);
 
     MM.FileFormat(QString("../../toolkit/MultiX/build/Machining/conf/geo/machining.geo"));
+}
+
+# include "Machining/Machining2Thread.h"
+
+void MainWindow::Machining2Solver() {
+    QProcess proc;
+    proc.execute("bash", QStringList() << "-c" << "cd ../../toolkit/MultiX/build/data/vtk && rm *.vtk");
+    proc.execute("bash", QStringList() << "-c" << "cd ../../toolkit/MultiX/build/conf && cp machiningconf m++conf");
+
+    machining_dock2->ui->pushButton_7->setEnabled(false);
+    Machining2Thread* td1 = new Machining2Thread;
+    td1->start();
+    connect(td1, SIGNAL(finished()), this, SLOT(Machining2ImportResults()));
+}
+
+void MainWindow::Machining2ImportResults () {
+    if (machining2_step == 0) {
+        vtk_widget->Hide();
+        machining_dock2->ui->pushButton_7->setEnabled(true);
+        QDir dir("../../toolkit/MultiX/build/data/vtk");
+        QStringList stringlist_vtk;
+        stringlist_vtk << "part_*.vtk";
+        dir.setNameFilters(stringlist_vtk);
+        QFileInfoList fileinfolist;
+        fileinfolist = dir.entryInfoList();
+        machining2_total_step = fileinfolist.length();
+        std::cout << machining2_total_step << std::endl;
+    }
+    if (machining2_step > machining2_total_step-1) {
+        machining2_step = 0;
+        machining2_total_step = 0;
+        return;
+    }
+    vtk_widget->rivetImportResults(
+                QString("../../toolkit/MultiX/build/data/vtk/part_")
+                +QString::number(machining2_step)
+                +QString(".vtk"));
+
+//    double length = pipe_dock->ui->tableWidget->item(0,0)->text().toDouble();
+//    double r_in = pipe_dock->ui->tableWidget->item(1,0)->text().toDouble();
+//    double r_out = pipe_dock->ui->tableWidget->item(2,0)->text().toDouble();
+//    double r_down = pipe_dock->ui->tableWidget->item(3,0)->text().toDouble();
+//    double r_up = pipe_dock->ui->tableWidget->item(4,0)->text().toDouble();
+
+//    vtk_widget->PipePlotDown(0,0,-(r_out+r_down),r_down);
+//    double r = r_out*2+r_down+r_up;
+//    double cx =r*sin(5*pipe_step*5*0.1/1000);
+//    double cz =r*cos(5*pipe_step*5*0.1/1000)-r_out-r_down;
+//    vtk_widget->PipePlotUp(cx,0,cz,r_up);
+
+    machining2_step++;
+    machining2_timer->singleShot(1, this, SLOT(Machining2ImportResults()));
 }

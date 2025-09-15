@@ -20,6 +20,7 @@ TEMPLATE = app
 SOURCES +=\
     CAD/PhysicsDockWidget.cpp \
     FEM/FEMThread1.cpp \
+    Machining/Machining2Thread.cpp \
     Machining/MachiningDockWidget2.cpp \
     Main.cpp \
     MainWindow.cpp \
@@ -66,6 +67,7 @@ SOURCES +=\
 HEADERS  += \
     CAD/PhysicsDockWidget.h \
     FEM/FEMThread1.h \
+    Machining/Machining2Thread.h \
     Machining/MachiningDockWidget2.h \
     Machining/MakeTools.h \
     MainWindow.h \
