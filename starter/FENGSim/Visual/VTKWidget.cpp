@@ -3341,6 +3341,27 @@ void VTKWidget::PipePlotUp(double cx, double cy, double cz, double r) {
     GetRenderWindow()->Render();
 }
 
+void VTKWidget::Machining2PlotTool(double cx, double cy, double cz, double r) {
+    renderer->RemoveActor(machining2_tool_actor);
+    machining2_tool_actor = vtkSmartPointer<vtkActor>::New();
+
+    vtkSmartPointer<vtkCubeSource> box = vtkSmartPointer<vtkCubeSource>::New();
+    box->SetCenter(cx,cy,cz);
+    box->SetXLength(r);
+    box->SetYLength(r);
+    box->SetZLength(r);
+    vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+    mapper->SetInputConnection(box->GetOutputPort());
+    machining2_tool_actor->SetMapper(mapper);
+    machining2_tool_actor->GetProperty()->EdgeVisibilityOff();
+    machining2_tool_actor->GetProperty()->SetLineWidth(1);
+    machining2_tool_actor->GetProperty()->SetOpacity(0.5);
+    machining2_tool_actor->SetPickable(false);
+    machining2_tool_actor->SetSelected(false);
+
+    renderer->AddActor(machining2_tool_actor);
+    GetRenderWindow()->Render();
+}
 
 // *******************************************************
 // machining

@@ -573,13 +573,14 @@ private:
     QString machining2_file_name;
     double machining2_mesh_size = 10000;
     double machining2_mesh_refine = 0;
+    General* machining2_part;
 public slots:
     void Machining2Create3DModel ();
-//    void PipeModelRefresh ();
-//    void PipeMeshGen ();
-//    void PipeMeshPlot ();
-//    void PipeSolver ();
-//    void PipeImportResults ();
+    //    void PipeModelRefresh ();
+    void Machining2Mesh3DGen ();
+    //    void PipeMeshPlot ();
+    //    void PipeSolver ();
+    //    void PipeImportResults ();
 
 
 

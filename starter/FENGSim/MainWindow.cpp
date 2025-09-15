@@ -412,7 +412,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     connect(machining_dock2->ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(Machining2Create3DModel()));
 //    connect(pipe_dock->ui->pushButton_3, SIGNAL(clicked(bool)), this, SLOT(PipeModelRefresh()));
 //    connect(pipe_dock->ui->pushButton_5, SIGNAL(clicked(bool)), this, SLOT(PipeImportResults()));
-//    connect(pipe_dock->ui->pushButton_6, SIGNAL(clicked(bool)), this, SLOT(PipeMeshGen()));
+    connect(machining_dock2->ui->pushButton_6, SIGNAL(clicked(bool)), this, SLOT(Machining2Mesh3DGen()));
 //    connect(pipe_dock->ui->pushButton_7, SIGNAL(clicked(bool)), this, SLOT(PipeSolver()));
 
     return;
@@ -4614,11 +4614,12 @@ void MainWindow::Machining2Create3DModel() {
     double part_w = machining_dock2->ui->tableWidget->item(1,0)->text().toDouble();
     double part_h = machining_dock2->ui->tableWidget->item(2,0)->text().toDouble();
     double tool_l = machining_dock2->ui->tableWidget->item(3,0)->text().toDouble();
+    double cut_d = machining_dock2->ui->tableWidget->item(4,0)->text().toDouble();
     TopoDS_Shape* S = new TopoDS_Shape(
                 BRepPrimAPI_MakeBox(gp_Ax2(gp_Pnt(0,0,0),gp_Dir(0,0,1)),part_l,part_w,part_h).Shape());
-    General* A = new General(S);
-    parts->Add(A);
-    vtk_widget->Plot(*(A->Value()),false);
+    machining2_part = new General(S);
+    vtk_widget->Plot(*(machining2_part->Value()),false);
+    vtk_widget->Machining2PlotTool(part_l+tool_l/2,tool_l/2,part_h-cut_d+tool_l/2,tool_l);
 
     STEPControl_Writer writer;
     writer.Transfer(*S,STEPControl_ManifoldSolidBrep);
@@ -4626,4 +4627,19 @@ void MainWindow::Machining2Create3DModel() {
 
     ofstream out("data/machining/para.dat");
     out << part_l << " " << part_w << " " << part_h << " " << tool_l << endl;
+}
+
+void MainWindow::Machining2Mesh3DGen() {
+    MM.MeshGeneration(machining2_part->Value(),0.3,0,meas_path);
+    vtk_widget->Clear();
+    vtk_widget->ImportVTKFile(std::string("./data/mesh/fengsim_mesh.vtk"));
+
+    double part_l = machining_dock2->ui->tableWidget->item(0,0)->text().toDouble();
+    double part_w = machining_dock2->ui->tableWidget->item(1,0)->text().toDouble();
+    double part_h = machining_dock2->ui->tableWidget->item(2,0)->text().toDouble();
+    double tool_l = machining_dock2->ui->tableWidget->item(3,0)->text().toDouble();
+    double cut_d = machining_dock2->ui->tableWidget->item(4,0)->text().toDouble();
+    vtk_widget->Machining2PlotTool(part_l+tool_l/2,tool_l/2,part_h-cut_d+tool_l/2,tool_l);
+
+    MM.FileFormat(QString("../../toolkit/MultiX/build/Machining/conf/geo/machining.geo"));
 }

@@ -479,6 +479,14 @@ public:
     void PipePlotDown (double cx, double cy, double cz, double r);
     void PipePlotUp (double cx, double cy, double cz, double r);
 
+    /* !
+     machining2 dynamic
+     */
+public:
+    vtkSmartPointer<vtkActor> machining2_part_actor;
+    vtkSmartPointer<vtkActor> machining2_tool_actor;
+    void Machining2PlotTool (double cx, double cy, double cz, double r);
+
 
     // *******************************************************
     // machining
