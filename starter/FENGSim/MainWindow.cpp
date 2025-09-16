@@ -4676,7 +4676,7 @@ void MainWindow::Machining2ImportResults () {
         machining2_total_step = 0;
         return;
     }
-    vtk_widget->rivetImportResults(
+    vtk_widget->Machining2ImportResults(
                 QString("../../toolkit/MultiX/build/data/vtk/part_")
                 +QString::number(machining2_step)
                 +QString(".vtk"));

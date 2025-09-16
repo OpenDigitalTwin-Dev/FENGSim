@@ -486,6 +486,7 @@ public:
     vtkSmartPointer<vtkActor> machining2_part_actor;
     vtkSmartPointer<vtkActor> machining2_tool_actor;
     vtkSmartPointer<vtkActor> machining2_mpm_actor;
+    void Machining2ImportResults (QString file_name);
     void Machining2PlotTool (double cx, double cy, double cz, double r);
     void Machining2MPMPlotTool (QString file_name);
 
