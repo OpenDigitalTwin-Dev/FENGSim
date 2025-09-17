@@ -10,13 +10,12 @@ def cylinder_hex ():
     print(line)
     values_point = re.split(' ',line)
     #geometry
-    r1 = float(values_point[3])
-    r2 = float(values_point[1])
-    h1 = float(values_point[0]) 
-    h2 = float(values_point[2])
+    height = float(values_point[0])
+    r_in = float(values_point[1])
+    r_out = float(values_point[2]) 
     #mesh
-    r = 0.02
-    h = 0.4
+    r = r_out
+    h = height
     l = r/4
     n = 3
     m = 2
