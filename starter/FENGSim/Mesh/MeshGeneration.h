@@ -71,7 +71,7 @@ class MeshModule {
 public:
     MeshModule () {}
     void MeshGeneration (TopoDS_Shape* S, double size = 0.5, int refine_level = 0, QString path ="", double subd=1);
-    void FileFormat ();
+    void FileFormat (QString out_path=QString("../Elasticity/build/solver/conf/geo/fengsim_mesh.geo"));
     void MeasureModel (QString path, QString filename = QString("/data/meas/fengsim_meas_target.vtk"));
     void MeasureModel (int id);
     bool IsInclude (std::vector<double> p, double x, double y, double z) {

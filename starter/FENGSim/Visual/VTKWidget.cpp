@@ -3341,6 +3341,83 @@ void VTKWidget::PipePlotUp(double cx, double cy, double cz, double r) {
     GetRenderWindow()->Render();
 }
 
+void VTKWidget::Machining2ImportResults(QString file_name)
+{
+    renderer->RemoveActor(machining2_part_actor);
+    machining2_part_actor = vtkSmartPointer<vtkActor>::New();
+    vtkSmartPointer<vtkUnstructuredGridReader> reader = vtkSmartPointer<vtkUnstructuredGridReader>::New();
+    reader->SetFileName(file_name.toStdString().c_str());
+    reader->Update();
+    vtkSmartPointer<vtkDataSetMapper> mapper = vtkSmartPointer<vtkDataSetMapper>::New();
+    mapper->SetInputConnection(reader->GetOutputPort());
+    mapper->SetScalarVisibility(false);
+    machining2_part_actor->SetMapper(mapper);
+    machining2_part_actor->GetProperty()->EdgeVisibilityOn();
+    machining2_part_actor->GetProperty()->SetLineWidth(1);
+    machining2_part_actor->GetProperty()->SetColor(COLOR0);
+    machining2_part_actor->SetPickable(false);
+    machining2_part_actor->SetSelected(false);
+
+    renderer->AddActor(machining2_part_actor);
+    GetRenderWindow()->Render();
+}
+
+void VTKWidget::Machining2PlotTool(double cx, double cy, double cz, double r) {
+    renderer->RemoveActor(machining2_tool_actor);
+    machining2_tool_actor = vtkSmartPointer<vtkActor>::New();
+
+    vtkSmartPointer<vtkCubeSource> box = vtkSmartPointer<vtkCubeSource>::New();
+    box->SetCenter(cx,cy,cz);
+    box->SetXLength(r);
+    box->SetYLength(r);
+    box->SetZLength(r);
+    vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+    mapper->SetInputConnection(box->GetOutputPort());
+    machining2_tool_actor->SetMapper(mapper);
+    machining2_tool_actor->GetProperty()->EdgeVisibilityOn();
+    //machining2_tool_actor->GetProperty()->SetLineWidth(1);
+    machining2_tool_actor->GetProperty()->SetOpacity(0.5);
+    //machining2_tool_actor->GetProperty()->SetColor(COLOR7);
+    machining2_tool_actor->SetPickable(false);
+    //machining2_tool_actor->SetSelected(false);
+
+    renderer->AddActor(machining2_tool_actor);
+    GetRenderWindow()->Render();
+}
+
+
+void VTKWidget::Machining2MPMPlotTool (QString file_name) {
+    vtkSmartPointer<vtkSimplePointsReader> reader = vtkSmartPointer<vtkSimplePointsReader>::New();
+    reader->SetFileName(file_name.toStdString().c_str());
+    reader->Update();
+
+    vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+    mapper->SetInputConnection(reader->GetOutputPort());
+    mapper->Update();
+
+    renderer->RemoveActor(machining2_mpm_actor);
+    machining2_mpm_actor = vtkSmartPointer<vtkActor>::New();
+    machining2_mpm_actor->SetMapper(mapper);
+    machining2_mpm_actor->GetProperty()->EdgeVisibilityOn();
+    machining2_mpm_actor->GetProperty()->SetPointSize(5);
+    machining2_mpm_actor->GetProperty()->SetColor(237,125,49);
+    machining2_mpm_actor->SetPickable(false);
+    machining2_mpm_actor->SetSelected(false);
+    renderer->AddActor(machining2_mpm_actor);
+    renderer->ResetCameraClippingRange();
+    GetRenderWindow()->Render();
+
+}
+
+
+
+
+
+
+
+
+
+
 
 // *******************************************************
 // machining
@@ -3806,5 +3883,6 @@ int VTKWidget::OCPoroImportVTKFile(std::string name, int n)
     // This ensures that no props are cut off
     // redraw
     GetRenderWindow()->Render();
+
     return m;
 }

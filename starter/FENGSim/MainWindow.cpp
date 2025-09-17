@@ -24,6 +24,7 @@
 //#include "Measure/Registration.h"
 #include "ui_AdditiveManufacturingDockWidget.h"
 #include "ui_MachiningDockWidget.h"
+#include "ui_MachiningDockWidget2.h"
 #include "ui_TransportDockWidget.h"
 #include "ui_OCPoroDockWidget.h"
 #include "ui_OCPoroDialog.h"
@@ -332,6 +333,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     // *******************************************************
     // machining
     machining_dock = new MachiningDockWidget;
+    machining_dock2 = new MachiningDockWidget2;
     connect(ui->actionMachining,SIGNAL(triggered()), this, SLOT(OpenMachiningModule()));
     connect(machining_dock->ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(MachiningPartSet()));
     connect(machining_dock->ui->comboBox_2, SIGNAL(currentIndexChanged(int)), this, SLOT(MachiningToolSet()));
@@ -388,19 +390,31 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     connect(ui->actionRivet, SIGNAL(triggered()), this, SLOT(OpenRivetModule()));
     connect(rivet_dock->ui->pushButton_5, SIGNAL(clicked(bool)), this, SLOT(rivetImportResults()));
     connect(rivet_dock->ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(rivetCreateModel()));
+    connect(rivet_dock->ui->pushButton_3, SIGNAL(clicked(bool)), this, SLOT(rivetModelRefresh()));
     connect(rivet_dock->ui->pushButton_6, SIGNAL(clicked(bool)), this, SLOT(rivetMeshGen()));
     connect(rivet_dock->ui->pushButton_8, SIGNAL(clicked(bool)), this, SLOT(rivetMeshRefresh()));
     connect(rivet_dock->ui->pushButton_7, SIGNAL(clicked(bool)), this, SLOT(rivetSolver()));
 
     /* !
-  rivet module
+  pipe module
  */
     pipe_dock = new PipeDockWidget;
     connect(ui->actionPipe, SIGNAL(triggered()), this, SLOT(OpenPipeModule()));
     connect(pipe_dock->ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(PipeCreateModel()));
+    connect(pipe_dock->ui->pushButton_3, SIGNAL(clicked(bool)), this, SLOT(PipeModelRefresh()));
     connect(pipe_dock->ui->pushButton_5, SIGNAL(clicked(bool)), this, SLOT(PipeImportResults()));
     connect(pipe_dock->ui->pushButton_6, SIGNAL(clicked(bool)), this, SLOT(PipeMeshGen()));
     connect(pipe_dock->ui->pushButton_7, SIGNAL(clicked(bool)), this, SLOT(PipeSolver()));
+
+    /* !
+  machining module
+ */
+    connect(machining_dock2->ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(Machining2Create3DModel()));
+    //    connect(pipe_dock->ui->pushButton_3, SIGNAL(clicked(bool)), this, SLOT(PipeModelRefresh()));
+    connect(machining_dock2->ui->pushButton_5, SIGNAL(clicked(bool)), this, SLOT(Machining2ImportResults()));
+    connect(machining_dock2->ui->pushButton_6, SIGNAL(clicked(bool)), this, SLOT(Machining2Mesh3DGen()));
+    connect(machining_dock2->ui->pushButton_7, SIGNAL(clicked(bool)), this, SLOT(Machining2Solver()));
+    connect(machining_dock2->ui->pushButton_16, SIGNAL(clicked(bool)), this, SLOT(Machining2ImportMPMResults()));
 
     return;
 }
@@ -3601,7 +3615,7 @@ void MainWindow::OpenMachiningModule()
 
 
 
-        ui->dockWidget->setWidget(machining_dock);
+        ui->dockWidget->setWidget(machining_dock2);
         ui->dockWidget->show();
         ui->actionCAD->setChecked(false);
         ui->actionMesh->setChecked(false);
@@ -4359,6 +4373,14 @@ void MainWindow::rivetCreateModel() {
     out << h1 << " " << r1 << " " << h2 << " " << r2 << " " << h3 << endl;
 }
 
+void MainWindow::rivetModelRefresh() {
+    rivet_dock->ui->tableWidget->item(0,0)->setText("0.1");
+    rivet_dock->ui->tableWidget->item(1,0)->setText("0.2");
+    rivet_dock->ui->tableWidget->item(2,0)->setText("0.2");
+    rivet_dock->ui->tableWidget->item(3,0)->setText("0.1");
+    rivet_dock->ui->tableWidget->item(4,0)->setText("0.1");
+}
+
 
 
 void MainWindow::rivetMeshGen() {
@@ -4400,7 +4422,7 @@ void MainWindow::rivetMeshRefresh() {
 
 void MainWindow::rivetSolver() {
     QProcess proc;
-    proc.execute("bash", QStringList() << "-c" << "cd ../../toolkit/MultiX/build/data/vtk && rm *.vtk");
+    proc.execute("bash", QStringList() << "-c" << "cd ../../toolkit/MultiX/build/data/vtk && rm rivet_*.vtk");
     proc.execute("bash", QStringList() << "-c" << "cd ../../toolkit/MultiX/build/conf && cp rivetconf m++conf");
 
     rivet_dock->ui->pushButton_7->setEnabled(false);
@@ -4430,7 +4452,7 @@ void MainWindow::rivetImportResults () {
         //QDir dir(rivet_file_name);
         QDir dir("../../toolkit/MultiX/build/data/vtk");
         QStringList stringlist_vtk;
-        stringlist_vtk << "telastoplasticity_undeform*.vtk";
+        stringlist_vtk << "rivet_*.vtk";
         dir.setNameFilters(stringlist_vtk);
         QFileInfoList fileinfolist;
         fileinfolist = dir.entryInfoList();
@@ -4446,7 +4468,7 @@ void MainWindow::rivetImportResults () {
         return;
     }
     vtk_widget->rivetImportResults(
-                QString("../../toolkit/MultiX/build/data/vtk/telastoplasticity_undeform")
+                QString("../../toolkit/MultiX/build/data/vtk/rivet_")
                 +QString::number(rivet_step)
                 +QString(".vtk"));
     rivet_step++;
@@ -4500,6 +4522,14 @@ void MainWindow::PipeCreateModel() {
     out << length << " " << r_in << " " << r_out << " " << r_down << " " << r_up << endl;
 }
 
+void MainWindow::PipeModelRefresh() {
+    pipe_dock->ui->tableWidget->item(0,0)->setText("0.4");
+    pipe_dock->ui->tableWidget->item(1,0)->setText("0.0");
+    pipe_dock->ui->tableWidget->item(2,0)->setText("0.02");
+    pipe_dock->ui->tableWidget->item(3,0)->setText("0.1");
+    pipe_dock->ui->tableWidget->item(4,0)->setText("0.1");
+}
+
 void MainWindow::PipeMeshGen() {
     //MeshGen();
     QProcess proc;
@@ -4527,7 +4557,7 @@ void MainWindow::PipeMeshPlot() {
 
 void MainWindow::PipeSolver() {
     QProcess proc;
-    proc.execute("bash", QStringList() << "-c" << "cd ../../toolkit/MultiX/build/data/vtk && rm *.vtk");
+    proc.execute("bash", QStringList() << "-c" << "cd ../../toolkit/MultiX/build/data/vtk && rm pipe_*.vtk");
     proc.execute("bash", QStringList() << "-c" << "cd ../../toolkit/MultiX/build/conf && cp pipeconf m++conf");
 
 
@@ -4543,7 +4573,7 @@ void MainWindow::PipeImportResults () {
         pipe_dock->ui->pushButton_7->setEnabled(true);
         QDir dir("../../toolkit/MultiX/build/data/vtk");
         QStringList stringlist_vtk;
-        stringlist_vtk << "telastoplasticity_undeform*.vtk";
+        stringlist_vtk << "pipe_*.vtk";
         dir.setNameFilters(stringlist_vtk);
         QFileInfoList fileinfolist;
         fileinfolist = dir.entryInfoList();
@@ -4559,7 +4589,7 @@ void MainWindow::PipeImportResults () {
         return;
     }
     vtk_widget->rivetImportResults(
-                QString("../../toolkit/MultiX/build/data/vtk/telastoplasticity_undeform")
+                QString("../../toolkit/MultiX/build/data/vtk/pipe_")
                 +QString::number(pipe_step)
                 +QString(".vtk"));
 
@@ -4577,4 +4607,119 @@ void MainWindow::PipeImportResults () {
 
     pipe_step++;
     pipe_timer->singleShot(1, this, SLOT(PipeImportResults()));
+}
+
+void MainWindow::Machining2Create3DModel() {
+    NewProject();
+    double part_l = machining_dock2->ui->tableWidget->item(0,0)->text().toDouble();
+    double part_w = machining_dock2->ui->tableWidget->item(1,0)->text().toDouble();
+    double part_h = machining_dock2->ui->tableWidget->item(2,0)->text().toDouble();
+    double tool_l = machining_dock2->ui->tableWidget->item(3,0)->text().toDouble();
+    double cut_d = machining_dock2->ui->tableWidget->item(4,0)->text().toDouble();
+    TopoDS_Shape* S = new TopoDS_Shape(
+                BRepPrimAPI_MakeBox(gp_Ax2(gp_Pnt(0,0,0),gp_Dir(0,0,1)),part_l,part_w,part_h).Shape());
+    machining2_part = new General(S);
+    vtk_widget->Plot(*(machining2_part->Value()),false);
+    vtk_widget->Machining2PlotTool(part_l+tool_l/2,tool_l/2,part_h-cut_d+tool_l/2,tool_l);
+
+    STEPControl_Writer writer;
+    writer.Transfer(*S,STEPControl_ManifoldSolidBrep);
+    writer.Write("data/mesh/mesh.stp");
+
+    ofstream out("data/machining/para.dat");
+    out << part_l << " " << part_w << " " << part_h << " " << tool_l << endl;
+}
+
+void MainWindow::Machining2Mesh3DGen() {
+    MM.MeshGeneration(machining2_part->Value(),0.3,0,meas_path);
+    vtk_widget->Clear();
+    vtk_widget->ImportVTKFile(std::string("./data/mesh/fengsim_mesh.vtk"));
+
+    double part_l = machining_dock2->ui->tableWidget->item(0,0)->text().toDouble();
+    double part_w = machining_dock2->ui->tableWidget->item(1,0)->text().toDouble();
+    double part_h = machining_dock2->ui->tableWidget->item(2,0)->text().toDouble();
+    double tool_l = machining_dock2->ui->tableWidget->item(3,0)->text().toDouble();
+    double cut_d = machining_dock2->ui->tableWidget->item(4,0)->text().toDouble();
+    vtk_widget->Machining2PlotTool(part_l+tool_l/2,tool_l/2,part_h-cut_d+tool_l/2,tool_l);
+
+    MM.FileFormat(QString("../../toolkit/MultiX/build/Machining/conf/geo/machining.geo"));
+}
+
+# include "Machining/Machining2Thread.h"
+
+void MainWindow::Machining2Solver() {
+    QProcess proc;
+    proc.execute("bash", QStringList() << "-c" << "cd ../../toolkit/MultiX/build/data/vtk && rm part_*.vtk");
+    proc.execute("bash", QStringList() << "-c" << "cd ../../toolkit/MultiX/build/conf && cp machiningconf m++conf");
+
+    machining_dock2->ui->pushButton_7->setEnabled(false);
+    Machining2Thread* td1 = new Machining2Thread;
+    td1->start();
+    connect(td1, SIGNAL(finished()), this, SLOT(Machining2ImportResults()));
+}
+
+void MainWindow::Machining2ImportResults () {
+    if (machining2_step == 0) {
+        vtk_widget->Hide();
+        machining_dock2->ui->pushButton_7->setEnabled(true);
+        QDir dir("../../toolkit/MultiX/build/data/vtk");
+        QStringList stringlist_vtk;
+        stringlist_vtk << "part_*.vtk";
+        dir.setNameFilters(stringlist_vtk);
+        QFileInfoList fileinfolist;
+        fileinfolist = dir.entryInfoList();
+        machining2_total_step = fileinfolist.length();
+        std::cout << machining2_total_step << std::endl;
+    }
+    if (machining2_step > machining2_total_step-1) {
+        machining2_step = 0;
+        machining2_total_step = 0;
+        return;
+    }
+    vtk_widget->Machining2ImportResults(
+                QString("../../toolkit/MultiX/build/data/vtk/part_")
+                +QString::number(machining2_step)
+                +QString(".vtk"));
+
+    double part_l = machining_dock2->ui->tableWidget->item(0,0)->text().toDouble();
+    double part_w = machining_dock2->ui->tableWidget->item(1,0)->text().toDouble();
+    double part_h = machining_dock2->ui->tableWidget->item(2,0)->text().toDouble();
+    double tool_l = machining_dock2->ui->tableWidget->item(3,0)->text().toDouble();
+    double cut_d = machining_dock2->ui->tableWidget->item(4,0)->text().toDouble();
+    vtk_widget->Machining2PlotTool(part_l+tool_l/2-0.3*(machining2_step+1),tool_l/2,part_h-cut_d+tool_l/2,tool_l);
+
+
+    machining2_step++;
+    machining2_timer->singleShot(1, this, SLOT(Machining2ImportResults()));
+}
+
+void MainWindow::Machining2ImportMPMResults () {
+    if (machining2_step == 0) {
+        vtk_widget->Hide();
+        machining_dock2->ui->pushButton_7->setEnabled(true);
+        QDir dir("../karamelo/cutting");
+        QStringList stringlist_vtk;
+        stringlist_vtk << "dump_*.vtk";
+        dir.setNameFilters(stringlist_vtk);
+        QFileInfoList fileinfolist;
+        fileinfolist = dir.entryInfoList();
+        machining2_total_step = fileinfolist.length();
+        std::cout << machining2_step << std::endl;
+        std::cout << machining2_total_step << std::endl;
+    }
+    if (machining2_step > machining2_total_step-1) {
+        machining2_step = 0;
+        machining2_total_step = 0;
+        return;
+    }
+    vtk_widget->Machining2MPMPlotTool(
+                QString("../karamelo/cutting/dump_")
+                +QString::number(machining2_step)
+                +QString(".vtk"));
+    std::cout << (QString("../karamelo/cutting/dump_")
+                 +QString::number(machining2_step)
+                 +QString(".vtk")).toStdString() << std::endl;
+
+    machining2_step++;
+    machining2_timer->singleShot(1, this, SLOT(Machining2ImportMPMResults()));
 }

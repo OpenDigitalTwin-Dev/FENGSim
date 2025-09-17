@@ -506,8 +506,8 @@
  </widget>
  <resources>
   <include location="../DataBaseWindow.qrc"/>
-  <include location="../AMWindow.qrc"/>
   <include location="../Rivet/RivetWindow.qrc"/>
+  <include location="../AMWindow.qrc"/>
  </resources>
  <connections/>
 </ui>

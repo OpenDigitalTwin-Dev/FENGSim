@@ -46,7 +46,7 @@ void MeshModule::MeshGeneration (TopoDS_Shape* S, double size, int refine_level,
 #include "fstream"
 #include <QFileDialog>
 
-void MeshModule::FileFormat ()
+void MeshModule::FileFormat (QString outpath)
 {
     //    QString filename =  QFileDialog::getSaveFileName(0,"Save Mesh",
     //                                                     QString("/home/jiping/M++/Elasticity/conf/geo"),
@@ -63,7 +63,8 @@ void MeshModule::FileFormat ()
     char L[len];
     // out .geo file
     //out.open(filename.toStdString().c_str());
-    out.open("../Elasticity/build/solver/conf/geo/fengsim_mesh.geo");
+    out.open(outpath.toStdString());
+    //out.open("../Elasticity/build/solver/conf/geo/fengsim_mesh.geo");
     out << "POINTS" << endl;
     // vertices
     for (int i = 0; i < 5; i++) is.getline(L,len);
