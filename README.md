@@ -27,7 +27,10 @@ There exist various solvers designed for nonlinear solid mechanics, computationa
 ```shell
 	cd FENGSim
 	git submodule update --init
-	cd toolkit
+```
+
+```shell
+	cd FENGSim/toolkit
 	git clone https://github.com/OpenDigitalTwin-Dev/MultiX.git
 ```
 
