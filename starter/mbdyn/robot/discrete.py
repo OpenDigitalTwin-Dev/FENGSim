@@ -3,7 +3,8 @@ from scipy.spatial import distance
 import numpy as np
 import math
 
-fun_name = input("输入1为测试例子，输入2为读入ur3.traj：\n");
+#fun_name = input("输入1为测试例子，输入2为读入ur3.traj：\n");
+fun_name = 2
 print ("您的输入是: ", fun_name)
 
 if int(fun_name) == 1:
