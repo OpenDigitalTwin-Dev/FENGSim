@@ -3121,26 +3121,31 @@ void VTKWidget::mbdPath () {
     }
     inFile.close();
 
-    std::vector<vtkSmartPointer<vtkLineSource>> lss;
-    lss.resize(lines.size()-1);
-    for (int i=0; i<lss.size(); i++) {
-        lss[i] = vtkSmartPointer<vtkLineSource>::New();
-    }
+    vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
+    vtkSmartPointer<vtkCellArray> cells = vtkSmartPointer<vtkCellArray>::New();
 
-    for (int i=0; i<lss.size(); i++) {
+    for (int i=0; i<int(lines.size())-1; i++) {
         double z[6];
         sscanf(lines[i+1].data(),"%lf %lf %lf %lf %lf %lf",z,z+1,z+2,z+3,z+4,z+5);
-        lss[i]->SetPoint1(-z[0],-z[1],z[2]);
-        lss[i]->SetPoint2(-z[3],-z[4],z[5]);
-        vtkSmartPointer<vtkPolyDataMapper> mapper_ls = vtkSmartPointer<vtkPolyDataMapper>::New();
-        mapper_ls->SetInputConnection(lss[i]->GetOutputPort());
-        vtkSmartPointer<vtkActor> actor_ls = vtkSmartPointer<vtkActor>::New();
-        actor_ls->SetMapper(mapper_ls);
-        //actor_ls->GetProperty()->SetColor(1,0,0);
-        actor_ls->GetProperty()->SetLineWidth(2);
-        renderer->AddActor(actor_ls);
+
+        points->InsertNextPoint(-z[0],-z[1],z[2]);
+        points->InsertNextPoint(-z[3],-z[4],z[5]);
+        vtkSmartPointer<vtkLine> line0 = vtkSmartPointer<vtkLine>::New();
+        line0->GetPointIds()->SetId(0, 0+i*2);
+        line0->GetPointIds()->SetId(1, 1+i*2);
+        cells->InsertNextCell(line0);
     }
 
+    vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
+    polydata->SetPoints(points);
+    polydata->SetLines(cells);
+    vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+    mapper->SetInputData(polydata);
+    vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
+    actor->SetMapper(mapper);
+    actor->GetProperty()->SetColor(1,0,0);
+    actor->GetProperty()->SetLineWidth(2);
+    renderer->AddActor(actor);
 
     //    vtkSmartPointer<vtkSphereSource> ss = vtkSmartPointer<vtkSphereSource>::New();
     //    ss->SetCenter(0.1,0.3,0.3);
