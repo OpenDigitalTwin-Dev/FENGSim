@@ -457,6 +457,12 @@ void MainWindow::SetActionChecked (int n) {
     ui->actionMesh->setChecked(false);
     ui->actionSolver->setChecked(false);
     ui->actionVisual->setChecked(false);
+    ui->actionAdditiveManufacturing->setChecked(false);
+    ui->actionMachining->setChecked(false);
+    ui->actionPipe->setChecked(false);
+    ui->actionRivet->setChecked(false);
+    ui->actionRobot->setChecked(false);
+    ui->actionMeasure->setChecked(false);
     if (n == 0)
         ui->actionCAD->setChecked(true);
     else if (n == 1)
@@ -467,6 +473,18 @@ void MainWindow::SetActionChecked (int n) {
         ui->actionSolver->setChecked(true);
     else if (n == 4)
         ui->actionVisual->setChecked(true);
+    else if (n == 6)
+        ui->actionAdditiveManufacturing->setChecked(true);
+    else if (n == 7)
+        ui->actionMachining->setChecked(true);
+    else if (n == 8)
+        ui->actionRivet->setChecked(true);
+    else if (n == 9)
+        ui->actionPipe->setChecked(true);
+    else if (n == 10)
+        ui->actionRobot->setChecked(true);
+    else if (n == 11)
+        ui->actionMeasure->setChecked(true);
 }
 
 void MainWindow::OpenCADModule()
@@ -596,52 +614,6 @@ void MainWindow::OpenProject ()
         vtk_widget->ImportVTKFile(fileName.toStdString());
     }
 }
-
-
-
-
-
-// ##############################################################################################
-// ##############################################################################################
-// ##############################################################################################
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1302,16 +1274,12 @@ void MainWindow::OpenMeasureModule()
 {
     if (ui->actionMeasure->isChecked())
     {
-        // set open and close
+        vtk_widget->SetSelectable(false);
+        vtk_widget->SetSelectDomain(false);
+        vtk_widget->Reset();
         ui->dockWidget->setWidget(measure_dock);
         ui->dockWidget->show();
-        ui->actionCAD->setChecked(false);
-        ui->actionMesh->setChecked(false);
-        ui->actionSolver->setChecked(false);
-        ui->actionVisual->setChecked(false);
-        ui->actionMeasure->setChecked(true);
-        ui->actionAdditiveManufacturing->setChecked(false);
-        ui->actionMachining->setChecked(false);
+        SetActionChecked(11);
     }
     else
     {
@@ -1718,17 +1686,11 @@ void MainWindow::OpenAdditiveManufacturingModule()
     if (ui->actionAdditiveManufacturing->isChecked())
     {
         vtk_widget->SetSelectable(false);
-        // set open and close
+        vtk_widget->SetSelectDomain(false);
+        vtk_widget->Reset();
         ui->dockWidget->setWidget(additive_manufacturing_dock);
         ui->dockWidget->show();
-        ui->actionCAD->setChecked(false);
-        ui->actionMesh->setChecked(false);
-        ui->actionSolver->setChecked(false);
-        ui->actionVisual->setChecked(false);
-        ui->actionAdditiveManufacturing->setChecked(true);
-        ui->actionMeasure->setChecked(false);
-        ui->actionSystem->setChecked(false);
-        ui->actionMachining->setChecked(false);
+        SetActionChecked(6);
     }
     else
     {
@@ -3607,16 +3569,7 @@ void MainWindow::OpenRobotModule() {
         vtk_widget->Reset();
         ui->dockWidget->setWidget(robot_dock);
         ui->dockWidget->show();
-        // set open and close
-        ui->actionCAD->setChecked(false);
-        ui->actionMesh->setChecked(false);
-        ui->actionSolver->setChecked(false);
-        ui->actionVisual->setChecked(false);
-        ui->actionMeasure->setChecked(false);
-        ui->actionOCPoro->setChecked(false);
-        ui->actionMachining->setChecked(false);
-        ui->actionRivet->setChecked(false);
-        ui->actionPipe->setChecked(false);
+        SetActionChecked(10);
     }
     else
     {
@@ -3665,23 +3618,12 @@ void MainWindow::OpenMachiningModule()
 {
     if (ui->actionMachining->isChecked())
     {
-        // set open and close
-
-        //                vtk_widget->Reset();
-
-
-
+        vtk_widget->SetSelectable(false);
+        vtk_widget->SetSelectDomain(false);
+        vtk_widget->Reset();
         ui->dockWidget->setWidget(machining_dock2);
         ui->dockWidget->show();
-        ui->actionCAD->setChecked(false);
-        ui->actionMesh->setChecked(false);
-        ui->actionSolver->setChecked(false);
-        ui->actionVisual->setChecked(false);
-        ui->actionMeasure->setChecked(false);
-        ui->actionSPC->setChecked(false);
-        ui->actionAdditiveManufacturing->setChecked(false);
-        ui->actionSystem->setChecked(false);
-        ui->actionMachining->setChecked(true);
+        SetActionChecked(7);
         machining_part_size[0] = 10;
         machining_part_size[1] = 1;
         machining_part_size[2] = 1;
@@ -4392,13 +4334,7 @@ void MainWindow::OpenRivetModule()
         vtk_widget->Reset();
         ui->dockWidget->setWidget(rivet_dock);
         ui->dockWidget->show();
-        // set open and close
-        ui->actionCAD->setChecked(false);
-        ui->actionMesh->setChecked(false);
-        ui->actionSolver->setChecked(false);
-        ui->actionVisual->setChecked(false);
-        ui->actionMeasure->setChecked(false);
-        ui->actionOCPoro->setChecked(false);
+        SetActionChecked(8);
     }
     else
     {
@@ -4540,15 +4476,7 @@ void MainWindow::OpenPipeModule()
         vtk_widget->Reset();
         ui->dockWidget->setWidget(pipe_dock);
         ui->dockWidget->show();
-        // set open and close
-        ui->actionCAD->setChecked(false);
-        ui->actionMesh->setChecked(false);
-        ui->actionSolver->setChecked(false);
-        ui->actionVisual->setChecked(false);
-        ui->actionMeasure->setChecked(false);
-        ui->actionOCPoro->setChecked(false);
-        ui->actionMachining->setChecked(false);
-        ui->actionRivet->setChecked(false);
+        SetActionChecked(9);
     }
     else
     {
