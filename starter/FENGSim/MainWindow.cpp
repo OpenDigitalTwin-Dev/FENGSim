@@ -332,6 +332,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
     connect(vtk_dock->ui->pushButton_7, SIGNAL(clicked()), this, SLOT(mbdOpenFile()));
     connect(vtk_dock->ui->pushButton_6, SIGNAL(clicked()), this, SLOT(mbdImportResults()));
     connect(robot_dock->ui->pushButton, SIGNAL(clicked()), this, SLOT(mbdOpenFile()));
+    connect(robot_dock->ui->pushButton_2, SIGNAL(clicked()), this, SLOT(RobotSolver()));
     connect(robot_dock->ui->pushButton_3, SIGNAL(clicked()), this, SLOT(mbdImportResults()));
 
 
@@ -3596,15 +3597,6 @@ void  MainWindow::mbdOpenFile () {
                                                  , 0 , QFileDialog::DontUseNativeDialog);
     vtk_widget->mbdmodel();
     vtk_widget->mbdPath();
-
-    ifstream inFile("../mbdyn/robot/robot_arm.mov");
-    std::vector<std::string> lines;
-    std::string line;
-    while (std::getline(inFile, line)) {
-        lines.push_back(line);
-    }
-    inFile.close();
-    mbd_time_sum = lines.size();
 }
 
 void MainWindow::OpenRobotModule() {
@@ -3631,6 +3623,40 @@ void MainWindow::OpenRobotModule() {
         ui->dockWidget->hide();
     }
 }
+
+void MainWindow::mbdImportResults () {
+    if (mbd_time_step==0) {
+        robot_dock->ui->pushButton_2->setEnabled(true);
+        ifstream inFile("../mbdyn/robot/robot_arm.mov");
+        std::vector<std::string> lines;
+        std::string line;
+        while (std::getline(inFile, line)) {
+            lines.push_back(line);
+        }
+        inFile.close();
+        mbd_time_sum = lines.size()/5;
+    }
+    if (mbd_time_step > mbd_time_sum) {
+        mbd_time_step = 0;
+        mbd_speed = 0;
+        return;
+    }
+    vtk_widget->mbdImportResults(mbd_time_step,mbd_file_name);
+    mbd_speed++;
+    //mbd_time_step++;
+    mbd_time_step = mbd_speed;
+    mbd_timer->singleShot(1, this, SLOT(mbdImportResults()));
+}
+
+#include "Robot/RobotThread.h"
+
+void MainWindow::RobotSolver() {
+    robot_dock->ui->pushButton_2->setEnabled(false);
+    RobotThread* td1 = new RobotThread;
+    td1->start();
+    connect(td1, SIGNAL(finished()), this, SLOT(mbdImportResults()));
+}
+
 // *******************************************************
 // *******************************************************
 //      Machining
@@ -4747,8 +4773,8 @@ void MainWindow::Machining2ImportMPMResults () {
                 +QString::number(machining2_step)
                 +QString(".vtk"));
     std::cout << (QString("../karamelo/cutting/dump_")
-                 +QString::number(machining2_step)
-                 +QString(".vtk")).toStdString() << std::endl;
+                  +QString::number(machining2_step)
+                  +QString(".vtk")).toStdString() << std::endl;
 
     machining2_step++;
     machining2_timer->singleShot(1, this, SLOT(Machining2ImportMPMResults()));

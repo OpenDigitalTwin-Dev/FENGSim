@@ -39,6 +39,7 @@ SOURCES +=\
     Pipe/PipeThread.cpp \
     Rivet/RivetThread.cpp \
     Robot/RobotDockWidget.cpp \
+    Robot/RobotThread.cpp \
     include/test.cpp \
     qcustomplot.cpp \
     AboutDialog.cpp \
@@ -87,6 +88,7 @@ HEADERS  += \
     Pipe/PipeThread.h \
     Rivet/RivetThread.h \
     Robot/RobotDockWidget.h \
+    Robot/RobotThread.h \
     include/test.h \
     qcustomplot.h \
     AboutDialog.h \
