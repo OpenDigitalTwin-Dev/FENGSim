@@ -1,9 +1,5 @@
 python3 discrete.py
 cd ../../kdl/exam_1/
-mkdir build
-cd build
-cmake ..
-make
 ./kdl
-cd ../../../mbdyn/robot
+cd ../../mbdyn/robot
 ./../../../toolkit/DAE/install/mbdyn_install/bin/mbdyn -f robot_arm.mbd
