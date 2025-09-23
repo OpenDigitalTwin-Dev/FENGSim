@@ -38,6 +38,7 @@
 #include "qcustomplot.h"
 #include "ui_RivetDockWidget.h"
 #include "ui_PipeDockWidget.h"
+#include "ui_RobotDockWidget.h"
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
@@ -326,8 +327,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
 
     // *******************************************************
     // multibody dynamic
+    robot_dock = new RobotDockWidget;
+    connect(ui->actionRobot, SIGNAL(triggered()), this, SLOT(OpenRobotModule()));
     connect(vtk_dock->ui->pushButton_7, SIGNAL(clicked()), this, SLOT(mbdOpenFile()));
     connect(vtk_dock->ui->pushButton_6, SIGNAL(clicked()), this, SLOT(mbdImportResults()));
+    connect(robot_dock->ui->pushButton, SIGNAL(clicked()), this, SLOT(mbdOpenFile()));
+    connect(robot_dock->ui->pushButton_3, SIGNAL(clicked()), this, SLOT(mbdImportResults()));
 
 
     // *******************************************************
@@ -3600,6 +3605,31 @@ void  MainWindow::mbdOpenFile () {
     }
     inFile.close();
     mbd_time_sum = lines.size();
+}
+
+void MainWindow::OpenRobotModule() {
+    if (ui->actionRobot->isChecked())
+    {
+        vtk_widget->SetSelectable(false);
+        vtk_widget->SetSelectDomain(false);
+        vtk_widget->Reset();
+        ui->dockWidget->setWidget(robot_dock);
+        ui->dockWidget->show();
+        // set open and close
+        ui->actionCAD->setChecked(false);
+        ui->actionMesh->setChecked(false);
+        ui->actionSolver->setChecked(false);
+        ui->actionVisual->setChecked(false);
+        ui->actionMeasure->setChecked(false);
+        ui->actionOCPoro->setChecked(false);
+        ui->actionMachining->setChecked(false);
+        ui->actionRivet->setChecked(false);
+        ui->actionPipe->setChecked(false);
+    }
+    else
+    {
+        ui->dockWidget->hide();
+    }
 }
 // *******************************************************
 // *******************************************************

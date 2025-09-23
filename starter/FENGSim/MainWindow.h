@@ -38,6 +38,8 @@
 #include "Mesh/MeshGeneration.h"
 #include "Rivet/RivetDockWidget.h"
 #include "Pipe/PipeDockWidget.h"
+#include "Robot/RobotDockWidget.h"
+
 
 
 // ui design
@@ -420,7 +422,10 @@ private:
     int mbd_speed = 0;
     QTimer* mbd_timer =  new QTimer;
     QString mbd_file_name;
+public:
+    RobotDockWidget* robot_dock;
 public slots:
+    void OpenRobotModule ();
     void mbdOpenFile ();
     void mbdImportResults () {
         if (mbd_time_step*5 > mbd_time_sum) {
