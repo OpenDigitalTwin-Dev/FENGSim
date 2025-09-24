@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/new/robot">
         <file>fig/robot.png</file>
+        <file>fig/hand.png</file>
     </qresource>
+    <qresource prefix="/"/>
 </RCC>

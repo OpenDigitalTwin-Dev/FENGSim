@@ -41,9 +41,6 @@
   <property name="autoFillBackground">
    <bool>false</bool>
   </property>
-  <property name="styleSheet">
-   <string notr="true">background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(100, 100, 100, 255), stop:1 rgb(255, 255, 255))</string>
-  </property>
   <property name="sizeGripEnabled">
    <bool>false</bool>
   </property>
@@ -76,6 +73,9 @@
        <width>600</width>
        <height>150</height>
       </size>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
      </property>
      <property name="text">
       <string/>
