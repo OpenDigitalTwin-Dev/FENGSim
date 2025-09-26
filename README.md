@@ -63,6 +63,9 @@ We will utilize Warp alongside our SDK to accomplish the following tasks:
 <div align="center">
 <img decoding="async" src="image/blade_3.jpg" width="1800">
 </div>
+<div align="center">
+<img decoding="async" src="image/blade_4.jpg" width="1800">
+</div>
 
 ## Additive Manufacturing
 
