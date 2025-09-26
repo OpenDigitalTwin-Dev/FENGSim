@@ -1,5 +1,4 @@
-![FENGSim](image/image1.svg)
-============================================
+# ![FENGSim](image/image1.svg)
 
 The FENGSim project serves as a software development kit (SDK) for high-fidelity numerical simulation and adaptive processing, integrating a variety of mathematical libraries such as computational geometry, computer algebra, numerical methods, numerical linear algebra, computer graphics, image processing, probability and statistics, optimization, and artificial intelligence. Central to the project are multi-x couplers tailored for intricate applications. It also incorporates the CAX software framework along with practical examples.
 
@@ -48,14 +47,12 @@ We will utilize Warp alongside our SDK to accomplish the following tasks:
 <img decoding="async" src="image/warp.png" width="1800">
 </div>
 
-[Docs](https://fengsim-docs.readthedocs.io)
-============================================
+# [Docs](https://fengsim-docs.readthedocs.io)
 
-Solutions
-============================================
 
-General
---------------------------------------------
+# Solutions
+
+## General
 
 <div align="center">
 <img decoding="async" src="image/1.jpg" width="1800">
@@ -73,8 +70,7 @@ General
 <img decoding="async" src="image/11.png" width="1800">
 </div>
 
-Additive Manufacturing
---------------------------------------------
+## Additive Manufacturing
 
 <!--
 <div align="center">
@@ -86,8 +82,7 @@ Additive Manufacturing
 </div>
 -->
 
-Composite Materials
---------------------------------------------
+## Composite Materials
 
 <!--
 <div align="center">
@@ -101,15 +96,27 @@ Composite Materials
 </div>
 -->
 
-Robotics
---------------------------------------------
+## Adaptive Processing
+
+### Path Planning
+
+<div align="center">
+<img decoding="async" src="image/ap_1.jpg" width="1800">
+</div>
+<div align="center">
+<img decoding="async" src="image/ap_2.jpg" width="1800">
+</div>
+<div align="center">
+<img decoding="async" src="image/ap_3.jpg" width="1800">
+</div>
+
+### Robotics
 
 <div align="center">
 <img decoding="async" src="image/ur3.jpg" width="1800">
 </div>
 
-Metrology
---------------------------------------------
+### Metrology
 
 <div align="center">
 <img decoding="async" src="image/8.jpg" width="1800">
