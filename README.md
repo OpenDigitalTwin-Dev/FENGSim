@@ -55,46 +55,18 @@ We will utilize Warp alongside our SDK to accomplish the following tasks:
 ## General
 
 <div align="center">
-<img decoding="async" src="image/1.jpg" width="1800">
+<img decoding="async" src="image/blade_1.jpg" width="1800">
 </div>
-
 <div align="center">
-<img decoding="async" src="image/2.jpg" width="1800">
+<img decoding="async" src="image/blade_2.jpg" width="1800">
 </div>
-
 <div align="center">
-<img decoding="async" src="image/3.jpg" width="1800">
-</div>
-
-<div align="center">
-<img decoding="async" src="image/11.png" width="1800">
+<img decoding="async" src="image/blade_3.jpg" width="1800">
 </div>
 
 ## Additive Manufacturing
 
-<!--
-<div align="center">
-<img decoding="async" src="image/4.1.6.10.png" width="1800">
-</div>
-
-<div align="center">
-<img decoding="async" src="image/4.1.6.16.png" width="1800">
-</div>
--->
-
 ## Composite Materials
-
-<!--
-<div align="center">
-<img decoding="async" src="image/5.jpg" width="1800">
-</div>
-<div align="center">
-<img decoding="async" src="image/6.jpg" width="1800">
-</div>
-<div align="center">
-<img decoding="async" src="image/7.jpg" width="1800">
-</div>
--->
 
 ## Adaptive Processing
 
