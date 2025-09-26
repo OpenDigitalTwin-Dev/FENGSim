@@ -1783,7 +1783,7 @@ void MainWindow::MeasureOpenCAD()
     TextOutput("Importing a CAD model. Please wait...");
 
     // file name
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "/home/jiping/FENGSim/FENGSim/Measure/data/",
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "../GDT/data/example_atos",
                                                     tr("CAD Files (*.stp *.step)"),
                                                     0 , QFileDialog::DontUseNativeDialog);
     if (fileName.isNull()) return;
