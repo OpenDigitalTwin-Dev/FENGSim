@@ -1,0 +1,39 @@
+{
+   "SimulationType": "Directional",
+   "MaterialFileName": "Inconel625.json",
+   "GrainOrientationFile": "GrainOrientationVectors.csv",
+   "RandomSeed": 0,
+   "Domain": {
+       "CellSize": 1,
+       "TimeStep": 0.066666666,
+       "Nx": 200,
+       "Ny": 200,
+       "Nz": 200
+   },
+   "Nucleation": {
+      "Density": 10,
+      "MeanUndercooling": 5,
+      "StDev": 0.5
+   },
+   "TemperatureData": {
+      "G": 500000,
+      "R": 300000
+   },
+   "Substrate": {
+      "SurfaceSiteFraction": 0.08
+   },
+   "Printing": {
+      "PathToOutput": "./",
+      "OutputFile": "TestProblemDirS",
+      "PrintBinary": false,
+      "PrintExaConstitSize": 0,
+      "Intralayer": {
+          "Increment": 5250,
+          "Fields": ["GrainMisorientation"],
+          "PrintIdleFrames": false
+      },
+      "Interlayer": {
+          "Fields": ["GrainID", "LayerID", "GrainMisorientation"]
+      }
+   }
+}
