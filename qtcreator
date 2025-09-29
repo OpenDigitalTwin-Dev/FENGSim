@@ -1,2 +1,6 @@
+filename=$PWD
+homepath="${filename%FENGSim*}"
+homepath+=FENGSim
+cd $homepath
 cd cli
 ./qtcreator

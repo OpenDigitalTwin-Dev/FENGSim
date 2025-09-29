@@ -14,6 +14,18 @@
    <string>Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="font">
@@ -976,8 +988,8 @@
   </layout>
  </widget>
  <resources>
-  <include location="../AMWindow.qrc"/>
   <include location="../DataBaseWindow.qrc"/>
+  <include location="../AMWindow.qrc"/>
   <include location="../Rivet/RivetWindow.qrc"/>
  </resources>
  <connections/>

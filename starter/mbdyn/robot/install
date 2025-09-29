@@ -1,0 +1,9 @@
+cd ../../../toolkit/DAE/kdl
+./install
+cd ../mbdyn
+./install
+cd ../../../starter/kdl/exam_1/
+mkdir build
+cd build
+cmake ..
+make

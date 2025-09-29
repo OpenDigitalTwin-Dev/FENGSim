@@ -91,14 +91,14 @@ void CADDockWidget::SetSweepModule()
     if (!ui->actionSweep->isChecked())
         ui->actionSweep->setChecked(true);
     ClearOperations();
-    ui->tabWidget->setCurrentIndex(2);
+    ui->tabWidget->setCurrentIndex(1);
     ui->comboBox->addItem("Position");
     ui->comboBox->addItem("Direction 1");
     ui->comboBox->addItem("Angle");
     ui->actionExtrude->setChecked(false);
     ui->actionMirror->setChecked(false);
     ui->pushButton_13->setIcon(QIcon(":/cad_wind/figure/cad_wind/sweep.png"));
-    ui->tabWidget->setTabIcon(2,QIcon(":/cad_wind/figure/cad_wind/sweep.png"));
+    ui->tabWidget->setTabIcon(1,QIcon(":/cad_wind/figure/cad_wind/sweep.png"));
     ui->comboBox->setCurrentIndex(0);
     ui->doubleSpinBox->setValue(pos[0]);
     ui->doubleSpinBox_2->setValue(pos[1]);
@@ -111,12 +111,12 @@ void CADDockWidget::SetExtrudeModule()
     if (!ui->actionExtrude->isChecked())
         ui->actionExtrude->setChecked(true);
     ClearOperations();
-    ui->tabWidget->setCurrentIndex(2);
+    ui->tabWidget->setCurrentIndex(1);
     ui->comboBox->addItem("Direction 1");
     ui->actionSweep->setChecked(false);
     ui->actionMirror->setChecked(false);
     ui->pushButton_13->setIcon(QIcon(":/cad_wind/figure/cad_wind/extrude.png"));
-    ui->tabWidget->setTabIcon(2,QIcon(":/cad_wind/figure/cad_wind/extrude.png"));
+    ui->tabWidget->setTabIcon(1,QIcon(":/cad_wind/figure/cad_wind/extrude.png"));
     ui->comboBox->setCurrentIndex(0);
     ui->doubleSpinBox->setValue(dir1[0]);
     ui->doubleSpinBox_2->setValue(dir1[1]);
@@ -129,14 +129,14 @@ void CADDockWidget::SetMirrorModule()
     if (!ui->actionMirror->isChecked())
         ui->actionMirror->setChecked(true);
     ClearOperations();
-    ui->tabWidget->setCurrentIndex(2);
+    ui->tabWidget->setCurrentIndex(1);
     ui->comboBox->addItem("Position");
     ui->comboBox->addItem("Direction 1");
     ui->comboBox->addItem("Direction 2");
     ui->actionSweep->setChecked(false);
     ui->actionExtrude->setChecked(false);
     ui->pushButton_13->setIcon(QIcon(":/cad_wind/figure/cad_wind/mirror.png"));
-    ui->tabWidget->setTabIcon(2,QIcon(":/cad_wind/figure/cad_wind/mirror.png"));
+    ui->tabWidget->setTabIcon(1,QIcon(":/cad_wind/figure/cad_wind/mirror.png"));
     ui->comboBox->setCurrentIndex(0);
     ui->doubleSpinBox->setValue(pos[0]);
     ui->doubleSpinBox_2->setValue(pos[1]);

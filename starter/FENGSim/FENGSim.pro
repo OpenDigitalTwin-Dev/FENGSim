@@ -38,6 +38,8 @@ SOURCES +=\
     Pipe/PipeDockWidget.cpp \
     Pipe/PipeThread.cpp \
     Rivet/RivetThread.cpp \
+    Robot/RobotDockWidget.cpp \
+    Robot/RobotThread.cpp \
     include/test.cpp \
     qcustomplot.cpp \
     AboutDialog.cpp \
@@ -85,6 +87,8 @@ HEADERS  += \
     Pipe/PipeDockWidget.h \
     Pipe/PipeThread.h \
     Rivet/RivetThread.h \
+    Robot/RobotDockWidget.h \
+    Robot/RobotThread.h \
     include/test.h \
     qcustomplot.h \
     AboutDialog.h \
@@ -120,6 +124,7 @@ FORMS    += \
     OCPoro/OCPoroDialog.ui \
     OCPoro/OCPoroDockWidget.ui \
     Pipe/PipeDockWidget.ui \
+    Robot/RobotDockWidget.ui \
     Visual/VTKDockWidget.ui \
     FEM/FEMDockWidget.ui \
     Measure/MeasureDockWidget.ui \
@@ -138,6 +143,7 @@ RESOURCES += \
     MeasureWidnow.qrc \
     OCPoro.qrc \
     Pipe/fig/PipeWindow.qrc \
+    Robot/RobotWindow.qrc \
     System.qrc \
     SPCWindow.qrc \
     AMWindow.qrc \

@@ -3144,7 +3144,7 @@ void VTKWidget::mbdPath () {
     vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
     actor->SetMapper(mapper);
     actor->GetProperty()->SetColor(1,0,0);
-    actor->GetProperty()->SetLineWidth(2);
+    actor->GetProperty()->SetLineWidth(1);
     renderer->AddActor(actor);
 
     //    vtkSmartPointer<vtkSphereSource> ss = vtkSmartPointer<vtkSphereSource>::New();

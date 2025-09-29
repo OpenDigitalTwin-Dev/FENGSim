@@ -38,6 +38,7 @@
 #include "qcustomplot.h"
 #include "ui_RivetDockWidget.h"
 #include "ui_PipeDockWidget.h"
+#include "ui_RobotDockWidget.h"
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
@@ -326,8 +327,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent),
 
     // *******************************************************
     // multibody dynamic
+    robot_dock = new RobotDockWidget;
+    connect(ui->actionRobot, SIGNAL(triggered()), this, SLOT(OpenRobotModule()));
     connect(vtk_dock->ui->pushButton_7, SIGNAL(clicked()), this, SLOT(mbdOpenFile()));
     connect(vtk_dock->ui->pushButton_6, SIGNAL(clicked()), this, SLOT(mbdImportResults()));
+    connect(robot_dock->ui->pushButton, SIGNAL(clicked()), this, SLOT(mbdOpenFile()));
+    connect(robot_dock->ui->pushButton_2, SIGNAL(clicked()), this, SLOT(RobotSolver()));
+    connect(robot_dock->ui->pushButton_3, SIGNAL(clicked()), this, SLOT(mbdImportResults()));
 
 
     // *******************************************************
@@ -451,6 +457,12 @@ void MainWindow::SetActionChecked (int n) {
     ui->actionMesh->setChecked(false);
     ui->actionSolver->setChecked(false);
     ui->actionVisual->setChecked(false);
+    ui->actionAdditiveManufacturing->setChecked(false);
+    ui->actionMachining->setChecked(false);
+    ui->actionPipe->setChecked(false);
+    ui->actionRivet->setChecked(false);
+    ui->actionRobot->setChecked(false);
+    ui->actionMeasure->setChecked(false);
     if (n == 0)
         ui->actionCAD->setChecked(true);
     else if (n == 1)
@@ -461,6 +473,18 @@ void MainWindow::SetActionChecked (int n) {
         ui->actionSolver->setChecked(true);
     else if (n == 4)
         ui->actionVisual->setChecked(true);
+    else if (n == 6)
+        ui->actionAdditiveManufacturing->setChecked(true);
+    else if (n == 7)
+        ui->actionMachining->setChecked(true);
+    else if (n == 8)
+        ui->actionRivet->setChecked(true);
+    else if (n == 9)
+        ui->actionPipe->setChecked(true);
+    else if (n == 10)
+        ui->actionRobot->setChecked(true);
+    else if (n == 11)
+        ui->actionMeasure->setChecked(true);
 }
 
 void MainWindow::OpenCADModule()
@@ -590,52 +614,6 @@ void MainWindow::OpenProject ()
         vtk_widget->ImportVTKFile(fileName.toStdString());
     }
 }
-
-
-
-
-
-// ##############################################################################################
-// ##############################################################################################
-// ##############################################################################################
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1296,16 +1274,12 @@ void MainWindow::OpenMeasureModule()
 {
     if (ui->actionMeasure->isChecked())
     {
-        // set open and close
+        vtk_widget->SetSelectable(false);
+        vtk_widget->SetSelectDomain(false);
+        vtk_widget->Reset();
         ui->dockWidget->setWidget(measure_dock);
         ui->dockWidget->show();
-        ui->actionCAD->setChecked(false);
-        ui->actionMesh->setChecked(false);
-        ui->actionSolver->setChecked(false);
-        ui->actionVisual->setChecked(false);
-        ui->actionMeasure->setChecked(true);
-        ui->actionAdditiveManufacturing->setChecked(false);
-        ui->actionMachining->setChecked(false);
+        SetActionChecked(11);
     }
     else
     {
@@ -1712,17 +1686,11 @@ void MainWindow::OpenAdditiveManufacturingModule()
     if (ui->actionAdditiveManufacturing->isChecked())
     {
         vtk_widget->SetSelectable(false);
-        // set open and close
+        vtk_widget->SetSelectDomain(false);
+        vtk_widget->Reset();
         ui->dockWidget->setWidget(additive_manufacturing_dock);
         ui->dockWidget->show();
-        ui->actionCAD->setChecked(false);
-        ui->actionMesh->setChecked(false);
-        ui->actionSolver->setChecked(false);
-        ui->actionVisual->setChecked(false);
-        ui->actionAdditiveManufacturing->setChecked(true);
-        ui->actionMeasure->setChecked(false);
-        ui->actionSystem->setChecked(false);
-        ui->actionMachining->setChecked(false);
+        SetActionChecked(6);
     }
     else
     {
@@ -1815,7 +1783,7 @@ void MainWindow::MeasureOpenCAD()
     TextOutput("Importing a CAD model. Please wait...");
 
     // file name
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "/home/jiping/FENGSim/FENGSim/Measure/data/",
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), "../GDT/data/example_atos",
                                                     tr("CAD Files (*.stp *.step)"),
                                                     0 , QFileDialog::DontUseNativeDialog);
     if (fileName.isNull()) return;
@@ -3591,16 +3559,57 @@ void  MainWindow::mbdOpenFile () {
                                                  , 0 , QFileDialog::DontUseNativeDialog);
     vtk_widget->mbdmodel();
     vtk_widget->mbdPath();
-
-    ifstream inFile("../mbdyn/robot/robot_arm.mov");
-    std::vector<std::string> lines;
-    std::string line;
-    while (std::getline(inFile, line)) {
-        lines.push_back(line);
-    }
-    inFile.close();
-    mbd_time_sum = lines.size();
 }
+
+void MainWindow::OpenRobotModule() {
+    if (ui->actionRobot->isChecked())
+    {
+        vtk_widget->SetSelectable(false);
+        vtk_widget->SetSelectDomain(false);
+        vtk_widget->Reset();
+        ui->dockWidget->setWidget(robot_dock);
+        ui->dockWidget->show();
+        SetActionChecked(10);
+    }
+    else
+    {
+        ui->dockWidget->hide();
+    }
+}
+
+void MainWindow::mbdImportResults () {
+    if (mbd_time_step==0) {
+        robot_dock->ui->pushButton_2->setEnabled(true);
+        ifstream inFile("../mbdyn/robot/robot_arm.mov");
+        std::vector<std::string> lines;
+        std::string line;
+        while (std::getline(inFile, line)) {
+            lines.push_back(line);
+        }
+        inFile.close();
+        mbd_time_sum = lines.size()/5;
+    }
+    if (mbd_time_step > mbd_time_sum) {
+        mbd_time_step = 0;
+        mbd_speed = 0;
+        return;
+    }
+    vtk_widget->mbdImportResults(mbd_time_step,mbd_file_name);
+    mbd_speed++;
+    //mbd_time_step++;
+    mbd_time_step = mbd_speed;
+    mbd_timer->singleShot(1, this, SLOT(mbdImportResults()));
+}
+
+#include "Robot/RobotThread.h"
+
+void MainWindow::RobotSolver() {
+    robot_dock->ui->pushButton_2->setEnabled(false);
+    RobotThread* td1 = new RobotThread;
+    td1->start();
+    connect(td1, SIGNAL(finished()), this, SLOT(mbdImportResults()));
+}
+
 // *******************************************************
 // *******************************************************
 //      Machining
@@ -3609,23 +3618,12 @@ void MainWindow::OpenMachiningModule()
 {
     if (ui->actionMachining->isChecked())
     {
-        // set open and close
-
-        //                vtk_widget->Reset();
-
-
-
+        vtk_widget->SetSelectable(false);
+        vtk_widget->SetSelectDomain(false);
+        vtk_widget->Reset();
         ui->dockWidget->setWidget(machining_dock2);
         ui->dockWidget->show();
-        ui->actionCAD->setChecked(false);
-        ui->actionMesh->setChecked(false);
-        ui->actionSolver->setChecked(false);
-        ui->actionVisual->setChecked(false);
-        ui->actionMeasure->setChecked(false);
-        ui->actionSPC->setChecked(false);
-        ui->actionAdditiveManufacturing->setChecked(false);
-        ui->actionSystem->setChecked(false);
-        ui->actionMachining->setChecked(true);
+        SetActionChecked(7);
         machining_part_size[0] = 10;
         machining_part_size[1] = 1;
         machining_part_size[2] = 1;
@@ -4336,13 +4334,7 @@ void MainWindow::OpenRivetModule()
         vtk_widget->Reset();
         ui->dockWidget->setWidget(rivet_dock);
         ui->dockWidget->show();
-        // set open and close
-        ui->actionCAD->setChecked(false);
-        ui->actionMesh->setChecked(false);
-        ui->actionSolver->setChecked(false);
-        ui->actionVisual->setChecked(false);
-        ui->actionMeasure->setChecked(false);
-        ui->actionOCPoro->setChecked(false);
+        SetActionChecked(8);
     }
     else
     {
@@ -4484,15 +4476,7 @@ void MainWindow::OpenPipeModule()
         vtk_widget->Reset();
         ui->dockWidget->setWidget(pipe_dock);
         ui->dockWidget->show();
-        // set open and close
-        ui->actionCAD->setChecked(false);
-        ui->actionMesh->setChecked(false);
-        ui->actionSolver->setChecked(false);
-        ui->actionVisual->setChecked(false);
-        ui->actionMeasure->setChecked(false);
-        ui->actionOCPoro->setChecked(false);
-        ui->actionMachining->setChecked(false);
-        ui->actionRivet->setChecked(false);
+        SetActionChecked(9);
     }
     else
     {
@@ -4717,8 +4701,8 @@ void MainWindow::Machining2ImportMPMResults () {
                 +QString::number(machining2_step)
                 +QString(".vtk"));
     std::cout << (QString("../karamelo/cutting/dump_")
-                 +QString::number(machining2_step)
-                 +QString(".vtk")).toStdString() << std::endl;
+                  +QString::number(machining2_step)
+                  +QString(".vtk")).toStdString() << std::endl;
 
     machining2_step++;
     machining2_timer->singleShot(1, this, SLOT(Machining2ImportMPMResults()));
