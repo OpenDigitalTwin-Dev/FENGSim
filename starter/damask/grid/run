@@ -1,0 +1,4 @@
+export PETSC_DIR=$PWD/../../../toolkit/NLA/install/petsc_install/
+export LD_LIBRARY_PATH=$PETSC_DIR/lib:$LD_LIBRARY_PATH
+
+./../../../toolkit/MultiX/extern/DAMASK/_install/bin/DAMASK_grid --load tensionX.yaml --geom 20grains16x16x16.vti --material material.yaml
