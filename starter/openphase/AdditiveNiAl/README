@@ -1,0 +1,13 @@
+This is a README file for the AdditiveNiAl example.
+
+In order to run the simulation run ./AdditiveNiAl after the compilation. 
+ProjectInput.opi file contains the necessary input for the simulation. 
+This example illustrates how one can run phase-field simulation with coupled mass and heat diffusion. 
+Two heat sources are incorporated to facilitate cooling and beam melting. 
+The user can adjust the heat source values according to the AM process parameters. 
+Please note that the units for the heat flux should be in W/m^2.
+In the current example, heat source 1 (beam melting) is activated when the temperature falls below 1600k and deactivated when there is 20% liquid in the system.
+ 
+Results will be placed into the ./VTK directory and can be visualised 
+using the ParaView (www.paraview.org).
+
