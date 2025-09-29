@@ -1,6 +1,6 @@
 # ![FENGSim](image/image1.svg)
 
-FENGSim is more than open source; it's a bold declaration of freedom. It champions the brave, persistent, and innovative spirit that breaks boundaries. Too many engineers and researchers see their potential stifled by unequal resource distribution. FENGSim shatters these barriers, unleashing that potential by providing the freedom and support for all to build, explore, and create. Join us in this mission.
+The FENGSim project is more than open source; it's a bold declaration of freedom. It champions the brave, persistent, and innovative spirit that breaks boundaries. Too many engineers and researchers see their potential stifled by unequal resource distribution. FENGSim shatters these barriers, unleashing that potential by providing the freedom and support for all to build, explore, and create. Join us in this mission.
 
 The FENGSim project serves as a software development kit (SDK) for high-fidelity numerical simulation and adaptive processing, integrating a variety of mathematical libraries such as computational geometry, computer algebra, numerical methods, numerical linear algebra, computer graphics, image processing, probability and statistics, optimization, and artificial intelligence. Central to the project are multi-x couplers tailored for intricate applications. It also incorporates the CAX software framework along with practical examples.
 
