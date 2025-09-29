@@ -1,1 +1,0 @@
-DAMASK_grid --load tensionX.yaml --geom 20grains16x16x16.vti --material material.yaml
