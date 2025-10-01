@@ -200,16 +200,21 @@ LIBS += -L$$PWD/../../toolkit/Geometry/install/vtk_install/lib \
 #-L/home/jiping/FENGSim/FENGSim/GDT/build -lexample2
 
 QT += svg
+
+# no necessary use RInside, since have to add more libs, the spc just generate a svg and use qsvg import
+# so change to the staters
+
 #INCLUDEPATH += /usr/local/lib/R/library/RInside/include/ /usr/local/lib/R/library/Rcpp/include/ /usr/local/lib/R/include
 #LIBS += -L/usr/local/lib/R/lib -lRlapack -lRblas -lR -L/usr/local/lib/R/library/RInside/lib/ -lRInside \
 #-L/usr/local/lib/R/library/Rcpp/libs/Rcpp.so
 
-INCLUDEPATH += $$PWD/../../toolkit/PS/install/r_install/lib/R/library/RInside/include/ \
-               $$PWD/../../toolkit/PS/install/r_install/lib/R/library/Rcpp/include/ \
-               $$PWD/../../toolkit/PS/install/r_install/lib/R/include
-LIBS += -L/$$PWD/../../toolkit/PS/install/r_install/lib/R/lib -lRlapack -lRblas -lR \
-        -L/$$PWD/../../toolkit/PS/install/r_install/lib/R/library/Rcpp/libs/Rcpp.so \
-        -L/$$PWD/../../toolkit/PS/install/r_install/lib/R/library/RInside/lib/ -lRInside
+#INCLUDEPATH += $$PWD/../../toolkit/PS/install/r_install/lib/R/library/RInside/include/ \
+#               $$PWD/../../toolkit/PS/install/r_install/lib/R/library/Rcpp/include/ \
+#               $$PWD/../../toolkit/PS/install/r_install/lib/R/include \
+#               $$PWD/../../toolkit/PS/install/r_install/lib/R/include
+#LIBS += -L/$$PWD/../../toolkit/PS/install/r_install/lib/R/lib -lRlapack -lRblas -lR \
+#        -L/$$PWD/../../toolkit/PS/install/r_install/lib/R/library/Rcpp/libs/Rcpp.so \
+#        -L/$$PWD/../../toolkit/PS/install/r_install/lib/R/library/RInside/lib/ -lRInside
 
 
 #QMAKE_LFLAGS += -no-pie

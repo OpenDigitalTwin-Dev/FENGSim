@@ -10,7 +10,7 @@ SPCDockWidget::SPCDockWidget(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(openspcmodule()));
+    connect(ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(openspcform()));
 }
 
 SPCDockWidget::~SPCDockWidget()
