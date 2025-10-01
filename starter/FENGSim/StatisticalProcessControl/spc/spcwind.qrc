@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>figure/main_wind/Fengsim_logo_about.png</file>
+    </qresource>
+</RCC>

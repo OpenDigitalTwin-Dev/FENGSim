@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SPCMainWindow</class>
+ <widget class="QMainWindow" name="SPCMainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>700</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>700</width>
+    <height>600</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>700</width>
+    <height>600</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Statistical Process Control</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="spcwind.qrc">
+    <normaloff>:/figure/main_wind/Fengsim_logo_about.png</normaloff>:/figure/main_wind/Fengsim_logo_about.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralWidget"/>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="spcwind.qrc"/>
+ </resources>
+ <connections/>
+</ui>
