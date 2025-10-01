@@ -25,7 +25,7 @@
 //#include "Measure/Registration.h"
 #include "AdditiveManufacturing/AdditiveManufacturingDockWidget.h"
 #include "AdditiveManufacturing/AMConfig.h"
-#include "StatisticalProcessControl/SPCDockWidget.h"
+#include "SPC/SPCDockWidget.h"
 #include "Machining/MachiningDockWidget.h"
 #include "Machining/MachiningDockWidget2.h"
 #include "Transport/TransportDockWidget.h"

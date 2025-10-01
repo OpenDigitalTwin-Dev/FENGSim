@@ -21,8 +21,6 @@
 
 #include <QProcess>
 
-//#include "SPCMainWindow.h"
-
 
 int main(int argc, char *argv[])
 {
@@ -54,8 +52,8 @@ int main(int argc, char *argv[])
 
 
 
-    //    SPCMainWindow spc;
-    //    spc.show();
+        //SPCMainWindow spc;
+        //spc.show();
 
 
 

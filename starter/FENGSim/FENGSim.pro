@@ -54,7 +54,8 @@ SOURCES +=\
 #    Measure/example2.cpp \
     AdditiveManufacturing/AdditiveManufacturingDockWidget.cpp \
     Mesh/Slices.cpp \
-    StatisticalProcessControl/SPCDockWidget.cpp \
+    SPC/SPCDockWidget.cpp \
+    SPC/SPCForm.cpp \
     AdditiveManufacturing/AMThread1.cpp \
     AdditiveManufacturing/AMThread2.cpp \
     AdditiveManufacturing/AMConfig.cpp \
@@ -104,7 +105,8 @@ HEADERS  += \
 #    Measure/example2.h \
     AdditiveManufacturing/AdditiveManufacturingDockWidget.h \
     Mesh/Slices.h \
-    StatisticalProcessControl/SPCDockWidget.h \
+    SPC/SPCDockWidget.h \
+    SPC/SPCForm.h \
     AdditiveManufacturing/AMThread1.h \
     AdditiveManufacturing/AMThread2.h \
     AdditiveManufacturing/AMConfig.h \
@@ -129,7 +131,8 @@ FORMS    += \
     FEM/FEMDockWidget.ui \
     Measure/MeasureDockWidget.ui \
     AdditiveManufacturing/AdditiveManufacturingDockWidget.ui \
-    StatisticalProcessControl/SPCDockWidget.ui \
+    SPC/SPCDockWidget.ui \
+    SPC/SPCForm.ui \
     Machining/MachiningDockWidget.ui \
     Transport/TransportDockWidget.ui \
     Rivet/RivetDockWidget.ui
@@ -201,6 +204,12 @@ QT += svg
 #LIBS += -L/usr/local/lib/R/lib -lRlapack -lRblas -lR -L/usr/local/lib/R/library/RInside/lib/ -lRInside \
 #-L/usr/local/lib/R/library/Rcpp/libs/Rcpp.so
 
+INCLUDEPATH += $$PWD/../../toolkit/PS/install/r_install/lib/R/library/RInside/include/ \
+               $$PWD/../../toolkit/PS/install/r_install/lib/R/library/Rcpp/include/ \
+               $$PWD/../../toolkit/PS/install/r_install/lib/R/include
+LIBS += -L/$$PWD/../../toolkit/PS/install/r_install/lib/R/lib -lRlapack -lRblas -lR \
+        -L/$$PWD/../../toolkit/PS/install/r_install/lib/R/library/Rcpp/libs/Rcpp.so \
+        -L/$$PWD/../../toolkit/PS/install/r_install/lib/R/library/RInside/lib/ -lRInside
 
 
 #QMAKE_LFLAGS += -no-pie
