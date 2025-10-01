@@ -18,12 +18,15 @@ SPCForm::~SPCForm()
 
 void SPCForm::setupDisplay(void)  {
 
-    this->load(QString("../r/output.svg"));
+    //this->load(QString("../r/output.svg")); //font has problems
+
     //m_svg = new QSvgWidget();
     //setCentralWidget(m_svg);
 
     //runRandomDataCmd();         // also calls plot()
     //plot();
+    QPixmap pixmap("../r/output.png"); // 从文件路径
+    ui->label->setPixmap(pixmap);
 
 }
 

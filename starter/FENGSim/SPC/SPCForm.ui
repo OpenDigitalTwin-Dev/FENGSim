@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>SPCForm</class>
  <widget class="QWidget" name="SPCForm">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -23,8 +26,20 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>SPC</string>
+   <string>Statistical Process Control</string>
   </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>
