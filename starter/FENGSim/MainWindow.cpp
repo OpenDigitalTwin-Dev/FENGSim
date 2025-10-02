@@ -463,6 +463,7 @@ void MainWindow::SetActionChecked (int n) {
     ui->actionRivet->setChecked(false);
     ui->actionRobot->setChecked(false);
     ui->actionMeasure->setChecked(false);
+    ui->actionSPC->setChecked(false);
     if (n == 0)
         ui->actionCAD->setChecked(true);
     else if (n == 1)
@@ -485,6 +486,8 @@ void MainWindow::SetActionChecked (int n) {
         ui->actionRobot->setChecked(true);
     else if (n == 11)
         ui->actionMeasure->setChecked(true);
+    else if (n == 12)
+        ui->actionSPC->setChecked(true);
 }
 
 void MainWindow::OpenCADModule()
@@ -1293,15 +1296,7 @@ void MainWindow::OpenSPCModule()
         // set open and close
         ui->dockWidget->setWidget(spc_dock);
         ui->dockWidget->show();
-        ui->actionCAD->setChecked(false);
-        ui->actionMesh->setChecked(false);
-        ui->actionSolver->setChecked(false);
-        ui->actionVisual->setChecked(false);
-        ui->actionMeasure->setChecked(false);
-        ui->actionSPC->setChecked(true);
-        ui->actionAdditiveManufacturing->setChecked(false);
-        ui->actionMachining->setChecked(false);
-        ui->actionSystem->setChecked(false);
+        SetActionChecked(12);
     }
     else
     {
