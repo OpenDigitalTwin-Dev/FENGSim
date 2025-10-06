@@ -72,7 +72,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>24</height>
+     <height>22</height>
     </rect>
    </property>
    <property name="sizePolicy">
@@ -193,7 +193,6 @@
    <addaction name="actionMeasure"/>
    <addaction name="actionSPC"/>
    <addaction name="actionTransport"/>
-   <addaction name="actionOCPoro"/>
    <addaction name="separator"/>
    <addaction name="actionAbout"/>
   </widget>
@@ -660,17 +659,17 @@
  </customwidgets>
  <resources>
   <include location="Robot/RobotWindow.qrc"/>
+  <include location="MainWindow.qrc"/>
+  <include location="Rivet/RivetWindow.qrc"/>
   <include location="CADWindow.qrc"/>
-  <include location="System.qrc"/>
-  <include location="OCPoro.qrc"/>
+  <include location="MeshWindow.qrc"/>
   <include location="Pipe/fig/PipeWindow.qrc"/>
-  <include location="Machining/machining.qrc"/>
+  <include location="System.qrc"/>
   <include location="TransportWindow.qrc"/>
   <include location="MeasureWidnow.qrc"/>
-  <include location="MainWindow.qrc"/>
-  <include location="MeshWindow.qrc"/>
+  <include location="OCPoro.qrc"/>
   <include location="SPCWindow.qrc"/>
-  <include location="Rivet/RivetWindow.qrc"/>
+  <include location="Machining/machining.qrc"/>
  </resources>
  <connections/>
 </ui>
