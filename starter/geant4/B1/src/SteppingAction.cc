@@ -54,24 +54,26 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     fScoringVolume = detConstruction->GetScoringVolume();
   }
 
+
+
   // get volume of the current step
   G4LogicalVolume* volume =
     step->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume();
 
-  // check if we are in scoring volume
-  if (volume != fScoringVolume) return;
-
-  // collect energy deposited in this step
-  G4double edepStep = step->GetTotalEnergyDeposit();
-  fEventAction->AddEdep(edepStep);
 
 
-  G4Track* track = step->GetTrack();
-  G4int trackID = track->GetTrackID();
-  G4int parentID = track->GetParentID();
+
+
+
+    G4String volumeName = volume->GetName();
   std::ofstream output;
   output.open("output.vtk",std::ios::app);      
-  //if (trackID == 1 && parentID == 0) {
+  if (volumeName=="Shape1"||volumeName=="Shape2")
+  {
+      G4Track* track = step->GetTrack();
+      G4int trackID = track->GetTrackID();
+      G4int parentID = track->GetParentID();
+      //if (trackID == 1 && parentID == 0) {
       //G4int eventID = G4RunManager::GetRunManager()->GetCurrentEvent()->GetEventID();
       //G4Track* track = step->GetTrack();
       //G4int trackID = track->GetTrackID();
@@ -86,9 +88,41 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
       //<<xyzTrack<<"	"<<xyzPost<<"	"
       //<<particalName<<"	"<<globalTime<<"	"
       //	   << std::endl;
-      output << xyzPre.x() << " " << xyzPre.y() << " " << xyzPre.z() << " " << xyzPost.x() << " " << xyzPost.y() << " " << xyzPost.z() << std::endl;
-      //}
+      output << xyzPre.x()/10 << " " << xyzPre.y()/10 << " " << xyzPre.z()/10 << " "
+	     << xyzPost.x()/10 << " " << xyzPost.y()/10 << " " << xyzPost.z()/10 << std::endl;
+  }
   output.close();
+
+
+
+
+
+
+
+
+
+    // check if we are in scoring volume
+  if (volume != fScoringVolume) {
+      return;
+  }
+
+
+
+
+
+  
+
+
+
+
+
+
+
+    // collect energy deposited in this step
+  G4double edepStep = step->GetTotalEnergyDeposit();
+  fEventAction->AddEdep(edepStep);
+
+
   
 }
 
