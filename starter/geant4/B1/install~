@@ -1,0 +1,5 @@
+cp -r ../../../toolkit/PS/install/geant4_install/share/Geant4/examples/basic/B1/* ./
+mkdir build
+cd build
+cmake .. -DGeant4_DIR=../../../toolkit/PS/install/geant4_install/lib/cmake/Geant4/ 
+make -j4
