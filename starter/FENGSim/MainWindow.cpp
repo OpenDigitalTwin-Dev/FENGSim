@@ -4132,12 +4132,12 @@ void MainWindow::TransportMCRun()
     //    B1.Run();
     //    return;
 
-    QFile::remove("/home/jiping/OpenDT/MPU1.2/output.vtk");
-    QFile::remove("/home/jiping/OpenDT/MPU1.2/output2.vtk");
-    QProcess *proc = new QProcess();
-    proc->setWorkingDirectory("/home/jiping/OpenDT/MPU1.2/build");
-    std::cout << proc->workingDirectory().toStdString() << std::endl;
-    proc->start("./exampleTOF");
+//    QFile::remove("/home/jiping/OpenDT/MPU1.2/output.vtk");
+//    QFile::remove("/home/jiping/OpenDT/MPU1.2/output2.vtk");
+//    QProcess *proc = new QProcess();
+//    proc->setWorkingDirectory("/home/jiping/OpenDT/MPU1.2/build");
+//    std::cout << proc->workingDirectory().toStdString() << std::endl;
+//    proc->start("./exampleTOF");
 
 
 
@@ -4145,12 +4145,12 @@ void MainWindow::TransportMCRun()
 
 
 
-    if (proc->waitForFinished(-1)) {
+//    if (proc->waitForFinished(-1)) {
 
         std::cout << "transport check" << std::endl;
 
-        std::ifstream is("/home/jiping/OpenDT/MPU1.2/output.vtk");
-        std::ofstream out("/home/jiping/OpenDT/MPU1.2/output2.vtk");
+        std::ifstream is("../geant4/B1/build/output.vtk");
+        std::ofstream out("../geant4/B1/build/output2.vtk");
 
         const int len = 256;
         char L[len];
@@ -4158,7 +4158,7 @@ void MainWindow::TransportMCRun()
         while(is.getline(L,len)) n++;
         is.close();
 
-        is.open("/home/jiping/OpenDT/MPU1.2/output.vtk");
+        is.open("../geant4/B1/build/output.vtk");
         out << "# vtk DataFile Version 2.0" << std::endl;
         out << "Unstructured Grid by M++" << std::endl;
         out << "ASCII" << std::endl;
@@ -4180,7 +4180,7 @@ void MainWindow::TransportMCRun()
         }
         out.close();
         is.close();
-        vtk_widget->TransportImportVTKFile("/home/jiping/OpenDT/MPU1.2/output2.vtk",9);
+        vtk_widget->TransportImportVTKFile("../geant4/B1/build/output2.vtk",9);
 
 
 
@@ -4196,7 +4196,7 @@ void MainWindow::TransportMCRun()
 
         return;
 
-    }
+    //}
 }
 
 
