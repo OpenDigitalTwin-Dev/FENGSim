@@ -1,0 +1,6 @@
+mkdir build
+cd build
+cmake .. -DGeant4_DIR=../../../toolkit/PS/install/geant4_install/lib/cmake/Geant4/ 
+make -j4
+export LD_LIBRARY_PATH=LD_LIBRARY_PATH:$PWD/../../../../toolkit/PS/install/geant4_install/lib
+./exampleB1
