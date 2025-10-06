@@ -25,5 +25,6 @@
         <file>figure/main_wind/physics.png</file>
         <file>figure/main_wind/direction.png</file>
         <file>../../image/Fengsim_logo_hi_2.png</file>
+        <file>figure/main_wind/fengsim_logo_white_words.png</file>
     </qresource>
 </RCC>

@@ -81,7 +81,7 @@
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="MainWindow.qrc">:/main_wind/image/Fengsim_logo_hi_2.png</pixmap>
+      <pixmap resource="MainWindow.qrc">:/main_wind/figure/main_wind/fengsim_logo_white_words.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>false</bool>
