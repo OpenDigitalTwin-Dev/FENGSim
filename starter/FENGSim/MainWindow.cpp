@@ -464,6 +464,7 @@ void MainWindow::SetActionChecked (int n) {
     ui->actionRobot->setChecked(false);
     ui->actionMeasure->setChecked(false);
     ui->actionSPC->setChecked(false);
+    ui->actionTransport->setChecked(false);
     if (n == 0)
         ui->actionCAD->setChecked(true);
     else if (n == 1)
@@ -488,6 +489,8 @@ void MainWindow::SetActionChecked (int n) {
         ui->actionMeasure->setChecked(true);
     else if (n == 12)
         ui->actionSPC->setChecked(true);
+    else if (n == 13)
+        ui->actionTransport->setChecked(true);
 }
 
 void MainWindow::OpenCADModule()
@@ -3937,11 +3940,7 @@ void MainWindow::OpenTransportModule()
         ui->dockWidget->setWidget(transport_dock);
         ui->dockWidget->show();
         // set open and close
-        ui->actionCAD->setChecked(true);
-        ui->actionMesh->setChecked(false);
-        ui->actionSolver->setChecked(false);
-        ui->actionVisual->setChecked(false);
-        ui->actionMeasure->setChecked(false);
+        SetActionChecked(13);
 
         transport_dock->ui->tableWidget->setRowCount(2);
         transport_dock->ui->tableWidget->setRowHeight(0,30);
