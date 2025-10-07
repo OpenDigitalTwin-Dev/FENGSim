@@ -1,7 +1,7 @@
 sudo apt -y install gcc g++ cmake make zlib1g-dev
 
-#mkdir build
-#cd build
+mkdir build
+cd build
 
 # >>> must use -DHDF5_BUILD_FORTRAN=ON, otherwise no hdf5.mod
 # >>> must use static libs, set -DBUILD_SHARED_LIBS=OFF, otherwise symbol has errors for petsc
@@ -15,7 +15,7 @@ sudo apt -y install gcc g++ cmake make zlib1g-dev
 
 # for damask should use ./configure can't use cmake strange but i dont' know
 
-./configure --prefix=$PWD/../install/hdf5_install --enable-fortran --enable-parallel --enable-shared
+./../configure --prefix=$PWD/../../install/hdf5_install --enable-fortran --enable-parallel --enable-shared
 
 #./../configure --prefix=$PWD/../../install/hdf5_install --enable-fortran --enable-parallel --enable-static --enable-shared=no
 
