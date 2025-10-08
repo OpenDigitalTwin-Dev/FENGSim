@@ -1,0 +1,3 @@
+cp cylinder2d_256.vertex build
+cd build
+./multix ../input2d.cylinder
