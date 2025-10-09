@@ -1,3 +1,4 @@
 cp cylinder2d_256.vertex build
+cp input2d.cylinder build
 cd build
-./multix ../input2d.cylinder
+./multix input2d.cylinder
