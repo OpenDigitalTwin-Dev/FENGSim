@@ -19,3 +19,6 @@
 [submodule "docs"]
 	path = docs
 	url = https://github.com/OpenDigitalTwin-Dev/docs.git
+[submodule "starter/AM"]
+	path = starter/AM
+	url = https://github.com/OpenDigitalTwin-Dev/AM.git
