@@ -156,28 +156,3 @@ git commit -m 'update all submodules'
 git push origin main
 echo $'\n'
 echo $'\n'
-
-echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-echo ">>>"
-echo ">>> report"
-echo ">>>"
-echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-cd toolkit/MultiX/report
-git checkout main
-git pull origin main
-cd ..
-echo $'\n'
-echo $'\n'
-
-echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-echo ">>>"
-echo ">>> update report submodulces"
-echo ">>>"
-echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-git add report
-git commit -m 'update report submodules'
-git push origin main
