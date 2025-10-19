@@ -1,0 +1,7 @@
+./../../../toolkit/DAE/install/ngspice_install/bin/ngspice example2.cir
+
+# you will enter the terminal of ngspice
+# you will see Circuit: dual rc ladder
+# the you could put the following command
+# ngspice 3 -> tran 50u 50m
+# ngspice 4 -> plot in int out
