@@ -1,7 +1,10 @@
+echo "you will enter the terminal of ngspice"
+echo "you will see Circuit: voltage divider netlist"
+echo "the you could put the following command"
+echo "ngspice 3 -> op"
+echo "ngspice 4 -> print out"
+echo $'\n'
+echo $'\n'
+
 ./../../../toolkit/DAE/install/ngspice_install/bin/ngspice example1.cir
 
-# you will enter the terminal of ngspice
-# you will see Circuit: voltage divider netlist
-# the you could put the following command
-# ngspice 3 -> op
-# ngspice 4 -> print out

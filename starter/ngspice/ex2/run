@@ -1,7 +1,10 @@
+echo "you will enter the terminal of ngspice"
+echo "you will see Circuit: dual rc ladder"
+echo "the you could put the following command"
+echo "ngspice 3 -> tran 50u 50m"
+echo "ngspice 4 -> plot in int out"
+echo $'\n'
+echo $'\n'
+
 ./../../../toolkit/DAE/install/ngspice_install/bin/ngspice example2.cir
 
-# you will enter the terminal of ngspice
-# you will see Circuit: dual rc ladder
-# the you could put the following command
-# ngspice 3 -> tran 50u 50m
-# ngspice 4 -> plot in int out
