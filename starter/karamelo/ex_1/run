@@ -1,1 +1,5 @@
- ./../../../toolkit/MultiX/extern/Karamelo/build/karamelo -i two-disks.mpm
+mkdir results
+cd results
+mpirun -np 2 ./../../../../toolkit/MultiX/extern/Karamelo/build/karamelo -i ./../two-disks.mpm
+python3 ../../../../toolkit/MultiX/extern/Karamelo/ovito_merge_dumps.py
+python3 ../dump2vtk.py
