@@ -137,7 +137,7 @@ git add toolkit/DAE
 git add toolkit/Particles
 git add toolkit/NLA
 git add toolkit/PS
-git commit -a -m 'update all submodules'
+git commit -m 'update all submodules'
 git push origin main
 echo $'\n'
 echo $'\n'

@@ -18,9 +18,6 @@ git clone https://github.com/OpenDigitalTwin-Dev/NLA.git
 git clone https://github.com/OpenDigitalTwin-Dev/Particles.git
 git clone https://github.com/OpenDigitalTwin-Dev/PS.git
 
-cd ../starter
-git clone https://github.com/OpenDigitalTwin-Dev/AM.git
-
 cd ../../
 
 rm FENGSim.tar.gz
