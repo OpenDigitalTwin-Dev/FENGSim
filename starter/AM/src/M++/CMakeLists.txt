@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 project(m++_api)
 
-set(CMAKE_CXX_COMPILER /usr/bin/mpicxx.openmpi)
+set(CMAKE_CXX_COMPILER /usr/bin/g++-10)
 
 find_package(MPI)
 if(MPI_FOUND)
@@ -11,6 +11,8 @@ if(MPI_FOUND)
   link_directories(${MPI_LIBRARY_DIRS})
   add_definitions(${MPI_DEFINITIONS})
 endif()
+
+include_directories("/usr/include/x86_64-linux-gnu/openmpi/")
 
 add_definitions(-DTETLIBRARY)
 include_directories("src")
