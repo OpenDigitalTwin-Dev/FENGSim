@@ -1,0 +1,25 @@
+M++ (Meshes, Multigrid and More)
+
+Parallel Finite Element Software 
+based on the Concept of Distributed Point Objects
+
+This code comes with no warranty, no documentation, and no support.
+It is under GNU public licence.
+
+Compiling
+
+> make
+
+Configuration 
+
+> edit conf/m++conf
+
+Running on one processor
+
+> M++
+
+Running on several processors
+
+> mpirun -np <n> M++
+
+

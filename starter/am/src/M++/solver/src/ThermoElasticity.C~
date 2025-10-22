@@ -1,0 +1,351 @@
+// file: ThermoElasticity.C
+// author: Jiping Xin
+
+#include "m++.h"
+#include "ThermoElasticityBVP.h"
+
+class ThermoElasticityAssemble_T : public ThermoElasticityBVP_T {
+    Discretization disc;
+    double dt;
+public:
+    ThermoElasticityAssemble_T (double _dt) { dt = _dt; }
+    void SetDirichletBC (Vector& u, double t) {
+        u = 0;
+	// we need to reset dirichlet flags
+	// if u has been done by "DirichletConsistent", the vertices on neumann boundary
+	// also is set dirichlet
+	u.ClearDirichletFlags();
+	for (cell c = u.GetMesh().cells(); c != u.GetMesh().cells_end(); ++c) {	  
+	    RowBndValues u_c(u,c);	    
+	    if (!u_c.onBnd()) continue;
+	    for (int i = 0; i < c.Faces(); ++i)	{
+		if (!IsDirichlet(u_c.bc(i))) continue;
+		ScalarElement E(disc,u,c);
+		for (int j = 0; j < disc.NodalPointsOnFace(c,i); ++j) {
+		    // j is the id for nodal point on face
+		    // k is the id for nodal point on cell
+		    int k = disc.NodalPointOnFace(c,i,j);
+		    u_c.D(k) = true;
+		    u_c(k) = DirichletValue(u_c.bc(i),E[k](),t);
+		}
+	    }
+	}
+	DirichletConsistent(u);
+    }
+    void SetInitialCondition (Vector& x1) {
+	x1 = 0;
+	for (row r = x1.rows(); r != x1.rows_end(); r++) {
+	    x1(r,0) = InitialValue(r());
+	}
+    }
+    void AssembleMatrix (Matrix& A, double t=0) {
+        A = 0;
+	for (cell c = A.GetMesh().cells(); c != A.GetMesh().cells_end(); ++c) {
+	    ScalarElement E(disc,A,c);
+	    RowEntries A_c(A,E);
+	    for (int i = 0; i < E.size(); ++i) {
+		for (int j = 0; j < E.size(); ++j) {
+		    for (int q = 0; q < E.nQ(); q++) {
+		        A_c(i,j) += (E.Value(q,i) * E.Value(q,j) + DiffusionCoe(c.Subdomain(),E.QPoint(q),t) * dt * E.Derivative(q,i) * E.Derivative(q,j)) * E.QWeight(q);
+		    }
+		}
+	    }
+	}
+	A.ClearDirichletValues();
+    }
+    void AssembleVector (const Vector& x1, const Vector& u, Vector& b, double t) {
+	b = 0;
+	for (cell c = b.GetMesh().cells(); c != b.GetMesh().cells_end(); ++c) {
+	    ScalarElement E(disc,b,c);
+	    RowValues b_c(b,E);
+	    // source
+	    for (int i = 0; i < E.size(); ++i) {
+		for (int q = 0; q < E.nQ(); q++) {
+		    b_c(i) += dt * E.Value(q,i) * SourceValue(c.Subdomain(),E.QPoint(q),t) * E.QWeight(q);
+		}
+	    }
+	    // initial
+	    for (int i = 0; i < E.size(); ++i) {
+		for (int q = 0; q < E.nQ(); q++) {
+		    b_c(i) += E.Value(q,i) * E.Value(q,x1) * E.QWeight(q);
+		}
+	    }
+	    // dirichlet
+	    for (int i = 0; i < E.size(); ++i) {
+		for (int q = 0; q < E.nQ(); q++) {
+		    b_c(i) += (-1.0) * (E.Value(q,i) * E.Value(q,u) + DiffusionCoe(c.Subdomain(),E.QPoint(q),t) * dt * E.Derivative(q,i) * E.Derivative(q,u)) * E.QWeight(q);
+		}
+	    }
+	    // neumann
+	    // we need to put neumann b.c. at the end, 
+	    // because "if (!u_c.onBnd()) continue;"
+	    RowBndValues u_c(b,c);	    
+	    if (!u_c.onBnd()) continue;
+	    for (int i = 0; i < c.Faces(); ++i) {
+		if (!IsDirichlet(u_c.bc(i))) {
+		    if (u_c.bc(i) != -1) {
+			ScalarFaceElement E(disc,b,c,i);
+			for (int j = 0; j < disc.NodalPointsOnFace(c,i); ++j) {
+			    int k = disc.NodalPointOnFace(c,i,j);
+			    for (int q = 0; q < E.nQ(); q++) {
+				u_c(k) += dt * E.Value(q,j) * NeumannValue(u_c.bc(i),E.QPoint(q),t) * E.QWeight(q);
+			    }
+			}
+		    }
+		}
+	    }
+	}
+	b.ClearDirichletValues();
+	Collect(b);
+    }
+    double L2Error (const Vector& x, double t) {
+	double s = 0;
+	for (cell c = x.GetMesh().cells(); c != x.GetMesh().cells_end(); c++) {
+	    ScalarElement E(disc,x,c);
+	    for (int q = 0; q < E.nQ(); q++) {
+		s += (Solution(E.QPoint(q),t) - E.Value(q,x)) * (Solution(E.QPoint(q),t) - E.Value(q,x)) * E.QWeight(q);
+	    }
+	}
+	s = PPM->Sum(s);
+	return sqrt(s);
+    }
+};
+
+class ThermoElasticityAssemble_D : public ThermoElasticityBVP_D {
+    Discretization disc;
+    Discretization disc_t;
+    int dim;
+public:
+    ThermoElasticityAssemble_D (int _dim) : disc(Discretization(_dim)) {
+        dim = _dim;
+    }
+    void DirichletBC (Vector& u, double t=0) {
+        u = 0;
+	u.ClearDirichletFlags();
+	for (cell c = u.GetMesh().cells(); c != u.GetMesh().cells_end(); ++c) {	  
+	    RowBndValues u_c(u,c);	    
+	    if (!u_c.onBnd()) continue;
+	    for (int i = 0; i < c.Faces(); ++i) {
+	        if (!IsDirichlet(u_c.bc(i))) continue;
+		VectorFieldElement E(disc,u,c);
+		for (int j = 0; j < disc.NodalPointsOnFace(c,i); ++j) {
+		    int k = disc.NodalPointOnFace(c,i,j);
+		    Point p = DirichletValue(u_c.bc(i), E[k](),t);
+		    for (int l = 0; l < dim; l++) {
+		        u_c.D(k,l) = true;
+			u_c(k,l) = p[l];
+		    }
+		}
+	    }
+	}
+	DirichletConsistent(u);
+    }
+    void Jacobi (Matrix& A, double t=0) {
+        A = 0;
+	for (cell c = A.GetMesh().cells(); c != A.GetMesh().cells_end(); ++c) {
+	    VectorFieldElement E(disc,A,c);
+	    RowEntries A_c(A,E);
+	    for (int i = 0; i < E.size(); ++i) {
+	        for (int j = 0; j < E.size(); ++j) {
+		    for (int k = 0; k < dim; ++k) {
+		        for (int l = 0; l < dim; ++l) {
+			    for (int q = 0; q < E.nQ(); q++) {
+			        A_c(i,j,k,l) += (2 * mu * Frobenius(sym(E.VectorGradient(q,i,k)),sym(E.VectorGradient(q,j,l)))
+						 + lambda * E.Divergence(q,i,k) * E.Divergence(q,j,l)
+				    ) * E.QWeight(q);
+			    }
+			}
+		    }
+		}
+	    }
+	}
+	A.ClearDirichletValues();
+    }
+    double Residual (Vector& b, const Vector& u0, Vector& temp, double t) {
+	b = 0;
+	for (cell c = b.GetMesh().cells(); c != b.GetMesh().cells_end(); ++c) {
+	    VectorFieldElement ED(disc,b,c);
+	    ScalarElement ET(disc_t,temp,c);	    
+	    RowValues b_c(b,ED);
+	    // source
+	    for (int i = 0; i < ED.size(); ++i) {
+	        for (int k = 0; k < dim; ++k) {
+		    for (int q = 0; q < ED.nQ(); q++) {
+		        b_c(i,k) += ED.VectorValue(q,i,k) * SourceValue(c.Subdomain(), ED.QPoint(q),t) * ED.QWeight(q);
+			//b_c(i,k) += ED.Divergence(q,i,k) * ET.Value(q,temp) * ED.QWeight(q);
+			b_c(i,k) += -1.0 * ED.VectorValue(q,i,k) * ET.Derivative(q,temp) * ED.QWeight(q);
+		    }
+		}
+	    }
+	    // dirichlet b.c.
+	    for (int i = 0; i < ED.size(); ++i) {
+	        for (int k = 0; k < dim; ++k) {
+		    for (int q = 0; q < ED.nQ(); q++) {
+		        b_c(i,k) += -(2 * mu * Frobenius(sym(ED.VectorGradient(q,i,k)),sym(ED.VectorGradient(q,u0)))
+				      + lambda * ED.Divergence(q,i,k) * ED.Divergence(q,u0)
+				      ) * ED.QWeight(q);
+		    }
+		}
+	    }
+	    // neumann b.c.
+	    RowBndValues u_c(b,c);	    
+	    if (!u_c.onBnd()) continue;
+	    for (int i = 0; i < c.Faces(); ++i) {
+	        if (!IsDirichlet(u_c.bc(i)) && u_c.bc(i) != -1) {
+		    VectorFieldFaceElement FED(disc,b,c,i);
+		    ScalarFaceElement FET(disc_t,temp,c,i);
+		    for (int j = 0; j < disc.NodalPointsOnFace(c,i); ++j) {
+		        int k = disc.NodalPointOnFace(c,i,j);
+			for (int l = 0; l < dim; l++) {
+			    for (int q = 0; q < FED.nQ(); q++) {
+			        u_c(k,l) += FED.VectorValue(q,j,l) * NeumannValue(u_c.bc(i), FED.QPoint(q),t) * FED.QWeight(q);
+				//u_c(k,l) += -1.0 * FED.QNormal(q) * FED.VectorValue(q,j,l) * FET.Value(q,temp) * FED.QWeight(q);
+			    }
+			}
+		    }
+		}
+	    }
+	}
+	b.ClearDirichletValues();
+	Collect(b);
+    }
+    double L2Error (const Vector& x, double t) {
+        double s = 0;
+        for (cell c = x.GetMesh().cells(); c != x.GetMesh().cells_end(); c++) {
+	    VectorFieldElement E(disc,x,c);
+	    for (int q = 0; q < E.nQ(); q++) {
+		Point p = Solution(E.QPoint(q),t);
+		s += (E.VectorValue(q,x) - p) * (E.VectorValue(q,x) - p) * E.QWeight(q);
+	    }
+	}
+	s = PPM->Sum(s);
+	return sqrt(s);
+    }
+};
+
+void ThermoElasticityMain () { 
+    Date Start;
+    // mesh
+    string name = "UnitCube";
+    ReadConfig(Settings, "Mesh", name);
+    Meshes M(name.c_str());
+    int dim = M.dim();
+    ThermoElasticityGeoID GeoID;
+    GeoID.SetSubDomain(M.fine());
+    GeoID.SetBoundaryType(M.fine());
+
+    // time interval
+    double T = 1;
+    double n = 1;
+    double l = 1;
+    ReadConfig(Settings, "Time", T);
+    ReadConfig(Settings, "TimeSteps", n);
+    ReadConfig(Settings, "TimeLevel", l);
+    n = pow(2,l);
+    double dt = T/n;
+
+    // heat equation
+    ThermoElasticityAssemble_T AT(dt);
+
+    // linear algebra heat equation
+    Discretization disc_t;
+    MatrixGraphs G_t(M,disc_t);
+    Vector u_t(G_t.fine());
+    Vector b_t(u_t);
+    Vector x1_t(u_t);
+    Vector x2_t(u_t);
+    Matrix A_t(u_t);
+
+    // elasticity equation
+    ThermoElasticityAssemble_D AD(dim);
+    
+    // linear algebra elasticity equation
+    Discretization disc_d(dim);
+    MatrixGraphs G_d(M,disc_d);
+    Vector u_d(G_d.fine());
+    Matrix A_d(u_d);
+    Vector b_d(u_d);
+    Vector x_d(u_d);	
+    
+    // initial and boundary conditions for heat equation
+    AT.SetInitialCondition(x1_t);
+    AT.SetDirichletBC(u_t,0);
+
+    Plot P(M.fine());
+    P.vertexdata(x1_t);
+    P.vtk_vertexdata("heat0");
+
+    // assemble matrix heat equation
+    Start = Date();
+    AT.AssembleMatrix(A_t);
+    mout << "assemble matrix: " << Date() - Start << endl;
+
+    // boundary condition for elasticity equation
+    AD.DirichletBC(u_d,0);
+
+    // assemble matrix elasticity equation
+    Start = Date();
+    AD.Jacobi(A_d);
+    mout << "assemble matrix: " << Date() - Start << endl;
+    
+    for (int i = 1; i < n+1; i++) {
+        mout << "time step: " << i << endl;
+	
+	// ************************************************************
+	// heat equation
+	// ************************************************************
+	AT.SetDirichletBC(u_t,i*dt);
+
+	// assemble vector
+	Start = Date();
+	AT.AssembleVector(x1_t,u_t,b_t,i*dt);
+	mout << "assemble vector: " << Date() - Start << endl;
+
+        // solve linear equations
+	Start = Date();
+	Solver S;
+	S(A_t);
+	x2_t = 0;
+	S.multiply_plus(x2_t,b_t);
+	x2_t += u_t;
+	tout(1) << Date() - Start << endl;
+	
+        // plot
+	P.vertexdata(x2_t);
+	char buffer [10];
+	sprintf(buffer,"%d",i);
+	string filename = string("heat") + buffer;
+	P.vtk_vertexdata(filename.c_str());
+
+	x1_t = x2_t;
+
+	// ************************************************************
+	// elasticity equation
+	// ************************************************************
+
+	// boundary value for displacement
+	AD.DirichletBC(u_d,i*dt);
+
+	Start = Date();
+	AD.Residual(b_d,u_d,x2_t,i*dt);	
+	mout << "assemble vector: " << Date() - Start << endl;
+	
+	//Solver S;
+	S(A_d);
+	x_d = 0;
+	S.multiply_plus(x_d,b_d);
+	x_d += u_d;
+	tout(1) << Date() - Start << endl;
+
+	P.vertexdata(x_d,dim);
+	string filename1_d = string("thermoelasticity_deform") + buffer;
+	string filename2_d = string("thermoelasticity_undeform") + buffer;
+	P.vtk_vertex_vector(filename1_d.c_str(),0,1);
+	P.vtk_vertex_vector(filename2_d.c_str(),0,0);
+    }
+    mout << "L2 error: "<< AT.L2Error(x2_t,T) << endl;
+    mout << "L2 error: "<< AD.L2Error(x_d,T) << endl;
+
+    return;
+}
+

@@ -1,0 +1,6 @@
+#loadconf = Poisson/conf/poisson.conf;
+#loadconf = Elasticity/conf/m++conf;
+#loadconf = ElastoPlasticity/conf/m++conf;
+#loadconf = ThermoElasticity/conf/m++conf;
+#loadconf = AdditiveManufacturing/conf/m++conf;
+loadconf = Cura/conf/m++conf;

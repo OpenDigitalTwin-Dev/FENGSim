@@ -1,0 +1,134 @@
+Model = FiniteStrainALE;
+GeoPath = solver/;
+EXAMPLE = 15;
+#Mesh = quad;  ### small strain, dynamic explicit, mass lumping
+Mesh = quad2; ### large strain, Jaumann stress rate
+#Mesh = stressstrain;
+#Mesh = tri;
+plevel = 1; # plevel =1 has some errors
+level = 5;
+
+Discretization = linear;
+Overlap_Distribution = 0;
+Overlap = none;
+Distribution = Stripes;
+
+### EXAM 1 EXAM 2
+#Young = 2.5; 
+#PoissonRatio = 0.25;
+#k_0 = 1e100;
+#h_0 = 0;
+#Time = 0.5;
+#TimeSteps = 2048;
+
+### EXAM 3 EXAM 4
+#Young = 210; 
+#PoissonRatio = 0.3;
+#k_0 = 0.24;
+#h_0 = 0;
+
+### EXAM 5
+#PoissonRatio = 0.29
+#Young = 2.069e+05
+#k_0 = 367.423461;
+#h_0 = 0.1;
+#Time = 150;
+#TimeSteps = 15;
+#TimeLevel = 5;
+
+### EXAM 6
+#Young = 210;	
+#PoissonRatio = 0.3;
+#k_0 = 0.24;
+#h_0 = 0.1;
+#Time = 2;
+#TimeSteps = 100;
+#TimeLevel = 5;
+
+### EXAM 7
+#Young = 210;	
+#PoissonRatio = 0.3;
+#k_0 = 0.24;
+#h_0 = 0.0;
+#Time = 1.0;
+#TimeSteps = 2000;
+
+### EXAM 8
+#Young = 100000000; 
+#PoissonRatio = 0.0;
+#k_0 = 1e100;
+#h_0 = 0;
+#Time = 1.0;
+#TimeSteps = 160000;
+
+### EXAM 9, large strain, Jaumann rate, traction
+#Young = 2.5; 
+#PoissonRatio = 0.25;
+#k_0 = 0.24;
+#Time = 1.0;
+#TimeSteps = 2000;
+#NGeom = 1;
+#ALE = 1; # use ShapeImprover
+#Frame = 20;
+#ALETest = 0;
+
+### EXAM 10, large strain, Jaumann rate, rotation
+#Young = 1e5; 
+#PoissonRatio = 0.0;
+#k_0 = 10;
+#Time = 1.0;
+#TimeSteps = 5000;
+#NGeom = 1;
+#ALE = 1; # use PaverMinEdgeLengthWrapper
+#Frame = 20;
+#ALETest = 0;
+
+
+### EXAM 11, large strain, Jaumann rate, impaction
+#Young = 210; 
+#PoissonRatio = 0.3;
+#k_0 = 0.24;
+#k_0 = 1000000;
+#Time = 1;
+#TimeSteps = 2000;
+#NGeom = 1;
+#ALE = 0; # use ShapeImprover
+#Frame = 20;
+#ALETest = 0;
+
+### EXAM 12 13 14, small strain, dynamic explicit, mass lumping
+#Young = 210; 
+#PoissonRatio = 0.3;
+#NGeom = 0;
+#k_0 = 0.24;
+#h_0 = 0;
+#Time = 1;
+#TimeSteps = 1000;
+
+### EXAM 15, metal cutting
+Young = 210; 
+PoissonRatio = 0.3;
+#k_0 = 1000000000;
+k_0 = 0.24;
+Time = 1.0;
+TimeSteps = 2000;
+NGeom = 1;
+ALE = 1; # use ShapeImprover
+Frame = 20;
+ALETest = 0;
+
+
+LinearSolver = CG;
+Preconditioner = Jacobi;
+LinearSolver = GMRES;
+Preconditioner = GaussSeidel;
+#LinearSolver = gmres;
+#Preconditioner = NoPreconditioner;
+
+LinearSteps = 100000;	
+LinearEpsilon = 1e-10;
+LinearReduction = 1e-10;
+
+QuadratureCell = 2;
+QuadratureBoundary = 1;
+precision = 10;

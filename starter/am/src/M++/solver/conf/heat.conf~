@@ -1,0 +1,31 @@
+Model = Heat;
+GeoPath = solver/;
+
+EXAMPLE = 3;
+
+Mesh = example3;	
+plevel = 0;
+level = 5;
+
+Discretization = linear;
+Overlap_Distribution = 0;
+Overlap = none;
+Distribution = Stripes;
+
+Time = 0.5;
+TimeSteps = 1;
+TimeLevel = 11;
+
+NewtonSteps = 10;
+NewtonResidual = 1e-20;
+
+LinearSolver = CG;
+Preconditioner = Jacobi;
+LinearSteps = 50000;	
+LinearEpsilon = 1e-15;
+LinearReduction = 1e-15;
+
+QuadratureCell = 3;
+QuadratureBoundary = 2;
+
+precision = 5;
