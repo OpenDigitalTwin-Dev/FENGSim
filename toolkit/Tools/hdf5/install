@@ -10,7 +10,8 @@ cmake .. -DCMAKE_INSTALL_PREFIX=$PWD/../../install/hdf5_install \
       -DHDF5_BUILD_FORTRAN=ON \
       -DHDF5_ENABLE_PARALLEL=ON \
       -DBUILD_SHARED_LIBS=ON \
-      -DBUILD_STATIC_LIBS=ON 
+      -DBUILD_STATIC_LIBS=ON \
+      -DSZIP_USE_EXTERNAL=ON
 
 #./../configure --prefix=$PWD/../../install/hdf5_install --enable-fortran --enable-parallel --enable-static --enable-shared=no
 

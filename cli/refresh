@@ -125,20 +125,6 @@ echo $'\n'
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 echo ">>>"
-echo ">>> AM"
-echo ">>>"
-echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-cd ../starter/AM
-git checkout main
-git pull origin main
-cd ../
-echo $'\n'
-echo $'\n'
-
-echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-echo ">>>"
 echo ">>> update all submodules"
 echo ">>>"
 echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>"
@@ -151,8 +137,7 @@ git add toolkit/DAE
 git add toolkit/Particles
 git add toolkit/NLA
 git add toolkit/PS
-git add starter/AM
-git commit -m 'update all submodules'
+git commit -a -m 'update all submodules'
 git push origin main
 echo $'\n'
 echo $'\n'

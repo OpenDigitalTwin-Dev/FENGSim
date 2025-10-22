@@ -39,6 +39,7 @@ sudo apt -y install libglu1-mesa-dev
 sudo apt -y install freeglut3-dev
 sudo apt -y install libxcb-xinput-dev
 sudo apt -y install g++
+#!/bin/bash
 
 # cgal
 sudo apt -y install libgmp-dev
