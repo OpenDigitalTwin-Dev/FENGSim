@@ -1,0 +1,158 @@
+# file: Makefile
+# author: Christian Wieners
+# $Header: /public/M++/Makefile,v 1.18 2008-09-29 09:37:04 wieners Exp $
+
+.PHONY: clean depend distclean explicit new lib
+
+default:
+	cd src; $(MAKE)
+
+lib:
+	cd src; $(MAKE)
+
+Plasticity: lib
+	cd Plasticity/src; $(MAKE)
+
+StaticPlasticity: lib
+	cd StaticPlasticity/src; $(MAKE)
+
+Stokes: lib
+	cd Stokes/src; $(MAKE)
+
+Porous: lib
+	cd Porous/src; $(MAKE)
+
+Cosserat: lib
+	cd Cosserat/src; $(MAKE)
+
+Fruitfly: lib
+	cd Fruitfly/src; $(MAKE)
+
+Meshes: lib
+	cd Meshes/src; $(MAKE)
+
+Maxwell: lib
+	cd Maxwell/src; $(MAKE)
+
+FDTD: lib
+	cd FDTD/src; $(MAKE)
+
+BEM: lib
+	cd BEM/src; $(MAKE)
+
+Pandas: lib
+	cd Pandas/src; $(MAKE)
+
+pandaslib: Makefile
+	cd Pandas/src; $(MAKE) pandaslib; cd ..;
+
+pandaslibdebug: Makefile
+	cd Pandas/src; $(MAKE) pandaslibdebug; cd ..;
+
+cleanpandas: Makefile
+	cd Pandas/src; $(MAKE) cleanpandas; cd ..;
+
+ErrorBound: lib
+	cd ErrorBound/src; $(MAKE)
+
+Scattering: lib
+	cd Scattering/src; $(MAKE)
+
+Materials: lib
+	cd Materials/src; $(MAKE)
+
+MultiSpecRed6: lib
+	cd MultiSpecRed6/src; $(MAKE)
+
+Wave: lib
+	cd Wave/src; $(MAKE)
+
+double:
+	cd src; cp CompilerDOUBLE.h Compiler.h
+
+complex:
+	cd src; cp CompilerCOMPLEX.h Compiler.h
+
+clean:
+	cd src; $(MAKE) clean
+	cd ErrorBound/src; $(MAKE) clean
+	cd Maxwell/src; $(MAKE) clean
+	cd Plasticity/src; $(MAKE) clean
+	cd Stokes/src; $(MAKE) clean
+	cd Cosserat/src; $(MAKE) clean
+	cd Materials/src; $(MAKE) clean
+	cd Fruitfly/src; $(MAKE) clean
+	cd Meshes/src; $(MAKE) clean
+	cd Porous/src; $(MAKE) clean
+	cd Wave/src; $(MAKE) clean
+	cd BEM/src; $(MAKE) clean
+
+cleanall:
+	cd src; $(MAKE) cleanall
+	cd ErrorBound/src; $(MAKE) cleanall
+	cd Maxwell/src; $(MAKE) cleanall
+	cd Plasticity/src; $(MAKE) cleanall
+	cd Stokes/src; $(MAKE) cleanall
+	cd Cosserat/src; $(MAKE) cleanall
+	cd Materials/src; $(MAKE) cleanall
+	cd Fruitfly/src; $(MAKE) cleanall
+	cd Meshes/src; $(MAKE) cleanall
+	cd Porous/src; $(MAKE) cleanall
+	cd Wave/src; $(MAKE) cleanall
+	cd BEM/src; $(MAKE) cleanall
+
+distclean:
+	\rm -f *~ */*~ */*/*~
+	cd src; $(MAKE) distclean
+	cd ErrorBound/src; $(MAKE) distclean
+	cd Maxwell/src; $(MAKE) distclean
+	cd Plasticity/src; $(MAKE) distclean
+	cd Stokes/src; $(MAKE) distclean
+	cd Cosserat/src; $(MAKE) distclean
+	cd Materials/src; $(MAKE) distclean
+	cd Fruitfly/src; $(MAKE) distclean
+	cd Meshes/src; $(MAKE) distclean
+	cd Porous/src; $(MAKE) distclean
+	cd Wave/src; $(MAKE) distclean
+	cd BEM/src; $(MAKE) distclean
+
+dxlink: 
+	cd tools/dx; $(MAKE)
+
+dxnew: 
+	rm -f dxlink;
+	$(MAKE) dxlink;
+
+cleandx:
+	cd tools/dx; $(MAKE) clean; cd ../..;
+
+new:
+	rm -f M++
+	cd src;	$(MAKE) new; cd ..;
+
+x_dx:
+	\rm -f data/dx/*
+
+x_gp:
+	\rm -f data/gp/*
+
+x_tp:
+	\rm -f data/tp/*
+
+x_vtk:
+	\rm -f data/vtk/*
+
+xdata: 
+	$(MAKE) -s -i x_dx; $(MAKE) -s -i x_gp; $(MAKE) -s -i x_tp; $(MAKE) -s -i x_vtk;
+
+xlog:
+	\rm -f log/log*
+
+ylog:
+	\rm -f log/*
+
+xxx:
+	$(MAKE) -s xlog; $(MAKE) -s -i xdata;
+
+yyy:
+	$(MAKE) -s ylog; $(MAKE) -s -i xdata;

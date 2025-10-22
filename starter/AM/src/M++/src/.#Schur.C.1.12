@@ -1,0 +1,2017 @@
+// file:   Schur.C
+// author: Daniel Maurer
+// $Header: /public/M++/src/Schur.C,v 1.12 2009-09-18 08:43:32 maurer Exp $
+
+// used configs:
+// invert: invert Small-matrices instead using LU-decomposition
+// checkdiagonal: true/false
+// Smalltype: use only Small-matrices, no Sparse-matrices
+// printout: proc-list etc.
+
+#include "Schur.h"
+#include "Small.h"
+#include "Preconditioner.h"
+#include "Lapdef.h"
+#include "Time.h"
+
+enum MATRIXTYPE { SPARSE = 0, SMALL = 1 };
+
+// class DateTime {
+//     Date Start;
+//     double elapsed;
+//     string name;
+//     public:
+//     DateTime() {}
+//     DateTime(string N) : name(N) {}
+//     DateTime(const DateTime& DT) : Start(DT.Start), elapsed(DT.elapsed),name(DT.name) {}
+//     void SetDate() {Start = Date();}
+//     void AddTime() {elapsed += (Date() - Start).Seconds();}
+//     double GetTime() const {return elapsed;}
+//     void SetName(string N) {name = N;}
+//     void ResetTime() {elapsed = 0;}
+//     string GetName() const {return name;}
+//     void GetMax() {
+//         elapsed = PPM->Max(elapsed);
+//     }
+// };
+
+class DDProblem { // : public ddind {
+    Scalar *a; 
+    int* IPIV;
+
+    BasicSparseMatrix* M;
+    SparseSolver* S;
+
+    int n;
+    int m;
+
+    int type; //0: Small; 1: Sparse
+
+    double epsi;
+
+    vector<ProcSet> PS;
+
+    bool inverted;
+
+    int verbose;
+
+    bool svd;
+
+    int nz ();
+    int int_in_vector(int, const vector<int>&) const;
+
+public:
+    DDProblem ();
+    DDProblem (int , int , bool, int);
+    DDProblem (int , int , const ProcSet&  , const ProcSet&, bool);
+
+    void setSparse(const SparseMatrix&, const vector<int>&, const vector<int>& );
+
+    void makeSparse();
+
+    void CreateSVD(double*, Scalar*, Scalar*);
+    void LU(bool, DateTime*, DateTime*);
+    void SolveLU(DDProblem&, DateTime*, DateTime* );
+    void SolveLU(SmallVector&, DateTime*, DateTime* );
+
+    void SetPS(const ProcSet&, const ProcSet&);
+
+    void GetEigenvalues(double);
+
+    void Destruct() {
+        if (a) delete [] a; a = 0;
+        if (IPIV) delete IPIV; IPIV = 0;
+        if (M) delete M; M = 0;
+        if (S) delete S; S = 0;
+    }
+
+    virtual ~DDProblem() { Destruct();}
+
+    Scalar& operator () (int i, int j) {
+        if (MATRIXTYPE(type) == SPARSE) mout << "WARNING! NO ASSIGNMENT POSSIBLE\n";
+        if (MATRIXTYPE(type) == SMALL) return a[n*j+i];
+    }
+
+
+    void SendMatrix (Buffer&);
+    size_t GetSizeSendMatrix ();
+    void AddMatrix (Buffer&);
+    void SetMatrix (Buffer&);
+
+    void SendIPIV (Buffer&);
+    size_t GetSizeSendIPIV();
+    void SetIPIV (Buffer&);
+
+    void Sendinverted (Buffer&);
+    size_t GetSizeSendinverted();
+    void Setinverted (Buffer&);
+
+    bool get_inverted() {return inverted;}
+
+    const Scalar operator () (int i, int j) const {
+        if (MATRIXTYPE(type) == SPARSE) {
+            int fd = (*M).find(i,j);
+            if (fd == -1) return 0;
+            return (*M).nzval(fd);
+        }
+        else if (MATRIXTYPE(type) == SMALL) {
+            return a[n*j+i];
+        }
+    }
+
+    int rows() const {return n;} 
+    int cols() const {return m;}
+
+    friend ostream& operator << (ostream& s, const DDProblem& DDP) {
+        char buf[128];
+        for (int i=0; i<DDP.rows(); ++i, s << endl) 
+            for (int j=0; j<DDP.cols(); ++j) {
+//                #ifdef NDOUBLE
+                s << " " << DDP(i,j);
+//                #else
+//               sprintf(buf,"%9.5f",DDP(i,j));	
+//                s << buf;
+//                #endif
+        }
+    return s;
+    }
+
+    int gettype() const {return type;}
+
+    DDProblem& operator -= (const constAB<DDProblem,DDProblem>& );
+
+    Scalar normF();
+};
+
+void MultiplySubtract(const DDProblem& A, const valarray<Scalar>& a, 
+		      valarray<Scalar>& b) {
+    for (int j=0; j<A.rows(); ++j) {
+        Scalar s = 0;
+        for (int k=0; k<a.size(); ++k) 
+            s += A(j,k) * a[k];
+        b[j] -= s;
+    }
+}
+
+bool equalProcSet(const ProcSet& P1, const ProcSet& P2) {
+    if (P1.size() != P2.size()) return false;
+    for (int i=0; i<P1.size(); ++i) {
+        bool equal = false;
+        for (int j=0; j<P2.size(); ++j)
+            if (P1[i] == P2[j]) {
+                equal = true; 
+                break;
+            }
+        if (!equal) return false;
+    }
+    return true;
+}
+
+void switchPS(ProcSet& P1, ProcSet& P2) {
+    ProcSet PS = P1;
+    P1 = P2;
+    P2 = PS;
+}
+
+void switchint(int& s1, int& s2) {
+    int s = s1;
+    s1 = s2;
+    s2 = s;
+}
+
+int min_PS(const ProcSet& P1) {
+    int m = P1[0];
+    for (int i=1; i<P1.size(); ++i)
+        if (P1[i] < m) m = P1[i];
+    return m;
+}
+
+class vecProcSet: public vector<ProcSet> {
+ vector<int> sz;
+ public:
+    vecProcSet() {};
+    vecProcSet(ProcSet P): vector<ProcSet>(1), sz(1) {(*this)[0] = P; sz[0] = -1;}
+
+    int findequalProcSet(const ProcSet& P) {
+        for (int i=0; i<(*this).size(); ++i)
+            if ((*this)[i].equalProcSet(P)) return i;
+        return -1;
+    }
+
+    void Add(const ProcSet& P, int s = -1) {
+        if (findequalProcSet(P) == -1) {
+            int m = size();
+            resize(m+1);
+            sz.resize(m+1);
+            (*this)[m] = P;
+            sz[m] = s;
+        }
+    }
+
+    ProcSet GetPS(int i) const {
+        return (*this)[i];
+    }
+
+    int GetSize(int i) const {
+        return sz[i];
+    }
+
+    void SetSize(int i,int s) {
+        sz[i] = s;
+    }
+
+    void Sort() {
+        for (int i=0; i<size(); ++i)
+            for (int j=i+1; j<size(); ++j)
+                if ((*this)[j].size() < (*this)[i].size()) {
+                    switchint(sz[j],sz[i]);
+                    switchPS((*this)[j],(*this)[i]);
+                }
+        for (int i=0; i<size(); ++i)
+            for (int j=i+1; j<size(); ++j)
+                if ((*this)[i].size() == (*this)[j].size()) {
+                    ProcSet Phelp1;
+                    Phelp1.Add((*this)[i]);
+                    ProcSet Phelp2;
+                    Phelp2.Add((*this)[j]);
+                    while (1) {
+                        int minP1 = min_PS(Phelp1);
+                        int minP2 = min_PS(Phelp2);
+                        if (minP1 == minP2) {
+                            Phelp1.erase(minP1);
+                            Phelp2.erase(minP2);
+                        } else
+                        if (minP1 > minP2) {
+                            switchPS((*this)[j],(*this)[i]);
+                            switchint(sz[j],sz[i]);
+                            break;
+                        } else break;
+                    }
+                }
+    }
+
+    ~vecProcSet() {(*this).clear();}
+};
+
+
+class DDind {
+    vector<int> IND;
+    vector<int> block; 
+
+    vecProcSet vPS;
+
+    vector<vector<int> > invIND;
+
+    class Less {
+    public:
+        bool operator () (const row& r0, const row& r1) const {
+            return (r0() < r1()); 
+        }
+    };
+
+public:
+    DDind(const DDind&);
+    void Setind(const Vector&);
+    DDind(const Vector&);
+
+    void Destruct();
+    virtual ~DDind() {Destruct();}
+
+    int size(int ) const;
+    int Size() const;
+
+    int find_block(int ) const;
+
+    int blockentry(int ) const;
+
+    int ind (int i) const {return IND[i];}
+    int ind (int i) {return IND[i];}
+
+    vector<int>& invind(int i) {return invIND[i];}
+
+    ProcSet GetProc (int ) const;
+    vecProcSet GetProc() const;
+
+    int findequalProcSet(ProcSet PS) {
+        return vPS.findequalProcSet(PS);
+    }
+};
+
+class ddind {
+    DDind* IND;
+public:
+    ddind (DDind& ind) : IND(&ind) {}
+    ddind (const ddind& ind) : IND(ind.IND) {}
+    int ind (int i) const {return IND->ind(i);}
+    int ind (int i) {return IND->ind(i);}
+    int size(int i) const {return IND->size(i);}
+    int Size() const {return IND->Size();}
+    int find_block(int i) const {return IND->find_block(i);}
+    int blockentry(int i) const {return IND->blockentry(i);}
+    const ddind& ref() const {return *this;}
+    ProcSet GetProc (int i) const {return IND->GetProc(i);}
+    vecProcSet GetProc() const {return IND->GetProc();}
+    vector<int>& invind(int i) {return IND->invind(i);}
+
+    int findequalProcSet(ProcSet PS) {
+        return IND->findequalProcSet(PS);
+    }
+};
+
+class DDVector;
+
+class DDMatrix : public ddind {
+    int verbose;
+    vector<vector<DDProblem*> > DPM;
+
+    void get_startend(const int&, int&, int&) const;
+
+    vector<vector<DDProblem*> > M;
+    vector<ProcSet> PM;
+
+    class Times {
+      public:
+        DateTime Communication;
+        DateTime LU;
+        DateTime SolveLU;
+        DateTime MatrixMultiplication;
+        DateTime Blockdecomposition;
+        Times(string prefix = "", string postfix = "") {
+            Communication.SetName(prefix + "Communication" + postfix);
+            LU.SetName(prefix + "LU" + postfix);
+            SolveLU.SetName(prefix + "SolveLU" + postfix);
+            MatrixMultiplication.SetName(prefix + "Matrix Multiplication" + postfix);
+            Blockdecomposition.SetName(prefix + "Blockdecomposition" + postfix);
+        }
+        void ResetTime() {
+            Communication.ResetTime();
+            LU.ResetTime();
+            SolveLU.ResetTime();
+            MatrixMultiplication.ResetTime();
+            Blockdecomposition.ResetTime();
+        }
+        void SetMax() {
+             Communication.SetMax();
+             LU.SetMax();
+             SolveLU.SetMax();
+             MatrixMultiplication.SetMax();
+             Blockdecomposition.SetMax();
+        }
+
+        friend ostream& operator << (ostream& s, const Times& TS) {
+            s << "Time of " << TS.Communication.GetName() << " " 
+              << TS.Communication.GetTime() << " sec.\n";
+            s << "Time of " << TS.LU.GetName() << " " 
+              << TS.LU.GetTime() << " sec.\n";
+            s << "Time of " << TS.SolveLU.GetName() << " " 
+              << TS.SolveLU.GetTime() << " sec.\n";
+            s << "Time of " << TS.MatrixMultiplication.GetName() << " " 
+              << TS.MatrixMultiplication.GetTime() << " sec.\n";
+            s << "Time of " << TS.Blockdecomposition.GetName() << " " 
+              << TS.Blockdecomposition.GetTime() << " sec.\n";
+        return s;
+        }
+    };
+
+    Times times;
+    Times times_step;
+
+    bool invert;
+    bool checkdiagonal;
+    bool ILU;
+
+    int Smalltype;
+    int printout;
+
+    bool DDP_svd;
+
+    bool parallel_mm;
+
+    class class_Solve_step {
+        int start;
+        int end;
+        int SendToL;
+        bool SendToU;
+        struct struct_send_special {
+            int vec;
+            int SendTo;
+        };
+
+        ProcSet akt_procs;
+
+        vector<struct struct_send_special> send_special;
+
+        vector<int> K_op;
+        vector<int> K_step;
+        vector<int> K_delta;
+      public:
+        class_Solve_step(int s, int e, int stl) : start(s), end(e), SendToL(stl), SendToU(false) {
+            send_special.resize(0);
+            send_special.resize(0);
+        }
+
+        void addto_send_special(int v, int st) {
+            int m=send_special.size();
+            for (int i=0; i<m; ++i)
+                if ((send_special[i].vec == v) && (send_special[i].SendTo == st)) return;
+            send_special.resize(m+1);
+            send_special[m].vec = v;
+            send_special[m].SendTo = st;
+        }
+
+        int getstart() {return start;}
+        int getend() {return end;}
+        int getSendToL() {return SendToL;}
+        void setSendToL(int s) {SendToL = s;}
+        bool getSendToU() {return SendToU;}
+
+        int get_send_special_vec(int i) {
+            return send_special[i].vec;
+        }
+        int get_send_special_SendTo(int i) {
+            return send_special[i].SendTo;
+        }
+
+        int send_special_size() {
+            return send_special.size();
+        }
+
+        void Set_SendToU(bool b) {
+            SendToU = b;
+        }
+
+        void setend(int i) {end=i;}
+        void set_akt_procs(ProcSet P) {
+            akt_procs.Add(P);
+        }
+
+        ProcSet get_akt_procs() {return akt_procs;}
+
+        void set_K_op_step(vector<ProcSet>& P);
+        vector<int> get_K_step() {return K_step;}
+        vector<int> get_K_op() {return K_op;}
+        vector<int> get_K_delta() {return K_delta;}
+    };
+
+    vector<class_Solve_step*> Solve_step;
+
+
+public:
+    DDMatrix (const DDMatrix& DDM) : ddind(DDM), DPM(DDM.DPM), invert(DDM.invert), checkdiagonal(DDM.checkdiagonal), ILU(DDM.ILU), Smalltype(DDM.Smalltype), printout(DDM.printout), DDP_svd(DDM.DDP_svd), parallel_mm(DDM.parallel_mm), verbose(DDM.verbose) {}
+    DDMatrix (const ddind& d, bool inv, bool chdg, bool ilu, int smtype, int prout, bool svd, bool parallel, int verb = 0) : ddind(d), DPM(0), invert(inv), checkdiagonal(chdg), ILU(ilu), Smalltype(smtype), printout(prout), DDP_svd(svd), parallel_mm(parallel), verbose(verb), times(), times_step(""," in this step") {}
+
+    bool int_in_PS(const int&, const ProcSet&) const;
+    void Send_PS(ExchangeBuffer&, const int &, const ProcSet&, const int&) const;
+    size_t GetSizeSend_PS(const ProcSet&) const;
+    void Receive_PS(ExchangeBuffer&, const int&, ProcSet&, int&) const;
+    void Send_Matrix(ExchangeBuffer&, const int, DDProblem&, int) const;
+    size_t GetSizeSend_Matrix(DDProblem&, int) const;
+    size_t GetSizeSend_Matrix_with_PS(ProcSet&, ProcSet&, DDProblem&, int) const;
+    void Receive_Matrix(ExchangeBuffer&, const int, DDProblem&, bool, int) const;
+    void Send_Matrix_to_Buffer(ExchangeBuffer&, const int, ProcSet&, ProcSet&, DDProblem&, int) const;
+    void Receive_Matrix_from_Buffer(ExchangeBuffer&, const int, vector<ProcSet>&, vector<vector<DDProblem*> >&, bool, int, int) const;
+    void Send_Vector(ExchangeBuffer&, const int, SmallVector&) const;
+    void Receive_Vector(ExchangeBuffer&,const int, SmallVector&, bool) const;
+
+    void Set(const Matrix& );
+
+    void Fill_steplist();
+
+    void Subtract(DDProblem&, DDProblem&, DDProblem&, DateTime*, DateTime*);
+
+    void Invert_parallel(int);
+    void Dissect(vector<int>, vector<int>);
+    void Send(ExchangeBuffer&, int ps, vector<int>);
+    void Invert();
+
+    void SolveLU(DDVector& b) const;
+
+    friend ostream& operator << (ostream& s, const DDMatrix& DDM) {
+        for (int i=0; i<DDM.DPM.size(); ++i)
+            for (int j=0; j<DDM.DPM[i].size(); ++j)
+                s << "M[" << i << "][" << j << "] on P " << DDM.ddind::GetProc(i) 
+                  << "  x " << DDM.ddind::GetProc(j) << " with type = " << (*DDM.DPM[i][j]).gettype() << endl << *DDM.DPM[i][j] << endl;
+        return s << endl;
+    }
+
+    void Destruct() {
+        for (int i=0; i<DPM.size(); ++i)
+            for (int j=0; j<DPM[i].size(); ++j)
+                delete DPM[i][j];
+        for (int i=0; i<DPM.size(); ++i)
+            DPM[i].clear();
+        DPM.clear();
+    }
+
+    virtual ~DDMatrix() {Destruct();}
+
+    int size(int i) const {return ddind::size(i);}
+    int Size() const {return ddind::Size();}
+
+    const ddind& ref() const {return ddind::ref();}
+
+    vector<ProcSet>& getPM() {return PM;}
+};
+
+class DDVector : public ddind {
+    vector<SmallVector*> v;
+
+    vector<SmallVector*> v4;
+
+ public:
+    DDVector (const ddind& d) : v(d.Size()), ddind(d) {}
+    DDVector (const DDMatrix& D): v(D.Size()), ddind(D.ref()) {}
+    DDVector (const DDVector& DDU) : v(DDU.v), ddind(DDU) {}
+    void Set (const Vector& );
+
+    int size(int i) const {return ddind::size(i);}
+    int Size() const {return ddind::Size();}
+
+    void Communicate ();
+    void CommunicateToAll(int, int, int);
+
+    SmallVector& getv(int i) { return (*v4[i]);}
+
+    void createnewvec(int i, int size) {
+        v4[i]=new SmallVector(size);
+        for (int j = 0; j< size; ++j) (*v4[i])[j] = 0;
+    }
+
+    void Setv(vector<ProcSet>& PM) {
+        v4.resize(PM.size());
+        for (int i=0; i<v4.size(); ++i) {
+            int p = ddind::findequalProcSet(PM[i])+1;
+            if (p != 0 || PM[i].size()==1) { 
+                v4[i] = v[p];
+           }
+        }
+    }
+
+    void writevector(Vector& ) const;
+
+    friend ostream& operator << (ostream& s, const DDVector& DDu) {
+        for (int i=0; i<DDu.v.size(); ++i)
+            s << "v[" << i << "]" << endl << *DDu.v[i];
+        return s << endl;
+    }
+};
+
+class Schur: public Preconditioner {
+    DDMatrix* DDM;
+    DDind* ind;
+
+    bool DDP_svd;
+    bool DDM_invert;
+    bool DDM_checkdiagonal;
+    bool DDM_ILU;
+    int DDM_Smalltype;
+    int DDM_printout;
+    bool parallel_mm;
+
+public:
+    Schur (): DDM(0), ind(0), DDP_svd(false), DDM_invert(false), DDM_checkdiagonal(false), DDM_ILU(false), DDM_Smalltype(MATRIXTYPE(SPARSE)), DDM_printout(-1), parallel_mm(false) {
+        ReadConfig(Settings,"SVD",DDP_svd);
+        ReadConfig(Settings,"invert",DDM_invert);
+        ReadConfig(Settings,"checkdiagonal",DDM_checkdiagonal);
+        ReadConfig(Settings,"ILU",DDM_ILU);
+        ReadConfig(Settings,"Smalltype",DDM_Smalltype);
+        ReadConfig(Settings,"printout", DDM_printout);
+        ReadConfig(Settings,"parallel_mm", parallel_mm);
+    }
+
+private:
+    void Construct(const Matrix&);
+
+    void Destruct();
+    virtual ~Schur() {Destruct();}
+
+    void multiply (Vector &, const Vector& ) const;
+
+    string Name () const { return "Schur"; }
+    friend ostream& operator << (ostream& s, const Schur& Sch) {return s << "Schur"; }
+};
+
+
+//////////////////////////////////////////////////////////////
+//                         DDind                            //
+//////////////////////////////////////////////////////////////
+
+DDind::DDind(const DDind& DI) : IND(DI.IND.size()), block(DI.block.size()) {
+    for (int i=0; i<IND.size(); ++i)
+        IND[i] = DI.IND[i];
+    for (int i=0; i<block.size(); ++i)
+        block[i] = DI.block[i];
+    for (int i=0; i<vPS.size(); ++i)
+        vPS.Add(DI.vPS[i]);
+}
+
+void DDind::Setind(const Vector& U) {
+    block.resize(2);
+    block[0] = 0;
+    block[1] = 0;
+    invIND.resize(1);
+
+    int size = U.size(); 
+
+    IND.resize(size);
+    invIND[0].resize(size);
+
+    int blocksize = 0;
+    vector<vector<row> > R(blocksize);
+    vector<int> nR(blocksize);
+
+    for (row r=U.rows(); r != U.rows_end(); ++r) {
+        Point x = r();
+        int s = r.n();
+        procset ps = U.find_procset(x);
+        if (ps != U.procsets_end()) {
+            int i = vPS.findequalProcSet(*ps);
+            if (i != -1) {
+                nR[i]++;
+                R[i].resize(nR[i]);
+                R[i][nR[i]-1] = r;
+            } else {
+                blocksize++;
+                R.resize(blocksize);
+                nR.resize(blocksize);
+                nR[blocksize-1] = 1;
+                R[blocksize-1].resize(nR[blocksize-1]);
+                R[blocksize-1][nR[blocksize-1]-1] = r;
+                vPS.Add(*ps); 
+            }
+        }
+        else {
+            int id = r.Id();
+            int i = U.Index(id);
+            for (int k=0; k<s; ++k) {
+                invIND[0][block[1]] = i+k;
+                IND[i+k] = block[1]++;
+            }
+        }
+    }
+
+    vector<int> rowsort(blocksize);
+
+    vPS.Sort();
+
+    for (int i=0; i<blocksize; ++i) 
+        sort(R[i].begin(),R[i].end(),Less());
+
+    for (int i=0; i<blocksize; ++i) rowsort[vPS.findequalProcSet(*(U.find_procset(R[i][0]())))] = i;
+
+    invIND[0].resize(block[1]);
+    invIND.resize(blocksize+1);
+
+    block.resize(blocksize+2);
+    for (int b=0; b<blocksize; ++b) {
+        block[b+2] = block[b+1];
+        invIND[b+1].resize(size-block[b+1]); 
+        int bsort = rowsort[b];
+        for (int n=0; n<nR[bsort]; ++n) {
+            int id = (R[bsort][n]).Id();
+            int i = U.Index(id);
+            int s = (R[bsort][n]).n();
+            for (int k=0; k<s; ++k) {
+                invIND[b+1][block[b+2]-block[b+1]] = i+k;
+                IND[i+k] = block[b+2]++;
+            }
+        }
+        invIND[b+1].resize(block[b+2]-block[b+1]);
+    }
+}
+
+DDind::DDind(const Vector& u) : IND(u.size()), block(0), invIND(0) {
+    vPS.resize(0);
+    Setind(u);
+}
+
+void DDind::Destruct() {
+    IND.clear(); 
+    for (int i=0; i<invIND.size(); ++i) invIND[i].clear();
+    invIND.clear();
+    block.clear();
+    vPS.clear();
+}
+
+int DDind::size(int i) const {
+    if (i==-1) return block[block.size()-1];
+    if (block.size()<i+2) return 0; 
+    return block[i+1]-block[i];
+}
+
+int DDind::Size() const {
+    return block.size()-1;
+}
+
+int DDind::find_block(int i) const {
+    for (int b=0; b<block.size()-1; ++b)
+        if (i < block[b+1]) return b;
+    return -1; // error
+}
+
+int DDind::blockentry(int i) const {
+    return block[i];
+}
+
+ProcSet DDind::GetProc (int i) const {
+    if (i==0) return PPM->proc();
+    return vPS.GetPS(i-1);
+}
+
+vecProcSet DDind::GetProc() const {
+    return vPS;
+}
+
+
+////////////////////////////////////////////////////
+//                  DDProblem                     //
+////////////////////////////////////////////////////
+
+DDProblem::DDProblem() :  type(-1), a(0), IPIV(0), M(0), S(0), PS(0), inverted(false), verbose(0), svd(false) {}
+
+
+DDProblem::DDProblem (int iN, int iM, bool SVD, int TYPE = MATRIXTYPE(SMALL)) : m(iM), n(iN), type(TYPE), IPIV(0), M(0), S(0), a(0), inverted(false), svd(SVD) {
+    epsi = 1.e-15;
+    switch (MATRIXTYPE(type)) {
+        case SMALL: a = new Scalar[n*m];
+                for (int i=0; i<n*m; ++i) a[i] = 0;
+                break;
+        case SPARSE: break;
+    }
+}
+
+DDProblem::DDProblem (int iN, int iM, const ProcSet&  P1, const ProcSet& P2, bool SVD) : n(iN), m(iM), type(MATRIXTYPE(SMALL)), IPIV(0), M(0), S(0), a(0), inverted(false), svd(SVD) {
+    a = new Scalar[n*m]; 
+    for (int i=0; i<n*m; ++i) a[i] = 0;
+    PS.resize(2);
+    PS[0].Add(P1);
+    PS[1].Add(P2);
+}
+
+int DDProblem::nz () {
+    int k = n;
+    for (int i=0; i<n; ++i)
+        for (int j=0; j<m; ++j) 
+            if (i!=j)
+                if (abs(a[j*n+i]) >= epsi)
+                    ++k;
+    return k;
+}
+
+void DDProblem::setSparse(const SparseMatrix& A, const vector<int>& Indices, const vector<int>& Indices2) {
+    Date Start;
+    type = MATRIXTYPE(SPARSE);
+    int nonzero = 0;
+    int size = A.size();
+
+    vector<int> searchindex;
+    searchindex.resize(size);
+    for (int i=0; i<searchindex.size(); ++i) searchindex[i] = -1;
+    for (int i=0; i<Indices2.size(); ++i) searchindex[Indices2[i]] = i;
+
+    for (int i = 0; i < Indices.size(); ++i)
+        for (int k = A.rowind(Indices[i]); k < A.rowind(Indices[i]+1); ++k)
+            if (searchindex[A.colptr(k)] != -1) 
+                nonzero++;
+
+    M = new BasicSparseMatrix(n,nonzero);
+
+    int* d = (*M).rowind();
+    Scalar* nzval = (*M).nzval();
+    int* colptr = (*M).colptr();
+    int mi = 0;
+    d[0] = 0;
+    for (int i = 0; i < Indices.size(); ++i) {
+        d[i+1] = d[i];
+        for (int k=A.rowind(Indices[i]); k<A.rowind(Indices[i]+1); ++k) {
+            int akt = searchindex[A.colptr(k)];
+            if (akt != -1) {
+                colptr[mi] = akt;
+                nzval[mi] = A.nzval(k);
+                ++d[i+1];
+                mi++;
+            }
+        }
+    }
+}
+
+void DDProblem::makeSparse() {
+    Date Start;
+    type = MATRIXTYPE(SPARSE); // 1
+    int nonzero = nz();
+    M = new BasicSparseMatrix(n,nonzero);
+
+    Scalar* nzval = (*M).nzval();
+    int* colptr = (*M).colptr();
+    int* rowind = (*M).rowind();
+    int d = 0;
+    for (int i=0; i<n; ++i) {
+        nzval[d] = a[i*n+i];
+        colptr[d] = i;
+        rowind[i] = d;
+        ++d;
+        for (int j=0; j<m; ++j) 
+            if (i!=j) 
+                if (abs(a[j*n+i]) >= epsi) {
+                    nzval[d] = a[j*n+i];
+                    colptr[d] = j;
+                    ++d;
+                }
+    }
+    rowind[n] = d;
+}
+
+void DDProblem::CreateSVD(double* S, Scalar* U, Scalar* VT) {
+    if (MATRIXTYPE(type) == SPARSE) mout << "Matrixtype has to be in Small-Format\n";
+    else if (MATRIXTYPE(type) == SMALL) {
+        int info;
+        char jobu = 'S';
+        char jobvt = 'S';
+        int _m = n;
+        int _n = m;
+        Scalar* A; A= a;
+        int lda = _m;
+        int min_mn = (_m < _n) ? _m : _n;
+        int ldu = _m;
+        int ldvt = min_mn;
+
+        int lwork = ((5*min_mn) > (3*min_mn+((_m>_n)?_m:_n))) ? 5*min_mn : (3*min_mn+((_m>_n)?_m:_n));
+        double work[lwork];
+
+        dgesvd_(&jobu, & jobvt, &_m, &_n, A, &lda, S, U, &ldu, VT, &ldvt, work, &lwork, &info);
+    }
+}
+
+void DDProblem::GetEigenvalues(double sz = 0) {
+    double testvalue = sz;
+    if (MATRIXTYPE(type) == SPARSE) mout << "Matrixtype has to be in Small-Format\n";
+    else if (MATRIXTYPE(type) == SMALL) {
+        char compute_vector = 'N';
+        char sort = 'S';
+        mout << "GetEigenvalues is not implemented yet.\n";
+    }
+}
+
+void DDProblem::LU(bool invert = false, DateTime* DT1 = NULL, DateTime* DT2 = NULL) {
+    if (DT1) DT1->SetDate();
+    if (DT2) DT2->SetDate();
+    if (n != m) {mout << "warning! no quadratic matrix!\n"; exit(0);}
+    if (n == 0 || m == 0) { vout(10) << "warning! want to factorize a zero-sized matrix\n";}
+    else
+    if (MATRIXTYPE(type) == SPARSE) {
+//         S = GetSparseSolver(*M,"SuperLU");
+        S = GetSparseSolver(*M);
+       delete M; M = 0; // try to use less space
+    }
+    else if (MATRIXTYPE(type) == SMALL) {
+        IPIV = new int[n];
+        int info;
+        Scalar* A; A = a;
+        GETRF(&m, &m, A, &m, IPIV, &info);
+        if (info!=0) mout <<"Error in GETRF (LU): info=" << info << " in file " << __FILE__ << " on line " << __LINE__ << endl;
+        if (invert) {
+            int lwork = 2*n;
+            double work[2*lwork];
+            GETRI(&m, A, &m, IPIV, work, &lwork, &info);
+            if (info!=0) mout <<"Error in GETRI (LU): info = " << info << " in file " << __FILE__ << " on line " << __LINE__ << endl;
+            inverted = true;
+        }
+    }
+    else mout << "warning! no LU-decomposition implemented\n";
+    if (DT1) DT1->AddTime();
+    if (DT2) DT2->AddTime();
+}
+
+
+double eps_svd = 0.0001;
+
+void DDProblem::SolveLU(DDProblem& b, DateTime* DT1 = NULL, DateTime* DT2 = NULL) {
+    if (DT1) DT1->SetDate();
+    if (DT2) DT2->SetDate();
+    if (m != b.n) pout << "ERROR in SolveLU(DDProblem) -- dimensions are not correct\n"; 
+    if (n != 0 && m != 0) {
+        Scalar* VT = 0;
+        Scalar* U = 0;
+        double* SIG = 0;
+        int min_mn = (b.n < b.m) ? b.n : b.m;
+        int ldu = b.n; 
+        int ldvt = min_mn; 
+        int _m = b.n; 
+        int _n = b.m;
+        if (svd) {
+//        if ((svd) && (MATRIXTYPE(type) == SPARSE)) {
+            VT = new Scalar[ldvt*_n];
+            U = new Scalar[ldu*min_mn];
+            SIG = new double[min_mn];
+            Date SVD_Date;
+            b.CreateSVD(SIG,U,VT);
+
+	    for (int i=min_mn-1; i>=0; --i)
+		if (SIG[i] > eps_svd) {
+		    min_mn = i+1;
+		    break;
+		}
+	    
+            mout << "Create SVD with size " << b.n << " x " << b.m << " in " << Date()-SVD_Date << " min " << min_mn << endl;
+
+
+
+        }
+        if (MATRIXTYPE(type) == SPARSE) {
+            if (svd) {
+                min_mn = int(min_mn);
+                Date SOLVE_Date;
+                S->Solve(U,min_mn);
+                mout << "Solve " << min_mn << " in " << Date()-SOLVE_Date << endl;
+                for (int i=0; i<min_mn; ++i)
+                    for (int j=0; j<b.n; ++j)
+                        U[i*b.n+j] *= SIG[i];
+
+                Scalar* A; A = b.a;
+
+                char trans = 'N';
+                double one = 1;
+                double zero = 0;
+                Date GEMM_Date;
+                GEMM(&trans, &trans, &_m, &_n, &min_mn, &one, U, &ldu, VT, &ldvt, &zero, A, &_m);
+                mout << "GEMM of " << _m << " x " << _n << " x " << min_mn << " in " << Date()-GEMM_Date << endl;
+            } else {
+/*                SmallVector s(b.n);
+                for (int i=0; i<b.cols(); ++i) {
+                    S->Solve(s.ref(),b.a+i*b.n);
+                    memcpy(b.a+i*b.n,s.ref(),sizeof(Scalar)*b.n);
+                }*/
+                S->Solve(b.a,b.m);
+            }
+        }
+        else if (MATRIXTYPE(type) == SMALL) {
+            if (!inverted) {
+                if (svd) {
+                    min_mn = int(min_mn);
+                    char transa='N'; int info;
+                    Scalar *A = a;
+                    GETRS(&transa, &b.n, &min_mn, A, &b.n, IPIV, U, &ldu, &info);
+                    for (int i=0; i<min_mn; ++i)
+                        for (int j=0; j<b.n; ++j)
+                            U[i*b.n+j] *= SIG[i];
+                    Scalar *C = b.a;
+                    char trans = 'N';
+                    double one = 1;
+                    double zero = 0;
+                    GEMM(&trans, &trans, &_m, &_n, &min_mn, &one, U, &ldu, VT, &ldvt, &zero, C, &_m);
+                } else {
+                    char transa = 'N';
+                    int info;
+                    Scalar *B = b.a;
+                    Scalar *A = a;
+                    GETRS(&transa, &b.n, &b.m, A, &b.n, IPIV, B, &b.n, &info);
+                    if (info!=0) mout <<"Error in GETRS (SolveLU(b)): info=" << info << " in file " << __FILE__ << " on line " << __LINE__ << endl;
+                }
+            } else {
+
+                char trans = 'N';
+                double one = 1;
+                double dnull = 0;
+                int _n = n;
+                int _m = b.m;
+                int _q = m;
+                Scalar *A = a;
+                Scalar *B = new Scalar[_n*_m];
+                Scalar *C = b.a;
+                for (int i=0; i<_n*_m; ++i) B[i] = C[i];
+                GEMM(&trans, &trans, &_n, &_m, &_q, &one, A, &_n, B, &_q, &dnull, C, &_n); 
+        delete [] B;
+            }
+        }
+        if (SIG) delete [] SIG; SIG = 0;
+        if (VT) delete [] VT; VT = 0;
+        if (U) delete [] U; U = 0;
+    }
+    if (DT1) DT1->AddTime();
+    if (DT2) DT2->AddTime();
+}
+
+void DDProblem::SolveLU(SmallVector& V, DateTime* DT1 = NULL, DateTime* DT2 = NULL) {
+    if (DT1) DT1->SetDate();
+    if (DT2) DT2->SetDate();
+    if (n != 0 && m != 0)
+    if (MATRIXTYPE(type) == SPARSE) {
+/*        SmallVector vsave(V.size());
+        for (int i=0; i<V.size(); ++i) (vsave)[i] = V[i];
+        S->Solve(V.ref(),vsave.ref());*/
+        S->Solve(V.ref());
+    }
+    else if (MATRIXTYPE(type) == SMALL) {
+        if (!inverted) {
+            char transa = 'N';
+            int one = 1;
+            int info;
+            Scalar *v = V.ref();
+            Scalar *A = a;
+            GETRS(&transa, &n, &one, A, &n, IPIV, v, &n, &info);
+            if (info!=0) mout <<"Error in GETRS (SolveLU(V)): info=" << info << " in file " << __FILE__ << " on line " << __LINE__ << endl;
+        } else {
+            char trans = 'N';
+            double one = 1;
+            double dnull = 0;
+            int inull = 1;
+            int _n = n;
+            int _m = m;
+            Scalar *A = a;
+            Scalar *B = new Scalar[_m];
+            Scalar *C = V.ref();
+            for (int i=0; i<_m; ++i) B[i] = C[i];
+            GEMV(&trans, &_n, &_m, &one, A, &_n, B, &inull, &dnull, C, &inull);
+        }
+    }
+    else mout << "warning! SolveLU(V) with type = " << type << "\n";
+    if (DT1) DT1->AddTime();
+    if (DT2) DT2->AddTime();
+}
+
+void DDProblem::SetPS(const ProcSet& P1, const ProcSet& P2) {
+    PS.resize(2);
+    PS[0].Add(P1);
+    PS[1].Add(P2);
+}
+
+DDProblem& DDProblem::operator -= (const constAB<DDProblem,DDProblem>& AB) {
+    int _n = AB.first().rows();
+    int _m = AB.second().cols();
+    int _q = AB.first().cols();
+    if (_n != 0 && _m != 0 && _q != 0)
+    if (MATRIXTYPE(AB.first().type) == SMALL) {
+        char trans = 'N';
+        double minone = -1;
+        double one = 1;
+        Scalar *C = a;
+        Scalar *A = AB.first().a;
+        Scalar *B = AB.second().a;
+        GEMM(&trans, &trans, &_n, &_m, &_q, &minone, A, &_n, B, &_q, &one, C, &_n);
+        }
+    else if (MATRIXTYPE(AB.first().type) == SPARSE) {
+        for (int i=0; i<_n; ++i)
+            for (int j=0; j<_m; ++j) {
+                Scalar s = 0;
+                for (int k = (*AB.first().M).rowind(i); k < (*AB.first().M).rowind(i+1); ++k)
+                    s += (*AB.first().M).nzval(k) * AB.second()((*AB.first().M).colptr(k),j);
+                a[j*_n+i] -= s;
+            }
+    }
+    return *this;
+}
+
+Scalar DDProblem::normF() {
+    Scalar norm = 0;
+    for (int i=0; i<n*m; ++i) norm += a[i]*a[i];
+    return sqrt(norm);
+}
+
+
+////////////////////////////////////////////////////
+//                  DDVector                      //
+////////////////////////////////////////////////////
+
+void DDVector::Set (const Vector& U) {
+    for (int i=0; i<ddind::Size(); ++i)
+        v[i] = new SmallVector(ddind::size(i));
+    for (int n=0; n<U.size(); ++n) {
+        int ind_i = ddind::ind(n);
+        int v_i = ddind::find_block(ind_i);
+        int sub_i = ddind::blockentry(v_i);
+        (*v[v_i])[ind_i-sub_i] = U[n];
+    }
+}
+
+void DDVector::writevector(Vector& u) const {
+    for (int n=0; n<u.size(); ++n) {
+        int ind_i = ddind::ind(n);
+        int v_i = ddind::find_block(ind_i);
+        int sub_i = ddind::blockentry(v_i);
+        u[n] = (*v[v_i])[ind_i-sub_i];
+    }
+}
+
+////////////////////////////////////////////////////
+//                  DDMatrix                      //
+////////////////////////////////////////////////////
+
+void DDMatrix::class_Solve_step::set_K_op_step(vector<ProcSet>& P) {
+    int m=0;
+    for (int k=start; k < P.size(); ++k) {
+        if (P[k].existselementof(akt_procs)) { // definition of K_op
+            m++;
+            K_op.resize(m);
+            K_op[m-1] = k;
+        }
+    }
+    m=0;
+    for (int k=start; k < P.size(); ++k) {
+        if (P[k].subset(akt_procs)) {
+            m++;
+            K_step.resize(m);
+            K_step[m-1] = k;
+        }
+    }
+    K_delta.resize(K_op.size()-K_step.size());
+    for (int i=K_step.size(); i < K_op.size(); ++i)
+        K_delta[i-K_step.size()] = K_op[i];
+}
+
+void DDMatrix::Set(const Matrix& _A) {
+    vector<int> size(ddind::Size());
+    DPM.resize(ddind::Size());
+
+    for (int i=0; i<ddind::Size(); ++i) 
+        DPM[i].resize(ddind::Size());
+
+    for (int i=0; i<size.size(); ++i)
+        size[i] = ddind::size(i);
+
+    for (int i=0; i<ddind::Size(); ++i)
+        for (int j=0; j<ddind::Size(); ++j) {
+            if ((MATRIXTYPE(Smalltype) == SPARSE) && (j == 0)) DPM[i][j] = new DDProblem(size[i],size[j],DDP_svd,MATRIXTYPE(SPARSE));
+            else 
+            DPM[i][j] = new DDProblem(size[i], size[j], DDP_svd, MATRIXTYPE(SMALL));
+    }
+
+    Matrix A(_A);
+
+    SparseMatrix S(A);
+
+    if (checkdiagonal) S.CheckDiagonal();
+
+    Date Start;
+
+    if (MATRIXTYPE(Smalltype) == SPARSE)
+    for (int i=0; i<ddind::Size(); ++i) {
+       if (DPM[i][0]->rows() != 0 && DPM[i][0]->cols() != 0)
+        DPM[i][0]->setSparse(S,ddind::invind(i),ddind::invind(0));
+    }
+
+    for (int n=0; n<S.size(); ++n) {
+        int ind_i = ddind::ind(n);
+        int M_i = ddind::find_block(ind_i);
+        int sub_i = ddind::blockentry(M_i);
+        for (int d = S.rowind(n); d < S.rowind(n+1); ++d) {
+            int col = S.colptr(d);
+
+            int ind_j = ddind::ind(col);
+            int M_j = ddind::find_block(ind_j);
+            int sub_j = ddind::blockentry(M_j);
+            if (((MATRIXTYPE(Smalltype) == SMALL) || (M_j !=0)) && (DPM[M_i][M_j]->rows() != 0) && (DPM[M_i][M_j]->cols() != 0))
+                (*DPM[M_i][M_j])(ind_i-sub_i,ind_j-sub_j) = S.nzval(d);
+
+            if (checkdiagonal &&
+                M_i == M_j && 
+                ind_i-sub_i == ind_j-sub_j && 
+                abs(S.nzval(d)) < 1.e-18)
+              if (((MATRIXTYPE(Smalltype) == SMALL) || (M_j != 0)) && (DPM[M_i][M_j]->rows() != 0) && (DPM[M_i][M_j]->cols() != 0))
+                (*DPM[M_i][M_j])(ind_i-sub_i,ind_j-sub_j) = 1;
+
+        }
+    }
+
+    tout(1) << "Set DDMatrices in " << Date()-Start << endl;
+}
+
+void DDMatrix::Send_PS(ExchangeBuffer& E, const int& q, const ProcSet& PS, const int& size) const {
+    E.Send(q) << int(PS.size());
+    for (int s=0; s<PS.size(); ++s) {
+        E.Send(q) << int(PS[s]);
+    }
+    E.Send(q) << size;
+}
+
+size_t DDMatrix::GetSizeSend_PS(const ProcSet& PS) const {
+    return sizeof(int) * (PS.size() + 2);
+}
+
+void DDMatrix::Receive_PS(ExchangeBuffer& E, const int& q, ProcSet& PS, int& size) const {
+    PS.resize(0);
+    int tmps, tmpq;
+    E.Receive(q) >> tmps;
+    for (int s=0; s<tmps; ++s) {
+        E.Receive(q) >> tmpq;
+        PS.Add(tmpq);
+    }
+    E.Receive(q) >> size;
+}
+
+
+void DDProblem::SendMatrix (Buffer& B) {
+    if (MATRIXTYPE(type) == SPARSE) Exit("wrong matrix type");
+    B.fill(*a,n*m*sizeof(Scalar));
+    return;
+}
+
+size_t DDProblem::GetSizeSendMatrix() {
+    return n*m*sizeof(Scalar);
+}
+
+void DDProblem::AddMatrix(Buffer& B) {
+    size_t size = n*m*sizeof(Scalar);
+    Scalar* tmp = new Scalar [n*m];
+    B.read(*tmp, size);
+    for (int j=0; j<n*m; ++j) a[j] += tmp[j];
+}
+
+void DDProblem::SetMatrix(Buffer& B) {
+     size_t size = n*m*sizeof(Scalar);
+     B.read(*a, size);
+}
+
+void DDProblem::SendIPIV (Buffer& B) {
+    size_t size = n*sizeof(int);
+    B.fill(*IPIV, size);
+}
+
+size_t DDProblem::GetSizeSendIPIV() {
+    return n*sizeof(int);
+}
+
+void DDProblem::SetIPIV (Buffer& B) {
+    if (!IPIV) IPIV = new int[n];
+    size_t size = n*sizeof(int);
+    B.read(*IPIV, size);
+}
+
+void DDProblem::Sendinverted (Buffer& B) {
+     B << inverted;
+}
+
+size_t DDProblem::GetSizeSendinverted() {
+    return sizeof(bool);
+}
+
+void DDProblem::Setinverted (Buffer& B) {
+     B >> inverted;
+}
+
+void DDMatrix::Send_Matrix(ExchangeBuffer& E, const int q, DDProblem& A, int info = 0) const {
+    A.SendMatrix(E.Send(q));
+    if (info > 0) {
+        A.Sendinverted(E.Send(q));
+        A.SendIPIV(E.Send(q));
+    }
+}
+
+size_t DDMatrix::GetSizeSend_Matrix(DDProblem& A, int info = 0) const {
+    size_t size = 0;
+    size += A.GetSizeSendMatrix();
+    if (info > 0) {
+        size += A.GetSizeSendinverted();
+        size += A.GetSizeSendIPIV();
+    }
+    return size;
+}
+
+size_t DDMatrix::GetSizeSend_Matrix_with_PS(ProcSet& P1, ProcSet& P2, DDProblem& A, int info = 0) const {
+    size_t size = 0;
+    size += GetSizeSend_PS(P1);
+    size += GetSizeSend_PS(P2);
+    size += GetSizeSend_Matrix(A,info);
+    return size;
+}
+
+void DDMatrix::Receive_Matrix(ExchangeBuffer& E, const int q, DDProblem& A, bool add_or_set = true, int info = 0) const {
+    if (add_or_set)
+        A.AddMatrix(E.Receive(q));
+    else
+        A.SetMatrix(E.Receive(q));
+    if (info > 0) {
+        A.Setinverted(E.Receive(q));
+        A.SetIPIV(E.Receive(q));
+    }
+}
+
+void DDMatrix::Send_Matrix_to_Buffer(ExchangeBuffer& E, const int q, ProcSet& P1, ProcSet& P2, DDProblem& A, int info) const {
+    Send_PS(E,q,P1,A.rows());
+    Send_PS(E,q,P2,A.cols());
+    Send_Matrix(E,q,A,info);
+}
+
+
+void DDMatrix::Receive_Matrix_from_Buffer(ExchangeBuffer& E, const int q, vector<ProcSet>& P, vector<vector<DDProblem* > > & M, bool add_or_set, int info, int DDP_svd) const {
+    int i = -1; int j = -1;
+    ProcSet P1;
+    ProcSet P2;
+    int rows, cols;
+
+    Receive_PS(E,q,P1,rows);
+    for (int s=0; s < P.size(); ++s)
+        if (equalProcSet(P[s],P1)) {i = s; break;}
+    if (i == -1) pout << "error in i\n";
+
+    Receive_PS(E,q,P2, cols);
+    for (int s=0; s < P.size(); ++s)
+        if (equalProcSet(P[s],P2)) {j = s; break;}
+    if (j == -1) pout << "error in j\n";
+
+    if (M[i][j] == NULL) {
+        M[i][j] = new DDProblem(rows,cols, DDP_svd);
+    }
+    Receive_Matrix(E,q,*M[i][j],add_or_set,info);
+}
+
+void DDMatrix::Send_Vector(ExchangeBuffer& E, const int q, SmallVector& v) const {
+    Scalar* vref = v.ref();
+    E.Send(q).fill(*vref,sizeof(Scalar)*v.size());
+}
+
+void DDMatrix::Receive_Vector(ExchangeBuffer& E, const int q, SmallVector & v, bool add_or_set = true) const {
+    if (add_or_set) {
+        Scalar* tmp = new Scalar[v.size()];
+        E.Receive(q).read(*tmp, sizeof(Scalar)*v.size());
+        for (int i=0; i<v.size(); ++i)
+            v[i] += tmp[i];
+        delete[] tmp;
+    } else {
+        Scalar* vref = v.ref();
+        E.Receive(q).read(*vref, sizeof(Scalar)*v.size());
+    }
+    return;
+}
+
+void DDMatrix::Fill_steplist() {
+    vecProcSet L_ges;
+    vector<bool> L_ges_used;
+    vecProcSet L_akt;
+    vector<bool> L_akt_used;
+    vector<int> P_list;
+    vector<ProcSet> akt_procs;
+
+    vector<int> sz;
+
+    ExchangeBuffer Exchange;
+
+    for (int i=0; i<ddind::Size(); ++i) {
+        for (int q=0; q<PPM->size(); ++q) {
+            Send_PS(Exchange,q,ddind::GetProc(i),ddind::size(i));
+        }
+    }
+
+    Exchange.Communicate();
+
+    for (short q=0; q<PPM->size(); ++q) {
+        ProcSet P;
+        int c;
+        while (Exchange.Receive(q).size() < Exchange.ReceiveSize(q)) {
+            Receive_PS(Exchange,q,P,c);
+            L_ges.Add(P,c);
+        }
+    }
+
+    L_ges.Sort();
+
+    vout(50) << "Total ProcList\n";
+    vout(50) << L_ges;
+    L_ges_used.resize(L_ges.size());
+    for (int i=0; i<L_ges_used.size(); ++i) L_ges_used[i] = false;
+
+    P_list.resize(PPM->size());
+    akt_procs.resize(PPM->size());
+    for (short q=0; q<PPM->size(); ++q) {
+        P_list[q] = q;
+        akt_procs[q].Add(q);
+    }
+
+    PM.resize(0);
+    sz.resize(0);
+    int used = 0;
+    int s = 0;
+
+    while (used < L_ges.size()) {
+        Solve_step.resize(s+1);
+        int start, end, sendto;
+        if (s == 0) {
+            start = 0; end = 0; sendto = -1;
+        } else {
+            start = (*Solve_step[s-1]).getend();
+            end = (*Solve_step[s-1]).getend();
+            sendto = -1;
+        }
+        L_akt.resize(0);
+        for (int i=0; i<L_ges.size(); ++i)
+            if (!L_ges_used[i]) {
+                L_akt.Add(L_ges[i],L_ges.GetSize(i));
+            }
+
+        L_akt_used.resize(L_akt.size());
+        for (int i=0; i<L_akt.size(); ++i)
+            L_akt_used[i] = false;
+
+        int akt_used = 0;
+        int akt = 0;
+        while (akt_used < L_akt.size()) {
+            while (L_akt_used[akt]) akt++;
+            ProcSet PM_akt = L_akt[akt];
+            int p = PM_akt[0];
+            int akt_p = P_list[p];
+            if (akt_p == PPM->proc()) {
+                end++;
+                int m = PM.size();
+                PM.resize(m+1);
+                PM[m] = PM_akt;
+                sz.resize(m+1);
+                sz[m] = L_akt.GetSize(akt);
+            }
+
+            for (int i=1; i<PM_akt.size(); ++i) {
+                int pi = PM_akt[i];
+                int akt_pi = P_list[pi];
+                if (PPM->proc() == akt_pi && akt_pi != akt_p) {
+                    (*Solve_step[s-1]).setSendToL(akt_p);
+                }
+                akt_procs[akt_p].Add(akt_procs[akt_pi]);
+
+                if (PPM->proc() == P_list[akt_pi] && PPM->proc() != P_list[p])
+                    for (int j=0; j<L_ges.size(); ++j) {
+                        if (!L_ges_used[j])
+                        if (akt_procs[akt_pi].existselementof(L_ges[j])) {
+                            int m=PM.size();
+                            PM.resize(m+1);
+                            PM[m] = L_ges[j];
+                            sz.resize(m+1);
+                            sz[m] = L_ges.GetSize(j);
+                        }
+                    }
+                int aendern = P_list[akt_pi];
+                for (int k=0; k<P_list.size(); ++k) if (P_list[k] == aendern) P_list[k] = P_list[akt_p];
+            }
+            L_ges_used[L_ges.findequalProcSet(PM_akt)] = true;
+            used++;
+            for (int j=0; j<L_akt.size(); ++j) {
+                if (L_akt_used[j]) continue;
+                if (akt_procs[akt_p].existselementof(L_akt[j])) {L_akt_used[j] = true;akt_used++;}
+            }
+            for (int i=0; i<L_ges.size(); ++i) {
+                if (L_ges_used[i]) continue;
+                if (L_ges[i].subset(akt_procs[akt_p])) {
+                    if (PPM->proc() == akt_p) {
+                        int m=PM.size();
+                        PM.resize(m+1);
+                        PM[m] = L_ges[i];
+                        sz.resize(m+1);
+                        sz[m] = L_ges.GetSize(i);
+                        end++;
+                    }
+                    L_ges_used[i] = true;
+                    used++;
+                }
+            }
+        }
+        Solve_step[s] = new class_Solve_step(start,end,sendto);
+        (*Solve_step[s]).set_akt_procs(akt_procs[PPM->proc()]);
+        s++;
+    }
+
+    if (PPM->proc() == printout) {
+        pout << "ProcList on P:" << PPM->proc() << "\n";
+
+        int sz_ges = 0;
+        for (int i=0; i<Solve_step.size(); ++i) {
+            pout << "akt_procs: " << (*Solve_step[i]).get_akt_procs() << endl;
+            int size = 0;
+            for (int j=(*Solve_step[i]).getstart(); j < (*Solve_step[i]).getend(); ++j) {
+                size += sz[j];
+                sz_ges += sz[j];
+                pout << PM[j] << "  ---  " << sz[j] << "  (" << size << " ; " << sz_ges << ")" << endl;
+            }
+            pout << " -----------------------------\n";
+            if ((*Solve_step[i]).getstart() == (*Solve_step[i]).getend()) {
+                pout << " --- other matrices ---\n";
+                for (int j=(*Solve_step[i]).getstart(); j < PM.size(); ++j) {
+                    size += sz[j];
+                    sz_ges += sz[j];
+                    pout << PM[j] << "  ---  " << sz[j] << "  (" << size << " ; " << sz_ges << ")" << endl;
+                 }
+                 i = Solve_step.size();
+            }
+        }
+
+        pout << "Start  End  SendTo  AktPS\n";
+        for (int i=0; i<Solve_step.size(); ++i)
+            pout << (*Solve_step[i]).getstart() << "   " << (*Solve_step[i]).getend() << "   " << (*Solve_step[i]).getSendToL() << "  " << (*Solve_step[i]).get_akt_procs() << endl;
+    }
+
+    M.resize(PM.size());
+    for (int i=0; i<M.size(); ++i) M[i].resize(PM.size());
+
+    for (int i=0; i<M.size(); ++i) {
+        int p = ddind::findequalProcSet(PM[i])+1;
+        if (p != 0 || PM[i].size()==1)
+            for (int j=0; j<M.size(); ++j) {
+                int q = ddind::findequalProcSet(PM[j])+1;
+                if (q != 0 || PM[j].size()==1) { 
+                    M[i][j] = DPM[p][q];
+                }
+            }
+    }
+    for (int i=0; i<Solve_step.size(); ++i)
+        (*Solve_step[i]).set_K_op_step(PM);
+}
+
+bool DDMatrix::int_in_PS(const int& p,const ProcSet& PS) const {
+    for (int i=0; i<PS.size(); ++i)
+        if (p == PS[i]) return true;
+    return false;
+}
+
+void DDMatrix::Subtract(DDProblem& A, DDProblem& B, DDProblem& C, DateTime* DT1 = NULL, DateTime* DT2 = NULL) {
+    if (DT1) DT1->SetDate();
+    if (DT2) DT2->SetDate();
+    A -= B*C;
+    if (DT1) DT1->AddTime();
+    if (DT2) DT2->AddTime();
+}
+
+void DDMatrix::Invert_parallel(int steps) {
+    int k_min = 0;
+    int k_max = 0;
+    tout(2) << "start with new parallel version \n";
+
+// get maximal number of steps
+    k_min = (*Solve_step[steps]).getstart();
+    k_max = (*Solve_step[steps]).getend();
+    int k_steps = k_max-k_min;
+    k_steps = PPM->Max(k_steps);
+
+// define sendsize; sendtoproc
+    vector<size_t> sendsize;
+    sendsize.resize(PPM->size());
+    vector<int> sendtoproc;
+    sendtoproc.resize(M.size()-(k_min));
+
+// get size of extraprocs
+    int extraprocs = 0;
+    if (k_min < k_max) extraprocs = (*Solve_step[steps]).get_akt_procs().size();
+
+    vector<int> vps;
+    vps.resize(extraprocs);
+    for (int i=0; i<extraprocs; ++i)
+        vps[i] = (*Solve_step[steps]).get_akt_procs()[i];
+
+// send all PMs to these extraprocs
+    PPM->Synchronize();
+    times.Communication.SetDate();
+    times_step.Communication.SetDate();
+    ExchangeBuffer E_PS;
+
+// set sendsize
+    for (int i=0; i<PPM->size(); ++i) sendsize[i] = 0;
+
+    for (int ex=0; ex<extraprocs; ++ex) {
+        int ps = vps[ex];
+        sendsize[ps] += sizeof(int);
+        for (int i=k_min; i<M.size(); ++i)
+            sendsize[ps] += GetSizeSend_PS(PM[i]);
+    }
+
+    if (extraprocs > 0)
+    for (int j=k_min+1; j<M.size(); ++j) {
+        int pr = ((j-(k_min+1)) % extraprocs);
+        int ps = vps[pr];
+        sendtoproc[j-(k_min)] = ps;
+        for (int i=k_min; i<M.size(); ++i) 
+            if (M[i][j]) sendsize[ps] += GetSizeSend_Matrix_with_PS(PM[i],PM[j],*M[i][j],0);
+    }
+
+// send all PS
+    for (int ex=0; ex<extraprocs; ++ex) {
+        int ps = (*Solve_step[steps]).get_akt_procs()[ex];
+        E_PS.Send(ps).resize(sendsize[ps]);
+        E_PS.Send(ps) << int(M.size()-k_min);
+
+        for (int i=k_min; i<M.size(); ++i)
+            Send_PS(E_PS,ps,PM[i],0);
+    }
+
+// send even all matrices from k_min+1 < M.size() and define which row is sent to what proc
+    if (extraprocs > 0)
+    for (int j=k_min+1; j<M.size(); ++j) {
+        int ps = sendtoproc[j-(k_min)];
+        for (int i=k_min; i<M.size(); ++i) 
+            if (M[i][j]) Send_Matrix_to_Buffer(E_PS,ps,PM[i],PM[j],*M[i][j],0);
+    }
+
+// receive PMs and matrices
+    E_PS.Communicate();
+
+    vector<ProcSet> PM_parallel;
+    vector<vector<DDProblem* > > M_parallel;
+    int maxsize = 0;
+
+    int sendto_aftersolve = -1;
+
+    for (short q=0; q<PPM->size(); ++q)
+        if (E_PS.Receive(q).size() < E_PS.ReceiveSize(q)) {
+            sendto_aftersolve = q;
+            E_PS.Receive(q) >> maxsize;
+
+    // ... receive PMs
+            PM_parallel.resize(maxsize);
+            int size_PM;
+            for (int i=0; i<maxsize; ++i)
+                Receive_PS(E_PS,q,PM_parallel[i],size_PM);
+
+    // ...resize of M_parallel to maxsize
+            M_parallel.resize(maxsize);
+            for (int i = 0; i < maxsize; ++i)
+                M_parallel[i].resize(maxsize);
+
+    // ...receive matrices
+            while (E_PS.Receive(q).size() < E_PS.ReceiveSize(q))
+                Receive_Matrix_from_Buffer(E_PS, q, PM_parallel, M_parallel, false, 0, DDP_svd);
+        }
+
+    times.Communication.AddTime();
+    times_step.Communication.AddTime();
+
+// solve by communication
+    for (int k_step=0; k_step<k_steps; ++k_step) {
+        int k=k_min+k_step;
+        int made_lu = 0;
+// make LU(k,k)
+        if (k_min+k_step < k_max) {
+            M[k][k]->LU(invert, &times.LU, &times_step.LU);
+            made_lu = 1;
+        }
+
+        PPM->Synchronize();
+        times.Communication.SetDate();
+        times_step.Communication.SetDate();
+
+// send column k to every proc
+        ExchangeBuffer E_parallel;
+    // set sendsize
+        for (int i=0; i<PPM->size(); ++i) sendsize[i] = 0;
+
+        if (made_lu)
+            for (int ex=0; ex<extraprocs; ++ex) {
+                int ps = vps[ex];
+                sendsize[ps] += sizeof(int);
+                sendsize[ps] += GetSizeSend_Matrix_with_PS(PM[k],PM[k],*M[k][k],1);
+
+                for (int i=k+1; i<M.size(); ++i)
+                    if (M[i][k]) sendsize[ps] += GetSizeSend_Matrix_with_PS(PM[i],PM[k],*M[i][k],0);
+            }
+
+    // send columns
+        if (made_lu)
+            for (int ex=0; ex<extraprocs; ++ex) {
+                int ps = vps[ex];
+                E_parallel.Send(ps).resize(sendsize[ps]);
+                E_parallel.Send(ps) << made_lu;
+
+                Send_Matrix_to_Buffer(E_parallel,ps,PM[k],PM[k],*M[k][k],1); // 1: including IPIV
+                for (int i=k+1; i<M.size(); ++i) 
+                    if (M[i][k]) Send_Matrix_to_Buffer(E_parallel,ps,PM[i],PM[k],*M[i][k],0);
+            }
+
+    E_parallel.Communicate();
+
+// receive all matrices
+    for (short q=0; q<PPM->size(); ++q)
+        if (E_parallel.Receive(q).size() < E_parallel.ReceiveSize(q)) {
+            E_parallel.Receive(q) >> made_lu;
+            Receive_Matrix_from_Buffer(E_parallel, q, PM_parallel, M_parallel, false, 1, DDP_svd); // receive with IPIV
+            while (E_parallel.Receive(q).size() < E_parallel.ReceiveSize(q)) {
+                Receive_Matrix_from_Buffer(E_parallel, q, PM_parallel, M_parallel, false, 0, DDP_svd);
+            }
+        }
+
+    times.Communication.AddTime();
+    times_step.Communication.AddTime();
+
+// solve on every proc: SolveLU(k_step,k_step..end)
+// and Matrix-Multiplication(k_step+1..end,kstep+1..end)
+        Date Date_SolveMM;
+        if (made_lu)
+        for (int i=k_step+1; i<maxsize; ++i)
+            if (M_parallel[k_step][i]) {
+                (*M_parallel[k_step][k_step]).SolveLU(*M_parallel[k_step][i], &times.SolveLU, &times_step.SolveLU);
+
+                long int num_mm = 0;
+                for (int j=k_step+1; j<maxsize; ++j)
+                    if (M_parallel[j][k_step]) {
+                        if (M_parallel[j][i] == NULL) {
+                            M_parallel[j][i] = new DDProblem((*M_parallel[j][k_step]).rows(),(*M_parallel[k_step][i]).cols(), DDP_svd);
+                        }
+                        Subtract(*M_parallel[j][i],*M_parallel[j][k_step],*M_parallel[k_step][i],&times.MatrixMultiplication,&times_step.MatrixMultiplication);
+
+                    }
+            }
+
+        PPM->Synchronize();
+        times.Communication.SetDate();
+        times_step.Communication.SetDate();
+// set sendsize for aftersolve
+        ExchangeBuffer E_aftersolve;
+        int ps = sendto_aftersolve;
+        for (int i=0; i<PPM->size(); ++i) sendsize[i] = 0;
+        for (int j=k_step+1; j<maxsize; ++j)
+            if (M_parallel[k_step][j]) sendsize[ps] += GetSizeSend_Matrix_with_PS(PM_parallel[k_step],PM_parallel[j],*M_parallel[k_step][j],0);
+
+        if (k_step+1 < maxsize)
+            for (int i=k_step+1; i<maxsize; ++i)
+                if (M_parallel[i][k_step+1]) sendsize[ps] += GetSizeSend_Matrix_with_PS(PM_parallel[i],PM_parallel[k_step+1],*M_parallel[i][k_step+1],0);
+
+        if (k_step == k_steps-1)
+            for (int i=k_step+1; i < maxsize; ++i)
+                for (int j=k_step+2; j<maxsize; ++j) 
+                    if (M_parallel[i][j]) sendsize[ps] += GetSizeSend_Matrix_with_PS(PM_parallel[i],PM_parallel[j],*M_parallel[i][j],0);
+
+        if (ps != -1) E_aftersolve.Send(ps).resize(sendsize[ps]);
+
+// send row k_step to sendto_aftersolve
+        for (int j=k_step+1; j<maxsize; ++j)
+            if (M_parallel[k_step][j]) Send_Matrix_to_Buffer(E_aftersolve,ps,PM_parallel[k_step],PM_parallel[j],*M_parallel[k_step][j],0);
+
+// send column k_step+1 to sendto_aftersolve 
+        if (k_step+1 < maxsize)
+            for (int i=k_step+1; i<maxsize; ++i)
+                if (M_parallel[i][k_step+1]) Send_Matrix_to_Buffer(E_aftersolve,ps,PM_parallel[i],PM_parallel[k_step+1],*M_parallel[i][k_step+1],0);
+
+        if (k_step == k_steps-1)
+            for (int i=k_step+1; i < maxsize; ++i)
+                for (int j=k_step+2; j<maxsize; ++j)
+                    if (M_parallel[i][j]) Send_Matrix_to_Buffer(E_aftersolve,ps,PM_parallel[i],PM_parallel[j],*M_parallel[i][j],0);
+
+// receive everything on sendto_aftersolve
+        E_aftersolve.Communicate();
+
+        for (short q=0; q<PPM->size(); ++q)
+            while (E_aftersolve.Receive(q).size() < E_aftersolve.ReceiveSize(q))
+                Receive_Matrix_from_Buffer(E_aftersolve, q, PM, M, false, 0, DDP_svd);
+
+        times.Communication.AddTime();
+        times_step.Communication.AddTime();
+    }
+
+    for (int i=0; i<maxsize; ++i)
+        for (int j=0; j<maxsize; ++j)
+            if (M_parallel[i][j] != NULL) {
+                delete (M_parallel[i][j]); 
+                M_parallel[i][j] = NULL;
+            }
+    for (int i=0; i<maxsize; ++i)
+        M_parallel[i].clear();
+    PM_parallel.clear();
+    M_parallel.clear();
+}
+
+void DDMatrix::Dissect(vector<int> K_step, vector<int> K_op) {
+    for (int mk=0; mk<K_step.size(); ++mk) {
+        int k = K_step[mk];
+        M[k][k]->LU(invert, &times.LU, &times_step.LU);
+
+        for (int mi=mk+1; mi < K_op.size(); ++mi) {
+            int i = K_op[mi];
+            (*M[k][k]).SolveLU(*M[k][i], &times.SolveLU, &times_step.SolveLU);
+
+            for (int mj=mk+1; mj < K_op.size(); ++mj) {
+                int j = K_op[mj];
+                if ((ILU && M[j][i]) || !ILU) {
+                    if (M[j][i] == NULL) 
+                        M[j][i] = new DDProblem((*M[j][k]).rows(),(*M[k][i]).cols(), DDP_svd);
+                    Subtract((*M[j][i]),(*M[j][k]),(*M[k][i]),&times.MatrixMultiplication,&times_step.MatrixMultiplication);
+                }
+            }
+        }
+    }
+}
+
+void DDMatrix::Send(ExchangeBuffer& E, int ps, vector<int> K_delta) {
+    size_t sendsize = 0;
+    if (ps != -1) {
+        for (int mi=0; mi<K_delta.size(); ++mi)
+            for (int mj=0; mj<K_delta.size(); ++mj) {
+                int i=K_delta[mi];int j=K_delta[mj];
+                if ((ILU && M[i][j]) || (!ILU)) sendsize += GetSizeSend_Matrix_with_PS(PM[i],PM[j],*M[i][j],0);
+            }
+
+        E.Send(ps).resize(sendsize);
+
+        for (int mi=0; mi<K_delta.size(); ++mi)
+            for (int mj=0; mj<K_delta.size(); ++mj) {
+                int i=K_delta[mi];int j=K_delta[mj];
+                if ((ILU && M[i][j]) || (!ILU)) 
+                    Send_Matrix_to_Buffer(E,ps,PM[i],PM[j],*M[i][j],0);
+            }
+    }
+}
+
+void DDMatrix::Invert() {
+    Fill_steplist();
+
+    times.ResetTime();
+    times.Blockdecomposition.SetDate();
+
+    for (int steps=0; steps< Solve_step.size(); ++steps) {
+        times_step.ResetTime();
+        times_step.Blockdecomposition.SetDate();
+
+        tout(2) << PPM->proc() << "  Step " << steps << endl;
+                                            ////////////////////////
+        if (steps > 0 && parallel_mm)       //  PARALLEL VERSION  //
+            Invert_parallel(steps);         ////////////////////////
+
+                                            ////////////////////////
+        if (steps == 0 || !parallel_mm)     //  PREVIOUS VERSION  //
+            Dissect((*Solve_step[steps]).get_K_step(),(*Solve_step[steps]).get_K_op());
+
+        PPM->Synchronize();
+        times.Communication.SetDate();      ////////////////////////
+        times_step.Communication.SetDate(); //    SEND MATRICES   //
+        ExchangeBuffer E_last;              ////////////////////////
+        Send(E_last, (*Solve_step[steps]).getSendToL(),(*Solve_step[steps]).get_K_delta());
+
+        E_last.Communicate();               ////////////////////////
+                                            //  RECEIVE MATRICES  //
+        for (short q=0; q<PPM->size(); ++q) ////////////////////////
+            while (E_last.Receive(q).size() < E_last.ReceiveSize(q))
+                Receive_Matrix_from_Buffer(E_last, q, PM, M, true, 0, DDP_svd);
+
+        times.Communication.AddTime();
+        times_step.Communication.AddTime();
+        times_step.Blockdecomposition.AddTime();
+
+        times_step.SetMax();
+        tout(3) << times_step;
+
+        tout(2) << "----------------------------------------------------------\n";
+    }  // of  for (int steps=0; steps< Solve_step.size(); ++steps) {
+
+    times.Blockdecomposition.AddTime();
+    times.SetMax();
+    tout(3) << times;
+}
+
+void DDMatrix::SolveLU(DDVector& b) const {
+    for (int steps=0; steps<Solve_step.size(); ++steps) {
+        for (int k=(*Solve_step[steps]).getstart(); k<(*Solve_step[steps]).getend(); ++k) {
+            vout(70) << "Solve M[" << k << "][" << k << "]\n";
+            (*M[k][k]).SolveLU(b.getv(k));
+            for (int i=k+1; i<M.size(); ++i)
+                if (M[i][k]) { 
+                    vout(70) << "b(" << i << ") -= M[" << i << "][" << k << "] * b(" << k << ")\n";
+                    b.getv(i) -= (*M[i][k])*b.getv(k);
+            }
+        }
+
+        ExchangeBuffer E;
+
+        size_t sendsize = 0;
+        int ps = (*Solve_step[steps]).getSendToL();
+        if (ps != -1) {
+            for (int i=(*Solve_step[steps]).getend(); i<M.size(); ++i) {
+                sendsize += GetSizeSend_PS(PM[i]);
+                sendsize += b.getv(i).size()*sizeof(Scalar);
+            }
+
+            E.Send(ps).resize(sendsize);
+
+            for (int i=(*Solve_step[steps]).getend(); i<M.size(); ++i) {
+                Send_PS(E,ps,PM[i],b.getv(i).size());
+                Send_Vector(E,ps,b.getv(i));
+            }
+        }
+
+        E.Communicate();
+
+        for (short q=0; q<PPM->size(); ++q) {
+            int i;
+            ProcSet P1;
+            int size;
+            while (E.Receive(q).size() < E.ReceiveSize(q)) {
+                Receive_PS(E,q,P1, size);
+                for (int s=1; s < PM.size(); ++s)
+                    if (equalProcSet(PM[s],P1)) {i = s; break;}
+
+                if (&(b.getv(i)) == NULL) {
+                    b.createnewvec(i,size);
+                    vout(70) << "CREATE NEW VECTOR " << P1 << " with size " << size << "\n";
+                }
+                Receive_Vector(E,q,b.getv(i));
+                vout(70) << "Receive Vector b(" << i << ") from Proc " << q << "\n";
+                (*Solve_step[steps+1]).Set_SendToU(true);
+                if (!int_in_PS(q,P1)) { 
+                    (*Solve_step[steps+1]).addto_send_special(i,q);
+                    vout(70) << "SET SPECIAL VECTOR " << P1 << " from " << q << "\n";
+                }
+            }
+        }
+    }
+
+    vout(50) << "------------------------END OF L-------------------------------------------\n";
+
+    for (int steps=Solve_step.size()-1; steps >=0; --steps) {
+        for (int i=(*Solve_step[steps]).getend()-1; i>=(*Solve_step[steps]).getstart(); --i) {
+            for (int k=M.size()-1; k>i; --k)
+                if (M[i][k]) { 
+                    b.getv(i) -= (*M[i][k])*b.getv(k);
+                    vout(70) << "b(" << i << ") -= M[" << i << "][" << k << "] * b(" << k << ")\n";
+                }
+        }
+        ExchangeBuffer E;
+
+        vector<size_t> sendsize;
+        sendsize.resize(PPM->size());
+        for (int i= 0; i<PPM->size(); ++i) sendsize[i] = 0;
+
+        for (int i=0; i<(*Solve_step[steps]).send_special_size(); ++i) {
+            int ps = (*Solve_step[steps]).get_send_special_SendTo(i);
+            int sw = (*Solve_step[steps]).get_send_special_vec(i);
+            sendsize[ps] += GetSizeSend_PS(PM[sw]);
+            sendsize[ps] += b.getv(sw).size()*sizeof(Scalar);
+        }
+
+        if ((*Solve_step[steps]).getSendToU()) {
+            for (int i=(*Solve_step[steps]).getend()-1; i>=(*Solve_step[steps]).getstart(); --i) {
+                for (int p=0; p<PM[i].size(); ++p) {
+                    int ps=PM[i][p];
+                    if (ps != PPM->proc()) {
+                        sendsize[ps] += GetSizeSend_PS(PM[i]);
+                        sendsize[ps] += b.getv(i).size()*sizeof(Scalar);
+                    }
+                }
+            }
+
+            for (int i=0; i<PPM->size(); ++i) E.Send(i).resize(sendsize[i]);
+
+            for (int i=(*Solve_step[steps]).getend()-1; i>=(*Solve_step[steps]).getstart(); --i) {
+                for (int p=0; p<PM[i].size(); ++p) {
+                    int ps=PM[i][p];
+                    if (ps != PPM->proc()) {
+                        Send_PS(E,ps,PM[i],b.getv(i).size());
+                        Send_Vector(E,ps,b.getv(i));
+                    } 
+                }
+            }
+        }
+
+        for (int i=0; i<(*Solve_step[steps]).send_special_size(); ++i) {
+            int ps = (*Solve_step[steps]).get_send_special_SendTo(i);
+            int sw = (*Solve_step[steps]).get_send_special_vec(i);
+            Send_PS(E,ps,PM[sw],b.getv(sw).size());
+            Send_Vector(E,ps,b.getv(sw));
+        }
+        E.Communicate();
+        for (short q=0; q<PPM->size(); ++q) {
+            int i;
+            ProcSet P1;
+            int size;
+            while (E.Receive(q).size() < E.ReceiveSize(q)) {
+                Receive_PS(E,q,P1, size);
+                for (int s=1; s < PM.size(); ++s)
+                    if (equalProcSet(PM[s],P1)) {i = s; break;}
+
+            if (&(b.getv(i)) == NULL) pout << "ERROR" << endl;//b.createnewvec(i,size);
+            Receive_Vector(E,q,b.getv(i),false);
+            vout(70) << "Receive Vector b(" << i << ") from Proc " << q << "\n";
+            }
+        }
+    }
+
+    vout(50) << "------------------------END OF U-------------------------------------------\n";
+}
+
+
+////////////////////////////////////////////////////
+//                  SCHUR                         //
+////////////////////////////////////////////////////
+
+void Schur::Construct(const Matrix& A) {
+    Date Start;
+
+    ind = new DDind(A.GetVector());
+    DDM = new DDMatrix(*ind, DDM_invert, DDM_checkdiagonal, DDM_ILU, DDM_Smalltype, DDM_printout, DDP_svd, parallel_mm, verbose);
+    DDM->Set(A);
+
+    DDM->Invert();
+
+    vout(1) << "create Decomposition " << Date() - Start << endl;
+}
+
+void Schur::Destruct() { 
+    if (ind) delete ind; ind = 0;
+    if (DDM) delete DDM; DDM = 0;
+}
+
+void Schur::multiply (Vector &u, const Vector& b) const {
+    Date Start;
+
+    DDVector ddu(*DDM);
+    ddu.Set(b);
+    ddu.Setv(DDM->getPM());
+    DDM->SolveLU(ddu);
+    ddu.writevector(u);
+    u.ClearDirichletValues();
+
+    vout(1) << "   multiply Schur " << Date() - Start << endl;
+}
+
+Preconditioner* GetSchurPC () {
+    return new Schur();
+}

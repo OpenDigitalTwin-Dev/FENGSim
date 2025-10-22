@@ -1,0 +1,60 @@
+// file: Compiler.h
+// author: Christian Wieners
+// $Header: /public/M++/src/CompilerDOUBLE.h,v 1.4 2009-09-21 16:25:55 wieners Exp $
+
+#ifndef _COMPILER_H_
+#define _COMPILER_H_
+
+#define SUPERLU
+//#define ILU_MULTILEVEL
+//#define UMFSOLVER
+//#define NPARALLEL
+//#define NINTERVAL
+//#define DCOMPLEX
+//#define RIB
+#define LAPACK
+
+using namespace std;
+#include <ext/hash_map>
+using __gnu_cxx::hash_map;
+#include <ext/numeric>
+using __gnu_cxx::power; 
+#include <cstring>
+
+#include <complex>
+typedef complex<double> Complex;
+
+#ifdef DCOMPLEX
+
+#define NDOUBLE 
+typedef complex<double> Scalar;
+inline double double_of_Scalar (const Scalar& z) { return real(z); } 
+inline Scalar eval (const Complex& z) { return z; }
+const Scalar iUnit(0,1);
+//inline void set_real (Scalar&z, double x) { real(z) = x; }
+
+#define GEMM zgemm_
+#define GETRS zgetrs_
+#define GEMV zgemv_
+#define GETRI zgetri_
+#define GETRF dgetrf_
+
+#else
+
+#define GEMM dgemm_
+#define GETRS dgetrs_
+#define GEMV dgemv_
+#define GETRI dgetri_
+#define GETRF dgetrf_
+
+typedef double Scalar;
+inline double double_of_Scalar (const Scalar& z) { return z; } 
+inline double conj (double x) { return x; }
+inline double real (double x) { return x; }
+inline void set_real (Scalar&z, double x) { z = x; }
+inline double eval (const Complex& z) { return real(z); }
+const Scalar iUnit(-1);
+
+#endif
+
+#endif

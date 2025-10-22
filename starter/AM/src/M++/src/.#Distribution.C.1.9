@@ -1,0 +1,422 @@
+// file: Distribution.C
+// author: Christian Wieners
+// $Header: /public/M++/src/Distribution.C,v 1.9 2009-12-02 10:51:43 wieners Exp $
+
+#include "Time.h"
+#include "IO.h"
+
+#include <algorithm>
+#include <cstring>
+
+#include "Distribution.h"
+
+#ifdef RIB
+#include "Misc.h"
+#endif
+
+inline Buffer& operator << (Buffer& b, const ProcSet& P) {
+    b << short(P.size());
+    for (int i=0; i<P.size(); ++i) b << P[i];
+    return b;
+}
+inline Buffer& operator << (Buffer& b, const Face& F) {
+    return b << F.Left() << F.Right();
+}
+inline Buffer& operator << (Buffer& b, const bnd_face& B) { 
+    return b << B() << B.Part();
+}
+inline Buffer& operator << (Buffer& b, const cell& c) {
+    b << int(c.Type()) << c.Subdomain() << short(c.size());
+    for (int i=0; i<c.size(); ++i) b << c[i];
+    return b;
+}
+
+inline Buffer& operator >> (Buffer& b, ProcSet& P) {
+    short n,q;
+    b >> n; 
+    for (int i=0; i<n; ++i) { b >> q; P.Append(q); }
+    return b;
+}
+inline Buffer& operator >> (Buffer& b, Face& F) {
+    Point x,y;
+    b >> x >> y;
+    F = Face(x,y);
+    return b;
+}
+inline Buffer& operator >> (Buffer& b, BoundaryFaces& B) { 
+    Point z;
+    int part;
+    b >> z >> part;
+    B.Insert(z,part);
+    return b;
+}
+inline Buffer& operator >> (Buffer& b, Mesh& M) {
+    int tp;
+    short n, sd;
+    b >> tp >> sd >> n;
+    vector<Point> x(n);
+    for (int i=0; i<n; ++i) b >> x[i];
+    M.InsertCell(CELLTYPE(tp),sd,x);
+    return b;
+}
+class Distribution {
+    Mesh& M;
+    vector< list<cell> > MarkedCells;
+    bool Overlap;
+ public:
+    Distribution (Mesh& m) : M(m), MarkedCells(PPM->size()), Overlap(false) {
+	ReadConfig(Settings,"Overlap_Distribution",Overlap);
+    }
+    void MarkCell (const cell& c, int q) { MarkedCells[q].push_back(c); }
+    void Communicate () {
+	vector< list<bnd_face> > MarkedBnd(PPM->size());
+	for (int q=0; q<PPM->size(); ++q) 
+	    for (list<cell>::const_iterator c = MarkedCells[q].begin();
+		 c != MarkedCells[q].end(); ++c) {
+		for (int i=0; i<(*c).Corners(); ++i) 
+		    M.ProcSets::Add((*c).Corner(i),q);
+		for (int i=0; i<(*c).Edges(); ++i)
+		    M.ProcSets::Add((*c).Edge(i),q);
+		for (int i=0; i<(*c).Faces(); ++i) {
+		    Point z = (*c).Face(i);
+		    M.ProcSets::Add(z,q);
+		    bnd_face b = M.find_bnd_face(z);
+		    if (b != M.bnd_faces_end())
+			MarkedBnd[q].push_back(b); 
+		}
+	    }
+	for (identifyset is=M.identifysets();is!=M.identifysets_end();++is) {
+	    if (!is.master()) continue;
+	    procset p = M.find_procset(is());
+	    if (p == M.procsets_end()) continue;
+	    for (int j=0; j<is.size(); ++j) {
+		procset q = M.find_procset(is[j]);
+		if (q == M.procsets_end()) continue;
+		for (int i=0; i<q.size(); ++i) 
+		    M.ProcSets::Append(is(),q[i]);
+	    }
+	    for (int j=0; j<is.size(); ++j)
+		M.ProcSets::Copy(p,is[j]);
+	}
+	for (identifyset is=M.identifysets();is!=M.identifysets_end();++is) {
+	    if (is.master()) continue;
+	    procset p = M.find_procset(is());
+	    if (p == M.procsets_end()) continue;
+	    for (int j=0; j<is.size(); ++j) {
+		procset q = M.find_procset(is[j]);
+		if (q == M.procsets_end()) continue;
+		for (int i=0; i<q.size(); ++i) 
+		    M.ProcSets::Append(is(),q[i]);
+	    }
+	    for (int j=0; j<is.size(); ++j)
+		M.ProcSets::Copy(p,is[j]);
+	}
+	for (identifyset is=M.identifysets();is!=M.identifysets_end();++is) {
+	    if (!is.master()) continue;
+	    procset p = M.find_procset(is());
+	    for (int j=0; j<is.size(); ++j)
+		M.ProcSets::Copy(p,is[j]);
+	}
+	ExchangeBuffer E;
+	for (identifyset is=M.identifysets();is!=M.identifysets_end();++is) {
+	    procset p = M.find_procset(is());
+	    if (p == M.procsets_end()) continue;
+	    for (int i=0; i<p.size(); ++i) {
+		if (p[i] == PPM->proc()) continue;
+		E.Send(p[i]) << short(is.size()) << is();
+		for (int j=0; j<is.size(); ++j) 
+		    E.Send(p[i]) << is[j];
+	    }
+	}
+	M.ProcSets::RemoveSingle();
+	for (int q=0; q<PPM->size(); ++q) {
+	    if (PPM->proc() == q) continue; 
+	    if (MarkedCells[q].size() == 0) continue;
+	    E.Send(q) << short(0);
+	}
+	for (procset p = M.procsets(); p != M.procsets_end(); ++p)
+	    for (int i=0; i<p.size(); ++i) 
+		if (p[i] != PPM->proc()) {
+		    short m = 1;
+		    face f = M.find_face(p());
+		    if (f != M.faces_end()) ++m;
+		    E.Send(p[i]) << m << p() << *p;
+		    if (m>1) E.Send(p[i]) << *f;
+		}
+	for (int q=0; q<PPM->size(); ++q) {
+	    if (PPM->proc() == q) continue; 
+	    if (MarkedCells[q].size() == 0) continue;
+	    E.Send(q) << short(0);
+	    E.Send(q) << int(MarkedBnd[q].size());
+	    for (list<bnd_face>::const_iterator b = MarkedBnd[q].begin();
+		 b != MarkedBnd[q].end(); ++b) 
+		E.Send(q) << *b;
+	    for (list<cell>::const_iterator c = MarkedCells[q].begin();
+		 c != MarkedCells[q].end(); ++c) {
+		E.Send(q) << *c;
+                if (Overlap) M.InsertOverlapCell(*c);
+		M.RemoveCell(*c);
+	    }
+	}
+	E.Communicate();
+	for (short q=0; q<PPM->size(); ++q) { 
+	    if (E.Receive(q).Size() == 0) continue;
+	    short m;
+	    E.Receive(q) >> m;
+	    while (m) {
+		Point x;
+		E.Receive(q) >> x;
+		for (int i=0; i<m; ++i) {
+		    Point y;
+		    E.Receive(q) >> y;
+		    M.IdentifySets::Insert(x,y);
+		}
+		E.Receive(q) >> m;
+	    }
+	    E.Receive(q) >> m;
+	    while (m) {
+		Point z;
+		ProcSet P;
+		E.Receive(q) >> z >> P;
+	        M.ProcSets::Insert(z,P);
+		if (m > 1) {
+		    Face F;
+		    E.Receive(q) >> F;
+		    M.Faces::Insert(z,F);
+		}
+		E.Receive(q) >> m;
+	    }
+	    int n;
+	    E.Receive(q) >> n;
+	    for (int i=0; i<n; ++i) E.Receive(q) >> M.BoundaryFaces::ref();
+	    while (E.Receive(q).size()<E.Receive(q).Size()) E.Receive(q) >> M;
+	}
+	M.ProcSets::Clean();
+	for (int q=0; q<PPM->size(); ++q) M.ProcSets::Add(Infty,q);
+	M.FinishParallel();
+    }
+    friend ostream& operator << (ostream& s, const Distribution& D) {
+	for (int i=0; i<PPM->size(); ++i) 
+	    s << "marked cells proc " << i << endl << D.MarkedCells[i];
+	return s << endl;
+    }
+};
+
+void FullCellsOverlap (Mesh& M) {
+    ExchangeBuffer E;
+    for (cell c=M.cells(); c!=M.cells_end(); ++c) {
+	M.ProcSets::Add(c(),PPM->proc());
+	for (int i=0; i<c.Corners(); ++i)
+	    M.ProcSets::Add(c.Corner(i),PPM->proc());
+	for (int i=0; i<c.Edges(); ++i)
+	    M.ProcSets::Add(c.Edge(i),PPM->proc());
+	for (int q=0; q<PPM->size(); ++q) {
+	    if (q == PPM->proc()) continue;
+	    E.Send(q) << c;
+	    M.ProcSets::Append(c(),q);
+	    for (int i=0; i<c.Corners(); ++i)
+		M.ProcSets::Append(c.Corner(i),q);
+	    for (int i=0; i<c.Edges(); ++i)
+		M.ProcSets::Append(c.Edge(i),q);
+	}
+    }
+    E.Communicate();
+    for (int q=0; q<PPM->size(); ++q) {
+	if (q == PPM->proc()) continue;
+	while (E.Receive(q).size()<E.Receive(q).Size()) {
+	    int tp;
+	    short n, sd;
+	    E.Receive(q) >> tp >> sd >> n;
+	    vector<Point> x(n);
+	    for (int i=0; i<n; ++i) E.Receive(q) >> x[i];
+	    Cell* C = CreateCell(CELLTYPE(tp),sd,x);
+	    M.InsertOverlapCell(C);
+	    M.ProcSets::Add(C->Center(),q);
+	    for (int i=0; i<C->Corners(); ++i)
+		M.ProcSets::Add(C->Corner(i),q);
+	    for (int i=0; i<C->Edges(); ++i)
+		M.ProcSets::Add(C->Edge(i),q);
+	    for (int qq=0; qq<PPM->size(); ++qq) {
+		M.ProcSets::Append(C->Center(),qq);
+		for (int i=0; i<C->Corners(); ++i)
+		    M.ProcSets::Append(C->Corner(i),qq);
+		for (int i=0; i<C->Edges(); ++i)
+		    M.ProcSets::Append(C->Edge(i),qq);
+	    }
+	}
+    }
+}
+
+void FullBndOverlap (Mesh& M) {
+    ExchangeBuffer E;
+    if (PPM->proc() == 0) {
+        for (bnd_face bf = M.bnd_faces();  bf != M.bnd_faces_end(); ++bf) {
+	    for (int q=1; q<PPM->size(); ++q) {
+		E.Send(q) << bf;
+	    }
+	}
+    }
+    E.Communicate();
+    if (PPM->proc() == 0) return;
+    while (E.Receive(0).size()<E.Receive(0).Size()) 
+	E.Receive(0) >> M.BoundaryFaces::ref();
+}
+
+class Less {
+    const Mesh& M;
+public:
+    Less (const Mesh& m) : M(m) {}
+    bool operator () (const cell& c0, const cell& c1) const { 
+	return (c0() < c1()); 
+    }
+};
+
+// class Less_x {
+//     const Mesh& M;
+// public:
+//     Less_x (const Mesh& m) : M(m) {}
+//     bool operator () (const cell& c0, const cell& c1) const {
+//         const Point& P = c0();
+//         const Point& Q = c1();
+//         if (P[0] < Q[0] - GeometricTolerance) return true;
+//         if (P[0] > Q[0] + GeometricTolerance) return false;
+//         if (P[1] < Q[1] - GeometricTolerance) return true;
+//         if (P[1] > Q[1] + GeometricTolerance) return false;
+//         if (P[2] < Q[2] - GeometricTolerance) return true;
+//         return false;
+//     }
+// };
+
+inline bool Less_x(const cell& c0, const cell& c1) {
+        const Point& P = c0();
+        const Point& Q = c1();
+        if (P[0] < Q[0] - GeometricTolerance) return true;
+        if (P[0] > Q[0] + GeometricTolerance) return false;
+        if (P[1] < Q[1] - GeometricTolerance) return true;
+        if (P[1] > Q[1] + GeometricTolerance) return false;
+        if (P[2] < Q[2] - GeometricTolerance) return true;
+        return false;
+    }
+inline bool Less_y(const cell& c0, const cell& c1) {
+        const Point& P = c0();
+        const Point& Q = c1();
+        if (P[1] < Q[1] - GeometricTolerance) return true;
+        if (P[1] > Q[1] + GeometricTolerance) return false;
+        if (P[2] < Q[2] - GeometricTolerance) return true;
+        if (P[2] > Q[2] + GeometricTolerance) return false;
+        if (P[0] < Q[0] - GeometricTolerance) return true;
+        return false;
+    }
+inline bool Less_z(const cell& c0, const cell& c1) {
+        const Point& P = c0();
+        const Point& Q = c1();
+        if (P[2] < Q[2] - GeometricTolerance) return true;
+        if (P[2] > Q[2] + GeometricTolerance) return false;
+        if (P[0] < Q[0] - GeometricTolerance) return true;
+        if (P[0] > Q[0] + GeometricTolerance) return false;
+        if (P[1] < Q[1] - GeometricTolerance) return true;
+        return false;
+    }
+
+
+inline void rcb (int level, vector<int>& D, int begin, int end, vector<cell>& C, char d) {
+    int N = end-begin;
+    switch (d) {
+        case 'x': sort(C.begin()+begin,C.begin()+end,Less_x);break;
+        case 'y': sort(C.begin()+begin,C.begin()+end,Less_y);break;
+        case 'z': sort(C.begin()+begin,C.begin()+end,Less_z);break;
+    }
+    if (level == 0) return;
+    else {
+        int mid = begin+(end-begin)/2;
+        for (int i=mid;i<end;++i) D[i] += 1 << (level-1);
+        switch (d) {
+            case 'x': rcb(level-1,D,begin,mid,C,'y');
+                      rcb(level-1,D,mid,end,C,'y');
+                      break;
+            case 'y': rcb(level-1,D,begin,mid,C,'z');
+                      rcb(level-1,D,mid,end,C,'z');
+                      break;
+            case 'z': rcb(level-1,D,begin,mid,C,'x');
+                      rcb(level-1,D,mid,end,C,'x');
+                      break;
+        }
+    }
+}
+
+void Distribute (Mesh& M, const string& name) {
+    if (PPM->size() == 1) return;
+    Date Start;
+    Distribution D(M);
+    if (name == "Stripes") {
+        vector<cell> C(M.Cells::size()); 
+        int n = 0;
+        for (cell c=M.cells(); c!=M.cells_end(); ++c) C[n++] = c;
+        sort(C.begin(),C.end(),Less(M));
+        int m = (n+PPM->size()-1) / PPM->size();
+        int r = n - (m-1)*PPM->size();
+        int k = 0;
+        int q = 0;
+        for (int i=0; i<C.size(); ++i) {
+            if (k >= m) {
+                k = 0;
+                ++q;
+                if (q == r) --m;
+            }
+            ++k;
+            D.MarkCell(C[i],q);
+        }
+    }
+    else if (name == "RCB") {
+        int N = M.Cells::size();
+        vector<cell> C(N);
+        vector<int> Dest(N);
+        int P = PPM->size();
+        int L = int(log(double(P))/log(2.0)+1e-10);
+        int n=0;
+        for (int i=0;i<N;++i)
+            Dest[i] = 0;
+        for (cell c=M.cells(); c!=M.cells_end(); ++c) C[n++] = c;
+        rcb(L,Dest,0,C.size(),C,'x');
+
+        for (int i=0; i<C.size(); ++i) {
+            D.MarkCell(C[i],Dest[i]);
+        }
+    }
+#ifdef RIB
+    else if (name == "RIB") {
+        int P = PPM->size();
+        int N = M.Cells::size();
+        vector<cell> C(N); 
+        vector<int> Dest(N); 
+        int n = 0;
+        for (cell c=M.cells(); c!=M.cells_end(); ++c) C[n++] = c;
+        vector<int> cell_ids(C.size());
+        for (int i=0;i<cell_ids.size();++i)
+            cell_ids[i] = i;
+        int depth = int(log(double(P))/log(2.0)+1e-10);
+        for (int i=0;i<N;++i)
+            Dest[i] = 0;
+	Date StartF;
+        if (PPM->master()) rib(depth,Dest,0,C.size(),C);
+	tout(2) << "find fiedler vectors " << Date() - StartF << "\n";
+        for (int i=0; i<C.size(); ++i)
+            D.MarkCell(C[i],Dest[i]);
+    }
+#endif
+    else Exit(name+" not implemented");
+    D.Communicate();
+    mout << M.Cells::size() << " cells on proc 0 of " 
+	 << M.Cells::psize() << " cells on " << PPM->size() << " procs" 
+	 << endl; 
+    tout(7) << "distribute " << Date() - Start << "\n";
+//  pout << "dist" << endl << M << endl;
+    string overlap = "none";
+    ReadConfig(Settings,"Overlap",overlap);
+    if (overlap == "full") {
+	FullCellsOverlap(M);
+	FullBndOverlap(M);
+    }
+//    pout << "dist2" << endl << M << endl;
+}
+
