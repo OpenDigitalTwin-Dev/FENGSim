@@ -2,4 +2,4 @@ mkdir build
 cd build
 cmake ..
 make
-./multix -f1 ../../../../toolkit/NLA/install/slepc_install/share/slepc/datafiles/matrices/bfw62a.petsc -f2 ../../../../toolkit/NLA/install/slepc_install/share/slepc/datafiles/matrices/bfw62b.petsc
+./multix -f1 ../data/bfw62a.petsc -f2 ../data/bfw62b.petsc
