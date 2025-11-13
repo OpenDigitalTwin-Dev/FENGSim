@@ -8,8 +8,9 @@ int main(int argc,char **argv) {
     PetscMPIInt    rank;
     EPS            eps;
     
-    PetscInitialize(&argc,&argv,NULL,NULL);
-    
+    //PetscInitialize(&argc,&argv,NULL,NULL);
+    SlepcInitialize(&argc,&argv,NULL,NULL);
+	
     // Compressed Sparse Row
     // [ 2, -1,  0,  0,  0]
     // [-1,  2, -1,  0,  0] 
@@ -118,6 +119,7 @@ int main(int argc,char **argv) {
     
     MatDestroy(&A);
     MatDestroy(&B);
-    PetscFinalize();
+    //PetscFinalize();
+    SlepcFinalize();
     return 0;
 }
