@@ -45,7 +45,7 @@ int main(int argc,char **argv) {
     MatMPIAIJSetPreallocation(A,0,d_nnz,0,NULL);
     //PetscFree(d_nnz);
 
-    PetscCall(MatGetOwnershipRange(A, &Istart, &Iend));
+    MatGetOwnershipRange(A, &Istart, &Iend);
     std::cout << Istart << " " << Iend << std::endl;
     for (PetscInt i=Istart; i<Iend; i++) {
         PetscInt ncols = row_ptr[i+1] - row_ptr[i];
