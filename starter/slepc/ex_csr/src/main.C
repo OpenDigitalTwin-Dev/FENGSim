@@ -1,4 +1,7 @@
 #include <slepceps.h>
+#include <petscvec.h>
+#include <petscmat.h>
+
 #include <iostream>
 
 int main(int argc,char **argv) {
@@ -8,7 +11,6 @@ int main(int argc,char **argv) {
     PetscMPIInt    rank;
     EPS            eps;
     
-    //PetscInitialize(&argc,&argv,NULL,NULL);
     SlepcInitialize(&argc,&argv,NULL,NULL);
 	
     // Compressed Sparse Row
@@ -55,7 +57,8 @@ int main(int argc,char **argv) {
          1.0, 4.0, 1.0,
 	 1.0, 4.0       
     };
-    
+
+    /*! create A */
     MatCreate(PETSC_COMM_WORLD,&A);
     MatSetSizes(A,PETSC_DECIDE,PETSC_DECIDE,m,n);
     MatSetType(A,MATAIJ); 
@@ -68,6 +71,7 @@ int main(int argc,char **argv) {
     }
     MatMPIAIJSetPreallocation(A,0,d_nnz,0,NULL);
 
+    /*! create B */
     MatCreate(PETSC_COMM_WORLD,&B);
     MatSetSizes(B,PETSC_DECIDE,PETSC_DECIDE,m,n);
     MatSetType(B,MATAIJ); 
@@ -80,8 +84,9 @@ int main(int argc,char **argv) {
     
     PetscFree(d_nnz);
 
+    /*! give A's values*/
     MatGetOwnershipRange(A, &Istart, &Iend);
-    std::cout << Istart << " " << Iend << std::endl;
+    //std::cout << Istart << " " << Iend << std::endl;
     for (PetscInt i=Istart; i<Iend; i++) {
         PetscInt ncols = row_ptr_A[i+1] - row_ptr_A[i];
         PetscInt *cols = &col_ind_A[row_ptr_A[i]];
@@ -90,8 +95,9 @@ int main(int argc,char **argv) {
         MatSetValues(A, 1, &i, ncols, cols, vals, INSERT_VALUES);
     }
 
+    /*! give B's values*/
     MatGetOwnershipRange(B, &Istart, &Iend);
-    std::cout << Istart << " " << Iend << std::endl;
+    //std::cout << Istart << " " << Iend << std::endl;
     for (PetscInt i=Istart; i<Iend; i++) {
         PetscInt ncols = row_ptr_B[i+1] - row_ptr_B[i];
         PetscInt *cols = &col_ind_B[row_ptr_B[i]];
@@ -114,12 +120,35 @@ int main(int argc,char **argv) {
     EPSSetFromOptions(eps);
     EPSSolve(eps);
 
+    /*! output eigenvalues and eigenvectors */
+    PetscInt nconv;
+    EPSGetConverged(eps, &nconv);
+    std::cout << std::endl << "nconv: " << nconv << std::endl;
+    PetscScalar ev;
+    Vec xr,yrA,yrB;
+    /*! if A is m*n, left vector is m*1, right vector is n*1*/
+    MatCreateVecs(A,NULL,&xr);
+    MatCreateVecs(A,NULL,&yrA);
+    MatCreateVecs(A,NULL,&yrB);
+    for (int i=0; i<nconv; i++) {
+	EPSGetEigenvalue(eps,i,&ev,NULL);
+	std::cout << "eigenvalue " << i << ": " << ev << std::endl;
+        EPSGetEigenvector(eps,i,xr,NULL);
+        //VecView(xr,PETSC_VIEWER_STDOUT_WORLD);
+	MatMult(A,xr,yrA);
+	MatMult(B,xr,yrB);
+	VecAXPY(yrA,-ev,yrB);
+	PetscReal norm;
+	VecNorm(yrA,NORM_1,&norm);
+	std::cout << "   Ax-aBx: " << norm << std::endl;
+    }
 
-
-    
+    EPSDestroy(&eps);
     MatDestroy(&A);
     MatDestroy(&B);
-    //PetscFinalize();
+    VecDestroy(&xr);
+    VecDestroy(&yrA);
+    VecDestroy(&yrB);
     SlepcFinalize();
     return 0;
 }
