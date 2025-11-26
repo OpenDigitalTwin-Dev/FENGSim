@@ -20,7 +20,7 @@ To launch the Qt project for FENGSim:
 	./qtcreator
 ```
 <div align="center">
-<img decoding="async" src="image/log/1.jpg" width="1800">
+<img decoding="async" src="image/list.jpg" width="1800">
 </div>
 
 There exist various solvers designed for nonlinear solid mechanics, computational fluid dynamics, computational electrodynamics, differential algebraic equations, particle methods, numerical linear algebra, and probability and statistics. These solvers can be obtained from Git by following the provided instructions.
