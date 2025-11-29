@@ -1,0 +1,31 @@
+#!/bin/bash
+
+git clone https://github.com/OpenDigitalTwin-Dev/FENGSim.git
+
+cd FENGSim
+
+git clone https://github.com/OpenDigitalTwin-Dev/docs.git
+
+cd toolkit
+
+git clone https://github.com/OpenDigitalTwin-Dev/MultiX.git
+git clone https://github.com/OpenDigitalTwin-Dev/CFD.git
+git clone https://github.com/OpenDigitalTwin-Dev/CEM.git
+git clone https://github.com/OpenDigitalTwin-Dev/DAE.git
+git clone https://github.com/OpenDigitalTwin-Dev/NLA.git
+git clone https://github.com/OpenDigitalTwin-Dev/Particles.git
+git clone https://github.com/OpenDigitalTwin-Dev/PS.git
+
+cd MultiX/docs
+./install
+
+cd ../../../../
+
+echo "compression begin"
+echo "compression begin" > download_log.txt
+
+tar -zcf FENGSim_$(date +%Y_%m_%d).tar.gz FENGSim
+
+current_time=$(date)
+echo "compression end ${current_time}" > download_log.txt
+echo "compression end ${current_time}"
