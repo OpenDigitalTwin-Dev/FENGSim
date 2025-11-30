@@ -1,0 +1,3 @@
+cd build
+./multix -alpha 10 -pv
+paraview ParaView/ex37/ex37.pvd
