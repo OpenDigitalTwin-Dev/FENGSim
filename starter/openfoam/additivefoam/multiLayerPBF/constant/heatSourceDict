@@ -1,0 +1,50 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  10
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      heatSourceProperties;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+/*---------------------------------------------------------------------------*\
+Citation:
+    J. Coleman, G.L. Knapp, B. Stump, M. Rolchigo, K. Kincaid, A. Plotkowski,
+    A dynamic volumetric heat source model for laser additive manufacturing,
+    Additive Manufacturing (2024), https://doi.org/10.1016/j.addma.2024.104531.
+\*---------------------------------------------------------------------------*/
+
+sources (beam);
+
+beam
+{
+    pathName            scanPath;
+ 
+    absorptionModel     Kelly;    
+    KellyCoeffs
+    {
+        geometry        cone;
+        eta0            0.28;
+        etaMin          0.35;
+    }   
+
+    heatSourceModel     modifiedSuperGaussian;
+    modifiedSuperGaussianCoeffs
+    {
+        dimensions      (40.0e-6 40.0e-6 30e-6);
+        m               2.72;
+        k               7.95;
+        transient       true;
+        isoValue        1620;
+        nPoints         (10 10 10);
+    }
+}
+
+// ************************************************************************* //
