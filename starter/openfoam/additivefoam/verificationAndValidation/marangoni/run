@@ -1,0 +1,5 @@
+export LD_LIBRARY_PATH=$PWD/../../../../../toolkit/CFD/install/am_install/lib/
+source $PWD/../../../../../toolkit/CFD/am/OpenFOAM-10/etc/bashrc
+./Allclean
+./Allrun
+foamToVTK
