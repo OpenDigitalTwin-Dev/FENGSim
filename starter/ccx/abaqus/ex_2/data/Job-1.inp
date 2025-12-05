@@ -9282,7 +9282,7 @@
 ** 
 *Step, name=Step-1, nlgeom=NO, perturbation
 *Frequency, eigensolver=Lanczos, sim, acoustic coupling=on, normalization=mass
-10, , , , ,  
+, , 10., , , 
 ** 
 ** BOUNDARY CONDITIONS
 ** 
@@ -9302,7 +9302,7 @@ Set-1, 6, 6
 ** FIELD OUTPUT: F-Output-1
 ** 
 *Output, field
-*Node File
+*Node Output
 U, 
 ** 
 ** HISTORY OUTPUT: H-Output-1
